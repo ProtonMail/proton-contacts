@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox, Icon, useContactGroups } from 'react-components';
-import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import { addPlus } from 'proton-shared/lib/helpers/string';
 
-const ContactsList = ({ contacts, onCheck }) => {
+const ContactsList = ({ contacts, onCheck, history }) => {
     const [contactGroups] = useContactGroups();
     const mapContactGroups = contactGroups.reduce((acc, contactGroup) => {
         acc[contactGroup.ID] = contactGroup;
@@ -16,9 +16,7 @@ const ContactsList = ({ contacts, onCheck }) => {
         onCheck(contactID, target.checked);
     };
 
-    const handleClick = (ID) => () => {
-        <Redirect to={`/contacts/${ID}`} />;
-    };
+    const handleClick = (ID) => () => history.push(`/contacts/${ID}`);
 
     return (
         <div>
@@ -60,7 +58,8 @@ const ContactsList = ({ contacts, onCheck }) => {
 
 ContactsList.propTypes = {
     contacts: PropTypes.array,
-    onCheck: PropTypes.func
+    onCheck: PropTypes.func,
+    history: PropTypes.object.isRequired
 };
 
-export default ContactsList;
+export default withRouter(ContactsList);

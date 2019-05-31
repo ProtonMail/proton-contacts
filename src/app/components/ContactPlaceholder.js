@@ -47,7 +47,8 @@ const ContactPlaceholder = () => {
                             eleifend orci. Etiam pharetra consequat tristique. Sed tristique ipsum quis suscipit
                             ullamcorper.
                         </p>
-                        <Link to="/settings/account">{c('Action').t`Settings`}</Link>
+                        <Link className="pm-button pm-button--primary" to="/settings/account">{c('Action')
+                            .t`Settings`}</Link>
                     </div>
                 </div>
             </div>
