@@ -24,18 +24,22 @@ const ContactView = ({ contact, errors }) => {
     };
 
     return (
-        <>
-            <div className="flex flex-spacebetween">
-                <h1>{c('Title').t`Contact details`}</h1>
-                <div>
-                    <PrimaryButton onClick={openContactModal}>{c('Action').t`Edit`}</PrimaryButton>
+        <div className="conversation-column-detail flex-item-fluid scroll-if-needed">
+            <div className="flex flex-spacebetween flex-items-center border-bottom">
+                <div className="p1">
+                    <h2 className="m0">{c('Title').t`Contact details`}</h2>
+                </div>
+                <div className="p1">
+                    <PrimaryButton onClick={openContactModal} className="mr1">{c('Action').t`Edit`}</PrimaryButton>
                     <Button onClick={handleExport}>{c('Action').t`Export`}</Button>
                 </div>
             </div>
             <ContactSummary contact={contact} />
-            <SignedContactProperties contact={contact} />
-            <EncryptedContactProperties contact={contact} />
-        </>
+            <div className="pl1 pr1">
+                <SignedContactProperties contact={contact} />
+                <EncryptedContactProperties contact={contact} />
+            </div>
+        </div>
     );
 };
 

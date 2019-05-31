@@ -19,17 +19,22 @@ const ContactsList = ({ contacts, onCheck, history }) => {
     const handleClick = (ID) => () => history.push(`/contacts/${ID}`);
 
     return (
-        <div>
-            <ul className="unstyled">
+        <div className="conversations-column-list scroll-if-needed scroll-smooth-touch">
+            <ul className="unstyled m0">
                 {contacts.map(({ ID, Name, LabelIDs = [], emails, isChecked }) => {
                     return (
-                        <li key={ID} className="p1 border-bottom flex bg-global-white" onClick={handleClick(ID)}>
-                            <div>
+                        <li key={ID} className="p1 border-bottom flex bg-global-white">
+                            <label className="conversation-icon flex-item-noshrink rounded50 bg-white inline-flex">
                                 <Checkbox checked={isChecked} onChange={handleCheck} data-contact-id={ID} />
-                            </div>
-                            <div>
-                                <div className="flex flex-spacebetween">
-                                    <span className="bold">{Name}</span>
+                            </label>
+                            <div
+                                className="flex-item-fluid flex flex-column flex-spacebetween conversation-titlesender"
+                                onClick={handleClick(ID)}
+                            >
+                                <div className="flex">
+                                    <div className="flex-item-fluid w0 pr1">
+                                        <span className="bold inbl mw100 ellipsis">{Name}</span>
+                                    </div>
                                     {LabelIDs.length ? (
                                         <div>
                                             {LabelIDs.map((labelID) => {
@@ -46,7 +51,9 @@ const ContactsList = ({ contacts, onCheck, history }) => {
                                         </div>
                                     ) : null}
                                 </div>
-                                <div title={emails.join(', ')}>{addPlus(emails)}</div>
+                                <div className="mw100 ellipsis" title={emails.join(', ')}>
+                                    {addPlus(emails)}
+                                </div>
                             </div>
                         </li>
                     );

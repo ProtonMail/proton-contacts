@@ -6,39 +6,39 @@ const EXACTLY_ONE_MAY_BE_PRESENT = '*1';
 const ONE_OR_MORE_MAY_BE_PRESENT = '*';
 
 const PROPERTIES = {
-    fn: { cardinality: ONE_ORE_MORE_MUST_BE_PRESENT, type: 'text' },
-    n: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT, type: 'text' },
-    nickname: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    photo: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    bday: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT, type: 'text' },
-    anniversary: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT, type: 'text' },
-    gender: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT, type: 'text' },
-    adr: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    tel: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    email: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    impp: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    lang: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    tz: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    geo: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    title: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    role: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    logo: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    org: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    member: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    related: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    categories: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    note: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    prodid: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT, type: 'text' },
-    rev: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT, type: 'text' },
-    sound: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    uid: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT, type: 'text' },
-    clientpidmap: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    url: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    version: { cardinality: EXACTLY_ONE_MUST_BE_PRESENT, type: 'text' },
-    key: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    fburl: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    caladruri: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' },
-    caluri: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT, type: 'text' }
+    fn: { cardinality: ONE_ORE_MORE_MUST_BE_PRESENT },
+    n: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT },
+    nickname: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    photo: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    bday: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT },
+    anniversary: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT },
+    gender: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT },
+    adr: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    tel: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    email: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    impp: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    lang: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    tz: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    geo: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    title: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    role: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    logo: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    org: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    member: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    related: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    categories: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    note: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    prodid: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT },
+    rev: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT },
+    sound: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    uid: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT },
+    clientpidmap: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    url: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    version: { cardinality: EXACTLY_ONE_MUST_BE_PRESENT },
+    key: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    fburl: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    caladruri: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
+    caluri: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT }
 };
 
 export const getAllProperties = () => Object.keys(PROPERTIES);
@@ -49,7 +49,7 @@ export const parse = (vcard = '') => {
     const properties = comp.getAllProperties();
 
     return properties.reduce((acc, property) => {
-        const { type = 'text' } = property;
+        const type = property.getParameter('type');
         const splitted = property.name.split('.');
         const field = splitted[1] ? splitted[1] : splitted[0];
 
@@ -82,7 +82,10 @@ export const parse = (vcard = '') => {
 
 export const toICAL = (contact = {}) => {
     return Object.entries(contact).reduce((acc, [field, { type, values, group }]) => {
-        const property = new ICAL.Property([[group, field].filter(Boolean).join('.'), {}, type, values], acc);
+        const fieldWithGroup = [group, field].filter(Boolean).join('.');
+        const property = new ICAL.Property(fieldWithGroup, acc);
+        property.setValues(values);
+        property.setParameter('type', type);
         acc.addProperty(property);
         return acc;
     }, new ICAL.Component());
@@ -103,3 +106,24 @@ export const merge = (vcards = []) => {
         return acc;
     }, {});
 };
+
+export const displayAdr = (adr = '') => {
+    return adr
+        .split(',')
+        .filter(Boolean)
+        .join('\n');
+};
+
+export const clearType = (type = '') => type.toLowerCase().replace('x-', '');
+
+export const getType = (types = []) => {
+    if (Array.isArray(types)) {
+        if (!types.length) {
+            return '';
+        }
+        return types[0];
+    }
+    return types;
+};
+
+export const getValue = (values = []) => values.join(', ');

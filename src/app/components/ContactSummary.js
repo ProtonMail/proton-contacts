@@ -3,46 +3,55 @@ import PropTypes from 'prop-types';
 import { Icon } from 'react-components';
 import { addPlus } from 'proton-shared/lib/helpers/string';
 
-const getFirstValue = (contact, key) => {
+const getFirstValues = (contact, key) => {
     if (!contact[key]) {
         return '';
     }
 
     if (Array.isArray(contact[key])) {
         const [{ values = [] } = {}] = contact[key];
-        return addPlus(values);
+        return values;
     }
 
-    return addPlus(contact[key].values);
+    return contact[key].values;
 };
 
 const ContactSummary = ({ contact }) => {
-    const fn = getFirstValue(contact, 'fn');
-    const email = getFirstValue(contact, 'email');
-    const tel = getFirstValue(contact, 'tel');
-    const adr = getFirstValue(contact, 'adr');
-    const org = getFirstValue(contact, 'org');
-    const note = getFirstValue(contact, 'note');
+    const photo = getFirstValues(contact, 'photo')[0];
+    const fn = addPlus(getFirstValues(contact, 'fn'));
+    const email = addPlus(getFirstValues(contact, 'email'));
+    const tel = addPlus(getFirstValues(contact, 'tel'));
+    const adr = addPlus(getFirstValues(contact, 'adr'));
+    const org = addPlus(getFirstValues(contact, 'org'));
+    const note = addPlus(getFirstValues(contact, 'note'));
 
     const summary = [
-        email && { icon: 'email', text: email, isEmail: true },
-        tel && { icon: 'phone', text: tel },
-        adr && { icon: 'address', text: adr },
-        org && { icon: 'organization', text: org },
-        note && { icon: 'note', text: note }
+        email && { icon: 'email', component: <a href={`mailto:${email}`}>{email}</a> },
+        tel && { icon: 'phone', component: tel },
+        adr && {
+            icon: 'address',
+            component: adr
+                .split(',')
+                .filter(Boolean)
+                .join(', ')
+        },
+        org && { icon: 'organization', component: org },
+        note && { icon: 'note', component: note }
     ].filter(Boolean);
 
     return (
-        <div className="bg-global-light flex">
-            <div>Photo</div>
-            <div>
-                <h1>{fn}</h1>
-                <ul className="unstyled">
-                    {summary.map(({ icon, text, isEmail }) => {
+        <div className="bg-global-light flex flex-nowrap p1 mb1 border-bottom">
+            <div className="w20">
+                <img src={photo} className="rounded50" />
+            </div>
+            <div className="pl1">
+                <h2 className="mb0-5">{fn}</h2>
+                <ul className="unstyled m0">
+                    {summary.map(({ icon, component }) => {
                         return (
-                            <li key={icon}>
-                                <Icon name={icon} />
-                                {isEmail ? <a href={`mailto:${text}`}>{text}</a> : <span>{text}</span>}
+                            <li key={icon} className="flex flex-items-center mb0-5">
+                                <Icon name={icon} className="mr0-5" />
+                                {component}
                             </li>
                         );
                     })}
