@@ -29,14 +29,33 @@ const ContactsContainer = () => {
 
     return (
         <>
-            <ContactsList contacts={formattedContacts} onCheck={handleCheck} />
             <Router>
                 <Switch>
                     <Route
                         path="/contacts/:id"
-                        component={({ match }) => <Contact id={match.params.id} userKeysList={userKeysList} />}
+                        component={({ match }) => {
+                            return (
+                                <>
+                                    <ContactsList
+                                        selectedContactID={match.params.id}
+                                        contacts={formattedContacts}
+                                        onCheck={handleCheck}
+                                    />
+                                    <Contact contactID={match.params.id} userKeysList={userKeysList} />
+                                </>
+                            );
+                        }}
                     />
-                    <Route component={ContactPlaceholder} />
+                    <Route
+                        component={() => {
+                            return (
+                                <>
+                                    <ContactsList contacts={formattedContacts} onCheck={handleCheck} />
+                                    <ContactPlaceholder />
+                                </>
+                            );
+                        }}
+                    />
                 </Switch>
             </Router>
         </>

@@ -95,7 +95,7 @@ const prepareContact = async (contact, keys) => {
     return { contact: merge(vcards.map(parse)), errors };
 };
 
-const Contact = ({ id: contactID, userKeysList }) => {
+const Contact = ({ contactID, userKeysList }) => {
     const api = useApi();
     const [loading, setLoading] = useState(true);
     const [{ contact, errors }, setModel] = useState({});
@@ -133,11 +133,11 @@ const Contact = ({ id: contactID, userKeysList }) => {
         return <Loader />;
     }
 
-    return <ContactView contact={contact} errors={errors} />;
+    return <ContactView contact={contact} contactID={contactID} errors={errors} />;
 };
 
 Contact.propTypes = {
-    id: PropTypes.string.isRequired,
+    contactID: PropTypes.string.isRequired,
     userKeysList: PropTypes.array
 };
 

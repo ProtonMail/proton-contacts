@@ -4,13 +4,12 @@ import { Bordered } from 'react-components';
 
 import ContactViewProperty from './ContactViewProperty';
 
-const fieldsToDisplay = [
+const FIELDS = [
     'bday',
     'anniversary',
     'gender',
     'adr',
     'tel',
-    'impp',
     'lang',
     'tz',
     'geo',
@@ -19,24 +18,18 @@ const fieldsToDisplay = [
     'logo',
     'org',
     'member',
-    'related',
     'note',
     'url'
 ];
 
 const EncryptedContactProperties = ({ contact }) => {
-    const properties = fieldsToDisplay.reduce((acc, field) => {
-        const properties = contact[field];
+    const properties = FIELDS.reduce((acc, field) => {
+        const p = contact[field] || [];
 
-        if (contact[field]) {
-            if (Array.isArray(properties)) {
-                properties.forEach((property, index) => {
-                    acc.push({ property, field, first: !index });
-                });
-                return acc;
-            }
-
-            acc.push({ property: properties, field, first: true });
+        if (p.length) {
+            p.forEach((property, index) => {
+                acc.push({ property, field, first: !index });
+            });
         }
         return acc;
     }, []);

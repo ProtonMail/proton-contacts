@@ -15,9 +15,39 @@ const AuthLayout = ({ children }) => {
 
     const list = [
         {
-            icon: 'contacts-group',
+            icon: 'contacts',
             text: c('Link').t`Contacts`,
             link: '/contacts'
+        },
+        {
+            icon: 'import',
+            text: c('Action').t`Import`,
+            type: 'button',
+            onClick() {}
+        },
+        {
+            icon: 'export',
+            text: c('Action').t`Export`,
+            type: 'button',
+            onClick() {}
+        },
+        {
+            icon: 'merge',
+            text: c('Action').t`Merge`,
+            type: 'button',
+            onClick() {}
+        },
+        {
+            icon: 'delete',
+            text: c('Action').t`Delete all`,
+            type: 'button',
+            onClick() {}
+        },
+        {
+            icon: 'contacts-group',
+            text: c('Link').t`Group`,
+            type: 'button',
+            onClick() {}
         }
     ].concat(
         contactGroups.map(({ Name, Color, ID }) => ({

@@ -9,18 +9,21 @@ import { toICAL } from '../helpers/vcard';
 import ContactSummary from './ContactSummary';
 import SignedContactProperties from './SignedContactProperties';
 import EncryptedContactProperties from './EncryptedContactProperties';
+import { getValues } from '../helpers/property';
 
 const ContactView = ({ contact, errors }) => {
     const { createModal } = useModals();
+
     const openContactModal = () => {
         createModal(<ContactModal contact={contact} />);
     };
 
     const handleExport = () => {
+        const filename = getValues(contact, ['fn', 'email']).filter(Boolean)[0];
         const vcard = toICAL(contact);
-        const blob = new Blob(vcard, { type: 'data:text/plain;charset=utf-8;' });
+        const blob = new Blob([vcard.toString()], { type: 'data:text/plain;charset=utf-8;' });
 
-        downloadFile(blob, 'contact');
+        downloadFile(blob, filename);
     };
 
     return (

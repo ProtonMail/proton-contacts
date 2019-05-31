@@ -44,6 +44,16 @@ const PROPERTIES = {
 export const getAllProperties = () => Object.keys(PROPERTIES);
 export const isCustomField = (field = '') => field.startsWith('x-');
 
+export const getValues = (property) => {
+    return property.getValues().map((val) => {
+        if (typeof val === 'string') {
+            return val;
+        }
+
+        return val.toString();
+    });
+};
+
 export const parse = (vcard = '') => {
     const comp = new ICAL.Component(ICAL.parse(vcard));
     const properties = comp.getAllProperties();
@@ -66,14 +76,14 @@ export const parse = (vcard = '') => {
         }
 
         const group = splitted[1] ? splitted[0] : undefined;
-        const value = { group, type, values: property.getValues() };
+        const prop = { group, type, values: getValues(property) };
         const { cardinality = ONE_OR_MORE_MAY_BE_PRESENT } = PROPERTIES[field] || {};
 
         if ([ONE_ORE_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT].includes(cardinality)) {
             acc[field] = acc[field] || [];
-            acc[field].push(value);
+            acc[field].push(prop);
         } else {
-            acc[field] = value;
+            acc[field] = [prop];
         }
 
         return acc;
@@ -81,49 +91,36 @@ export const parse = (vcard = '') => {
 };
 
 export const toICAL = (contact = {}) => {
-    return Object.entries(contact).reduce((acc, [field, { type, values, group }]) => {
-        const fieldWithGroup = [group, field].filter(Boolean).join('.');
-        const property = new ICAL.Property(fieldWithGroup, acc);
-        property.setValues(values);
-        property.setParameter('type', type);
-        acc.addProperty(property);
-        return acc;
-    }, new ICAL.Component());
+    return Object.entries(contact).reduce((component, [field, properties = []]) => {
+        properties.forEach(({ type, values, group }) => {
+            const fieldWithGroup = [group, field].filter(Boolean).join('.');
+            const property = new ICAL.Property(fieldWithGroup);
+            property.isMultiValue ? property.setValues(values) : property.setValue(values[0]);
+            type && property.setParameter('type', type);
+            component.addProperty(property);
+        });
+        return component;
+    }, new ICAL.Component('vcard'));
 };
 
 export const merge = (vcards = []) => {
     return vcards.reduce((acc, vcard) => {
-        Object.entries(vcard).forEach(([field, value]) => {
+        Object.entries(vcard).forEach(([field, properties]) => {
             const { cardinality = ONE_OR_MORE_MAY_BE_PRESENT } = PROPERTIES[field] || {};
 
             if ([ONE_ORE_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT].includes(cardinality)) {
                 acc[field] = acc[field] || [];
-                acc[field].push(...value);
+                acc[field].push(...properties);
             } else if (!acc[field]) {
-                acc[field] = value;
+                acc[field] = properties;
             }
         });
         return acc;
     }, {});
 };
 
-export const displayAdr = (adr = '') => {
-    return adr
-        .split(',')
-        .filter(Boolean)
-        .join('\n');
+export const getProperties = (contact) => {
+    return Object.entries(contact).reduce((acc, [field, properties = []]) => {
+        return acc.concat(properties.map((property) => ({ ...property, field })));
+    }, []);
 };
-
-export const clearType = (type = '') => type.toLowerCase().replace('x-', '');
-
-export const getType = (types = []) => {
-    if (Array.isArray(types)) {
-        if (!types.length) {
-            return '';
-        }
-        return types[0];
-    }
-    return types;
-};
-
-export const getValue = (values = []) => values.join(', ');

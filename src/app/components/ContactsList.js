@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Checkbox, Icon, useContactGroups } from 'react-components';
+import { Checkbox, useContactGroups } from 'react-components';
 import { withRouter } from 'react-router';
 import { addPlus } from 'proton-shared/lib/helpers/string';
 
-const ContactsList = ({ contacts, onCheck, history }) => {
+import ContactGroupIcon from './ContactGroupIcon';
+
+const ContactsList = ({ contacts, onCheck, history, selectedContactID }) => {
     const [contactGroups] = useContactGroups();
     const mapContactGroups = contactGroups.reduce((acc, contactGroup) => {
         acc[contactGroup.ID] = contactGroup;
@@ -23,7 +25,12 @@ const ContactsList = ({ contacts, onCheck, history }) => {
             <ul className="unstyled m0">
                 {contacts.map(({ ID, Name, LabelIDs = [], emails, isChecked }) => {
                     return (
-                        <li key={ID} className="p1 border-bottom flex bg-global-white">
+                        <li
+                            key={ID}
+                            className={`p1 border-bottom flex bg-global-white ${
+                                selectedContactID === ID ? 'conversation-is-selected' : ''
+                            }`}
+                        >
                             <label className="conversation-icon flex-item-noshrink rounded50 bg-white inline-flex">
                                 <Checkbox checked={isChecked} onChange={handleCheck} data-contact-id={ID} />
                             </label>
@@ -39,14 +46,7 @@ const ContactsList = ({ contacts, onCheck, history }) => {
                                         <div>
                                             {LabelIDs.map((labelID) => {
                                                 const { Color, Name } = mapContactGroups[labelID];
-                                                return (
-                                                    <Icon
-                                                        key={labelID}
-                                                        name="contacts-groups"
-                                                        color={Color}
-                                                        title={Name}
-                                                    />
-                                                );
+                                                return <ContactGroupIcon key={labelID} name={Name} color={Color} />;
                                             })}
                                         </div>
                                     ) : null}
@@ -66,7 +66,8 @@ const ContactsList = ({ contacts, onCheck, history }) => {
 ContactsList.propTypes = {
     contacts: PropTypes.array,
     onCheck: PropTypes.func,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
+    selectedContactID: PropTypes.string
 };
 
 export default withRouter(ContactsList);

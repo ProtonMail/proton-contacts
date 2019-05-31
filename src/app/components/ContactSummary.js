@@ -2,23 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'react-components';
 import { addPlus } from 'proton-shared/lib/helpers/string';
-
-const getFirstValues = (contact, key) => {
-    if (!contact[key]) {
-        return '';
-    }
-
-    if (Array.isArray(contact[key])) {
-        const [{ values = [] } = {}] = contact[key];
-        return values;
-    }
-
-    return contact[key].values;
-};
+import { getFirstValues } from '../helpers/property';
 
 const ContactSummary = ({ contact }) => {
     const photo = getFirstValues(contact, 'photo')[0];
-    const fn = addPlus(getFirstValues(contact, 'fn'));
+    const name = getFirstValues(contact, 'fn').join(', ');
     const email = addPlus(getFirstValues(contact, 'email'));
     const tel = addPlus(getFirstValues(contact, 'tel'));
     const adr = addPlus(getFirstValues(contact, 'adr'));
@@ -27,7 +15,7 @@ const ContactSummary = ({ contact }) => {
 
     const summary = [
         email && { icon: 'email', component: <a href={`mailto:${email}`}>{email}</a> },
-        tel && { icon: 'phone', component: tel },
+        tel && { icon: 'phone', component: <a href={`mailto:${tel}`}>{tel}</a> },
         adr && {
             icon: 'address',
             component: adr
@@ -45,7 +33,7 @@ const ContactSummary = ({ contact }) => {
                 <img src={photo} className="rounded50" />
             </div>
             <div className="pl1">
-                <h2 className="mb0-5">{fn}</h2>
+                <h2 className="mb0-5">{name}</h2>
                 <ul className="unstyled m0">
                     {summary.map(({ icon, component }) => {
                         return (
