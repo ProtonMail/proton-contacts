@@ -1,13 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tooltip, Icon } from 'react-components';
+import { Icon } from 'react-components';
 
 const ContactGroupIcon = ({ name, color }) => {
-    return (
-        <Tooltip title={name}>
-            <Icon name="contacts-groups" color={color} />
-        </Tooltip>
-    );
+    return <Icon title={name} name="contacts-groups" color={color} />;
 };
 
 ContactGroupIcon.propTypes = {

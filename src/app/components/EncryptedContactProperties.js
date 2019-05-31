@@ -34,6 +34,10 @@ const EncryptedContactProperties = ({ contact }) => {
         return acc;
     }, []);
 
+    if (!properties.length) {
+        return null;
+    }
+
     return (
         <Bordered>
             {properties.map(({ property, field, first }, index) => {

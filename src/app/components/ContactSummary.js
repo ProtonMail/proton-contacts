@@ -29,8 +29,8 @@ const ContactSummary = ({ contact }) => {
 
     return (
         <div className="bg-global-light flex flex-nowrap p1 mb1 border-bottom">
-            <div className="w20">
-                <img src={photo} className="rounded50" />
+            <div className="w20 aligncenter">
+                {photo ? <img src={photo} className="rounded50" /> : <Icon name="contact" size={40} />}
             </div>
             <div className="pl1">
                 <h2 className="mb0-5">{name}</h2>

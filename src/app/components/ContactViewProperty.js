@@ -2,8 +2,10 @@ import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Row, Label, Field, Icon } from 'react-components';
+
 import { clearType, getType, getValue } from '../helpers/property';
 import { getLabels, getIcons } from '../helpers/field';
+import ContactGroupIcon from './ContactGroupIcon';
 
 const ICONS = getIcons();
 
@@ -16,8 +18,20 @@ const ContactViewProperty = ({ property, field, first }) => {
 
     const getContent = () => {
         switch (field) {
-            case 'email':
-                return <a href={`mailto:${value}`}>{value}</a>;
+            case 'email': {
+                return (
+                    <>
+                        <a className="mr0-5" href={`mailto:${value}`}>
+                            {value}
+                        </a>
+                        {property.contactGroups.length
+                            ? property.contactGroups.map(({ Name, Color, ID }) => (
+                                  <ContactGroupIcon key={ID} name={Name} color={Color} />
+                              ))
+                            : null}
+                    </>
+                );
+            }
             case 'tel':
                 return <a href={`tel:${value}`}>{value}</a>;
             case 'bday':

@@ -11,7 +11,7 @@ import SignedContactProperties from './SignedContactProperties';
 import EncryptedContactProperties from './EncryptedContactProperties';
 import { getValues } from '../helpers/property';
 
-const ContactView = ({ contact, errors }) => {
+const ContactView = ({ contact, contactID, errors }) => {
     const { createModal } = useModals();
 
     const openContactModal = () => {
@@ -39,7 +39,7 @@ const ContactView = ({ contact, errors }) => {
             </div>
             <ContactSummary contact={contact} />
             <div className="pl1 pr1">
-                <SignedContactProperties contact={contact} />
+                <SignedContactProperties contactID={contactID} contact={contact} />
                 <EncryptedContactProperties contact={contact} />
             </div>
         </div>
@@ -94,6 +94,7 @@ const ContactPropTypes = PropTypes.shape({
 });
 
 ContactView.propTypes = {
+    contactID: PropTypes.string,
     contact: ContactPropTypes,
     errors: PropTypes.array
 };
