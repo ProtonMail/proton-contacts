@@ -25,3 +25,10 @@ yarn-error.log*
 dist
 .eslintcache
 .idea
+
+env.json
+.env
+src/config.js
+src/app/config.js
+env.json
+po/i18n.txt
