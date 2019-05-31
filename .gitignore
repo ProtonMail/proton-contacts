@@ -32,3 +32,4 @@ src/config.js
 src/app/config.js
 env.json
 po/i18n.txt
+package-lock.json
