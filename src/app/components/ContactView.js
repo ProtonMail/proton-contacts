@@ -7,8 +7,7 @@ import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 import ContactModal from './ContactModal';
 import { toICAL } from '../helpers/vcard';
 import ContactSummary from './ContactSummary';
-import SignedContactProperties from './SignedContactProperties';
-import EncryptedContactProperties from './EncryptedContactProperties';
+import ContactViewProperties from './ContactViewProperties';
 
 const ContactView = ({ properties, contactID, errors }) => {
     const { createModal } = useModals();
@@ -40,8 +39,10 @@ const ContactView = ({ properties, contactID, errors }) => {
             </div>
             <ContactSummary properties={properties} />
             <div className="pl1 pr1">
-                <SignedContactProperties contactID={contactID} properties={properties} />
-                <EncryptedContactProperties properties={properties} />
+                <ContactViewProperties contactID={contactID} properties={properties} field="email" />
+                <ContactViewProperties contactID={contactID} properties={properties} field="tel" />
+                <ContactViewProperties contactID={contactID} properties={properties} field="adr" />
+                <ContactViewProperties contactID={contactID} properties={properties} />
             </div>
         </div>
     );

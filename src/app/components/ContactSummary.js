@@ -15,14 +15,12 @@ const ContactSummary = ({ properties }) => {
     const tel = getFirstValue(properties, 'tel');
     const adr = getFirstValue(properties, 'adr');
     const org = getFirstValue(properties, 'org');
-    const note = getFirstValue(properties, 'note');
 
     const summary = [
         email && { icon: 'email', component: <a href={`mailto:${email}`}>{email}</a> },
         tel && { icon: 'phone', component: <a href={`mailto:${tel}`}>{tel}</a> },
         adr && { icon: 'address', component: formatAdr(adr) },
-        org && { icon: 'organization', component: org },
-        note && { icon: 'note', component: note }
+        org && { icon: 'organization', component: org }
     ].filter(Boolean);
 
     return (
