@@ -92,13 +92,13 @@ const prepareContact = async (contact, keys) => {
         },
         { vcards: [], errors: [] }
     );
-    return { contact: merge(vcards.map(parse)), errors };
+    return { properties: merge(vcards.map(parse)), errors };
 };
 
 const Contact = ({ contactID, userKeysList }) => {
     const api = useApi();
     const [loading, setLoading] = useState(true);
-    const [{ contact, errors }, setModel] = useState({});
+    const [{ properties, errors }, setModel] = useState({});
     const { publicKeys, privateKeys } = userKeysList.reduce(
         (acc, { privateKey }) => {
             if (!privateKey.isDecrypted()) {
@@ -115,11 +115,12 @@ const Contact = ({ contactID, userKeysList }) => {
         try {
             setLoading(true);
             const { Contact } = await api(getContact(contactID));
-            const { contact, errors } = await prepareContact(Contact, { publicKeys, privateKeys });
-            setModel({ contact, errors });
+            const { properties, errors } = await prepareContact(Contact, { publicKeys, privateKeys });
+            setModel({ properties, errors });
             setLoading(false);
         } catch (error) {
             setLoading(false);
+            throw error;
         }
     };
 
@@ -133,7 +134,7 @@ const Contact = ({ contactID, userKeysList }) => {
         return <Loader />;
     }
 
-    return <ContactView contact={contact} contactID={contactID} errors={errors} />;
+    return <ContactView properties={properties} contactID={contactID} errors={errors} />;
 };
 
 Contact.propTypes = {

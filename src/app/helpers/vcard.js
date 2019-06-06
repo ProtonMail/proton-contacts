@@ -41,25 +41,32 @@ const PROPERTIES = {
     caluri: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT }
 };
 
-export const getAllProperties = () => Object.keys(PROPERTIES);
+export const getAllFields = () => Object.keys(PROPERTIES);
 export const isCustomField = (field = '') => field.startsWith('x-');
 
-export const getValues = (property) => {
-    return property.getValues().map((val) => {
+export const getValue = (property) => {
+    const values = property.getValues().map((val) => {
         if (typeof val === 'string') {
             return val;
         }
 
         return val.toString();
     });
+    return property.isMultiValue ? values : values[0];
 };
 
+/**
+ * Parse vCard String an return contact properties model as an Array
+ * @param {String} vcard to parse
+ * @returns {Array} contact properties
+ */
 export const parse = (vcard = '') => {
     const comp = new ICAL.Component(ICAL.parse(vcard));
     const properties = comp.getAllProperties();
 
     return properties.reduce((acc, property) => {
         const type = property.getParameter('type');
+        const pref = property.getParameter('pref');
         const splitted = property.name.split('.');
         const field = splitted[1] ? splitted[1] : splitted[0];
 
@@ -76,51 +83,50 @@ export const parse = (vcard = '') => {
         }
 
         const group = splitted[1] ? splitted[0] : undefined;
-        const prop = { group, type, values: getValues(property) };
-        const { cardinality = ONE_OR_MORE_MAY_BE_PRESENT } = PROPERTIES[field] || {};
+        const prop = { pref, field, group, type, value: getValue(property) };
 
-        if ([ONE_ORE_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT].includes(cardinality)) {
-            acc[field] = acc[field] || [];
-            acc[field].push(prop);
-        } else {
-            acc[field] = [prop];
-        }
+        acc.push(prop);
 
         return acc;
-    }, {});
+    }, []);
 };
 
-export const toICAL = (contact = {}) => {
-    return Object.entries(contact).reduce((component, [field, properties = []]) => {
-        properties.forEach(({ type, values, group }) => {
-            const fieldWithGroup = [group, field].filter(Boolean).join('.');
-            const property = new ICAL.Property(fieldWithGroup);
-            property.isMultiValue ? property.setValues(values) : property.setValue(values[0]);
-            type && property.setParameter('type', type);
-            component.addProperty(property);
-        });
+/**
+ * Parse contact properties to create a ICAL vcard component
+ * @param {Array} contact properties
+ * @returns {ICAL.Component} vcard
+ */
+export const toICAL = (properties = []) => {
+    return properties.reduce((component, { field, type, value, group }) => {
+        const fieldWithGroup = [group, field].filter(Boolean).join('.');
+        const property = new ICAL.Property(fieldWithGroup);
+        property.isMultiValue ? property.setValues(value) : property.setValue(value);
+        type && property.setParameter('type', type);
+        component.addProperty(property);
         return component;
     }, new ICAL.Component('vcard'));
 };
 
-export const merge = (vcards = []) => {
-    return vcards.reduce((acc, vcard) => {
-        Object.entries(vcard).forEach(([field, properties]) => {
+/**
+ * Merge multiple contact properties
+ * order matters
+ * @param {Array} contacts
+ * @returns {Array} contact properties
+ */
+export const merge = (contacts = []) => {
+    return contacts.reduce((acc, properties) => {
+        properties.forEach((property) => {
+            const { field } = property;
             const { cardinality = ONE_OR_MORE_MAY_BE_PRESENT } = PROPERTIES[field] || {};
 
             if ([ONE_ORE_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT].includes(cardinality)) {
-                acc[field] = acc[field] || [];
-                acc[field].push(...properties);
-            } else if (!acc[field]) {
-                acc[field] = properties;
+                acc.push(property);
+            } else if (!acc.find(({ field: f }) => f === field)) {
+                acc.push(property);
             }
         });
         return acc;
-    }, {});
-};
-
-export const getProperties = (contact) => {
-    return Object.entries(contact).reduce((acc, [field, properties = []]) => {
-        return acc.concat(properties.map((property) => ({ ...property, field })));
     }, []);
 };
+
+export const orderProperties = (properties) => {};

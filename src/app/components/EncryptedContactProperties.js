@@ -22,17 +22,18 @@ const FIELDS = [
     'url'
 ];
 
-const EncryptedContactProperties = ({ contact }) => {
-    const properties = FIELDS.reduce((acc, field) => {
-        const p = contact[field] || [];
-
-        if (p.length) {
-            p.forEach((property, index) => {
-                acc.push({ property, field, first: !index });
-            });
-        }
-        return acc;
-    }, []);
+const EncryptedContactProperties = ({ properties: allProperties }) => {
+    const MAP_FIRST = Object.create(null);
+    const properties = allProperties
+        .filter(({ field }) => FIELDS.includes(field))
+        .map((property) => {
+            const { field } = property;
+            if (!MAP_FIRST[field]) {
+                property.first = !MAP_FIRST[field];
+                MAP_FIRST[field] = true;
+            }
+            return property;
+        });
 
     if (!properties.length) {
         return null;
@@ -40,15 +41,15 @@ const EncryptedContactProperties = ({ contact }) => {
 
     return (
         <Bordered>
-            {properties.map(({ property, field, first }, index) => {
-                return <ContactViewProperty first={first} key={index.toString()} field={field} property={property} />;
+            {properties.map((property, index) => {
+                return <ContactViewProperty key={index.toString()} property={property} />;
             })}
         </Bordered>
     );
 };
 
 EncryptedContactProperties.propTypes = {
-    contact: PropTypes.object
+    properties: PropTypes.array
 };
 
 export default EncryptedContactProperties;

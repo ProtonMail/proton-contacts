@@ -8,7 +8,7 @@ const ContactGroupIcon = ({ name, color }) => {
 
 ContactGroupIcon.propTypes = {
     name: PropTypes.string,
-    color: PropTypes.color
+    color: PropTypes.string
 };
 
 export default ContactGroupIcon;

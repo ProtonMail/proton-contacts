@@ -6,22 +6,24 @@ import { normalize } from 'proton-shared/lib/helpers/string';
 
 import ContactViewProperty from './ContactViewProperty';
 
-const SignedContactProperties = ({ contact, contactID }) => {
+const SignedContactProperties = ({ properties: allProperties, contactID }) => {
     const [contactEmails] = useContactEmails();
     const [contactGroups] = useContactGroups();
     const mapContactGroups = toMap(contactGroups);
     const filteredContactEmails = contactEmails.filter(({ ContactID }) => ContactID === contactID);
-    const { email = [] } = contact;
-    const properties = email.map((property) => {
-        const [email = ''] = property.values || [];
-        const { LabelIDs = [] } =
-            filteredContactEmails.find(({ Email = '' }) => normalize(Email) === normalize(email)) || {};
+    const properties = allProperties
+        .filter(({ field }) => field === 'email')
+        .map((property, index) => {
+            const email = Array.isArray(property.value) ? property.value[0] : property.value;
+            const { LabelIDs = [] } =
+                filteredContactEmails.find(({ Email = '' }) => normalize(Email) === normalize(email)) || {};
 
-        return {
-            ...property,
-            contactGroups: LabelIDs.map((labelID) => mapContactGroups[labelID])
-        };
-    });
+            return {
+                ...property,
+                first: !index,
+                contactGroups: LabelIDs.map((labelID) => mapContactGroups[labelID])
+            };
+        });
 
     if (!properties.length) {
         return null;
@@ -30,7 +32,7 @@ const SignedContactProperties = ({ contact, contactID }) => {
     return (
         <Bordered>
             {properties.map((property, index) => {
-                return <ContactViewProperty first={!index} key={index.toString()} field="email" property={property} />;
+                return <ContactViewProperty key={index.toString()} property={property} />;
             })}
         </Bordered>
     );
@@ -38,7 +40,7 @@ const SignedContactProperties = ({ contact, contactID }) => {
 
 SignedContactProperties.propTypes = {
     contactID: PropTypes.string,
-    contact: PropTypes.object
+    properties: PropTypes.array
 };
 
 export default SignedContactProperties;

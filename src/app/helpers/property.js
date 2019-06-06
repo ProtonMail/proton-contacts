@@ -18,7 +18,7 @@ export const getValues = (contact = {}, fields = []) => {
 
         if (properties.length) {
             properties.forEach((property) => {
-                acc.push(...property.values);
+                acc.push(...property.value);
             });
         }
 
@@ -26,7 +26,10 @@ export const getValues = (contact = {}, fields = []) => {
     }, []);
 };
 
-export const getFirstValues = (contact, field) => {
-    const [{ values = [] } = {}] = contact[field] || [];
-    return values;
+export const formatAdr = (adr = '') => {
+    return adr
+        .split(',')
+        .filter(Boolean)
+        .map((value) => value.trim())
+        .join(', ');
 };

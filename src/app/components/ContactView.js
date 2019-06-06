@@ -9,18 +9,19 @@ import { toICAL } from '../helpers/vcard';
 import ContactSummary from './ContactSummary';
 import SignedContactProperties from './SignedContactProperties';
 import EncryptedContactProperties from './EncryptedContactProperties';
-import { getValues } from '../helpers/property';
 
-const ContactView = ({ contact, contactID, errors }) => {
+const ContactView = ({ properties, contactID, errors }) => {
     const { createModal } = useModals();
 
     const openContactModal = () => {
-        createModal(<ContactModal contact={contact} />);
+        createModal(<ContactModal properties={properties} contactID={contactID} />);
     };
 
     const handleExport = () => {
-        const filename = getValues(contact, ['fn', 'email']).filter(Boolean)[0];
-        const vcard = toICAL(contact);
+        const filename = properties
+            .filter(({ field }) => ['fn', 'email'].includes(field))
+            .map(({ value }) => (Array.isArray(value) ? value[0] : value))[0];
+        const vcard = toICAL(properties);
         const blob = new Blob([vcard.toString()], { type: 'data:text/plain;charset=utf-8;' });
 
         downloadFile(blob, filename);
@@ -37,65 +38,25 @@ const ContactView = ({ contact, contactID, errors }) => {
                     <Button onClick={handleExport}>{c('Action').t`Export`}</Button>
                 </div>
             </div>
-            <ContactSummary contact={contact} />
+            <ContactSummary properties={properties} />
             <div className="pl1 pr1">
-                <SignedContactProperties contactID={contactID} contact={contact} />
-                <EncryptedContactProperties contact={contact} />
+                <SignedContactProperties contactID={contactID} properties={properties} />
+                <EncryptedContactProperties properties={properties} />
             </div>
         </div>
     );
 };
 
 const ContactPropertyPropTypes = PropTypes.shape({
-    values: PropTypes.arrayOf(PropTypes.string),
+    value: PropTypes.oneOf(PropTypes.string, PropTypes.arrayOf(PropTypes.string)),
     type: PropTypes.string,
-    group: PropTypes.string
-});
-
-const ContactPropertiesPropTypes = PropTypes.oneOfType([
-    ContactPropertyPropTypes,
-    PropTypes.arrayOf(ContactPropertyPropTypes)
-]);
-
-const ContactPropTypes = PropTypes.shape({
-    fn: ContactPropertiesPropTypes,
-    n: ContactPropertiesPropTypes,
-    nickname: ContactPropertiesPropTypes,
-    photo: ContactPropertiesPropTypes,
-    bday: ContactPropertiesPropTypes,
-    anniversary: ContactPropertiesPropTypes,
-    gender: ContactPropertiesPropTypes,
-    adr: ContactPropertiesPropTypes,
-    tel: ContactPropertiesPropTypes,
-    email: ContactPropertiesPropTypes,
-    impp: ContactPropertiesPropTypes,
-    lang: ContactPropertiesPropTypes,
-    tz: ContactPropertiesPropTypes,
-    geo: ContactPropertiesPropTypes,
-    title: ContactPropertiesPropTypes,
-    role: ContactPropertiesPropTypes,
-    logo: ContactPropertiesPropTypes,
-    org: ContactPropertiesPropTypes,
-    member: ContactPropertiesPropTypes,
-    related: ContactPropertiesPropTypes,
-    categories: ContactPropertiesPropTypes,
-    note: ContactPropertiesPropTypes,
-    prodid: ContactPropertiesPropTypes,
-    rev: ContactPropertiesPropTypes,
-    sound: ContactPropertiesPropTypes,
-    uid: ContactPropertiesPropTypes,
-    clientpidmap: ContactPropertiesPropTypes,
-    url: ContactPropertiesPropTypes,
-    version: ContactPropertiesPropTypes,
-    key: ContactPropertiesPropTypes,
-    fburl: ContactPropertiesPropTypes,
-    caladruri: ContactPropertiesPropTypes,
-    caluri: ContactPropertiesPropTypes
+    group: PropTypes.string,
+    field: PropTypes.string
 });
 
 ContactView.propTypes = {
     contactID: PropTypes.string,
-    contact: ContactPropTypes,
+    properties: PropTypes.arrayOf(ContactPropertyPropTypes),
     errors: PropTypes.array
 };
 
