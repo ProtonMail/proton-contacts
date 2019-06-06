@@ -3,31 +3,35 @@ import PropTypes from 'prop-types';
 import { Row, Field, DropdownActions } from 'react-components';
 import { c } from 'ttag';
 
-import ContactFieldProperty from './ContactFieldProperty';
-import ContactLabelProperty from './ContactLabelProperty';
 import { clearType, getType } from '../helpers/property';
+import ContactFieldProperty from './ContactFieldProperty';
+import ContactModalLabel from './ContactModalLabel';
 
-const ContactRowProperty = ({ property, onChange, onAdd, onDelete, onMoveUp, onMoveDown, first, last }) => {
+const ContactModalRow = ({ property, onChange, onAdd, onRemove, onMoveUp, onMoveDown, first, last }) => {
     const { field } = property;
     const type = clearType(getType(property.type));
-    const containsMultiple = first !== last;
-    const canAdd = ['tel', 'email', 'adr'].includes(field) && last;
-    const canDelete = ['tel', 'email', 'adr'].includes(field) && containsMultiple;
+    const canAdd = !['fn'].includes(field) && last;
+    const canDelete = !['fn'].includes(field);
     const canMoveUp = ['email'].includes(field) && !first;
     const canMoveDown = ['email'].includes(field) && !last;
 
     const list = [
         canAdd && { text: c('Action').t`Add`, onClick: onAdd },
-        canDelete && { text: c('Action').t`Delete`, onClick: onDelete },
+        canDelete && {
+            text: c('Action').t`Delete`,
+            onClick() {
+                onRemove(property.uid);
+            }
+        },
         canMoveUp && { text: c('Action').t`Move up`, onClick: onMoveUp },
         canMoveDown && { text: c('Action').t`Move down`, onClick: onMoveDown }
     ].filter(Boolean);
 
     return (
         <Row>
-            <ContactLabelProperty field={field} type={type} />
+            <ContactModalLabel field={field} type={type} uid={property.uid} onChange={onChange} />
             <Field>
-                <ContactFieldProperty field={field} value={property.value} onChange={onChange} />
+                <ContactFieldProperty field={field} value={property.value} uid={property.uid} onChange={onChange} />
             </Field>
             {list.length ? (
                 <div className="ml1 flex flex-items-end">
@@ -38,20 +42,20 @@ const ContactRowProperty = ({ property, onChange, onAdd, onDelete, onMoveUp, onM
     );
 };
 
-ContactRowProperty.propTypes = {
+ContactModalRow.propTypes = {
     property: PropTypes.object.isRequired,
     onChange: PropTypes.func,
     onAdd: PropTypes.func,
-    onDelete: PropTypes.func,
+    onRemove: PropTypes.func,
     onMoveUp: PropTypes.func,
     onMoveDown: PropTypes.func,
     first: PropTypes.bool,
     last: PropTypes.bool
 };
 
-ContactRowProperty.defaultProps = {
+ContactModalRow.defaultProps = {
     first: false,
     last: false
 };
 
-export default ContactRowProperty;
+export default ContactModalRow;

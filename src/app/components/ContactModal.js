@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormModal } from 'react-components';
 import { c } from 'ttag';
-import ContactRowProperty from './ContactRowProperty';
+
+import ContactModalProperties from './ContactModalProperties';
+import { randomIntFromInterval } from 'proton-shared/lib/helpers/function';
+import { OTHER_INFORMATION_FIELDS } from '../constants';
+import { generateUID } from 'react-components/helpers/component';
 
 const DEFAULT_MODEL = [
     { field: 'fn', value: '' },
@@ -33,120 +37,91 @@ const FIELDS = [
     'url'
 ];
 
+const UID_PREFIX = 'contact-property';
+
 const formatModel = (properties) => {
-    return properties.filter(({ field }) => FIELDS.includes(field)); // Only includes editable properties that we decided
+    if (!properties) {
+        return DEFAULT_MODEL.map((property) => ({ ...property, uid: generateUID(UID_PREFIX) })); // Add UID to localize the property easily;
+    }
+    return properties
+        .filter(({ field }) => FIELDS.includes(field)) // Only includes editable properties that we decided
+        .map((property) => ({ ...property, uid: generateUID(UID_PREFIX) })); // Add UID to localize the property easily
 };
 
 const clearModel = (properties) => {
     return properties.filter(({ value }) => value);
 };
 
-const ContactModal = ({ contactID, properties, ...rest }) => {
-    const [model, setModel] = useState(contactID ? formatModel(properties) : DEFAULT_MODEL);
+const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => {
+    const [properties, setProperties] = useState(formatModel(initialProperties));
     const title = contactID ? c('Title').t`Edit contact details` : c('Title').t`Add new contact`;
-    const handleAdd = (field) => setModel([...model, { field, value: '' }]);
+
+    const handleRemove = (propertyUID) => {
+        setProperties(properties.filter(({ uid }) => uid !== propertyUID));
+    };
+
+    const handleAdd = (field) => () => {
+        if (!field) {
+            // Get random field from other info
+            const index = randomIntFromInterval(0, OTHER_INFORMATION_FIELDS.length - 1);
+            return setProperties([
+                ...properties,
+                { field: OTHER_INFORMATION_FIELDS[index], value: '', uid: generateUID(UID_PREFIX) }
+            ]);
+        }
+        setProperties([...properties, { field, value: '', uid: generateUID(UID_PREFIX) }]);
+    };
 
     const handleSubmit = () => {
-        const params = clearModel(model);
+        const params = clearModel(properties);
         console.log(params);
     };
 
-    const handleChange = (index) => (value) => {
-        const newModel = [...model];
-        newModel[index].value = value;
-        setModel(newModel);
+    const handleChange = ({ uid: propertyUID, value, key = 'value' }) => {
+        const newProperties = properties.map((property) => {
+            if (property.uid === propertyUID) {
+                property[key] = value;
+            }
+            return property;
+        });
+        setProperties(newProperties);
     };
-
-    const {
-        fn: fnProperties,
-        email: emailProperties,
-        tel: telProperties,
-        adr: adrProperties,
-        rest: restProperties
-    } = model.reduce(
-        (acc, property, index) => {
-            const { field } = property;
-            const newProperty = { ...property, index };
-
-            if (field === 'fn') {
-                acc.fn.push(newProperty);
-                return acc;
-            }
-
-            if (field === 'adr') {
-                acc.adr.push(newProperty);
-                return acc;
-            }
-
-            if (field === 'tel') {
-                acc.tel.push(newProperty);
-                return acc;
-            }
-
-            if (field === 'email') {
-                acc.email.push(newProperty);
-                return acc;
-            }
-
-            acc.rest.push(newProperty);
-
-            return acc;
-        },
-        { fn: [], adr: [], tel: [], email: [], rest: [] }
-    );
 
     return (
         <FormModal onSubmit={handleSubmit} title={title} submit={c('Action').t`Save`} {...rest}>
-            {fnProperties.map((property, index) => (
-                <ContactRowProperty
-                    key={index.toString()}
-                    property={property}
-                    onChange={handleChange(property.index)}
-                    onAdd={handleAdd}
-                />
-            ))}
-            <hr />
-            {emailProperties.map((property, index) => (
-                <ContactRowProperty
-                    first={!index}
-                    last={emailProperties.length - 1 === index}
-                    key={index.toString()}
-                    property={property}
-                    onChange={handleChange(property.index)}
-                    onAdd={handleAdd}
-                />
-            ))}
-            <hr />
-            {telProperties.map((property, index) => (
-                <ContactRowProperty
-                    first={!index}
-                    last={telProperties.length - 1 === index}
-                    key={index.toString()}
-                    property={property}
-                    onChange={handleChange(property.index)}
-                    onAdd={handleAdd}
-                />
-            ))}
-            <hr />
-            {adrProperties.map((property, index) => (
-                <ContactRowProperty
-                    first={!index}
-                    last={adrProperties.length - 1 === index}
-                    key={index.toString()}
-                    property={property}
-                    onChange={handleChange(property.index)}
-                    onAdd={handleAdd}
-                />
-            ))}
-            <hr />
-            {restProperties.map((property, index) => (
-                <ContactRowProperty
-                    key={index.toString()}
-                    property={property}
-                    onChange={handleChange(property.index)}
-                    onAdd={handleAdd}
-                />
-            ))}
+            <ContactModalProperties
+                properties={properties}
+                field="fn"
+                onChange={handleChange}
+                onRemove={handleRemove}
+            />
+            <ContactModalProperties
+                properties={properties}
+                field="email"
+                onChange={handleChange}
+                onRemove={handleRemove}
+                onAdd={handleAdd('email')}
+            />
+            <ContactModalProperties
+                properties={properties}
+                field="tel"
+                onChange={handleChange}
+                onRemove={handleRemove}
+                onAdd={handleAdd('tel')}
+            />
+            <ContactModalProperties
+                properties={properties}
+                field="adr"
+                onChange={handleChange}
+                onRemove={handleRemove}
+                onAdd={handleAdd('adr')}
+            />
+            <ContactModalProperties
+                properties={properties}
+                onChange={handleChange}
+                onRemove={handleRemove}
+                onAdd={handleAdd()}
+            />
         </FormModal>
     );
 };

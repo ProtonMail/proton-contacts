@@ -1,4 +1,5 @@
 import ICAL from 'ical.js';
+import { generateUID } from 'react-components/helpers/component';
 
 const ONE_ORE_MORE_MUST_BE_PRESENT = '1*';
 const EXACTLY_ONE_MUST_BE_PRESENT = '1';

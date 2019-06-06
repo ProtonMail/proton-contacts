@@ -6,13 +6,7 @@ import { toMap } from 'proton-shared/lib/helpers/object';
 import { normalize } from 'proton-shared/lib/helpers/string';
 
 import ContactViewProperty from './ContactViewProperty';
-
-const TITLE = {
-    email: c('Title').t`Email addresses`,
-    tel: c('Title').t`Phone numbers`,
-    adr: c('Title').t`Addresses`,
-    other: c('Title').t`Other information`
-};
+import { OTHER_INFORMATION_FIELDS } from '../constants';
 
 const ICONS = {
     email: 'email',
@@ -21,30 +15,21 @@ const ICONS = {
     other: 'info'
 };
 
-const OTHER_FIELDS = [
-    'bday',
-    'anniversary',
-    'gender',
-    'lang',
-    'tz',
-    'geo',
-    'title',
-    'role',
-    'logo',
-    'org',
-    'member',
-    'note',
-    'url'
-];
-
 const ContactViewProperties = ({ properties: allProperties, contactID, field }) => {
+    const TITLES = {
+        email: c('Title').t`Email addresses`,
+        tel: c('Title').t`Phone numbers`,
+        adr: c('Title').t`Addresses`,
+        other: c('Title').t`Other information`
+    };
+
     const [contactEmails] = useContactEmails();
     const [contactGroups] = useContactGroups();
     const mapContactGroups = toMap(contactGroups);
     const filteredContactEmails = contactEmails.filter(({ ContactID }) => ContactID === contactID);
-    const title = field ? TITLE[field] : TITLE.other;
+    const title = field ? TITLES[field] : TITLES.other;
     const iconName = field ? ICONS[field] : ICONS.other;
-    const fields = field ? [field] : OTHER_FIELDS;
+    const fields = field ? [field] : OTHER_INFORMATION_FIELDS;
 
     const properties = allProperties
         .filter(({ field }) => fields.includes(field))

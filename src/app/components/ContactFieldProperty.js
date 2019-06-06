@@ -6,8 +6,8 @@ import { Input, TextArea, EmailInput, DateInput } from 'react-components';
 import ContactImageField from './ContactImageField';
 import ContactAdrField from './ContactAdrField';
 
-const ContactFieldProperty = ({ field, value, onChange, ...rest }) => {
-    const handleChange = ({ target }) => onChange(target.value);
+const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
+    const handleChange = ({ target }) => onChange({ value: target.value, uid });
     const val = Array.isArray(value) ? value[0] : value;
 
     if (field === 'email') {
@@ -15,7 +15,8 @@ const ContactFieldProperty = ({ field, value, onChange, ...rest }) => {
     }
 
     if (field === 'adr') {
-        return <ContactAdrField value={val} onChange={onChange} />;
+        const handleChangeAdr = (adr) => onChange({ value: adr, uid });
+        return <ContactAdrField value={val} onChange={handleChangeAdr} />;
     }
 
     if (field === 'note') {
@@ -25,11 +26,12 @@ const ContactFieldProperty = ({ field, value, onChange, ...rest }) => {
     if (field === 'bday' || field === 'anniversary') {
         const m = moment(val);
         if (m.isValid()) {
+            const handleSelectDate = (date) => onChange({ value: date, uid });
             return (
                 <DateInput
                     setDefaultDate
                     defaultDate={m.toDate()}
-                    onSelect={onChange}
+                    onSelect={handleSelectDate}
                     format={moment.localeData().longDateFormat('L')}
                     {...rest}
                 />
@@ -38,14 +40,16 @@ const ContactFieldProperty = ({ field, value, onChange, ...rest }) => {
     }
 
     if (field === 'photo' || field === 'logo') {
-        return <ContactImageField value={val} onChange={onChange} {...rest} />;
+        const handleChangeImage = (url) => onChange({ value: url, uid });
+        return <ContactImageField value={val} onChange={handleChangeImage} {...rest} />;
     }
 
     return <Input value={val} onChange={handleChange} {...rest} />;
 };
 
 ContactFieldProperty.propTypes = {
-    field: PropTypes.string,
+    field: PropTypes.string.isRequired,
+    uid: PropTypes.string.isRequired,
     value: PropTypes.oneOf(PropTypes.string, PropTypes.arrayOf(PropTypes.string)),
     onChange: PropTypes.func.isRequired
 };
