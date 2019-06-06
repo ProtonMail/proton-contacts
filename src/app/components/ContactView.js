@@ -28,7 +28,7 @@ const ContactView = ({ properties, contactID, errors }) => {
     };
 
     return (
-        <div className="conversation-column-detail flex-item-fluid scroll-if-needed">
+        <div className="view-column-detail flex-item-fluid scroll-if-needed">
             <div className="flex flex-spacebetween flex-items-center border-bottom">
                 <div className="p1">
                     <h2 className="m0">{c('Title').t`Contact details`}</h2>
