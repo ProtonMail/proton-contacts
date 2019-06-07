@@ -9,7 +9,7 @@ import ContactPlaceholder from '../components/ContactPlaceholder';
 const ContactsContainer = () => {
     const [contactEmails, loadingContactEmails] = useContactEmails();
     const [contacts, loadingContacts] = useContacts();
-    const [checkedContacts, setCheckedContacts] = useState({});
+    const [checkedContacts, setCheckedContacts] = useState(Object.create(null));
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
 
@@ -17,8 +17,12 @@ const ContactsContainer = () => {
         return <Loader />;
     }
 
-    const handleCheck = (contactID, checked) => {
-        setCheckedContacts({ ...checkedContacts, [contactID]: checked });
+    const handleCheck = (contactIDs, checked) => {
+        const update = contactIDs.reduce((acc, contactID) => {
+            acc[contactID] = checked;
+            return acc;
+        }, Object.create(null));
+        setCheckedContacts({ ...checkedContacts, ...update });
     };
 
     const formattedContacts = contacts.map((contact) => {

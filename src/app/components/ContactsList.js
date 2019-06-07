@@ -10,6 +10,7 @@ import ContactGroupIcon from './ContactGroupIcon';
 const ContactsList = ({ contacts, onCheck, history, contactID }) => {
     const listRef = useRef(null);
     const containerRef = useRef(null);
+    const [lastChecked, setLastChecked] = useState(); // Store ID of the last contact ID checked
     const getHeight = () => containerRef.current.clientHeight;
     const getWidth = () => containerRef.current.offsetWidth;
     const [contactGroups] = useContactGroups();
@@ -20,15 +21,24 @@ const ContactsList = ({ contacts, onCheck, history, contactID }) => {
         return acc;
     }, Object.create(null));
 
-    const handleCheck = ({ target }) => {
+    const handleCheck = ({ target, shiftKey }) => {
         const contactID = target.getAttribute('data-contact-id');
-        onCheck(contactID, target.checked);
+        const contactIDs = [contactID];
+
+        if (lastChecked && shiftKey) {
+            const start = contacts.findIndex(({ ID }) => ID === contactID);
+            const end = contactID.findIndex(({ ID }) => ID === lastChecked);
+            const contactIDs = contacts.slice(Math.min(start, end), Math.max(start, end) + 1);
+            contactIDs.push(...contacts.slice(Math.min(start, end), Math.max(start, end) + 1).map(({ ID }) => ID));
+        }
+
+        setLastChecked(contactID);
+        onCheck(contactIDs, target.checked);
     };
 
     const handleClick = (ID) => () => history.push(`/contacts/${ID}`);
 
     const Row = ({
-        key, // Unique key within array of rows
         index, // Index of row within collection
         style // Style object to be applied to row (to position it)
     }) => {
@@ -37,7 +47,7 @@ const ContactsList = ({ contacts, onCheck, history, contactID }) => {
         return (
             <div
                 style={style}
-                key={key}
+                key={ID}
                 className={`item-container  bg-global-white  ${contactID === ID ? 'item-is-selected' : ''}`}
             >
                 <div className="flex flex-nowrap">
