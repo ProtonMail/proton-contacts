@@ -1,6 +1,6 @@
 # protonmail-contacts
 
-Proton Contacts built with React.
+Proton Contacts built with React. To set up the project, follow the steps below:
 
 
 
