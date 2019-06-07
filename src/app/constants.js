@@ -16,6 +16,7 @@ export const OTHER_INFORMATION_FIELDS = [
     'geo',
     'title',
     'role',
+    'photo',
     'logo',
     'org',
     'member',

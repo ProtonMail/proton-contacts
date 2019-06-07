@@ -29,8 +29,8 @@ const ContactViewProperties = ({ properties: allProperties, contactID, field }) 
     const filteredContactEmails = contactEmails.filter(({ ContactID }) => ContactID === contactID);
     const title = field ? TITLES[field] : TITLES.other;
     const iconName = field ? ICONS[field] : ICONS.other;
-    const fields = field ? [field] : OTHER_INFORMATION_FIELDS;
-
+    const toExclude = ['photo', 'org', 'logo'];
+    const fields = field ? [field] : OTHER_INFORMATION_FIELDS.filter((field) => !toExclude.includes(field));
     const properties = allProperties
         .filter(({ field }) => fields.includes(field))
         .map((property) => {
