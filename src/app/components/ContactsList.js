@@ -4,7 +4,6 @@ import { Checkbox, useContactGroups } from 'react-components';
 import { withRouter } from 'react-router';
 import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
 import List from 'react-virtualized/dist/commonjs/List';
-import { debounce } from 'proton-shared/lib/helpers/function';
 
 import ContactGroupIcon from './ContactGroupIcon';
 
@@ -98,11 +97,11 @@ const ContactsList = ({ contacts, onCheck, history, contactID }) => {
             }
         }, 200);
 
-        document.addEventListener('resize', debounce(onResize, 200));
+        document.addEventListener('resize', onResize);
 
         return () => {
             clearTimeout(timeoutID);
-            document.removeEventListener('resize', debounce(onResize, 200));
+            document.removeEventListener('resize', onResize);
         };
     }, []);
 

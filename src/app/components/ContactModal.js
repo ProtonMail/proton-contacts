@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FormModal } from 'react-components';
+import { FormModal, useUser } from 'react-components';
 import { c } from 'ttag';
 
 import ContactModalProperties from './ContactModalProperties';
+import ContactPromote from './ContactPromote';
 import { randomIntFromInterval } from 'proton-shared/lib/helpers/function';
 import { OTHER_INFORMATION_FIELDS } from '../constants';
 import { generateUID } from 'react-components/helpers/component';
@@ -53,6 +54,7 @@ const clearModel = (properties) => {
 };
 
 const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => {
+    const [{ hasPaidMail }] = useUser();
     const [properties, setProperties] = useState(formatModel(initialProperties));
     const title = contactID ? c('Title').t`Edit contact details` : c('Title').t`Add new contact`;
 
@@ -102,26 +104,32 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
                 onRemove={handleRemove}
                 onAdd={handleAdd('email')}
             />
-            <ContactModalProperties
-                properties={properties}
-                field="tel"
-                onChange={handleChange}
-                onRemove={handleRemove}
-                onAdd={handleAdd('tel')}
-            />
-            <ContactModalProperties
-                properties={properties}
-                field="adr"
-                onChange={handleChange}
-                onRemove={handleRemove}
-                onAdd={handleAdd('adr')}
-            />
-            <ContactModalProperties
-                properties={properties}
-                onChange={handleChange}
-                onRemove={handleRemove}
-                onAdd={handleAdd()}
-            />
+            {hasPaidMail ? (
+                <>
+                    <ContactModalProperties
+                        properties={properties}
+                        field="tel"
+                        onChange={handleChange}
+                        onRemove={handleRemove}
+                        onAdd={handleAdd('tel')}
+                    />
+                    <ContactModalProperties
+                        properties={properties}
+                        field="adr"
+                        onChange={handleChange}
+                        onRemove={handleRemove}
+                        onAdd={handleAdd('adr')}
+                    />
+                    <ContactModalProperties
+                        properties={properties}
+                        onChange={handleChange}
+                        onRemove={handleRemove}
+                        onAdd={handleAdd()}
+                    />
+                </>
+            ) : (
+                <ContactPromote />
+            )}
         </FormModal>
     );
 };

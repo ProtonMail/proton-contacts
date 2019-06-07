@@ -1,13 +1,14 @@
 import React from 'react';
 import { c } from 'ttag';
 import PropTypes from 'prop-types';
-import { useModals, useUser, PrimaryButton, Button, Alert, Icon } from 'react-components';
+import { useModals, useUser, PrimaryButton, Button } from 'react-components';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 
 import ContactModal from './ContactModal';
 import { toICAL } from '../helpers/vcard';
 import ContactSummary from './ContactSummary';
 import ContactViewProperties from './ContactViewProperties';
+import ContactPromote from './ContactPromote';
 
 const ContactView = ({ properties, contactID, errors }) => {
     const { createModal } = useModals();
@@ -48,14 +49,8 @@ const ContactView = ({ properties, contactID, errors }) => {
                         <ContactViewProperties contactID={contactID} properties={properties} />
                     </>
                 ) : (
-                    <div className="border-bottom mb1 pl1 pr1">
-                        <h3 className="mb1">
-                            <Icon name="lock" /> {c('Title').t`Encrypted details`}
-                        </h3>
-                        <Alert learnMore="TODO">{c('Info')
-                            .t`Upgrade your plan to unlock encrypted details such as phone numbers and home addresses.`}</Alert>
-                        <a href="/settings/dashboard" className="pm-button pm-button pm-button--primary">{c('Action')
-                            .t`Upgrade`}</a>
+                    <div className="mb1 pl1 pr1">
+                        <ContactPromote />
                     </div>
                 )}
             </div>
