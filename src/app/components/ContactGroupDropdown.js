@@ -59,52 +59,49 @@ const ContactGroupDropdown = ({ className, contactIDs }) => {
 
     return (
         <Dropdown caret className={className} content={c('Contact group dropdown').t`Group`} autoClose={false}>
-            <div className="p1">
-                <div className="flex flex-spacebetween mb1">
-                    <strong>{c('Label').t`Add to group`}</strong>
-                    <Tooltip title={c('Info').t`Create a new contact group`}>
-                        <SmallButton className="pm-button--primary pm-button--for-icon" onClick={handleAdd}>
-                            <Icon name="contacts-groups" fill="light" />+
-                        </SmallButton>
-                    </Tooltip>
-                </div>
-                <div className="mb1">
-                    <SearchInput
-                        value={keyword}
-                        onChange={setKeyword}
-                        autoFocus={true}
-                        placeholder={c('Placeholder').t`Filter groups`}
-                    />
-                </div>
-                <div className="mb1">
-                    <ul className="unstyled m0">
-                        {groups.map(({ ID, Name, Color }) => {
-                            return (
-                                <li
-                                    key={ID}
-                                    className="flex flex-spacebetween flex-nowrap border-bottom border-bottom--dashed pt0-5 pb0-5"
-                                >
-                                    <label htmlFor={ID} className="flex flex-nowrap">
-                                        <Icon name="contacts-groups" className="mr0-5" color={Color} />
-                                        <span className="ellipsis" title={Name}>
-                                            {Name}
-                                        </span>
-                                    </label>
-                                    <Checkbox
-                                        id={ID}
-                                        checked={model[ID] === CHECKED}
-                                        indeterminate={model[ID] === INDETERMINATE}
-                                        onChange={handleCheck(ID)}
-                                    />
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
-                <div className="aligncenter">
-                    <SmallButton className="pm-button--primary" onClick={handleApply}>{c('Action')
-                        .t`Apply`}</SmallButton>
-                </div>
+            <div className="flex flex-spacebetween pt1 pl1 pr1 mb1">
+                <strong>{c('Label').t`Add to group`}</strong>
+                <Tooltip title={c('Info').t`Create a new contact group`}>
+                    <SmallButton className="pm-button--primary pm-button--for-icon" onClick={handleAdd}>
+                        <Icon name="contacts-groups" fill="light" />+
+                    </SmallButton>
+                </Tooltip>
+            </div>
+            <div className="pl1 pr1 mb1">
+                <SearchInput
+                    value={keyword}
+                    onChange={setKeyword}
+                    autoFocus={true}
+                    placeholder={c('Placeholder').t`Filter groups`}
+                />
+            </div>
+            <div className="mb1">
+                <ul className="unstyled m0 dropDown-contentInner">
+                    {groups.map(({ ID, Name, Color }) => {
+                        return (
+                            <li
+                                key={ID}
+                                className="flex flex-spacebetween flex-nowrap border-bottom border-bottom--dashed pt0-5 pb0-5"
+                            >
+                                <label htmlFor={ID} className="flex flex-nowrap">
+                                    <Icon name="contacts-groups" className="mr0-5" color={Color} />
+                                    <span className="ellipsis" title={Name}>
+                                        {Name}
+                                    </span>
+                                </label>
+                                <Checkbox
+                                    id={ID}
+                                    checked={model[ID] === CHECKED}
+                                    indeterminate={model[ID] === INDETERMINATE}
+                                    onChange={handleCheck(ID)}
+                                />
+                            </li>
+                        );
+                    })}
+                </ul>
+            </div>
+            <div className="aligncenter mb1">
+                <SmallButton className="pm-button--primary" onClick={handleApply}>{c('Action').t`Apply`}</SmallButton>
             </div>
         </Dropdown>
     );
