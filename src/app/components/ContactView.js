@@ -25,7 +25,7 @@ const ContactView = ({ properties, contactID, errors }) => {
         const vcard = toICAL(properties);
         const blob = new Blob([vcard.toString()], { type: 'data:text/plain;charset=utf-8;' });
 
-        downloadFile(blob, filename);
+        downloadFile(blob, `${filename}.vcf`);
     };
 
     return (
