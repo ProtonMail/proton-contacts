@@ -1,7 +1,7 @@
 import React from 'react';
 import { c } from 'ttag';
 import PropTypes from 'prop-types';
-import { useModals, PrimaryButton, Button } from 'react-components';
+import { useModals, useUser, PrimaryButton, Button, Alert, Icon } from 'react-components';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 
 import ContactModal from './ContactModal';
@@ -11,6 +11,7 @@ import ContactViewProperties from './ContactViewProperties';
 
 const ContactView = ({ properties, contactID, errors }) => {
     const { createModal } = useModals();
+    const [{ hasPaidMail }] = useUser();
 
     const openContactModal = () => {
         createModal(<ContactModal properties={properties} contactID={contactID} />);
@@ -40,9 +41,23 @@ const ContactView = ({ properties, contactID, errors }) => {
             <ContactSummary properties={properties} />
             <div className="pl1 pr1">
                 <ContactViewProperties contactID={contactID} properties={properties} field="email" />
-                <ContactViewProperties contactID={contactID} properties={properties} field="tel" />
-                <ContactViewProperties contactID={contactID} properties={properties} field="adr" />
-                <ContactViewProperties contactID={contactID} properties={properties} />
+                {hasPaidMail ? (
+                    <>
+                        <ContactViewProperties contactID={contactID} properties={properties} field="tel" />
+                        <ContactViewProperties contactID={contactID} properties={properties} field="adr" />
+                        <ContactViewProperties contactID={contactID} properties={properties} />
+                    </>
+                ) : (
+                    <div className="border-bottom mb1 pl1 pr1">
+                        <h3 className="mb1">
+                            <Icon name="lock" /> {c('Title').t`Encrypted details`}
+                        </h3>
+                        <Alert learnMore="TODO">{c('Info')
+                            .t`Upgrade your plan to unlock encrypted details such as phone numbers and home addresses.`}</Alert>
+                        <a href="/settings/dashboard" className="pm-button pm-button pm-button--primary">{c('Action')
+                            .t`Upgrade`}</a>
+                    </div>
+                )}
             </div>
         </div>
     );

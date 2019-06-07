@@ -37,7 +37,7 @@ const ContactsContainer = () => {
                             return (
                                 <>
                                     <ContactsList
-                                        selectedContactID={match.params.id}
+                                        contactID={match.params.id}
                                         contacts={formattedContacts}
                                         onCheck={handleCheck}
                                     />
