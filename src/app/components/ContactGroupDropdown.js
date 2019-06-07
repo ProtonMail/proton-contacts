@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, SmallButton, Icon, SearchInput, Checkbox, useContactGroups, useContacts } from 'react-components';
+import {
+    Dropdown,
+    SmallButton,
+    Icon,
+    SearchInput,
+    Checkbox,
+    useContactGroups,
+    useContacts,
+    Tooltip
+} from 'react-components';
 import { c } from 'ttag';
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { toMap } from 'proton-shared/lib/helpers/object';
@@ -44,7 +53,8 @@ const ContactGroupDropdown = ({ className, contactIDs }) => {
     };
 
     const handleAdd = () => {
-        console.log('TODO open modal');
+        // TODO
+        console.log('open modal');
     };
 
     return (
@@ -52,9 +62,11 @@ const ContactGroupDropdown = ({ className, contactIDs }) => {
             <div className="p1">
                 <div className="flex flex-spacebetween mb1">
                     <strong>{c('Label').t`Add to group`}</strong>
-                    <SmallButton className="pm-button--primary pm-button--for-icon" onClick={handleAdd}>
-                        <Icon name="contacts-groups" fill="light" />+
-                    </SmallButton>
+                    <Tooltip title={c('Info').t`Create a new contact group`}>
+                        <SmallButton className="pm-button--primary pm-button--for-icon" onClick={handleAdd}>
+                            <Icon name="contacts-groups" fill="light" />+
+                        </SmallButton>
+                    </Tooltip>
                 </div>
                 <div className="mb1">
                     <SearchInput
@@ -74,7 +86,9 @@ const ContactGroupDropdown = ({ className, contactIDs }) => {
                                 >
                                     <label htmlFor={ID} className="flex flex-nowrap">
                                         <Icon name="contacts-groups" className="mr0-5" color={Color} />
-                                        <span className="ellipsis">{Name}</span>
+                                        <span className="ellipsis" title={Name}>
+                                            {Name}
+                                        </span>
                                     </label>
                                     <Checkbox
                                         id={ID}
