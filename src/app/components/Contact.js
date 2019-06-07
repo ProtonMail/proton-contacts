@@ -11,6 +11,7 @@ import ContactView from './ContactView';
 const { CLEAR_TEXT, ENCRYPTED_AND_SIGNED, ENCRYPTED, SIGNED } = CONTACT_CARD_TYPE;
 const SIGNATURED_NOT_VERIFIED = 1;
 const FAIL_TO_READ = 2;
+const FAIL_TO_LOAD = 3;
 
 const decryptSigned = async ({ Data, Signature }, { publicKeys, privateKeys }) => {
     try {
@@ -98,7 +99,8 @@ const prepareContact = async (contact, keys) => {
 const Contact = ({ contactID, userKeysList }) => {
     const api = useApi();
     const [loading, setLoading] = useState(true);
-    const [{ properties, errors }, setModel] = useState({});
+    const [model, setModel] = useState({ properties: [], errors: [] });
+    const { properties, errors } = model;
     const { publicKeys, privateKeys } = userKeysList.reduce(
         (acc, { privateKey }) => {
             if (!privateKey.isDecrypted()) {
@@ -120,6 +122,7 @@ const Contact = ({ contactID, userKeysList }) => {
             setLoading(false);
         } catch (error) {
             setLoading(false);
+            setModel({ ...model, errors: [FAIL_TO_LOAD] });
             throw error;
         }
     };

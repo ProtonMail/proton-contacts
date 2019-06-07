@@ -9,7 +9,7 @@ import ContactGroupIcon from './ContactGroupIcon';
 import ContactGroupDropdown from './ContactGroupDropdown';
 import ContactLabelProperty from './ContactLabelProperty';
 
-const ContactViewProperty = ({ property }) => {
+const ContactViewProperty = ({ property, contactID }) => {
     const { field, first } = property;
     const { createModal } = useModals();
     const type = clearType(getType(property.type));
@@ -60,7 +60,7 @@ const ContactViewProperty = ({ property }) => {
 
                 return (
                     <Group>
-                        <ContactGroupDropdown className="pm-button--small pm-group-button" />
+                        <ContactGroupDropdown className="pm-button--small pm-group-button" contactIDs={[contactID]} />
                         <ButtonGroup onClick={handleSettings} className="pm-button--small">{c('Action')
                             .t`Settings`}</ButtonGroup>
                         <Copy className="pm-button--small pm-group-button" value={value} />
@@ -88,7 +88,8 @@ const ContactViewProperty = ({ property }) => {
 };
 
 ContactViewProperty.propTypes = {
-    property: PropTypes.object.isRequired
+    property: PropTypes.object.isRequired,
+    contactID: PropTypes.string
 };
 
 export default ContactViewProperty;

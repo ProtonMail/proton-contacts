@@ -116,7 +116,7 @@ const ContactsList = ({ contacts, onCheck, history, contactID }) => {
     }, []);
 
     return (
-        <div ref={containerRef} className="items-column-list scroll-if-needed scroll-smooth-touch">
+        <div ref={containerRef} className="items-column-list">
             <List
                 ref={listRef}
                 rowRenderer={Row}

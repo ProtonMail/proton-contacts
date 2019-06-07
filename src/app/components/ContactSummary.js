@@ -46,7 +46,7 @@ const ContactSummary = ({ properties }) => {
 };
 
 ContactSummary.propTypes = {
-    properties: PropTypes.array
+    properties: PropTypes.array.isRequired
 };
 
 export default ContactSummary;
