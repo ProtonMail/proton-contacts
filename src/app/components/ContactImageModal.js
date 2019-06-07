@@ -7,6 +7,7 @@ import { CONTACT_IMG_SIZE } from '../constants';
 
 const ContactImageModal = ({ url: initialUrl, onSubmit, onClose, ...rest }) => {
     const [url, setUrl] = useState(initialUrl);
+    const title = c('Title').t`Edit image`;
     const { createNotification } = useNotifications();
     const handleChange = ({ target }) => setUrl(target.value);
 
@@ -34,7 +35,7 @@ const ContactImageModal = ({ url: initialUrl, onSubmit, onClose, ...rest }) => {
     };
 
     return (
-        <FormModal onSubmit={handleSubmit} submit={c('Action').t`Save`} onClose={onClose} {...rest}>
+        <FormModal title={title} onSubmit={handleSubmit} submit={c('Action').t`Save`} onClose={onClose} {...rest}>
             <Row>
                 <Label htmlFor="contactImageModal-input-url">{c('Label').t`Add image URL`}</Label>
                 <Field>
