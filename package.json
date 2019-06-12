@@ -1,17 +1,22 @@
 {
     "name": "proton-contacts",
-    "version": "1.0.0",
+    "version": "0.0.0",
     "description": "",
     "main": "index.js",
+    "config": {
+        "publicPathFlag": "--publicPath=/contacts/"
+    },
     "scripts": {
         "start": "proton-pack dev-server",
         "lint": "eslint src --ext .js --quiet --cache",
         "pretty": "prettier --write  $(find src/app -type f -name '*.js')",
         "preversion": "git update-index --no-assume-unchanged package-lock.json",
         "postversion": "git update-index --assume-unchanged package-lock.json && git push --tags",
+        "build": "cross-env NODE_ENV=production proton-pack compile",
         "i18n:validate": "proton-i18n validate lint-functions",
         "i18n:validate:context": "proton-i18n extract && proton-i18n validate",
-        "i18n:getlatest": "proton-i18n upgrade"
+        "i18n:getlatest": "proton-i18n upgrade",
+        "deploy": "proton-bundler"
     },
     "repository": {
         "type": "git",
@@ -25,10 +30,12 @@
     },
     "homepage": "https://github.com/ProtonMail/proton-contacts#readme",
     "devDependencies": {
-        "proton-i18n": "github:ProtonMail/proton-i18n#semver:^1.4.0",
-        "husky": "^1.3.1",
+        "cross-env": "^5.2.0",
+        "husky": "^2.4.1",
         "lint-staged": "^8.1.5",
-        "prettier": "^1.16.4"
+        "prettier": "^1.16.4",
+        "proton-bundler": "github:ProtonMail/proton-bundler#semver:^1.0.0",
+        "proton-i18n": "github:ProtonMail/proton-i18n#semver:^1.4.0"
     },
     "dependencies": {
         "@babel/polyfill": "^7.2.5",
