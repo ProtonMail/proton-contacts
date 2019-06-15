@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Row, Field, Group, ButtonGroup, Copy, useModals } from 'react-components';
+import { Row, Field, Group, ButtonGroup, Copy, useModals, useUser } from 'react-components';
 import { c } from 'ttag';
 
 import { clearType, getType, formatAdr } from '../helpers/property';
@@ -11,6 +11,7 @@ import ContactLabelProperty from './ContactLabelProperty';
 
 const ContactViewProperty = ({ property, contactID }) => {
     const { field, first } = property;
+    const [{ hasPaidMail }] = useUser();
     const { createModal } = useModals();
     const type = clearType(getType(property.type));
     const value = Array.isArray(property.value) ? property.value.join(', ') : property.value;
@@ -60,9 +61,16 @@ const ContactViewProperty = ({ property, contactID }) => {
 
                 return (
                     <Group>
-                        <ContactGroupDropdown className="pm-button--small pm-group-button" contactIDs={[contactID]} />
-                        <ButtonGroup onClick={handleSettings} className="pm-button--small">{c('Action')
-                            .t`Settings`}</ButtonGroup>
+                        {hasPaidMail ? (
+                            <>
+                                <ContactGroupDropdown
+                                    className="pm-button--small pm-group-button"
+                                    contactIDs={[contactID]}
+                                />
+                                <ButtonGroup onClick={handleSettings} className="pm-button--small">{c('Action')
+                                    .t`Settings`}</ButtonGroup>
+                            </>
+                        ) : null}
                         <Copy className="pm-button--small pm-group-button" value={value} />
                     </Group>
                 );

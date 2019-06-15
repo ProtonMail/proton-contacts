@@ -8,11 +8,10 @@ import ContactFieldProperty from './ContactFieldProperty';
 import ContactModalLabel from './ContactModalLabel';
 import ContactImageModal from './ContactImageModal';
 
-const ContactModalRow = ({ property, onChange, onAdd, onRemove, onMoveUp, onMoveDown, first, last }) => {
+const ContactModalRow = ({ property, onChange, onRemove, onMoveUp, onMoveDown, first, last }) => {
     const { createModal } = useModals();
     const { field, uid } = property;
     const type = clearType(getType(property.type));
-    const canAdd = !['fn'].includes(field) && last;
     const canDelete = !['fn'].includes(field);
     const canMoveUp = ['email'].includes(field) && !first;
     const canMoveDown = ['email'].includes(field) && !last;
@@ -20,7 +19,6 @@ const ContactModalRow = ({ property, onChange, onAdd, onRemove, onMoveUp, onMove
     const canEdit = ['photo', 'logo'].includes(field);
 
     const list = [
-        canAdd && { text: c('Action').t`Add`, onClick: onAdd },
         canDelete && {
             text: c('Action').t`Delete`,
             onClick() {

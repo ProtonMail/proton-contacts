@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { Icon } from 'react-components';
+import { Icon, PrimaryButton } from 'react-components';
 
 import ContactModalRow from './ContactModalRow';
 import { OTHER_INFORMATION_FIELDS } from '../constants';
@@ -27,6 +27,7 @@ const ContactModalProperties = ({ properties: allProperties, field, onChange, on
     const iconName = field ? ICONS[field] : ICONS.other;
     const fields = field ? [field] : OTHER_INFORMATION_FIELDS;
     const properties = allProperties.filter(({ field }) => fields.includes(field));
+    const canAdd = !fields.includes('fn');
 
     return (
         <div className="border-bottom mb1">
@@ -44,6 +45,7 @@ const ContactModalProperties = ({ properties: allProperties, field, onChange, on
                     onAdd={onAdd}
                 />
             ))}
+            {canAdd ? <PrimaryButton className="mb1" onClick={onAdd}>{c('Action').t`Add`}</PrimaryButton> : null}
         </div>
     );
 };

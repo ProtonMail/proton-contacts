@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Checkbox, useContactGroups } from 'react-components';
+import { useContactGroups, useUser } from 'react-components';
 import { withRouter } from 'react-router';
 import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
 import List from 'react-virtualized/dist/commonjs/List';
 
+import ItemCheckbox from './ItemCheckbox';
 import ContactGroupIcon from './ContactGroupIcon';
 
 const ContactsList = ({ contacts, onCheck, history, contactID }) => {
+    const [{ hasPaidMail }] = useUser();
     const listRef = useRef(null);
     const containerRef = useRef(null);
     const [lastChecked, setLastChecked] = useState(); // Store ID of the last contact ID checked
@@ -21,7 +23,8 @@ const ContactsList = ({ contacts, onCheck, history, contactID }) => {
         return acc;
     }, Object.create(null));
 
-    const handleCheck = ({ target, shiftKey }) => {
+    const handleCheck = (event) => {
+        const { target, shiftKey } = event;
         const contactID = target.getAttribute('data-contact-id');
         const contactIDs = [contactID];
 
@@ -51,15 +54,14 @@ const ContactsList = ({ contacts, onCheck, history, contactID }) => {
                 className={`item-container  bg-global-white  ${contactID === ID ? 'item-is-selected' : ''}`}
             >
                 <div className="flex flex-nowrap">
-                    <label className="item-icon flex-item-noshrink rounded50 bg-white inline-flex">
-                        <span className="mauto item-abbr">{initial}</span>
-                        <Checkbox
-                            checked={isChecked}
-                            className="item-checkbox sr-only"
-                            onChange={handleCheck}
-                            data-contact-id={ID}
-                        />
-                    </label>
+                    <ItemCheckbox
+                        checked={isChecked}
+                        className="item-checkbox sr-only"
+                        onChange={handleCheck}
+                        data-contact-id={ID}
+                    >
+                        {initial}
+                    </ItemCheckbox>
                     <div
                         className="flex-item-fluid flex flex-column flex-spacebetween conversation-titlesender"
                         onClick={handleClick(ID)}
@@ -68,7 +70,7 @@ const ContactsList = ({ contacts, onCheck, history, contactID }) => {
                             <div className={`flex-item-fluid w0 ${LabelIDs.length ? 'pr1' : ''}`}>
                                 <span className="bold inbl mw100 ellipsis">{Name}</span>
                             </div>
-                            {LabelIDs.length ? (
+                            {hasPaidMail && LabelIDs.length ? (
                                 <div>
                                     {LabelIDs.map((labelID) => {
                                         const { Color, Name } = mapContactGroups[labelID];

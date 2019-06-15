@@ -1,14 +1,32 @@
 import React from 'react';
-import { c } from 'ttag';
-import { PrimaryButton } from 'react-components';
+import PropTypes from 'prop-types';
+import { c, ngettext, msgid } from 'ttag';
+import { PrimaryButton, Button } from 'react-components';
 import { Link } from 'react-router-dom';
 
-const ContactPlaceholder = () => {
+const ContactPlaceholder = ({ contacts, onUncheck }) => {
     const handleImport = () => {};
     const handleExport = () => {};
+    const selectedContacts = contacts.filter(({ isChecked }) => isChecked);
+    const countSelectedContacts = selectedContacts.length;
+
+    if (countSelectedContacts) {
+        return (
+            <div className="p2 view-column-detail flex-item-fluid aligncenter">
+                <h1>
+                    {ngettext(
+                        msgid`${countSelectedContacts} contact selected`,
+                        `${countSelectedContacts} contacts selected`,
+                        countSelectedContacts
+                    )}
+                </h1>
+                <Button onClick={onUncheck}>{c('Action').t`Deselect all`}</Button>
+            </div>
+        );
+    }
 
     return (
-        <div className="p2">
+        <div className="p2 view-column-detail flex-item-fluid">
             <div className="aligncenter">
                 <h1>{c('Title').t`Contacts`}</h1>
                 <p>
@@ -54,6 +72,15 @@ const ContactPlaceholder = () => {
             </div>
         </div>
     );
+};
+
+ContactPlaceholder.propTypes = {
+    contacts: PropTypes.array,
+    onUncheck: PropTypes.func
+};
+
+ContactPlaceholder.defaultProps = {
+    contacts: []
 };
 
 export default ContactPlaceholder;
