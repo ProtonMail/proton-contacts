@@ -25,7 +25,7 @@ const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
 
     if (field === 'bday' || field === 'anniversary') {
         const m = moment(val);
-        if (m.isValid()) {
+        if (val === '' || m.isValid()) {
             const handleSelectDate = (date) => onChange({ value: date, uid });
             return (
                 <DateInput

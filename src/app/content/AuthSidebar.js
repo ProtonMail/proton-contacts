@@ -1,15 +1,26 @@
 import React from 'react';
-import { Sidebar, useContactGroups, Loader } from 'react-components';
+import { Sidebar, useContactGroups, Loader, useModals } from 'react-components';
 import { c } from 'ttag';
+
+import ContactModal from '../components/ContactModal';
 
 const AuthSidebar = () => {
     const [contactGroups, loading] = useContactGroups();
+    const { createModal } = useModals();
 
     if (loading) {
         return <Loader />;
     }
 
     const list = [
+        {
+            icon: 'plus',
+            text: c('Action').t`Add contact`,
+            type: 'button',
+            onClick() {
+                createModal(<ContactModal />);
+            }
+        },
         {
             icon: 'contacts',
             text: c('Link').t`Contacts`,
@@ -24,11 +35,11 @@ const AuthSidebar = () => {
             }
         }
     ].concat(
-        contactGroups.map(({ Name, Color, ID }) => ({
+        contactGroups.map(({ Name: text, Color: color, ID: contactGroupID }) => ({
             icon: 'contacts-groups',
-            color: Color,
-            text: Name,
-            link: `/contacts/group/${ID}`
+            color,
+            text,
+            link: `/contacts/${contactGroupID}`
         }))
     );
 

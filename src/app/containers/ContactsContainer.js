@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Loader, useContactEmails, useContacts, useUser, useUserKeys } from 'react-components';
 
@@ -7,14 +8,13 @@ import Contact from '../components/Contact';
 import ContactPlaceholder from '../components/ContactPlaceholder';
 import ContactToolbar from '../components/ContactToolbar';
 
-const ContactsContainer = () => {
+const ContactsContainer = ({ contactGroupID }) => {
     const [checkAll, setCheckAll] = useState(false);
     const [contactEmails, loadingContactEmails] = useContactEmails();
     const [contacts, loadingContacts] = useContacts();
     const [checkedContacts, setCheckedContacts] = useState(Object.create(null));
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
-    const contactGroupID = ''; // TODO
 
     if (loadingContactEmails || loadingContacts || loadingUserKeys) {
         return <Loader />;
@@ -73,7 +73,11 @@ const ContactsContainer = () => {
                                 return (
                                     <>
                                         <ContactsList contacts={formattedContacts} onCheck={handleCheck} />
-                                        <ContactPlaceholder contacts={formattedContacts} onUncheck={handleUncheckAll} />
+                                        <ContactPlaceholder
+                                            user={user}
+                                            contacts={formattedContacts}
+                                            onUncheck={handleUncheckAll}
+                                        />
                                     </>
                                 );
                             }}
@@ -83,6 +87,10 @@ const ContactsContainer = () => {
             </div>
         </>
     );
+};
+
+ContactsContainer.propTypes = {
+    contactGroupID: PropTypes.string
 };
 
 export default ContactsContainer;

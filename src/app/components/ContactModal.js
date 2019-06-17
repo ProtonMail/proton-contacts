@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FormModal, useUser } from 'react-components';
+import { FormModal, Alert, useUser } from 'react-components';
 import { c } from 'ttag';
 
 import ContactModalProperties from './ContactModalProperties';
@@ -15,12 +15,11 @@ const DEFAULT_MODEL = [
     { field: 'tel', value: '' },
     { field: 'adr', value: '' },
     { field: 'org', value: '' },
-    { field: 'note', value: '' },
-    { field: 'photo', value: '' }
+    { field: 'note', value: '' }
 ];
 
 // List of field where we let the user interact with
-const FIELDS = [
+const EDITABLE_FIELDS = [
     'fn',
     'email',
     'tel',
@@ -45,7 +44,7 @@ const formatModel = (properties) => {
         return DEFAULT_MODEL.map((property) => ({ ...property, uid: generateUID(UID_PREFIX) })); // Add UID to localize the property easily;
     }
     return properties
-        .filter(({ field }) => FIELDS.includes(field)) // Only includes editable properties that we decided
+        .filter(({ field }) => EDITABLE_FIELDS.includes(field)) // Only includes editable properties that we decided
         .map((property) => ({ ...property, uid: generateUID(UID_PREFIX) })); // Add UID to localize the property easily
 };
 
@@ -91,6 +90,8 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
 
     return (
         <FormModal onSubmit={handleSubmit} title={title} submit={c('Action').t`Save`} {...rest}>
+            <Alert>{c('Info')
+                .t`Email address, phone number and address at the top of their respective list are automatically set as the default information and will be displayed in the contact information's summary section.`}</Alert>
             <ContactModalProperties
                 properties={properties}
                 field="fn"
