@@ -3,6 +3,7 @@ import { Sidebar, useContactGroups, Loader, useModals } from 'react-components';
 import { c } from 'ttag';
 
 import ContactModal from '../components/ContactModal';
+import ExportModal from '../components/ExportModal';
 
 const AuthSidebar = () => {
     const [contactGroups, loading] = useContactGroups();
@@ -25,6 +26,32 @@ const AuthSidebar = () => {
             icon: 'contacts',
             text: c('Link').t`Contacts`,
             link: '/contacts'
+        },
+        {
+            icon: 'import',
+            text: c('Action').t`Import`,
+            type: 'button',
+            onClick() {}
+        },
+        {
+            icon: 'export',
+            text: c('Action').t`Export`,
+            type: 'button',
+            onClick() {
+                createModal(<ExportModal />);
+            }
+        },
+        {
+            icon: 'merge',
+            text: c('Action').t`Merge`,
+            type: 'button',
+            onClick() {}
+        },
+        {
+            icon: 'delete',
+            text: c('Action').t`Delete all`,
+            type: 'button',
+            onClick() {}
         },
         {
             icon: 'contacts-group',
