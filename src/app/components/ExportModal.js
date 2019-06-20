@@ -1,30 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import moment from 'moment';
 import {
     useContacts,
     useUser,
     useUserKeys,
     useApi,
     FormModal,
+    FooterModal,
     ResetButton,
     PrimaryButton,
     Alert
 } from 'react-components';
-import { queryContactExport } from 'proton-shared/lib/api/contacts';
+import { getContact } from 'proton-shared/lib/api/contacts';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
-import { wait } from 'proton-shared/lib/helpers/promise';
 
-import { bothUserKeys, prepareContact } from '../helpers/decrypt';
+import { prepareContact, bothUserKeys } from '../helpers/cryptoTools';
 import { toICAL } from '../helpers/vcard';
-import { percentageProgress } from './../helpers/progress';
 import DynamicProgress from './DynamicProgress';
 
-const DOWNLOAD_FILENAME = 'protonContacts';
-// BACK-END DATA
-const QUERY_EXPORT_MAX_PAGESIZE = 50;
-const API_SAFE_INTERVAL = 100; // API request limit: 100 requests / 10 seconds, so 1 request every 100 ms is safe
+const decryptContact = async (api, contactID, keys) => {
+    try {
+        const { Contact } = await api(getContact(contactID));
+        const { properties, errors } = await prepareContact(Contact, bothUserKeys(keys));
+        return properties;
+    } catch (error) {
+        throw error;
+    }
+};
 
 const ExportFooter = ({ loading }) => {
     return (
@@ -37,11 +40,7 @@ const ExportFooter = ({ loading }) => {
     );
 };
 
-ExportFooter.propTypes = {
-    loading: PropTypes.bool
-};
-
-const ExportModal = ({ contactGroupID: LabelID, onClose, ...rest }) => {
+const ExportModal = ({ onSubmit, onClose, ...rest }) => {
     const api = useApi();
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
@@ -59,68 +58,25 @@ const ExportModal = ({ contactGroupID: LabelID, onClose, ...rest }) => {
     const handleSave = (vcards) => {
         const allVcards = vcards.join('\n');
         const blob = new Blob([allVcards], { type: 'data:text/plain;charset=utf-8;' });
-        downloadFile(blob, `${DOWNLOAD_FILENAME}-${moment().format('YYYY-MM-DD')}.vcf`);
+        downloadFile(blob, 'protonContacts.vcf');
+        onSubmit();
         onClose();
     };
 
     useEffect(() => {
-        const abortController = new AbortController();
-        const apiWithAbort = (config) => api({ ...config, signal: abortController.signal });
-
-        const exportBatch = async (i, { signal }) => {
-            const { Contacts: contacts } = await apiWithAbort(
-                queryContactExport({ LabelID, Page: i, PageSize: QUERY_EXPORT_MAX_PAGESIZE })
-            );
-            for (const { Cards, ID } of contacts) {
-                if (signal.aborted) {
-                    return;
-                }
+        const exportContacts = () => {
+            contacts.forEach(async ({ ID }, i) => {
                 try {
-                    const { properties: contactDecrypted = [], errors = [] } = await prepareContact(
-                        { Cards },
-                        { publicKeys, privateKeys }
-                    );
-
-                    if (errors.length) {
-                        throw new Error('Error decrypting contact');
-                    }
-
+                    const contactDecrypted = await decryptContact(api, ID, userKeysList);
                     const contactExported = toICAL(contactDecrypted).toString();
-                    /*
-                        need to check again for signal.aborted because the abort
-                        may have taken place during await prepareContact
-                    */
-                    !signal.aborted && addSuccess((contactsExported) => [...contactsExported, contactExported]);
+                    addSuccess((contactsExported) => [...contactsExported, contactExported]);
                 } catch (error) {
-                    /*
-                        need to check again for signal.aborted because the abort
-                        may have taken place during await prepareContact
-                    */
-                    !signal.aborted && addError((contactsNotExported) => [...contactsNotExported, ID]);
+                    addError((contactsNotExported) => [...contactsNotExported, ID]);
+                    throw error;
                 }
-            }
+            });
         };
-
-        const exportContacts = async (abortController) => {
-            for (let i = 0; i < apiCalls; i++) {
-                /*
-                    typically exportBatch will take longer than apiTimeout, but we include it
-                    to avoid API overload it just in case exportBatch is too fast
-                */
-                await Promise.all([exportBatch(i, abortController), wait(API_SAFE_INTERVAL)]);
-            }
-        };
-
-        exportContacts(abortController).catch((error) => {
-            if (error.name !== 'AbortError') {
-                onClose(); // close the modal; otherwise it is left hanging in there
-                throw error;
-            }
-        });
-
-        return () => {
-            abortController.abort();
-        };
+        exportContacts();
     }, []);
 
     return (
@@ -137,19 +93,20 @@ const ExportModal = ({ contactGroupID: LabelID, onClose, ...rest }) => {
                     .t`Decrypting contacts... This may take a few minutes. When the process is completed, you will be able to download the file with all your contacts exported.`}
             </Alert>
             <DynamicProgress
-                id="progress-export-contacts"
+                id="progress-contacts"
                 alt="contact-loader"
-                value={percentageProgress(contactsExported.length, contactsNotExported.length, countContacts)}
-                displayEnd={c('Progress bar description')
-                    .t`${contactsExported.length} out of ${countContacts} contacts successfully exported.`}
+                value={Math.round(((contactsExported.length + contactsNotExported.length) / contacts.length) * 100)}
+                displayEnd={c('Progress bar description').t`${contactsExported.length} out of ${
+                    contacts.length
+                } contacts successfully exported.`}
             />
         </FormModal>
     );
 };
 
 ExportModal.propTypes = {
-    onClose: PropTypes.func.isRequired,
-    contactGroupID: PropTypes.string
+    onSubmit: PropTypes.func,
+    onClose: PropTypes.func
 };
 
 export default ExportModal;
