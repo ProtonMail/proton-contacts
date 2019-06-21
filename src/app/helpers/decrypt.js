@@ -1,5 +1,5 @@
 import { getMessage, decryptMessage, getSignature, verifyMessage, createCleartextMessage } from 'pmcrypto';
-import { merge, parse } from '../helpers/vcard';
+import { merge, parse } from './vcard';
 
 import { CONTACT_CARD_TYPE } from 'proton-shared/lib/constants';
 import { SIGNATURE_NOT_VERIFIED, FAIL_TO_READ, FAIL_TO_DECRYPT } from '../constants';
@@ -61,7 +61,7 @@ const decryptSigned = async ({ Data, Signature }, { publicKeys, privateKeys }) =
     }
 };
 
-const clearText = ({ Data }) => Data;
+const clearText = ({ Data }) => ({ data: Data });
 
 const ACTIONS = {
     [ENCRYPTED_AND_SIGNED]: decryptSigned,
