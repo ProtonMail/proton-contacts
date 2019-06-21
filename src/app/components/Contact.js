@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Loader, GenericError } from 'react-components';
 
-import { prepareContact, bothUserKeys } from '../helpers/cryptoTools';
+import { prepareContact, bothUserKeys } from '../helpers/decrypt';
 import ContactView from './ContactView';
 
 const Contact = ({ contactID, userKeysList }) => {
@@ -14,9 +14,7 @@ const Contact = ({ contactID, userKeysList }) => {
         try {
             setLoading(true);
             const { Contact } = await api(getContact(contactID));
-            // console.log(Contact);
             const { properties, errors } = await prepareContact(Contact, { publicKeys, privateKeys });
-            // console.log(properties);
             setModel({ properties, errors });
             setLoading(false);
         } catch (error) {
