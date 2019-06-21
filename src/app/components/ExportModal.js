@@ -23,6 +23,9 @@ const decryptContact = async (api, contactID, keys) => {
     try {
         const { Contact } = await api(getContact(contactID));
         const { properties, errors } = await prepareContact(Contact, bothUserKeys(keys));
+        if (errors.length !== 0) {
+            throw new Error('Error decrypting contact with contactID ', contactID);
+        }
         return properties;
     } catch (error) {
         throw error;
@@ -63,7 +66,7 @@ const ExportModal = ({ onSubmit, onClose, ...rest }) => {
 
     useEffect(() => {
         const exportContacts = () => {
-            contacts.forEach(async ({ ID }, i) => {
+            contacts.forEach(async ({ ID }) => {
                 try {
                     const contactExported = toICAL(contactDecrypted).toString();
                     addSuccess((contactsExported) => [...contactsExported, contactExported]);
