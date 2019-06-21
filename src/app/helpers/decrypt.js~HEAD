@@ -1,5 +1,5 @@
 import { getMessage, decryptMessage, getSignature, verifyMessage, createCleartextMessage } from 'pmcrypto';
-import { merge, parse } from '../helpers/vcard';
+import { merge, parse } from './vcard';
 
 import { CONTACT_CARD_TYPE } from 'proton-shared/lib/constants';
 
@@ -57,7 +57,7 @@ const decryptSigned = async ({ Data, Signature }, { publicKeys, privateKeys }) =
     }
 };
 
-const clearText = ({ Data }) => Data;
+const clearText = ({ Data }) => ({ data: Data });
 
 const ACTIONS = {
     [ENCRYPTED_AND_SIGNED]: decryptSigned,
@@ -106,4 +106,16 @@ export const bothUserKeys = (privateKeyList) => {
         },
         { publicKeys: [], privateKeys: [] }
     );
+};
+
+export const decryptContactCards = async (contactCards, contactID, keys) => {
+    try {
+        const { properties, errors } = await prepareContact({ Cards: contactCards }, bothUserKeys(keys));
+        if (errors.length !== 0) {
+            throw new Error('Error decrypting contact with contactID ', contactID);
+        }
+        return properties;
+    } catch (error) {
+        throw error;
+    }
 };
