@@ -7,7 +7,6 @@ import {
     useUserKeys,
     useApi,
     FormModal,
-    FooterModal,
     ResetButton,
     PrimaryButton,
     Alert
@@ -15,7 +14,7 @@ import {
 import { getContact } from 'proton-shared/lib/api/contacts';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 
-import { prepareContact, bothUserKeys } from '../helpers/cryptoTools';
+import { prepareContact, bothUserKeys } from '../helpers/decrypt';
 import { toICAL } from '../helpers/vcard';
 import DynamicProgress from './DynamicProgress';
 

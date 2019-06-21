@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { getContact } from 'proton-shared/lib/api/contacts';
 import { useApi, Loader } from 'react-components';
 
-import { prepareContact, bothUserKeys } from '../helpers/cryptoTools';
+import { prepareContact, bothUserKeys } from '../helpers/decrypt';
 import ContactView from './ContactView';
 
 const Contact = ({ contactID, userKeysList }) => {
@@ -16,9 +16,7 @@ const Contact = ({ contactID, userKeysList }) => {
         try {
             setLoading(true);
             const { Contact } = await api(getContact(contactID));
-            // console.log(Contact);
             const { properties, errors } = await prepareContact(Contact, { publicKeys, privateKeys });
-            // console.log(properties);
             setModel({ properties, errors });
             setLoading(false);
         } catch (error) {
