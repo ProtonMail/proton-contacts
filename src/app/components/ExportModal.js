@@ -11,24 +11,19 @@ import {
     PrimaryButton,
     Alert
 } from 'react-components';
-import { getContact } from 'proton-shared/lib/api/contacts';
+import { queryContactExport } from 'proton-shared/lib/api/contacts';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 
-import { prepareContact, bothUserKeys } from '../helpers/decrypt';
+import { decryptContactCards } from '../helpers/decrypt';
 import { toICAL } from '../helpers/vcard';
 import DynamicProgress from './DynamicProgress';
 
-const decryptContact = async (api, contactID, keys) => {
-    try {
-        const { Contact } = await api(getContact(contactID));
-        const { properties, errors } = await prepareContact(Contact, bothUserKeys(keys));
-        if (errors.length !== 0) {
-            throw new Error('Error decrypting contact with contactID ', contactID);
-        }
-        return properties;
-    } catch (error) {
-        throw error;
-    }
+// BACK-END DATA
+const QUERY_EXPORT_MAX_PAGESIZE = 50;
+const [API_MAX_REQUESTS, API_REQUEST_RELAX_INTERVAL] = [100, 10000]; // API request limit: 100 requests / 10 seconds
+
+const apiRelax = (relaxInterval = API_REQUEST_RELAX_INTERVAL) => {
+    return new Promise((resolve) => setTimeout(resolve, API_REQUEST_RELAX_INTERVAL / API_MAX_REQUESTS));
 };
 
 const ExportFooter = ({ loading }) => {
@@ -42,12 +37,11 @@ const ExportFooter = ({ loading }) => {
     );
 };
 
-const ExportModal = ({ onSubmit, onClose, ...rest }) => {
+const ExportModal = ({ onClose, ...rest }) => {
     const api = useApi();
     const [user] = useUser();
-    const [userKeysList, loadingUserKeys] = useUserKeys(user);
-    const { publicKeys, privateKeys } = bothUserKeys(userKeysList);
     const [contacts, loadingContacts] = useContacts();
+    const [userKeysList, loadingUserKeys] = useUserKeys(user);
 
     const [contactsExported, addSuccess] = useState([]);
     const [contactsNotExported, addError] = useState([]);
@@ -61,22 +55,32 @@ const ExportModal = ({ onSubmit, onClose, ...rest }) => {
         const allVcards = vcards.join('\n');
         const blob = new Blob([allVcards], { type: 'data:text/plain;charset=utf-8;' });
         downloadFile(blob, 'protonContacts.vcf');
-        onSubmit();
         onClose();
     };
 
     useEffect(() => {
-        const exportContacts = () => {
-            contacts.forEach(async ({ ID }) => {
+        const apiCalls = Math.ceil(contacts.length / QUERY_EXPORT_MAX_PAGESIZE);
+
+        const exportBatch = async (i) => {
+            const batch = await api(queryContactExport({ Page: i, PageSize: QUERY_EXPORT_MAX_PAGESIZE }));
+            batch.Contacts.forEach(async ({ ID, Cards }) => {
                 try {
-                    const contactDecrypted = await decryptContact(api, ID, userKeysList);
+                    const contactDecrypted = await decryptContactCards(Cards, ID, userKeysList);
                     const contactExported = toICAL(contactDecrypted).toString();
                     addSuccess((contactsExported) => [...contactsExported, contactExported]);
+                    console.log('success');
                 } catch (error) {
                     addError((contactsNotExported) => [...contactsNotExported, ID]);
+                    console.log('error');
                     throw error;
                 }
             });
+        };
+
+        const exportContacts = async () => {
+            for (let i = 0; i < apiCalls; i++) {
+                await Promise.all([exportBatch(i), apiRelax()]);
+            }
         };
         exportContacts();
     }, []);
@@ -98,16 +102,14 @@ const ExportModal = ({ onSubmit, onClose, ...rest }) => {
                 id="progress-contacts"
                 alt="contact-loader"
                 value={Math.round(((contactsExported.length + contactsNotExported.length) / contacts.length) * 100)}
-                displayEnd={c('Progress bar description').t`${contactsExported.length} out of ${
-                    contacts.length
-                } contacts successfully exported.`}
+                displayEnd={c('Progress bar description')
+                    .t`${contactsExported.length} out of ${contacts.length} contacts successfully exported.`}
             />
         </FormModal>
     );
 };
 
 ExportModal.propTypes = {
-    onSubmit: PropTypes.func,
     onClose: PropTypes.func
 };
 
