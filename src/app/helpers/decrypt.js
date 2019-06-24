@@ -109,3 +109,15 @@ export const bothUserKeys = (userKeysList) => {
         { publicKeys: [], privateKeys: [] }
     );
 };
+
+export const decryptContactCards = async (contactCards, contactID, keys) => {
+    try {
+        const { properties, errors } = await prepareContact({ Cards: contactCards }, bothUserKeys(keys));
+        if (errors.length !== 0) {
+            throw new Error('Error decrypting contact with contactID ', contactID);
+        }
+        return properties;
+    } catch (error) {
+        throw error;
+    }
+};
