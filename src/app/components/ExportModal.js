@@ -18,12 +18,13 @@ import { decryptContactCards } from '../helpers/decrypt';
 import { toICAL } from '../helpers/vcard';
 import DynamicProgress from './DynamicProgress';
 
+const DOWNLOAD_FILENAME = 'protonContacts.vcf';
 // BACK-END DATA
 const QUERY_EXPORT_MAX_PAGESIZE = 50;
-const [API_MAX_REQUESTS, API_REQUEST_RELAX_INTERVAL] = [100, 10000]; // API request limit: 100 requests / 10 seconds
+const [API_SAFE_INTERVAL] = [100]; // API request limit: 100 requests / 10 seconds, so 1 request every 100 ms is safe
 
-const apiRelax = (relaxInterval = API_REQUEST_RELAX_INTERVAL) => {
-    return new Promise((resolve) => setTimeout(resolve, API_REQUEST_RELAX_INTERVAL / API_MAX_REQUESTS));
+const apiTimeout = (ms = API_SAFE_INTERVAL) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 const ExportFooter = ({ loading }) => {
@@ -40,8 +41,8 @@ const ExportFooter = ({ loading }) => {
 const ExportModal = ({ onClose, ...rest }) => {
     const api = useApi();
     const [user] = useUser();
-    const [contacts, loadingContacts] = useContacts();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
+    const [contacts, loadingContacts] = useContacts();
 
     const [contactsExported, addSuccess] = useState([]);
     const [contactsNotExported, addError] = useState([]);
@@ -49,7 +50,7 @@ const ExportModal = ({ onClose, ...rest }) => {
     const handleSave = (vcards) => {
         const allVcards = vcards.join('\n');
         const blob = new Blob([allVcards], { type: 'data:text/plain;charset=utf-8;' });
-        downloadFile(blob, 'protonContacts.vcf');
+        downloadFile(blob, DOWNLOAD_FILENAME);
         onClose();
     };
 
@@ -63,10 +64,8 @@ const ExportModal = ({ onClose, ...rest }) => {
                     const contactDecrypted = await decryptContactCards(Cards, ID, userKeysList);
                     const contactExported = toICAL(contactDecrypted).toString();
                     addSuccess((contactsExported) => [...contactsExported, contactExported]);
-                    console.log('success');
                 } catch (error) {
                     addError((contactsNotExported) => [...contactsNotExported, ID]);
-                    console.log('error');
                     throw error;
                 }
             });
@@ -74,7 +73,7 @@ const ExportModal = ({ onClose, ...rest }) => {
 
         const exportContacts = async () => {
             for (let i = 0; i < apiCalls; i++) {
-                await Promise.all([exportBatch(i), apiRelax()]);
+                await Promise.all([exportBatch(i), apiTimeout()]); // typically exportBatch will take longer than apiTimeout, but we include it 'just in case' to avoid API overload
             }
         };
         exportContacts();
@@ -96,7 +95,7 @@ const ExportModal = ({ onClose, ...rest }) => {
             <DynamicProgress
                 id="progress-contacts"
                 alt="contact-loader"
-                value={Math.round(((contactsExported.length + contactsNotExported.length) / contacts.length) * 100)}
+                value={Math.floor(((contactsExported.length + contactsNotExported.length) / contacts.length) * 100)}
                 displayEnd={c('Progress bar description')
                     .t`${contactsExported.length} out of ${contacts.length} contacts successfully exported.`}
             />
