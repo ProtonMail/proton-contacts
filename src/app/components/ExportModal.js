@@ -60,28 +60,44 @@ const ExportModal = ({ onClose, ...rest }) => {
     };
 
     useEffect(() => {
+        const abortController = new AbortController();
+        const apiWithAbort = (config) => api({ ...config, signal: abortController.signal });
+
         const apiCalls = Math.ceil(contacts.length / QUERY_EXPORT_MAX_PAGESIZE);
 
-        const exportBatch = async (i) => {
-            const batch = await api(queryContactExport({ Page: i, PageSize: QUERY_EXPORT_MAX_PAGESIZE }));
-            batch.Contacts.forEach(async ({ ID, Cards }) => {
+        const exportBatch = async (i, { signal }) => {
+            const batch = await apiWithAbort(queryContactExport({ Page: i, PageSize: QUERY_EXPORT_MAX_PAGESIZE }));
+            const contacts = batch.Contacts;
+            for (let j = 0; j < contacts.length; j++) {
+                if (signal.aborted) {
+                    return;
+                }
                 try {
-                    const contactDecrypted = await decryptContactCards(Cards, ID, userKeysList);
+                    const contactDecrypted = await decryptContactCards(contacts[j].Cards, contacts[j].ID, userKeysList);
                     const contactExported = toICAL(contactDecrypted).toString();
-                    addSuccess((contactsExported) => [...contactsExported, contactExported]);
+                    !signal.aborted && addSuccess((contactsExported) => [...contactsExported, contactExported]);
                 } catch (error) {
-                    addError((contactsNotExported) => [...contactsNotExported, ID]);
+                    !signal.aborted && addError((contactsNotExported) => [...contactsNotExported, contacts[j].ID]);
                     throw error;
                 }
-            });
-        };
-
-        const exportContacts = async () => {
-            for (let i = 0; i < apiCalls; i++) {
-                await Promise.all([exportBatch(i), apiTimeout()]); // typically exportBatch will take longer than apiTimeout, but we include it 'just in case' to avoid API overload
             }
         };
-        exportContacts();
+
+        const exportContacts = async ({ signal }) => {
+            for (let i = 0; i < apiCalls; i++) {
+                await Promise.all([exportBatch(i, { signal }), apiTimeout()]); // typically exportBatch will take longer than apiTimeout, but we include it 'just in case' to avoid API overload
+            }
+        };
+
+        exportContacts(abortController).catch((error) => {
+            if (error.name !== 'AbortError') {
+                throw error;
+            }
+        });
+
+        return () => {
+            abortController.abort();
+        };
     }, []);
 
     return (
