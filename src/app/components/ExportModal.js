@@ -75,9 +75,9 @@ const ExportModal = ({ onClose, ...rest }) => {
                 try {
                     const contactDecrypted = await decryptContactCards(contacts[j].Cards, contacts[j].ID, userKeysList);
                     const contactExported = toICAL(contactDecrypted).toString();
-                    !signal.aborted && addSuccess((contactsExported) => [...contactsExported, contactExported]);
+                    !signal.aborted && addSuccess((contactsExported) => [...contactsExported, contactExported]); // need to check again for signal.aborted because the abort may have taken place during await decryptContactCards
                 } catch (error) {
-                    !signal.aborted && addError((contactsNotExported) => [...contactsNotExported, contacts[j].ID]);
+                    !signal.aborted && addError((contactsNotExported) => [...contactsNotExported, contacts[j].ID]); // need to check again for signal.aborted because the abort may have taken place during await decryptContactCards
                     throw error;
                 }
             }
