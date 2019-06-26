@@ -21,7 +21,7 @@ const Contact = ({ contactID, userKeysList }) => {
             setLoading(false);
         } catch (error) {
             setLoading(false);
-            setModel({ ...model, errors: [FAIL_TO_LOAD] });
+            setModel({ ...{ properties, errors }, errors: [FAIL_TO_LOAD] });
             throw error;
         }
     };

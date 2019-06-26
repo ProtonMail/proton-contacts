@@ -24,7 +24,6 @@ const ContactView = ({ properties, contactID }) => {
             .filter(({ field }) => ['fn', 'email'].includes(field))
             .map(({ value }) => (Array.isArray(value) ? value[0] : value))[0];
         const vcard = toICAL(properties);
-        console.log(typeof vcard.toString());
         const blob = new Blob([vcard.toString()], { type: 'data:text/plain;charset=utf-8;' });
 
         downloadFile(blob, `${filename}.vcf`);
