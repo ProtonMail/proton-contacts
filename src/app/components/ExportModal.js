@@ -70,9 +70,17 @@ const ExportModal = ({ onClose, ...rest }) => {
                 try {
                     const contactDecrypted = await decryptContactCards(contacts[j].Cards, contacts[j].ID, userKeysList);
                     const contactExported = toICAL(contactDecrypted).toString();
-                    !signal.aborted && addSuccess((contactsExported) => [...contactsExported, contactExported]); // need to check again for signal.aborted because the abort may have taken place during await decryptContactCards
+                    /*
+                        need to check again for signal.aborted because the abort
+                        may have taken place during await decryptContactCards
+                    */
+                    !signal.aborted && addSuccess((contactsExported) => [...contactsExported, contactExported]);
                 } catch (error) {
-                    !signal.aborted && addError((contactsNotExported) => [...contactsNotExported, contacts[j].ID]); // need to check again for signal.aborted because the abort may have taken place during await decryptContactCards
+                    /*
+                        need to check again for signal.aborted because the abort
+                        may have taken place during await decryptContactCards
+                    */
+                    !signal.aborted && addError((contactsNotExported) => [...contactsNotExported, contacts[j].ID]);
                     throw error;
                 }
             }
@@ -80,7 +88,11 @@ const ExportModal = ({ onClose, ...rest }) => {
 
         const exportContacts = async ({ signal }) => {
             for (let i = 0; i < apiCalls; i++) {
-                await Promise.all([exportBatch(i, { signal }), apiTimeout()]); // typically exportBatch will take longer than apiTimeout, but we include it 'just in case' to avoid API overload
+                /*
+                    typically exportBatch will take longer than apiTimeout, but we include it
+                    to avoid API overload it just in case exportBatch is too fast
+                */
+                await Promise.all([exportBatch(i, { signal }), apiTimeout()]);
             }
         };
 
