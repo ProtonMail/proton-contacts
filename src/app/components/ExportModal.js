@@ -13,6 +13,7 @@ import {
 } from 'react-components';
 import { queryContactExport } from 'proton-shared/lib/api/contacts';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
+import { wait } from 'proton-shared/lib/helpers/promise';
 
 import { decryptContactCards } from '../helpers/decrypt';
 import { toICAL } from '../helpers/vcard';
@@ -21,11 +22,7 @@ import DynamicProgress from './DynamicProgress';
 const DOWNLOAD_FILENAME = 'protonContacts.vcf';
 // BACK-END DATA
 const QUERY_EXPORT_MAX_PAGESIZE = 50;
-const [API_SAFE_INTERVAL] = [100]; // API request limit: 100 requests / 10 seconds, so 1 request every 100 ms is safe
-
-const apiTimeout = (ms = API_SAFE_INTERVAL) => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-};
+const API_SAFE_INTERVAL = 100; // API request limit: 100 requests / 10 seconds, so 1 request every 100 ms is safe
 
 const ExportFooter = ({ loading }) => {
     return (
@@ -66,14 +63,15 @@ const ExportModal = ({ onClose, ...rest }) => {
         const apiCalls = Math.ceil(contacts.length / QUERY_EXPORT_MAX_PAGESIZE);
 
         const exportBatch = async (i, { signal }) => {
-            const batch = await apiWithAbort(queryContactExport({ Page: i, PageSize: QUERY_EXPORT_MAX_PAGESIZE }));
-            const contacts = batch.Contacts;
-            for (let j = 0; j < contacts.length; j++) {
+            const { Contacts: contacts } = await apiWithAbort(
+                queryContactExport({ Page: i, PageSize: QUERY_EXPORT_MAX_PAGESIZE })
+            );
+            for (const { Cards, ID } of contacts) {
                 if (signal.aborted) {
                     return;
                 }
                 try {
-                    const contactDecrypted = await decryptContactCards(contacts[j].Cards, contacts[j].ID, userKeysList);
+                    const contactDecrypted = await decryptContactCards(Cards, ID, userKeysList);
                     const contactExported = toICAL(contactDecrypted).toString();
                     /*
                         need to check again for signal.aborted because the abort
@@ -85,24 +83,24 @@ const ExportModal = ({ onClose, ...rest }) => {
                         need to check again for signal.aborted because the abort
                         may have taken place during await decryptContactCards
                     */
-                    !signal.aborted && addError((contactsNotExported) => [...contactsNotExported, contacts[j].ID]);
-                    throw error;
+                    !signal.aborted && addError((contactsNotExported) => [...contactsNotExported, ID]);
                 }
             }
         };
 
-        const exportContacts = async ({ signal }) => {
+        const exportContacts = async (abortController) => {
             for (let i = 0; i < apiCalls; i++) {
                 /*
                     typically exportBatch will take longer than apiTimeout, but we include it
                     to avoid API overload it just in case exportBatch is too fast
                 */
-                await Promise.all([exportBatch(i, { signal }), apiTimeout()]);
+                await Promise.all([exportBatch(i, abortController), wait(API_SAFE_INTERVAL)]);
             }
         };
 
         exportContacts(abortController).catch((error) => {
             if (error.name !== 'AbortError') {
+                onClose(); // close the modal; otherwise it is left hanging in there
                 throw error;
             }
         });
