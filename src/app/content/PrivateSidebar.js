@@ -7,6 +7,8 @@ import ContactModal from '../components/ContactModal';
 
 import ContactGroupModal from '../components/ContactGroupModal';
 import ContactGroupsModal from '../components/ContactGroupsModal';
+import ImportModal from '../components/ImportModal';
+import ExportModal from '../components/ExportModal';
 
 const PrivateSidebar = ({ contactGroups }) => {
     const { createModal } = useModals();
@@ -24,6 +26,34 @@ const PrivateSidebar = ({ contactGroups }) => {
             },
             text: c('Link').t`Contacts`,
             link: '/contacts'
+        },
+        {
+            icon: 'import',
+            text: c('Action').t`Import`,
+            type: 'button',
+            onClick() {
+                createModal(<ImportModal />);
+            }
+        },
+        {
+            icon: 'export',
+            text: c('Action').t`Export`,
+            type: 'button',
+            onClick() {
+                createModal(<ExportModal />);
+            }
+        },
+        {
+            icon: 'merge',
+            text: c('Action').t`Merge`,
+            type: 'button',
+            onClick() {}
+        },
+        {
+            icon: 'delete',
+            text: c('Action').t`Delete all`,
+            type: 'button',
+            onClick() {}
         },
         {
             icon: 'contacts-group',
