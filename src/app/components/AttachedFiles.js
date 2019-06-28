@@ -15,7 +15,7 @@ const splitExtension = (filename) => {
     return [name, ext];
 };
 
-const AttachedFile = ({ files, iconName, className, clear, onClear, ...rest }) => {
+const AttachedFiles = ({ files, iconName, className, clear, onClear, ...rest }) => {
     return (
         <>
             {files.map(({ name, size }, i) => {
@@ -38,16 +38,16 @@ const AttachedFile = ({ files, iconName, className, clear, onClear, ...rest }) =
     );
 };
 
-AttachedFile.propTypes = {
+AttachedFiles.propTypes = {
     files: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string, size: PropTypes.number })),
     iconName: PropTypes.string.isRequired,
     clear: PropTypes.string,
     onClear: PropTypes.func
 };
 
-AttachedFile.defaultProps = {
+AttachedFiles.defaultProps = {
     files: [],
     clear: c('Action').t`Delete`
 };
 
-export default AttachedFile;
+export default AttachedFiles;
