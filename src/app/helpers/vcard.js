@@ -1,12 +1,12 @@
 import ICAL from 'ical.js';
 
-const ONE_ORE_MORE_MUST_BE_PRESENT = '1*';
+const ONE_OR_MORE_MUST_BE_PRESENT = '1*';
 const EXACTLY_ONE_MUST_BE_PRESENT = '1';
 const EXACTLY_ONE_MAY_BE_PRESENT = '*1';
 const ONE_OR_MORE_MAY_BE_PRESENT = '*';
 
 const PROPERTIES = {
-    fn: { cardinality: ONE_ORE_MORE_MUST_BE_PRESENT },
+    fn: { cardinality: ONE_OR_MORE_MUST_BE_PRESENT },
     n: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT },
     nickname: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
     photo: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
@@ -72,7 +72,7 @@ export const getValue = (property) => {
 };
 
 /**
- * Parse vCard String an return contact properties model as an Array
+ * Parse vCard String and return contact properties model as an Array
  * @param {String} vcard to parse
  * @returns {Array} contact properties ordered
  */
@@ -145,7 +145,7 @@ export const merge = (contact = []) => {
             const { field } = property;
             const { cardinality = ONE_OR_MORE_MAY_BE_PRESENT } = PROPERTIES[field] || {};
 
-            if ([ONE_ORE_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT].includes(cardinality)) {
+            if ([ONE_OR_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT].includes(cardinality)) {
                 acc.push(property);
             } else if (!acc.find(({ field: f }) => f === field)) {
                 acc.push(property);
@@ -155,6 +155,18 @@ export const merge = (contact = []) => {
     }, []);
 };
 
-export const orderProperties = (properties) => {
-    return properties;
+export const orderProperties = (properties) => {};
+
+/**
+ * Extract array of vcards from a string containing several vcards
+ * @param {String} vcf
+ * @return {Array<String>}  Array of vcards
+ */
+export const extractVcards = (vcf = '') => {
+    const res = vcf.split('END:VCARD').map((vcard) => vcard.trim() + '\r\nEND:VCARD');
+    // Some checks on the vcf file
+    if ((vcf.match(/BEGIN:VCARD/g) || []).length !== (vcf.match(/END:VCARD/g) || []).length || res.pop() !== '') {
+        throw new Error('Invalid vcf file');
+    }
+    return res;
 };

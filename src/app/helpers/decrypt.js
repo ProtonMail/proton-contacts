@@ -73,7 +73,14 @@ const ACTIONS = {
 export const prepareContact = async (contact, { publicKeys, privateKeys }) => {
     const { Cards } = contact;
 
-    const data = await Promise.all(Cards.map((card) => ACTIONS[card.Type](card, { publicKeys, privateKeys })));
+    const data = await Promise.all(
+        Cards.map(async (card) => {
+            if (!ACTIONS[card.Type]) {
+                return { error: FAIL_TO_READ };
+            }
+            return ACTIONS[card.Type](card, { publicKeys, privateKeys });
+        })
+    );
 
     const { vcards, errors } = data.reduce(
         (acc, { data, error }) => {
@@ -117,6 +124,15 @@ export const decryptContactCards = async (contactCards, contactID, keys) => {
             throw new Error('Error decrypting contact with contactID ', contactID);
         }
         return properties;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const prepareVcard = (vcard) => {
+    try {
+        // TODO ; throwing an error for the moment
+        throw new Error('Code for preparing vcard not ready yet!');
     } catch (error) {
         throw error;
     }
