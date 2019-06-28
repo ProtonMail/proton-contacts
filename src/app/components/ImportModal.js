@@ -2,29 +2,25 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import {
-    useContacts,
+    useNotifications,
     useUser,
     useUserKeys,
     useApi,
-    useNotifications,
-    Bordered,
-    Row,
     FormModal,
-    Icon,
-    Button,
     ResetButton,
-    PrimaryButton,
-    FileInput,
-    Alert
+    PrimaryButton
 } from 'react-components';
-import { queryContactExport } from 'proton-shared/lib/api/contacts';
 
-import AttachedFile from './AttachedFile';
+import AttachingModalContent from './AttachingModalContent';
+import ImportingModalContent from './ImportingModalContent';
 
-import { decryptContactCards } from '../helpers/decrypt';
-import { toICAL } from '../helpers/vcard';
+import { addContacts } from 'proton-shared/lib/api/contacts';
+import { readFileAsString } from 'proton-shared/lib/helpers/file';
+import { extractVcards, parse as parseVcard } from '../helpers/vcard';
+import { prepareVcard } from '../helpers/decrypt';
+import { extractCsvContacts, parse as parseCsvContact } from '../helpers/csv';
 
-const ImportFooter = ({ disabled }) => {
+const AttachingFooter = ({ disabled }) => {
     return (
         <>
             <ResetButton>{c('Action').t`Cancel`}</ResetButton>
@@ -35,25 +31,55 @@ const ImportFooter = ({ disabled }) => {
     );
 };
 
+const ImportingFooter = ({ loading }) => {
+    return (
+        <>
+            <PrimaryButton loading={loading} type="submit">
+                {c('Action').t`Close`}
+            </PrimaryButton>
+        </>
+    );
+};
+
 const ImportModal = ({ onClose, ...rest }) => {
-    const [attached, setAttached] = useState(false);
-    const [importFiles, setImportFiles] = useState([]);
+    const api = useApi();
+    const [user] = useUser();
+    const [userKeysList, loadingUserKeys] = useUserKeys(user);
     const { createNotification } = useNotifications();
 
-    const handleAttach = ({ target }) => {
-        const files = [...target.files].filter(({ type }) => ['text/vcard', 'text/csv'].includes(type));
-        console.log(files);
+    const [attached, setAttached] = useState(false);
+    const [isImporting, setIsImporting] = useState(false);
+    const [importFiles, setImportFiles] = useState([]);
 
-        if (!files.length) {
+    const [totalContacts, setTotalContacts] = useState(0);
+    const [contactsImported, addSuccess] = useState([]);
+    const [contactsNotImported, addError] = useState([]);
+
+    const handleAttach = async ({ target }, attachedFiles) => {
+        // TODO: set some limit on the total number of files or their size ?
+        const files = [...target.files].filter(({ type }) => ['text/vcard', 'text/csv'].includes(type));
+
+        if (target.files.length && !files.length) {
             return createNotification({
                 type: 'error',
                 text: c('Error notification').t`No .csv or .vcard files selected`
             });
         }
-        // TODO: set some limit on the total number of files or their size ?
 
-        setAttached(files.length !== 0);
-        setImportFiles(files);
+        const filteredFiles = [];
+        for (const file of files) {
+            if (attachedFiles.map(({ name }) => name).includes(file.name)) {
+                createNotification({
+                    type: 'error',
+                    text: c('Error notification').t`${file.name} already selected`
+                });
+            } else {
+                filteredFiles.push(file);
+            }
+        }
+
+        !attachedFiles.length && setAttached(filteredFiles.length !== 0);
+        setImportFiles((importFiles) => [...importFiles, ...filteredFiles]);
     };
 
     const handleClear = (files, index) => {
@@ -61,39 +87,73 @@ const ImportModal = ({ onClose, ...rest }) => {
         files.length === 1 && setAttached(false);
     };
 
-    const handleSave = () => {
-        onClose();
-    };
+    const handleStartImport = () => setIsImporting(true);
+
+    useEffect(() => {
+        const setup = async () => {
+            // read files, count contacts and extract their vcard properties
+            const contactsProperties = [];
+
+            for (const file of importFiles) {
+                if (file.type == 'text/vcard') {
+                    const vcards = extractVcards(await readFileAsString(file));
+                    setTotalContacts((totalContacts) => totalContacts + vcards.length);
+                    vcards.forEach((vcard) => contactsProperties.push(parseVcard(vcard)));
+                }
+                if (file.type == 'text/csv') {
+                    const { values: contactValues } = extractCsvContacts(file);
+                    setTotalContacts((totalContacts) => totalContacts + contactValues.length);
+                    contactsProperties.concat(parseCsvContacts(contactValues));
+                }
+            }
+
+            // encrypt contacts
+            for (const vcard of vcards) {
+                try {
+                    const contactImported = prepareVcard(vcard, userKeysList);
+                    addSuccess((contactsImported) => [...contactsImported, contactImported]);
+                } catch (error) {
+                    addError((contactsNotImported) => [...contactsNotImported, vcard]);
+                }
+            }
+
+            // send contacts to back-end
+            await api(addContacts(contactsImported));
+        };
+
+        isImporting && setup();
+    }, [isImporting]);
 
     return (
         <FormModal
-            title={c('Title').t`Import contacts`}
-            submit={c('Action').t`Import`}
-            onSubmit={() => handleSave()}
+            title={!isImporting ? c('Title').t`Import contacts` : c('Title').t`Importing contacts`}
+            onSubmit={!isImporting ? handleStartImport : onClose}
             onClose={onClose}
-            footer={ImportFooter({ disabled: !attached })}
+            footer={
+                !isImporting
+                    ? AttachingFooter({ disabled: !attached })
+                    : ImportingFooter({
+                          loading:
+                              totalContacts === 0 ||
+                              contactsImported.length + contactsNotImported.length !== totalContacts
+                      })
+            }
             {...rest}
         >
-            <Alert learnMore="https://protonmail.com/support/knowledge-base/adding-contacts/">
-                {c('Description')
-                    .t`We support importing CSV files from Outlook, Outlook Express, Yahoo! Mail, Hotmail, Eudora and some other apps. We also support importing vCard. (UTF-8 encoding).`}
-            </Alert>
-            <Bordered className="flex">
-                {/* TODO: drag&drop component here. There seems to be no React component for this kind of behavior yet */}
-                {attached ? (
-                    <AttachedFile files={importFiles} iconName="contacts-groups" onClear={handleClear} />
-                ) : (
-                    <FileInput
-                        className="center"
-                        multiple
-                        accept=".csv, .vcard"
-                        id="import-contacts"
-                        onChange={handleAttach}
-                    >
-                        {c('Action').t`Select file from computer`}
-                    </FileInput>
-                )}
-            </Bordered>
+            {!isImporting ? (
+                <AttachingModalContent
+                    attached={attached}
+                    files={importFiles}
+                    onAttach={handleAttach}
+                    onClear={handleClear}
+                />
+            ) : (
+                <ImportingModalContent
+                    imported={contactsImported.length}
+                    notImported={contactsNotImported.length}
+                    total={totalContacts}
+                />
+            )}
         </FormModal>
     );
 };
