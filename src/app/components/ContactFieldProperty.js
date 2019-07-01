@@ -50,7 +50,7 @@ const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
 ContactFieldProperty.propTypes = {
     field: PropTypes.string.isRequired,
     uid: PropTypes.string.isRequired,
-    value: PropTypes.oneOf(PropTypes.string, PropTypes.arrayOf(PropTypes.string)),
+    value: PropTypes.oneOf([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
     onChange: PropTypes.func.isRequired
 };
 

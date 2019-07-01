@@ -16,7 +16,7 @@ const Routes = () => {
                     render={({ location }) => (
                         <ErrorBoundary key={location.key}>
                             <Switch>
-                                <Route path="/contacts/:contactGroupID" component={ContactsContainer} />
+                                <Route path="/contacts" component={ContactsContainer} />
                                 <Route component={NotFoundContainer} />
                             </Switch>
                         </ErrorBoundary>

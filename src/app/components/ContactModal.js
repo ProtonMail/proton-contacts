@@ -74,8 +74,7 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
     };
 
     const handleSubmit = () => {
-        const params = clearModel(properties);
-        console.log(params);
+        clearModel(properties);
     };
 
     const handleChange = ({ uid: propertyUID, value, key = 'value' }) => {

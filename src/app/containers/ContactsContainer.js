@@ -8,11 +8,14 @@ import Contact from '../components/Contact';
 import ContactPlaceholder from '../components/ContactPlaceholder';
 import ContactToolbar from '../components/ContactToolbar';
 
-const ContactsContainer = ({ contactGroupID }) => {
+const ContactsContainer = ({ location }) => {
+    const params = new URLSearchParams(location.search);
+    const contactGroupID = params.get('contactGroupID');
     const [checkAll, setCheckAll] = useState(false);
     const [contactEmails, loadingContactEmails] = useContactEmails();
     const [contacts, loadingContacts] = useContacts();
     const [checkedContacts, setCheckedContacts] = useState(Object.create(null));
+    const hasChecked = Object.entries(checkedContacts).some(([, isChecked]) => isChecked);
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
 
@@ -56,14 +59,23 @@ const ContactsContainer = ({ contactGroupID }) => {
                         <Route
                             path="/contacts/:contactID"
                             component={({ match }) => {
+                                const { contactID } = match.params;
                                 return (
                                     <>
                                         <ContactsList
-                                            contactID={match.params.contactID}
+                                            contactID={contactID}
                                             contacts={formattedContacts}
                                             onCheck={handleCheck}
                                         />
-                                        <Contact contactID={match.params.contactID} userKeysList={userKeysList} />
+                                        {hasChecked ? (
+                                            <ContactPlaceholder
+                                                user={user}
+                                                contacts={formattedContacts}
+                                                onUncheck={handleUncheckAll}
+                                            />
+                                        ) : (
+                                            <Contact contactID={contactID} userKeysList={userKeysList} />
+                                        )}
                                     </>
                                 );
                             }}
@@ -90,7 +102,7 @@ const ContactsContainer = ({ contactGroupID }) => {
 };
 
 ContactsContainer.propTypes = {
-    contactGroupID: PropTypes.string
+    location: PropTypes.object.isRequired
 };
 
 export default ContactsContainer;

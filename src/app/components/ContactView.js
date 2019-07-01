@@ -10,7 +10,8 @@ import ContactSummary from './ContactSummary';
 import ContactViewProperties from './ContactViewProperties';
 import ContactPromote from './ContactPromote';
 
-const ContactView = ({ properties, contactID, errors }) => {
+const ContactView = ({ properties, contactID }) => {
+    // TODO handle errrors prop
     const { createModal } = useModals();
     const [{ hasPaidMail }] = useUser();
 
@@ -59,7 +60,7 @@ const ContactView = ({ properties, contactID, errors }) => {
 };
 
 const ContactPropertyPropTypes = PropTypes.shape({
-    value: PropTypes.oneOf(PropTypes.string, PropTypes.arrayOf(PropTypes.string)),
+    value: PropTypes.oneOf([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
     type: PropTypes.string,
     group: PropTypes.string,
     field: PropTypes.string

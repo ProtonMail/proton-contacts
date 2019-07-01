@@ -39,7 +39,7 @@ const AuthSidebar = () => {
             icon: 'contacts-groups',
             color,
             text,
-            link: `/contacts/${contactGroupID}`
+            link: `?contactGroupID=${contactGroupID}`
         }))
     );
 

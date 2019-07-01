@@ -49,12 +49,10 @@ const ContactGroupDropdown = ({ className, contactIDs }) => {
 
     const handleApply = () => {
         // TODO
-        console.log(model);
     };
 
     const handleAdd = () => {
         // TODO
-        console.log('open modal');
     };
 
     return (

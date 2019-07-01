@@ -4,20 +4,17 @@ import { useContactGroups, useUser } from 'react-components';
 import { withRouter } from 'react-router';
 import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
 import List from 'react-virtualized/dist/commonjs/List';
+import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 
 import ItemCheckbox from './ItemCheckbox';
 import ContactGroupIcon from './ContactGroupIcon';
 
-const ContactsList = ({ contacts, onCheck, history, contactID }) => {
+const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
     const [{ hasPaidMail }] = useUser();
     const listRef = useRef(null);
     const containerRef = useRef(null);
     const [lastChecked, setLastChecked] = useState(); // Store ID of the last contact ID checked
-    const getHeight = () => containerRef.current.clientHeight;
-    const getWidth = () => containerRef.current.offsetWidth;
     const [contactGroups] = useContactGroups();
-    const [height, setHeight] = useState(0);
-    const [width, setWidth] = useState(0);
     const mapContactGroups = contactGroups.reduce((acc, contactGroup) => {
         acc[contactGroup.ID] = contactGroup;
         return acc;
@@ -39,7 +36,7 @@ const ContactsList = ({ contacts, onCheck, history, contactID }) => {
         onCheck(contactIDs, target.checked);
     };
 
-    const handleClick = (ID) => () => history.push(`/contacts/${ID}`);
+    const handleClick = (ID) => () => history.push({ ...location, pathname: `/contacts/${ID}` });
 
     const Row = ({
         index, // Index of row within collection
@@ -51,7 +48,7 @@ const ContactsList = ({ contacts, onCheck, history, contactID }) => {
             <div
                 style={style}
                 key={ID}
-                className={`item-container  bg-global-white  ${contactID === ID ? 'item-is-selected' : ''}`}
+                className={`item-container bg-global-white  ${contactID === ID ? 'item-is-selected' : ''}`}
             >
                 <div className="flex flex-nowrap">
                     <ItemCheckbox
@@ -94,39 +91,33 @@ const ContactsList = ({ contacts, onCheck, history, contactID }) => {
         style: PropTypes.string
     };
 
-    const onResize = () => {
-        setHeight(getHeight());
-        setWidth(getWidth());
-    };
-
     useEffect(() => {
         const timeoutID = setTimeout(() => {
-            onResize();
-
             if (contactID) {
                 const index = contacts.findIndex(({ ID }) => contactID === ID);
                 listRef.current.scrollToRow(index);
             }
         }, 200);
 
-        document.addEventListener('resize', onResize);
-
         return () => {
             clearTimeout(timeoutID);
-            document.removeEventListener('resize', onResize);
         };
     }, []);
 
     return (
         <div ref={containerRef} className="items-column-list">
-            <List
-                ref={listRef}
-                rowRenderer={Row}
-                rowCount={contacts.length}
-                rowHeight={76}
-                height={height}
-                width={width}
-            />
+            <AutoSizer>
+                {({ height, width }) => (
+                    <List
+                        ref={listRef}
+                        rowRenderer={Row}
+                        rowCount={contacts.length}
+                        height={height}
+                        width={width}
+                        rowHeight={76}
+                    />
+                )}
+            </AutoSizer>
         </div>
     );
 };
@@ -135,6 +126,7 @@ ContactsList.propTypes = {
     contacts: PropTypes.array,
     onCheck: PropTypes.func,
     history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
     contactID: PropTypes.string
 };
 
