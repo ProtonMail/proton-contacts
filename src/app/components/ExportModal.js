@@ -106,8 +106,6 @@ const ExportModal = ({ onClose, ...rest }) => {
         };
     }, []);
 
-    console.log(contactsNotExported);
-
     return (
         <FormModal
             title={c('Title').t`Exporting contacts`}
