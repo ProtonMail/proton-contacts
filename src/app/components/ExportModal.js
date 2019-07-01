@@ -17,6 +17,7 @@ import { wait } from 'proton-shared/lib/helpers/promise';
 
 import { decryptContactCards } from '../helpers/decrypt';
 import { toICAL } from '../helpers/vcard';
+import { percentageProgress } from './../helpers/progress';
 import DynamicProgress from './DynamicProgress';
 
 const DOWNLOAD_FILENAME = 'protonContacts.vcf';
@@ -105,6 +106,8 @@ const ExportModal = ({ onClose, ...rest }) => {
         };
     }, []);
 
+    console.log(contactsNotExported);
+
     return (
         <FormModal
             title={c('Title').t`Exporting contacts`}
@@ -119,9 +122,9 @@ const ExportModal = ({ onClose, ...rest }) => {
                     .t`Decrypting contacts... This may take a few minutes. When the process is completed, you will be able to download the file with all your contacts exported.`}
             </Alert>
             <DynamicProgress
-                id="progress-contacts"
+                id="progress-export-contacts"
                 alt="contact-loader"
-                value={Math.floor(((contactsExported.length + contactsNotExported.length) / contacts.length) * 100)}
+                value={percentageProgress(contactsExported.length, contactsNotExported.length, contacts.length)}
                 displayEnd={c('Progress bar description')
                     .t`${contactsExported.length} out of ${contacts.length} contacts successfully exported.`}
             />
