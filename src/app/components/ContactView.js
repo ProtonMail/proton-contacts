@@ -60,7 +60,7 @@ const ContactView = ({ properties, contactID }) => {
 };
 
 const ContactPropertyPropTypes = PropTypes.shape({
-    value: PropTypes.oneOf([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
     type: PropTypes.string,
     group: PropTypes.string,
     field: PropTypes.string
