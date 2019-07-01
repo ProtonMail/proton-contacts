@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
+import moment from 'moment';
 import {
     useContacts,
     useUser,
@@ -20,7 +21,7 @@ import { toICAL } from '../helpers/vcard';
 import { percentageProgress } from './../helpers/progress';
 import DynamicProgress from './DynamicProgress';
 
-const DOWNLOAD_FILENAME = 'protonContacts.vcf';
+const DOWNLOAD_FILENAME = `protonContacts-${moment().format()}.vcf`;
 // BACK-END DATA
 const QUERY_EXPORT_MAX_PAGESIZE = 50;
 const API_SAFE_INTERVAL = 100; // API request limit: 100 requests / 10 seconds, so 1 request every 100 ms is safe
@@ -100,6 +101,8 @@ const ExportModal = ({ onClose, ...rest }) => {
                 throw error;
             }
         });
+
+        console.log(DOWNLOAD_FILENAME);
 
         return () => {
             abortController.abort();

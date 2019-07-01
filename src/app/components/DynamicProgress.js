@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { Icon } from 'react-components';
+import { Progress, Icon } from 'react-components';
 import contactLoader from 'design-system/assets/img/pm-images/contact-export-loader.gif';
 
 const DyanmicProgress = ({ id, alt, displayDuring, displayEnd, value, max, ...rest }) => {
@@ -12,7 +12,7 @@ const DyanmicProgress = ({ id, alt, displayDuring, displayEnd, value, max, ...re
             ) : (
                 <Icon name="on" fill="success" size={100} alt={`${alt}-finished`} />
             )}
-            <progress className="progress-contact w100 mt1" aria-describedby={id} value={value} max={max} {...rest} />
+            <Progress className="progress-contact w100 mt1" aria-describedby={id} value={value} max={max} {...rest} />
             <p aria-atomic="true" aria-live="polite" id="id">
                 {value < max ? `${displayDuring}: ${value}%` : displayEnd}
             </p>
