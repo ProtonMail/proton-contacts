@@ -66,7 +66,7 @@ const ACTIONS = {
     [CLEAR_TEXT]: clearText
 };
 
-export const prepareContact = async (contact, keys) => {
+export const prepareContact = async (contact, { publicKeys, privateKeys }) => {
     const { Cards } = contact;
 
     const data = await Promise.all(
@@ -74,7 +74,7 @@ export const prepareContact = async (contact, keys) => {
             if (!ACTIONS[card.Type]) {
                 return { error: FAIL_TO_READ };
             }
-            return ACTIONS[card.Type](card, keys);
+            return ACTIONS[card.Type](card, { publicKeys, privateKeys });
         })
     );
 
@@ -94,9 +94,9 @@ export const prepareContact = async (contact, keys) => {
     return { properties: merge(vcards.map(parse)), errors };
 };
 
-export const decryptContactCards = async (contactCards, contactID, keys) => {
+export const decryptContactCards = async (contactCards, contactID, { publicKeys, privateKeys }) => {
     try {
-        const { properties, errors } = await prepareContact({ Cards: contactCards }, keys);
+        const { properties, errors } = await prepareContact({ Cards: contactCards }, { publicKeys, privateKeys });
         if (errors.length !== 0) {
             throw new Error('Error decrypting contact with contactID ', contactID);
         }
@@ -104,4 +104,23 @@ export const decryptContactCards = async (contactCards, contactID, keys) => {
     } catch (error) {
         throw error;
     }
+};
+
+/**
+ * generate list of public keys corresponding to a list of private keys
+ * @param {Object} userKeysList     { privateKeys: Array<PGPkey> }
+ * @return {Object}                 { publicKeys: Array<PGPkey>, privateKeys: Array<PGPkey>}
+ */
+export const bothUserKeys = (userKeysList) => {
+    return userKeysList.reduce(
+        (acc, { privateKey }) => {
+            if (!privateKey.isDecrypted()) {
+                return acc;
+            }
+            acc.publicKeys.push(privateKey.toPublic());
+            acc.privateKeys.push(privateKey);
+            return acc;
+        },
+        { publicKeys: [], privateKeys: [] }
+    );
 };

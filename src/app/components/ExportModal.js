@@ -16,7 +16,7 @@ import { queryContactExport } from 'proton-shared/lib/api/contacts';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 import { wait } from 'proton-shared/lib/helpers/promise';
 
-import { decryptContactCards } from '../helpers/decrypt';
+import { decryptContactCards, bothUserKeys } from '../helpers/decrypt';
 import { toICAL } from '../helpers/vcard';
 import { percentageProgress } from './../helpers/progress';
 import DynamicProgress from './DynamicProgress';
@@ -41,6 +41,7 @@ const ExportModal = ({ onClose, ...rest }) => {
     const api = useApi();
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
+    const { publicKeys, privateKeys } = bothUserKeys(userKeysList);
     const [contacts, loadingContacts] = useContacts();
 
     const [contactsExported, addSuccess] = useState([]);
@@ -59,18 +60,6 @@ const ExportModal = ({ onClose, ...rest }) => {
 
         const apiCalls = Math.ceil(contacts.length / QUERY_EXPORT_MAX_PAGESIZE);
 
-        const bothUserKeys = userKeysList.reduce(
-            (acc, { privateKey }) => {
-                if (!privateKey.isDecrypted()) {
-                    return acc;
-                }
-                acc.publicKeys.push(privateKey.toPublic());
-                acc.privateKeys.push(privateKey);
-                return acc;
-            },
-            { publicKeys: [], privateKeys: [] }
-        );
-
         const exportBatch = async (i, { signal }) => {
             const { Contacts: contacts } = await apiWithAbort(
                 queryContactExport({ Page: i, PageSize: QUERY_EXPORT_MAX_PAGESIZE })
@@ -80,7 +69,7 @@ const ExportModal = ({ onClose, ...rest }) => {
                     return;
                 }
                 try {
-                    const contactDecrypted = await decryptContactCards(Cards, ID, bothUserKeys);
+                    const contactDecrypted = await decryptContactCards(Cards, ID, { publicKeys, privateKeys });
                     const contactExported = toICAL(contactDecrypted).toString();
                     /*
                         need to check again for signal.aborted because the abort
