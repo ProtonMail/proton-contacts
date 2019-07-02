@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FormModal, Alert, useUser } from 'react-components';
+import { FormModal, Alert, useUser, useApi, useUserKeys } from 'react-components';
 import { c } from 'ttag';
+import { addContacts } from 'proton-shared/lib/api/contacts';
 
 import ContactModalProperties from './ContactModalProperties';
 import ContactPromote from './ContactPromote';
 import { randomIntFromInterval } from 'proton-shared/lib/helpers/function';
 import { OTHER_INFORMATION_FIELDS } from '../constants';
 import { generateUID } from 'react-components/helpers/component';
+import { prepareContacts } from '../helpers/encrypt';
 
 const DEFAULT_MODEL = [
     { field: 'fn', value: '' },
@@ -39,8 +41,8 @@ const EDITABLE_FIELDS = [
 
 const UID_PREFIX = 'contact-property';
 
-const formatModel = (properties) => {
-    if (!properties) {
+const formatModel = (properties = []) => {
+    if (!properties.length) {
         return DEFAULT_MODEL.map((property) => ({ ...property, uid: generateUID(UID_PREFIX) })); // Add UID to localize the property easily;
     }
     return properties
@@ -48,12 +50,14 @@ const formatModel = (properties) => {
         .map((property) => ({ ...property, uid: generateUID(UID_PREFIX) })); // Add UID to localize the property easily
 };
 
-const clearModel = (properties) => {
+const sanitizeModel = (properties) => {
     return properties.filter(({ value }) => value);
 };
 
 const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => {
-    const [{ hasPaidMail }] = useUser();
+    const api = useApi();
+    const [user] = useUser();
+    const [userKeysList] = useUserKeys(user);
     const [properties, setProperties] = useState(formatModel(initialProperties));
     const title = contactID ? c('Title').t`Edit contact details` : c('Title').t`Add new contact`;
 
@@ -73,8 +77,13 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
         setProperties([...properties, { field, value: '', uid: generateUID(UID_PREFIX) }]);
     };
 
-    const handleSubmit = () => {
-        clearModel(properties);
+    const handleSubmit = async () => {
+        const notEditableProperties = initialProperties.filter(({ field }) => !EDITABLE_FIELDS.includes(field));
+        const Contacts = await prepareContacts(
+            [sanitizeModel(properties).concat(notEditableProperties)],
+            userKeysList[0]
+        );
+        await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: 0 }));
     };
 
     const handleChange = ({ uid: propertyUID, value, key = 'value' }) => {
@@ -104,7 +113,7 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
                 onRemove={handleRemove}
                 onAdd={handleAdd('email')}
             />
-            {hasPaidMail ? (
+            {user.hasPaidMail ? (
                 <>
                     <ContactModalProperties
                         properties={properties}
@@ -138,6 +147,10 @@ ContactModal.propTypes = {
     contactID: PropTypes.string,
     properties: PropTypes.array,
     onClose: PropTypes.func
+};
+
+ContactModal.defaultProps = {
+    properties: []
 };
 
 export default ContactModal;

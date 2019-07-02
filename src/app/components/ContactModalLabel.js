@@ -50,7 +50,7 @@ const ContactModalLabel = ({ field, uid, type, onChange }) => {
         ]
     };
 
-    if (OPTIONS[field] && !OPTIONS[field].map(({ value }) => value).includes(type)) {
+    if (field === 'fn' || (OPTIONS[field] && !OPTIONS[field].map(({ value }) => value).includes(type))) {
         return <ContactLabelProperty field={field} type={type} />;
     }
 

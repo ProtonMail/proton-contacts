@@ -48,7 +48,7 @@ const decryptSigned = async ({ Data, Signature }, { publicKeys, privateKeys }) =
         });
 
         if (verified !== 1) {
-            return { data, error: SIGNATURED_NOT_VERIFIED };
+            return { data, error: SIGNATURE_NOT_VERIFIED };
         }
 
         return { data };

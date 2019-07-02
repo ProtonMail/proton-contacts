@@ -7,6 +7,7 @@ export const REGION = 4;
 export const POSTAL_CODE = 5;
 export const COUNTRY = 6;
 
+// List of fields display in the bottom section for contact view
 export const OTHER_INFORMATION_FIELDS = [
     'bday',
     'anniversary',
@@ -23,3 +24,7 @@ export const OTHER_INFORMATION_FIELDS = [
     'note',
     'url'
 ];
+
+export const VCARD_KEY_FIELDS = ['key', 'x-pm-mimetype', 'x-pm-encrypt', 'x-pm-sign', 'x-pm-scheme', 'x-pm-tls'];
+export const CLEAR_FIELDS = ['version', 'prodid', 'categories'];
+export const SIGNED_FIELDS = ['version', 'prodid', 'fn', 'uid', 'email'].concat(VCARD_KEY_FIELDS);

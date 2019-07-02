@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Icon, Checkbox, useContacts } from 'react-components';
+import { Icon, Checkbox, useContacts } from 'react-components';
 import { c } from 'ttag';
 
 import { extract } from '../helpers/merge';
@@ -15,15 +15,15 @@ const ContactToolbar = ({ onCheck, onDelete, checked }) => {
     const canMerge = duplicates > 0;
 
     return (
-        <div className="toolbar noprint">
-            <Checkbox checked={checked} onChange={handleCheck} />
-            <Button title={c('Tooltip').t`Delete`} className="pm-button--for-icon mr1" onClick={onDelete}>
-                <Icon name="delete" />
-            </Button>
+        <div className="toolbar flex noprint">
+            <Checkbox className="flex pl1 pr1" checked={checked} onChange={handleCheck} />
+            <button type="button" title={c('Tooltip').t`Delete`} className="pl1 pr1" onClick={onDelete}>
+                <Icon name="delete" className="toolbar-icon" />
+            </button>
             {canMerge ? (
-                <Button title={c('Tooltip').t`Merge`} className="pm-button--for-icon" onClick={handleMerge}>
-                    <Icon name="merge" />
-                </Button>
+                <button type="button" title={c('Tooltip').t`Merge`} className="pl1 pr1" onClick={handleMerge}>
+                    <Icon name="merge" className="toolbar-icon" />
+                </button>
             ) : null}
         </div>
     );

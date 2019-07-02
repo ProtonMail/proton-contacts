@@ -11,7 +11,7 @@ const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
     const val = Array.isArray(value) ? value[0] : value;
 
     if (field === 'email') {
-        <EmailInput value={val} onChange={handleChange} {...rest} />;
+        return <EmailInput value={val} onChange={handleChange} {...rest} />;
     }
 
     if (field === 'adr') {
