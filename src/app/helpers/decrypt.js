@@ -2,11 +2,9 @@ import { getMessage, decryptMessage, getSignature, verifyMessage, createCleartex
 import { merge, parse } from './vcard';
 
 import { CONTACT_CARD_TYPE } from 'proton-shared/lib/constants';
+import { SIGNATURE_NOT_VERIFIED, FAIL_TO_READ } from '../constants';
 
 const { CLEAR_TEXT, ENCRYPTED_AND_SIGNED, ENCRYPTED, SIGNED } = CONTACT_CARD_TYPE;
-
-const SIGNATURE_NOT_VERIFIED = 1;
-const FAIL_TO_READ = 2;
 
 const decrypt = async ({ Data }, { privateKeys }) => {
     try {

@@ -6,6 +6,8 @@ import { useApi, Loader } from 'react-components';
 import { prepareContact, bothUserKeys } from '../helpers/decrypt';
 import ContactView from './ContactView';
 
+import { FAIL_TO_LOAD } from '../constants';
+
 const Contact = ({ contactID, userKeysList }) => {
     const api = useApi();
     const [loading, setLoading] = useState(true);
