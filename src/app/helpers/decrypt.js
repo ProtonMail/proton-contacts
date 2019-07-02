@@ -94,23 +94,9 @@ export const prepareContact = async (contact, keys) => {
     return { properties: merge(vcards.map(parse)), errors };
 };
 
-export const bothUserKeys = (privateKeyList) => {
-    return privateKeyList.reduce(
-        (acc, { privateKey }) => {
-            if (!privateKey.isDecrypted()) {
-                return acc;
-            }
-            acc.publicKeys.push(privateKey.toPublic());
-            acc.privateKeys.push(privateKey);
-            return acc;
-        },
-        { publicKeys: [], privateKeys: [] }
-    );
-};
-
 export const decryptContactCards = async (contactCards, contactID, keys) => {
     try {
-        const { properties, errors } = await prepareContact({ Cards: contactCards }, bothUserKeys(keys));
+        const { properties, errors } = await prepareContact({ Cards: contactCards }, keys);
         if (errors.length !== 0) {
             throw new Error('Error decrypting contact with contactID ', contactID);
         }

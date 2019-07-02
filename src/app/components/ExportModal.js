@@ -59,6 +59,18 @@ const ExportModal = ({ onClose, ...rest }) => {
 
         const apiCalls = Math.ceil(contacts.length / QUERY_EXPORT_MAX_PAGESIZE);
 
+        const bothUserKeys = userKeysList.reduce(
+            (acc, { privateKey }) => {
+                if (!privateKey.isDecrypted()) {
+                    return acc;
+                }
+                acc.publicKeys.push(privateKey.toPublic());
+                acc.privateKeys.push(privateKey);
+                return acc;
+            },
+            { publicKeys: [], privateKeys: [] }
+        );
+
         const exportBatch = async (i, { signal }) => {
             const { Contacts: contacts } = await apiWithAbort(
                 queryContactExport({ Page: i, PageSize: QUERY_EXPORT_MAX_PAGESIZE })
@@ -68,7 +80,7 @@ const ExportModal = ({ onClose, ...rest }) => {
                     return;
                 }
                 try {
-                    const contactDecrypted = await decryptContactCards(Cards, ID, userKeysList);
+                    const contactDecrypted = await decryptContactCards(Cards, ID, bothUserKeys);
                     const contactExported = toICAL(contactDecrypted).toString();
                     /*
                         need to check again for signal.aborted because the abort
