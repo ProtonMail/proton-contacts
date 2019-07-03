@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { c, ngettext, msgid } from 'ttag';
+import { c, msgid } from 'ttag';
 import { PrimaryButton, Button, AutoSaveContactsToggle, useMailSettings, useModals } from 'react-components';
 
 import ExportModal from './ExportModal';

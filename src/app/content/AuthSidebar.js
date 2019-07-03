@@ -4,6 +4,7 @@ import { c } from 'ttag';
 
 import ContactModal from '../components/ContactModal';
 import { extract } from '../helpers/merge';
+import ContactGroupModal from '../components/ContactGroupModal';
 
 const AuthSidebar = () => {
     const [contacts, loadingContacts] = useContacts();
@@ -53,7 +54,7 @@ const AuthSidebar = () => {
         text: c('Link').t`Add group`,
         type: 'button',
         onClick() {
-            // TODO open create contact group modal
+            createModal(<ContactGroupModal />);
         }
     });
 
