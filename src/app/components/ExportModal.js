@@ -16,7 +16,7 @@ import { queryContactExport } from 'proton-shared/lib/api/contacts';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 import { wait } from 'proton-shared/lib/helpers/promise';
 
-import { decryptContactCards, bothUserKeys, prepareContact } from '../helpers/decrypt';
+import { bothUserKeys, prepareContact } from '../helpers/decrypt';
 import { toICAL } from '../helpers/vcard';
 import { percentageProgress } from './../helpers/progress';
 import DynamicProgress from './DynamicProgress';
@@ -35,6 +35,10 @@ const ExportFooter = ({ loading }) => {
             </PrimaryButton>
         </>
     );
+};
+
+ExportFooter.propTypes = {
+    loading: PropTypes.bool
 };
 
 const ExportModal = ({ onClose, ...rest }) => {
