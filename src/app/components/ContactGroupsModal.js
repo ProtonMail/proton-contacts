@@ -104,7 +104,7 @@ const ContactGroupsModal = (props) => {
     return (
         <FormModal title={c('Title').t`Manage groups`} close={c('Action').t`Close`} hasSubmit={false} {...props}>
             <div className="mb1">
-                <PrimaryButton onClick={handleCreate}>{c('Action').t`Create a new contact group`}</PrimaryButton>
+                <PrimaryButton onClick={handleCreate}>{c('Action').t`Add group`}</PrimaryButton>
             </div>
             <ContactGroupsTable onClose={props.onClose} />
         </FormModal>

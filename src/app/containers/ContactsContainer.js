@@ -70,6 +70,7 @@ const ContactsContainer = ({ location }) => {
                                         {hasChecked ? (
                                             <ContactPlaceholder
                                                 user={user}
+                                                contactGroupID={contactGroupID}
                                                 contacts={formattedContacts}
                                                 onUncheck={handleUncheckAll}
                                             />
@@ -87,6 +88,7 @@ const ContactsContainer = ({ location }) => {
                                         <ContactsList contacts={formattedContacts} onCheck={handleCheck} />
                                         <ContactPlaceholder
                                             user={user}
+                                            contactGroupID={contactGroupID}
                                             contacts={formattedContacts}
                                             onUncheck={handleUncheckAll}
                                         />

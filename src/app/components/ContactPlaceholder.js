@@ -2,9 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
-import { PrimaryButton, Button, AutoSaveContactsToggle, useMailSettings, useModals } from 'react-components';
+import {
+    PrimaryButton,
+    Button,
+    AutoSaveContactsToggle,
+    Icon,
+    useMailSettings,
+    useModals,
+    useContactGroups
+} from 'react-components';
 
 import ExportModal from './ExportModal';
+import ContactGroupModal from './ContactGroupModal';
 
 const PaidCards = () => {
     const { createModal } = useModals();
@@ -98,12 +107,14 @@ const FreeCards = () => {
     );
 };
 
-const ContactPlaceholder = ({ contacts, user, onUncheck }) => {
+const ContactPlaceholder = ({ contacts, contactGroupID, user, onUncheck }) => {
     const { hasPaidMail } = user;
     const countContacts = contacts.length;
     const selectedContacts = contacts.filter(({ isChecked }) => isChecked);
     const countSelectedContacts = selectedContacts.length;
     const [{ AutoSaveContacts } = {}] = useMailSettings();
+    const [contactGroups] = useContactGroups();
+    const { createModal } = useModals();
 
     if (countSelectedContacts) {
         return (
@@ -116,6 +127,28 @@ const ContactPlaceholder = ({ contacts, user, onUncheck }) => {
                     )}
                 </h1>
                 <Button onClick={onUncheck}>{c('Action').t`Deselect all`}</Button>
+            </div>
+        );
+    }
+
+    if (contactGroupID) {
+        const { Name, Color } = contactGroups.find(({ ID }) => ID === contactGroupID);
+        const style = { color: Color };
+        const handleClick = () => createModal(<ContactGroupModal contactGroupID={contactGroupID} />);
+        return (
+            <div className="p2 view-column-detail flex-item-fluid">
+                <div className="aligncenter">
+                    <Icon name="contacts-groups" color={Color} />
+                    <h1 style={style}>{Name}</h1>
+                    <p>
+                        {c('Info').ngettext(
+                            msgid`You have ${countContacts} contact in your address book`,
+                            `You have ${countContacts} contacts in your address book`,
+                            countContacts
+                        )}
+                    </p>
+                    <PrimaryButton onClick={handleClick}>{c('Action').t`Edit group`}</PrimaryButton>
+                </div>
             </div>
         );
     }
@@ -141,6 +174,7 @@ const ContactPlaceholder = ({ contacts, user, onUncheck }) => {
 
 ContactPlaceholder.propTypes = {
     contacts: PropTypes.array.isRequired,
+    contactGroupID: PropTypes.string,
     user: PropTypes.object.isRequired,
     onUncheck: PropTypes.func
 };
