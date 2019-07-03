@@ -95,7 +95,7 @@ export const prepareContact = async (contact, { publicKeys, privateKeys }) => {
 export const decryptContactCards = async (contactCards, contactID, { publicKeys, privateKeys }) => {
     try {
         const { properties, errors } = await prepareContact({ Cards: contactCards }, { publicKeys, privateKeys });
-        if (errors.length !== 0) {
+        if (errors.length) {
             throw new Error('Error decrypting contact with contactID ', contactID);
         }
         return properties;
