@@ -58,7 +58,9 @@ const ContactGroupModal = ({ contactGroupID, ...rest }) => {
         name: contactGroupID ? contactGroup.Name : '',
         color: contactGroupID ? contactGroup.Color : LABEL_COLORS[randomIntFromInterval(0, LABEL_COLORS.length - 1)],
         contactEmailID: contactEmails.length && options[0].value,
-        contactEmails: contactGroupID ? contactEmails.filter(({ LabelIDs }) => LabelIDs.includes(contactGroupID)) : []
+        contactEmails: contactGroupID
+            ? contactEmails.filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID))
+            : []
     });
 
     const handleChangeName = ({ target }) => setModel({ ...model, name: target.value });
