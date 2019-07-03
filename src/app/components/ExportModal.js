@@ -16,7 +16,7 @@ import { queryContactExport } from 'proton-shared/lib/api/contacts';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 import { wait } from 'proton-shared/lib/helpers/promise';
 
-import { decryptContactCards, bothUserKeys } from '../helpers/decrypt';
+import { decryptContactCards, bothUserKeys, prepareContact } from '../helpers/decrypt';
 import { toICAL } from '../helpers/vcard';
 import { percentageProgress } from './../helpers/progress';
 import DynamicProgress from './DynamicProgress';
@@ -69,7 +69,15 @@ const ExportModal = ({ onClose, ...rest }) => {
                     return;
                 }
                 try {
-                    const contactDecrypted = await decryptContactCards(Cards, ID, { publicKeys, privateKeys });
+                    const { properties: contactDecrypted = [], errors = [] } = await prepareContact(
+                        { Cards },
+                        { publicKeys, privateKeys }
+                    );
+
+                    if (errors.length) {
+                        throw new Error('Error decrypting contact');
+                    }
+
                     const contactExported = toICAL(contactDecrypted).toString();
                     /*
                         need to check again for signal.aborted because the abort

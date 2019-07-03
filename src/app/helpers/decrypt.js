@@ -92,18 +92,6 @@ export const prepareContact = async (contact, { publicKeys, privateKeys }) => {
     return { properties: merge(vcards.map(parse)), errors };
 };
 
-export const decryptContactCards = async (contactCards, contactID, { publicKeys, privateKeys }) => {
-    try {
-        const { properties, errors } = await prepareContact({ Cards: contactCards }, { publicKeys, privateKeys });
-        if (errors.length) {
-            throw new Error('Error decrypting contact with contactID', contactID);
-        }
-        return properties;
-    } catch (error) {
-        throw error;
-    }
-};
-
 /**
  * generate list of public keys corresponding to a list of private keys
  * @param {Object} userKeysList     { privateKeys: Array<PGPkey> }
