@@ -47,44 +47,31 @@ const ImportModal = ({ onClose, ...rest }) => {
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
     const { createNotification } = useNotifications();
 
-    const [attached, setAttached] = useState(false);
+    const [attached, setAttached] = useState('');
     const [isImporting, setIsImporting] = useState(false);
-    const [importFiles, setImportFiles] = useState([]);
+    const [importFile, setImportFile] = useState(null);
 
     const [totalContacts, setTotalContacts] = useState(0);
     const [contactsImported, addSuccess] = useState([]);
     const [contactsNotImported, addError] = useState([]);
 
-    const handleAttach = async ({ target }, attachedFiles) => {
+    const handleAttach = async ({ target }) => {
         // TODO: set some limit on the total number of files or their size ?
-        const files = [...target.files].filter(({ type }) => ['text/vcard', 'text/csv'].includes(type));
+        const file = [...target.files].filter(({ type }) => ['text/vcard', 'text/csv'].includes(type))[0];
 
-        if (target.files.length && !files.length) {
+        if (target.files.length && !file) {
             return createNotification({
                 type: 'error',
-                text: c('Error notification').t`No .csv or .vcard files selected`
+                text: c('Error notification').t`No .csv or .vcard file selected`
             });
         }
-
-        const filteredFiles = [];
-        for (const file of files) {
-            if (attachedFiles.map(({ name }) => name).includes(file.name)) {
-                createNotification({
-                    type: 'error',
-                    text: c('Error notification').t`${file.name} already selected`
-                });
-            } else {
-                filteredFiles.push(file);
-            }
-        }
-
-        !attachedFiles.length && setAttached(filteredFiles.length !== 0);
-        setImportFiles((importFiles) => [...importFiles, ...filteredFiles]);
+        setAttached(file.type);
+        setImportFile(file);
     };
 
-    const handleClear = (files, index) => {
-        setImportFiles(files.filter((item, i) => i !== index));
-        files.length === 1 && setAttached(false);
+    const handleClear = () => {
+        setImportFile(null);
+        setAttached('');
     };
 
     const handleStartImport = () => setIsImporting(true);
@@ -131,7 +118,7 @@ const ImportModal = ({ onClose, ...rest }) => {
             onClose={onClose}
             footer={
                 !isImporting
-                    ? AttachingFooter({ disabled: !attached })
+                    ? AttachingFooter({ disabled: attached === '' })
                     : ImportingFooter({
                           loading:
                               totalContacts === 0 ||
@@ -143,7 +130,7 @@ const ImportModal = ({ onClose, ...rest }) => {
             {!isImporting ? (
                 <AttachingModalContent
                     attached={attached}
-                    files={importFiles}
+                    file={importFile}
                     onAttach={handleAttach}
                     onClear={handleClear}
                 />
