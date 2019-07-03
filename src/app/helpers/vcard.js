@@ -114,11 +114,11 @@ export const toICAL = (properties = []) => {
 /**
  * Merge multiple contact properties
  * order matters
- * @param {Array} contacts
+ * @param {Array} contact
  * @returns {Array} contact properties
  */
-export const merge = (contacts = []) => {
-    return contacts.reduce((acc, properties) => {
+export const merge = (contact = []) => {
+    return contact.reduce((acc, properties) => {
         properties.forEach((property) => {
             const { field } = property;
             const { cardinality = ONE_OR_MORE_MAY_BE_PRESENT } = PROPERTIES[field] || {};
