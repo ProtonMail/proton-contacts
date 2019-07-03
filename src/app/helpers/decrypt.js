@@ -2,11 +2,9 @@ import { getMessage, decryptMessage, getSignature, verifyMessage, createCleartex
 import { merge, parse } from './vcard';
 
 import { CONTACT_CARD_TYPE } from 'proton-shared/lib/constants';
+import { SIGNATURE_NOT_VERIFIED, FAIL_TO_READ } from '../constants';
 
 const { CLEAR_TEXT, ENCRYPTED_AND_SIGNED, ENCRYPTED, SIGNED } = CONTACT_CARD_TYPE;
-
-const SIGNATURE_NOT_VERIFIED = 1;
-const FAIL_TO_READ = 2;
 
 const decrypt = async ({ Data }, { privateKeys }) => {
     try {
@@ -66,7 +64,7 @@ const ACTIONS = {
     [CLEAR_TEXT]: clearText
 };
 
-export const prepareContact = async (contact, keys) => {
+export const prepareContact = async (contact, { publicKeys, privateKeys }) => {
     const { Cards } = contact;
 
     const data = await Promise.all(
@@ -74,7 +72,7 @@ export const prepareContact = async (contact, keys) => {
             if (!ACTIONS[card.Type]) {
                 return { error: FAIL_TO_READ };
             }
-            return ACTIONS[card.Type](card, keys);
+            return ACTIONS[card.Type](card, { publicKeys, privateKeys });
         })
     );
 
@@ -94,8 +92,13 @@ export const prepareContact = async (contact, keys) => {
     return { properties: merge(vcards.map(parse)), errors };
 };
 
-export const bothUserKeys = (privateKeyList) => {
-    return privateKeyList.reduce(
+/**
+ * generate list of public keys corresponding to a list of private keys
+ * @param {Object} userKeysList     { privateKeys: Array<PGPkey> }
+ * @return {Object}                 { publicKeys: Array<PGPkey>, privateKeys: Array<PGPkey>}
+ */
+export const bothUserKeys = (userKeysList) => {
+    return userKeysList.reduce(
         (acc, { privateKey }) => {
             if (!privateKey.isDecrypted()) {
                 return acc;
@@ -106,16 +109,4 @@ export const bothUserKeys = (privateKeyList) => {
         },
         { publicKeys: [], privateKeys: [] }
     );
-};
-
-export const decryptContactCards = async (contactCards, contactID, keys) => {
-    try {
-        const { properties, errors } = await prepareContact({ Cards: contactCards }, bothUserKeys(keys));
-        if (errors.length !== 0) {
-            throw new Error('Error decrypting contact with contactID ', contactID);
-        }
-        return properties;
-    } catch (error) {
-        throw error;
-    }
 };

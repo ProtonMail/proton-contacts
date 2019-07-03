@@ -109,7 +109,7 @@ const ContactPlaceholder = ({ contacts, user, onUncheck }) => {
         return (
             <div className="p2 view-column-detail flex-item-fluid aligncenter">
                 <h1>
-                    {ngettext(
+                    {c('Info').ngettext(
                         msgid`${countSelectedContacts} contact selected`,
                         `${countSelectedContacts} contacts selected`,
                         countSelectedContacts
@@ -125,7 +125,7 @@ const ContactPlaceholder = ({ contacts, user, onUncheck }) => {
             <div className="aligncenter">
                 <h1>{c('Title').t`Contacts`}</h1>
                 <p>
-                    {ngettext(
+                    {c('Info').ngettext(
                         msgid`You have ${countContacts} contact in your address book`,
                         `You have ${countContacts} contacts in your address book`,
                         countContacts
