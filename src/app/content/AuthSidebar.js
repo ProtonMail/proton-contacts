@@ -1,15 +1,19 @@
 import React from 'react';
-import { Sidebar, useContactGroups, Loader, useModals } from 'react-components';
+import { Sidebar, useContactGroups, Loader, useModals, useContacts } from 'react-components';
 import { c } from 'ttag';
 
 import ContactModal from '../components/ContactModal';
-import ExportModal from '../components/ExportModal';
+import { extract } from '../helpers/merge';
 
 const AuthSidebar = () => {
-    const [contactGroups, loading] = useContactGroups();
+    const [contacts, loadingContacts] = useContacts();
+    const [contactGroups, loadingContactGroups] = useContactGroups();
     const { createModal } = useModals();
+    const emails = extract(contacts);
+    const duplicates = Object.keys(emails).reduce((acc, key) => acc + emails[key].length, 0);
+    const canMerge = duplicates > 0;
 
-    if (loading) {
+    if (loadingContacts || loadingContactGroups) {
         return <Loader />;
     }
 
@@ -28,37 +32,11 @@ const AuthSidebar = () => {
             link: '/contacts'
         },
         {
-            icon: 'import',
-            text: c('Action').t`Import`,
-            type: 'button',
-            onClick() {}
-        },
-        {
-            icon: 'export',
-            text: c('Action').t`Export`,
-            type: 'button',
-            onClick() {
-                createModal(<ExportModal />);
-            }
-        },
-        {
-            icon: 'merge',
-            text: c('Action').t`Merge`,
-            type: 'button',
-            onClick() {}
-        },
-        {
-            icon: 'delete',
-            text: c('Action').t`Delete all`,
-            type: 'button',
-            onClick() {}
-        },
-        {
             icon: 'contacts-group',
             text: c('Link').t`Group`,
             type: 'button',
             onClick() {
-                // TODO open create contact group modal
+                // TODO open manage contact group modal
             }
         }
     ].concat(
@@ -69,6 +47,24 @@ const AuthSidebar = () => {
             link: `?contactGroupID=${contactGroupID}`
         }))
     );
+
+    list.push({
+        icon: 'add',
+        text: c('Link').t`Add group`,
+        type: 'button',
+        onClick() {
+            // TODO open create contact group modal
+        }
+    });
+
+    if (canMerge) {
+        list.splice(2, 0, {
+            icon: 'merge',
+            text: c('Action').t`Merge`,
+            type: 'button',
+            onClick() {}
+        });
+    }
 
     return <Sidebar list={list} />;
 };

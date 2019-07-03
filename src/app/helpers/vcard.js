@@ -44,14 +44,30 @@ const PROPERTIES = {
 export const getAllFields = () => Object.keys(PROPERTIES);
 export const isCustomField = (field = '') => field.startsWith('x-');
 
+/**
+ * ICAL library can crash if the value saved in the vCard is improperly formatted
+ * If it crash we get the raw value from jCal key
+ * @param {ICAL.Property} property
+ * @returns {Array<String>}
+ */
+const getRawValues = (property) => {
+    try {
+        return property.getValues();
+    } catch (error) {
+        const [, , , value = ''] = property.jCal || [];
+        return [value];
+    }
+};
+
 export const getValue = (property) => {
-    const values = property.getValues().map((val) => {
+    const values = getRawValues(property).map((val) => {
         if (typeof val === 'string') {
             return val;
         }
 
         return val.toString();
     });
+
     return property.isMultiValue ? values : values[0];
 };
 

@@ -9,7 +9,8 @@ import ContactView from './ContactView';
 const Contact = ({ contactID, userKeysList }) => {
     const api = useApi();
     const [loading, setLoading] = useState(true);
-    const [{ properties, errors }, setModel] = useState({});
+    const [model, setModel] = useState({ properties: [], errors: [] });
+    const { properties, errors } = model;
     const { publicKeys, privateKeys } = bothUserKeys(userKeysList);
 
     const request = async () => {
@@ -21,7 +22,7 @@ const Contact = ({ contactID, userKeysList }) => {
             setLoading(false);
         } catch (error) {
             setLoading(false);
-            setModel({ ...{ properties, errors }, errors: [FAIL_TO_LOAD] });
+            setModel({ ...model, errors: [FAIL_TO_LOAD] });
             throw error;
         }
     };
