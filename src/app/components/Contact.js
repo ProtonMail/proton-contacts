@@ -20,7 +20,6 @@ const Contact = ({ contactID, userKeysList }) => {
             setLoading(true);
             const { Contact } = await api(getContact(contactID));
             const { properties, errors } = await prepareContact(Contact, { publicKeys, privateKeys });
-            debugger;
             setModel({ properties, errors });
             setLoading(false);
         } catch (error) {

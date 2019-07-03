@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { Bordered, FileInput, Alert } from 'react-components';
 
-import AttachedFiles from './AttachedFiles';
+import AttachedFile from './AttachedFile';
 
-const AttachingModalContent = ({ attached, files, onAttach, onClear }) => {
+const AttachingModalContent = ({ attached, file, onAttach, onClear }) => {
     return (
         <>
             <Alert learnMore="https://protonmail.com/support/knowledge-base/adding-contacts/">
@@ -14,23 +14,20 @@ const AttachingModalContent = ({ attached, files, onAttach, onClear }) => {
             </Alert>
             <Bordered className="flex">
                 {/* TODO: drag&drop component here. There seems to be no React component for this kind of behavior yet */}
-                {attached ? <AttachedFiles files={files} iconName="contacts-groups" onClear={onClear} /> : null}
-                <FileInput
-                    className="center"
-                    multiple
-                    accept=".csv, .vcf"
-                    id="import-contacts"
-                    onChange={(e) => onAttach(e, files)}
-                >
-                    {c('Action').t`Select file from computer`}
-                </FileInput>
+                {attached ? (
+                    <AttachedFile file={file} iconName="contacts-groups" onClear={onClear} />
+                ) : (
+                    <FileInput className="center" accept=".csv, .vcf" id="import-contacts" onChange={onAttach}>
+                        {c('Action').t`Select file from computer`}
+                    </FileInput>
+                )}
             </Bordered>
         </>
     );
 };
 
 AttachingModalContent.propTypes = {
-    attached: PropTypes.bool.isRequired,
+    attached: PropTypes.string.isRequired,
     files: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string, size: PropTypes.number })),
     onAttach: PropTypes.func,
     onClear: PropTypes.func
