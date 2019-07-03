@@ -139,7 +139,9 @@ const ContactPlaceholder = ({ contacts, contactGroupID, user, onUncheck }) => {
             <div className="p2 view-column-detail flex-item-fluid">
                 <div className="aligncenter">
                     <Icon name="contacts-groups" color={Color} />
-                    <h1 style={style}>{Name}</h1>
+                    <h1 className="ellipsis" style={style}>
+                        {Name}
+                    </h1>
                     <p>
                         {c('Info').ngettext(
                             msgid`You have ${countContacts} contact in your address book`,

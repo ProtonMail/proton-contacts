@@ -8,6 +8,7 @@ import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 
 import ItemCheckbox from './ItemCheckbox';
 import ContactGroupIcon from './ContactGroupIcon';
+import { c } from 'ttag';
 
 const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
     const [{ hasPaidMail }] = useUser();
@@ -103,6 +104,14 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
             clearTimeout(timeoutID);
         };
     }, []);
+
+    if (!contacts.length) {
+        return (
+            <div className="items-column-list p1 aligncenter">
+                {c('Info').t`You have 0 contacts in your address book`}
+            </div>
+        );
+    }
 
     return (
         <div ref={containerRef} className="items-column-list">
