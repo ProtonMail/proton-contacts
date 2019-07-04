@@ -15,14 +15,14 @@ import {
 import ExportModal from './ExportModal';
 import ContactGroupModal from './ContactGroupModal';
 
-const PaidCards = () => {
+const PaidCards = ({ contactGroupID }) => {
     const { createModal } = useModals();
 
     const handleImport = () => {
         // TODO
     };
     const handleExport = () => {
-        createModal(<ExportModal />);
+        createModal(<ExportModal contactGroupID={contactGroupID} />);
     };
 
     return (
@@ -62,6 +62,10 @@ const PaidCards = () => {
             </div>
         </div>
     );
+};
+
+PaidCards.propTypes = {
+    contactGroupID: PropTypes.string
 };
 
 const FreeCards = () => {
@@ -142,14 +146,17 @@ const ContactPlaceholder = ({ contacts, contactGroupID, user, onUncheck }) => {
                     <h1 className="ellipsis" style={style}>
                         {Name}
                     </h1>
-                    <p>
+                    <div className="mb2">
                         {c('Info').ngettext(
                             msgid`You have ${countContacts} contact in your address book`,
                             `You have ${countContacts} contacts in your address book`,
                             countContacts
                         )}
-                    </p>
-                    <PrimaryButton onClick={handleClick}>{c('Action').t`Edit group`}</PrimaryButton>
+                    </div>
+                    <div className="mb2">
+                        <PrimaryButton onClick={handleClick}>{c('Action').t`Edit group`}</PrimaryButton>
+                    </div>
+                    {hasPaidMail ? <PaidCards contactGroupID={contactGroupID} /> : <FreeCards />}
                 </div>
             </div>
         );
@@ -158,16 +165,21 @@ const ContactPlaceholder = ({ contacts, contactGroupID, user, onUncheck }) => {
     return (
         <div className="p2 view-column-detail flex-item-fluid">
             <div className="aligncenter">
+                <Icon name="contacts" />
                 <h1>{c('Title').t`Contacts`}</h1>
-                <p>
+                <div className="mb2">
                     {c('Info').ngettext(
                         msgid`You have ${countContacts} contact in your address book`,
                         `You have ${countContacts} contacts in your address book`,
                         countContacts
                     )}
-                </p>
-                <p>{c('Info').t`Contacts are automatically added to your address book`}</p>
-                <AutoSaveContactsToggle autoSaveContacts={!!AutoSaveContacts} />
+                </div>
+                <div className="w50 center flex flex-spacebetween flex-items-center mb2">
+                    <div>{c('Info').t`Automatically add contact`}</div>
+                    <div>
+                        <AutoSaveContactsToggle autoSaveContacts={!!AutoSaveContacts} />
+                    </div>
+                </div>
             </div>
             {hasPaidMail ? <PaidCards /> : <FreeCards />}
         </div>
