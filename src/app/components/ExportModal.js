@@ -21,7 +21,7 @@ import { toICAL } from '../helpers/vcard';
 import { percentageProgress } from './../helpers/progress';
 import DynamicProgress from './DynamicProgress';
 
-const DOWNLOAD_FILENAME = `protonContacts-${moment().format('YYYY-MM-DD')}.vcf`;
+const DOWNLOAD_FILENAME = 'protonContacts';
 // BACK-END DATA
 const QUERY_EXPORT_MAX_PAGESIZE = 50;
 const API_SAFE_INTERVAL = 100; // API request limit: 100 requests / 10 seconds, so 1 request every 100 ms is safe
@@ -41,7 +41,7 @@ ExportFooter.propTypes = {
     loading: PropTypes.bool
 };
 
-const ExportModal = ({ onClose, ...rest }) => {
+const ExportModal = ({ contactGroupID: LabelID, onClose, ...rest }) => {
     const api = useApi();
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
@@ -51,10 +51,15 @@ const ExportModal = ({ onClose, ...rest }) => {
     const [contactsExported, addSuccess] = useState([]);
     const [contactsNotExported, addError] = useState([]);
 
+    const countContacts = LabelID
+        ? contacts.filter(({ LabelIDs = [] }) => LabelIDs.includes(LabelID)).length
+        : contacts.length;
+    const apiCalls = Math.ceil(countContacts / QUERY_EXPORT_MAX_PAGESIZE);
+
     const handleSave = (vcards) => {
         const allVcards = vcards.join('\n');
         const blob = new Blob([allVcards], { type: 'data:text/plain;charset=utf-8;' });
-        downloadFile(blob, DOWNLOAD_FILENAME);
+        downloadFile(blob, `${DOWNLOAD_FILENAME}-${moment().format('YYYY-MM-DD')}.vcf`);
         onClose();
     };
 
@@ -62,11 +67,9 @@ const ExportModal = ({ onClose, ...rest }) => {
         const abortController = new AbortController();
         const apiWithAbort = (config) => api({ ...config, signal: abortController.signal });
 
-        const apiCalls = Math.ceil(contacts.length / QUERY_EXPORT_MAX_PAGESIZE);
-
         const exportBatch = async (i, { signal }) => {
             const { Contacts: contacts } = await apiWithAbort(
-                queryContactExport({ Page: i, PageSize: QUERY_EXPORT_MAX_PAGESIZE })
+                queryContactExport({ LabelID, Page: i, PageSize: QUERY_EXPORT_MAX_PAGESIZE })
             );
             for (const { Cards, ID } of contacts) {
                 if (signal.aborted) {
@@ -125,7 +128,7 @@ const ExportModal = ({ onClose, ...rest }) => {
             title={c('Title').t`Exporting contacts`}
             onSubmit={() => handleSave(contactsExported)}
             onClose={onClose}
-            footer={ExportFooter({ loading: contactsExported.length + contactsNotExported.length !== contacts.length })}
+            footer={ExportFooter({ loading: contactsExported.length + contactsNotExported.length !== countContacts })}
             loading={loadingUserKeys || loadingContacts}
             {...rest}
         >
@@ -136,16 +139,17 @@ const ExportModal = ({ onClose, ...rest }) => {
             <DynamicProgress
                 id="progress-export-contacts"
                 alt="contact-loader"
-                value={percentageProgress(contactsExported.length, contactsNotExported.length, contacts.length)}
+                value={percentageProgress(contactsExported.length, contactsNotExported.length, countContacts)}
                 displayEnd={c('Progress bar description')
-                    .t`${contactsExported.length} out of ${contacts.length} contacts successfully exported.`}
+                    .t`${contactsExported.length} out of ${countContacts} contacts successfully exported.`}
             />
         </FormModal>
     );
 };
 
 ExportModal.propTypes = {
-    onClose: PropTypes.func
+    onClose: PropTypes.func.isRequired,
+    contactGroupID: PropTypes.string
 };
 
 export default ExportModal;
