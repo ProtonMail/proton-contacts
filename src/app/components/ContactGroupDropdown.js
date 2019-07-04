@@ -39,6 +39,7 @@ const getModel = (contactGroups = [], contactEmails = []) => {
 
 const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) => {
     const [keyword, setKeyword] = useState('');
+    const [loading, setLoading] = useState(false);
     const dropdownRef = useRef();
     const { createNotification } = useNotifications();
     const { call } = useEventManager();
@@ -55,31 +56,38 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
     const handleCheck = (contactGroupID) => ({ target }) => setModel({ ...model, [contactGroupID]: +target.checked });
 
     const handleApply = async () => {
-        const groupEntries = Object.entries(model);
-        await Promise.all(
-            groupEntries.map(([contactGroupID, isChecked]) => {
-                if (isChecked === INDETERMINATE) {
-                    return Promise.resolve();
-                }
+        try {
+            setLoading(true);
+            const groupEntries = Object.entries(model);
+            await Promise.all(
+                groupEntries.map(([contactGroupID, isChecked]) => {
+                    if (isChecked === INDETERMINATE) {
+                        return Promise.resolve();
+                    }
 
-                if (isChecked === CHECKED) {
-                    const toLabel = contactEmails
-                        .filter(({ LabelIDs = [] }) => !LabelIDs.includes(contactGroupID))
+                    if (isChecked === CHECKED) {
+                        const toLabel = contactEmails
+                            .filter(({ LabelIDs = [] }) => !LabelIDs.includes(contactGroupID))
+                            .map(({ ID }) => ID);
+                        return api(labelContactEmails({ LabelID: contactGroupID, ContactEmailIDs: toLabel }));
+                    }
+
+                    const toUnlabel = contactEmails
+                        .filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID))
                         .map(({ ID }) => ID);
-                    return api(labelContactEmails({ LabelID: contactGroupID, ContactEmailIDs: toLabel }));
-                }
-
-                const toUnlabel = contactEmails
-                    .filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID))
-                    .map(({ ID }) => ID);
-                return api(unLabelContactEmails({ LabelID: contactGroupID, ContactEmailIDs: toUnlabel }));
-            })
-        );
-        await call();
-        createNotification({
-            text: c('Info').ngettext(msgid`Contact group apply`, `Contact groups apply`, groupEntries.length)
-        });
-        dropdownRef.current.close();
+                    return api(unLabelContactEmails({ LabelID: contactGroupID, ContactEmailIDs: toUnlabel }));
+                })
+            );
+            await call();
+            createNotification({
+                text: c('Info').ngettext(msgid`Contact group apply`, `Contact groups apply`, groupEntries.length)
+            });
+            dropdownRef.current.close();
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            throw error;
+        }
     };
 
     return (
@@ -133,7 +141,8 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
                 </ul>
             </div>
             <div className="aligncenter mb1">
-                <SmallButton className="pm-button--primary" onClick={handleApply}>{c('Action').t`Apply`}</SmallButton>
+                <SmallButton loading={loading} className="pm-button--primary" onClick={handleApply}>{c('Action')
+                    .t`Apply`}</SmallButton>
             </div>
         </Dropdown>
     );
@@ -143,7 +152,7 @@ ContactGroupDropdown.propTypes = {
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
     disabled: PropTypes.bool,
-    contactEmails: PropTypes.arrayOf(PropTypes.string)
+    contactEmails: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default ContactGroupDropdown;
