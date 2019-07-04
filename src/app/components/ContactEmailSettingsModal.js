@@ -11,25 +11,40 @@ const PgpSettings = () => {
             <Row>
                 <Label>
                     {c('Label').t`Encrypt emails`}
-                    <Info />
+                    <Info
+                        className="ml1"
+                        title={c('Tooltip')
+                            .t`Email encryption forces email signature to help authentify your sent messages`}
+                    />
                 </Label>
             </Row>
             <Row>
                 <Label>
                     {c('Label').t`Sign emails`}
-                    <Info />
+                    <Info
+                        className="ml1"
+                        title={c('Tooltip').t`Digitally signing emails helps authentify that messages are sent by you`}
+                    />
                 </Label>
             </Row>
             <Row>
                 <Label>
                     {c('Label').t`Public keys`}
-                    <Info />
+                    <Info
+                        className="ml1"
+                        title={c('Tooltip')
+                            .t`Upload a public key to enable sending end-to-end encrypted emails to this email`}
+                    />
                 </Label>
             </Row>
             <Row>
                 <Label>
                     {c('Label').t`Cryptographic scheme`}
-                    <Info />
+                    <Info
+                        className="ml1"
+                        title={c('Tooltip')
+                            .t`Select the PGP scheme to be used when signing or encrypting to an user. Note that PGP/Inline forces plain text messages`}
+                    />
                 </Label>
             </Row>
         </>
@@ -54,7 +69,11 @@ const ContactEmailSettingsModal = ({ properties, contactEmail, ...rest }) => {
             <Row>
                 <Label>
                     {c('Label').t`Email format`}
-                    <Info />
+                    <Info
+                        className="ml1"
+                        title={c('Tooltip')
+                            .t`Automatic indicates that the format in the composer is used to send to this user. Plain text indicates that the message will always be converted to plain text on send.`}
+                    />
                 </Label>
                 <Field>
                     <Select value={model.emailFormat} options={options} onChange={handleChangeEmailFormat} />

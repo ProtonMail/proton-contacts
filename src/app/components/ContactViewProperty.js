@@ -57,13 +57,8 @@ const ContactViewProperty = ({ property, contactID }) => {
     const getActions = () => {
         switch (field) {
             case 'email': {
+                const contactEmail = contactEmails.find(({ Email }) => Email === value);
                 const handleSettings = () => {
-                    const contactEmail = contactEmails.find(({ Email }) => Email === value);
-
-                    if (!contactEmail) {
-                        throw new Error('contactEmail not found');
-                    }
-
                     createModal(<ContactEmailSettingsModal contactEmail={contactEmail} />);
                 };
 
@@ -73,7 +68,7 @@ const ContactViewProperty = ({ property, contactID }) => {
                             <>
                                 <ContactGroupDropdown
                                     className="pm-button--small pm-group-button"
-                                    contactIDs={[contactID]}
+                                    contactEmails={[contactEmail]}
                                 >{c('Contact group dropdown').t`Group`}</ContactGroupDropdown>
                                 <ButtonGroup onClick={handleSettings} className="pm-button--small">{c('Action')
                                     .t`Settings`}</ButtonGroup>

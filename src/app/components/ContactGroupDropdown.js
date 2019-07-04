@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
     Dropdown,
@@ -7,42 +7,46 @@ import {
     SearchInput,
     Checkbox,
     useContactGroups,
-    useContacts,
     useModals,
-    Tooltip
+    useApi,
+    Tooltip,
+    useNotifications,
+    useEventManager
 } from 'react-components';
-import { c } from 'ttag';
+import { c, msgid } from 'ttag';
 import { normalize } from 'proton-shared/lib/helpers/string';
-import { toMap } from 'proton-shared/lib/helpers/object';
 
 import ContactGroupModal from './ContactGroupModal';
+import { labelContactEmails, unLabelContactEmails } from 'proton-shared/lib/api/contacts';
 
 const UNCHECKED = 0;
 const CHECKED = 1;
 const INDETERMINATE = 2;
 
-const getModel = (contactGroups = [], contacts = []) => {
-    if (!contacts.length || !contactGroups.length) {
+const getModel = (contactGroups = [], contactEmails = []) => {
+    if (!contactEmails.length || !contactGroups.length) {
         return Object.create(null);
     }
 
     return contactGroups.reduce((acc, { ID }) => {
-        const inGroup = contacts.filter(({ LabelIDs = [] }) => {
+        const inGroup = contactEmails.filter(({ LabelIDs = [] }) => {
             return LabelIDs.includes(ID);
         });
-        acc[ID] = inGroup.length ? (contacts.length === inGroup.length ? CHECKED : INDETERMINATE) : UNCHECKED;
+        acc[ID] = inGroup.length ? (contactEmails.length === inGroup.length ? CHECKED : INDETERMINATE) : UNCHECKED;
         return acc;
     }, Object.create(null));
 };
 
-const ContactGroupDropdown = ({ children, className, contactIDs }) => {
+const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) => {
     const [keyword, setKeyword] = useState('');
+    const dropdownRef = useRef();
+    const { createNotification } = useNotifications();
+    const { call } = useEventManager();
+    const api = useApi();
     const { createModal } = useModals();
     const normalizedKeyword = normalize(keyword);
     const [contactGroups] = useContactGroups();
-    const [contacts] = useContacts();
-    const mapContacts = toMap(contacts);
-    const [model, setModel] = useState(getModel(contactGroups, contactIDs.map((contactID) => mapContacts[contactID])));
+    const [model, setModel] = useState(getModel(contactGroups, contactEmails));
     const groups = normalizedKeyword.length
         ? contactGroups.filter(({ Name }) => normalize(Name).includes(normalizedKeyword))
         : contactGroups;
@@ -50,12 +54,43 @@ const ContactGroupDropdown = ({ children, className, contactIDs }) => {
     const handleAdd = () => createModal(<ContactGroupModal />);
     const handleCheck = (contactGroupID) => ({ target }) => setModel({ ...model, [contactGroupID]: +target.checked });
 
-    const handleApply = () => {
-        // TODO
+    const handleApply = async () => {
+        const groupEntries = Object.entries(model);
+        await Promise.all(
+            groupEntries.map(([contactGroupID, isChecked]) => {
+                if (isChecked === INDETERMINATE) {
+                    return Promise.resolve();
+                }
+
+                if (isChecked === CHECKED) {
+                    const toLabel = contactEmails
+                        .filter(({ LabelIDs = [] }) => !LabelIDs.includes(contactGroupID))
+                        .map(({ ID }) => ID);
+                    return api(labelContactEmails({ LabelID: contactGroupID, ContactEmailIDs: toLabel }));
+                }
+
+                const toUnlabel = contactEmails
+                    .filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID))
+                    .map(({ ID }) => ID);
+                return api(unLabelContactEmails({ LabelID: contactGroupID, ContactEmailIDs: toUnlabel }));
+            })
+        );
+        await call();
+        createNotification({
+            text: c('Info').ngettext(msgid`Contact group apply`, `Contact groups apply`, groupEntries.length)
+        });
+        dropdownRef.current.close();
     };
 
     return (
-        <Dropdown caret className={className} content={children} autoClose={false}>
+        <Dropdown
+            caret
+            disabled={disabled}
+            className={className}
+            content={children}
+            autoClose={false}
+            ref={dropdownRef}
+        >
             <div className="flex flex-spacebetween pt1 pl1 pr1 mb1">
                 <strong>{c('Label').t`Add to group`}</strong>
                 <Tooltip title={c('Info').t`Create a new contact group`}>
@@ -107,7 +142,8 @@ const ContactGroupDropdown = ({ children, className, contactIDs }) => {
 ContactGroupDropdown.propTypes = {
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
-    contactIDs: PropTypes.arrayOf(PropTypes.string)
+    disabled: PropTypes.bool,
+    contactEmails: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default ContactGroupDropdown;

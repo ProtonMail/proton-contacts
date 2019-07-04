@@ -47,12 +47,21 @@ const ContactsContainer = ({ location }) => {
         .map((contact) => {
             const { ID } = contact;
             const emails = contactEmails.filter(({ ContactID }) => ContactID === ID).map(({ Email }) => Email);
-            return { ...contact, emails, isChecked: !!checkedContacts[ID] };
+            return {
+                ...contact,
+                emails,
+                isChecked: !!checkedContacts[ID]
+            };
         });
 
     return (
         <>
-            <ContactToolbar checked={checkAll} onCheck={handleCheckAll} onDelete={handleDelete} />
+            <ContactToolbar
+                checkedContacts={checkedContacts}
+                checked={checkAll}
+                onCheck={handleCheckAll}
+                onDelete={handleDelete}
+            />
             <div className="flex flex-nowrap">
                 <Router>
                     <Switch>
