@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Checkbox } from 'react-components';
 import { c } from 'ttag';
+import ContactGroupDropdown from './ContactGroupDropdown';
 
 const ContactToolbar = ({ onCheck, onDelete, checked }) => {
     const handleCheck = ({ target }) => onCheck(target.checked);
@@ -12,6 +13,9 @@ const ContactToolbar = ({ onCheck, onDelete, checked }) => {
             <button type="button" title={c('Tooltip').t`Delete`} className="pl1 pr1" onClick={onDelete}>
                 <Icon name="delete" className="toolbar-icon" />
             </button>
+            <ContactGroupDropdown contactIDs={[]}>
+                <Icon name="contacts-groups" className="toolbar-icon" />
+            </ContactGroupDropdown>
         </div>
     );
 };

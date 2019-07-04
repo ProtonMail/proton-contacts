@@ -1,18 +1,20 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Row, Field, Group, ButtonGroup, Copy, useModals, useUser } from 'react-components';
+import { Row, Field, Group, ButtonGroup, Copy, useModals, useUser, useContactEmails } from 'react-components';
 import { c } from 'ttag';
 
 import { clearType, getType, formatAdr } from '../helpers/property';
 import ContactGroupIcon from './ContactGroupIcon';
 import ContactGroupDropdown from './ContactGroupDropdown';
 import ContactLabelProperty from './ContactLabelProperty';
+import ContactEmailSettingsModal from './ContactEmailSettingsModal';
 
 const ContactViewProperty = ({ property, contactID }) => {
     const { field, first } = property;
     const [{ hasPaidMail }] = useUser();
     const { createModal } = useModals();
+    const [contactEmails] = useContactEmails();
     const type = clearType(getType(property.type));
     const value = Array.isArray(property.value) ? property.value.join(', ') : property.value;
 
@@ -56,7 +58,13 @@ const ContactViewProperty = ({ property, contactID }) => {
         switch (field) {
             case 'email': {
                 const handleSettings = () => {
-                    createModal();
+                    const contactEmail = contactEmails.find(({ Email }) => Email === value);
+
+                    if (!contactEmail) {
+                        throw new Error('contactEmail not found');
+                    }
+
+                    createModal(<ContactEmailSettingsModal contactEmail={contactEmail} />);
                 };
 
                 return (
@@ -66,7 +74,7 @@ const ContactViewProperty = ({ property, contactID }) => {
                                 <ContactGroupDropdown
                                     className="pm-button--small pm-group-button"
                                     contactIDs={[contactID]}
-                                />
+                                >{c('Contact group dropdown').t`Group`}</ContactGroupDropdown>
                                 <ButtonGroup onClick={handleSettings} className="pm-button--small">{c('Action')
                                     .t`Settings`}</ButtonGroup>
                             </>

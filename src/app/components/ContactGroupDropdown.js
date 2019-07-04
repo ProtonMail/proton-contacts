@@ -8,11 +8,14 @@ import {
     Checkbox,
     useContactGroups,
     useContacts,
+    useModals,
     Tooltip
 } from 'react-components';
 import { c } from 'ttag';
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { toMap } from 'proton-shared/lib/helpers/object';
+
+import ContactGroupModal from './ContactGroupModal';
 
 const UNCHECKED = 0;
 const CHECKED = 1;
@@ -32,8 +35,9 @@ const getModel = (contactGroups = [], contacts = []) => {
     }, Object.create(null));
 };
 
-const ContactGroupDropdown = ({ className, contactIDs }) => {
+const ContactGroupDropdown = ({ children, className, contactIDs }) => {
     const [keyword, setKeyword] = useState('');
+    const { createModal } = useModals();
     const normalizedKeyword = normalize(keyword);
     const [contactGroups] = useContactGroups();
     const [contacts] = useContacts();
@@ -43,20 +47,15 @@ const ContactGroupDropdown = ({ className, contactIDs }) => {
         ? contactGroups.filter(({ Name }) => normalize(Name).includes(normalizedKeyword))
         : contactGroups;
 
-    const handleCheck = (contactGroupID) => ({ target }) => {
-        setModel({ ...model, [contactGroupID]: +target.checked });
-    };
+    const handleAdd = () => createModal(<ContactGroupModal />);
+    const handleCheck = (contactGroupID) => ({ target }) => setModel({ ...model, [contactGroupID]: +target.checked });
 
     const handleApply = () => {
         // TODO
     };
 
-    const handleAdd = () => {
-        // TODO
-    };
-
     return (
-        <Dropdown caret className={className} content={c('Contact group dropdown').t`Group`} autoClose={false}>
+        <Dropdown caret className={className} content={children} autoClose={false}>
             <div className="flex flex-spacebetween pt1 pl1 pr1 mb1">
                 <strong>{c('Label').t`Add to group`}</strong>
                 <Tooltip title={c('Info').t`Create a new contact group`}>
@@ -106,6 +105,7 @@ const ContactGroupDropdown = ({ className, contactIDs }) => {
 };
 
 ContactGroupDropdown.propTypes = {
+    children: PropTypes.node.isRequired,
     className: PropTypes.string,
     contactIDs: PropTypes.arrayOf(PropTypes.string)
 };

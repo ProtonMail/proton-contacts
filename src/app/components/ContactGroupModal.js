@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { randomIntFromInterval } from 'proton-shared/lib/helpers/function';
+import { diff } from 'proton-shared/lib/helpers/array';
 import { LABEL_COLORS } from 'proton-shared/lib/constants';
+import { createContactGroup, updateLabel } from 'proton-shared/lib/api/labels';
+import { labelContactEmails, unLabelContactEmails } from 'proton-shared/lib/api/contacts';
 import {
     FormModal,
     useApi,
@@ -19,7 +22,9 @@ import {
     TableRow,
     Table,
     useContactGroups,
-    useContactEmails
+    useContactEmails,
+    useNotifications,
+    useEventManager
 } from 'react-components';
 
 const ContactGroupTable = ({ contactEmails, onDelete }) => {
@@ -46,25 +51,31 @@ ContactGroupTable.propTypes = {
     onDelete: PropTypes.func
 };
 
-const ContactGroupModal = ({ contactGroupID, ...rest }) => {
+const mapIDs = (contactEmails) => contactEmails.map(({ ID }) => ID);
+
+const ContactGroupModal = (props) => {
+    const [loading, setLoading] = useState(false);
+    const { call } = useEventManager();
+    const { contactGroupID, ...rest } = props;
     const api = useApi();
+    const { createNotification } = useNotifications();
     const [contactGroups] = useContactGroups();
     const [contactEmails] = useContactEmails();
     const options = contactEmails.map(({ ID, Email, Name }) => ({ label: `${Email} ${Name}`, value: ID }));
     const contactGroup = contactGroupID && contactGroups.find(({ ID }) => ID === contactGroupID);
+    const existingContactEmails =
+        contactGroupID && contactEmails.filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID));
     const title = contactGroupID ? c('Title').t`Edit contact group` : c('Title').t`Create new group`;
 
     const [model, setModel] = useState({
         name: contactGroupID ? contactGroup.Name : '',
         color: contactGroupID ? contactGroup.Color : LABEL_COLORS[randomIntFromInterval(0, LABEL_COLORS.length - 1)],
         contactEmailID: contactEmails.length && options[0].value,
-        contactEmails: contactGroupID
-            ? contactEmails.filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID))
-            : []
+        contactEmails: contactGroupID ? existingContactEmails : []
     });
 
     const handleChangeName = ({ target }) => setModel({ ...model, name: target.value });
-    const handleChangeColor = () => (color) => setModel({ ...model, color });
+    const handleChangeColor = (color) => () => setModel({ ...model, color });
     const handleChangeEmail = ({ target }) => setModel({ ...model, contactEmailID: target.value });
 
     const handleAddEmail = () => {
@@ -78,8 +89,8 @@ const ContactGroupModal = ({ contactGroupID, ...rest }) => {
         }
     };
 
-    const handleDeleteEmail = () => (contactEmailID) => {
-        const index = model.contactEmails.findIndex({ ID: contactEmailID });
+    const handleDeleteEmail = (contactEmailID) => () => {
+        const index = model.contactEmails.findIndex(({ ID }) => ID === contactEmailID);
 
         if (index > -1) {
             const copy = [...model.contactEmails];
@@ -88,12 +99,39 @@ const ContactGroupModal = ({ contactGroupID, ...rest }) => {
         }
     };
 
-    const handleSubmit = () => {
-        // TODO
+    const handleSubmit = async () => {
+        try {
+            setLoading(true);
+            const contactGroupParams = { Name: model.name, Color: model.color };
+            const { Label = {} } = await api(
+                contactGroupID
+                    ? updateLabel(contactGroupID, contactGroupParams)
+                    : createContactGroup(contactGroupParams)
+            );
+            const { ID } = Label;
+            const toLabel = mapIDs(model.contactEmails);
+            const toUnlabel = contactGroupID ? diff(mapIDs(toLabel, existingContactEmails)) : [];
+            await Promise.all(
+                [
+                    toLabel.length && api(labelContactEmails({ LabelIDs: [ID], ContactEmailIDs: toLabel })),
+                    toUnlabel.length && api(unLabelContactEmails({ LabelIDs: [ID], ContactEmailIDs: toUnlabel }))
+                ].filter(Boolean)
+            );
+            await call();
+            props.onClose();
+            createNotification({
+                text: contactGroupID
+                    ? c('Notification').t`Contact group updated`
+                    : c('Notification').t`Contact group created`
+            });
+        } catch (error) {
+            setLoading(false);
+            throw error;
+        }
     };
 
     return (
-        <FormModal onSubmit={handleSubmit} submit={c('Action').t`Save`} title={title} {...rest}>
+        <FormModal onSubmit={handleSubmit} loading={loading} submit={c('Action').t`Save`} title={title} {...rest}>
             <Row>
                 <Label htmlFor="contactGroupName">{c('Label for contact group name').t`Name`}</Label>
                 <Field>
@@ -138,7 +176,8 @@ const ContactGroupModal = ({ contactGroupID, ...rest }) => {
 };
 
 ContactGroupModal.propTypes = {
-    contactGroupID: PropTypes.string
+    contactGroupID: PropTypes.string,
+    onClose: PropTypes.func.isRequired
 };
 
 export default ContactGroupModal;
