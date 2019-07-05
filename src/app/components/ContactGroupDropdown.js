@@ -11,18 +11,26 @@ import {
     useApi,
     Tooltip,
     useNotifications,
-    useEventManager
+    useEventManager,
+    useContacts
 } from 'react-components';
 import { c, msgid } from 'ttag';
 import { normalize } from 'proton-shared/lib/helpers/string';
+import { labelContactEmails, unLabelContactEmails } from 'proton-shared/lib/api/contacts';
 
 import ContactGroupModal from './ContactGroupModal';
-import { labelContactEmails, unLabelContactEmails } from 'proton-shared/lib/api/contacts';
+import SelectEmailsModal from './SelectEmailsModal';
 
 const UNCHECKED = 0;
 const CHECKED = 1;
 const INDETERMINATE = 2;
 
+/**
+ * Build initial dropdown model
+ * @param {Array} contactGroups
+ * @param {Array} contactEmails
+ * @returns {Object}
+ */
 const getModel = (contactGroups = [], contactEmails = []) => {
     if (!contactEmails.length || !contactGroups.length) {
         return Object.create(null);
@@ -37,6 +45,31 @@ const getModel = (contactGroups = [], contactEmails = []) => {
     }, Object.create(null));
 };
 
+/**
+ * Collect contacts having multiple emails
+ * Used for <SelectEmailsModal />
+ * @param {Array} contactEmails
+ * @returns {Array} result.contacts
+ */
+const collectContacts = (contactEmails = [], contacts) => {
+    return contactEmails.reduce(
+        (acc, { ContactID }) => {
+            acc.duplicate[ContactID] = +!!acc.duplicate[ContactID] + 1;
+
+            if (acc.duplicate[ContactID] === 2) {
+                const contact = contacts.find(({ ID }) => ID === ContactID);
+                acc.contacts.push(contact);
+            }
+
+            return acc;
+        },
+        {
+            contacts: [],
+            duplicate: Object.create(null)
+        }
+    );
+};
+
 const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) => {
     const [keyword, setKeyword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -45,9 +78,11 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
     const { call } = useEventManager();
     const api = useApi();
     const { createModal } = useModals();
-    const normalizedKeyword = normalize(keyword);
+    const [contacts] = useContacts();
     const [contactGroups] = useContactGroups();
     const [model, setModel] = useState(getModel(contactGroups, contactEmails));
+
+    const normalizedKeyword = normalize(keyword);
     const groups = normalizedKeyword.length
         ? contactGroups.filter(({ Name }) => normalize(Name).includes(normalizedKeyword))
         : contactGroups;
@@ -58,6 +93,14 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
     const handleApply = async () => {
         try {
             setLoading(true);
+            let selectedContactEmails = [...contactEmails];
+            const { contacts: collectedContacts } = collectContacts(contactEmails, contacts);
+
+            if (collectedContacts.length) {
+                selectedContactEmails = await new Promise((resolve, reject) => {
+                    createModal(<SelectEmailsModal contacts={collectedContacts} onSubmit={resolve} onClose={reject} />);
+                });
+            }
             const groupEntries = Object.entries(model);
             await Promise.all(
                 groupEntries.map(([contactGroupID, isChecked]) => {
@@ -66,13 +109,13 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
                     }
 
                     if (isChecked === CHECKED) {
-                        const toLabel = contactEmails
+                        const toLabel = selectedContactEmails
                             .filter(({ LabelIDs = [] }) => !LabelIDs.includes(contactGroupID))
                             .map(({ ID }) => ID);
                         return api(labelContactEmails({ LabelID: contactGroupID, ContactEmailIDs: toLabel }));
                     }
 
-                    const toUnlabel = contactEmails
+                    const toUnlabel = selectedContactEmails
                         .filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID))
                         .map(({ ID }) => ID);
                     return api(unLabelContactEmails({ LabelID: contactGroupID, ContactEmailIDs: toUnlabel }));
