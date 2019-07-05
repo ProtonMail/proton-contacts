@@ -35,3 +35,11 @@ export const FAIL_TO_LOAD = 3;
 export const FAIL_TO_DECRYPT = 4;
 export const PGP_INLINE = 'PGP/Inline';
 export const PGP_MIME = 'PGP/MIME';
+
+// Import steps are numbered according to the order in which they can appear
+export const IMPORT_STEPS = {
+    ATTACHING: 1,
+    ATTACHED: 2,
+    CHECKING_CSV: 3,
+    IMPORTING: 4
+};

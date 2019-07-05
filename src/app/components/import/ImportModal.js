@@ -1,44 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import {
-    useNotifications,
-    useUser,
-    useUserKeys,
-    useApi,
-    FormModal,
-    ResetButton,
-    PrimaryButton
-} from 'react-components';
+import { useNotifications, useUser, useUserKeys, useApi, FormModal } from 'react-components';
 
+import ImportFooter from './ImportFooter';
 import AttachingModalContent from './AttachingModalContent';
+import ImportCsvModalContent from './ImportCsvModalContent';
 import ImportingModalContent from './ImportingModalContent';
 
+import { noop } from 'proton-shared/lib/helpers/function';
 import { addContacts } from 'proton-shared/lib/api/contacts';
 import { readFileAsString } from 'proton-shared/lib/helpers/file';
-import { extractVcards, parse as parseVcard } from '../helpers/vcard';
-import { prepareVcard } from '../helpers/decrypt';
-import { extractCsvContacts, parse as parseCsvContact } from '../helpers/csv';
+import { extractVcards, parse as parseVcard } from '../../helpers/vcard';
+import { prepareVcard } from '../../helpers/decrypt';
+import { extractCsvContacts, parse as parseCsvContact } from '../../helpers/csv';
+import { IMPORT_STEPS } from '../../constants';
 
-const AttachingFooter = ({ disabled }) => {
-    return (
-        <>
-            <ResetButton>{c('Action').t`Cancel`}</ResetButton>
-            <PrimaryButton disabled={disabled} type="submit">
-                {c('Action').t`Import`}
-            </PrimaryButton>
-        </>
-    );
-};
+const { ATTACHING, ATTACHED, CHECKING_CSV, IMPORTING } = IMPORT_STEPS;
 
-const ImportingFooter = ({ loading }) => {
-    return (
-        <>
-            <PrimaryButton loading={loading} type="submit">
-                {c('Action').t`Close`}
-            </PrimaryButton>
-        </>
-    );
+const getI18nTitle = {
+    [ATTACHING]: c('Title').t`Import contacts`,
+    [ATTACHED]: c('Title').t`Import contacts`,
+    [CHECKING_CSV]: c('Title').t`Import CSV file`,
+    [IMPORTING]: c('Title').t`Importing contacts`
 };
 
 const ImportModal = ({ onClose, ...rest }) => {
@@ -47,9 +31,9 @@ const ImportModal = ({ onClose, ...rest }) => {
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
     const { createNotification } = useNotifications();
 
-    const [attached, setAttached] = useState('');
-    const [isImporting, setIsImporting] = useState(false);
+    const [step, setStep] = useState(ATTACHING);
     const [importFile, setImportFile] = useState(null);
+    const [contactsProperties, setContactsProperties] = useState([]);
 
     const [totalContacts, setTotalContacts] = useState(0);
     const [contactsImported, addSuccess] = useState([]);
@@ -65,16 +49,25 @@ const ImportModal = ({ onClose, ...rest }) => {
                 text: c('Error notification').t`No .csv or .vcard file selected`
             });
         }
-        setAttached(file.type);
+        setStep(ATTACHED);
         setImportFile(file);
     };
 
     const handleClear = () => {
         setImportFile(null);
-        setAttached('');
+        setStep(ATTACHING);
     };
 
-    const handleStartImport = () => setIsImporting(true);
+    const handleChangeProperties = (properties) => setContactsProperties(properties);
+
+    const handleSubmit = {
+        [ATTACHING]: noop,
+        [ATTACHED]: () => setStep(importFile.type === 'text/csv' ? CHECKING_CSV : IMPORTING),
+        [CHECKING_CSV]: () => setStep(IMPORTING),
+        [IMPORTING]: onClose
+    };
+
+    console.log(step);
 
     useEffect(() => {
         const setup = async () => {
@@ -108,34 +101,29 @@ const ImportModal = ({ onClose, ...rest }) => {
             await api(addContacts(contactsImported));
         };
 
-        isImporting && setup();
-    }, [isImporting]);
+        step === IMPORTING && setup();
+    }, [step === IMPORTING]);
 
     return (
         <FormModal
-            title={!isImporting ? c('Title').t`Import contacts` : c('Title').t`Importing contacts`}
-            onSubmit={!isImporting ? handleStartImport : onClose}
+            title={getI18nTitle[step]}
+            onSubmit={handleSubmit[step]}
             onClose={onClose}
-            footer={
-                !isImporting
-                    ? AttachingFooter({ disabled: attached === '' })
-                    : ImportingFooter({
-                          loading:
-                              totalContacts === 0 ||
-                              contactsImported.length + contactsNotImported.length !== totalContacts
-                      })
-            }
+            footer={ImportFooter({ step })}
             {...rest}
         >
-            {!isImporting ? (
+            {step <= ATTACHED ? (
                 <AttachingModalContent
-                    attached={attached}
+                    attached={step === ATTACHED}
                     file={importFile}
                     onAttach={handleAttach}
                     onClear={handleClear}
                 />
+            ) : step === CHECKING_CSV ? (
+                <ImportCsvModalContent file={importFile} onChangeProperties={handleChangeProperties} />
             ) : (
                 <ImportingModalContent
+                    contactsProperties={contactsProperties}
                     imported={contactsImported.length}
                     notImported={contactsNotImported.length}
                     total={totalContacts}

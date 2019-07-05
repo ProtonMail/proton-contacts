@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { Alert } from 'react-components';
 
-import DynamicProgress from './DynamicProgress';
+import DynamicProgress from '../DynamicProgress';
 
-import { percentageProgress } from './../helpers/progress';
+import { percentageProgress } from '../../helpers/progress';
 
 const ImportingModalContent = ({ imported, notImported, total }) => {
     return (
