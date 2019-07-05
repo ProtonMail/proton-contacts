@@ -1,102 +1,67 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { useNotifications, Table, Alert, Block } from 'react-components';
+import { Table, TableBody, Alert } from 'react-components';
 
 import ImportCsvTableHeader from './ImportCsvTableHeader';
-import ImportCsvTableBody from './ImportCsvTableBody';
+import ImportCsvTableRow from './ImportCsvTableRow';
 
-import { prepare, toVcardContacts } from '../../helpers/csv';
-import { modifyContactField, modifyContactType, toggleContactChecked } from '../../helpers/import';
+import { getCsvData } from '../../helpers/csv';
 
-const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
-    const { createNotification } = useNotifications();
-
-    const [isParsingFile, setIsParsingFile] = useState(true);
+const ImportCsvModalContent = ({ file, onChangeProperties }) => {
+    const [isReadingFile, setIsReadingFile] = useState(true);
+    const [headers, setHeaders] = useState([]);
+    const [contacts, setContacts] = useState([]);
     const [contactIndex, setContactIndex] = useState(0);
-    const [preVcardsContacts, setPreVcardsContacts] = useState([]);
+
+    const [contactsProperties, setProperties] = useState([]);
 
     const handleClickPrevious = () => setContactIndex((index) => index - 1);
     const handleClickNext = () => setContactIndex((index) => index + 1);
 
-    const handleToggle = (groupIndex) => (index) => {
-        if (preVcardsContacts[0][groupIndex][index].combineInto === 'fn-main') {
-            const preVcards = preVcardsContacts[0][groupIndex];
-            const firstNameIndex = preVcards.findIndex(({ header }) => header.toLowerCase() === 'first name');
-            const lastNameIndex = preVcards.findIndex(({ header }) => header.toLowerCase() === 'last name');
-            const isFirstNameChecked = firstNameIndex !== -1 && preVcards[firstNameIndex].checked;
-            const isLastNameChecked = lastNameIndex !== -1 && preVcards[lastNameIndex].checked;
-
-            if ((!isFirstNameChecked && index === lastNameIndex) || (!isLastNameChecked && index === firstNameIndex)) {
-                return createNotification({
-                    type: 'error',
-                    text: c('Error notification').t`First name and last name cannot be unchecked at the same time`
-                });
-            }
-        }
-        setPreVcardsContacts(preVcardsContacts.map((contact) => toggleContactChecked(contact, [groupIndex, index])));
-    };
-
-    const handleChangeField = (groupIndex) => (newField) =>
-        setPreVcardsContacts(preVcardsContacts.map((contact) => modifyContactField(contact, groupIndex, newField)));
-
-    const handleChangeType = (groupIndex) => (newType) =>
-        setPreVcardsContacts(preVcardsContacts.map((contact) => modifyContactType(contact, groupIndex, newType)));
-
     useEffect(() => {
-        const parseFile = async () => {
-            const preVcardsContacts = prepare(file);
-            setPreVcardsContacts(preVcardsContacts);
-            setIsParsingFile(false);
+        const readFile = async () => {
+            const csvData = await getCsvData(file);
+            setHeaders(csvData.headers);
+            setContacts(csvData.contacts);
+            // setProperties(parseCsvData({ headers: csvData.headers, contacts: csvData.contacts }));
+            setIsReadingFile(false);
         };
 
-        parseFile();
+        readFile();
     }, []);
-
-    useEffect(() => {
-        onSetVcardContacts(toVcardContacts(preVcardsContacts));
-    }, [preVcardsContacts]);
 
     return (
         <>
             <Alert>
-                {c('Description of the purpose of the import CSV modal')
-                    .t`We have detected the following fields in the CSV file you uploaded. Check the ones you want to import.`}
-            </Alert>
-            <Alert>
-                {c('Description of the purpose of the import CSV modal')
-                    .t`Also, we have automatically matched CSV fields with vCard fields. You can review and change this matching manually.`}
+                {c('Description')
+                    .t`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`}
             </Alert>
             <Table>
                 <ImportCsvTableHeader
-                    disabledPrevious={isParsingFile || contactIndex === 0}
-                    disabledNext={
-                        isParsingFile || preVcardsContacts.length === 0 || contactIndex + 1 === preVcardsContacts.length
-                    }
+                    disabledPrevious={isReadingFile || contactIndex === 0}
+                    disabledNext={isReadingFile || contactIndex + 1 === contacts.length}
                     onNext={handleClickNext}
                     onPrevious={handleClickPrevious}
                 />
-                <ImportCsvTableBody
-                    loading={isParsingFile}
-                    contact={preVcardsContacts && preVcardsContacts[contactIndex]}
-                    onToggle={handleToggle}
-                    onChangeField={handleChangeField}
-                    onChangeType={handleChangeType}
-                />
+                <TableBody loading={isReadingFile} colSpan={4}>
+                    {headers.map((header, i) => (
+                        <ImportCsvTableRow
+                            key={header}
+                            header={header}
+                            checked={true}
+                            value={contacts[contactIndex] && contacts[contactIndex][i]}
+                        />
+                    ))}
+                </TableBody>
             </Table>
-            {!isParsingFile && !preVcardsContacts.length && (
-                <Block className="aligncenter">{c('Info').t`No contacts to be imported`}</Block>
-            )}
         </>
     );
 };
 
 ImportCsvModalContent.propTypes = {
-    file: PropTypes.shape({ headers: PropTypes.array, contacts: PropTypes.array }).isRequired,
-    parsedContacts: PropTypes.arrayOf(
-        PropTypes.arrayOf(PropTypes.shape({ field: PropTypes.string, type: PropTypes.string }))
-    ),
-    onSetParsedContacts: PropTypes.func
+    file: PropTypes.shape({ name: PropTypes.string, size: PropTypes.number }).isRequired,
+    onChangeProperties: PropTypes.func
 };
 
 export default ImportCsvModalContent;

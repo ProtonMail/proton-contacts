@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { Icon, Button } from 'react-components';
@@ -16,8 +16,6 @@ const splitExtension = (filename) => {
 };
 
 const AttachedFile = ({ file, iconName, className, clear, onClear, ...rest }) => {
-    const [fileName, extension] = splitExtension(file.name);
-
     return (
         <div className={`flex w100 ${className}`} {...rest}>
             <div className="bordered-container p0-5 mb1 flex flex-spacebetween w10">
@@ -25,8 +23,8 @@ const AttachedFile = ({ file, iconName, className, clear, onClear, ...rest }) =>
             </div>
             <div className="bordered-container p0-5 mb1 flex flex-spacebetween w90">
                 <div>
-                    <div>{fileName}</div>
-                    <div>{`${extension.toUpperCase()} - ${humanSize(file.size)}`}</div>
+                    <div>{splitExtension(file.name)[0]}</div>
+                    <div>{`${splitExtension(file.name)[1].toUpperCase()} - ${humanSize(file.size)}`}</div>
                 </div>
                 <Button onClick={onClear}>{clear}</Button>
             </div>
@@ -35,7 +33,7 @@ const AttachedFile = ({ file, iconName, className, clear, onClear, ...rest }) =>
 };
 
 AttachedFile.propTypes = {
-    file: PropTypes.instanceOf(File).isRequired,
+    file: PropTypes.shape({ name: PropTypes.string, size: PropTypes.number }).isRequired,
     iconName: PropTypes.string.isRequired,
     clear: PropTypes.string,
     onClear: PropTypes.func

@@ -27,8 +27,8 @@ const AttachingModalContent = ({ attached, file, onAttach, onClear }) => {
 };
 
 AttachingModalContent.propTypes = {
-    attached: PropTypes.string.isRequired,
-    files: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string, size: PropTypes.number })),
+    attached: PropTypes.bool,
+    file: PropTypes.instanceOf(File),
     onAttach: PropTypes.func,
     onClear: PropTypes.func
 };

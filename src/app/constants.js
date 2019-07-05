@@ -36,6 +36,7 @@ export const FAIL_TO_DECRYPT = 4;
 export const PGP_INLINE = 'PGP/Inline';
 export const PGP_MIME = 'PGP/MIME';
 
+<<<<<<< HEAD
 export const OVERWRITE = {
     // when UID conflict at contact import
     THROW_ERROR: 0,
@@ -48,3 +49,12 @@ export const CATEGORIES = {
 };
 
 export const SUCCESS_IMPORT_CODE = 1000; // in POST API route /contacts
+=======
+// Import steps are numbered according to the order in which they can appear
+export const IMPORT_STEPS = {
+    ATTACHING: 1,
+    ATTACHED: 2,
+    CHECKING_CSV: 3,
+    IMPORTING: 4
+};
+>>>>>>> create check csv modal with no toggle
