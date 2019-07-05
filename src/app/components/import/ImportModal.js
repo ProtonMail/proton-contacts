@@ -13,7 +13,6 @@ import { addContacts } from 'proton-shared/lib/api/contacts';
 import { readFileAsString } from 'proton-shared/lib/helpers/file';
 import { extractVcards, parse as parseVcard } from '../../helpers/vcard';
 import { prepareVcard } from '../../helpers/decrypt';
-import { extractCsvContacts, parse as parseCsvContact } from '../../helpers/csv';
 import { IMPORT_STEPS } from '../../constants';
 
 const { ATTACHING, ATTACHED, CHECKING_CSV, IMPORTING } = IMPORT_STEPS;
@@ -33,7 +32,8 @@ const ImportModal = ({ onClose, ...rest }) => {
 
     const [step, setStep] = useState(ATTACHING);
     const [importFile, setImportFile] = useState(null);
-    const [contactsProperties, setContactsProperties] = useState([]);
+    const [parsedContacts, setParsedContacts] = useState([]);
+    const [propertiesToKeep, setPropertiesToKeep] = useState([]);
 
     const [totalContacts, setTotalContacts] = useState(0);
     const [contactsImported, addSuccess] = useState([]);
@@ -58,50 +58,55 @@ const ImportModal = ({ onClose, ...rest }) => {
         setStep(ATTACHING);
     };
 
-    const handleChangeProperties = (properties) => setContactsProperties(properties);
+    const handleChangeParsedContacts = (parsedContacts) => setParsedContacts(parsedContacts);
+    const handleChangePropertiesToKeep = (propertiesToKeep) => setPropertiesToKeep(propertiesToKeep);
+    const handleToggleKeepProperty = (index) => {
+        setPropertiesToKeep((propertiesToKeep) => propertiesToKeep.map((bool, j) => (index === j ? !bool : bool)));
+    };
 
     const handleSubmit = {
         [ATTACHING]: noop,
         [ATTACHED]: () => setStep(importFile.type === 'text/csv' ? CHECKING_CSV : IMPORTING),
-        [CHECKING_CSV]: () => setStep(IMPORTING),
+        [CHECKING_CSV]: () => {
+            setParsedContacts(
+                parsedContacts.map((properties) => properties.filter((property, i) => propertiesToKeep[i]))
+            );
+            setStep(IMPORTING);
+        },
         [IMPORTING]: onClose
     };
 
-    console.log(step);
+    console.log('step', step);
 
     useEffect(() => {
-        const setup = async () => {
-            // read files, count contacts and extract their vcard properties
-            const contactsProperties = [];
-
-            for (const file of importFiles) {
-                if (file.type == 'text/vcard') {
-                    const vcards = extractVcards(await readFileAsString(file));
-                    setTotalContacts((totalContacts) => totalContacts + vcards.length);
-                    vcards.forEach((vcard) => contactsProperties.push(parseVcard(vcard)));
-                }
-                if (file.type == 'text/csv') {
-                    const { values: contactValues } = extractCsvContacts(file);
-                    setTotalContacts((totalContacts) => totalContacts + contactValues.length);
-                    contactsProperties.concat(parseCsvContacts(contactValues));
-                }
-            }
-
-            // encrypt contacts
-            for (const vcard of vcards) {
-                try {
-                    const contactImported = prepareVcard(vcard, userKeysList);
-                    addSuccess((contactsImported) => [...contactsImported, contactImported]);
-                } catch (error) {
-                    addError((contactsNotImported) => [...contactsNotImported, vcard]);
-                }
-            }
-
-            // send contacts to back-end
-            await api(addContacts(contactsImported));
-        };
-
-        step === IMPORTING && setup();
+        // const setup = async () => {
+        //     // read files, count contacts and extract their vcard properties
+        //     const contactsProperties = [];
+        //     for (const file of importFiles) {
+        //         if (file.type == 'text/vcard') {
+        //             const vcards = extractVcards(await readFileAsString(file));
+        //             setTotalContacts((totalContacts) => totalContacts + vcards.length);
+        //             vcards.forEach((vcard) => contactsProperties.push(parseVcard(vcard)));
+        //         }
+        //         if (file.type == 'text/csv') {
+        //             const { values: contactValues } = extractCsvContacts(file);
+        //             setTotalContacts((totalContacts) => totalContacts + contactValues.length);
+        //             contactsProperties.concat(parseCsvContacts(contactValues));
+        //         }
+        //     }
+        //     // encrypt contacts
+        //     for (const vcard of vcards) {
+        //         try {
+        //             const contactImported = prepareVcard(vcard, userKeysList);
+        //             addSuccess((contactsImported) => [...contactsImported, contactImported]);
+        //         } catch (error) {
+        //             addError((contactsNotImported) => [...contactsNotImported, vcard]);
+        //         }
+        //     }
+        //     // send contacts to back-end
+        //     await api(addContacts(contactsImported));
+        // };
+        // step === IMPORTING && setup();
     }, [step === IMPORTING]);
 
     return (
@@ -120,10 +125,17 @@ const ImportModal = ({ onClose, ...rest }) => {
                     onClear={handleClear}
                 />
             ) : step === CHECKING_CSV ? (
-                <ImportCsvModalContent file={importFile} onChangeProperties={handleChangeProperties} />
+                <ImportCsvModalContent
+                    file={importFile}
+                    parsedContacts={parsedContacts}
+                    propertiesToKeep={propertiesToKeep}
+                    onChangeParsedContacts={handleChangeParsedContacts}
+                    onChangePropertiesToKeep={handleChangePropertiesToKeep}
+                    onToggleKeepProperty={handleToggleKeepProperty}
+                />
             ) : (
                 <ImportingModalContent
-                    contactsProperties={contactsProperties}
+                    parsedContacts={parsedContacts}
                     imported={contactsImported.length}
                     notImported={contactsNotImported.length}
                     total={totalContacts}
