@@ -6,25 +6,47 @@ import { Table, TableBody, Alert } from 'react-components';
 import ImportCsvTableHeader from './ImportCsvTableHeader';
 import ImportCsvTableRow from './ImportCsvTableRow';
 
-import { getCsvData } from '../../helpers/csv';
+import { getCsvData, parseCsvData } from '../../helpers/csv';
 
-const ImportCsvModalContent = ({ file, onChangeProperties }) => {
+const ImportCsvModalContent = ({
+    file,
+    parsedContacts,
+    propertiesToKeep,
+    onChangeParsedContacts,
+    onChangePropertiesToKeep,
+    onToggleKeepProperty
+}) => {
     const [isReadingFile, setIsReadingFile] = useState(true);
     const [headers, setHeaders] = useState([]);
-    const [contacts, setContacts] = useState([]);
+    const [csvContacts, setCsvContacts] = useState([]);
     const [contactIndex, setContactIndex] = useState(0);
-
-    const [contactsProperties, setProperties] = useState([]);
 
     const handleClickPrevious = () => setContactIndex((index) => index - 1);
     const handleClickNext = () => setContactIndex((index) => index + 1);
+
+    const handleChangeField = (fieldToChange, newField) => {
+        console.log('before', parsedContacts);
+        console.log(
+            'after',
+            parsedContacts.map((contact) =>
+                contact.map((prop) => (prop.field === fieldToChange ? { ...prop, field: newField } : prop))
+            )
+        );
+
+        return onChangeParsedContacts((parsedContacts) =>
+            parsedContacts.map((contact) =>
+                contact.map((prop) => (prop.field === fieldToChange ? { ...prop, field: newField } : prop))
+            )
+        );
+    };
 
     useEffect(() => {
         const readFile = async () => {
             const csvData = await getCsvData(file);
             setHeaders(csvData.headers);
-            setContacts(csvData.contacts);
-            // setProperties(parseCsvData({ headers: csvData.headers, contacts: csvData.contacts }));
+            setCsvContacts(csvData.contacts);
+            onChangeParsedContacts(parseCsvData({ headers: csvData.headers, contacts: csvData.contacts }));
+            onChangePropertiesToKeep(csvData.headers.map((header) => true));
             setIsReadingFile(false);
         };
 
@@ -34,13 +56,17 @@ const ImportCsvModalContent = ({ file, onChangeProperties }) => {
     return (
         <>
             <Alert>
-                {c('Description')
-                    .t`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`}
+                {c('Description of the purpose of the import CSV modal')
+                    .t`We have detected the following fields in the CSV file you uploaded. Check the ones you want to import.`}
+            </Alert>
+            <Alert>
+                {c('Description of the purpose of the import CSV modal')
+                    .t`Also, we have automatically matched CSV fields with vCard fields. You can review and change this matching manually.`}
             </Alert>
             <Table>
                 <ImportCsvTableHeader
                     disabledPrevious={isReadingFile || contactIndex === 0}
-                    disabledNext={isReadingFile || contactIndex + 1 === contacts.length}
+                    disabledNext={isReadingFile || contactIndex + 1 === csvContacts.length}
                     onNext={handleClickNext}
                     onPrevious={handleClickPrevious}
                 />
@@ -48,9 +74,12 @@ const ImportCsvModalContent = ({ file, onChangeProperties }) => {
                     {headers.map((header, i) => (
                         <ImportCsvTableRow
                             key={header}
+                            checked={propertiesToKeep[i]}
                             header={header}
-                            checked={true}
-                            value={contacts[contactIndex] && contacts[contactIndex][i]}
+                            property={parsedContacts[contactIndex] && parsedContacts[contactIndex][i]}
+                            value={csvContacts[contactIndex] && csvContacts[contactIndex][i]}
+                            onToggle={() => onToggleKeepProperty(i)}
+                            onChangeField={handleChangeField}
                         />
                     ))}
                 </TableBody>
@@ -61,7 +90,7 @@ const ImportCsvModalContent = ({ file, onChangeProperties }) => {
 
 ImportCsvModalContent.propTypes = {
     file: PropTypes.shape({ name: PropTypes.string, size: PropTypes.number }).isRequired,
-    onChangeProperties: PropTypes.func
+    onChangeParsedContacts: PropTypes.func
 };
 
 export default ImportCsvModalContent;

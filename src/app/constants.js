@@ -36,20 +36,6 @@ export const FAIL_TO_DECRYPT = 4;
 export const PGP_INLINE = 'PGP/Inline';
 export const PGP_MIME = 'PGP/MIME';
 
-<<<<<<< HEAD
-export const OVERWRITE = {
-    // when UID conflict at contact import
-    THROW_ERROR: 0,
-    OVERWRITE_CONTACT: 1
-};
-
-export const CATEGORIES = {
-    IGNORE: 0,
-    INCLUDE: 1
-};
-
-export const SUCCESS_IMPORT_CODE = 1000; // in POST API route /contacts
-=======
 // Import steps are numbered according to the order in which they can appear
 export const IMPORT_STEPS = {
     ATTACHING: 1,
@@ -57,4 +43,75 @@ export const IMPORT_STEPS = {
     CHECKING_CSV: 3,
     IMPORTING: 4
 };
->>>>>>> create check csv modal with no toggle
+
+export const CUSTOMIZABLE_VCARD_FIELDS = [
+    'fn',
+    'n',
+    'nickname',
+    'photo',
+    'bday',
+    'anniversary',
+    'gender',
+    'adr',
+    'tel',
+    'email',
+    'impp',
+    'lang',
+    'tz',
+    'geo',
+    'title',
+    'role',
+    'logo',
+    'org',
+    'member',
+    'related',
+    'categories',
+    'note',
+    'prodid',
+    'rev',
+    'sound',
+    'uid',
+    'clientpidmap',
+    'url',
+    'version',
+    'key',
+    'fburl',
+    'caladruri',
+    'caluri'
+];
+
+export const CUSTOMIZABLE_VCARD_TYPES = {
+    fn: ['given', 'yomi'],
+    n: [],
+    nickname: [],
+    photo: [],
+    bday: [],
+    anniversary: [],
+    gender: [],
+    adr: [],
+    tel: ['home', 'mobile', 'work'],
+    email: ['home', 'work'],
+    impp: [],
+    lang: [],
+    tz: [],
+    geo: [],
+    title: [],
+    role: [],
+    logo: [],
+    org: [],
+    member: [],
+    related: [],
+    categories: [],
+    note: [],
+    prodid: [],
+    rev: [],
+    sound: [],
+    uid: [],
+    clientpidmap: [],
+    url: [],
+    version: [],
+    key: [],
+    fburl: [],
+    caladruri: [],
+    caluri: []
+};

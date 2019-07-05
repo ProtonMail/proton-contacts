@@ -47,21 +47,22 @@ export const getCsvData = async (file) => {
 };
 
 /**
- * @param {Object} contacts
- * @param {Array<String>} contacts.headers          Array of property names for a list of csv contacts
- * @param {Array<Array<String>>} contacts.values    Array of contact values for the property names above
- * @return {Array<Array>}                           [[...contactProperties]]
+ * Transform csv properties and corresponding contacts values into array of contacts properties
+ * @param {Object} csvData
+ * @param {Array<String>} csvData.headers           Array of property names for a list of csv contacts
+ * @param {Array<Array<String>>} csvData.contacts   Array of contact values for the property names above
+ * @return {Array<Array<Object>>}                   [[{ pref, field, group, type, value }]]
  *
  * @dev  contacts[i][j] : value for property headers[j] of contact i
  */
 export const parseCsvData = ({ headers = [], contacts = [] }) => {
-    if (values.length === 0) {
+    if (contacts.length === 0) {
         return [];
     }
-    const properties = [];
     const translator = headers.map(toICALProperty);
-    contacts.forEach((values) => properties.push(values.map((value, index) => translator[index](value))));
-    return properties;
+    return contacts
+        .map((values) => values.map((value, index) => translator[index](value)))
+        .map((properties) => properties.filter((property) => !!property));
 };
 
 /**
@@ -71,8 +72,15 @@ export const parseCsvData = ({ headers = [], contacts = [] }) => {
  */
 export const toICALProperty = (CsvProperty) => {
     const property = CsvProperty.toLowerCase();
-    if (property === 'First Name') {
-        return (value) => ({ field: 'fn', value });
+    if (property === 'first name') {
+        return (value) => ({ field: 'fn', type: 'given', value });
     }
+    if (property === 'last name') {
+        return (value) => ({ field: 'n', value });
+    }
+    if (property === 'nickname') {
+        return (value) => ({ field: 'nickname', value });
+    }
+    return (value) => null;
     // Brute-force all of them ?
 };
