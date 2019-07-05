@@ -36,15 +36,10 @@ export const FAIL_TO_DECRYPT = 4;
 export const PGP_INLINE = 'PGP/Inline';
 export const PGP_MIME = 'PGP/MIME';
 
-export const OVERWRITE = {
-    // when UID conflict at contact import
-    THROW_ERROR: 0,
-    OVERWRITE_CONTACT: 1
+// Import steps are numbered according to the order in which they can appear
+export const IMPORT_STEPS = {
+    ATTACHING: 1,
+    ATTACHED: 2,
+    CHECKING_CSV: 3,
+    IMPORTING: 4
 };
-
-export const CATEGORIES = {
-    IGNORE: 0,
-    INCLUDE: 1
-};
-
-export const SUCCESS_IMPORT_CODE = 1000; // in POST API route /contacts
