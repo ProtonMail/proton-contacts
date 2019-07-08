@@ -1,19 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { TableRow, Checkbox, Dropdown, DropdownMenu, DropdownButton } from 'react-components';
+import { TableRow, Checkbox } from 'react-components';
 
-import { CUSTOMIZABLE_VCARD_FIELDS as vcardFields, CUSTOMIZABLE_VCARD_TYPES as vcardTypes } from '../../constants';
+import ImportFieldDropdown from './ImportFieldDropdown';
+import ImportTypeDropdown from './ImportTypeDropdown';
 
-const ImportCsvTableRow = ({ header, checked, property, value, onToggle, onChangeField, ...rest }) => {
-    console.log(property);
-    const [prop, set] = useState(property);
-
-    const handleChangeField = (fieldToChange, newField) => {
-        set((prop) => ({ ...prop, field: newField }));
-        onChangeField(fieldToChange, newField);
-    };
-
+const ImportCsvTableRow = ({ header, checked, property, value, onToggle, onChangeField, onChangeType }) => {
     const cells = [
         <Checkbox checked={checked} onChange={onToggle} />,
         header,
@@ -21,55 +14,30 @@ const ImportCsvTableRow = ({ header, checked, property, value, onToggle, onChang
             c('Info in import CSV modal').t`TODO`
         ) : (
             <div className="flex">
-                <Dropdown
-                    caret
-                    title={c('Info on dropdown in import CSV modal')
-                        .t`Select the VCF property that best matches the CSV property`}
-                    content={prop.field}
-                >
-                    <DropdownMenu className="dropDown-contentInner">
-                        {vcardFields.map((field) => {
-                            return (
-                                <DropdownButton
-                                    key={`field-${field}`}
-                                    onClick={() => handleChangeField(property.field, field)}
-                                >
-                                    {field}
-                                </DropdownButton>
-                            );
-                        })}
-                    </DropdownMenu>
-                </Dropdown>
-                {prop.type && prop.type.length ? (
-                    <Dropdown
-                        caret
-                        title={c('Info on dropdown in import CSV modal').t`Select a type for the VCF property`}
-                        content={prop.type}
-                    >
-                        <DropdownMenu className="dropDown-contentInner">
-                            {vcardTypes[prop.field].map((type) => (
-                                <DropdownButton key={`type-${type}`}>{type}</DropdownButton>
-                            ))}
-                        </DropdownMenu>
-                    </Dropdown>
+                <ImportFieldDropdown initialField={property.field} onChangeField={onChangeField} />
+                {property.type ? (
+                    <ImportTypeDropdown
+                        field={property.field}
+                        initialType={property.type}
+                        onChangeType={onChangeType}
+                    />
                 ) : null}
             </div>
         ),
         value
     ];
 
-    useEffect(() => {
-        return () => console.log('unmounted', prop);
-    }, []);
-
-    return <TableRow cells={cells} {...rest} />;
+    return <TableRow cells={cells} />;
 };
 
 ImportCsvTableRow.propTypes = {
     header: PropTypes.string.isRequired,
     checked: PropTypes.bool,
+    property: PropTypes.shape({ field: PropTypes.string, type: PropTypes.string }),
     value: PropTypes.string, // csv values are always strings
-    onToggle: PropTypes.func
+    onToggle: PropTypes.func,
+    onChangeField: PropTypes.func,
+    onChangeType: PropTypes.func
 };
 
 export default ImportCsvTableRow;
