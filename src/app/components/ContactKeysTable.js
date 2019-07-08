@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { move } from 'proton-shared/lib/helpers/array';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { getKeys } from 'pmcrypto';
@@ -7,7 +8,7 @@ import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 import { describe } from 'proton-shared/lib/keys/keysAlgorithm';
 import { Table, TableHeader, TableBody, TableRow, Badge, DropdownActions } from 'react-components';
 
-const ContactKeysTable = ({ email, publicKeys, onRemove, onMakePrimary }) => {
+const ContactKeysTable = ({ model, setModel }) => {
     const [keys, setKeys] = useState([]); // Store parsed keys
     const header = [
         c('Table header').t`Fingerprint`,
@@ -20,7 +21,7 @@ const ContactKeysTable = ({ email, publicKeys, onRemove, onMakePrimary }) => {
 
     const parse = async () => {
         const parsedKeys = await Promise.all(
-            publicKeys.map(async (key, index) => {
+            model.keys.map(async (key, index) => {
                 try {
                     const [publicKey] = await getKeys(key);
                     const algoInfo = publicKey.getAlgorithmInfo();
@@ -40,7 +41,7 @@ const ContactKeysTable = ({ email, publicKeys, onRemove, onMakePrimary }) => {
 
     useEffect(() => {
         parse();
-    }, [publicKeys]);
+    }, [model.keys]);
 
     return (
         <Table>
@@ -54,7 +55,7 @@ const ContactKeysTable = ({ email, publicKeys, onRemove, onMakePrimary }) => {
                             text: c('Action').t`Download`,
                             async onClick() {
                                 const blob = new Blob([publicKey.armor()], { type: 'data:text/plain;charset=utf-8;' });
-                                const filename = `publickey - ${email} - 0x${fingerprint
+                                const filename = `publickey - ${model.email} - 0x${fingerprint
                                     .slice(0, 8)
                                     .toUpperCase()}.asc`;
 
@@ -64,13 +65,15 @@ const ContactKeysTable = ({ email, publicKeys, onRemove, onMakePrimary }) => {
                         index > 0 && {
                             text: c('Action').t`Make primary`,
                             onClick() {
-                                onMakePrimary(index);
+                                setModel({ ...model, keys: move(model.keys, index, 0) });
                             }
                         },
                         {
                             text: c('Action').t`Remove`,
                             onClick() {
-                                onRemove(index);
+                                const copy = [...model.keys];
+                                copy.splice(index, 1);
+                                setModel({ ...model, keys: copy });
                             }
                         }
                     ].filter(Boolean);
@@ -92,10 +95,8 @@ const ContactKeysTable = ({ email, publicKeys, onRemove, onMakePrimary }) => {
 };
 
 ContactKeysTable.propTypes = {
-    publicKeys: PropTypes.array,
-    onRemove: PropTypes.func,
-    onMakePrimary: PropTypes.func,
-    email: PropTypes.string
+    model: PropTypes.object,
+    setModel: PropTypes.func
 };
 
 export default ContactKeysTable;

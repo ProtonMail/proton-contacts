@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { move } from 'proton-shared/lib/helpers/array';
 import { Alert, Row, Label, Field, Info, Toggle, SelectKeyFiles, useNotifications } from 'react-components';
 
 import ContactSchemeSelect from './ContactSchemeSelect';
@@ -9,15 +8,6 @@ import ContactKeysTable from './ContactKeysTable';
 
 const ContactPgpSettings = ({ model, setModel }) => {
     const { createNotification } = useNotifications();
-    const handleRemoveKey = (index) => {
-        const copy = [...model.keys];
-        copy.splice(index, 1);
-        setModel({ ...model, keys: copy });
-    };
-
-    const handleMakePrimary = (index) => {
-        setModel({ ...model, keys: move(model.keys, index, 0) });
-    };
 
     const handleUploadKeys = (files) => {
         if (!files.length) {
@@ -41,14 +31,35 @@ const ContactPgpSettings = ({ model, setModel }) => {
             <Alert learnMore="TODO">{c('Info')
                 .t`Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service.`}</Alert>
             {model.isPGPInline ? (
-                <Alert className="pgp-external-only pgp-inline-only">{c('Info')
+                <Alert>{c('Info')
                     .t`PGP/Inline is only compatible with Plain Text format. Please note that ProtonMail always signs PGP/Inline messages.`}</Alert>
             ) : null}
             {model.isPGPMime ? (
-                <Alert className="pgp-external-only pgp-mime-only">{c('Info')
+                <Alert>{c('Info')
                     .t`PGP/MIME automatically sends the message using the current composer mode. Please note that ProtonMail always signs PGP/MIME messages.`}</Alert>
             ) : null}
-            {model.isPgpExternal ? (
+            {model.keys.length && model.noPrimary ? (
+                <Alert type="warning">{c('Info')
+                    .t`Address Verification with Trusted Keys is enabled for this address. To be able to send to this address, first trust public keys that can be used for sending.`}</Alert>
+            ) : null}
+            {model.pgpAddressDisabled ? (
+                <Alert type="warning">{c('Info')
+                    .t`This address is disabled. To be able to send to this address, the owner must first enable the address.`}</Alert>
+            ) : null}
+            {model.isPGPInternal ? (
+                <Alert learnMore="https://protonmail.com/support/knowledge-base/address-verification/">{c('Info')
+                    .t`To use Address Verification, you must enable Trusted Keys and trust one or more available public keys, including the primary key for this address. This prevents the encryption keys from being faked.`}</Alert>
+            ) : null}
+            {model.isPGPExternal && !model.sign ? (
+                <Alert learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
+                    .t`Only change these settings if you are using PGP with non-ProtonMail recipients.`}</Alert>
+            ) : null}
+            {model.keysExpired ? (
+                <Alert type="warning" learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c(
+                    'Info'
+                ).t`All uploaded keys are expired or revoked! Encryption is automatically disabled.`}</Alert>
+            ) : null}
+            {model.isPGPExternal ? (
                 <Row>
                     <Label>
                         {c('Label').t`Encrypt emails`}
@@ -72,7 +83,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                     </Field>
                 </Row>
             ) : null}
-            {model.isPgpExternal ? (
+            {model.isPGPExternal ? (
                 <Row>
                     <Label>
                         {c('Label').t`Sign emails`}
@@ -85,23 +96,26 @@ const ContactPgpSettings = ({ model, setModel }) => {
                     <Field>
                         <Toggle
                             checked={model.sign}
+                            disabled={model.encrypt}
                             onChange={({ target }) => setModel({ ...model, sign: target.checked })}
                         />
                     </Field>
                 </Row>
             ) : null}
-            <Row>
-                <Label>
-                    {c('Label').t`Trusted keys`}
-                    <Info className="ml0-5" title={c('Tooltip').t`TODO`} />
-                </Label>
-                <Field>
-                    <Toggle
-                        checked={model.trust}
-                        onChange={({ target }) => setModel({ ...model, trust: target.checked })}
-                    />
-                </Field>
-            </Row>
+            {model.isPGPInternal ? (
+                <Row>
+                    <Label>
+                        {c('Label').t`Trusted keys`}
+                        <Info className="ml0-5" title={c('Tooltip').t`TODO`} />
+                    </Label>
+                    <Field>
+                        <Toggle
+                            checked={model.trust}
+                            onChange={({ target }) => setModel({ ...model, trust: target.checked })}
+                        />
+                    </Field>
+                </Row>
+            ) : null}
             <Row>
                 <Label>
                     {c('Label').t`Public keys`}
@@ -115,15 +129,8 @@ const ContactPgpSettings = ({ model, setModel }) => {
                     <SelectKeyFiles onFiles={handleUploadKeys} multiple={true} />
                 </Field>
             </Row>
-            {model.keys.length ? (
-                <ContactKeysTable
-                    email={model.email}
-                    publicKeys={model.keys}
-                    onRemove={handleRemoveKey}
-                    onMakePrimary={handleMakePrimary}
-                />
-            ) : null}
-            {model.isPgpExternal ? (
+            {model.keys.length ? <ContactKeysTable model={model} setModel={setModel} /> : null}
+            {model.isPGPExternal ? (
                 <Row>
                     <Label>
                         {c('Label').t`Cryptographic scheme`}

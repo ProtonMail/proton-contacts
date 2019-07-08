@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FormModal, Alert, Row, Label, Field, Info, LinkButton, useApi, useMailSettings } from 'react-components';
-import { binaryStringToArray, decodeBase64 } from 'pmcrypto';
+import { binaryStringToArray, decodeBase64, encodeBase64, arrayToBinaryString } from 'pmcrypto';
 import { c } from 'ttag';
 import { RECIPIENT_TYPE, PACKAGE_TYPE } from 'proton-shared/lib/constants';
 import { API_CUSTOM_ERROR_CODES } from 'proton-shared/lib/errors';
 import { getPublicKeys } from 'proton-shared/lib/api/keys';
 
 import ContactMIMETypeSelect from './ContactMIMETypeSelect';
-import { isInternalUser, isDisabledUser } from '../helpers/pgp';
+import { isInternalUser, isDisabledUser, getRawInternalKeys, allKeysExpired } from '../helpers/pgp';
 import { VCARD_KEY_FIELDS } from '../constants';
 import ContactPgpSettings from './ContactPgpSettings';
 
@@ -18,53 +18,15 @@ const { KEY_GET_ADDRESS_MISSING, KEY_GET_DOMAIN_MISSING_MX, KEY_GET_INPUT_INVALI
 const EMAIL_ERRORS = [KEY_GET_ADDRESS_MISSING, KEY_GET_DOMAIN_MISSING_MX, KEY_GET_INPUT_INVALID];
 
 const PGP_MAP = {
-    SEND_PGP_INLINE: 'pgp-inline',
-    SEND_PGP_MIME: 'pgp-mime'
-};
-
-const prepareModel = (properties = [], contactEmail, sign) => {
-    const email = contactEmail.Email;
-    const emailProperty = properties.find(({ value }) => value === email);
-
-    return properties
-        .filter(({ field, group }) => VCARD_KEY_FIELDS.includes(field) && group === emailProperty.group)
-        .reduce(
-            (acc, { field, value }) => {
-                if (field === 'key' && value) {
-                    acc.keys.push(binaryStringToArray(decodeBase64(value)));
-                    return acc;
-                }
-
-                if (field === 'x-pm-encrypt' && value) {
-                    acc.encrypt = value === 'true';
-                    return acc;
-                }
-
-                if (field === 'x-pm-sign' && value) {
-                    acc.sign = value === 'true';
-                    return acc;
-                }
-
-                if (field === 'x-pm-scheme' && value) {
-                    acc.scheme = value;
-                    return acc;
-                }
-
-                if (field === 'x-pm-mimetype' && value) {
-                    acc.mimeType = value;
-                    return acc;
-                }
-
-                return acc;
-            },
-            { email, keys: [], mimeType: '', encrypt: false, scheme: '', sign: sign === 1 }
-        ); // Default values
+    [SEND_PGP_INLINE]: 'pgp-inline',
+    [SEND_PGP_MIME]: 'pgp-mime'
 };
 
 const ContactEmailSettingsModal = ({ properties, contactEmail, ...rest }) => {
+    const { Email } = contactEmail;
     const [{ Sign }] = useMailSettings(); // MailSettings model needs to be loaded
     const api = useApi();
-    const [model, setModel] = useState(prepareModel(properties, contactEmail, Sign));
+    const [model, setModel] = useState({});
     const [{ PGPScheme }] = useMailSettings();
 
     const hasSheme = (scheme) => {
@@ -99,26 +61,81 @@ const ContactEmailSettingsModal = ({ properties, contactEmail, ...rest }) => {
         }
     };
 
-    const request = async () => {
+    const prepare = async () => {
+        const emailProperty = properties.find(({ value }) => value === Email);
+        const { contactKeys, mimeType, encrypt, scheme, sign } = properties
+            .filter(({ field, group }) => VCARD_KEY_FIELDS.includes(field) && group === emailProperty.group)
+            .reduce(
+                (acc, { field, value }) => {
+                    if (field === 'key' && value) {
+                        const [, base64 = ''] = value.split(',');
+                        const data = binaryStringToArray(decodeBase64(base64));
+
+                        if (data.length) {
+                            acc.contactKeys.push(data);
+                        }
+
+                        return acc;
+                    }
+
+                    if (field === 'x-pm-encrypt' && value) {
+                        acc.encrypt = value === 'true';
+                        return acc;
+                    }
+
+                    if (field === 'x-pm-sign' && value) {
+                        acc.sign = value === 'true';
+                        return acc;
+                    }
+
+                    if (field === 'x-pm-scheme' && value) {
+                        acc.scheme = value;
+                        return acc;
+                    }
+
+                    if (field === 'x-pm-mimetype' && value) {
+                        acc.mimeType = value;
+                        return acc;
+                    }
+
+                    return acc;
+                },
+                { contactKeys: [], mimeType: '', encrypt: false, scheme: '', sign: Sign === 1 } // Default values
+            );
         const config = await getKeysFromApi(contactEmail.Email);
         const internalUser = isInternalUser(config);
+        const externalUser = !internalUser;
+        const apiKeys = config.Keys.map(({ PublicKey }) => PublicKey);
+        const [unarmoredKeys, keysExpired] = await Promise.all([
+            getRawInternalKeys(config),
+            allKeysExpired(contactKeys)
+        ]);
+        const noPrimary = !unarmoredKeys.some((k) =>
+            contactKeys.map((value) => encodeBase64(arrayToBinaryString(value))).includes(k)
+        );
 
         setModel({
-            ...model,
-            keys: internalUser ? config.Keys.map(({ PublicKey }) => PublicKey) : model.keys,
-            trust: config.RecipientType === 1,
-            isPgpExternal: !internalUser,
-            isPgpInternal: internalUser,
+            mimeType,
+            encrypt,
+            scheme,
+            sign,
+            email: Email,
+            keys: internalUser && !contactKeys.length ? apiKeys : contactKeys,
+            trust: internalUser && contactKeys.length > 0,
+            isPGPExternal: externalUser,
+            isPGPInternal: internalUser,
             pgpAddressDisabled: isDisabledUser(config),
-            isPGPInline: !internalUser && hasSheme('pgp-inline'),
-            isPGPMime: !internalUser && hasSheme('pgp-mime')
+            noPrimary,
+            keysExpired,
+            isPGPInline: externalUser && hasSheme('pgp-inline'),
+            isPGPMime: externalUser && hasSheme('pgp-mime')
         });
     };
 
     const handleSubmit = () => {};
 
     useEffect(() => {
-        request();
+        prepare();
     }, []);
 
     return (
