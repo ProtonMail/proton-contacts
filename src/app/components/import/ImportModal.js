@@ -33,7 +33,8 @@ const ImportModal = ({ onClose, ...rest }) => {
     const [step, setStep] = useState(ATTACHING);
     const [importFile, setImportFile] = useState(null);
     const [parsedContacts, setParsedContacts] = useState([]);
-    const [propertiesToKeep, setPropertiesToKeep] = useState([]);
+
+    const [keepHeaders, setKeepHeaders] = useState([]);
 
     const [totalContacts, setTotalContacts] = useState(0);
     const [contactsImported, addSuccess] = useState([]);
@@ -58,25 +59,17 @@ const ImportModal = ({ onClose, ...rest }) => {
         setStep(ATTACHING);
     };
 
-    const handleChangeParsedContacts = (parsedContacts) => setParsedContacts(parsedContacts);
-    const handleChangePropertiesToKeep = (propertiesToKeep) => setPropertiesToKeep(propertiesToKeep);
-    const handleToggleKeepProperty = (index) => {
-        setPropertiesToKeep((propertiesToKeep) => propertiesToKeep.map((bool, j) => (index === j ? !bool : bool)));
-    };
-
     const handleSubmit = {
-        [ATTACHING]: noop,
+        [ATTACHING]: () => noop,
         [ATTACHED]: () => setStep(importFile.type === 'text/csv' ? CHECKING_CSV : IMPORTING),
         [CHECKING_CSV]: () => {
-            setParsedContacts(
-                parsedContacts.map((properties) => properties.filter((property, i) => propertiesToKeep[i]))
+            setParsedContacts((parsedContacts) =>
+                parsedContacts.map((contact) => contact.filter((property, i) => keepHeaders[i]))
             );
             setStep(IMPORTING);
         },
         [IMPORTING]: onClose
     };
-
-    console.log('step', step);
 
     useEffect(() => {
         // const setup = async () => {
@@ -128,10 +121,9 @@ const ImportModal = ({ onClose, ...rest }) => {
                 <ImportCsvModalContent
                     file={importFile}
                     parsedContacts={parsedContacts}
-                    propertiesToKeep={propertiesToKeep}
-                    onChangeParsedContacts={handleChangeParsedContacts}
-                    onChangePropertiesToKeep={handleChangePropertiesToKeep}
-                    onToggleKeepProperty={handleToggleKeepProperty}
+                    keepHeaders={keepHeaders}
+                    onSetParsedContacts={setParsedContacts}
+                    onSetKeepHeaders={setKeepHeaders}
                 />
             ) : (
                 <ImportingModalContent
