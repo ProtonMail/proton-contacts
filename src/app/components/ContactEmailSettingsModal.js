@@ -1,62 +1,126 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FormModal, Alert, Row, Label, Field, Select, Info, LinkButton } from 'react-components';
+import { FormModal, Alert, Row, Label, Field, Info, LinkButton, useApi, useMailSettings } from 'react-components';
+import { binaryStringToArray, decodeBase64 } from 'pmcrypto';
 import { c } from 'ttag';
+import { RECIPIENT_TYPE, PACKAGE_TYPE } from 'proton-shared/lib/constants';
+import { API_CUSTOM_ERROR_CODES } from 'proton-shared/lib/errors';
+import { getPublicKeys } from 'proton-shared/lib/api/keys';
 
-const PgpSettings = () => {
-    return (
-        <>
-            <Alert learnMore="TODO">{c('Info')
-                .t`Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service.`}</Alert>
-            <Row>
-                <Label>
-                    {c('Label').t`Encrypt emails`}
-                    <Info
-                        className="ml1"
-                        title={c('Tooltip')
-                            .t`Email encryption forces email signature to help authentify your sent messages`}
-                    />
-                </Label>
-            </Row>
-            <Row>
-                <Label>
-                    {c('Label').t`Sign emails`}
-                    <Info
-                        className="ml1"
-                        title={c('Tooltip').t`Digitally signing emails helps authentify that messages are sent by you`}
-                    />
-                </Label>
-            </Row>
-            <Row>
-                <Label>
-                    {c('Label').t`Public keys`}
-                    <Info
-                        className="ml1"
-                        title={c('Tooltip')
-                            .t`Upload a public key to enable sending end-to-end encrypted emails to this email`}
-                    />
-                </Label>
-            </Row>
-            <Row>
-                <Label>
-                    {c('Label').t`Cryptographic scheme`}
-                    <Info
-                        className="ml1"
-                        title={c('Tooltip')
-                            .t`Select the PGP scheme to be used when signing or encrypting to an user. Note that PGP/Inline forces plain text messages`}
-                    />
-                </Label>
-            </Row>
-        </>
-    );
+import ContactMIMETypeSelect from './ContactMIMETypeSelect';
+import { isInternalUser, isDisabledUser } from '../helpers/pgp';
+import { VCARD_KEY_FIELDS } from '../constants';
+import ContactPgpSettings from './ContactPgpSettings';
+
+const { SEND_PGP_INLINE, SEND_PGP_MIME } = PACKAGE_TYPE;
+const { TYPE_NO_RECEIVE } = RECIPIENT_TYPE;
+const { KEY_GET_ADDRESS_MISSING, KEY_GET_DOMAIN_MISSING_MX, KEY_GET_INPUT_INVALID } = API_CUSTOM_ERROR_CODES;
+const EMAIL_ERRORS = [KEY_GET_ADDRESS_MISSING, KEY_GET_DOMAIN_MISSING_MX, KEY_GET_INPUT_INVALID];
+
+const PGP_MAP = {
+    SEND_PGP_INLINE: 'pgp-inline',
+    SEND_PGP_MIME: 'pgp-mime'
+};
+
+const prepareModel = (properties = [], contactEmail, sign) => {
+    const email = contactEmail.Email;
+    const emailProperty = properties.find(({ value }) => value === email);
+
+    return properties
+        .filter(({ field, group }) => VCARD_KEY_FIELDS.includes(field) && group === emailProperty.group)
+        .reduce(
+            (acc, { field, value }) => {
+                if (field === 'key' && value) {
+                    acc.keys.push(binaryStringToArray(decodeBase64(value)));
+                    return acc;
+                }
+
+                if (field === 'x-pm-encrypt' && value) {
+                    acc.encrypt = value === 'true';
+                    return acc;
+                }
+
+                if (field === 'x-pm-sign' && value) {
+                    acc.sign = value === 'true';
+                    return acc;
+                }
+
+                if (field === 'x-pm-scheme' && value) {
+                    acc.scheme = value;
+                    return acc;
+                }
+
+                if (field === 'x-pm-mimetype' && value) {
+                    acc.mimeType = value;
+                    return acc;
+                }
+
+                return acc;
+            },
+            { email, keys: [], mimeType: '', encrypt: false, scheme: '', sign: sign === 1 }
+        ); // Default values
 };
 
 const ContactEmailSettingsModal = ({ properties, contactEmail, ...rest }) => {
-    const options = [];
-    const [model, setModel] = useState({});
-    const handleChangeEmailFormat = ({ target }) => setModel({ ...model, emailFormat: target.value });
+    const [{ Sign }] = useMailSettings(); // MailSettings model needs to be loaded
+    const api = useApi();
+    const [model, setModel] = useState(prepareModel(properties, contactEmail, Sign));
+    const [{ PGPScheme }] = useMailSettings();
+
+    const hasSheme = (scheme) => {
+        if (!model.scheme) {
+            return PGP_MAP[PGPScheme] === scheme;
+        }
+
+        return model.scheme === scheme;
+    };
+
+    /**
+     * Get the keys for an email address from the API.
+     * @param {String} Email
+     * @returns {Promise<{RecipientType, MIMEType, Keys}>}
+     */
+    const getKeysFromApi = async (Email) => {
+        try {
+            const { Code, ...data } = await api(getPublicKeys({ Email }));
+            return data;
+        } catch (error) {
+            const { data = {} } = error;
+
+            if (EMAIL_ERRORS.includes(data.Code)) {
+                return {
+                    RecipientType: TYPE_NO_RECEIVE,
+                    MIMEType: null,
+                    Keys: []
+                };
+            }
+
+            throw error;
+        }
+    };
+
+    const request = async () => {
+        const config = await getKeysFromApi(contactEmail.Email);
+        const internalUser = isInternalUser(config);
+
+        setModel({
+            ...model,
+            keys: internalUser ? config.Keys.map(({ PublicKey }) => PublicKey) : model.keys,
+            trust: config.RecipientType === 1,
+            isPgpExternal: !internalUser,
+            isPgpInternal: internalUser,
+            pgpAddressDisabled: isDisabledUser(config),
+            isPGPInline: !internalUser && hasSheme('pgp-inline'),
+            isPGPMime: !internalUser && hasSheme('pgp-mime')
+        });
+    };
+
     const handleSubmit = () => {};
-    const handleTogglePgpSettings = () => setModel({ ...model, showPgpSettings: !model.showPgpSettings });
+
+    useEffect(() => {
+        request();
+    }, []);
+
     return (
         <FormModal
             submit={c('Action').t`Save`}
@@ -70,23 +134,26 @@ const ContactEmailSettingsModal = ({ properties, contactEmail, ...rest }) => {
                 <Label>
                     {c('Label').t`Email format`}
                     <Info
-                        className="ml1"
+                        className="ml0-5"
                         title={c('Tooltip')
                             .t`Automatic indicates that the format in the composer is used to send to this user. Plain text indicates that the message will always be converted to plain text on send.`}
                     />
                 </Label>
                 <Field>
-                    <Select value={model.emailFormat} options={options} onChange={handleChangeEmailFormat} />
+                    <ContactMIMETypeSelect
+                        value={model.mimeType}
+                        onChange={(mimeType) => setModel({ ...model, mimeType })}
+                    />
                 </Field>
             </Row>
             <div className="mb1">
-                <LinkButton onClick={handleTogglePgpSettings}>
+                <LinkButton onClick={() => setModel({ ...model, showPgpSettings: !model.showPgpSettings })}>
                     {model.showPgpSettings
                         ? c('Action').t`Hide advanced PGP settings`
                         : c('Action').t`Show advanced PGP settings`}
                 </LinkButton>
             </div>
-            {model.showPgpSettings ? <PgpSettings /> : null}
+            {model.showPgpSettings ? <ContactPgpSettings model={model} setModel={setModel} /> : null}
         </FormModal>
     );
 };
