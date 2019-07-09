@@ -16,7 +16,6 @@ const ContactKeysTable = ({ model, setModel }) => {
     const header = [
         c('Table header').t`Fingerprint`,
         c('Table header').t`Created`,
-        c('Table header').t`Expires`,
         c('Table header').t`Type`,
         c('Table header').t`Status`,
         c('Table header').t`Actions`
@@ -36,15 +35,16 @@ const ContactKeysTable = ({ model, setModel }) => {
                     const algo = describe(algoInfo);
                     const fingerprint = publicKey.getFingerprint();
                     const isPrimary = !index && !isExpired && model.isPGPExternal;
+                    const isTrusted = model.isPGPInternal && model.trusted.includes(fingerprint);
                     return {
                         publicKey,
                         fingerprint,
                         algo,
                         creationTime,
-                        expirationTime,
                         isPrimary,
                         isExpired,
-                        isRevoked
+                        isRevoked,
+                        isTrusted
                     };
                 } catch (error) {
                     return false;
@@ -64,11 +64,10 @@ const ContactKeysTable = ({ model, setModel }) => {
             <TableBody>
                 {keys.map(
                     (
-                        { fingerprint, algo, creationTime, expirationTime, isPrimary, publicKey, isExpired, isRevoked },
+                        { fingerprint, algo, creationTime, isPrimary, publicKey, isExpired, isRevoked, isTrusted },
                         index
                     ) => {
                         const creation = moment(creationTime);
-                        const expiration = moment(expirationTime);
                         const list = [
                             {
                                 text: c('Action').t`Download`,
@@ -91,12 +90,20 @@ const ContactKeysTable = ({ model, setModel }) => {
                                         setModel({ ...model, keys: move(model.keys, index, 0) });
                                     }
                                 },
-                            model.isPGPInternal && {
-                                text: c('Action').t`Trust`,
-                                onClick() {
-                                    setModel({ ...model }); // TODO
-                                }
-                            },
+                            model.isPGPInternal &&
+                                isTrusted && {
+                                    text: c('Action').t`Trust`,
+                                    onClick() {
+                                        setModel({ ...model, trusted: [...model.trusted, fingerprint] });
+                                    }
+                                },
+                            model.isPGPInternal &&
+                                !isTrusted && {
+                                    text: c('Action').t`Untrust`,
+                                    onClick() {
+                                        setModel({ ...model, trusted: model.trusted.filter((f) => f !== fingerprint) });
+                                    }
+                                },
                             model.isPGPExternal && {
                                 text: c('Action').t`Remove`,
                                 onClick() {
@@ -118,9 +125,11 @@ const ContactKeysTable = ({ model, setModel }) => {
                                 <span className="flex-item-fluid ellipsis">{fingerprint}</span>
                             </div>,
                             creation.isValid() ? creation.format('ll') : '-',
-                            expiration.isValid() ? expiration.format('ll') : '-',
                             algo,
-                            isPrimary ? <Badge key={fingerprint}>{c('Key badge').t`Primary`}</Badge> : null,
+                            <React.Fragment key={fingerprint}>
+                                {isPrimary ? <Badge>{c('Key badge').t`Primary`}</Badge> : null}
+                                {isTrusted ? <Badge>{c('Key badge').t`Trusted`}</Badge> : null}
+                            </React.Fragment>,
                             <DropdownActions key={fingerprint} className="pm-button--small" list={list} />
                         ];
                         return <TableRow key={fingerprint} cells={cells} />;

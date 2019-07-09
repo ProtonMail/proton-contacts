@@ -8,7 +8,6 @@ import { emailMismatch } from '../helpers/pgp';
 const KeyWarningIcon = ({ publicKey, isRevoked, isExpired, email, ...rest }) => {
     const icon = <Icon name="attention" fill="attention" {...rest} />;
     const assignedEmails = emailMismatch(publicKey, email);
-    console.log(publicKey, email, assignedEmails);
 
     if (assignedEmails) {
         return (

@@ -48,7 +48,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
             ) : null}
             {model.isPGPInternal ? (
                 <Alert learnMore="https://protonmail.com/support/knowledge-base/address-verification/">{c('Info')
-                    .t`To use Address Verification, you must enable Trusted Keys and trust one or more available public keys, including the primary key for this address. This prevents the encryption keys from being faked.`}</Alert>
+                    .t`To use Address Verification, you must trust one or more available public keys, including the primary key for this address. This prevents the encrypted keys from being faked.`}</Alert>
             ) : null}
             {model.isPGPExternal && !model.sign ? (
                 <Alert learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
@@ -61,7 +61,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
             ) : null}
             {model.isPGPExternal ? (
                 <Row>
-                    <Label>
+                    <Label htmlFor="encrypt-toggle">
                         {c('Label').t`Encrypt emails`}
                         <Info
                             className="ml0-5"
@@ -71,6 +71,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                     </Label>
                     <Field>
                         <Toggle
+                            id="encrypt-toggle"
                             checked={model.encrypt}
                             onChange={({ target }) =>
                                 setModel({
@@ -86,7 +87,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
             ) : null}
             {model.isPGPExternal ? (
                 <Row>
-                    <Label>
+                    <Label htmlFor="sign-toggle">
                         {c('Label').t`Sign emails`}
                         <Info
                             className="ml0-5"
@@ -96,6 +97,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                     </Label>
                     <Field>
                         <Toggle
+                            id="sign-toggle"
                             checked={model.sign}
                             disabled={model.encrypt}
                             onChange={({ target }) =>
@@ -105,20 +107,6 @@ const ContactPgpSettings = ({ model, setModel }) => {
                                     mimeType: ''
                                 })
                             }
-                        />
-                    </Field>
-                </Row>
-            ) : null}
-            {model.isPGPInternal ? (
-                <Row>
-                    <Label>
-                        {c('Label').t`Trusted keys`}
-                        <Info className="ml0-5" title={c('Tooltip').t`TODO`} />
-                    </Label>
-                    <Field>
-                        <Toggle
-                            checked={model.trust}
-                            onChange={({ target }) => setModel({ ...model, trust: target.checked })}
                         />
                     </Field>
                 </Row>

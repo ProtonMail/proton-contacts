@@ -14,15 +14,15 @@ import {
 
 import ExportModal from './ExportModal';
 import ContactGroupModal from './ContactGroupModal';
+import ContactGroupsModal from './ContactGroupsModal';
 
 const PaidCards = ({ contactGroupID }) => {
     const { createModal } = useModals();
+    const handleExport = () => createModal(<ExportModal contactGroupID={contactGroupID} />);
+    const handleGroups = () => createModal(<ContactGroupsModal />);
 
     const handleImport = () => {
         // TODO
-    };
-    const handleExport = () => {
-        createModal(<ExportModal contactGroupID={contactGroupID} />);
     };
 
     return (
@@ -57,7 +57,7 @@ const PaidCards = ({ contactGroupID }) => {
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at tristique mauris, non
                         eleifend orci.
                     </p>
-                    <Link className="pm-button pm-button--primary" to="/settings/account">{c('Action').t`Groups`}</Link>
+                    <PrimaryButton onClick={handleGroups}>{c('Action').t`Groups`}</PrimaryButton>
                 </div>
             </div>
         </div>

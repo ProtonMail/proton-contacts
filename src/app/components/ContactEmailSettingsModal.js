@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { FormModal, Alert, Row, Label, Field, Info, LinkButton, useApi, useMailSettings } from 'react-components';
 import { binaryStringToArray, decodeBase64, encodeBase64, arrayToBinaryString } from 'pmcrypto';
 import { c } from 'ttag';
+import { getKeys } from 'pmcrypto';
 import { RECIPIENT_TYPE, PACKAGE_TYPE } from 'proton-shared/lib/constants';
 import { API_CUSTOM_ERROR_CODES } from 'proton-shared/lib/errors';
 import { getPublicKeys } from 'proton-shared/lib/api/keys';
@@ -116,6 +117,14 @@ const ContactEmailSettingsModal = ({ properties, contactEmail, ...rest }) => {
                 contactKeys.map((value) => encodeBase64(arrayToBinaryString(value))).includes(k)
             );
 
+        const trusted = internalUser
+            ? await Promise.all(
+                  contactKeys.map(async (key) => {
+                      const [publicKey] = await getKeys(key);
+                      return publicKey.getFingerprint();
+                  })
+              )
+            : [];
         setModel({
             mimeType,
             encrypt,
@@ -123,7 +132,7 @@ const ContactEmailSettingsModal = ({ properties, contactEmail, ...rest }) => {
             sign,
             email: Email,
             keys: internalUser && !contactKeys.length ? apiKeys : contactKeys,
-            trust: internalUser && contactKeys.length > 0,
+            trusted,
             isPGPExternal: externalUser,
             isPGPInternal: internalUser,
             pgpAddressDisabled: isDisabledUser(config),
