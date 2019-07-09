@@ -13,7 +13,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
         if (!files.length) {
             return createNotification({
                 type: 'error',
-                text: c('Error').t`Invalid private key file`
+                text: c('Error').t`Invalid public key file`
             });
         }
 
@@ -133,7 +133,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                     />
                 </Label>
                 <Field>
-                    <SelectKeyFiles onFiles={handleUploadKeys} multiple={true} />
+                    {model.isPGPExternal ? <SelectKeyFiles onFiles={handleUploadKeys} multiple={true} /> : null}
                 </Field>
             </Row>
             {model.keys.length ? <ContactKeysTable model={model} setModel={setModel} /> : null}

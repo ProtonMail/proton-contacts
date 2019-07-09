@@ -110,9 +110,11 @@ const ContactEmailSettingsModal = ({ properties, contactEmail, ...rest }) => {
             getRawInternalKeys(config),
             allKeysExpired(contactKeys)
         ]);
-        const noPrimary = !unarmoredKeys.some((k) =>
-            contactKeys.map((value) => encodeBase64(arrayToBinaryString(value))).includes(k)
-        );
+        const noPrimary =
+            unarmoredKeys.length &&
+            !unarmoredKeys.some((k) =>
+                contactKeys.map((value) => encodeBase64(arrayToBinaryString(value))).includes(k)
+            );
 
         setModel({
             mimeType,

@@ -50,19 +50,24 @@ export const allKeysExpired = async (keys = []) => {
  * Check if current email mismatch with email define in key data
  * @param {Array} key.users
  * @param {String} currentEmail
- * @returns {Boolean}
+ * @returns {Boolean|String} emails
  */
 export const emailMismatch = ({ users = [] }, currentEmail) => {
     const keyEmails = users
         .map(({ userId = {} }) => {
-            if (!userId || !userId.email) {
+            if (!userId || !userId.userid) {
                 // userId can be set to null
                 return false;
             }
             // we don't normalize anything here because enigmail / pgp also doesn't normalize it.
-            return userId.email;
+            const [, email = userId.userid] = /<([^>]*)>/.exec(userId.userid);
+            return email;
         })
         .filter(Boolean);
 
-    return !keyEmails.includes(currentEmail);
+    if (keyEmails.includes(currentEmail)) {
+        return false;
+    }
+
+    return keyEmails;
 };

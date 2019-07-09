@@ -7,34 +7,9 @@ import { serverTime } from 'pmcrypto/lib/serverTime';
 import moment from 'moment';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 import { describe } from 'proton-shared/lib/keys/keysAlgorithm';
-import { Table, TableHeader, TableBody, TableRow, Badge, DropdownActions, Icon, Tooltip } from 'react-components';
-import { emailMismatch } from '../helpers/pgp';
+import { Table, TableHeader, TableBody, TableRow, Badge, DropdownActions } from 'react-components';
 
-const KeyWarningIcon = ({ publicKey, isRevoked, isExpired, email, ...rest }) => {
-    const icon = <Icon name="attention" {...rest} />;
-    const hasInvalidUserID = emailMismatch(publicKey, email);
-
-    if (hasInvalidUserID) {
-        return <Tooltip title={c('PGP key warning').t`This key has invalid user ID`}>{icon}</Tooltip>;
-    }
-
-    if (isRevoked) {
-        return <Tooltip title={c('PGP key warning').t`This key is revoked`}>{icon}</Tooltip>;
-    }
-
-    if (isExpired) {
-        return <Tooltip title={c('PGP key warning').t`This key is expired`}>{icon}</Tooltip>;
-    }
-
-    return null;
-};
-
-KeyWarningIcon.propTypes = {
-    publicKey: PropTypes.object.isRequired,
-    isExpired: PropTypes.bool,
-    isRevoked: PropTypes.bool,
-    email: PropTypes.string.isRequired
-};
+import KeyWarningIcon from './KeyWarningIcon';
 
 const ContactKeysTable = ({ model, setModel }) => {
     const [keys, setKeys] = useState([]);
@@ -60,7 +35,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                     const algoInfo = publicKey.getAlgorithmInfo();
                     const algo = describe(algoInfo);
                     const fingerprint = publicKey.getFingerprint();
-                    const isPrimary = !index;
+                    const isPrimary = !index && !isExpired && model.isPGPExternal;
                     return {
                         publicKey,
                         fingerprint,
@@ -132,15 +107,15 @@ const ContactKeysTable = ({ model, setModel }) => {
                             }
                         ].filter(Boolean);
                         const cells = [
-                            <div key={fingerprint} className="flex flex-nowrap flex-items-center" title={fingerprint}>
+                            <div key={fingerprint} title={fingerprint} className="flex flex-nowrap">
                                 <KeyWarningIcon
-                                    className="mr0-5"
+                                    className="mr0-5 flex-item-noshrink"
                                     publicKey={publicKey}
                                     isExpired={isExpired}
                                     isRevoked={isRevoked}
                                     email={model.email}
                                 />
-                                <span className="ellipsis">{fingerprint}</span>
+                                <span className="flex-item-fluid ellipsis">{fingerprint}</span>
                             </div>,
                             creation.isValid() ? creation.format('ll') : '-',
                             expiration.isValid() ? expiration.format('ll') : '-',
