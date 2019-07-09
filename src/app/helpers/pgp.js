@@ -1,13 +1,5 @@
 import { RECIPIENT_TYPE, KEY_FLAGS } from 'proton-shared/lib/constants';
-import {
-    arrayToBinaryString,
-    binaryStringToArray,
-    decodeBase64,
-    encodeBase64,
-    getKeys,
-    isExpiredKey,
-    stripArmor
-} from 'pmcrypto';
+import { arrayToBinaryString, encodeBase64, getKeys, isExpiredKey, stripArmor } from 'pmcrypto';
 
 const { TYPE_INTERNAL } = RECIPIENT_TYPE;
 const { ENABLE_ENCRYPTION } = KEY_FLAGS;
@@ -52,4 +44,25 @@ export const allKeysExpired = async (keys = []) => {
     const isExpired = await Promise.all(keyObjects);
 
     return isExpired.every((keyExpired) => keyExpired);
+};
+
+/**
+ * Check if current email mismatch with email define in key data
+ * @param {Array} key.users
+ * @param {String} currentEmail
+ * @returns {Boolean}
+ */
+export const emailMismatch = ({ users = [] }, currentEmail) => {
+    const keyEmails = users
+        .map(({ userId = {} }) => {
+            if (!userId || !userId.email) {
+                // userId can be set to null
+                return false;
+            }
+            // we don't normalize anything here because enigmail / pgp also doesn't normalize it.
+            return userId.email;
+        })
+        .filter(Boolean);
+
+    return !keyEmails.includes(currentEmail);
 };

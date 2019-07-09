@@ -76,7 +76,8 @@ const ContactPgpSettings = ({ model, setModel }) => {
                                 setModel({
                                     ...model,
                                     encrypt: target.checked,
-                                    sign: target.checked ? true : model.sign
+                                    sign: target.checked ? true : model.sign,
+                                    mimeType: ''
                                 })
                             }
                         />
@@ -97,7 +98,13 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         <Toggle
                             checked={model.sign}
                             disabled={model.encrypt}
-                            onChange={({ target }) => setModel({ ...model, sign: target.checked })}
+                            onChange={({ target }) =>
+                                setModel({
+                                    ...model,
+                                    sign: target.checked,
+                                    mimeType: ''
+                                })
+                            }
                         />
                     </Field>
                 </Row>

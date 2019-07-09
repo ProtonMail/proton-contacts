@@ -158,6 +158,7 @@ const ContactEmailSettingsModal = ({ properties, contactEmail, ...rest }) => {
                 </Label>
                 <Field>
                     <ContactMIMETypeSelect
+                        disabled={model.encrypt || model.sign}
                         value={model.mimeType}
                         onChange={(mimeType) => setModel({ ...model, mimeType })}
                     />
