@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'react-components';
+import { getInitial } from 'proton-shared/lib/helpers/string';
+
 import { formatAdr } from '../helpers/property';
 
 const getFirstValue = (properties, field) => {
@@ -26,7 +28,15 @@ const ContactSummary = ({ properties }) => {
     return (
         <div className="bg-global-light flex flex-nowrap p1 mb1 border-bottom">
             <div className="w20 aligncenter">
-                {photo ? <img src={photo} className="rounded50" /> : <Icon name="contact" size={40} />}
+                {photo ? (
+                    <img src={photo} className="rounded50" />
+                ) : (
+                    <div className="rounded50 bordered bg-white ratio-container-square h1 mb0">
+                        <span className="inner-ratio-container flex">
+                            <span className="mauto">{getInitial(name)}</span>
+                        </span>
+                    </div>
+                )}
             </div>
             <div className="pl1">
                 <h2 className="mb0-5">{name}</h2>
