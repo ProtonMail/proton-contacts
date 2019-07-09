@@ -46,7 +46,8 @@ const ContactGroupsTable = ({ onClose }) => {
             <TableHeader cells={header} />
             <TableBody>
                 {contactGroups.map(({ ID, Name, Color }) => {
-                    const countMembers = contactEmails.filter(({ LabelIDs = [] }) => LabelIDs.includes(ID)).length;
+                    const countEmailAddresses = contactEmails.filter(({ LabelIDs = [] }) => LabelIDs.includes(ID))
+                        .length;
                     const list = [
                         {
                             text: c('Action').t`Edit`,
@@ -79,7 +80,11 @@ const ContactGroupsTable = ({ onClose }) => {
                                 <ContactGroupIcon name={Name} color={Color} /> {Name}
                             </span>
                         </div>,
-                        c('Info').ngettext(msgid`${countMembers} member`, `${countMembers} members`, countMembers),
+                        c('Info').ngettext(
+                            msgid`${countEmailAddresses} email address`,
+                            `${countEmailAddresses} email addresses`,
+                            countEmailAddresses
+                        ),
                         <DropdownActions key={ID} className="pm-button--small" list={list} />
                     ];
                     return <TableRow key={ID} cells={cells} />;
@@ -103,6 +108,7 @@ const ContactGroupsModal = (props) => {
 
     return (
         <FormModal title={c('Title').t`Manage groups`} close={c('Action').t`Close`} hasSubmit={false} {...props}>
+            <Alert>{c('Info').t`A group can contain multiple email addresses from the same contact.`}</Alert>
             <div className="mb1">
                 <PrimaryButton onClick={handleCreate}>{c('Action').t`Add group`}</PrimaryButton>
             </div>
