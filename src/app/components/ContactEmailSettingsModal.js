@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FormModal, Alert, Row, Label, Field, Info, LinkButton, useApi, useMailSettings } from 'react-components';
+import {
+    FormModal,
+    Alert,
+    Row,
+    Label,
+    Field,
+    Info,
+    LinkButton,
+    useApi,
+    useMailSettings,
+    useUser,
+    useUserKeys,
+    useNotifications
+} from 'react-components';
 import { binaryStringToArray, decodeBase64, encodeBase64, arrayToBinaryString } from 'pmcrypto';
 import { c } from 'ttag';
 import { getKeys } from 'pmcrypto';
@@ -12,6 +25,8 @@ import ContactMIMETypeSelect from './ContactMIMETypeSelect';
 import { isInternalUser, isDisabledUser, getRawInternalKeys, allKeysExpired } from '../helpers/pgp';
 import { VCARD_KEY_FIELDS } from '../constants';
 import ContactPgpSettings from './ContactPgpSettings';
+import { prepareContacts } from '../helpers/encrypt';
+import { addContacts } from 'proton-shared/lib/api/contacts';
 
 const { SEND_PGP_INLINE, SEND_PGP_MIME } = PACKAGE_TYPE;
 const { TYPE_NO_RECEIVE } = RECIPIENT_TYPE;
@@ -23,12 +38,17 @@ const PGP_MAP = {
     [SEND_PGP_MIME]: 'pgp-mime'
 };
 
-const ContactEmailSettingsModal = ({ properties, contactEmail, ...rest }) => {
+const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...rest }) => {
     const { Email } = contactEmail;
-    const [{ Sign }] = useMailSettings(); // MailSettings model needs to be loaded
+    const [loading, setLoading] = useState(false);
+    const { createNotification } = useNotifications();
+    const emailProperty = properties.find(({ value }) => value === Email);
+    const { group: emailGroup } = emailProperty;
     const api = useApi();
+    const [user] = useUser();
+    const [userKeysList, loadingUserKeys] = useUserKeys(user);
     const [model, setModel] = useState({});
-    const [{ PGPScheme }] = useMailSettings();
+    const [{ PGPScheme, Sign }, loadingMailSettings] = useMailSettings(); // NOTE MailSettings model needs to be loaded
 
     const hasSheme = (scheme) => {
         if (!model.scheme) {
@@ -45,6 +65,7 @@ const ContactEmailSettingsModal = ({ properties, contactEmail, ...rest }) => {
      */
     const getKeysFromApi = async (Email) => {
         try {
+            // eslint-disable-next-line no-unused-vars
             const { Code, ...data } = await api(getPublicKeys({ Email }));
             return data;
         } catch (error) {
@@ -63,7 +84,6 @@ const ContactEmailSettingsModal = ({ properties, contactEmail, ...rest }) => {
     };
 
     const prepare = async () => {
-        const emailProperty = properties.find(({ value }) => value === Email);
         const { contactKeys, mimeType, encrypt, scheme, sign } = properties
             .filter(({ field, group }) => VCARD_KEY_FIELDS.includes(field) && group === emailProperty.group)
             .reduce(
@@ -143,16 +163,65 @@ const ContactEmailSettingsModal = ({ properties, contactEmail, ...rest }) => {
         });
     };
 
-    const handleSubmit = () => {};
+    const getKeysProperties = async (group) => {
+        const toKeyProperty = (value, index) => ({ field: 'key', value, group, pref: `${index + 1}` });
+
+        if (model.isPGPExternal) {
+            return model.keys.map(toKeyProperty);
+        }
+
+        const keysMap = await Promise.all(
+            model.keys.map(async (key) => {
+                const [publicKey] = await getKeys(key);
+                return {
+                    key,
+                    fingerprint: publicKey.getFingerprint()
+                };
+            })
+        );
+
+        return keysMap
+            .filter(({ fingerprint }) => model.trusted.includes(fingerprint))
+            .map(({ key }, index) => toKeyProperty(key, index));
+    };
+
+    const handleSubmit = async () => {
+        const otherProperties = properties.filter((acc, { field, group }) => {
+            return !VCARD_KEY_FIELDS.includes(field) || (group && group !== emailProperty.group);
+        });
+        const emailProperties = [
+            emailProperty,
+            model.encrypt && { field: 'x-pm-encrypt', value: 'true', group: emailGroup },
+            model.sign && { field: 'x-pm-sign', value: 'true', group: emailGroup },
+            model.mimeType && { field: 'x-pm-mimetype', value: model.mimeType, group: emailGroup },
+            model.scheme && { field: 'x-pm-scheme', value: model.scheme, group: emailGroup },
+            ...(await getKeysProperties())
+        ].filter(Boolean);
+        const Contacts = await prepareContacts([otherProperties.concat(emailProperties)], userKeysList[0]);
+        await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: 0 }));
+        rest.onClose();
+        createNotification({ text: c('Success').t`Preferences saved` });
+    };
 
     useEffect(() => {
-        prepare();
-    }, []);
+        if (!loadingMailSettings && !loadingUserKeys) {
+            setLoading(true);
+            prepare()
+                .then(() => setLoading(false))
+                .catch(() => setLoading(false));
+        }
+    }, [loadingMailSettings, loadingUserKeys]);
 
     return (
         <FormModal
+            loading={loading || loadingMailSettings || loadingUserKeys}
             submit={c('Action').t`Save`}
-            onSubmit={handleSubmit}
+            onSubmit={() => {
+                setLoading(true);
+                handleSubmit()
+                    .then(() => setLoading(false))
+                    .catch(() => setLoading(false));
+            }}
             title={c('Title').t`Email settings (${contactEmail.Email})`}
             {...rest}
         >
@@ -188,6 +257,7 @@ const ContactEmailSettingsModal = ({ properties, contactEmail, ...rest }) => {
 };
 
 ContactEmailSettingsModal.propTypes = {
+    contactID: PropTypes.string,
     properties: PropTypes.array,
     contactEmail: PropTypes.object.isRequired
 };

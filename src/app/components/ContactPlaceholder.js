@@ -33,7 +33,8 @@ const PaidCards = ({ contactGroupID }) => {
                     <div className="bold">{c('Title').t`Import contacts`}</div>
                     <p>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at tristique mauris, non
-                        eleifend orci.
+                        eleifend orci. Etiam pharetra consequat tristique. Sed tristique ipsum quis suscipit
+                        ullamcorper.
                     </p>
                     <PrimaryButton onClick={handleImport}>{c('Action').t`Import`}</PrimaryButton>
                 </div>
@@ -44,7 +45,8 @@ const PaidCards = ({ contactGroupID }) => {
                     <div className="bold">{c('Title').t`Export contacts`}</div>
                     <p>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at tristique mauris, non
-                        eleifend orci.
+                        eleifend orci. Etiam pharetra consequat tristique. Sed tristique ipsum quis suscipit
+                        ullamcorper.
                     </p>
                     <PrimaryButton onClick={handleExport}>{c('Action').t`Export`}</PrimaryButton>
                 </div>
@@ -55,7 +57,8 @@ const PaidCards = ({ contactGroupID }) => {
                     <div className="bold">{c('Title').t`Contacts settings`}</div>
                     <p>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at tristique mauris, non
-                        eleifend orci.
+                        eleifend orci. Etiam pharetra consequat tristique. Sed tristique ipsum quis suscipit
+                        ullamcorper.
                     </p>
                     <PrimaryButton onClick={handleGroups}>{c('Action').t`Groups`}</PrimaryButton>
                 </div>
