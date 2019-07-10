@@ -9,7 +9,8 @@ import {
     useUser,
     useUserKeys,
     useApi,
-    useNotifications
+    useNotifications,
+    useEventManager
 } from 'react-components';
 import { clearContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 
@@ -21,6 +22,7 @@ import ContactToolbar from '../components/ContactToolbar';
 const ContactsContainer = ({ location }) => {
     const api = useApi();
     const { createNotification } = useNotifications();
+    const { call } = useEventManager();
     const params = new URLSearchParams(location.search);
     const contactGroupID = params.get('contactGroupID');
     const [checkAll, setCheckAll] = useState(false);
@@ -47,6 +49,7 @@ const ContactsContainer = ({ location }) => {
 
     const handleDelete = async () => {
         await api(checkAll ? clearContacts : deleteContacts(getCheckedContactIDs()));
+        await call();
         setCheckedContacts(Object.create(null));
         setCheckAll(false);
         createNotification({ text: c('Success').t`Contacts deleted` });
