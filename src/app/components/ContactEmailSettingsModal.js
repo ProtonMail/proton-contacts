@@ -14,7 +14,7 @@ import {
     useUserKeys,
     useNotifications
 } from 'react-components';
-import { binaryStringToArray, decodeBase64, encodeBase64, arrayToBinaryString } from 'pmcrypto';
+import { binaryStringToArray, decodeBase64 } from 'pmcrypto';
 import { c } from 'ttag';
 import { getKeys } from 'pmcrypto';
 import { RECIPIENT_TYPE, PACKAGE_TYPE } from 'proton-shared/lib/constants';
@@ -23,7 +23,7 @@ import { getPublicKeys } from 'proton-shared/lib/api/keys';
 import { noop } from 'proton-shared/lib/helpers/function';
 
 import ContactMIMETypeSelect from './ContactMIMETypeSelect';
-import { isInternalUser, isDisabledUser, getRawInternalKeys, allKeysExpired } from '../helpers/pgp';
+import { isInternalUser, isDisabledUser, getRawInternalKeys, allKeysExpired, hasNoPrimary } from '../helpers/pgp';
 import { VCARD_KEY_FIELDS } from '../constants';
 import ContactPgpSettings from './ContactPgpSettings';
 import { prepareContacts } from '../helpers/encrypt';
@@ -151,11 +151,6 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
             getRawInternalKeys(config),
             allKeysExpired(contactKeys)
         ]);
-        const noPrimary =
-            unarmoredKeys.length &&
-            !unarmoredKeys.some((k) =>
-                contactKeys.map((publicKey) => encodeBase64(arrayToBinaryString(publicKey.armor()))).includes(k)
-            );
 
         const trusted = internalUser ? contactKeys.map((publicKey) => publicKey.getFingerprint()) : [];
         setModel({
@@ -169,7 +164,7 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
             isPGPExternal: externalUser,
             isPGPInternal: internalUser,
             pgpAddressDisabled: isDisabledUser(config),
-            noPrimary,
+            noPrimary: hasNoPrimary(unarmoredKeys, contactKeys),
             keysExpired,
             isPGPInline: externalUser && hasSheme('pgp-inline'),
             isPGPMime: externalUser && hasSheme('pgp-mime')

@@ -108,7 +108,7 @@ export const parse = (vcard = '') => {
             return acc;
         }, [])
         .sort((firstEl, secondEl) => {
-            // NOTE Mutation
+            // WARNING `sort` is mutating the new array returned by reduce
             return firstEl.pref <= secondEl.pref;
         });
 };

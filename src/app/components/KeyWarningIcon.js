@@ -10,11 +10,8 @@ const KeyWarningIcon = ({ publicKey, isRevoked, isExpired, email, ...rest }) => 
     const assignedEmails = emailMismatch(publicKey, email); // Returns Boolean|Array<String>
 
     if (assignedEmails) {
-        return (
-            <Tooltip title={c('PGP key warning').t`This key is assigned to ${assignedEmails.join(', ')}`}>
-                {icon}
-            </Tooltip>
-        );
+        const emails = assignedEmails.join(', ');
+        return <Tooltip title={c('PGP key warning').t`This key is assigned to ${emails}`}>{icon}</Tooltip>;
     }
 
     if (isRevoked) {

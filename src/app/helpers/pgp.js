@@ -17,7 +17,7 @@ export const isInternalUser = ({ RecipientType }) => RecipientType === TYPE_INTE
  * @returns {Boolean}
  */
 export const isDisabledUser = (config) =>
-    isInternalUser(config) && config.Keys.every(({ Flags }) => !(Flags & ENABLE_ENCRYPTION));
+    isInternalUser(config) && config.Keys.some(({ Flags }) => Flags & ENABLE_ENCRYPTION);
 
 export const getRawInternalKeys = ({ Keys = [] }) => {
     return Promise.all(
@@ -52,21 +52,28 @@ export const allKeysExpired = async (keys = []) => {
  * @returns {Boolean|Array<String>} emails
  */
 export const emailMismatch = ({ users = [] }, currentEmail) => {
-    const keyEmails = users
-        .map(({ userId = {} }) => {
-            if (!userId || !userId.userid) {
-                // userId can be set to null
-                return false;
-            }
-            // we don't normalize anything here because enigmail / pgp also doesn't normalize it.
-            const [, email = userId.userid] = /<([^>]*)>/.exec(userId.userid);
-            return email;
-        })
-        .filter(Boolean);
+    const keyEmails = users.reduce((acc, { userId = {} } = {}) => {
+        if (!userId || !userId.userid) {
+            // userId can be set to null
+            return acc;
+        }
+        // we don't normalize anything here because enigmail / pgp also doesn't normalize it.
+        const [, email = userId.userid] = /<([^>]*)>/.exec(userId.userid);
+        acc.push(email);
+        return acc;
+    }, []);
 
     if (keyEmails.includes(currentEmail)) {
         return false;
     }
 
     return keyEmails;
+};
+
+export const hasNoPrimary = (unarmoredKeys = [], contactKeys = []) => {
+    if (!unarmoredKeys.length) {
+        return false;
+    }
+    const keys = contactKeys.map((value) => encodeBase64(arrayToBinaryString(value)));
+    return !unarmoredKeys.some((k) => keys.includes(k));
 };
