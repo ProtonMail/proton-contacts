@@ -7,10 +7,10 @@ import ContactGroupDropdown from './ContactGroupDropdown';
 const ContactToolbar = ({ onCheck, onDelete, checked, checkedContacts }) => {
     const [contactEmails] = useContactEmails();
     const handleCheck = ({ target }) => onCheck(target.checked);
-    const contactEmailsSelected = Object.entries(checkedContacts).reduce((acc, [contactID, isChecked]) => {
-        if (isChecked) {
-            acc.push(...contactEmails.filter(({ ContactID }) => ContactID === contactID));
-        }
+    const contactEntries = Object.entries(checkedContacts).filter(([, isChecked]) => isChecked);
+
+    const contactEmailsSelected = contactEntries.reduce((acc, [contactID]) => {
+        acc.push(...contactEmails.filter(({ ContactID }) => ContactID === contactID));
         return acc;
     }, []);
 
@@ -18,7 +18,7 @@ const ContactToolbar = ({ onCheck, onDelete, checked, checkedContacts }) => {
         <div className="toolbar flex noprint">
             <Checkbox className="flex pl1 pr1" checked={checked} onChange={handleCheck} />
             <button
-                disabled={!contactEmailsSelected.length}
+                disabled={!contactEntries.length}
                 type="button"
                 title={c('Tooltip').t`Delete`}
                 className="pl1 pr1"
