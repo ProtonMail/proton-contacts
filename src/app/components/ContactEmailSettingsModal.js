@@ -20,6 +20,7 @@ import { getKeys } from 'pmcrypto';
 import { RECIPIENT_TYPE, PACKAGE_TYPE } from 'proton-shared/lib/constants';
 import { API_CUSTOM_ERROR_CODES } from 'proton-shared/lib/errors';
 import { getPublicKeys } from 'proton-shared/lib/api/keys';
+import { noop } from 'proton-shared/lib/helpers/function';
 
 import ContactMIMETypeSelect from './ContactMIMETypeSelect';
 import { isInternalUser, isDisabledUser, getRawInternalKeys, allKeysExpired } from '../helpers/pgp';
@@ -50,6 +51,11 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
     const [model, setModel] = useState({});
     const [{ PGPScheme, Sign }, loadingMailSettings] = useMailSettings(); // NOTE MailSettings model needs to be loaded
 
+    /**
+     * Detect current scheme
+     * @param {String} scheme
+     * @returns {Boolean}
+     */
     const hasSheme = (scheme) => {
         if (!model.scheme) {
             return PGP_MAP[PGPScheme] === scheme;
@@ -83,17 +89,24 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
         }
     };
 
+    /**
+     * Initialize the model for the modal
+     * @returns {Promise}
+     */
     const prepare = async () => {
-        const { contactKeys, mimeType, encrypt, scheme, sign } = properties
+        const { contactKeyPromises, mimeType, encrypt, scheme, sign } = properties
             .filter(({ field, group }) => VCARD_KEY_FIELDS.includes(field) && group === emailProperty.group)
             .reduce(
                 (acc, { field, value }) => {
                     if (field === 'key' && value) {
                         const [, base64 = ''] = value.split(',');
-                        const data = binaryStringToArray(decodeBase64(base64));
+                        const key = binaryStringToArray(decodeBase64(base64));
 
-                        if (data.length) {
-                            acc.contactKeys.push(data);
+                        if (key.length) {
+                            const promise = getKeys(key)
+                                .then(([publicKey]) => publicKey)
+                                .catch(noop);
+                            acc.contactKeyPromises.push(promise);
                         }
 
                         return acc;
@@ -121,12 +134,19 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
 
                     return acc;
                 },
-                { contactKeys: [], mimeType: '', encrypt: false, scheme: '', sign: Sign === 1 } // Default values
+                { contactKeyPromises: [], mimeType: '', encrypt: false, scheme: '', sign: Sign === 1 } // Default values
             );
+        const contactKeys = (await Promise.all(contactKeyPromises)).filter(Boolean);
         const config = await getKeysFromApi(contactEmail.Email);
         const internalUser = isInternalUser(config);
         const externalUser = !internalUser;
-        const apiKeys = config.Keys.map(({ PublicKey }) => PublicKey);
+        const apiKeys = (await Promise.all(
+            config.Keys.map(({ PublicKey }) =>
+                getKeys(PublicKey)
+                    .then(([publicKey]) => publicKey)
+                    .catch(noop)
+            )
+        )).filter(Boolean);
         const [unarmoredKeys, keysExpired] = await Promise.all([
             getRawInternalKeys(config),
             allKeysExpired(contactKeys)
@@ -134,17 +154,10 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
         const noPrimary =
             unarmoredKeys.length &&
             !unarmoredKeys.some((k) =>
-                contactKeys.map((value) => encodeBase64(arrayToBinaryString(value))).includes(k)
+                contactKeys.map((publicKey) => encodeBase64(arrayToBinaryString(publicKey.armor()))).includes(k)
             );
 
-        const trusted = internalUser
-            ? await Promise.all(
-                  contactKeys.map(async (key) => {
-                      const [publicKey] = await getKeys(key);
-                      return publicKey.getFingerprint();
-                  })
-              )
-            : [];
+        const trusted = internalUser ? contactKeys.map((publicKey) => publicKey.getFingerprint()) : [];
         setModel({
             mimeType,
             encrypt,
@@ -163,31 +176,33 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
         });
     };
 
-    const getKeysProperties = async (group) => {
-        const toKeyProperty = (value, index) => ({ field: 'key', value, group, pref: `${index + 1}` });
+    /**
+     * Collect keys from the model to save
+     * @param {String} group attach to the current email address
+     * @returns {Array} key properties to save in the vCard
+     */
+    const getKeysProperties = (group) => {
+        const toKeyProperty = (publicKey, index) => ({
+            field: 'key',
+            value: publicKey.armor(),
+            group,
+            pref: `${index + 1}`
+        });
 
         if (model.isPGPExternal) {
             return model.keys.map(toKeyProperty);
         }
 
-        const keys = await Promise.all(
-            model.keys.map(async (key) => {
-                const [publicKey] = await getKeys(key);
-                return {
-                    key,
-                    fingerprint: publicKey.getFingerprint()
-                };
-            })
-        );
-
-        return keys
-            .filter(({ fingerprint }) => model.trusted.includes(fingerprint))
-            .map(({ key }, index) => toKeyProperty(key, index));
+        return model.keys.filter((publicKey) => model.trusted.includes(publicKey.getFingerprint())).map(toKeyProperty);
     };
 
+    /**
+     * Save send preferences
+     * @returns {Promise}
+     */
     const handleSubmit = async () => {
         const otherProperties = properties.filter((acc, { field, group }) => {
-            return !VCARD_KEY_FIELDS.includes(field) || (group && group !== emailProperty.group);
+            return !VCARD_KEY_FIELDS.includes(field) || (group && group !== emailGroup);
         });
         const emailProperties = [
             emailProperty,
@@ -195,7 +210,7 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
             model.isPGPExternal && model.encrypt && { field: 'x-pm-encrypt', value: 'true', group: emailGroup },
             model.isPGPExternal && model.sign && { field: 'x-pm-sign', value: 'true', group: emailGroup },
             model.isPGPExternal && model.scheme && { field: 'x-pm-scheme', value: model.scheme, group: emailGroup },
-            ...(await getKeysProperties(emailGroup)) // [{ field: 'key' }, ]
+            ...getKeysProperties(emailGroup) // [{ field: 'key' }, ]
         ].filter(Boolean);
         const Contacts = await prepareContacts([otherProperties.concat(emailProperties)], userKeysList[0]);
         await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: 0 }));

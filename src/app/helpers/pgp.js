@@ -1,5 +1,5 @@
 import { RECIPIENT_TYPE, KEY_FLAGS } from 'proton-shared/lib/constants';
-import { arrayToBinaryString, encodeBase64, getKeys, isExpiredKey, stripArmor } from 'pmcrypto';
+import { arrayToBinaryString, encodeBase64, isExpiredKey, stripArmor } from 'pmcrypto';
 
 const { TYPE_INTERNAL } = RECIPIENT_TYPE;
 const { ENABLE_ENCRYPTION } = KEY_FLAGS;
@@ -39,8 +39,7 @@ export const allKeysExpired = async (keys = []) => {
         return false;
     }
 
-    const keyObjects = keys.filter((a) => a.length).map((a) => getKeys(a).then(([k]) => isExpiredKey(k)));
-
+    const keyObjects = keys.map((publicKey) => isExpiredKey(publicKey));
     const isExpired = await Promise.all(keyObjects);
 
     return isExpired.every((keyExpired) => keyExpired);

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { move } from 'proton-shared/lib/helpers/array';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { getKeys } from 'pmcrypto';
 import { serverTime } from 'pmcrypto/lib/serverTime';
 import moment from 'moment';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
@@ -21,11 +20,13 @@ const ContactKeysTable = ({ model, setModel }) => {
         c('Table header').t`Actions`
     ];
 
+    /**
+     * Extract keys info from model.keys to define table body
+     */
     const parse = async () => {
         const parsedKeys = await Promise.all(
-            model.keys.map(async (key, index) => {
+            model.keys.map(async (publicKey, index) => {
                 try {
-                    const [publicKey] = await getKeys(key);
                     const date = +serverTime();
                     const creationTime = publicKey.getCreationTime();
                     const expirationTime = publicKey.getExpirationTime('encrypt');

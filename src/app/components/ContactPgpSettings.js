@@ -9,6 +9,10 @@ import ContactKeysTable from './ContactKeysTable';
 const ContactPgpSettings = ({ model, setModel }) => {
     const { createNotification } = useNotifications();
 
+    /**
+     * Add / update keys to model
+     * @param {Array<PublicKey>} files
+     */
     const handleUploadKeys = (files) => {
         if (!files.length) {
             return createNotification({
@@ -17,13 +21,33 @@ const ContactPgpSettings = ({ model, setModel }) => {
             });
         }
 
-        setModel({
-            ...model,
-            keys: [
-                ...model.keys,
-                ...files.map((publicKey) => publicKey.armor()) // TODO update existing key if same fingerprint
-            ]
-        });
+        // Update existing keys by looking on the fingerprint
+        // And add new one
+        const existingFingerprints = model.keys((publicKey) => publicKey.getFingerprint());
+        const { toAdd, toUpdate } = files.reduce(
+            (acc, publicKey) => {
+                const fingerprint = publicKey.getFingerprint();
+
+                if (existingFingerprints.includes(fingerprint)) {
+                    acc.toUpdate.push(publicKey);
+                    return acc;
+                }
+
+                acc.toAdd.push(publicKey);
+                return acc;
+            },
+            { toAdd: [], toUpdate: [] }
+        );
+
+        const keys = model.keys
+            .map((publicKey) => {
+                const fingerprint = publicKey.getFingerprint();
+                const found = toUpdate.find((publicKey) => publicKey.getFingerprint() === fingerprint);
+                return found ? found : publicKey;
+            })
+            .concat(toAdd);
+
+        setModel({ ...model, keys });
     };
 
     return (
