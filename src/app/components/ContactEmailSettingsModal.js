@@ -191,10 +191,10 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
         });
         const emailProperties = [
             emailProperty,
-            model.encrypt && { field: 'x-pm-encrypt', value: 'true', group: emailGroup },
-            model.sign && { field: 'x-pm-sign', value: 'true', group: emailGroup },
             model.mimeType && { field: 'x-pm-mimetype', value: model.mimeType, group: emailGroup },
-            model.scheme && { field: 'x-pm-scheme', value: model.scheme, group: emailGroup },
+            model.isPGPExternal && model.encrypt && { field: 'x-pm-encrypt', value: 'true', group: emailGroup },
+            model.isPGPExternal && model.sign && { field: 'x-pm-sign', value: 'true', group: emailGroup },
+            model.isPGPExternal && model.scheme && { field: 'x-pm-scheme', value: model.scheme, group: emailGroup },
             ...(await getKeysProperties(emailGroup)) // [{ field: 'key' }, ]
         ].filter(Boolean);
         const Contacts = await prepareContacts([otherProperties.concat(emailProperties)], userKeysList[0]);
@@ -238,7 +238,7 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
                 </Label>
                 <Field>
                     <ContactMIMETypeSelect
-                        disabled={model.encrypt || model.sign}
+                        disabled={model.isPGPExternal && (model.encrypt || model.sign)}
                         value={model.mimeType}
                         onChange={(mimeType) => setModel({ ...model, mimeType })}
                     />

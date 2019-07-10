@@ -50,7 +50,7 @@ export const allKeysExpired = async (keys = []) => {
  * Check if current email mismatch with email define in key data
  * @param {Array} key.users
  * @param {String} currentEmail
- * @returns {Boolean|String} emails
+ * @returns {Boolean|Array<String>} emails
  */
 export const emailMismatch = ({ users = [] }, currentEmail) => {
     const keyEmails = users
