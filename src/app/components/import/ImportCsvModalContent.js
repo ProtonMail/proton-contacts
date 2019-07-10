@@ -6,7 +6,7 @@ import { Table, TableBody, Alert } from 'react-components';
 import ImportCsvTableHeader from './ImportCsvTableHeader';
 import ImportCsvTableRow from './ImportCsvTableRow';
 
-import { getCsvData, parseCsvData } from '../../helpers/csv';
+import { getCsvData, prepareCsvData } from '../../helpers/csv';
 import { modifyContactField, modifyContactType } from '../../helpers/import';
 
 const ImportCsvModalContent = ({ file, parsedContacts, keepHeaders, onSetParsedContacts, onSetKeepHeaders }) => {
@@ -28,19 +28,21 @@ const ImportCsvModalContent = ({ file, parsedContacts, keepHeaders, onSetParsedC
                 contact.map((property, i) => (fieldIndex === i ? modifyContactField(property, newField) : property))
             )
         );
+
     const handleChangeType = (fieldIndex) => (newType) =>
         onSetParsedContacts((parsedContacts) =>
             parsedContacts.map((contact) =>
                 contact.map((property, i) => (fieldIndex === i ? modifyContactType(property, newType) : property))
             )
         );
+
     useEffect(() => {
         const parseFile = async () => {
-            const csvData = await getCsvData(file);
-            setHeaders(csvData.headers);
-            setCsvContacts(csvData.contacts);
-            onSetParsedContacts(parseCsvData({ headers: csvData.headers, contacts: csvData.contacts }));
-            onSetKeepHeaders(csvData.headers.map((header) => true));
+            const { headers = [], preVcardContacts = [] } = prepareCsvData(await getCsvData(file));
+            setHeaders(headers);
+            setCsvContacts(preVcardContacts.map((contact) => contact.map((property) => property.value)));
+            onSetParsedContacts(preVcardContacts);
+            onSetKeepHeaders(headers.map((header) => true));
             setIsReadingFile(false);
         };
 

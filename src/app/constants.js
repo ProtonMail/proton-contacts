@@ -41,7 +41,8 @@ export const IMPORT_STEPS = {
     ATTACHING: 1,
     ATTACHED: 2,
     CHECKING_CSV: 3,
-    IMPORTING: 4
+    IMPORTING: 4,
+    IMPORT_GROUPS: 5
 };
 
 export const CUSTOMIZABLE_VCARD_FIELDS = [
@@ -82,16 +83,16 @@ export const CUSTOMIZABLE_VCARD_FIELDS = [
 
 export const CUSTOMIZABLE_VCARD_TYPES = {
     // the empty string denotes no type available
-    fn: ['given', 'yomi'],
+    fn: ['Given'],
     n: [''],
     nickname: [''],
     photo: [''],
     bday: [''],
     anniversary: [''],
     gender: [''],
-    adr: [''],
-    tel: ['home', 'mobile', 'work'],
-    email: ['home', 'work'],
+    adr: ['Home', 'Work', 'Other'],
+    tel: ['Phone', 'Home', 'Work', 'Other', 'Mobile', 'Main', 'Fax'],
+    email: ['Home', 'Work', 'Other'],
     impp: [''],
     lang: [''],
     tz: [''],

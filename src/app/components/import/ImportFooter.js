@@ -5,11 +5,12 @@ import { ResetButton, PrimaryButton } from 'react-components';
 
 import { IMPORT_STEPS } from '../../constants';
 
-const { ATTACHING, CHECKING_CSV, IMPORTING } = IMPORT_STEPS;
+const { ATTACHING, CHECKING_CSV, IMPORTING, IMPORT_GROUPS } = IMPORT_STEPS;
 
 const ImportFooter = ({ step, loading }) => {
     const hasResetButton = step !== IMPORTING;
     const hasImportButton = step <= CHECKING_CSV;
+    const hasCreateButton = step === IMPORT_GROUPS;
 
     return (
         <>
@@ -18,10 +19,12 @@ const ImportFooter = ({ step, loading }) => {
                 <PrimaryButton disabled={step === ATTACHING} type="submit">
                     {c('Action').t`Import`}
                 </PrimaryButton>
-            ) : (
+            ) : !hasCreateButton ? (
                 <PrimaryButton loading={loading} type="submit">
-                    {c('Action').t`Close`}
+                    {c('Action').t`Next`}
                 </PrimaryButton>
+            ) : (
+                <PrimaryButton type="submit">{c('Action').t`Create`}</PrimaryButton>
             )}
         </>
     );
