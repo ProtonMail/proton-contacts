@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { c } from 'ttag';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Loader, useContactEmails, useContacts, useUser, useUserKeys } from 'react-components';
+import {
+    Loader,
+    useContactEmails,
+    useContacts,
+    useUser,
+    useUserKeys,
+    useApi,
+    useNotifications
+} from 'react-components';
+import { clearContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 
 import ContactsList from '../components/ContactsList';
 import Contact from '../components/Contact';
@@ -9,6 +19,8 @@ import ContactPlaceholder from '../components/ContactPlaceholder';
 import ContactToolbar from '../components/ContactToolbar';
 
 const ContactsContainer = ({ location }) => {
+    const api = useApi();
+    const { createNotification } = useNotifications();
     const params = new URLSearchParams(location.search);
     const contactGroupID = params.get('contactGroupID');
     const [checkAll, setCheckAll] = useState(false);
@@ -23,7 +35,22 @@ const ContactsContainer = ({ location }) => {
         return <Loader />;
     }
 
-    const handleDelete = () => {};
+    const getCheckedContactIDs = () => {
+        return Object.entries(checkedContacts).reduce((acc, [contactID, isChecked]) => {
+            if (!isChecked) {
+                return acc;
+            }
+            acc.push(contactID);
+            return acc;
+        }, []);
+    };
+
+    const handleDelete = async () => {
+        await api(checkAll ? clearContacts : deleteContacts(getCheckedContactIDs()));
+        setCheckedContacts(Object.create(null));
+        setCheckAll(false);
+        createNotification({ text: c('Success').t`Contacts deleted` });
+    };
 
     const handleCheckAll = (checked = false) => handleCheck(contacts.map(({ ID }) => ID), checked);
     const handleUncheckAll = () => handleCheckAll(false);
