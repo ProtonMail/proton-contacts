@@ -11,7 +11,7 @@ const ImportCsvTableHeader = ({ disabledPrevious, disabledNext, onPrevious, onNe
                     {c('TableHeader').t`IMPORT`}
                 </TableCell>
                 <TableCell type="header">{c('TableHeader').t`CSV FIELD`}</TableCell>
-                <TableCell type="header">{c('TableHeader').t`VCF FIELD`}</TableCell>
+                <TableCell type="header">{c('TableHeader').t`VCARD FIELD`}</TableCell>
                 <TableCell type="header">
                     <span className="mr0-5">{c('TableHeader').t`VALUES`}</span>
                     <span>

@@ -7,6 +7,7 @@ import ImportFooter from './ImportFooter';
 import AttachingModalContent from './AttachingModalContent';
 import ImportCsvModalContent from './ImportCsvModalContent';
 import ImportingModalContent from './ImportingModalContent';
+import ImportGroupsModalContent from './ImportGroupsModalContent';
 
 import { noop } from 'proton-shared/lib/helpers/function';
 import { addContacts } from 'proton-shared/lib/api/contacts';
@@ -15,13 +16,14 @@ import { extractVcards, parse as parseVcard } from '../../helpers/vcard';
 import { prepareVcard } from '../../helpers/decrypt';
 import { IMPORT_STEPS } from '../../constants';
 
-const { ATTACHING, ATTACHED, CHECKING_CSV, IMPORTING } = IMPORT_STEPS;
+const { ATTACHING, ATTACHED, CHECKING_CSV, IMPORTING, IMPORT_GROUPS } = IMPORT_STEPS;
 
 const getI18nTitle = {
     [ATTACHING]: c('Title').t`Import contacts`,
     [ATTACHED]: c('Title').t`Import contacts`,
     [CHECKING_CSV]: c('Title').t`Import CSV file`,
-    [IMPORTING]: c('Title').t`Importing contacts`
+    [IMPORTING]: c('Title').t`Importing contacts`,
+    [IMPORT_GROUPS]: c(`Title`).t`Import groups`
 };
 
 const ImportModal = ({ onClose, ...rest }) => {
@@ -68,7 +70,8 @@ const ImportModal = ({ onClose, ...rest }) => {
             );
             setStep(IMPORTING);
         },
-        [IMPORTING]: onClose
+        [IMPORTING]: () => setStep(IMPORT_GROUPS),
+        [IMPORT_GROUPS]: onClose
     };
 
     useEffect(() => {
@@ -125,8 +128,15 @@ const ImportModal = ({ onClose, ...rest }) => {
                     onSetParsedContacts={setParsedContacts}
                     onSetKeepHeaders={setKeepHeaders}
                 />
-            ) : (
+            ) : step === IMPORTING ? (
                 <ImportingModalContent
+                    parsedContacts={parsedContacts}
+                    imported={contactsImported.length}
+                    notImported={contactsNotImported.length}
+                    total={totalContacts}
+                />
+            ) : (
+                <ImportGroupsModalContent
                     parsedContacts={parsedContacts}
                     imported={contactsImported.length}
                     notImported={contactsNotImported.length}
