@@ -170,7 +170,7 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
             return model.keys.map(toKeyProperty);
         }
 
-        const keysMap = await Promise.all(
+        const keys = await Promise.all(
             model.keys.map(async (key) => {
                 const [publicKey] = await getKeys(key);
                 return {
@@ -180,7 +180,7 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
             })
         );
 
-        return keysMap
+        return keys
             .filter(({ fingerprint }) => model.trusted.includes(fingerprint))
             .map(({ key }, index) => toKeyProperty(key, index));
     };
@@ -195,7 +195,7 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
             model.sign && { field: 'x-pm-sign', value: 'true', group: emailGroup },
             model.mimeType && { field: 'x-pm-mimetype', value: model.mimeType, group: emailGroup },
             model.scheme && { field: 'x-pm-scheme', value: model.scheme, group: emailGroup },
-            ...(await getKeysProperties())
+            ...(await getKeysProperties(emailGroup)) // [{ field: 'key' }, ]
         ].filter(Boolean);
         const Contacts = await prepareContacts([otherProperties.concat(emailProperties)], userKeysList[0]);
         await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: 0 }));
