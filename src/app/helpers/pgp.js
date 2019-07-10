@@ -42,7 +42,7 @@ export const allKeysExpired = async (keys = []) => {
     const keyObjects = keys.map((publicKey) => isExpiredKey(publicKey));
     const isExpired = await Promise.all(keyObjects);
 
-    return isExpired.every((keyExpired) => keyExpired);
+    return isExpired.some((keyExpired) => !keyExpired);
 };
 
 /**

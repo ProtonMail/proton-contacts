@@ -36,7 +36,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                     const algo = describe(algoInfo);
                     const fingerprint = publicKey.getFingerprint();
                     const isPrimary = !index && !isExpired && model.isPGPExternal;
-                    const isTrusted = model.isPGPInternal && model.trusted.includes(fingerprint);
+                    const isTrusted = model.isPGPInternal && model.trustedFingerprints.includes(fingerprint);
                     return {
                         publicKey,
                         fingerprint,
@@ -95,14 +95,22 @@ const ContactKeysTable = ({ model, setModel }) => {
                                 isTrusted && {
                                     text: c('Action').t`Trust`,
                                     onClick() {
-                                        setModel({ ...model, trusted: [...model.trusted, fingerprint] });
+                                        setModel({
+                                            ...model,
+                                            trustedFingerprints: [...model.trustedFingerprints, fingerprint]
+                                        });
                                     }
                                 },
                             model.isPGPInternal &&
                                 !isTrusted && {
                                     text: c('Action').t`Untrust`,
                                     onClick() {
-                                        setModel({ ...model, trusted: model.trusted.filter((f) => f !== fingerprint) });
+                                        setModel({
+                                            ...model,
+                                            trustedFingerprints: model.trustedFingerprints.filter(
+                                                (f) => f !== fingerprint
+                                            )
+                                        });
                                     }
                                 },
                             model.isPGPExternal && {

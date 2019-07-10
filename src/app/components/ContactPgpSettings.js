@@ -90,7 +90,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         <Info
                             className="ml0-5"
                             title={c('Tooltip')
-                                .t`Email encryption forces email signature to help authentify your sent messages`}
+                                .t`Email encryption forces email signature to help authenticate your sent messages`}
                         />
                     </Label>
                     <Field>
@@ -156,7 +156,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         <Info
                             className="ml0-5"
                             title={c('Tooltip')
-                                .t`Select the PGP scheme to be used when signing or encrypting to an user. Note that PGP/Inline forces plain text messages`}
+                                .t`Select the PGP scheme to be used when signing or encrypting to a user. Note that PGP/Inline forces plain text messages`}
                         />
                     </Label>
                     <Field>

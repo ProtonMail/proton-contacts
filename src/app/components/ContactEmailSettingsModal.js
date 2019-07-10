@@ -33,6 +33,7 @@ const { SEND_PGP_INLINE, SEND_PGP_MIME } = PACKAGE_TYPE;
 const { TYPE_NO_RECEIVE } = RECIPIENT_TYPE;
 const { KEY_GET_ADDRESS_MISSING, KEY_GET_DOMAIN_MISSING_MX, KEY_GET_INPUT_INVALID } = API_CUSTOM_ERROR_CODES;
 const EMAIL_ERRORS = [KEY_GET_ADDRESS_MISSING, KEY_GET_DOMAIN_MISSING_MX, KEY_GET_INPUT_INVALID];
+const SIGN = 1;
 
 const PGP_MAP = {
     [SEND_PGP_INLINE]: 'pgp-inline',
@@ -56,7 +57,7 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
      * @param {String} scheme
      * @returns {Boolean}
      */
-    const hasSheme = (scheme) => {
+    const hasScheme = (scheme) => {
         if (!model.scheme) {
             return PGP_MAP[PGPScheme] === scheme;
         }
@@ -134,10 +135,10 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
 
                     return acc;
                 },
-                { contactKeyPromises: [], mimeType: '', encrypt: false, scheme: '', sign: Sign === 1 } // Default values
+                { contactKeyPromises: [], mimeType: '', encrypt: false, scheme: '', sign: Sign === SIGN } // Default values
             );
         const contactKeys = (await Promise.all(contactKeyPromises)).filter(Boolean);
-        const config = await getKeysFromApi(contactEmail.Email);
+        const config = await getKeysFromApi(Email);
         const internalUser = isInternalUser(config);
         const externalUser = !internalUser;
         const apiKeys = (await Promise.all(
@@ -152,7 +153,7 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
             allKeysExpired(contactKeys)
         ]);
 
-        const trusted = internalUser ? contactKeys.map((publicKey) => publicKey.getFingerprint()) : [];
+        const trustedFingerprints = internalUser ? contactKeys.map((publicKey) => publicKey.getFingerprint()) : [];
         setModel({
             mimeType,
             encrypt,
@@ -160,14 +161,14 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
             sign,
             email: Email,
             keys: internalUser && !contactKeys.length ? apiKeys : contactKeys,
-            trusted,
+            trustedFingerprints,
             isPGPExternal: externalUser,
             isPGPInternal: internalUser,
             pgpAddressDisabled: isDisabledUser(config),
             noPrimary: hasNoPrimary(unarmoredKeys, contactKeys),
             keysExpired,
-            isPGPInline: externalUser && hasSheme('pgp-inline'),
-            isPGPMime: externalUser && hasSheme('pgp-mime')
+            isPGPInline: externalUser && hasScheme('pgp-inline'),
+            isPGPMime: externalUser && hasScheme('pgp-mime')
         });
     };
 
@@ -188,7 +189,9 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
             return model.keys.map(toKeyProperty);
         }
 
-        return model.keys.filter((publicKey) => model.trusted.includes(publicKey.getFingerprint())).map(toKeyProperty);
+        return model.keys
+            .filter((publicKey) => model.trustedFingerprints.includes(publicKey.getFingerprint()))
+            .map(toKeyProperty);
     };
 
     /**
