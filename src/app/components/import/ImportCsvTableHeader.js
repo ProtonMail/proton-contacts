@@ -7,10 +7,10 @@ const ImportCsvTableHeader = ({ disabledPrevious, disabledNext, onPrevious, onNe
     return (
         <thead {...rest}>
             <tr>
-                <TableCell type="header" className="w20">
+                <TableCell type="header" className="w15 aligncenter">
                     {c('TableHeader').t`IMPORT`}
                 </TableCell>
-                <TableCell type="header">{c('TableHeader').t`CSV FIELD`}</TableCell>
+                <TableCell type="header" className="aligncenter">{c('TableHeader').t`CSV FIELD`}</TableCell>
                 <TableCell type="header">{c('TableHeader').t`VCARD FIELD`}</TableCell>
                 <TableCell type="header">
                     <span className="mr0-5">{c('TableHeader').t`VALUES`}</span>

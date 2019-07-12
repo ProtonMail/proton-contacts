@@ -23,14 +23,21 @@ import { prepareContact } from './decrypt';
  *
  * "vCard contact": An array made of vCard properties
  *
- * "pre-vCard property": Because different csv properties correspond to a single vCard property,
+ * "pre-vCard property": Because different csv properties may correspond to a single vCard property,
  *                       to pass from one to the other we go through an intermediate step.
  *                       A pre-vCard property is the JS object:
- *                       { pref, field, group, type, value, group, inGroup }
- *                       The key "group" will be the same for different csv properties that will
+ *                       { header, checked, pref, field, type, value, combineInto, combineIndex, combine }
+ *                       The key "header" equals the csv property.
+ *                       The key "checked" will mark whether we want to include this property into the vCard
+ *                       The key "combineInto" will be the same for different csv properties that will
  *                       assemble into a single vCard property. For this assembly we need to order
- *                       the properties, and that order will be indicated by the key "inGroup"
+ *                       the properties, which will be indicated by the key "combineIndex", and combine
+ *                       them in a certain way indicated by the function "combine", which takes as arguments
+ *                       the csv properties to be assembled
  * "pre-vCard contact": An array made of pre-vCard properties
+ *
+ * "pre-vCards property" An array of pre-vCard properties. These pre-Vcards are to be combined into a single vCard
+ * "pre-vCards contact": An array made of arrays of pre-Vcard properties
  */
 
 /**
@@ -38,14 +45,18 @@ import { prepareContact } from './decrypt';
  * @param {File} file
  * @return {Promise<Object>}         { headers: Array<String>, values: Array<Array<String>> }
  *
- * @dev  headers are automatically converted into lower case
  * @dev  contacts[i][j] : value for property headers[j] of contact i
  */
 const readCsv = (file) => {
     return new Promise((resolve, reject) => {
         const onComplete = ({ data = [] } = {}) => resolve({ headers: data[0], contacts: data.slice(1) });
         Papa.parse(file, {
-            header: false, // If true, the first row of parsed data will be interpreted as field names. An array of field names will be returned in meta, and each row of data will be an object of values keyed by field name instead of a simple array. Rows with a different number of fields from the header row will produce an error.
+            header: false,
+            /*
+                If true, the first row of parsed data will be interpreted as field names. An array of field names will be returned in meta,
+                and each row of data will be an object of values keyed by field name instead of a simple array.
+                Rows with a different number of fields from the header row will produce an error.
+            */
             dynamicTyping: false, // If true, numeric and boolean data will be converted to their type instead of remaining strings.
             complete: onComplete,
             error: reject,
@@ -55,133 +66,196 @@ const readCsv = (file) => {
 };
 
 /**
- * For a list of headers and contacts values extracted from a csv,
+ * For a list of headers and csv contacts extracted from a csv,
  * check if a given header index has the empty value for all contacts
  * @param {Number} index
  * @param {Array<Array<String>>} contacts
+ *
  * @return {Boolean}
  */
-const isEmptyHeaderIndex = (index, contacts) => {
-    return contacts.some((values) => values[index] !== '');
-};
+const isEmptyHeaderIndex = (index, contacts) => !contacts.some((values) => values[index] !== '');
 
 /**
  * Extract (only) non-empty csv properties and contacts values from a csv file
  * @param {File} file
- * @return {Promise<Object>}         { headers: Array<String>, contacts: Array<Array<String>> }
  *
- * @dev  contacts[i][j] : value for property headers[j] of contact i
+ * @return {Promise<Object>}         { headers: Array<String>, contacts: Array<Array<String>> }
  */
 export const getCsvData = async (file) => {
     const { headers, contacts } = await readCsv(file);
-    const indicesToRemove = headers.map((header, i) => isEmptyHeaderIndex(i, contacts));
+    const indicesToKeep = headers.map((header, i) => !isEmptyHeaderIndex(i, contacts));
     return {
-        headers: headers.filter((header, i) => indicesToRemove[i]),
-        contacts: contacts.map((values) => values.filter((value, j) => indicesToRemove[j]))
+        headers: headers.filter((header, i) => indicesToKeep[i]),
+        contacts: contacts.map((values) => values.filter((value, j) => indicesToKeep[j]))
     };
 };
 
 /**
- * Transform prepared csv properties and csv contacts into pre-vCard contacts
+ * Transform csv properties and csv contacts into pre-vCard contacts.
  * @param {Object} csvData
- * @param {Array<String>} csvData.headers           Array of prepared csv properties
+ * @param {Array<String>} csvData.headers           Array of csv properties
  * @param {Array<Array<String>>} csvData.contacts   Array of csv contacts
- * @return {Array<Array<Object>>}                   Array of pre-vCard contacts
  *
- * @dev  contacts[i][j] : value for property headers[j] of contact i
+ * @return {Array<Array<Object>>}                   pre-vCard contacts
+ *
+ * @dev  Some csv property may be assigned to several pre-vCard contacts,
+ *       so an array of new headers is returned together with the pre-vCard contacts
  */
-const preParseCsvData = ({ headers = [], contacts = [] }) => {
+const parse = ({ headers = [], contacts = [] }) => {
     if (contacts.length === 0) {
         return [];
     }
-    const translator = headers.map(toICALPreProperty);
+    const translator = headers.map(toPreVcard);
+    console.log(
+        contacts.map((contact) =>
+            contact.map((header, i) => translator[i](header)).reduce((acc, val) => acc.concat(val), [])
+        )
+        // some headers are mapped to several properties, so we need to flatten
+    );
     return contacts
-        .map((values) => values.map((value, index) => translator[index](value)))
-        .map((properties) => properties.filter((property) => !!property));
+        .map((contact) =>
+            contact
+                .map((header, i) => translator[i](header))
+                // some headers are mapped to several properties, so we need to flatten
+                .reduce((acc, val) => acc.concat(val), [])
+        )
+        .map((contact) => contact.filter((preVcard) => !!preVcard));
 };
 
 /**
- * Transform prepared csv properties and csv contacts into vCard contacts
+ * Transform csv properties and csv contacts into pre-vCard contacts,
+ * re-arranging them in the process
  * @param {Object} csvData
- * @param {Array<String>} csvData.headers           Array of prepared csv properties
+ * @param {Array<String>} csvData.headers           Array of csv properties
  * @param {Array<Array<String>>} csvData.contacts   Array of csv contacts
- * @return {Array<Array<Object>>}                   { headers, preVcardContacts }
  *
- * @dev  contacts[i][j] : value for property headers[j] of contact i
+ * @return {Array<Object>}                          Array of pre-vCard contacts
+ *
+ * @dev  headers are arranged as headers = [[group of headers to be combined in a vCard], ...]
+ *       preVcardContacts is an array of pre-vCard contacts, each of them containing pre-vCards
+ *       arranged in the same way as the headers:
+ *       preVcardContacts = [[[group of pre-vCard properties to be combined], ...], ...]
  */
-export const prepareCsvData = ({ headers = [], contacts = [] }) => {
-    const preVcardContacts = preParseCsvData({ headers, contacts });
+export const prepare = ({ headers = [], contacts = [] }) => {
+    const preVcardContacts = parse({ headers, contacts });
     if (!preVcardContacts.length) {
-        return { headers: [], preVcardContacts: [] };
+        return [];
     }
 
-    // detect groups in preVcardContacts and split header indices
-    const unGroupedIndices = [];
-    const groups = preVcardContacts[0].reduce((acc, { group, inGroup }, i) => {
-        if (group) {
-            if (!acc[group]) {
-                acc[group] = [];
+    // detect csv properties to be combined in preVcardContacts and split header indices
+    const nonCombined = [];
+    const combined = preVcardContacts[0].reduce((acc, { combineInto, combineIndex: j }, i) => {
+        if (combineInto) {
+            if (!acc[combineInto]) {
+                acc[combineInto] = [];
             }
-            // groups = { 'fn-main': [2, 3, 5, 1], 'fn-yomi': [6, 7] }
-            acc[group][inGroup] = i;
+            acc[combineInto][j] = i;
+            // combined will look like e.g.
+            // { 'fn-main': [2, <empty item(s)>, 3, 5, 1], 'fn-yomi': [<empty item(s)>, 6, 7] }
             return acc;
         }
-        unGroupedIndices.push(i);
+        nonCombined.push(i);
         return acc;
     }, {});
-    for (const group of Object.keys(groups)) {
-        groups[group] = groups[group].filter((n) => n !== null);
+
+    for (const combination of Object.keys(combined)) {
+        // remove empty items from arrays in combined
+        combined[combination] = combined[combination].filter((n) => n !== null);
     }
 
-    // re-order headers
-    const reOrderedHeaders = [];
-    const reOrderedContacts = contacts.map((contact) => []);
-    for (const [key, groupIndices] of Object.entries(groups)) {
-        for (const [j, index] of groupIndices.entries()) {
-            reOrderedHeaders.push(headers[index]);
-            reOrderedContacts.forEach((contact, i) =>
-                contact.push({
-                    ...preVcardContacts[i][index],
-                    rowSpan: j === 0 ? groupIndices.length : undefined,
-                    hide: j !== 0
+    // re-order and arrange headers
+    const preparedPreVcardContacts = contacts.map((contact) => []);
+    for (const [i, indices] of Object.values(combined).entries()) {
+        preparedPreVcardContacts.forEach((contact) => contact.push([]));
+        indices.forEach((index) => {
+            preparedPreVcardContacts.forEach((contact, k) =>
+                contact[i].push({
+                    ...preVcardContacts[k][index]
                 })
             );
-        }
+        });
     }
-    for (const index of unGroupedIndices) {
-        reOrderedHeaders.push(headers[index]);
-        reOrderedContacts.forEach((contact, i) => contact.push(preVcardContacts[i][index]));
+    for (const index of nonCombined) {
+        preparedPreVcardContacts.forEach((contact, k) => contact.push([preVcardContacts[k][index]]));
     }
 
-    return { headers: reOrderedHeaders, preVcardContacts: reOrderedContacts };
+    return preparedPreVcardContacts;
 };
 
+const getFirst = (values) => values[0];
+
 /**
- * Given a csv property name, return a function that transforms
- * a value for that property into a pre-vCard property
+ * Given a csv property name (header), return a function that transforms
+ * a value for that property into one or several pre-vCard properties
  * @param {String} CsvProperty
+ *
  * @return {Function}
  */
-export const toICALPreProperty = (CsvProperty) => {
-    const property = CsvProperty.toLowerCase();
+export const toPreVcard = (header) => {
+    const property = header.toLowerCase();
     if (property === 'prefix' || property === 'title') {
-        return (value) => ({ field: 'fn', value, group: 'fn-main', inGroup: 0 });
+        return (value) => [templateFN(header, value, 0), templateN(header, value, 3)];
     }
     if (property === 'first name') {
-        return (value) => ({ field: 'fn', value, group: 'fn-main', inGroup: 1 });
+        return (value) => [templateFN(header, value, 1), templateN(header, value, 1)];
     }
     if (property === 'middle name') {
-        return (value) => ({ field: 'n', value, group: 'fn-main', inGroup: 2 });
+        return (value) => [templateFN(header, value, 2), templateN(header, value, 2)];
     }
     if (property === 'last name') {
-        return (value) => ({ field: 'fn', value, group: 'fn-main', inGroup: 3 });
+        return (value) => [templateFN(header, value, 3), templateN(header, value, 0)];
     }
     if (property === 'suffix') {
-        return (value) => ({ field: 'fn', value, group: 'fn-main', inGroup: 4 });
+        return (value) => [templateFN(header, value, 4), templateN(header, value, 4)];
+    }
+    if (property === 'given yomi') {
+        return (value) => templateFNYomi(header, value, 0);
+    }
+    if (property === 'surname yomi') {
+        return (value) => templateFNYomi(header, value, 1);
     }
     if (property === 'nickname') {
-        return (value) => ({ field: 'nickname', value });
+        return (value) => ({ header, value, check: true, field: 'nickname', combine: getFirst });
     }
     return (value) => null;
     // Brute-force all of them ?
 };
+
+const templateFN = (header, value, index) => ({
+    header,
+    value,
+    checked: true,
+    pref: 0,
+    field: 'fn',
+    type: 'Main',
+    combineInto: 'fn-main',
+    combineIndex: index,
+    combine(values) {
+        return values.join(' ');
+    }
+});
+const templateFNYomi = (header, value, index) => ({
+    header,
+    value,
+    checked: true,
+    pref: 0,
+    field: 'fn',
+    type: 'Yomi',
+    combineInto: 'fn-yomi',
+    combineIndex: index,
+    combine(values) {
+        return values.join(' ');
+    }
+});
+const templateN = (header, value, index) => ({
+    header,
+    value,
+    checked: true,
+    pref: 0,
+    field: 'n',
+    combineInto: 'n',
+    combineIndex: index,
+    combine(values) {
+        return values.filter(Boolean).join('; ');
+    }
+});
