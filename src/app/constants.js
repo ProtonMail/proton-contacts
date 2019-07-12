@@ -83,7 +83,7 @@ export const CUSTOMIZABLE_VCARD_FIELDS = [
 
 export const CUSTOMIZABLE_VCARD_TYPES = {
     // the empty string denotes no type available
-    fn: ['Given'],
+    fn: ['Main', 'Yomi'],
     n: [''],
     nickname: [''],
     photo: [''],

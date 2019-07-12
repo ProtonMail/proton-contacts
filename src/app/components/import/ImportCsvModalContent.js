@@ -1,48 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { Table, TableBody, Alert } from 'react-components';
+import { Table, Alert, Block } from 'react-components';
 
 import ImportCsvTableHeader from './ImportCsvTableHeader';
-import ImportCsvTableRow from './ImportCsvTableRow';
+import ImportCsvTableBody from './ImportCsvTableBody';
 
-import { getCsvData, prepareCsvData } from '../../helpers/csv';
-import { modifyContactField, modifyContactType } from '../../helpers/import';
+import { getCsvData, prepare } from '../../helpers/csv';
+import { modifyContactField, modifyContactType, toggleContactChecked } from '../../helpers/import';
 
-const ImportCsvModalContent = ({ file, parsedContacts, keepHeaders, onSetParsedContacts, onSetKeepHeaders }) => {
+const ImportCsvModalContent = ({ file, parsedContacts, onSetParsedContacts }) => {
     const [isReadingFile, setIsReadingFile] = useState(true);
     const [contactIndex, setContactIndex] = useState(0);
-    const [headers, setHeaders] = useState([]);
-    const [csvContacts, setCsvContacts] = useState([]);
+    const [preVcardsContacts, setpreVcardsContacts] = useState([]);
 
     const handleClickPrevious = () => setContactIndex((index) => index - 1);
     const handleClickNext = () => setContactIndex((index) => index + 1);
 
-    const handleToggleKeepHeader = (index) => {
-        onSetKeepHeaders((headers) => headers.map((bool, j) => (index === j ? !bool : bool)));
-    };
+    const handleToggle = (groupIndex) => (index) =>
+        setpreVcardsContacts(preVcardsContacts.map((contact) => toggleContactChecked(contact, [groupIndex, index])));
 
-    const handleChangeField = (fieldIndex) => (newField) =>
-        onSetParsedContacts((parsedContacts) =>
-            parsedContacts.map((contact) =>
-                contact.map((property, i) => (fieldIndex === i ? modifyContactField(property, newField) : property))
-            )
-        );
+    const handleChangeField = (groupIndex) => (newField) =>
+        setpreVcardsContacts(preVcardsContacts.map((contact) => modifyContactField(contact, groupIndex, newField)));
 
-    const handleChangeType = (fieldIndex) => (newType) =>
-        onSetParsedContacts((parsedContacts) =>
-            parsedContacts.map((contact) =>
-                contact.map((property, i) => (fieldIndex === i ? modifyContactType(property, newType) : property))
-            )
-        );
+    const handleChangeType = (groupIndex) => (newType) =>
+        setpreVcardsContacts(preVcardsContacts.map((contact) => modifyContactType(contact, groupIndex, newType)));
 
     useEffect(() => {
         const parseFile = async () => {
-            const { headers = [], preVcardContacts = [] } = prepareCsvData(await getCsvData(file));
-            setHeaders(headers);
-            setCsvContacts(preVcardContacts.map((contact) => contact.map((property) => property.value)));
-            onSetParsedContacts(preVcardContacts);
-            onSetKeepHeaders(headers.map((header) => true));
+            const preVcardsContacts = prepare(await getCsvData(file));
+            setpreVcardsContacts(preVcardsContacts);
             setIsReadingFile(false);
         };
 
@@ -62,25 +49,21 @@ const ImportCsvModalContent = ({ file, parsedContacts, keepHeaders, onSetParsedC
             <Table>
                 <ImportCsvTableHeader
                     disabledPrevious={isReadingFile || contactIndex === 0}
-                    disabledNext={isReadingFile || contactIndex + 1 === csvContacts.length}
+                    disabledNext={isReadingFile || contactIndex + 1 === preVcardsContacts.length}
                     onNext={handleClickNext}
                     onPrevious={handleClickPrevious}
                 />
-                <TableBody loading={isReadingFile} colSpan={4}>
-                    {headers.map((header, i) => (
-                        <ImportCsvTableRow
-                            key={header}
-                            checked={keepHeaders[i]}
-                            header={header}
-                            property={parsedContacts[contactIndex] && parsedContacts[contactIndex][i]}
-                            value={csvContacts[contactIndex] && csvContacts[contactIndex][i]}
-                            onToggle={() => handleToggleKeepHeader(i)}
-                            onChangeField={handleChangeField(i)}
-                            onChangeType={handleChangeType(i)}
-                        />
-                    ))}
-                </TableBody>
+                <ImportCsvTableBody
+                    loading={isReadingFile}
+                    contact={preVcardsContacts && preVcardsContacts[contactIndex]}
+                    onToggle={handleToggle}
+                    onChangeField={handleChangeField}
+                    onChangeType={handleChangeType}
+                />
             </Table>
+            {!isReadingFile && !preVcardsContacts.length && (
+                <Block className="aligncenter">{c('Info').t`No contacts to be imported`}</Block>
+            )}
         </>
     );
 };
@@ -90,10 +73,7 @@ ImportCsvModalContent.propTypes = {
     parsedContacts: PropTypes.arrayOf(
         PropTypes.arrayOf(PropTypes.shape({ field: PropTypes.string, type: PropTypes.string }))
     ),
-    keepHeaders: PropTypes.arrayOf(PropTypes.bool),
-    onSetParsedContacts: PropTypes.func,
-    onSetKeepHeaders: PropTypes.func,
-    onChangeParsedContacts: PropTypes.func
+    onSetParsedContacts: PropTypes.func
 };
 
 export default ImportCsvModalContent;

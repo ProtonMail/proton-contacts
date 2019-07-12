@@ -36,8 +36,6 @@ const ImportModal = ({ onClose, ...rest }) => {
     const [importFile, setImportFile] = useState(null);
     const [parsedContacts, setParsedContacts] = useState([]);
 
-    const [keepHeaders, setKeepHeaders] = useState([]);
-
     const [totalContacts, setTotalContacts] = useState(0);
     const [contactsImported, addSuccess] = useState([]);
     const [contactsNotImported, addError] = useState([]);
@@ -124,9 +122,7 @@ const ImportModal = ({ onClose, ...rest }) => {
                 <ImportCsvModalContent
                     file={importFile}
                     parsedContacts={parsedContacts}
-                    keepHeaders={keepHeaders}
                     onSetParsedContacts={setParsedContacts}
-                    onSetKeepHeaders={setKeepHeaders}
                 />
             ) : step === IMPORTING ? (
                 <ImportingModalContent
