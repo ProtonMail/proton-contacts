@@ -6,10 +6,10 @@ import { Table, Alert, Block } from 'react-components';
 import ImportCsvTableHeader from './ImportCsvTableHeader';
 import ImportCsvTableBody from './ImportCsvTableBody';
 
-import { getCsvData, prepare } from '../../helpers/csv';
+import { getCsvData, prepare, toVcardContact } from '../../helpers/csv';
 import { modifyContactField, modifyContactType, toggleContactChecked } from '../../helpers/import';
 
-const ImportCsvModalContent = ({ file, parsedContacts, onSetParsedContacts }) => {
+const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
     const [isReadingFile, setIsReadingFile] = useState(true);
     const [contactIndex, setContactIndex] = useState(0);
     const [preVcardsContacts, setpreVcardsContacts] = useState([]);
@@ -36,6 +36,10 @@ const ImportCsvModalContent = ({ file, parsedContacts, onSetParsedContacts }) =>
         parseFile();
     }, []);
 
+    useEffect(() => {
+        onSetVcardContacts(preVcardsContacts.map(toVcardContact));
+    }, [preVcardsContacts]);
+
     return (
         <>
             <Alert>
@@ -49,7 +53,9 @@ const ImportCsvModalContent = ({ file, parsedContacts, onSetParsedContacts }) =>
             <Table>
                 <ImportCsvTableHeader
                     disabledPrevious={isReadingFile || contactIndex === 0}
-                    disabledNext={isReadingFile || contactIndex + 1 === preVcardsContacts.length}
+                    disabledNext={
+                        isReadingFile || preVcardsContacts.length === 0 || contactIndex + 1 === preVcardsContacts.length
+                    }
                     onNext={handleClickNext}
                     onPrevious={handleClickPrevious}
                 />

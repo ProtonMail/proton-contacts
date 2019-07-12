@@ -106,12 +106,6 @@ const parse = ({ headers = [], contacts = [] }) => {
         return [];
     }
     const translator = headers.map(toPreVcard);
-    console.log(
-        contacts.map((contact) =>
-            contact.map((header, i) => translator[i](header)).reduce((acc, val) => acc.concat(val), [])
-        )
-        // some headers are mapped to several properties, so we need to flatten
-    );
     return contacts
         .map((contact) =>
             contact
@@ -219,6 +213,20 @@ export const toPreVcard = (header) => {
     }
     return (value) => null;
     // Brute-force all of them ?
+};
+
+/**
+ * Transform pre-vCards contact into a vCard one
+ * @param {Object} preVcardsContact     Array of pre-vCards properties
+ *
+ * @return {Object}                     Array of vCard properties
+ */
+export const toVcardContact = (preVcardsContact) => {
+    return preVcardsContact.map((preVcards) => {
+        const { pref, field, type, combine } = preVcards[0];
+        const checkedValues = preVcards.map(({ checked, value }) => checked && value).filter(Boolean);
+        return { pref, field, type, value: combine(checkedValues) };
+    });
 };
 
 const templateFN = (header, value, index) => ({
