@@ -7,7 +7,7 @@ import { IMPORT_STEPS } from '../../constants';
 
 const { ATTACHING, CHECKING_CSV, IMPORTING, IMPORT_GROUPS } = IMPORT_STEPS;
 
-const ImportFooter = ({ step, loading }) => {
+const ImportFooter = ({ step, vcardContacts }) => {
     const hasResetButton = step !== IMPORTING;
     const hasImportButton = step <= CHECKING_CSV;
     const hasCreateButton = step === IMPORT_GROUPS;
@@ -16,13 +16,14 @@ const ImportFooter = ({ step, loading }) => {
         <>
             {hasResetButton ? <ResetButton>{c('Action').t`Cancel`}</ResetButton> : null}
             {hasImportButton ? (
-                <PrimaryButton disabled={step === ATTACHING} type="submit">
+                <PrimaryButton
+                    disabled={step === ATTACHING || (step === CHECKING_CSV && !vcardContacts.length)}
+                    type="submit"
+                >
                     {c('Action').t`Import`}
                 </PrimaryButton>
             ) : !hasCreateButton ? (
-                <PrimaryButton loading={loading} type="submit">
-                    {c('Action').t`Next`}
-                </PrimaryButton>
+                <PrimaryButton type="submit">{c('Action').t`Next`}</PrimaryButton>
             ) : (
                 <PrimaryButton type="submit">{c('Action').t`Create`}</PrimaryButton>
             )}
@@ -32,7 +33,7 @@ const ImportFooter = ({ step, loading }) => {
 
 ImportFooter.propTypes = {
     step: PropTypes.number.isRequired,
-    loading: PropTypes.bool.isRequired
+    vcardContacts: PropTypes.array
 };
 
 export default ImportFooter;
