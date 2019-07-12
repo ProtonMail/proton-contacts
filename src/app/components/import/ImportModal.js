@@ -34,7 +34,7 @@ const ImportModal = ({ onClose, ...rest }) => {
 
     const [step, setStep] = useState(ATTACHING);
     const [importFile, setImportFile] = useState(null);
-    const [parsedContacts, setParsedContacts] = useState([]);
+    const [vcardContacts, setVcardContacts] = useState([]);
 
     const [totalContacts, setTotalContacts] = useState(0);
     const [contactsImported, addSuccess] = useState([]);
@@ -63,9 +63,6 @@ const ImportModal = ({ onClose, ...rest }) => {
         [ATTACHING]: () => noop,
         [ATTACHED]: () => setStep(importFile.type === 'text/csv' ? CHECKING_CSV : IMPORTING),
         [CHECKING_CSV]: () => {
-            setParsedContacts((parsedContacts) =>
-                parsedContacts.map((contact) => contact.filter((property, i) => keepHeaders[i]))
-            );
             setStep(IMPORTING);
         },
         [IMPORTING]: () => setStep(IMPORT_GROUPS),
@@ -108,7 +105,7 @@ const ImportModal = ({ onClose, ...rest }) => {
             title={getI18nTitle[step]}
             onSubmit={handleSubmit[step]}
             onClose={onClose}
-            footer={ImportFooter({ step })}
+            footer={ImportFooter({ step, vcardContacts })}
             {...rest}
         >
             {step <= ATTACHED ? (
@@ -121,19 +118,19 @@ const ImportModal = ({ onClose, ...rest }) => {
             ) : step === CHECKING_CSV ? (
                 <ImportCsvModalContent
                     file={importFile}
-                    parsedContacts={parsedContacts}
-                    onSetParsedContacts={setParsedContacts}
+                    vcardContacts={vcardContacts}
+                    onSetVcardContacts={setVcardContacts}
                 />
             ) : step === IMPORTING ? (
                 <ImportingModalContent
-                    parsedContacts={parsedContacts}
+                    vcardContacts={vcardContacts}
                     imported={contactsImported.length}
                     notImported={contactsNotImported.length}
                     total={totalContacts}
                 />
             ) : (
                 <ImportGroupsModalContent
-                    parsedContacts={parsedContacts}
+                    vcardContacts={vcardContacts}
                     imported={contactsImported.length}
                     notImported={contactsNotImported.length}
                     total={totalContacts}
