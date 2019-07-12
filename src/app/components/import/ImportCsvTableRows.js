@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { c } from 'ttag';
 import { Checkbox } from 'react-components';
 
-import SelectImportField from './SelectImportField';
-import SelectImportType from './SelectImportType';
-
-import { toVcard } from '../../helpers/csv';
+import ImportFieldDropdown from './ImportFieldDropdown';
+import ImportTypeDropdown from './ImportTypeDropdown';
 
 const ImportCsvTableRows = ({ preVcards, onToggle, onChangeField, onChangeType }) => {
-    const { field, type, display } = toVcard(preVcards);
+    const { field, type, combine } = (preVcards.length && preVcards[0]) || {};
+    const checkedValues = preVcards.map(({ checked, value }) => checked && value).filter(Boolean);
 
     return preVcards.map(({ checked, header }, i) => (
         <tr key={i.toString()}>
@@ -20,13 +20,13 @@ const ImportCsvTableRows = ({ preVcards, onToggle, onChangeField, onChangeType }
                 <>
                     <td rowSpan={preVcards.length}>
                         <div className="flex">
-                            <SelectImportField value={field} onChangeField={onChangeField} />
-                            {type !== undefined ? (
-                                <SelectImportType field={field} value={type} onChangeType={onChangeType} />
+                            <ImportFieldDropdown initialField={field} onChangeField={onChangeField} />
+                            {type ? (
+                                <ImportTypeDropdown field={field} initialType={type} onChangeType={onChangeType} />
                             ) : null}
                         </div>
                     </td>
-                    <td rowSpan={preVcards.length}>{display}</td>
+                    <td rowSpan={preVcards.length}>{combine(checkedValues)}</td>
                 </>
             ) : null}
         </tr>
@@ -34,10 +34,8 @@ const ImportCsvTableRows = ({ preVcards, onToggle, onChangeField, onChangeType }
 };
 
 ImportCsvTableRows.propTypes = {
-    preVcards: PropTypes.array.isRequired,
-    onToggle: PropTypes.func,
-    onChangeField: PropTypes.func,
-    onChangeType: PropTypes.func
+    headers: PropTypes.array.isRequired,
+    checked: PropTypes.array
 };
 
 export default ImportCsvTableRows;
