@@ -1,5 +1,5 @@
 import Papa from 'papaparse';
-import { prepareContact } from './decrypt';
+import { toPreVcard } from './csvFormat';
 
 /** NOTATION
  *
@@ -26,14 +26,17 @@ import { prepareContact } from './decrypt';
  * "pre-vCard property": Because different csv properties may correspond to a single vCard property,
  *                       to pass from one to the other we go through an intermediate step.
  *                       A pre-vCard property is the JS object:
- *                       { header, checked, pref, field, type, value, combineInto, combineIndex, combine }
+ *                       { header, checked, pref, field, type, value, combineInto, combineIndex, combine, display }
  *                       The key "header" equals the csv property.
  *                       The key "checked" will mark whether we want to include this property into the vCard
  *                       The key "combineInto" will be the same for different csv properties that will
  *                       assemble into a single vCard property. For this assembly we need to order
  *                       the properties, which will be indicated by the key "combineIndex", and combine
  *                       them in a certain way indicated by the function "combine", which takes as arguments
- *                       the csv properties to be assembled
+ *                       the csv properties to be assembled.
+ *                       Because the value of a vCard property is not always a string (sometimes it is an array),
+ *                       we need an additional function that combines the csv properties into a string.
+ *                       This function is the key "display".
  * "pre-vCard contact": An array made of pre-vCard properties
  *
  * "pre-vCards property" An array of pre-vCard properties. These pre-Vcards are to be combined into a single vCard
@@ -157,7 +160,7 @@ export const prepare = ({ headers = [], contacts = [] }) => {
         combined[combination] = combined[combination].filter((n) => n !== null);
     }
 
-    // re-order and arrange headers
+    // Arrange pre-vCards respecting the original ordering outside header groups
     const preparedPreVcardContacts = contacts.map((contact) => []);
     for (const [i, indices] of Object.values(combined).entries()) {
         preparedPreVcardContacts.forEach((contact) => contact.push([]));
@@ -176,43 +179,18 @@ export const prepare = ({ headers = [], contacts = [] }) => {
     return preparedPreVcardContacts;
 };
 
-const getFirst = (values) => values[0];
-
 /**
- * Given a csv property name (header), return a function that transforms
- * a value for that property into one or several pre-vCard properties
- * @param {String} CsvProperty
+ * Combine pre-vCards properties into a single vCard one
+ * @param {Array} preVcards     Array of pre-vCards properties
  *
- * @return {Function}
+ * @return {Object}             vCard property
  */
-export const toPreVcard = (header) => {
-    const property = header.toLowerCase();
-    if (property === 'prefix' || property === 'title') {
-        return (value) => [templateFN(header, value, 0), templateN(header, value, 3)];
+export const toVcard = (preVcards) => {
+    if (!preVcards.length) {
+        return {};
     }
-    if (property === 'first name') {
-        return (value) => [templateFN(header, value, 1), templateN(header, value, 1)];
-    }
-    if (property === 'middle name') {
-        return (value) => [templateFN(header, value, 2), templateN(header, value, 2)];
-    }
-    if (property === 'last name') {
-        return (value) => [templateFN(header, value, 3), templateN(header, value, 0)];
-    }
-    if (property === 'suffix') {
-        return (value) => [templateFN(header, value, 4), templateN(header, value, 4)];
-    }
-    if (property === 'given yomi') {
-        return (value) => templateFNYomi(header, value, 0);
-    }
-    if (property === 'surname yomi') {
-        return (value) => templateFNYomi(header, value, 1);
-    }
-    if (property === 'nickname') {
-        return (value) => ({ header, value, check: true, field: 'nickname', combine: getFirst });
-    }
-    return (value) => null;
-    // Brute-force all of them ?
+    const { pref, field, type, combine, display } = preVcards[0];
+    return { pref, field, type, value: combine(preVcards), display: display(preVcards) };
 };
 
 /**
@@ -221,49 +199,4 @@ export const toPreVcard = (header) => {
  *
  * @return {Object}                     Array of vCard properties
  */
-export const toVcardContact = (preVcardsContact) => {
-    return preVcardsContact.map((preVcards) => {
-        const { pref, field, type, combine } = preVcards[0];
-        const checkedValues = preVcards.map(({ checked, value }) => checked && value).filter(Boolean);
-        return { pref, field, type, value: combine(checkedValues) };
-    });
-};
-
-const templateFN = (header, value, index) => ({
-    header,
-    value,
-    checked: true,
-    pref: 0,
-    field: 'fn',
-    type: 'Main',
-    combineInto: 'fn-main',
-    combineIndex: index,
-    combine(values) {
-        return values.join(' ');
-    }
-});
-const templateFNYomi = (header, value, index) => ({
-    header,
-    value,
-    checked: true,
-    pref: 0,
-    field: 'fn',
-    type: 'Yomi',
-    combineInto: 'fn-yomi',
-    combineIndex: index,
-    combine(values) {
-        return values.join(' ');
-    }
-});
-const templateN = (header, value, index) => ({
-    header,
-    value,
-    checked: true,
-    pref: 0,
-    field: 'n',
-    combineInto: 'n',
-    combineIndex: index,
-    combine(values) {
-        return values.filter(Boolean).join('; ');
-    }
-});
+export const toVcardContact = (preVcardsContact) => preVcardsContact.map(toVcard);
