@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { Dropdown, DropdownMenu, DropdownButton } from 'react-components';
 
-import { CUSTOMIZABLE_VCARD_FIELDS as vcardFields } from '../../constants';
+import { CUSTOMIZABLE_VCARD_FIELDS as vcardFields, DISPLAY_VCARD_FIELDS as display } from '../../constants';
 
 const ImportFieldDropdown = ({ initialField, onChangeField }) => {
     return (
@@ -11,13 +11,13 @@ const ImportFieldDropdown = ({ initialField, onChangeField }) => {
             caret
             title={c('Info on dropdown in import CSV modal')
                 .t`Select the VCF property that best matches the CSV property`}
-            content={initialField}
+            content={display[initialField]}
         >
             <DropdownMenu className="dropDown-contentInner">
                 {vcardFields.map((field) => {
                     return (
                         <DropdownButton key={`field-${field}`} onClick={() => onChangeField(field)} type="button">
-                            {field}
+                            {display[field]}
                         </DropdownButton>
                     );
                 })}

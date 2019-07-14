@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { c } from 'ttag';
 import { Checkbox } from 'react-components';
 
 import ImportFieldDropdown from './ImportFieldDropdown';
 import ImportTypeDropdown from './ImportTypeDropdown';
 
+import { toVcard } from '../../helpers/csv';
+
 const ImportCsvTableRows = ({ preVcards, onToggle, onChangeField, onChangeType }) => {
-    const { field, type, combine } = (preVcards.length && preVcards[0]) || {};
-    const checkedValues = preVcards.map(({ checked, value }) => checked && value).filter(Boolean);
+    const { field, type, display } = toVcard(preVcards);
 
     return preVcards.map(({ checked, header }, i) => (
         <tr key={i.toString()}>
@@ -26,7 +26,7 @@ const ImportCsvTableRows = ({ preVcards, onToggle, onChangeField, onChangeType }
                             ) : null}
                         </div>
                     </td>
-                    <td rowSpan={preVcards.length}>{combine(checkedValues)}</td>
+                    <td rowSpan={preVcards.length}>{display}</td>
                 </>
             ) : null}
         </tr>
@@ -34,8 +34,10 @@ const ImportCsvTableRows = ({ preVcards, onToggle, onChangeField, onChangeType }
 };
 
 ImportCsvTableRows.propTypes = {
-    headers: PropTypes.array.isRequired,
-    checked: PropTypes.array
+    preVcards: PropTypes.array.isRequired,
+    onToggle: PropTypes.func,
+    onChangeField: PropTypes.func,
+    onChangeType: PropTypes.func
 };
 
 export default ImportCsvTableRows;

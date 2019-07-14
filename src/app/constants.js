@@ -83,16 +83,16 @@ export const CUSTOMIZABLE_VCARD_FIELDS = [
 
 export const CUSTOMIZABLE_VCARD_TYPES = {
     // the empty string denotes no type available
-    fn: ['Main', 'Yomi'],
+    fn: ['main', 'yomi'],
     n: [''],
     nickname: [''],
     photo: [''],
     bday: [''],
     anniversary: [''],
     gender: [''],
-    adr: ['Home', 'Work', 'Other'],
-    tel: ['Phone', 'Home', 'Work', 'Other', 'Mobile', 'Main', 'Fax'],
-    email: ['Home', 'Work', 'Other'],
+    adr: ['home', 'work', 'other'],
+    tel: ['phone', 'home', 'work', 'other', 'mobile', 'main', 'fax'],
+    email: ['home', 'work', 'other'],
     impp: [''],
     lang: [''],
     tz: [''],
@@ -116,4 +116,42 @@ export const CUSTOMIZABLE_VCARD_TYPES = {
     fburl: [''],
     caladruri: [''],
     caluri: ['']
+};
+
+export const DISPLAY_VCARD_FIELDS = {
+    fn: 'Display name',
+    n: 'Name',
+    nickname: 'Nickname',
+    photo: 'Photo',
+    bday: 'Birthday',
+    anniversary: 'Anniversary',
+    gender: 'Gender',
+    adr: 'Address',
+    tel: 'Phone',
+    email: 'E-mail',
+    impp: 'Impp',
+    lang: 'Language',
+    tz: 'Time zone',
+    geo: 'Location',
+    title: 'Title',
+    role: 'Role',
+    logo: 'Logo',
+    org: 'Organization',
+    member: 'Member',
+    related: 'Related',
+    categories: 'Categories',
+    note: 'Note',
+    rev: 'Rev',
+    sound: 'Sound',
+    url: 'Web page'
+};
+
+export const DISPLAY_VCARD_TYPES = {
+    main: 'Main',
+    yomi: 'Yomi',
+    home: 'Home',
+    work: 'Work',
+    other: 'Other',
+    mobile: 'Mobile',
+    fax: 'Fax'
 };
