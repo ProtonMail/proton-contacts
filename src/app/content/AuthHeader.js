@@ -1,8 +1,9 @@
 import React from 'react';
 import { c } from 'ttag';
-import { useModals, AuthenticatedBugModal } from 'react-components';
+import PropTypes from 'prop-types';
+import { useModals, AuthenticatedBugModal, SearchInput } from 'react-components';
 
-const AuthHeader = () => {
+const AuthHeader = ({ search, onSearch }) => {
     const { createModal } = useModals();
     const handleClick = () => createModal(<AuthenticatedBugModal />);
     return (
@@ -29,11 +30,12 @@ const AuthHeader = () => {
             <div className="searchbox-container relative flex-item-centered-vert">
                 <label htmlFor="global_search">
                     <span className="sr-only">{c('Placeholder').t`Search`}</span>
-                    <input
-                        type="search"
+                    <SearchInput
+                        value={search}
+                        onChange={onSearch}
                         id="global_search"
                         placeholder={c('Placeholder').t`Search`}
-                        className="pm-field w100 searchbox-field "
+                        className="searchbox-field"
                     />
                 </label>
             </div>
@@ -92,6 +94,11 @@ const AuthHeader = () => {
             </div>
         </header>
     );
+};
+
+AuthHeader.propTypes = {
+    search: PropTypes.string,
+    onSearch: PropTypes.func
 };
 
 export default AuthHeader;

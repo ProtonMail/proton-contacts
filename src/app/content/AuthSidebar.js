@@ -1,23 +1,18 @@
 import React from 'react';
-import { Sidebar, useContactGroups, Loader, useModals, useContacts } from 'react-components';
+import { Sidebar, useModals } from 'react-components';
 import { c } from 'ttag';
+import PropTypes from 'prop-types';
 
 import ContactModal from '../components/ContactModal';
 import { extract } from '../helpers/merge';
 import ContactGroupModal from '../components/ContactGroupModal';
 import ContactGroupsModal from '../components/ContactGroupsModal';
 
-const AuthSidebar = () => {
-    const [contacts, loadingContacts] = useContacts();
-    const [contactGroups, loadingContactGroups] = useContactGroups();
+const AuthSidebar = ({ contacts, contactGroups }) => {
     const { createModal } = useModals();
     const emails = extract(contacts);
     const duplicates = Object.keys(emails).reduce((acc, key) => acc + emails[key].length, 0);
     const canMerge = duplicates > 0;
-
-    if (loadingContacts || loadingContactGroups) {
-        return <Loader />;
-    }
 
     const list = [
         {
@@ -69,6 +64,11 @@ const AuthSidebar = () => {
     }
 
     return <Sidebar list={list} />;
+};
+
+AuthSidebar.propTypes = {
+    contacts: PropTypes.array,
+    contactGroups: PropTypes.array
 };
 
 export default AuthSidebar;
