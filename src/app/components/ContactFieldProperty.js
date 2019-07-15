@@ -5,13 +5,16 @@ import { Input, TextArea, EmailInput, DateInput } from 'react-components';
 
 import ContactImageField from './ContactImageField';
 import ContactAdrField from './ContactAdrField';
+import { c } from 'ttag';
+import { getLabels } from '../helpers/field';
 
 const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
     const handleChange = ({ target }) => onChange({ value: target.value, uid });
+    const labels = getLabels();
     const val = Array.isArray(value) ? value[0] : value;
 
     if (field === 'email') {
-        return <EmailInput value={val} onChange={handleChange} {...rest} />;
+        return <EmailInput value={val} placeholder={labels.email} onChange={handleChange} {...rest} />;
     }
 
     if (field === 'adr') {
@@ -20,7 +23,7 @@ const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
     }
 
     if (field === 'note') {
-        return <TextArea value={val} onChange={handleChange} {...rest} />;
+        return <TextArea value={val} placeholder={labels.note} onChange={handleChange} {...rest} />;
     }
 
     if (field === 'bday' || field === 'anniversary') {
@@ -30,6 +33,7 @@ const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
             return (
                 <DateInput
                     setDefaultDate
+                    placeholder={labels[field]}
                     defaultDate={m.toDate()}
                     onSelect={handleSelectDate}
                     format={moment.localeData().longDateFormat('L')}
@@ -43,8 +47,7 @@ const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
         const handleChangeImage = (url) => onChange({ value: url, uid });
         return <ContactImageField value={val} onChange={handleChangeImage} {...rest} />;
     }
-
-    return <Input value={val} onChange={handleChange} {...rest} />;
+    return <Input value={val} placeholder={labels[field]} onChange={handleChange} {...rest} />;
 };
 
 ContactFieldProperty.propTypes = {
