@@ -5,6 +5,7 @@ import { c } from 'ttag';
 import { generateUID } from './contact';
 import { CLEAR_FIELDS, SIGNED_FIELDS } from '../constants';
 import { toICAL } from './vcard';
+import { sanitizeProperties, addPref, addGroup } from './properties';
 
 const { CLEAR_TEXT, ENCRYPTED_AND_SIGNED, SIGNED } = CONTACT_CARD_TYPE;
 
@@ -98,8 +99,19 @@ export const prepareCards = (properties = [], privateKeys, publicKeys) => {
     return Promise.all(promises);
 };
 
+/**
+ * Clean properties
+ * Parse properties to build vCards
+ * @param {Array} properties
+ * @param {Array} privateKeys
+ * @param {Array} publicKeys
+ * @return {Object}
+ */
 export const prepareContact = async (properties, privateKeys, publicKeys) => {
-    const Cards = await prepareCards(properties, privateKeys, publicKeys);
+    const sanitized = sanitizeProperties(properties);
+    const withPref = addPref(sanitized);
+    const withGroup = addGroup(withPref);
+    const Cards = await prepareCards(withGroup, privateKeys, publicKeys);
     return { Cards };
 };
 
