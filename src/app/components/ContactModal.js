@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FormModal, Alert, useUser, useApi, useUserKeys } from 'react-components';
+import { FormModal, Alert, useUser, useApi, useUserKeys, useNotifications } from 'react-components';
 import { c } from 'ttag';
 import { addContacts } from 'proton-shared/lib/api/contacts';
 
@@ -56,8 +56,10 @@ const sanitizeModel = (properties) => {
 
 const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => {
     const api = useApi();
+    const { createNotification } = useNotifications();
+    const [loading, setLoading] = useState(false);
     const [user] = useUser();
-    const [userKeysList] = useUserKeys(user);
+    const [userKeysList, loadingUserKeys] = useUserKeys(user);
     const [properties, setProperties] = useState(formatModel(initialProperties));
     const title = contactID ? c('Title').t`Edit contact details` : c('Title').t`Add new contact`;
 
@@ -84,6 +86,8 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
             userKeysList[0]
         );
         await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: 0 }));
+        rest.onClose();
+        createNotification({ text: c('Success').t`Contact saved` });
     };
 
     const handleChange = ({ uid: propertyUID, value, key = 'value' }) => {
@@ -97,7 +101,18 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
     };
 
     return (
-        <FormModal onSubmit={handleSubmit} title={title} submit={c('Action').t`Save`} {...rest}>
+        <FormModal
+            loading={loading || loadingUserKeys}
+            onSubmit={() => {
+                setLoading(true);
+                handleSubmit()
+                    .then(() => setLoading(false))
+                    .catch(() => setLoading(false));
+            }}
+            title={title}
+            submit={c('Action').t`Save`}
+            {...rest}
+        >
             <Alert>{c('Info')
                 .t`Email address, phone number and address at the top of their respective list are automatically set as the default information and will be displayed in the contact information's summary section.`}</Alert>
             <ContactModalProperties

@@ -74,37 +74,43 @@ export const getValue = (property) => {
 /**
  * Parse vCard String an return contact properties model as an Array
  * @param {String} vcard to parse
- * @returns {Array} contact properties
+ * @returns {Array} contact properties ordered
  */
 export const parse = (vcard = '') => {
     const comp = new ICAL.Component(ICAL.parse(vcard));
     const properties = comp.getAllProperties();
 
-    return properties.reduce((acc, property) => {
-        const type = property.getParameter('type');
-        const pref = property.getParameter('pref');
-        const splitted = property.name.split('.');
-        const field = splitted[1] ? splitted[1] : splitted[0];
+    return properties
+        .reduce((acc, property) => {
+            const type = property.getParameter('type');
+            const prefValue = property.getParameter('pref');
+            const pref = typeof prefValue === 'string' ? +prefValue : 0;
+            const splitted = property.name.split('.');
+            const field = splitted[1] ? splitted[1] : splitted[0];
 
-        // Ignore invalid field
-        if (!field) {
+            // Ignore invalid field
+            if (!field) {
+                return acc;
+            }
+
+            const isCustom = isCustomField(field);
+
+            // Ignore invalid property
+            if (!isCustom && !PROPERTIES[field]) {
+                return acc;
+            }
+
+            const group = splitted[1] ? splitted[0] : undefined;
+            const prop = { pref, field, group, type, value: getValue(property) };
+
+            acc.push(prop);
+
             return acc;
-        }
-
-        const isCustom = isCustomField(field);
-
-        // Ignore invalid property
-        if (!isCustom && !PROPERTIES[field]) {
-            return acc;
-        }
-
-        const group = splitted[1] ? splitted[0] : undefined;
-        const prop = { pref, field, group, type, value: getValue(property) };
-
-        acc.push(prop);
-
-        return acc;
-    }, []);
+        }, [])
+        .sort((firstEl, secondEl) => {
+            // WARNING `sort` is mutating the new array returned by reduce
+            return firstEl.pref <= secondEl.pref;
+        });
 };
 
 /**

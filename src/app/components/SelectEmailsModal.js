@@ -9,8 +9,7 @@ import { c } from 'ttag';
  * @param {Function} props.onSubmit only submit checked contactEmails (Array<Object>)
  * @param {Function} props.onClose
  */
-const SelectEmailsModal = (props) => {
-    const { contacts, onSubmit, ...rest } = props;
+const SelectEmailsModal = ({ contacts, onSubmit, ...rest }) => {
     const [contactEmails] = useContactEmails();
     const [model, setModel] = useState(
         contacts.map((contact) => {
@@ -32,7 +31,7 @@ const SelectEmailsModal = (props) => {
             });
             return acc;
         }, []);
-        props.onClose();
+        rest.onClose();
         onSubmit(toSubmit);
     };
 
@@ -77,8 +76,7 @@ const SelectEmailsModal = (props) => {
 
 SelectEmailsModal.propTypes = {
     contacts: PropTypes.arrayOf(PropTypes.object),
-    onSubmit: PropTypes.func,
-    onClose: PropTypes.func
+    onSubmit: PropTypes.func
 };
 
 export default SelectEmailsModal;

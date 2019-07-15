@@ -53,10 +53,9 @@ ContactGroupTable.propTypes = {
 
 const mapIDs = (contactEmails) => contactEmails.map(({ ID }) => ID);
 
-const ContactGroupModal = (props) => {
+const ContactGroupModal = ({ contactGroupID, ...rest }) => {
     const [loading, setLoading] = useState(false);
     const { call } = useEventManager();
-    const { contactGroupID, ...rest } = props;
     const api = useApi();
     const { createNotification } = useNotifications();
     const [contactGroups] = useContactGroups();
@@ -118,7 +117,7 @@ const ContactGroupModal = (props) => {
                 ].filter(Boolean)
             );
             await call();
-            props.onClose();
+            rest.onClose();
             createNotification({
                 text: contactGroupID
                     ? c('Notification').t`Contact group updated`
@@ -176,8 +175,7 @@ const ContactGroupModal = (props) => {
 };
 
 ContactGroupModal.propTypes = {
-    contactGroupID: PropTypes.string,
-    onClose: PropTypes.func.isRequired
+    contactGroupID: PropTypes.string
 };
 
 export default ContactGroupModal;

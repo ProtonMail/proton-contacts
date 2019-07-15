@@ -14,21 +14,22 @@ import {
 
 import ExportModal from './ExportModal';
 import ContactGroupModal from './ContactGroupModal';
+import ContactGroupsModal from './ContactGroupsModal';
 
 const PaidCards = ({ contactGroupID }) => {
     const { createModal } = useModals();
+    const handleExport = () => createModal(<ExportModal contactGroupID={contactGroupID} />);
+    const handleGroups = () => createModal(<ContactGroupsModal />);
 
     const handleImport = () => {
         // TODO
-    };
-    const handleExport = () => {
-        createModal(<ExportModal contactGroupID={contactGroupID} />);
     };
 
     return (
         <div className="flex-autogrid">
             <div className="flex-autogrid-item">
                 <div className="p1 aligncenter bordered-container">
+                    <Icon name="import" className="icon-100p mb1" />
                     <div className="bold">{c('Title').t`Import contacts`}</div>
                     <p>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at tristique mauris, non
@@ -40,6 +41,7 @@ const PaidCards = ({ contactGroupID }) => {
             </div>
             <div className="flex-autogrid-item">
                 <div className="p1 aligncenter bordered-container">
+                    <Icon name="export" className="icon-100p mb1" />
                     <div className="bold">{c('Title').t`Export contacts`}</div>
                     <p>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at tristique mauris, non
@@ -51,13 +53,14 @@ const PaidCards = ({ contactGroupID }) => {
             </div>
             <div className="flex-autogrid-item">
                 <div className="p1 aligncenter bordered-container">
+                    <Icon name="contacts" className="icon-100p mb1" />
                     <div className="bold">{c('Title').t`Contacts settings`}</div>
                     <p>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at tristique mauris, non
                         eleifend orci. Etiam pharetra consequat tristique. Sed tristique ipsum quis suscipit
                         ullamcorper.
                     </p>
-                    <Link className="pm-button pm-button--primary" to="/settings/account">{c('Action').t`Groups`}</Link>
+                    <PrimaryButton onClick={handleGroups}>{c('Action').t`Groups`}</PrimaryButton>
                 </div>
             </div>
         </div>
@@ -136,17 +139,13 @@ const ContactPlaceholder = ({ contacts, contactGroupID, user, onUncheck }) => {
     }
 
     if (contactGroupID) {
-        const { Name, Color } = contactGroups.find(({ ID }) => ID === contactGroupID);
-        const style = { color: Color };
+        const { Name } = contactGroups.find(({ ID }) => ID === contactGroupID);
         const handleClick = () => createModal(<ContactGroupModal contactGroupID={contactGroupID} />);
         return (
             <div className="p2 view-column-detail flex-item-fluid">
                 <div className="aligncenter">
-                    <Icon name="contacts-groups" color={Color} />
-                    <h1 className="ellipsis" style={style}>
-                        {Name}
-                    </h1>
-                    <div className="mb2">
+                    <h1 className="ellipsis">{Name}</h1>
+                    <div className="mb1">
                         {c('Info').ngettext(
                             msgid`You have ${countContacts} contact in your address book`,
                             `You have ${countContacts} contacts in your address book`,
@@ -165,9 +164,8 @@ const ContactPlaceholder = ({ contacts, contactGroupID, user, onUncheck }) => {
     return (
         <div className="p2 view-column-detail flex-item-fluid">
             <div className="aligncenter">
-                <Icon name="contacts" />
                 <h1>{c('Title').t`Contacts`}</h1>
-                <div className="mb2">
+                <div className="mb1">
                     {c('Info').ngettext(
                         msgid`You have ${countContacts} contact in your address book`,
                         `You have ${countContacts} contacts in your address book`,

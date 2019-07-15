@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Row, Field, Group, ButtonGroup, Copy, useModals, useUser, useContactEmails } from 'react-components';
+import { Row, Group, ButtonGroup, Copy, useModals, useUser, useContactEmails } from 'react-components';
 import { c } from 'ttag';
 
 import { clearType, getType, formatAdr } from '../helpers/property';
@@ -10,7 +10,7 @@ import ContactGroupDropdown from './ContactGroupDropdown';
 import ContactLabelProperty from './ContactLabelProperty';
 import ContactEmailSettingsModal from './ContactEmailSettingsModal';
 
-const ContactViewProperty = ({ property, contactID }) => {
+const ContactViewProperty = ({ property, properties, contactID }) => {
     const { field, first } = property;
     const [{ hasPaidMail }] = useUser();
     const { createModal } = useModals();
@@ -59,7 +59,13 @@ const ContactViewProperty = ({ property, contactID }) => {
             case 'email': {
                 const contactEmail = contactEmails.find(({ Email }) => Email === value);
                 const handleSettings = () => {
-                    createModal(<ContactEmailSettingsModal contactEmail={contactEmail} />);
+                    createModal(
+                        <ContactEmailSettingsModal
+                            contactID={contactID}
+                            contactEmail={contactEmail}
+                            properties={properties}
+                        />
+                    );
                 };
 
                 return (
@@ -90,16 +96,17 @@ const ContactViewProperty = ({ property, contactID }) => {
     return (
         <Row>
             <ContactLabelProperty field={field} type={type} first={first} />
-            <Field className="w100 pt0-5">
+            <div className="flex flex-nowrap flex-items-center w100">
                 <span className="mr0-5">{getContent()}</span>
                 {getActions()}
-            </Field>
+            </div>
         </Row>
     );
 };
 
 ContactViewProperty.propTypes = {
     property: PropTypes.object.isRequired,
+    properties: PropTypes.array,
     contactID: PropTypes.string
 };
 

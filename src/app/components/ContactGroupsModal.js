@@ -98,28 +98,24 @@ ContactGroupsTable.propTypes = {
     onClose: PropTypes.func
 };
 
-const ContactGroupsModal = (props) => {
+const ContactGroupsModal = ({ ...rest }) => {
     const { createModal } = useModals();
 
     const handleCreate = () => {
-        props.onClose();
+        rest.onClose();
         createModal(<ContactGroupModal />);
     };
 
     return (
-        <FormModal title={c('Title').t`Manage groups`} close={c('Action').t`Close`} hasSubmit={false} {...props}>
+        <FormModal title={c('Title').t`Manage groups`} close={c('Action').t`Close`} hasSubmit={false} {...rest}>
             <Alert>{c('Info')
                 .t`A group can contain multiple email addresses from the same contact. Please note that a sending limit may apply and prevent you from sending emails to excessively large groups.`}</Alert>
             <div className="mb1">
                 <PrimaryButton onClick={handleCreate}>{c('Action').t`Add group`}</PrimaryButton>
             </div>
-            <ContactGroupsTable onClose={props.onClose} />
+            <ContactGroupsTable onClose={rest.onClose} />
         </FormModal>
     );
-};
-
-ContactGroupsModal.propTypes = {
-    onClose: PropTypes.func
 };
 
 export default ContactGroupsModal;

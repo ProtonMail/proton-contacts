@@ -57,7 +57,14 @@ const ContactViewProperties = ({ properties: allProperties, contactID, field }) 
                 <Icon name={iconName} /> {title}
             </h3>
             {properties.map((property, index) => {
-                return <ContactViewProperty key={index.toString()} property={property} contactID={contactID} />;
+                return (
+                    <ContactViewProperty
+                        key={index.toString()}
+                        contactID={contactID}
+                        property={property}
+                        properties={allProperties}
+                    />
+                );
             })}
         </div>
     );
