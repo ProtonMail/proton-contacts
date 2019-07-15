@@ -50,10 +50,6 @@ const formatModel = (properties = []) => {
         .map((property) => ({ ...property, uid: generateUID(UID_PREFIX) })); // Add UID to localize the property easily
 };
 
-const sanitizeModel = (properties) => {
-    return properties.filter(({ value }) => value);
-};
-
 const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => {
     const api = useApi();
     const { createNotification } = useNotifications();
@@ -81,10 +77,7 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
 
     const handleSubmit = async () => {
         const notEditableProperties = initialProperties.filter(({ field }) => !EDITABLE_FIELDS.includes(field));
-        const Contacts = await prepareContacts(
-            [sanitizeModel(properties).concat(notEditableProperties)],
-            userKeysList[0]
-        );
+        const Contacts = await prepareContacts([properties.concat(notEditableProperties)], userKeysList[0]);
         await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: 0 }));
         rest.onClose();
         createNotification({ text: c('Success').t`Contact saved` });
