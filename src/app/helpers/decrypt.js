@@ -135,12 +135,3 @@ export const decryptContactCards = async (contactCards, contactID, keys) => {
         throw error;
     }
 };
-
-export const prepareVcard = (vcard) => {
-    try {
-        // TODO ; throwing an error for the moment
-        throw new Error('Code for preparing vcard not ready yet!');
-    } catch (error) {
-        throw error;
-    }
-};

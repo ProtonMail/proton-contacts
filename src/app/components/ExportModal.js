@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
+import moment from 'moment';
 import {
     useContacts,
     useUser,
@@ -15,13 +16,13 @@ import { queryContactExport } from 'proton-shared/lib/api/contacts';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 import { wait } from 'proton-shared/lib/helpers/promise';
 
-import { decryptContactCards } from '../helpers/decrypt';
+import { bothUserKeys, prepareContact } from '../helpers/decrypt';
 import { toICAL } from '../helpers/vcard';
 import { percentageProgress } from './../helpers/progress';
 import DynamicProgress from './DynamicProgress';
 import { noop } from 'proton-shared/lib/helpers/function';
 
-const DOWNLOAD_FILENAME = 'protonContacts.vcf';
+const DOWNLOAD_FILENAME = 'protonContacts';
 // BACK-END DATA
 const QUERY_EXPORT_MAX_PAGESIZE = 50;
 const API_SAFE_INTERVAL = 100; // API request limit: 100 requests / 10 seconds, so 1 request every 100 ms is safe
@@ -37,10 +38,15 @@ const ExportFooter = ({ loading }) => {
     );
 };
 
-const ExportModal = ({ onClose, ...rest }) => {
+ExportFooter.propTypes = {
+    loading: PropTypes.bool
+};
+
+const ExportModal = ({ contactGroupID: LabelID, onClose, ...rest }) => {
     const api = useApi();
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
+    const { publicKeys, privateKeys } = bothUserKeys(userKeysList);
     const [contacts, loadingContacts] = useContacts();
 
     const [contactsExported, addSuccess] = useState([]);
@@ -54,7 +60,7 @@ const ExportModal = ({ onClose, ...rest }) => {
     const handleSave = (vcards) => {
         const allVcards = vcards.join('\n');
         const blob = new Blob([allVcards], { type: 'data:text/plain;charset=utf-8;' });
-        downloadFile(blob, DOWNLOAD_FILENAME);
+        downloadFile(blob, `${DOWNLOAD_FILENAME}-${moment().format('YYYY-MM-DD')}.vcf`);
         onClose();
     };
 
@@ -62,28 +68,34 @@ const ExportModal = ({ onClose, ...rest }) => {
         const abortController = new AbortController();
         const apiWithAbort = (config) => api({ ...config, signal: abortController.signal });
 
-        const apiCalls = Math.ceil(contacts.length / QUERY_EXPORT_MAX_PAGESIZE);
-
         const exportBatch = async (i, { signal }) => {
             const { Contacts: contacts } = await apiWithAbort(
-                queryContactExport({ Page: i, PageSize: QUERY_EXPORT_MAX_PAGESIZE })
+                queryContactExport({ LabelID, Page: i, PageSize: QUERY_EXPORT_MAX_PAGESIZE })
             );
             for (const { Cards, ID } of contacts) {
                 if (signal.aborted) {
                     return;
                 }
                 try {
-                    const contactDecrypted = await decryptContactCards(Cards, ID, userKeysList);
+                    const { properties: contactDecrypted = [], errors = [] } = await prepareContact(
+                        { Cards },
+                        { publicKeys, privateKeys }
+                    );
+
+                    if (errors.length) {
+                        throw new Error('Error decrypting contact');
+                    }
+
                     const contactExported = toICAL(contactDecrypted).toString();
                     /*
                         need to check again for signal.aborted because the abort
-                        may have taken place during await decryptContactCards
+                        may have taken place during await prepareContact
                     */
                     !signal.aborted && addSuccess((contactsExported) => [...contactsExported, contactExported]);
                 } catch (error) {
                     /*
                         need to check again for signal.aborted because the abort
-                        may have taken place during await decryptContactCards
+                        may have taken place during await prepareContact
                     */
                     !signal.aborted && addError((contactsNotExported) => [...contactsNotExported, ID]);
                 }
@@ -127,16 +139,17 @@ const ExportModal = ({ onClose, ...rest }) => {
             <DynamicProgress
                 id="progress-export-contacts"
                 alt="contact-loader"
-                value={percentageProgress(contactsExported.length, contactsNotExported.length, contacts.length)}
+                value={percentageProgress(contactsExported.length, contactsNotExported.length, countContacts)}
                 displayEnd={c('Progress bar description')
-                    .t`${contactsExported.length} out of ${contacts.length} contacts successfully exported.`}
+                    .t`${contactsExported.length} out of ${countContacts} contacts successfully exported.`}
             />
         </FormModal>
     );
 };
 
 ExportModal.propTypes = {
-    onClose: PropTypes.func
+    onClose: PropTypes.func.isRequired,
+    contactGroupID: PropTypes.string
 };
 
 export default ExportModal;

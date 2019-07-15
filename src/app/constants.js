@@ -68,17 +68,9 @@ export const CUSTOMIZABLE_VCARD_FIELDS = [
     'related',
     'categories',
     'note',
-    'prodid',
     'rev',
     'sound',
-    'uid',
-    'clientpidmap',
-    'url',
-    'version',
-    'key',
-    'fburl',
-    'caladruri',
-    'caluri'
+    'url'
 ];
 
 export const CUSTOMIZABLE_VCARD_TYPES = {
@@ -91,7 +83,7 @@ export const CUSTOMIZABLE_VCARD_TYPES = {
     anniversary: [''],
     gender: [''],
     adr: ['home', 'work', 'other'],
-    tel: ['phone', 'home', 'work', 'other', 'mobile', 'main', 'fax'],
+    tel: ['home', 'work', 'other', 'mobile', 'main', 'fax'],
     email: ['home', 'work', 'other'],
     impp: [''],
     lang: [''],
@@ -105,17 +97,9 @@ export const CUSTOMIZABLE_VCARD_TYPES = {
     related: [''],
     categories: [''],
     note: [''],
-    prodid: [''],
     rev: [''],
     sound: [''],
-    uid: [''],
-    clientpidmap: [''],
-    url: [''],
-    version: [''],
-    key: [''],
-    fburl: [''],
-    caladruri: [''],
-    caluri: ['']
+    url: ['']
 };
 
 export const DISPLAY_VCARD_FIELDS = {
