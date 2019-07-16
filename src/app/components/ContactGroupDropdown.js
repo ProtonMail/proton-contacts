@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
     Dropdown,
@@ -80,7 +80,7 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
     const { createModal } = useModals();
     const [contacts] = useContacts();
     const [contactGroups] = useContactGroups();
-    const [model, setModel] = useState(getModel(contactGroups, contactEmails));
+    const [model, setModel] = useState(Object.create(null));
 
     const normalizedKeyword = normalize(keyword);
     const groups = normalizedKeyword.length
@@ -132,6 +132,10 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
             throw error;
         }
     };
+
+    useEffect(() => {
+        setModel(getModel(contactGroups, contactEmails));
+    }, [contactGroups, contactEmails]);
 
     return (
         <Dropdown
