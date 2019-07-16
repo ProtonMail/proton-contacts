@@ -5,13 +5,13 @@ import { useModals, useUser, PrimaryButton, Button } from 'react-components';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 
 import ContactModal from './ContactModal';
+import ContactViewErrors from './ContactViewErrors';
 import { toICAL } from '../helpers/vcard';
 import ContactSummary from './ContactSummary';
 import ContactViewProperties from './ContactViewProperties';
 import ContactPromote from './ContactPromote';
 
-const ContactView = ({ properties, contactID }) => {
-    // TODO handle errrors prop
+const ContactView = ({ properties, contactID, errors }) => {
     const { createModal } = useModals();
     const [{ hasPaidMail }] = useUser();
 
@@ -40,6 +40,7 @@ const ContactView = ({ properties, contactID }) => {
                     <Button onClick={handleExport}>{c('Action').t`Export`}</Button>
                 </div>
             </div>
+            <ContactViewErrors errors={errors} />
             <ContactSummary properties={properties} />
             <div className="pl1 pr1">
                 <ContactViewProperties contactID={contactID} properties={properties} field="email" />

@@ -2,17 +2,23 @@ import { getMessage, decryptMessage, getSignature, verifyMessage, createCleartex
 import { merge, parse } from './vcard';
 
 import { CONTACT_CARD_TYPE } from 'proton-shared/lib/constants';
-import { SIGNATURE_NOT_VERIFIED, FAIL_TO_READ } from '../constants';
+import { SIGNATURE_NOT_VERIFIED, FAIL_TO_READ, FAIL_TO_DECRYPT } from '../constants';
 
 const { CLEAR_TEXT, ENCRYPTED_AND_SIGNED, ENCRYPTED, SIGNED } = CONTACT_CARD_TYPE;
 
 const decrypt = async ({ Data }, { privateKeys }) => {
+    let message;
     try {
-        const message = await getMessage(Data);
+        message = await getMessage(Data);
+    } catch (error) {
+        return { error: FAIL_TO_READ };
+    }
+
+    try {
         const data = await decryptMessage({ message, privateKeys, armor: true });
         return { data };
     } catch (error) {
-        return { error: FAIL_TO_READ };
+        return { error: FAIL_TO_DECRYPT };
     }
 };
 
@@ -67,14 +73,7 @@ const ACTIONS = {
 export const prepareContact = async (contact, { publicKeys, privateKeys }) => {
     const { Cards } = contact;
 
-    const data = await Promise.all(
-        Cards.map((card) => {
-            if (!ACTIONS[card.Type]) {
-                return { error: FAIL_TO_READ };
-            }
-            return ACTIONS[card.Type](card, { publicKeys, privateKeys });
-        })
-    );
+    const data = await Promise.all(Cards.map((card) => ACTIONS[card.Type](card, { publicKeys, privateKeys })));
 
     const { vcards, errors } = data.reduce(
         (acc, { data, error }) => {
