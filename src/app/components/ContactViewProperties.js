@@ -53,8 +53,10 @@ const ContactViewProperties = ({ properties: allProperties, contactID, field }) 
 
     return (
         <div className="border-bottom mb1 pl1 pr1">
-            <h3 className="mb1">
-                <Icon name={iconName} /> {title}
+            <h3 className="mb1 flex flex-nowrap flex-items-center">
+                <Icon name={iconName} className="mr0-5" />
+                <span className="mr0-5">{title}</span>
+                {field === 'email' ? null : <Icon name="lock" />}
             </h3>
             {properties.map((property, index) => {
                 return (

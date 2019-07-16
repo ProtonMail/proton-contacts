@@ -31,8 +31,10 @@ const ContactModalProperties = ({ properties: allProperties, field, onChange, on
 
     return (
         <div className="border-bottom mb1">
-            <h3 className="mb1">
-                <Icon name={iconName} /> {title}
+            <h3 className="mb1 flex flex-nowrap flex-items-center">
+                <Icon className="mr0-5" name={iconName} />
+                <span className="mr0-5">{title}</span>
+                {['fn', 'email'].includes(field) ? null : <Icon name="lock" />}
             </h3>
             {properties.map((property, index) => (
                 <ContactModalRow
