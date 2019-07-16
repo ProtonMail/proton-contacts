@@ -61,7 +61,7 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
                         {initial}
                     </ItemCheckbox>
                     <div
-                        className="flex-item-fluid flex flex-column flex-spacebetween conversation-titlesender"
+                        className="flex-item-fluid pl1 flex flex-column flex-spacebetween conversation-titlesender"
                         onClick={handleClick(ID)}
                     >
                         <div className="flex">
