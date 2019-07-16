@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox } from 'react-components';
 
-import ImportFieldDropdown from './ImportFieldDropdown';
-import ImportTypeDropdown from './ImportTypeDropdown';
+import SelectImportField from './SelectImportField';
+import SelectImportType from './SelectImportType';
 
 import { toVcard } from '../../helpers/csv';
 
@@ -20,9 +20,9 @@ const ImportCsvTableRows = ({ preVcards, onToggle, onChangeField, onChangeType }
                 <>
                     <td rowSpan={preVcards.length}>
                         <div className="flex">
-                            <ImportFieldDropdown initialField={field} onChangeField={onChangeField} />
-                            {type ? (
-                                <ImportTypeDropdown field={field} initialType={type} onChangeType={onChangeType} />
+                            <SelectImportField value={field} onChangeField={onChangeField} />
+                            {type !== undefined ? (
+                                <SelectImportType field={field} value={type} onChangeType={onChangeType} />
                             ) : null}
                         </div>
                     </td>

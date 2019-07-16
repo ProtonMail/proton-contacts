@@ -7,8 +7,7 @@ export const getTypeLabels = () => ({
     main: c('Contact type label').t`Main`,
     yomi: c('Contact type label').t`Yomi`,
     other: c('Contact type label').t`Other`,
-    fax: c('Contact type label').t`Fax`,
-    pager: c('Contact type label').t`Pager`
+    fax: c('Contact type label').t`Fax`
 });
 
 export const getAllTypes = () => ({
@@ -28,8 +27,7 @@ export const getAllTypes = () => ({
         { text: c('Property type').t`Other`, value: 'other' },
         { text: c('Property type').t`Mobile`, value: 'cell' },
         { text: c('Property type').t`Main`, value: 'main' },
-        { text: c('Property type').t`Fax`, value: 'fax' },
-        { text: c('Property type').t`Pager`, value: 'pager' }
+        { text: c('Property type').t`Fax`, value: 'fax' }
     ],
     adr: [
         { text: c('Property type').t`Address`, value: '' },
@@ -48,28 +46,6 @@ export const getAllTypes = () => ({
     logo: [],
     photo: [],
     org: [],
-    related: [
-        { text: c('Property type').t`Contact`, value: 'contact' },
-        { text: c('Property type').t`Acquaintance`, value: 'acquaintance' },
-        { text: c('Property type').t`Friend`, value: 'friend' },
-        { text: c('Property type').t`Met`, value: 'met' },
-        { text: c('Property type').t`Co-worker`, value: 'co-worker' },
-        { text: c('Property type').t`Colleague`, value: 'colleague' },
-        { text: c('Property type').t`Co-resident`, value: 'co-resident' },
-        { text: c('Property type').t`Neighbor`, value: 'neighbor' },
-        { text: c('Property type').t`Child`, value: 'child' },
-        { text: c('Property type').t`Parent`, value: 'parent' },
-        { text: c('Property type').t`Sibling`, value: 'sibling' },
-        { text: c('Property type').t`Sibling`, value: 'spouse' },
-        { text: c('Property type').t`Kin`, value: 'kin' },
-        { text: c('Property type').t`Muse`, value: 'muse' },
-        { text: c('Property type').t`Crush`, value: 'crush' },
-        { text: c('Property type').t`Date`, value: 'date' },
-        { text: c('Property type').t`Sweetheart`, value: 'sweetheart' },
-        { text: c('Property type').t`Me`, value: 'me' },
-        { text: c('Property type').t`Agent`, value: 'agent' },
-        { text: c('Property type').t`Emergency`, value: 'emergency' }
-    ],
     member: [],
     note: [],
     url: []
@@ -80,7 +56,7 @@ export const getTypeValues = () => ({
     n: [],
     nickname: [],
     email: ['', 'home', 'work', 'other'],
-    tel: ['', 'home', 'work', 'other', 'cell', 'main', 'fax', 'pager'],
+    tel: ['', 'home', 'work', 'other', 'cell', 'main', 'fax'],
     adr: ['', 'home', 'work', 'other'],
     bday: [],
     anniversary: [],
@@ -92,28 +68,6 @@ export const getTypeValues = () => ({
     role: [],
     logo: [],
     org: [],
-    related: [
-        'contact',
-        'acquaintance',
-        'friend',
-        'met',
-        'co-worker',
-        'colleague',
-        'co-resident',
-        'neighbor',
-        'child',
-        'parent',
-        'sibling',
-        'spouse',
-        'kin',
-        'muse',
-        'crush',
-        'date',
-        'sweetheart',
-        'me',
-        'agent',
-        'emergency'
-    ],
     member: [],
     note: [],
     url: []

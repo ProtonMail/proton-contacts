@@ -88,6 +88,7 @@ const ImportModal = ({ onClose, ...rest }) => {
                 <ImportingModalContent
                     file={importFile}
                     vcardContacts={vcardContacts}
+                    onSetVcardContacts={setVcardContacts}
                     loadingKeys={loadingUserKeys}
                     privateKey={userKeysList[0].privateKey}
                     encryptingDone={encryptingDone}
