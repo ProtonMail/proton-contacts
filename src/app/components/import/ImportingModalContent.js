@@ -10,6 +10,9 @@ import { readFileAsString } from 'proton-shared/lib/helpers/file';
 import { extractVcards, parse as parseVcard } from '../../helpers/vcard';
 import { prepareContact } from '../../helpers/encrypt';
 import { percentageProgress } from '../../helpers/progress';
+import { OVERWRITE, SUCCESS_IMPORT_CODE } from '../../constants';
+
+const { OVERWRITE_CONTACT } = OVERWRITE;
 
 const ImportingModalContent = ({
     file,
@@ -26,22 +29,21 @@ const ImportingModalContent = ({
     const total = vcardContacts.length;
     const [encrypted, addSuccess] = useState([]);
     const [failed, addError] = useState([]);
+    const [finished, setFinished] = useState(false);
+    const [imported, setImported] = useState(0);
 
     useEffect(() => {
-        const readFile = async () => {
-            const vcards = extractVcards(await readFileAsString(file));
-            onSetVcardContacts(vcards.map(parseVcard));
-            setFileRead(true);
-        };
-
-        if (file.type === 'text/vcard') {
-            readFile();
-        }
-        if (file.type === 'text/csv') {
+        const readFileIfNeeded = async () => {
+            if (file.type === 'text/vcard') {
+                const vcards = extractVcards(await readFileAsString(file));
+                onSetVcardContacts(vcards.map(parseVcard));
+            }
             // In this case the file has been already read,
             // and vcardContacts has been set too, in step CHECKING_CSV
             setFileRead(true);
-        }
+        };
+
+        readFileIfNeeded();
     }, []);
 
     useEffect(() => {
@@ -63,7 +65,18 @@ const ImportingModalContent = ({
 
     useEffect(() => {
         const importContacts = async () => {
-            const apiResponse = await api(addContacts({ Contacts: encrypted, Overwrite: 1, Labels: 0 }));
+            const { Responses } = await api(
+                addContacts({ Contacts: encrypted, Overwrite: OVERWRITE_CONTACT, Labels: 0 })
+            );
+            setImported(
+                Responses.reduce((acc, { Code }) => {
+                    if (Code === SUCCESS_IMPORT_CODE) {
+                        return acc + 1;
+                    }
+                    return acc;
+                }, 0)
+            );
+            setFinished(true);
         };
 
         encryptingDone && importContacts();
@@ -80,7 +93,8 @@ const ImportingModalContent = ({
                 alt="contact-loader"
                 value={percentageProgress(encrypted.length, failed.length, total)}
                 displayEnd={c('Progress bar description')
-                    .t`${encrypted.length} out of ${total} contacts successfully imported.`}
+                    .t`${imported} out of ${total} contacts successfully imported.`}
+                endPostponed={!finished}
             />
         </>
     );
