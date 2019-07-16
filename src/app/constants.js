@@ -44,3 +44,11 @@ export const IMPORT_STEPS = {
     IMPORTING: 4,
     IMPORT_GROUPS: 5
 };
+
+export const OVERWRITE = {
+    // when UID conflict at contact import
+    THROW_ERROR: 0,
+    OVERWRITE_CONTACT: 1
+};
+
+export const SUCCESS_IMPORT_CODE = 1000; // in POST API route /contacts
