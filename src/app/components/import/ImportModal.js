@@ -33,7 +33,7 @@ const ImportModal = ({ onClose, ...rest }) => {
     const [encryptingDone, setEncryptingDone] = useState(false);
 
     const handleAttach = async ({ target }) => {
-        // TODO: set some limit on the total number of files or their size ?
+        // TODO: set some limit on the the size ?
         const file = [...target.files].filter(({ type }) => ['text/vcard', 'text/csv'].includes(type))[0];
 
         if (target.files.length && !file) {
