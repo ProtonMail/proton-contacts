@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sidebar, useModals } from 'react-components';
+import { NavMenu, useModals, PrimaryButton } from 'react-components';
 import { c } from 'ttag';
 import PropTypes from 'prop-types';
 
@@ -16,14 +16,6 @@ const AuthSidebar = ({ contacts, contactGroups }) => {
 
     const list = [
         {
-            icon: 'plus',
-            text: c('Action').t`Add contact`,
-            type: 'button',
-            onClick() {
-                createModal(<ContactModal />);
-            }
-        },
-        {
             icon: 'contacts',
             text: c('Link').t`Contacts`,
             link: '/contacts'
@@ -32,6 +24,7 @@ const AuthSidebar = ({ contacts, contactGroups }) => {
             icon: 'contacts-group',
             text: c('Link').t`Group`,
             type: 'button',
+            className: 'alignleft',
             onClick() {
                 createModal(<ContactGroupsModal />);
             }
@@ -49,6 +42,7 @@ const AuthSidebar = ({ contacts, contactGroups }) => {
         icon: 'add',
         text: c('Link').t`Add group`,
         type: 'button',
+        className: 'alignleft',
         onClick() {
             createModal(<ContactGroupModal />);
         }
@@ -59,11 +53,24 @@ const AuthSidebar = ({ contacts, contactGroups }) => {
             icon: 'merge',
             text: c('Action').t`Merge`,
             type: 'button',
-            onClick() {}
+            className: 'alignleft',
+            onClick() {
+                // TODO
+            }
         });
     }
 
-    return <Sidebar list={list} />;
+    return (
+        <div className="sidebar flex flex-column noprint">
+            <div className="pl1 pr1">
+                <PrimaryButton className="w100" onClick={() => createModal(<ContactModal />)}>{c('Action')
+                    .t`Add contact`}</PrimaryButton>
+            </div>
+            <nav className="navigation flex-item-fluid scroll-if-needed mb1">
+                <NavMenu list={list} />
+            </nav>
+        </div>
+    );
 };
 
 AuthSidebar.propTypes = {
