@@ -30,16 +30,16 @@ export const toPreVcard = (header) => {
     }
     if (/^e-mail (\d*)/.test(property)) {
         const match = property.match(/^e-mail (\d+)/);
-        return (value) => templates['email']({ pref: (match && match[1]) || 1, header, value });
+        return (value) => templates['email']({ pref: +(match && match[1]) || 1, header, value });
     }
     if (/^(\w+\s*\w*) phone\s?(\d*)$/.test(property)) {
         const match = property.match(/^(\w+\s*\w*) phone\s?(\d*)$/);
-        return (value) => templates['tel']({ pref: match[2] || 1, header, value, type: toVcardType(match[1]) });
+        return (value) => templates['tel']({ pref: +match[2] || 1, header, value, type: toVcardType(match[1]) });
     }
     if (/^(\w+) fax\s?(\d*)$/.test(property)) {
         const match = property.match(/^(\w+) fax\s?(\d*)$/);
         return (value) =>
-            templates['tel']({ pref: match[2] || 1, header, value, type: `fax, ${toVcardType(match[1])}` });
+            templates['tel']({ pref: +match[2] || 1, header, value, type: `fax, ${toVcardType(match[1])}` });
     }
     if (/^(\w+) street\s?(\d*)$/.test(property)) {
         const [, type, pref] = property.match(/^(\w+) street\s?(\d*)$/);
@@ -234,6 +234,7 @@ const templates = {
             checked: true,
             field: 'email',
             type: 'home',
+            group: pref,
             combine: getFirstValue,
             display: getFirstValue
         };
@@ -293,7 +294,7 @@ const toVcardType = (csvType) => {
         case 'work':
             return 'work';
         case 'mobile':
-            return 'mobile';
+            return 'cell';
         case 'other':
             return 'other';
         case 'main':

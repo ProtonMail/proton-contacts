@@ -11,22 +11,41 @@ import { extractVcards, parse as parseVcard } from '../../helpers/vcard';
 import { prepareContact } from '../../helpers/encrypt';
 import { percentageProgress } from '../../helpers/progress';
 
-const ImportingModalContent = ({ file, vcardContacts, loadingKeys, privateKey, encryptingDone, onEncryptingDone }) => {
+const ImportingModalContent = ({
+    file,
+    vcardContacts,
+    onSetVcardContacts,
+    loadingKeys,
+    privateKey,
+    encryptingDone,
+    onEncryptingDone
+}) => {
     const api = useApi();
 
+    const [fileRead, setFileRead] = useState(false);
     const total = vcardContacts.length;
     const [encrypted, addSuccess] = useState([]);
     const [failed, addError] = useState([]);
 
     useEffect(() => {
-        const encryptContacts = async () => {
-            if (file.type == 'text/vcard') {
-                const vcards = extractVcards(await readFileAsString(file));
-                setVcardContacts(vcards.map(parseVcard));
-            }
-            // if importFile.type == 'text/csv', vcardContacts has been set in step CHECKING_CSV
+        const readFile = async () => {
+            const vcards = extractVcards(await readFileAsString(file));
+            onSetVcardContacts(vcards.map(parseVcard));
+            setFileRead(true);
+        };
 
-            // encrypt contacts
+        if (file.type === 'text/vcard') {
+            readFile();
+        }
+        if (file.type === 'text/csv') {
+            // In this case the file has been already read,
+            // and vcardContacts has been set too, in step CHECKING_CSV
+            setFileRead(true);
+        }
+    }, []);
+
+    useEffect(() => {
+        const encryptContacts = async () => {
             const publicKey = privateKey.toPublic();
             for (const vcardContact of vcardContacts) {
                 try {
@@ -39,26 +58,22 @@ const ImportingModalContent = ({ file, vcardContacts, loadingKeys, privateKey, e
             onEncryptingDone();
         };
 
-        !loadingKeys && encryptContacts();
-    }, [loadingKeys]);
+        !loadingKeys && fileRead && encryptContacts();
+    }, [loadingKeys, fileRead]);
 
     useEffect(() => {
         const importContacts = async () => {
-            if (encryptingDone) {
-                console.log(encrypted);
-                const apiResponse = await api(addContacts({ Contacts: encrypted, Overwrite: 1, Labels: 0 }));
-                console.log('apiResponse', apiResponse);
-            }
+            const apiResponse = await api(addContacts({ Contacts: encrypted, Overwrite: 1, Labels: 0 }));
         };
 
-        importContacts();
+        encryptingDone && importContacts();
     }, [encryptingDone]);
 
     return (
         <>
             <Alert>
                 {c('Description')
-                    .t`Importing contacts... This may take a few minutes. When the process is completed, you can close this modal.`}
+                    .t`Encrypting and importing contacts... This may take a few minutes. When the process is completed, you can close this modal.`}
             </Alert>
             <DynamicProgress
                 id="progress-import-contacts"
@@ -72,8 +87,9 @@ const ImportingModalContent = ({ file, vcardContacts, loadingKeys, privateKey, e
 };
 
 ImportingModalContent.propTypes = {
-    file: PropTypes.shape({ type: PropTypes.string }).isRequired,
+    file: PropTypes.instanceOf(File).isRequired,
     vcardContacts: PropTypes.array.isRequired,
+    onSetVcardContacts: PropTypes.func,
     loadingKeys: PropTypes.bool,
     privateKey: PropTypes.object.isRequired,
     encryptingDone: PropTypes.bool,
