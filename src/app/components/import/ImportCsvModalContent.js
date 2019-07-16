@@ -6,7 +6,7 @@ import { Table, Alert, Block } from 'react-components';
 import ImportCsvTableHeader from './ImportCsvTableHeader';
 import ImportCsvTableBody from './ImportCsvTableBody';
 
-import { getCsvData, prepare, toVcardContact } from '../../helpers/csv';
+import { getCsvData, prepare, toVcardContacts } from '../../helpers/csv';
 import { modifyContactField, modifyContactType, toggleContactChecked } from '../../helpers/import';
 
 const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
@@ -37,7 +37,7 @@ const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
     }, []);
 
     useEffect(() => {
-        onSetVcardContacts(preVcardsContacts.map(toVcardContact));
+        onSetVcardContacts(toVcardContacts(preVcardsContacts));
     }, [preVcardsContacts]);
 
     return (
@@ -75,7 +75,7 @@ const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
 };
 
 ImportCsvModalContent.propTypes = {
-    file: PropTypes.shape({ name: PropTypes.string, size: PropTypes.number }).isRequired,
+    file: PropTypes.instanceOf(File).isRequired,
     parsedContacts: PropTypes.arrayOf(
         PropTypes.arrayOf(PropTypes.shape({ field: PropTypes.string, type: PropTypes.string }))
     ),

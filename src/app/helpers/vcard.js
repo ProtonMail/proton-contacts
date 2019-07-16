@@ -163,10 +163,11 @@ export const orderProperties = (properties) => {};
  * @return {Array<String>}  Array of vcards
  */
 export const extractVcards = (vcf = '') => {
-    const res = vcf.split('END:VCARD').map((vcard) => vcard.trim() + '\r\nEND:VCARD');
-    // Some checks on the vcf file
-    if ((vcf.match(/BEGIN:VCARD/g) || []).length !== (vcf.match(/END:VCARD/g) || []).length || res.pop() !== '') {
+    // Basic check on the vcf file
+    if ((vcf.match(/BEGIN:VCARD/g) || []).length !== (vcf.match(/END:VCARD/g) || []).length) {
         throw new Error('Invalid vcf file');
     }
-    return res;
+    const vcards = vcf.split('END:VCARD');
+    vcards.pop();
+    return vcards.map((vcard) => vcard.trim() + '\r\nEND:VCARD');
 };

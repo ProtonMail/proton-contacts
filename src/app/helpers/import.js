@@ -1,4 +1,4 @@
-import { CUSTOMIZABLE_VCARD_TYPES as vcardTypes } from '../constants';
+import { getTypeValues } from '../helpers/types';
 
 // See './csv.js' for the definition of pre-vCard and pre-vCards contact
 
@@ -10,7 +10,12 @@ import { CUSTOMIZABLE_VCARD_TYPES as vcardTypes } from '../constants';
  * @return {Object}                 pre-vCard with the modified field (and type, if needed)
  */
 const modifyPreVcardField = (preVcard, newField) => {
-    const newType = vcardTypes[newField].includes(preVcard.type) ? preVcard.type : vcardTypes[newField][0];
+    const types = getTypeValues();
+    const newType = types[newField].includes(preVcard.type)
+        ? preVcard.type
+        : types[newField].length
+        ? types[newField][0]
+        : undefined;
     return { ...preVcard, field: newField, type: newType };
 };
 

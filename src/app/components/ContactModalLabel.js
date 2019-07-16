@@ -5,7 +5,7 @@ import { Select, Label } from 'react-components';
 
 import ContactLabelProperty from './ContactLabelProperty';
 
-const FIELDS = ['email', 'tel', 'adr']; // List of field where we let the user change the type
+const FIELDS = ['email', 'tel', 'adr']; // List of fields where we let the user change the type
 
 const ContactModalLabel = ({ field, uid, type, onChange }) => {
     const handleChangeType = ({ target }) => onChange({ value: target.value, key: 'type', uid });

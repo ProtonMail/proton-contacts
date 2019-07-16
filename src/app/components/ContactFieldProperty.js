@@ -5,11 +5,11 @@ import { Input, TextArea, EmailInput, DateInput } from 'react-components';
 
 import ContactImageField from './ContactImageField';
 import ContactAdrField from './ContactAdrField';
-import { getLabels } from '../helpers/field';
+import { getFieldLabels } from '../helpers/fields';
 
 const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
     const handleChange = ({ target }) => onChange({ value: target.value, uid });
-    const labels = getLabels();
+    const labels = getFieldLabels();
     const val = Array.isArray(value) ? value[0] : value;
 
     if (field === 'email') {
