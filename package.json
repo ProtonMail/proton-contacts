@@ -60,7 +60,6 @@
         "redux-devtools-extension": "^2.13.7",
         "redux-thunk": "^2.3.0",
         "ttag": "^1.5.1",
-        "vcf": "^2.0.4",
         "yetch": "^1.1.0"
     },
     "lint-staged": {
