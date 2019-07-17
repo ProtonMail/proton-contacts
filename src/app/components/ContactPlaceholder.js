@@ -22,7 +22,7 @@ const PaidCards = ({ contactGroupID }) => {
     const handleGroups = () => createModal(<ContactGroupsModal />);
 
     const handleImport = () => {
-        // TODO
+        // TODO open import modal
     };
 
     return (

@@ -52,7 +52,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
 
     return (
         <>
-            <Alert learnMore="TODO">{c('Info')
+            <Alert learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
                 .t`Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service.`}</Alert>
             {model.isPGPInline ? (
                 <Alert>{c('Info')

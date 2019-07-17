@@ -238,7 +238,7 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
             title={c('Title').t`Email settings (${contactEmail.Email})`}
             {...rest}
         >
-            <Alert learnMore="TODO">{c('Info')
+            <Alert>{c('Info')
                 .t`Select the email format you want to be used by default when sending an email to this email address.`}</Alert>
             <Row>
                 <Label>
