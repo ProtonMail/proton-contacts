@@ -4,15 +4,12 @@ import { c } from 'ttag';
 import PropTypes from 'prop-types';
 
 import ContactModal from '../components/ContactModal';
-import { extract } from '../helpers/merge';
+
 import ContactGroupModal from '../components/ContactGroupModal';
 import ContactGroupsModal from '../components/ContactGroupsModal';
 
-const AuthSidebar = ({ contacts, contactGroups }) => {
+const AuthSidebar = ({ contactGroups }) => {
     const { createModal } = useModals();
-    const emails = extract(contacts);
-    const duplicates = Object.keys(emails).reduce((acc, key) => acc + emails[key].length, 0);
-    const canMerge = duplicates > 0;
 
     const list = [
         {
@@ -60,18 +57,6 @@ const AuthSidebar = ({ contacts, contactGroups }) => {
         }
     });
 
-    if (canMerge) {
-        list.splice(2, 0, {
-            icon: 'merge',
-            text: c('Action').t`Merge`,
-            type: 'button',
-            className: 'alignleft',
-            onClick() {
-                // TODO
-            }
-        });
-    }
-
     return (
         <div className="sidebar flex flex-column noprint">
             <div className="pl1 pr1">
@@ -86,7 +71,6 @@ const AuthSidebar = ({ contacts, contactGroups }) => {
 };
 
 AuthSidebar.propTypes = {
-    contacts: PropTypes.array,
     contactGroups: PropTypes.array
 };
 

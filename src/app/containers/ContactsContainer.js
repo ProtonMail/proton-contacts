@@ -101,7 +101,7 @@ const ContactsContainer = ({ location }) => {
         <>
             <AuthHeader search={search} onSearch={updateSearch} />
             <div className="flex flex-nowrap">
-                <Route path="/:path" render={() => <AuthSidebar contacts={contacts} contactGroups={contactGroups} />} />
+                <Route path="/:path" render={() => <AuthSidebar contactGroups={contactGroups} />} />
                 <div className="main flex-item-fluid main-area">
                     <ContactToolbar
                         checkedContacts={checkedContacts}
