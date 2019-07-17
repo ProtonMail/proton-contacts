@@ -9,8 +9,10 @@ import ImportCsvModalContent from './ImportCsvModalContent';
 import ImportingModalContent from './ImportingModalContent';
 import ImportGroupsModalContent from './ImportGroupsModalContent';
 
-import { noop } from 'proton-shared/lib/helpers/function';
 import { IMPORT_STEPS } from '../../constants';
+import { hasCategories } from '../../helpers/import';
+import { readCsv } from '../../helpers/csv';
+import { readFileAsString } from 'proton-shared/lib/helpers/file';
 
 const { ATTACHING, ATTACHED, CHECKING_CSV, IMPORTING, IMPORT_GROUPS } = IMPORT_STEPS;
 
@@ -28,38 +30,58 @@ const ImportModal = ({ onClose, ...rest }) => {
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
 
     const [step, setStep] = useState(ATTACHING);
-    const [importFile, setImportFile] = useState(null);
+    const [file, setFile] = useState({ attached: null, read: null });
     const [vcardContacts, setVcardContacts] = useState([]);
     const [encryptingDone, setEncryptingDone] = useState(false);
 
     const handleAttach = async ({ target }) => {
         // TODO: set some limit on the the size ?
-        const file = [...target.files].filter(({ type }) => ['text/vcard', 'text/csv'].includes(type))[0];
+        const attachedFile = [...target.files].filter(({ type }) => ['text/vcard', 'text/csv'].includes(type))[0];
 
-        if (target.files.length && !file) {
+        if (target.files.length && !attachedFile) {
             return createNotification({
                 type: 'error',
                 text: c('Error notification').t`No .csv or .vcf file selected`
             });
         }
         setStep(ATTACHED);
-        setImportFile(file);
+        setFile({ ...file, attached: attachedFile });
     };
 
     const handleClear = () => {
-        setImportFile(null);
+        setFile({ attached: null, read: null });
         setStep(ATTACHING);
     };
 
     const handleEncryptingDone = () => setEncryptingDone(true);
 
     const handleSubmit = {
-        [ATTACHING]: () => noop,
-        [ATTACHED]: () => setStep(importFile.type === 'text/csv' ? CHECKING_CSV : IMPORTING),
+        [ATTACHED]: async () => {
+            try {
+                if (file.attached.type === 'text/csv') {
+                    setFile({ ...file, read: await readCsv(file.attached) });
+                    setStep(CHECKING_CSV);
+                } else {
+                    setFile({ ...file, read: await readFileAsString(file.attached) });
+                    setStep(IMPORTING);
+                }
+            } catch {
+                createNotification({
+                    type: 'error',
+                    text: c('Error notification').t`File selected appears to be corrupted`
+                });
+                setStep(ATTACHING);
+            }
+        },
         [CHECKING_CSV]: () => {
             setStep(IMPORTING);
         },
-        [IMPORTING]: () => setStep(IMPORT_GROUPS),
+        [IMPORTING]: () => {
+            if (hasCategories(vcardContacts)) {
+                return setStep(IMPORT_GROUPS);
+            }
+            onClose();
+        },
         [IMPORT_GROUPS]: onClose
     };
 
@@ -74,19 +96,20 @@ const ImportModal = ({ onClose, ...rest }) => {
             {step <= ATTACHED ? (
                 <AttachingModalContent
                     attached={step === ATTACHED}
-                    file={importFile}
+                    file={file.attached}
                     onAttach={handleAttach}
                     onClear={handleClear}
                 />
             ) : step === CHECKING_CSV ? (
                 <ImportCsvModalContent
-                    file={importFile}
+                    file={file.read}
                     vcardContacts={vcardContacts}
                     onSetVcardContacts={setVcardContacts}
                 />
             ) : step === IMPORTING ? (
                 <ImportingModalContent
-                    file={importFile}
+                    fileType={file.attached.type}
+                    file={file.read}
                     vcardContacts={vcardContacts}
                     onSetVcardContacts={setVcardContacts}
                     loadingKeys={loadingUserKeys}

@@ -33,7 +33,7 @@ const AttachedFile = ({ file, iconName, className, clear, onClear, ...rest }) =>
 };
 
 AttachedFile.propTypes = {
-    file: PropTypes.shape({ name: PropTypes.string, size: PropTypes.number }).isRequired,
+    file: PropTypes.instanceOf(File).isRequired,
     iconName: PropTypes.string.isRequired,
     clear: PropTypes.string,
     onClear: PropTypes.func

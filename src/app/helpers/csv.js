@@ -50,7 +50,7 @@ import { toPreVcard } from './csvFormat';
  *
  * @dev  contacts[i][j] : value for property headers[j] of contact i
  */
-const readCsv = (file) => {
+export const readCsv = (file) => {
     return new Promise((resolve, reject) => {
         const onComplete = ({ data = [] } = {}) => resolve({ headers: data[0], contacts: data.slice(1) });
         Papa.parse(file, {
@@ -79,13 +79,13 @@ const readCsv = (file) => {
 const isEmptyHeaderIndex = (index, contacts) => !contacts.some((values) => values[index] !== '');
 
 /**
- * Extract (only) non-empty csv properties and contacts values from a csv file
- * @param {File} file
+ * Extract (only) non-empty csv properties and contacts values from a read csv file
+ * @param {Array<String>} headers
+ * @param {Array<Array<String>>} contacts
  *
- * @return {Promise<Object>}         { headers: Array<String>, contacts: Array<Array<String>> }
+ * @return {Object}         { headers: Array<String>, contacts: Array<Array<String>> }
  */
-export const getCsvData = async (file) => {
-    const { headers, contacts } = await readCsv(file);
+const getNonEmptyCsvData = ({ headers, contacts }) => {
     const indicesToKeep = headers.map((header, i) => !isEmptyHeaderIndex(i, contacts));
     return {
         headers: headers.filter((header, i) => indicesToKeep[i]),
@@ -108,8 +108,9 @@ const parse = ({ headers = [], contacts = [] }) => {
     if (contacts.length === 0) {
         return [];
     }
-    const translator = headers.map(toPreVcard);
-    return contacts
+    const { headers: nonEmptyHeaders, contacts: nonEmptyContacts } = getNonEmptyCsvData({ headers, contacts });
+    const translator = nonEmptyHeaders.map(toPreVcard);
+    return nonEmptyContacts
         .map((contact) =>
             contact
                 .map((header, i) => translator[i](header))
