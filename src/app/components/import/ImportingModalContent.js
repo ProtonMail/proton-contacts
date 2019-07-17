@@ -10,9 +10,12 @@ import { readFileAsString } from 'proton-shared/lib/helpers/file';
 import { extractVcards, parse as parseVcard } from '../../helpers/vcard';
 import { prepareContact } from '../../helpers/encrypt';
 import { percentageProgress } from '../../helpers/progress';
-import { OVERWRITE, SUCCESS_IMPORT_CODE } from '../../constants';
+import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE } from '../../constants';
+import { CONTACT_CARD_TYPE } from 'proton-shared/lib/constants';
 
 const { OVERWRITE_CONTACT } = OVERWRITE;
+const { IGNORE, INCLUDE } = CATEGORIES;
+const { CLEAR_TEXT } = CONTACT_CARD_TYPE;
 
 const ImportingModalContent = ({
     file,
@@ -65,11 +68,24 @@ const ImportingModalContent = ({
 
     useEffect(() => {
         const importContacts = async () => {
-            const { Responses } = await api(
-                addContacts({ Contacts: encrypted, Overwrite: OVERWRITE_CONTACT, Labels: 0 })
+            // split encrypted contacts depending on having the CATEGORIES property
+            const withCategories = encrypted.filter(({ Cards }) =>
+                Cards.some(({ Type, Data }) => Type === CLEAR_TEXT && Data.includes('CATEGORIES'))
             );
+            const withoutCategories = encrypted.filter(({ Cards }) =>
+                Cards.every(({ Type, Data }) => Type !== CLEAR_TEXT || !Data.includes('CATEGORIES'))
+            );
+
+            // send encrypted contacts to API
+            const responses = (await api(
+                addContacts({ Contacts: withCategories, Overwrite: OVERWRITE_CONTACT, Labels: INCLUDE })
+            )).Responses.concat(
+                (await api(addContacts({ Contacts: withoutCategories, Overwrite: OVERWRITE_CONTACT, Labels: IGNORE })))
+                    .Responses
+            ).map(({ Response }) => Response);
+
             setImported(
-                Responses.reduce((acc, { Code }) => {
+                responses.reduce((acc, { Code }) => {
                     if (Code === SUCCESS_IMPORT_CODE) {
                         return acc + 1;
                     }
