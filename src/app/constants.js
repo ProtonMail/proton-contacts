@@ -51,4 +51,9 @@ export const OVERWRITE = {
     OVERWRITE_CONTACT: 1
 };
 
+export const CATEGORIES = {
+    IGNORE: 0,
+    INCLUDE: 1
+};
+
 export const SUCCESS_IMPORT_CODE = 1000; // in POST API route /contacts
