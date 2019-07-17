@@ -6,11 +6,11 @@ import { Table, Alert, Block } from 'react-components';
 import ImportCsvTableHeader from './ImportCsvTableHeader';
 import ImportCsvTableBody from './ImportCsvTableBody';
 
-import { getCsvData, prepare, toVcardContacts } from '../../helpers/csv';
+import { prepare, toVcardContacts } from '../../helpers/csv';
 import { modifyContactField, modifyContactType, toggleContactChecked } from '../../helpers/import';
 
 const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
-    const [isReadingFile, setIsReadingFile] = useState(true);
+    const [isParsingFile, setIsParsingFile] = useState(true);
     const [contactIndex, setContactIndex] = useState(0);
     const [preVcardsContacts, setpreVcardsContacts] = useState([]);
 
@@ -28,9 +28,9 @@ const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
 
     useEffect(() => {
         const parseFile = async () => {
-            const preVcardsContacts = prepare(await getCsvData(file));
+            const preVcardsContacts = prepare(file);
             setpreVcardsContacts(preVcardsContacts);
-            setIsReadingFile(false);
+            setIsParsingFile(false);
         };
 
         parseFile();
@@ -52,22 +52,22 @@ const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
             </Alert>
             <Table>
                 <ImportCsvTableHeader
-                    disabledPrevious={isReadingFile || contactIndex === 0}
+                    disabledPrevious={isParsingFile || contactIndex === 0}
                     disabledNext={
-                        isReadingFile || preVcardsContacts.length === 0 || contactIndex + 1 === preVcardsContacts.length
+                        isParsingFile || preVcardsContacts.length === 0 || contactIndex + 1 === preVcardsContacts.length
                     }
                     onNext={handleClickNext}
                     onPrevious={handleClickPrevious}
                 />
                 <ImportCsvTableBody
-                    loading={isReadingFile}
+                    loading={isParsingFile}
                     contact={preVcardsContacts && preVcardsContacts[contactIndex]}
                     onToggle={handleToggle}
                     onChangeField={handleChangeField}
                     onChangeType={handleChangeType}
                 />
             </Table>
-            {!isReadingFile && !preVcardsContacts.length && (
+            {!isParsingFile && !preVcardsContacts.length && (
                 <Block className="aligncenter">{c('Info').t`No contacts to be imported`}</Block>
             )}
         </>
@@ -75,7 +75,7 @@ const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
 };
 
 ImportCsvModalContent.propTypes = {
-    file: PropTypes.instanceOf(File).isRequired,
+    file: PropTypes.shape({ headers: PropTypes.array, contacts: PropTypes.array }).isRequired,
     parsedContacts: PropTypes.arrayOf(
         PropTypes.arrayOf(PropTypes.shape({ field: PropTypes.string, type: PropTypes.string }))
     ),
