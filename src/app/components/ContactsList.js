@@ -46,8 +46,13 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
 
     const Row = ({
         index, // Index of row within collection
-        style // Style object to be applied to row (to position it)
+        style, // Style object to be applied to row (to position it)
+        key
     }) => {
+        if (canMerge && !index) {
+            return <MergeRow index={index} key={key} style={style} />;
+        }
+
         const { ID, Name, LabelIDs = [], emails, isChecked } = contacts[index];
         const initial = getInitial(Name);
         return (
@@ -120,13 +125,12 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
 
     return (
         <div ref={containerRef} className="items-column-list">
-            {canMerge ? <MergeRow /> : null}
             <AutoSizer>
                 {({ height, width }) => (
                     <List
                         ref={listRef}
                         rowRenderer={Row}
-                        rowCount={contacts.length}
+                        rowCount={contacts.length + canMerge}
                         height={height}
                         width={width}
                         rowHeight={76}
