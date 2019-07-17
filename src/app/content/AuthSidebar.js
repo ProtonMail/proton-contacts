@@ -17,6 +17,14 @@ const AuthSidebar = ({ contacts, contactGroups }) => {
     const list = [
         {
             icon: 'contacts',
+            isActive(match, location) {
+                if (!match) {
+                    return false;
+                }
+                const params = new URLSearchParams(location.search);
+                const contactGroupID = params.get('contactGroupID');
+                return !contactGroupID;
+            },
             text: c('Link').t`Contacts`,
             link: '/contacts'
         },
@@ -32,6 +40,10 @@ const AuthSidebar = ({ contacts, contactGroups }) => {
     ].concat(
         contactGroups.map(({ Name: text, Color: color, ID: contactGroupID }) => ({
             icon: 'contacts-groups',
+            isActive(match, location) {
+                const params = new URLSearchParams(location.search);
+                return params.get('contactGroupID') === contactGroupID;
+            },
             color,
             text,
             link: `/contacts?contactGroupID=${contactGroupID}`
