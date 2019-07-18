@@ -8,7 +8,7 @@ import ContactModal from '../components/ContactModal';
 import ContactGroupModal from '../components/ContactGroupModal';
 import ContactGroupsModal from '../components/ContactGroupsModal';
 
-const AuthSidebar = ({ contactGroups }) => {
+const PrivateSidebar = ({ contactGroups }) => {
     const { createModal } = useModals();
 
     const list = [
@@ -70,8 +70,8 @@ const AuthSidebar = ({ contactGroups }) => {
     );
 };
 
-AuthSidebar.propTypes = {
+PrivateSidebar.propTypes = {
     contactGroups: PropTypes.array
 };
 
-export default AuthSidebar;
+export default PrivateSidebar;
