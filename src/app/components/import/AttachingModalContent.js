@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { Bordered, FileInput, Alert } from 'react-components';
@@ -6,6 +6,8 @@ import { Bordered, FileInput, Alert } from 'react-components';
 import AttachedFile from './AttachedFile';
 
 const AttachingModalContent = ({ attached, file, onAttach, onClear }) => {
+    const myRef = useRef();
+
     return (
         <>
             <Alert learnMore="https://protonmail.com/support/knowledge-base/adding-contacts/">
@@ -17,7 +19,14 @@ const AttachingModalContent = ({ attached, file, onAttach, onClear }) => {
                 {attached ? (
                     <AttachedFile file={file} iconName="contacts-groups" onClear={onClear} />
                 ) : (
-                    <FileInput className="center" accept=".csv, .vcf" id="import-contacts" onChange={onAttach}>
+                    <FileInput
+                        className="center"
+                        accept=".csv, .vcf"
+                        id="import-contacts"
+                        value={file}
+                        onChange={onAttach}
+                        ref={myRef}
+                    >
                         {c('Action').t`Select file from computer`}
                     </FileInput>
                 )}

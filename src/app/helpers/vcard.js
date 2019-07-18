@@ -164,18 +164,36 @@ export const merge = (contact = []) => {
     }, []);
 };
 
-export const orderProperties = (properties) => {};
+/**
+ * Basic test for the validity of a vCard file read as a string
+ * @param {String} vcf
+ *
+ * @return {Boolean}
+ */
+const isValid = (vcf = '') =>
+    !!vcf.match(/BEGIN:VCARD/g) && vcf.match(/BEGIN:VCARD/g).length !== (vcf.match(/END:VCARD/g) || []).length;
+
+/**
+ * Read a vCard file as a string. If there are errors when parsing the csv, throw
+ * @param {File} vcf
+ *
+ * @return {String}
+ */
+export const readVcf = async (file) => {
+    const vcf = readFileAsString(file);
+    if (!isValid(vcf)) {
+        throw new Error('Error when reading vcf file');
+    }
+    return vcf;
+};
 
 /**
  * Extract array of vcards from a string containing several vcards
  * @param {String} vcf
+ *
  * @return {Array<String>}  Array of vcards
  */
 export const extractVcards = (vcf = '') => {
-    // Basic check on the vcf file
-    if ((vcf.match(/BEGIN:VCARD/g) || []).length !== (vcf.match(/END:VCARD/g) || []).length) {
-        throw new Error('Invalid vcf file');
-    }
     const vcards = vcf.split('END:VCARD');
     vcards.pop();
     return vcards.map((vcard) => vcard.trim() + '\r\nEND:VCARD');
