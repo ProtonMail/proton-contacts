@@ -15,7 +15,7 @@ import MergeRow from './MergeRow';
 const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
     const [{ hasPaidMail }] = useUser();
     const emails = extract(contacts);
-    const duplicates = Object.keys(emails).reduce((acc, key) => acc + emails[key].length, 0);
+    const duplicates = Object.values(emails).reduce((acc, arr) => acc + arr.length, 0);
     const canMerge = duplicates > 0;
     const listRef = useRef(null);
     const containerRef = useRef(null);
@@ -50,7 +50,7 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
         key
     }) => {
         if (canMerge && !index) {
-            return <MergeRow index={index} key={key} style={style} />;
+            return <MergeRow key={key} style={style} />;
         }
 
         const { ID, Name, LabelIDs = [], emails, isChecked } = contacts[index];
