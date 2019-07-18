@@ -3,7 +3,7 @@ import { c } from 'ttag';
 import PropTypes from 'prop-types';
 import { useModals, AuthenticatedBugModal, SearchInput } from 'react-components';
 
-const AuthHeader = ({ search, onSearch }) => {
+const PrivateHeader = ({ search, onSearch }) => {
     const { createModal } = useModals();
     const handleClick = () => createModal(<AuthenticatedBugModal />);
     return (
@@ -96,9 +96,9 @@ const AuthHeader = ({ search, onSearch }) => {
     );
 };
 
-AuthHeader.propTypes = {
+PrivateHeader.propTypes = {
     search: PropTypes.string,
     onSearch: PropTypes.func
 };
 
-export default AuthHeader;
+export default PrivateHeader;
