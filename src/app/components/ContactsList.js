@@ -8,10 +8,15 @@ import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 
 import ItemCheckbox from './ItemCheckbox';
 import ContactGroupIcon from './ContactGroupIcon';
+import { extract } from '../helpers/merge';
 import { c } from 'ttag';
+import MergeRow from './MergeRow';
 
 const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
     const [{ hasPaidMail }] = useUser();
+    const emails = extract(contacts);
+    const duplicates = Object.values(emails).reduce((acc, arr) => acc + arr.length, 0);
+    const canMerge = duplicates > 0;
     const listRef = useRef(null);
     const containerRef = useRef(null);
     const [lastChecked, setLastChecked] = useState(); // Store ID of the last contact ID checked
@@ -41,8 +46,13 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
 
     const Row = ({
         index, // Index of row within collection
-        style // Style object to be applied to row (to position it)
+        style, // Style object to be applied to row (to position it)
+        key
     }) => {
+        if (canMerge && !index) {
+            return <MergeRow key={key} style={style} />;
+        }
+
         const { ID, Name, LabelIDs = [], emails, isChecked } = contacts[index];
         const initial = getInitial(Name);
         return (
@@ -120,7 +130,7 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
                     <List
                         ref={listRef}
                         rowRenderer={Row}
-                        rowCount={contacts.length}
+                        rowCount={contacts.length + canMerge}
                         height={height}
                         width={width}
                         rowHeight={76}
