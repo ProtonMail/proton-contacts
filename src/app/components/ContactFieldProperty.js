@@ -5,7 +5,6 @@ import { Input, TextArea, EmailInput, DateInput } from 'react-components';
 
 import ContactImageField from './ContactImageField';
 import ContactAdrField from './ContactAdrField';
-import { c } from 'ttag';
 import { getLabels } from '../helpers/field';
 
 const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
