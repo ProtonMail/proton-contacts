@@ -44,15 +44,17 @@ import { toPreVcard } from './csvFormat';
  */
 
 /**
- * Get all csv properties and corresponding contacts values from a csv file
+ * Get all csv properties and corresponding contacts values from a csv file.
+ * If there are errors when parsing the csv, throw
  * @param {File} file
  * @return {Promise<Object>}         { headers: Array<String>, values: Array<Array<String>> }
  *
  * @dev  contacts[i][j] : value for property headers[j] of contact i
  */
-export const readCsv = (file) => {
-    return new Promise((resolve, reject) => {
-        const onComplete = ({ data = [] } = {}) => resolve({ headers: data[0], contacts: data.slice(1) });
+export const readCsv = async (file) => {
+    const { headers, contacts, errors } = await new Promise((resolve, reject) => {
+        const onComplete = ({ data = [], errors = [] } = {}) =>
+            resolve({ headers: data[0], contacts: data.slice(1), errors });
         Papa.parse(file, {
             header: false,
             /*
@@ -66,6 +68,12 @@ export const readCsv = (file) => {
             skipEmptyLines: true // If true, lines that are completely empty will be skipped. An empty line is defined to be one which evaluates to empty string.
         });
     });
+
+    if (errors.length) {
+        throw new Error('Error when reading csv file');
+    }
+
+    return { headers, contacts };
 };
 
 /**
