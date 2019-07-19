@@ -1,5 +1,5 @@
 import Papa from 'papaparse';
-import { toPreVcard } from './csvFormat';
+import { combine, display, toPreVcard } from './csvFormat';
 
 /** NOTATION
  *
@@ -26,17 +26,15 @@ import { toPreVcard } from './csvFormat';
  * "pre-vCard property": Because different csv properties may correspond to a single vCard property,
  *                       to pass from one to the other we go through an intermediate step.
  *                       A pre-vCard property is the JS object:
- *                       { header, checked, pref, field, type, value, combineInto, combineIndex, combine, display }
+ *                       { header, checked, pref, field, type, value, combineInto, combineIndex, custom }
  *                       The key "header" equals the csv property.
  *                       The key "checked" will mark whether we want to include this property into the vCard
  *                       The key "combineInto" will be the same for different csv properties that will
  *                       assemble into a single vCard property. For this assembly we need to order
- *                       the properties, which will be indicated by the key "combineIndex", and combine
- *                       them in a certain way indicated by the function "combine", which takes as arguments
- *                       the csv properties to be assembled.
- *                       Because the value of a vCard property is not always a string (sometimes it is an array),
- *                       we need an additional function that combines the csv properties into a string.
- *                       This function is the key "display".
+ *                       the properties, which will be indicated by the key "combineIndex".
+ *                       The key "custom" is a boolean that indicates whether the header couldn't be matched
+ *                       with a standard vCard property.
+ *
  * "pre-vCard contact": An array made of pre-vCard properties
  *
  * "pre-vCards property" An array of pre-vCard properties. These pre-Vcards are to be combined into a single vCard
@@ -198,8 +196,10 @@ export const toVcard = (preVcards) => {
     if (!preVcards.length) {
         return {};
     }
-    const { pref, field, type, combine, display } = preVcards[0];
-    return { pref, field, type, value: combine(preVcards), display: display(preVcards) };
+    const { pref, field, type, custom } = preVcards[0];
+    return custom
+        ? { pref, field, type, value: combine['custom'](preVcards), display: display['custom'](preVcards) }
+        : { pref, field, type, value: combine[field](preVcards), display: display[field](preVcards) };
 };
 
 /**
