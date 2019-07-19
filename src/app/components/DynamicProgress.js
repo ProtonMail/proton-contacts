@@ -4,7 +4,7 @@ import { c } from 'ttag';
 import { Icon } from 'react-components';
 import contactLoader from 'design-system/assets/img/pm-images/contact-export-loader.gif';
 
-const DyanmicProgress = ({ id, alt, displayDuring, displayEnd, value, max, endPostponed, ...rest }) => {
+const DynamicProgress = ({ id, alt, displayDuring, displayEnd, value, max, endPostponed, ...rest }) => {
     return (
         <div className="aligncenter">
             {value < max ? (

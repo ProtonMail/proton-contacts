@@ -23,7 +23,6 @@ const AttachingModalContent = ({ attached, file, onAttach, onClear }) => {
                         className="center"
                         accept=".csv, .vcf"
                         id="import-contacts"
-                        value={file}
                         onChange={onAttach}
                         ref={myRef}
                     >

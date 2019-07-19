@@ -171,7 +171,7 @@ export const merge = (contact = []) => {
  * @return {Boolean}
  */
 const isValid = (vcf = '') =>
-    !!vcf.match(/BEGIN:VCARD/g) && vcf.match(/BEGIN:VCARD/g).length !== (vcf.match(/END:VCARD/g) || []).length;
+    !!vcf.match(/BEGIN:VCARD/g) && vcf.match(/BEGIN:VCARD/g).length === (vcf.match(/END:VCARD/g) || []).length;
 
 /**
  * Read a vCard file as a string. If there are errors when parsing the csv, throw
@@ -180,7 +180,7 @@ const isValid = (vcf = '') =>
  * @return {String}
  */
 export const readVcf = async (file) => {
-    const vcf = readFileAsString(file);
+    const vcf = await readFileAsString(file);
     if (!isValid(vcf)) {
         throw new Error('Error when reading vcf file');
     }

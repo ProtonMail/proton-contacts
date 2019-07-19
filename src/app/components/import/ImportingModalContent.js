@@ -16,6 +16,8 @@ const { OVERWRITE_CONTACT } = OVERWRITE;
 const { IGNORE, INCLUDE } = CATEGORIES;
 const { CLEAR_TEXT } = CONTACT_CARD_TYPE;
 
+const [PARSING, ENCRYPTING, IMPORTING, FINISHED] = [1, 2, 3, 4];
+
 const ImportingModalContent = ({
     fileType,
     file,
@@ -23,81 +25,87 @@ const ImportingModalContent = ({
     onSetVcardContacts,
     loadingKeys,
     privateKey,
-    encryptingDone,
     onEncryptingDone
 }) => {
     const api = useApi();
 
-    const [fileParsed, setFileParsed] = useState(false);
+    const [step, setStep] = useState(PARSING);
+    const [track, setTrack] = useState({
+        total: 0,
+        encrypted: [],
+        failedOnParse: 0,
+        failedOnEncrypt: [],
+        imported: 0
+    });
+
     const total = vcardContacts.length;
-    const [encrypted, addSuccess] = useState([]);
-    const [failed, addError] = useState([]);
-    const [finished, setFinished] = useState(false);
-    const [imported, setImported] = useState(0);
 
-    useEffect(() => {
-        const parseFileIfNeeded = async () => {
-            if (fileType === 'text/vcard') {
-                const vcards = extractVcards(file);
-                onSetVcardContacts(vcards.map(parseVcard));
-            }
+    const parseFileIfNeeded = async () => {
+        if (fileType === 'text/vcard') {
+            const vcards = extractVcards(file);
+            setTrack((track) => ({ ...track, total: vcards.length }));
+            onSetVcardContacts(vcards.map(parseVcard));
+        } else {
             // in the case of a csv file, the parsing has occurred in the previous step
-            setFileParsed(true);
-        };
+            setTrack((track) => ({ ...track, total: vcardContacts.length }));
+        }
+        setStep(ENCRYPTING);
+    };
 
-        parseFileIfNeeded();
-    }, []);
-
-    useEffect(() => {
-        const encryptContacts = async () => {
-            const publicKey = privateKey.toPublic();
-            for (const vcardContact of vcardContacts) {
-                try {
-                    const contactEncrypted = await prepareContact(vcardContact, privateKey, publicKey);
-                    addSuccess((encrypted) => [...encrypted, contactEncrypted]);
-                } catch (error) {
-                    addError((failed) => [...failed, vcardContact]);
-                }
+    const encryptContacts = async () => {
+        const publicKey = privateKey.toPublic();
+        for (const vcardContact of vcardContacts) {
+            try {
+                const contactEncrypted = await prepareContact(vcardContact, privateKey, publicKey);
+                setTrack((track) => ({ ...track, encrypted: [...track.encrypted, contactEncrypted] }));
+            } catch (error) {
+                setTrack((track) => ({ ...track, failedOnEncrypt: [...track.failed, vcardContact] }));
             }
-            onEncryptingDone();
-        };
+        }
+        onEncryptingDone();
+        setStep(IMPORTING);
+    };
 
-        !loadingKeys && fileParsed && encryptContacts();
-    }, [loadingKeys, fileParsed]);
+    const importContacts = async (contacts) => {
+        // split encrypted contacts depending on having the CATEGORIES property
+        const withCategories = contacts.filter(({ Cards }) =>
+            Cards.some(({ Type, Data }) => Type === CLEAR_TEXT && Data.includes('CATEGORIES'))
+        );
+        const withoutCategories = contacts.filter(({ Cards }) =>
+            Cards.every(({ Type, Data }) => Type !== CLEAR_TEXT || !Data.includes('CATEGORIES'))
+        );
+
+        // send encrypted contacts to API
+        const responses = (await api(
+            addContacts({ Contacts: withCategories, Overwrite: OVERWRITE_CONTACT, Labels: INCLUDE })
+        )).Responses.concat(
+            (await api(addContacts({ Contacts: withoutCategories, Overwrite: OVERWRITE_CONTACT, Labels: IGNORE })))
+                .Responses
+        ).map(({ Response }) => Response);
+
+        const imported = responses.reduce((acc, { Code }) => {
+            if (Code === SUCCESS_IMPORT_CODE) {
+                return acc + 1;
+            }
+            return acc;
+        }, 0);
+        setTrack((track) => ({ ...track, imported }));
+        setStep(FINISHED);
+    };
 
     useEffect(() => {
-        const importContacts = async () => {
-            // split encrypted contacts depending on having the CATEGORIES property
-            const withCategories = encrypted.filter(({ Cards }) =>
-                Cards.some(({ Type, Data }) => Type === CLEAR_TEXT && Data.includes('CATEGORIES'))
-            );
-            const withoutCategories = encrypted.filter(({ Cards }) =>
-                Cards.every(({ Type, Data }) => Type !== CLEAR_TEXT || !Data.includes('CATEGORIES'))
-            );
+        if (step === PARSING) {
+            parseFileIfNeeded();
+        }
+        if (step === ENCRYPTING) {
+            !loadingKeys && encryptContacts();
+        }
+        if (step === IMPORTING) {
+            importContacts(track.encrypted);
+        }
+    }, [step, loadingKeys]);
 
-            // send encrypted contacts to API
-            const responses = (await api(
-                addContacts({ Contacts: withCategories, Overwrite: OVERWRITE_CONTACT, Labels: INCLUDE })
-            )).Responses.concat(
-                (await api(addContacts({ Contacts: withoutCategories, Overwrite: OVERWRITE_CONTACT, Labels: IGNORE })))
-                    .Responses
-            ).map(({ Response }) => Response);
-
-            setImported(
-                responses.reduce((acc, { Code }) => {
-                    if (Code === SUCCESS_IMPORT_CODE) {
-                        return acc + 1;
-                    }
-                    return acc;
-                }, 0)
-            );
-            setFinished(true);
-        };
-
-        encryptingDone && importContacts();
-    }, [encryptingDone]);
-
-    return fileParsed ? (
+    return (
         <>
             <Alert>
                 {c('Description')
@@ -106,13 +114,17 @@ const ImportingModalContent = ({
             <DynamicProgress
                 id="progress-import-contacts"
                 alt="contact-loader"
-                value={percentageProgress(encrypted.length, failed.length, total)}
+                value={percentageProgress(
+                    track.encrypted.length,
+                    track.failedOnParse + track.failedOnEncrypt.length,
+                    track.total
+                )}
                 displayEnd={c('Progress bar description')
-                    .t`${imported} out of ${total} contacts successfully imported.`}
-                endPostponed={!finished}
+                    .t`${track.imported} out of ${track.total} contacts successfully imported.`}
+                endPostponed={step !== FINISHED}
             />
         </>
-    ) : null;
+    );
 };
 
 ImportingModalContent.propTypes = {
