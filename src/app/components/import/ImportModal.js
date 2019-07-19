@@ -54,7 +54,6 @@ const ImportModal = ({ onClose, ...rest }) => {
 
     const handleAttach = ({ target }) => {
         const attachedFile = [...target.files].filter(({ type }) => ['text/vcard', 'text/csv'].includes(type))[0];
-        console.log('handleAttach called');
 
         if (target.files.length && !attachedFile) {
             return createNotification({
@@ -81,8 +80,6 @@ const ImportModal = ({ onClose, ...rest }) => {
         setFile({ ...file, attached: attachedFile });
     };
 
-    console.log('file', file, 'step', step);
-
     const handleEncryptingDone = () => setEncryptingDone(true);
 
     const { content, ...modalProps } = (() => {
@@ -103,6 +100,7 @@ const ImportModal = ({ onClose, ...rest }) => {
                         type: 'error',
                         text: c('Error notification').t`File selected appears to be corrupted`
                     });
+                    setStep(ATTACHING);
                     handleClear();
                 }
             };
@@ -175,7 +173,6 @@ const ImportModal = ({ onClose, ...rest }) => {
                         onSetVcardContacts={setVcardContacts}
                         loadingKeys={loadingUserKeys}
                         privateKey={userKeysList[0].privateKey}
-                        encryptingDone={encryptingDone}
                         onEncryptingDone={handleEncryptingDone}
                     />
                 ),

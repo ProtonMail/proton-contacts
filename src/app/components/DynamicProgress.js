@@ -4,7 +4,7 @@ import { c } from 'ttag';
 import { Icon } from 'react-components';
 import contactLoader from 'design-system/assets/img/pm-images/contact-export-loader.gif';
 
-const DyanmicProgress = ({ id, alt, displayDuring, displayEnd, value, max, endPostponed, ...rest }) => {
+const DynamicProgress = ({ id, alt, displayDuring, displayEnd, value, max, endPostponed, ...rest }) => {
     return (
         <div className="aligncenter">
             {value < max ? (
@@ -20,7 +20,7 @@ const DyanmicProgress = ({ id, alt, displayDuring, displayEnd, value, max, endPo
     );
 };
 
-DyanmicProgress.propTypes = {
+DynamicProgress.propTypes = {
     id: PropTypes.string.isRequired,
     alt: PropTypes.string.isRequired,
     displayDuring: PropTypes.string,
@@ -30,11 +30,11 @@ DyanmicProgress.propTypes = {
     endPostponed: PropTypes.bool.isRequired
 };
 
-DyanmicProgress.defaultProps = {
+DynamicProgress.defaultProps = {
     displayDuring: c('Progress bar description').t`Progress`,
     displayEnd: c('Progress bar description').t`Completed`,
     max: 100,
     endPostponed: false
 };
 
-export default DyanmicProgress;
+export default DynamicProgress;
