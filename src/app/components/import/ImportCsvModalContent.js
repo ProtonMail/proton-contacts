@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { Table, Alert, Block } from 'react-components';
+import { useNotifications, Table, Alert, Block } from 'react-components';
 
 import ImportCsvTableHeader from './ImportCsvTableHeader';
 import ImportCsvTableBody from './ImportCsvTableBody';
@@ -10,6 +10,8 @@ import { prepare, toVcardContacts } from '../../helpers/csv';
 import { modifyContactField, modifyContactType, toggleContactChecked } from '../../helpers/import';
 
 const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
+    const { createNotification } = useNotifications();
+
     const [isParsingFile, setIsParsingFile] = useState(true);
     const [contactIndex, setContactIndex] = useState(0);
     const [preVcardsContacts, setpreVcardsContacts] = useState([]);
@@ -17,8 +19,23 @@ const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
     const handleClickPrevious = () => setContactIndex((index) => index - 1);
     const handleClickNext = () => setContactIndex((index) => index + 1);
 
-    const handleToggle = (groupIndex) => (index) =>
+    const handleToggle = (groupIndex) => (index) => {
+        if (preVcardsContacts[0][groupIndex][index].field === 'fn') {
+            const preVcards = preVcardsContacts[0][groupIndex];
+            const firstNameIndex = preVcards.findIndex(({ header }) => header.toLowerCase() === 'first name');
+            const lastNameIndex = preVcards.findIndex(({ header }) => header.toLowerCase() === 'last name');
+            const isFirstNameChecked = firstNameIndex !== -1 && preVcards[firstNameIndex].checked;
+            const isLastNameChecked = lastNameIndex !== -1 && preVcards[lastNameIndex].checked;
+
+            if ((!isFirstNameChecked && index === lastNameIndex) || (!isLastNameChecked && index === firstNameIndex)) {
+                return createNotification({
+                    type: 'error',
+                    text: c('Error notification').t`First name and last name cannot be unchecked at the same time`
+                });
+            }
+        }
         setpreVcardsContacts(preVcardsContacts.map((contact) => toggleContactChecked(contact, [groupIndex, index])));
+    };
 
     const handleChangeField = (groupIndex) => (newField) =>
         setpreVcardsContacts(preVcardsContacts.map((contact) => modifyContactField(contact, groupIndex, newField)));
