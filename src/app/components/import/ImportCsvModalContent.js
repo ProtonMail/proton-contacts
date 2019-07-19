@@ -14,13 +14,13 @@ const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
 
     const [isParsingFile, setIsParsingFile] = useState(true);
     const [contactIndex, setContactIndex] = useState(0);
-    const [preVcardsContacts, setpreVcardsContacts] = useState([]);
+    const [preVcardsContacts, setPreVcardsContacts] = useState([]);
 
     const handleClickPrevious = () => setContactIndex((index) => index - 1);
     const handleClickNext = () => setContactIndex((index) => index + 1);
 
     const handleToggle = (groupIndex) => (index) => {
-        if (preVcardsContacts[0][groupIndex][index].field === 'fn') {
+        if (preVcardsContacts[0][groupIndex][index].combineInto === 'fn-main') {
             const preVcards = preVcardsContacts[0][groupIndex];
             const firstNameIndex = preVcards.findIndex(({ header }) => header.toLowerCase() === 'first name');
             const lastNameIndex = preVcards.findIndex(({ header }) => header.toLowerCase() === 'last name');
@@ -34,19 +34,19 @@ const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
                 });
             }
         }
-        setpreVcardsContacts(preVcardsContacts.map((contact) => toggleContactChecked(contact, [groupIndex, index])));
+        setPreVcardsContacts(preVcardsContacts.map((contact) => toggleContactChecked(contact, [groupIndex, index])));
     };
 
     const handleChangeField = (groupIndex) => (newField) =>
-        setpreVcardsContacts(preVcardsContacts.map((contact) => modifyContactField(contact, groupIndex, newField)));
+        setPreVcardsContacts(preVcardsContacts.map((contact) => modifyContactField(contact, groupIndex, newField)));
 
     const handleChangeType = (groupIndex) => (newType) =>
-        setpreVcardsContacts(preVcardsContacts.map((contact) => modifyContactType(contact, groupIndex, newType)));
+        setPreVcardsContacts(preVcardsContacts.map((contact) => modifyContactType(contact, groupIndex, newType)));
 
     useEffect(() => {
         const parseFile = async () => {
             const preVcardsContacts = prepare(file);
-            setpreVcardsContacts(preVcardsContacts);
+            setPreVcardsContacts(preVcardsContacts);
             setIsParsingFile(false);
         };
 

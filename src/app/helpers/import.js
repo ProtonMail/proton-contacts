@@ -26,7 +26,8 @@ const modifyPreVcardField = (preVcard, newField) => {
         : types[newField].length
         ? types[newField][0]
         : undefined;
-    return { ...preVcard, field: newField, type: newType };
+
+    return { ...preVcard, field: newField, type: newType, custom: false };
 };
 
 /**

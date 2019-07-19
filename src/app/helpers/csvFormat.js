@@ -77,9 +77,7 @@ export const toPreVcard = (header) => {
             header,
             value,
             checked: true,
-            field: 'nickname',
-            combine: getFirstValue,
-            display: getFirstValue
+            field: 'nickname'
         });
     }
     if (property === 'imaddress') {
@@ -87,9 +85,7 @@ export const toPreVcard = (header) => {
             header,
             value,
             checked: true,
-            field: 'impp',
-            combine: getFirstValue,
-            display: getFirstValue
+            field: 'impp'
         });
     }
     if (property === 'job title') {
@@ -97,9 +93,7 @@ export const toPreVcard = (header) => {
             header,
             value,
             checked: true,
-            field: 'title',
-            combine: getFirstValue,
-            display: getFirstValue
+            field: 'title'
         });
     }
     if (property === 'job title') {
@@ -107,9 +101,7 @@ export const toPreVcard = (header) => {
             header,
             value,
             checked: true,
-            field: 'title',
-            combine: getFirstValue,
-            display: getFirstValue
+            field: 'title'
         });
     }
     if (property === "manager's name") {
@@ -118,9 +110,7 @@ export const toPreVcard = (header) => {
             value,
             checked: true,
             field: 'related',
-            type: 'co-worker',
-            combine: getFirstValue,
-            display: getFirstValue
+            type: 'co-worker'
         });
     }
     if (property === "assistant's name") {
@@ -129,9 +119,7 @@ export const toPreVcard = (header) => {
             value,
             checked: true,
             field: 'related',
-            type: 'agent',
-            combine: getFirstValue,
-            display: getFirstValue
+            type: 'agent'
         });
     }
     if (property === 'spouse') {
@@ -140,9 +128,7 @@ export const toPreVcard = (header) => {
             value,
             checked: true,
             field: 'related',
-            type: 'spouse',
-            combine: getFirstValue,
-            display: getFirstValue
+            type: 'spouse'
         });
     }
     if (property === 'birthday') {
@@ -150,9 +136,7 @@ export const toPreVcard = (header) => {
             header,
             value,
             checked: true,
-            field: 'bday',
-            combine: getFirstValue,
-            display: getFirstValue
+            field: 'bday'
         });
     }
     if (property === 'anniversary') {
@@ -160,9 +144,7 @@ export const toPreVcard = (header) => {
             header,
             value,
             checked: true,
-            field: 'anniversary',
-            combine: getFirstValue,
-            display: getFirstValue
+            field: 'anniversary'
         });
     }
     if (property === 'personal web page' || property.includes('website')) {
@@ -170,9 +152,7 @@ export const toPreVcard = (header) => {
             header,
             value,
             checked: true,
-            field: 'url',
-            combine: getFirstValue,
-            display: getFirstValue
+            field: 'url'
         });
     }
     if (property === 'location') {
@@ -181,9 +161,7 @@ export const toPreVcard = (header) => {
             value,
             checked: true,
             field: 'geo',
-            type: 'main',
-            combine: getFirstValue,
-            display: getFirstValue
+            type: 'main'
         });
     }
     if (property === 'office location') {
@@ -192,9 +170,7 @@ export const toPreVcard = (header) => {
             value,
             checked: true,
             field: 'geo',
-            type: 'work',
-            combine: getFirstValue,
-            display: getFirstValue
+            type: 'work'
         });
     }
     if (property === 'notes') {
@@ -202,9 +178,7 @@ export const toPreVcard = (header) => {
             header,
             value,
             checked: true,
-            field: 'note',
-            combine: getFirstValue,
-            display: getFirstValue
+            field: 'note'
         });
     }
 
@@ -213,12 +187,7 @@ export const toPreVcard = (header) => {
         value,
         checked: true,
         field: 'note',
-        combine(preVcards) {
-            return value ? `${header}: ${getFirstValue(preVcards)}` : '';
-        },
-        display(preVcards) {
-            return value ? `${header}: ${getFirstValue(preVcards)}` : '';
-        }
+        custom: true
     });
 };
 
@@ -254,17 +223,7 @@ const templates = {
             field: 'fn',
             type: 'main',
             combineInto: 'fn-main',
-            combineIndex: index,
-            combine(preVcards) {
-                return preVcards
-                    .reduce((acc, { value, checked }) => (value && checked ? acc + ` ${value}` : acc), '')
-                    .trim();
-            },
-            display(preVcards) {
-                return preVcards
-                    .reduce((acc, { value, checked }) => (value && checked ? acc + ` ${value}` : acc), '')
-                    .trim();
-            }
+            combineIndex: index
         };
     },
     fnYomi({ header, value, index }) {
@@ -276,46 +235,11 @@ const templates = {
             field: 'fn',
             type: 'yomi',
             combineInto: 'fn-yomi',
-            combineIndex: index,
-            combine(preVcards) {
-                return preVcards
-                    .reduce((acc, { value, checked }) => (value && checked ? acc + ` ${value}` : acc), '')
-                    .trim();
-            },
-            display(preVcards) {
-                return preVcards
-                    .reduce((acc, { value, checked }) => (value && checked ? acc + ` ${value}` : acc), '')
-                    .trim();
-            }
+            combineIndex: index
         };
     },
     n({ header, value, index }) {
-        return {
-            header,
-            value,
-            checked: true,
-            field: 'n',
-            combineInto: 'n',
-            combineIndex: index,
-            combine(preVcards) {
-                const propertyN = new Array(5).fill('');
-                preVcards.forEach(({ value, checked, combineIndex }) => {
-                    if (checked) {
-                        propertyN[combineIndex] = value;
-                    }
-                });
-                return propertyN;
-            },
-            display(preVcards) {
-                const propertyN = new Array(5).fill('');
-                preVcards.forEach(({ value, checked, combineIndex }) => {
-                    if (checked) {
-                        propertyN[combineIndex] = value;
-                    }
-                });
-                return propertyN.filter(Boolean).join(', ');
-            }
-        };
+        return { header, value, checked: true, field: 'n', combineInto: 'n', combineIndex: index };
     },
     email({ pref, header, value, type }) {
         return {
@@ -325,9 +249,7 @@ const templates = {
             checked: true,
             field: 'email',
             type: 'home',
-            group: pref,
-            combine: getFirstValue,
-            display: getFirstValue
+            group: pref
         };
     },
     tel({ pref, header, value, type }) {
@@ -337,9 +259,7 @@ const templates = {
             value,
             checked: true,
             field: 'tel',
-            type,
-            combine: getFirstValue,
-            display: getFirstValue
+            type
         };
     },
     adr({ pref, header, type, value, index }) {
@@ -351,25 +271,7 @@ const templates = {
             field: 'adr',
             type,
             combineInto: `adr-${type}`,
-            combineIndex: index,
-            combine(preVcards) {
-                const propertyADR = new Array(6).fill('');
-                preVcards.forEach(({ value, checked, combineIndex }) => {
-                    if (checked) {
-                        propertyADR[combineIndex] = value;
-                    }
-                });
-                return propertyADR;
-            },
-            display(preVcards) {
-                const propertyADR = new Array(6).fill('');
-                preVcards.forEach(({ value, checked, combineIndex }) => {
-                    if (checked) {
-                        propertyADR[combineIndex] = value;
-                    }
-                });
-                return propertyADR.filter(Boolean).join(', ');
-            }
+            combineIndex: index
         };
     },
     org({ header, value, index }) {
@@ -379,29 +281,141 @@ const templates = {
             checked: true,
             field: 'org',
             combineInto: 'org',
-            combineIndex: index,
-            combine(preVcards) {
-                const propertyORG = new Array(2).fill('');
-                preVcards.forEach(({ value, checked, combineIndex }) => {
-                    if (checked) {
-                        propertyORG[combineIndex] = value;
-                    }
-                });
-                return propertyORG.filter(Boolean).join(';');
-            },
-            display(preVcards) {
-                const propertyORG = new Array(2).fill('');
-                preVcards.forEach(({ value, checked, combineIndex }) => {
-                    if (checked) {
-                        propertyORG[combineIndex] = value;
-                    }
-                });
-                return propertyORG.filter(Boolean).join('; ');
-            }
+            combineIndex: index
         };
     }
 };
 
+/**
+ * This object contains the functions that must be used when combining pre-vCard properties into
+ * vCard ones. The keys correspond to the field of the pre-vCards to be combined.
+ */
+export const combine = {
+    fn(preVcards) {
+        return preVcards.reduce((acc, { value, checked }) => (value && checked ? acc + ` ${value}` : acc), '').trim();
+    },
+    n(preVcards) {
+        const propertyN = new Array(5).fill('');
+        preVcards.forEach(({ value, checked, combineIndex }) => {
+            if (checked) {
+                propertyN[combineIndex] = value;
+            }
+        });
+        return propertyN;
+    },
+    adr(preVcards) {
+        const propertyADR = new Array(6).fill('');
+        preVcards.forEach(({ value, checked, combineIndex }) => {
+            if (checked) {
+                propertyADR[combineIndex] = value;
+            }
+        });
+        return propertyADR;
+    },
+    org(preVcards) {
+        const propertyORG = new Array(2).fill('');
+        preVcards.forEach(({ value, checked, combineIndex }) => {
+            if (checked) {
+                propertyORG[combineIndex] = value;
+            }
+        });
+        return propertyORG.filter(Boolean).join(';');
+    },
+    email: getFirstValue,
+    tel: getFirstValue,
+    nickname: getFirstValue,
+    photo: getFirstValue,
+    bday: getFirstValue,
+    anniversary: getFirstValue,
+    title: getFirstValue,
+    role: getFirstValue,
+    note: getFirstValue,
+    url: getFirstValue,
+    gender: getFirstValue,
+    lang: getFirstValue,
+    tz: getFirstValue,
+    geo: getFirstValue,
+    logo: getFirstValue,
+    member: getFirstValue,
+    impp: getFirstValue,
+    related: getFirstValue,
+    categories: getFirstValue,
+    sound: getFirstValue,
+    custom(preVcards) {
+        const { header, value } = preVcards[0];
+        return value ? `${header}: ${getFirstValue(preVcards)}` : '';
+    }
+};
+
+/**
+ * Because the value of a vCard property is not always a string (sometimes it is an array),
+ * we need an additional function that combines the csv properties into a string to be displayed.
+ * This object contains the functions that take an array of pre-vCards properties to be combined
+ * and returns the value to be displayed. The keys correspond to the field of the pre-vCards to be combined.
+ */
+export const display = {
+    fn(preVcards) {
+        return preVcards.reduce((acc, { value, checked }) => (value && checked ? acc + ` ${value}` : acc), '').trim();
+    },
+    n(preVcards) {
+        const propertyN = new Array(5).fill('');
+        preVcards.forEach(({ value, checked, combineIndex }) => {
+            if (checked) {
+                propertyN[combineIndex] = value;
+            }
+        });
+        return propertyN.filter(Boolean).join(', ');
+    },
+    adr(preVcards) {
+        const propertyADR = new Array(6).fill('');
+        preVcards.forEach(({ value, checked, combineIndex }) => {
+            if (checked) {
+                propertyADR[combineIndex] = value;
+            }
+        });
+        return propertyADR.filter(Boolean).join(', ');
+    },
+    org(preVcards) {
+        const propertyORG = new Array(2).fill('');
+        preVcards.forEach(({ value, checked, combineIndex }) => {
+            if (checked) {
+                propertyORG[combineIndex] = value;
+            }
+        });
+        return propertyORG.filter(Boolean).join('; ');
+    },
+    email: getFirstValue,
+    tel: getFirstValue,
+    nickname: getFirstValue,
+    photo: getFirstValue,
+    bday: getFirstValue,
+    anniversary: getFirstValue,
+    title: getFirstValue,
+    role: getFirstValue,
+    note: getFirstValue,
+    url: getFirstValue,
+    gender: getFirstValue,
+    lang: getFirstValue,
+    tz: getFirstValue,
+    geo: getFirstValue,
+    logo: getFirstValue,
+    member: getFirstValue,
+    impp: getFirstValue,
+    related: getFirstValue,
+    categories: getFirstValue,
+    sound: getFirstValue,
+    custom(preVcards) {
+        const { header, value, checked } = preVcards[0];
+        return checked && value ? `${header}: ${getFirstValue(preVcards)}` : '';
+    }
+};
+
+/**
+ * Standarize a custom vcard type coming from a csv property
+ * @param {String} csvType
+ *
+ * @return {String}
+ */
 const toVcardType = (csvType) => {
     const type = csvType.toLowerCase();
 
