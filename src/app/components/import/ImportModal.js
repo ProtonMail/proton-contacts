@@ -71,7 +71,7 @@ const ImportModal = ({ onClose, ...rest }) => {
                     title={c('Title').t`File is too big!`}
                 >
                     <Alert type="error">{c('Error info')
-                        .t`We only support importing files smaller than 10 MB. `}</Alert>
+                        .t`We only support importing files smaller than 10 MB. Please split your contacts into several smaller files.`}</Alert>
                 </ConfirmModal>
             );
         }
