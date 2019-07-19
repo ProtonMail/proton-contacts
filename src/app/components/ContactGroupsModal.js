@@ -16,10 +16,10 @@ import {
     useContactGroups,
     useEventManager,
     useContactEmails,
-    useModals,
-    arrayMove
+    useModals
 } from 'react-components';
 import { deleteLabel, orderContactGroup } from 'proton-shared/lib/api/labels';
+import { move } from 'proton-shared/lib/helpers/array';
 
 import ContactGroupModal from './ContactGroupModal';
 import ContactGroupIcon from './ContactGroupIcon';
@@ -32,10 +32,10 @@ const ContactGroupsTable = ({ onClose }) => {
     const api = useApi();
     const { call } = useEventManager();
 
-    const [list, setContactGroups] = useState(contactGroups || []);
+    const [list, setContactGroups] = useState(contactGroups);
 
     useEffect(() => {
-        setContactGroups(contactGroups || []);
+        setContactGroups(contactGroups);
     }, [contactGroups]);
 
     const handleConfirmDeletion = (ID) => async () => {
@@ -49,7 +49,7 @@ const ContactGroupsTable = ({ onClose }) => {
     const handleSortEnd = useCallback(
         async ({ oldIndex, newIndex }) => {
             try {
-                const newList = arrayMove(list, oldIndex, newIndex);
+                const newList = move(list, oldIndex, newIndex);
                 setContactGroups(newList);
                 await api(orderContactGroup({ LabelIDs: newList.map(({ ID }) => ID) }));
                 call();
