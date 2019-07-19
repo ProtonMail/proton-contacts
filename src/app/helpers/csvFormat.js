@@ -28,6 +28,12 @@ export const toPreVcard = (header) => {
     if (['middle name yomi', 'additional name yomi'].includes(property)) {
         return (value) => templates['fnYomi']({ header, value, index: 1 });
     }
+    if (property === 'company') {
+        return (value) => templates['org']({ header, value, index: 0 });
+    }
+    if (property === 'department') {
+        return (value) => templates['org']({ header, value, index: 1 });
+    }
     if (/^e-mail (\d*)/.test(property)) {
         const match = property.match(/^e-mail (\d+)/);
         return (value) => templates['email']({ pref: +(match && match[1]) || 1, header, value });
@@ -41,9 +47,14 @@ export const toPreVcard = (header) => {
         return (value) =>
             templates['tel']({ pref: +match[2] || 1, header, value, type: `fax, ${toVcardType(match[1])}` });
     }
-    if (/^(\w+) street\s?(\d*)$/.test(property)) {
-        const [, type, pref] = property.match(/^(\w+) street\s?(\d*)$/);
-        return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 2 });
+    if (/^[pager,callback,telex]\s?(\d*)$/.test(property)) {
+        const match = property.match(/^[pager,callback,telex]\s?(\d*)$/);
+        return (value) =>
+            templates['tel']({ pref: +match[2] || 1, header, value, type: `other, ${toVcardType(match[1])}` });
+    }
+    if (/^(\w+) street$/.test(property)) {
+        const match = property.match(/^(\w+) street/);
+        return (value) => templates['adr']({ header, type: toVcardType(match[1]), value, index: 2 });
     }
     if (/^(\w+) city\s?(\d*)$/.test(property)) {
         const [, type, pref] = property.match(/^(\w+) city\s?(\d*)$/);
@@ -71,6 +82,69 @@ export const toPreVcard = (header) => {
             display: getFirstValue
         });
     }
+    if (property === 'imaddress') {
+        return (value) => ({
+            header,
+            value,
+            checked: true,
+            field: 'impp',
+            combine: getFirstValue,
+            display: getFirstValue
+        });
+    }
+    if (property === 'job title') {
+        return (value) => ({
+            header,
+            value,
+            checked: true,
+            field: 'title',
+            combine: getFirstValue,
+            display: getFirstValue
+        });
+    }
+    if (property === 'job title') {
+        return (value) => ({
+            header,
+            value,
+            checked: true,
+            field: 'title',
+            combine: getFirstValue,
+            display: getFirstValue
+        });
+    }
+    if (property === "manager's name") {
+        return (value) => ({
+            header,
+            value,
+            checked: true,
+            field: 'related',
+            type: 'co-worker',
+            combine: getFirstValue,
+            display: getFirstValue
+        });
+    }
+    if (property === "assistant's name") {
+        return (value) => ({
+            header,
+            value,
+            checked: true,
+            field: 'related',
+            type: 'agent',
+            combine: getFirstValue,
+            display: getFirstValue
+        });
+    }
+    if (property === 'spouse') {
+        return (value) => ({
+            header,
+            value,
+            checked: true,
+            field: 'related',
+            type: 'spouse',
+            combine: getFirstValue,
+            display: getFirstValue
+        });
+    }
     if (property === 'birthday') {
         return (value) => ({
             header,
@@ -87,16 +161,6 @@ export const toPreVcard = (header) => {
             value,
             checked: true,
             field: 'anniversary',
-            combine: getFirstValue,
-            display: getFirstValue
-        });
-    }
-    if (property === 'notes') {
-        return (value) => ({
-            header,
-            value,
-            checked: true,
-            field: 'note',
             combine: getFirstValue,
             display: getFirstValue
         });
@@ -133,10 +197,37 @@ export const toPreVcard = (header) => {
             display: getFirstValue
         });
     }
-    return (value) => null;
-    // Brute-force all of them ?
+    if (property === 'notes') {
+        return (value) => ({
+            header,
+            value,
+            checked: true,
+            field: 'note',
+            combine: getFirstValue,
+            display: getFirstValue
+        });
+    }
+
+    return (value) => ({
+        header,
+        value,
+        checked: true,
+        field: 'note',
+        combine(preVcards) {
+            return value ? `${header}: ${getFirstValue(preVcards)}` : '';
+        },
+        display(preVcards) {
+            return value ? `${header}: ${getFirstValue(preVcards)}` : '';
+        }
+    });
 };
 
+/**
+ * When there is only one pre-vCard property in a pre-vCards property, get the property
+ * @param {Array} preVcards     A pre-vCards property
+ *
+ * @return {String}             Value of the pre-vCards property
+ */
 const getFirstValue = (preVcards) => (preVcards[0].checked ? preVcards[0].value : '');
 
 /**
@@ -280,6 +371,34 @@ const templates = {
                 return propertyADR.filter(Boolean).join(', ');
             }
         };
+    },
+    org({ header, value, index }) {
+        return {
+            header,
+            value,
+            checked: true,
+            field: 'org',
+            combineInto: 'org',
+            combineIndex: index,
+            combine(preVcards) {
+                const propertyORG = new Array(2).fill('');
+                preVcards.forEach(({ value, checked, combineIndex }) => {
+                    if (checked) {
+                        propertyORG[combineIndex] = value;
+                    }
+                });
+                return propertyORG.filter(Boolean).join(';');
+            },
+            display(preVcards) {
+                const propertyORG = new Array(2).fill('');
+                preVcards.forEach(({ value, checked, combineIndex }) => {
+                    if (checked) {
+                        propertyORG[combineIndex] = value;
+                    }
+                });
+                return propertyORG.filter(Boolean).join('; ');
+            }
+        };
     }
 };
 
@@ -302,6 +421,8 @@ const toVcardType = (csvType) => {
         case 'primary':
             return 'main';
         case 'company main':
-            return 'work, main';
+            return 'work';
+        default:
+            return 'other';
     }
 };
