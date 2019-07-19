@@ -38,13 +38,19 @@ const ImportingModalContent = ({
         imported: 0
     });
 
-    const total = vcardContacts.length;
-
     const parseFileIfNeeded = async () => {
         if (fileType === 'text/vcard') {
             const vcards = extractVcards(file);
             setTrack((track) => ({ ...track, total: vcards.length }));
-            onSetVcardContacts(vcards.map(parseVcard));
+            const parsedVcards = [];
+            for (const vcard of vcards) {
+                try {
+                    parsedVcards.push(parseVcard(vcard));
+                } catch {
+                    setTrack((track) => ({ ...track, failedOnParse: track.failedOnParse + 1 }));
+                }
+            }
+            onSetVcardContacts(parsedVcards);
         } else {
             // in the case of a csv file, the parsing has occurred in the previous step
             setTrack((track) => ({ ...track, total: vcardContacts.length }));
