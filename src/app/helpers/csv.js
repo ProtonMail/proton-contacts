@@ -1,5 +1,5 @@
 import Papa from 'papaparse';
-import { combine, display, toPreVcard } from './csvFormat';
+import { standarize, combine, display, toPreVcard } from './csvFormat';
 
 /** NOTATION
  *
@@ -92,10 +92,10 @@ const isEmptyHeaderIndex = (index, contacts) => !contacts.some((values) => value
  * @return {Object}         { headers: Array<String>, contacts: Array<Array<String>> }
  */
 const getNonEmptyCsvData = ({ headers, contacts }) => {
-    const indicesToKeep = headers.map((header, i) => !isEmptyHeaderIndex(i, contacts));
+    const indicesToKeep = headers.map((_header, i) => !isEmptyHeaderIndex(i, contacts));
     return {
-        headers: headers.filter((header, i) => indicesToKeep[i]),
-        contacts: contacts.map((values) => values.filter((value, j) => indicesToKeep[j]))
+        headers: headers.filter((_header, i) => indicesToKeep[i]),
+        contacts: contacts.map((values) => values.filter((_value, j) => indicesToKeep[j]))
     };
 };
 
@@ -114,13 +114,15 @@ const parse = ({ headers = [], contacts = [] }) => {
     if (contacts.length === 0) {
         return [];
     }
-    const { headers: nonEmptyHeaders, contacts: nonEmptyContacts } = getNonEmptyCsvData({ headers, contacts });
-    const translator = nonEmptyHeaders.map(toPreVcard);
-    return nonEmptyContacts
+    const { headers: standardHeaders, contacts: standardContacts } = standarize(
+        getNonEmptyCsvData({ headers, contacts })
+    );
+    const translator = standardHeaders.map(toPreVcard);
+    return standardContacts
         .map((contact) =>
             contact
                 .map((header, i) => translator[i](header))
-                // some headers are mapped to several properties, so we need to flatten
+                // some headers can be mapped to several properties, so we need to flatten
                 .reduce((acc, val) => acc.concat(val), [])
         )
         .map((contact) => contact.filter((preVcard) => !!preVcard));
@@ -168,7 +170,7 @@ export const prepare = ({ headers = [], contacts = [] }) => {
     }
 
     // Arrange pre-vCards respecting the original ordering outside header groups
-    const preparedPreVcardContacts = contacts.map((contact) => []);
+    const preparedPreVcardContacts = contacts.map((_) => []);
     for (const [i, indices] of Object.values(combined).entries()) {
         preparedPreVcardContacts.forEach((contact) => contact.push([]));
         indices.forEach((index) => {

@@ -7,7 +7,8 @@ export const getTypeLabels = () => ({
     main: c('Contact type label').t`Main`,
     yomi: c('Contact type label').t`Yomi`,
     other: c('Contact type label').t`Other`,
-    fax: c('Contact type label').t`Fax`
+    fax: c('Contact type label').t`Fax`,
+    pager: c('Contact type label').t`Pager`
 });
 
 export const getAllTypes = () => ({
@@ -27,7 +28,8 @@ export const getAllTypes = () => ({
         { text: c('Property type').t`Other`, value: 'other' },
         { text: c('Property type').t`Mobile`, value: 'cell' },
         { text: c('Property type').t`Main`, value: 'main' },
-        { text: c('Property type').t`Fax`, value: 'fax' }
+        { text: c('Property type').t`Fax`, value: 'fax' },
+        { text: c('Property type').t`Pager`, value: 'pager' }
     ],
     adr: [
         { text: c('Property type').t`Address`, value: '' },
@@ -78,7 +80,7 @@ export const getTypeValues = () => ({
     n: [],
     nickname: [],
     email: ['', 'home', 'work', 'other'],
-    tel: ['', 'home', 'work', 'other', 'cell', 'main', 'fax'],
+    tel: ['', 'home', 'work', 'other', 'cell', 'main', 'fax', 'pager'],
     adr: ['', 'home', 'work', 'other'],
     bday: [],
     anniversary: [],
