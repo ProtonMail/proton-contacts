@@ -1,3 +1,9 @@
+// See './csv.js' for the definition of pre-vCard and pre-vCards contact
+
+export const standarize = ({ headers, contacts }) => {
+    return { headers, contacts };
+};
+
 /**
  * Given a csv property name (header), return a function that transforms
  * a value for that property into one or several pre-vCard properties
@@ -42,15 +48,17 @@ export const toPreVcard = (header) => {
         const match = property.match(/^(\w+\s*\w*) phone\s?(\d*)$/);
         return (value) => templates['tel']({ pref: +match[2] || 1, header, value, type: toVcardType(match[1]) });
     }
-    if (/^(\w+) fax\s?(\d*)$/.test(property)) {
-        const match = property.match(/^(\w+) fax\s?(\d*)$/);
-        return (value) =>
-            templates['tel']({ pref: +match[2] || 1, header, value, type: `fax, ${toVcardType(match[1])}` });
+    if (/^(\w+)?\s?fax\s?(\d*)$/.test(property)) {
+        const match = property.match(/^(\w+)?\s?fax\s?(\d*)$/);
+        return (value) => templates['tel']({ pref: +match[2] || 1, header, value, type: 'fax' });
     }
-    if (/^[pager,callback,telex]\s?(\d*)$/.test(property)) {
+    if (/^(\w+)?\s?pager\s?(\d*)$/.test(property)) {
+        const match = property.match(/^(\w+)?\s?pager\s?(\d*)$/);
+        return (value) => templates['tel']({ pref: +match[2] || 1, header, value, type: 'pager' });
+    }
+    if (/^[callback,telex]\s?(\d*)$/.test(property)) {
         const match = property.match(/^[pager,callback,telex]\s?(\d*)$/);
-        return (value) =>
-            templates['tel']({ pref: +match[2] || 1, header, value, type: `other, ${toVcardType(match[1])}` });
+        return (value) => templates['tel']({ pref: +match[2] || 1, header, value, type: 'other' });
     }
     if (/^(\w+) street$/.test(property)) {
         const match = property.match(/^(\w+) street/);
@@ -429,6 +437,8 @@ const toVcardType = (csvType) => {
             return 'main';
         case 'company main':
             return 'work';
+        case 'pager':
+            return 'pager';
         default:
             return 'other';
     }
