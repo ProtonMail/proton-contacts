@@ -177,6 +177,7 @@ const ImportModal = ({ onClose, ...rest }) => {
                     />
                 ),
                 footer,
+                hasClose: false,
                 onSubmit: handleSubmit
             };
         }
