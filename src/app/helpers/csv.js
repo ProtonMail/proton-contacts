@@ -170,7 +170,7 @@ export const prepare = ({ headers = [], contacts = [] }) => {
     }
 
     // Arrange pre-vCards respecting the original ordering outside header groups
-    const preparedPreVcardContacts = contacts.map((_) => []);
+    const preparedPreVcardContacts = contacts.map(() => []);
     for (const [i, indices] of Object.values(combined).entries()) {
         preparedPreVcardContacts.forEach((contact) => contact.push([]));
         indices.forEach((index) => {
