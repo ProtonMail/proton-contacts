@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { FormModal, Alert, useUser, useApi, useUserKeys, useNotifications } from 'react-components';
+import { FormModal, Alert, useUser, useApi, useEventManager, useUserKeys, useNotifications } from 'react-components';
 import { c } from 'ttag';
 import { addContacts } from 'proton-shared/lib/api/contacts';
 
@@ -52,6 +52,7 @@ const formatModel = (properties = []) => {
 
 const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => {
     const api = useApi();
+    const { call } = useEventManager();
     const { createNotification } = useNotifications();
     const [loading, setLoading] = useState(false);
     const [user] = useUser();
@@ -79,6 +80,7 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
         const notEditableProperties = initialProperties.filter(({ field }) => !EDITABLE_FIELDS.includes(field));
         const Contacts = await prepareContacts([properties.concat(notEditableProperties)], userKeysList[0]);
         await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: 0 }));
+        call();
         rest.onClose();
         createNotification({ text: c('Success').t`Contact saved` });
     };
@@ -92,6 +94,20 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
         });
         setProperties(newProperties);
     };
+
+    const handleOrderChange = useCallback(
+        (field, orderedProperties) => {
+            if (!orderedProperties.length) {
+                return;
+            }
+            const startingIndex = properties.findIndex((property) => property.field === field);
+            const newProperties = properties.slice();
+            newProperties.splice(startingIndex, orderedProperties.length, ...orderedProperties);
+
+            setProperties(newProperties);
+        },
+        [properties]
+    );
 
     return (
         <FormModal
@@ -119,6 +135,7 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
                 field="email"
                 onChange={handleChange}
                 onRemove={handleRemove}
+                onOrderChange={handleOrderChange}
                 onAdd={handleAdd('email')}
             />
             {user.hasPaidMail ? (
