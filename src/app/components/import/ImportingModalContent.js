@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { c } from 'ttag';
+import { c, msgid } from 'ttag';
 import { Alert, useApi } from 'react-components';
 
 import DynamicProgress from '../DynamicProgress';
@@ -125,8 +125,11 @@ const ImportingModalContent = ({
                     track.failedOnParse + track.failedOnEncrypt.length,
                     track.total
                 )}
-                displayEnd={c('Progress bar description')
-                    .t`${track.imported} out of ${track.total} contacts successfully imported.`}
+                displayEnd={c('Progress bar description').ngettext(
+                    msgid`${track.imported} out of ${track.total} contact successfully imported.`,
+                    `${track.imported} out of ${track.total} contacts successfully imported.`,
+                    track.imported
+                )}
                 endPostponed={step !== FINISHED}
             />
         </>
