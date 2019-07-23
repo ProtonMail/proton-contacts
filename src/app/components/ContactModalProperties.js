@@ -15,15 +15,7 @@ const ICONS = {
     other: 'info'
 };
 
-const ContactModalProperties = ({
-    properties: allProperties,
-    field,
-    onChange,
-    onOrderChange,
-    onAdd,
-    onRemove,
-    orderable
-}) => {
+const ContactModalProperties = ({ properties: allProperties, field, onChange, onOrderChange, onAdd, onRemove }) => {
     const TITLES = {
         fn: c('Title').t`Display name`,
         email: c('Title').t`Email addresses`,
@@ -55,15 +47,11 @@ const ContactModalProperties = ({
 
     const handleSortEnd = useCallback(
         ({ newIndex, oldIndex }) => {
-            if (!onOrderChange) {
-                return;
-            }
-
             const orderedProperties = move(properties, oldIndex, newIndex);
 
             onOrderChange(field, orderedProperties);
         },
-        [properties, field, onOrderChange]
+        [properties, field]
     );
 
     return (
@@ -73,7 +61,7 @@ const ContactModalProperties = ({
                 <span className="mr0-5">{title}</span>
                 {['fn', 'email'].includes(field) ? null : <Icon name="lock" />}
             </h3>
-            {orderable ? (
+            {onOrderChange ? (
                 <OrderableContainer helperClass="row--orderable" onSortEnd={handleSortEnd}>
                     <div>
                         {rows.map((row, index) => (
@@ -97,12 +85,7 @@ ContactModalProperties.propTypes = {
     onChange: PropTypes.func,
     onOrderChange: PropTypes.func,
     onAdd: PropTypes.func,
-    onRemove: PropTypes.func,
-    orderable: PropTypes.bool
-};
-
-ContactModalProperties.defaultProps = {
-    orderable: false
+    onRemove: PropTypes.func
 };
 
 export default ContactModalProperties;

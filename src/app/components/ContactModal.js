@@ -97,9 +97,6 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
 
     const handleOrderChange = useCallback(
         (field, orderedProperties) => {
-            if (!orderedProperties.length) {
-                return;
-            }
             const newProperties = properties.filter((property) => property.field !== field);
             newProperties.unshift(...orderedProperties);
 
@@ -136,7 +133,6 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
                 onRemove={handleRemove}
                 onOrderChange={handleOrderChange}
                 onAdd={handleAdd('email')}
-                orderable
             />
             {user.hasPaidMail ? (
                 <>
