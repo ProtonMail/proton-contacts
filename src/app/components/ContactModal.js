@@ -100,9 +100,8 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
             if (!orderedProperties.length) {
                 return;
             }
-            const startingIndex = properties.findIndex((property) => property.field === field);
-            const newProperties = properties.slice();
-            newProperties.splice(startingIndex, orderedProperties.length, ...orderedProperties);
+            const newProperties = properties.filter((property) => property.field !== field);
+            newProperties.unshift(...orderedProperties);
 
             setProperties(newProperties);
         },
@@ -137,6 +136,7 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
                 onRemove={handleRemove}
                 onOrderChange={handleOrderChange}
                 onAdd={handleAdd('email')}
+                orderable
             />
             {user.hasPaidMail ? (
                 <>
