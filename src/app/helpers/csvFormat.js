@@ -1,6 +1,7 @@
 // See './csv.js' for the definition of pre-vCard and pre-vCards contact
 
 export const standarize = ({ headers, contacts }) => {
+    // TODO
     return { headers, contacts };
 };
 
