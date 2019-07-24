@@ -40,9 +40,10 @@ const ContactModalProperties = ({ properties: allProperties, field, onChange, on
                     onChange={onChange}
                     onRemove={onRemove}
                     onAdd={onAdd}
+                    isOrderable={!!onOrderChange}
                 />
             )),
-        [properties, onChange, onRemove, onAdd]
+        [properties, onChange, onRemove, onAdd, !!onOrderChange]
     );
 
     const handleSortEnd = useCallback(
@@ -62,7 +63,7 @@ const ContactModalProperties = ({ properties: allProperties, field, onChange, on
                 {['fn', 'email'].includes(field) ? null : <Icon name="lock" />}
             </h3>
             {onOrderChange ? (
-                <OrderableContainer helperClass="row--orderable" onSortEnd={handleSortEnd}>
+                <OrderableContainer helperClass="row--orderable" onSortEnd={handleSortEnd} useDragHandle>
                     <div>
                         {rows.map((row, index) => (
                             <OrderableElement key={row.key} index={index}>
