@@ -1,0 +1,24 @@
+@import "~design-system/_sass/reusable-components/design-system-config";
+
+.contactView-locked-background {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    background: rgba($white, .7);
+}
+
+.contactView-locked-background ~ * { pointer-events: none }
+
+.contactView-locked-background .contactPromote-container {
+    background: $white;
+    padding: 2em;
+    border: 1px solid $pm-global-border;
+    border-radius: $global-border-radius;
+}
