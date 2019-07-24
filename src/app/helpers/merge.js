@@ -1,94 +1,61 @@
 import { normalize } from 'proton-shared/lib/helpers/string';
-import { remove } from 'proton-shared/lib/helpers/array';
 
-import { getEmails, getName } from './contact';
+import { getEmails } from './contact';
 
-/**
- * Extract duplicate items.
- * @param {array} items
- * @param {string} duplicateKey
- * @param {string} uniqueKey
- * @param {string} objectKey
- * @returns {{}}
- */
-export const extractDuplicates = ({ items = [], duplicateKey = '', uniqueKey = '', objectKey = '' }) => {
-    const { cache, uniques } = items.reduce(
-        (acc, item) => {
-            const key = item[duplicateKey];
-            const unique = item[uniqueKey];
-            const object = item[objectKey];
-
-            const { cache, uniques } = acc;
-
-            // If this unique value has not been seen, initialize it.
-            if (!uniques[unique]) {
-                uniques[unique] = { potentialDuplicateKeys: [], used: false, object };
+export const extractMergeable = (contacts = []) => {
+    // detect duplicate names
+    // namesConnections = { name: [contact indices with that name] }
+    const namesConnections = contacts.reduce((acc, { Name }, index) => {
+        const name = normalize(Name);
+        if (!acc[name]) {
+            acc[name] = [index];
+        } else {
+            acc[name].push(index);
+        }
+        return acc;
+    }, Object.create(null));
+    // detect duplicate emails
+    // emailConnections = { email: [contact indices with that email] }
+    const emailConnections = contacts.reduce((acc, { Emails }, index) => {
+        Emails.map(normalize).forEach((email) => {
+            if (!acc[email]) {
+                acc[email] = [index];
+            } else {
+                acc[email].push(index);
             }
-
-            // If this unique value has already been used as a duplicate, continue.
-            if (uniques[unique].used) {
-                return acc;
-            }
-
-            // Previously unseen duplicate key.
-            if (!cache[key]) {
-                // Initialize it as a single array with the unique value.
-                cache[key] = [unique];
-                // Register that this unique value has a potential duplicate in these keys.
-                uniques[unique].potentialDuplicateKeys.push(key);
-            } else if (cache[key].indexOf(unique) === -1) {
-                // Ensure that this unique value does not already exist in the duplicates.
-                // A duplicate has been discovered.
-                cache[key].push(unique);
-
-                // Register that this unique value has been used.
-                uniques[unique].used = true;
-
-                // Ensure that all unique values registered as a duplicate for this key are used only once.
-                cache[key].forEach((u) => {
-                    // The unique value was used on this duplicate key, so free it up from all other potential duplicate keys.
-                    uniques[u].potentialDuplicateKeys.forEach((k) => {
-                        if (k !== key) {
-                            cache[k] = remove(cache[k], u);
+        });
+        return acc;
+    }, Object.create(null));
+    // Now we collect contact indices that go together
+    // either in duplicate names or duplicate emails.
+    const { mergeableIndices } = Object.keys(namesConnections).reduce(
+        (acc, name) => {
+            const { mergeableIndices, isUsed } = acc;
+            const indices = namesConnections[name];
+            for (const index of indices) {
+                if (!isUsed[index]) {
+                    if (!mergeableIndices[name]) {
+                        mergeableIndices[name] = [index];
+                    }
+                    for (const email of getEmails(contacts[index])) {
+                        for (const j of emailConnections[email]) {
+                            if (!mergeableIndices[name].includes(j) && !isUsed[j]) {
+                                mergeableIndices[name].push(j);
+                                isUsed[j] = true;
+                            }
                         }
-                    });
-                    uniques[u].potentialDuplicateKeys.length = 0;
-                });
+                    }
+                    isUsed[index] = true;
+                } else {
+                    indices.splice(indices.indexOf(index), 1);
+                }
             }
             return acc;
         },
-        { cache: Object.create(null), uniques: Object.create(null) }
+        { mergeableIndices: Object.create(null), isUsed: Object.create(null) }
     );
 
-    // For each duplicates found, convert the unique values to the desired object.
-    return Object.keys(cache).reduce((acc, key) => {
-        if (cache[key].length <= 1) {
-            return acc;
-        }
-        acc[key] = cache[key].map((unique) => uniques[unique].object);
-        return acc;
-    }, Object.create(null));
-};
-
-/**
- * Extract duplicates from an array of contacts.
- * @param {Array} contacts
- * @returns {{}}
- */
-export const extract = (contacts = []) => {
-    // Flatten all emails and names from a contact into the format that duplicateExtractor expects.
-    const items = contacts.reduce((acc, contact, index) => {
-        getEmails(contact).forEach((email) => {
-            acc.push({ duplicate: email, unique: index, contact });
-        });
-        acc.push({ duplicate: normalize(getName(contact)), unique: index, contact });
-        return acc;
-    }, []);
-    // Extract the duplicates.
-    return extractDuplicates({
-        items,
-        duplicateKey: 'duplicate',
-        uniqueKey: 'unique',
-        objectKey: 'contact'
-    });
+    return Object.values(mergeableIndices)
+        .filter((arr) => arr.length > 1)
+        .map((indices) => indices.map((index) => contacts[index]));
 };

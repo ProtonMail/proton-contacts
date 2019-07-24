@@ -205,14 +205,10 @@ export const toVcard = (preVcards) => {
 };
 
 /**
- * Transform pre-vCards contacts into a vCard contacts
+ * Transform pre-vCards contacts into vCard contacts
  * @param {Object} preVcardsContacts    Array of pre-vCards contacts
  *
  * @return {Object}                     Array of vCard contacts
  */
 export const toVcardContacts = (preVcardsContacts) =>
-    preVcardsContacts
-        .map((preVcardsContact) => preVcardsContact.map(toVcard))
-        .sort((firstEl, secondEl) => {
-            return firstEl.pref <= secondEl.pref;
-        });
+    preVcardsContacts.map((preVcardsContact) => preVcardsContact.map(toVcard));

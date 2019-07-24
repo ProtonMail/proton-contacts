@@ -35,6 +35,11 @@ export const addPref = (properties = []) => {
 };
 
 /**
+ * Function that sorts properties by preference
+ */
+export const sortByPref = (firstEl, secondEl) => firstEl.pref <= secondEl.pref;
+
+/**
  * Generate new group name that doesn't exist
  * @param {Array<String>} existingGroups
  * @returns {String}

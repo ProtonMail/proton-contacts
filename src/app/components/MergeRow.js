@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { Icon } from 'react-components';
+import { useModals, Icon } from 'react-components';
 
-const MergeRow = ({ style }) => {
+import MergeModal from './merge/MergeModal';
+
+const MergeRow = ({ style, mergeableContacts, hasPaidMail, userKeysList }) => {
+    const { createModal } = useModals();
+
     const handleClick = () => {
-        // TODO start merge process
+        createModal(<MergeModal contacts={mergeableContacts} hasPaidMail={hasPaidMail} userKeysList={userKeysList} />);
     };
 
     return (
@@ -26,7 +30,9 @@ const MergeRow = ({ style }) => {
 };
 
 MergeRow.propTypes = {
-    style: PropTypes.object
+    style: PropTypes.object,
+    hasPaidMail: PropTypes.number,
+    userKeysList: PropTypes.array
 };
 
 export default MergeRow;

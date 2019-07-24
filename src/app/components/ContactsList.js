@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useContactGroups, useUser } from 'react-components';
+import { useContactGroups } from 'react-components';
 import { withRouter } from 'react-router';
 import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
 import List from 'react-virtualized/dist/commonjs/List';
@@ -8,15 +8,14 @@ import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 
 import ContactGroupIcon from './ContactGroupIcon';
 import ItemCheckbox from './ItemCheckbox';
-import { extract } from '../helpers/merge';
+import ContactGroupIcon from './ContactGroupIcon';
+import { extractMergeable } from '../helpers/merge';
 import { c } from 'ttag';
 import MergeRow from './MergeRow';
 
-const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
-    const [{ hasPaidMail }] = useUser();
-    const emails = extract(contacts);
-    const duplicates = Object.values(emails).reduce((acc, arr) => acc + arr.length, 0);
-    const canMerge = duplicates > 0;
+const ContactsList = ({ contacts, onCheck, hasPaidMail, userKeysList, history, contactID, location }) => {
+    const mergeableContacts = extractMergeable(contacts);
+    const canMerge = mergeableContacts.length > 0;
     const listRef = useRef(null);
     const containerRef = useRef(null);
     const [lastChecked, setLastChecked] = useState(); // Store ID of the last contact ID checked
@@ -53,12 +52,18 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
         key
     }) => {
         if (canMerge && !index) {
-            return <MergeRow key={key} style={style} />;
+            return (
+                <MergeRow
+                    key={key}
+                    style={style}
+                    mergeableContacts={mergeableContacts}
+                    hasPaidMail={hasPaidMail}
+                    userKeysList={userKeysList}
+                />
+            );
         }
 
-        const contactIndex = canMerge ? index - 1 : index;
-
-        const { ID, Name, LabelIDs = [], emails, isChecked } = contacts[contactIndex];
+        const { ID, Name, LabelIDs = [], Emails, isChecked } = contacts[index];
         const initial = getInitial(Name);
         return (
             <div
@@ -99,8 +104,8 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
                                 </div>
                             ) : null}
                         </div>
-                        <div className="mw100 ellipsis" title={emails.join(', ')}>
-                            {addPlus(emails)}
+                        <div className="mw100 ellipsis" title={Emails.join(', ')}>
+                            {addPlus(Emails)}
                         </div>
                     </div>
                 </div>
@@ -157,6 +162,8 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
 ContactsList.propTypes = {
     contacts: PropTypes.array,
     onCheck: PropTypes.func,
+    hasPaidMail: PropTypes.number,
+    userKeysList: PropTypes.array,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     contactID: PropTypes.string

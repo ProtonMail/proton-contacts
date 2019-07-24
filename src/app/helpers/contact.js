@@ -1,8 +1,8 @@
 import { normalize } from 'proton-shared/lib/helpers/string';
 
-export const getEmails = ({ Emails = [] }) => Emails.map(({ Email = '' }) => normalize(Email)).filter(Boolean);
+export const getEmails = ({ Emails = [] }) => Emails.map((email) => normalize(email)).filter(Boolean);
 
-export const getName = ({ Name }) => Name;
+export const getName = ({ Name }) => normalize(Name);
 
 /**
  * Generates a contact UID of the form 'proton-web-uuid'

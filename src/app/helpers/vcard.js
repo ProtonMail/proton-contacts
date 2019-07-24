@@ -1,5 +1,6 @@
 import ICAL from 'ical.js';
 import { readFileAsString } from 'proton-shared/lib/helpers/file';
+import { sortByPref } from './properties';
 
 const ONE_OR_MORE_MUST_BE_PRESENT = '1*';
 const EXACTLY_ONE_MUST_BE_PRESENT = '1';
@@ -114,10 +115,7 @@ export const parse = (vcard = '') => {
 
             return acc;
         }, [])
-        .sort((firstEl, secondEl) => {
-            // WARNING `sort` is mutating the new array returned by reduce
-            return firstEl.pref <= secondEl.pref;
-        });
+        .sort(sortByPref);
 };
 
 /**
