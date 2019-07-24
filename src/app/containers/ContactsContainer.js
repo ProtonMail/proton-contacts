@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import {
     Loader,
     useContactEmails,
@@ -20,8 +20,8 @@ import ContactsList from '../components/ContactsList';
 import Contact from '../components/Contact';
 import ContactPlaceholder from '../components/ContactPlaceholder';
 import ContactToolbar from '../components/ContactToolbar';
-import AuthHeader from '../content/AuthHeader';
-import AuthSidebar from '../content/AuthSidebar';
+import PrivateHeader from '../content/PrivateHeader';
+import PrivateSidebar from '../content/PrivateSidebar';
 
 const ContactsContainer = ({ location }) => {
     const [search, updateSearch] = useState('');
@@ -99,9 +99,9 @@ const ContactsContainer = ({ location }) => {
 
     return (
         <>
-            <AuthHeader search={search} onSearch={updateSearch} />
+            <PrivateHeader search={search} onSearch={updateSearch} />
             <div className="flex flex-nowrap">
-                <Route path="/:path" render={() => <AuthSidebar contactGroups={contactGroups} />} />
+                <Route path="/:path" render={() => <PrivateSidebar contactGroups={contactGroups} />} />
                 <div className="main flex-item-fluid main-area">
                     <ContactToolbar
                         checkedContacts={checkedContacts}
@@ -110,50 +110,48 @@ const ContactsContainer = ({ location }) => {
                         onDelete={handleDelete}
                     />
                     <div className="flex flex-nowrap">
-                        <Router>
-                            <Switch>
-                                <Route
-                                    path="/contacts/:contactID"
-                                    component={({ match }) => {
-                                        const { contactID } = match.params;
-                                        return (
-                                            <>
-                                                <ContactsList
-                                                    contactID={contactID}
-                                                    contacts={formattedContacts}
-                                                    onCheck={handleCheck}
-                                                />
-                                                {hasChecked ? (
-                                                    <ContactPlaceholder
-                                                        user={user}
-                                                        contactGroupID={contactGroupID}
-                                                        contacts={formattedContacts}
-                                                        onUncheck={handleUncheckAll}
-                                                    />
-                                                ) : (
-                                                    <Contact contactID={contactID} userKeysList={userKeysList} />
-                                                )}
-                                            </>
-                                        );
-                                    }}
-                                />
-                                <Route
-                                    component={() => {
-                                        return (
-                                            <>
-                                                <ContactsList contacts={formattedContacts} onCheck={handleCheck} />
+                        <Switch>
+                            <Route
+                                path="/contacts/:contactID"
+                                component={({ match }) => {
+                                    const { contactID } = match.params;
+                                    return (
+                                        <>
+                                            <ContactsList
+                                                contactID={contactID}
+                                                contacts={formattedContacts}
+                                                onCheck={handleCheck}
+                                            />
+                                            {hasChecked ? (
                                                 <ContactPlaceholder
                                                     user={user}
                                                     contactGroupID={contactGroupID}
                                                     contacts={formattedContacts}
                                                     onUncheck={handleUncheckAll}
                                                 />
-                                            </>
-                                        );
-                                    }}
-                                />
-                            </Switch>
-                        </Router>
+                                            ) : (
+                                                <Contact contactID={contactID} userKeysList={userKeysList} />
+                                            )}
+                                        </>
+                                    );
+                                }}
+                            />
+                            <Route
+                                component={() => {
+                                    return (
+                                        <>
+                                            <ContactsList contacts={formattedContacts} onCheck={handleCheck} />
+                                            <ContactPlaceholder
+                                                user={user}
+                                                contactGroupID={contactGroupID}
+                                                contacts={formattedContacts}
+                                                onUncheck={handleUncheckAll}
+                                            />
+                                        </>
+                                    );
+                                }}
+                            />
+                        </Switch>
                     </div>
                 </div>
             </div>
