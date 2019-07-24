@@ -63,7 +63,7 @@ const ContactGroupsTable = ({ onClose }) => {
     const header = [c('Table header').t`Name`, c('Table header').t`Group size`, c('Table header').t`Actions`];
 
     return (
-        <OrderableTable className="noborder" onSortEnd={handleSortEnd} pressDelay={100}>
+        <OrderableTable className="noborder" onSortEnd={handleSortEnd}>
             <OrderableTableHeader cells={header} />
             <OrderableTableBody>
                 {list.map(({ ID, Name, Color }, index) => {
