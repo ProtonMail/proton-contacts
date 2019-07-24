@@ -1,6 +1,6 @@
 import React from 'react';
 import { c } from 'ttag';
-import { Alert, Icon } from 'react-components';
+import { Alert, Icon, Href } from 'react-components';
 
 const ContactPromote = () => {
     return (
@@ -10,8 +10,11 @@ const ContactPromote = () => {
             </h3>
             <Alert learnMore="https://protonmail.com/support/knowledge-base/encrypted-contacts/">{c('Info')
                 .t`Upgrade your plan to unlock encrypted details such as phone numbers and home addresses.`}</Alert>
-            <a href="/settings/dashboard" className="pm-button pm-button pm-button--primary">{c('Action')
-                .t`Upgrade`}</a>
+            <div className="mb1">
+                <Href url="/settings/subscription" target="_self" className="pm-button pm-button pm-button--primary">{c(
+                    'Action'
+                ).t`Upgrade`}</Href>
+            </div>
         </div>
     );
 };
