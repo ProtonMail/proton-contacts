@@ -22,7 +22,7 @@ const Contact = ({ contactID, userKeysList }) => {
         if (contact && Array.isArray(userKeysList)) {
             withLoading(decryptContact());
         }
-    }, [contact, contactFetchError, userKeysList]);
+    }, [contact, userKeysList]);
 
     if (contactFetchError) {
         return 'TODO: Error';
