@@ -109,11 +109,11 @@ const ContactGroupModal = ({ contactGroupID, ...rest }) => {
             );
             const { ID } = Label;
             const toLabel = mapIDs(model.contactEmails);
-            const toUnlabel = contactGroupID ? diff(mapIDs(toLabel, existingContactEmails)) : [];
+            const toUnlabel = contactGroupID ? diff(toLabel, mapIDs(existingContactEmails)) : [];
             await Promise.all(
                 [
-                    toLabel.length && api(labelContactEmails({ LabelIDs: [ID], ContactEmailIDs: toLabel })),
-                    toUnlabel.length && api(unLabelContactEmails({ LabelIDs: [ID], ContactEmailIDs: toUnlabel }))
+                    toLabel.length && api(labelContactEmails({ LabelID: ID, ContactEmailIDs: toLabel })),
+                    toUnlabel.length && api(unLabelContactEmails({ LabelID: ID, ContactEmailIDs: toUnlabel }))
                 ].filter(Boolean)
             );
             await call();

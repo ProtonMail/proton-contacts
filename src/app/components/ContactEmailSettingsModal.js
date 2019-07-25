@@ -10,6 +10,7 @@ import {
     LinkButton,
     useApi,
     useMailSettings,
+    useEventManager,
     useUser,
     useUserKeys,
     useNotifications
@@ -47,6 +48,7 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
     const emailProperty = properties.find(({ value }) => value === Email);
     const { group: emailGroup } = emailProperty;
     const api = useApi();
+    const { call } = useEventManager();
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
     const [model, setModel] = useState({});
@@ -212,6 +214,7 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
         ].filter(Boolean);
         const Contacts = await prepareContacts([otherProperties.concat(emailProperties)], userKeysList[0]);
         await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: 0 }));
+        await call();
         rest.onClose();
         createNotification({ text: c('Success').t`Preferences saved` });
     };

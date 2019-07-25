@@ -113,7 +113,7 @@ const ContactsContainer = ({ location }) => {
                         <Switch>
                             <Route
                                 path="/contacts/:contactID"
-                                component={({ match }) => {
+                                render={({ match }) => {
                                     const { contactID } = match.params;
                                     return (
                                         <>
@@ -137,7 +137,7 @@ const ContactsContainer = ({ location }) => {
                                 }}
                             />
                             <Route
-                                component={() => {
+                                render={() => {
                                     return (
                                         <>
                                             <ContactsList contacts={formattedContacts} onCheck={handleCheck} />
