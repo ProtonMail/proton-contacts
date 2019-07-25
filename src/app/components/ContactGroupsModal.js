@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
 import {
@@ -6,10 +6,10 @@ import {
     PrimaryButton,
     useApi,
     DropdownActions,
-    TableHeader,
-    TableBody,
-    TableRow,
-    Table,
+    OrderableTable,
+    OrderableTableHeader,
+    OrderableTableBody,
+    OrderableTableRow,
     ConfirmModal,
     Alert,
     useNotifications,
@@ -18,7 +18,8 @@ import {
     useContactEmails,
     useModals
 } from 'react-components';
-import { deleteLabel } from 'proton-shared/lib/api/labels';
+import { deleteLabel, orderContactGroup } from 'proton-shared/lib/api/labels';
+import { move } from 'proton-shared/lib/helpers/array';
 
 import ContactGroupModal from './ContactGroupModal';
 import ContactGroupIcon from './ContactGroupIcon';
@@ -31,6 +32,12 @@ const ContactGroupsTable = ({ onClose }) => {
     const api = useApi();
     const { call } = useEventManager();
 
+    const [list, setContactGroups] = useState(contactGroups);
+
+    useEffect(() => {
+        setContactGroups(contactGroups);
+    }, [contactGroups]);
+
     const handleConfirmDeletion = (ID) => async () => {
         await api(deleteLabel(ID));
         await call();
@@ -39,13 +46,27 @@ const ContactGroupsTable = ({ onClose }) => {
         });
     };
 
+    const handleSortEnd = useCallback(
+        async ({ oldIndex, newIndex }) => {
+            try {
+                const newList = move(list, oldIndex, newIndex);
+                setContactGroups(newList);
+                await api(orderContactGroup({ LabelIDs: newList.map(({ ID }) => ID) }));
+                call();
+            } catch {
+                setContactGroups(contactGroups);
+            }
+        },
+        [list, contactGroups]
+    );
+
     const header = [c('Table header').t`Name`, c('Table header').t`Group size`, c('Table header').t`Actions`];
 
     return (
-        <Table className="noborder">
-            <TableHeader cells={header} />
-            <TableBody>
-                {contactGroups.map(({ ID, Name, Color }) => {
+        <OrderableTable className="noborder" onSortEnd={handleSortEnd}>
+            <OrderableTableHeader cells={header} />
+            <OrderableTableBody>
+                {list.map(({ ID, Name, Color }, index) => {
                     const countEmailAddresses = contactEmails.filter(({ LabelIDs = [] }) => LabelIDs.includes(ID))
                         .length;
                     const list = [
@@ -87,10 +108,10 @@ const ContactGroupsTable = ({ onClose }) => {
                         ),
                         <DropdownActions key={ID} className="pm-button--small" list={list} />
                     ];
-                    return <TableRow key={ID} cells={cells} />;
+                    return <OrderableTableRow key={ID} index={index} cells={cells} />;
                 })}
-            </TableBody>
-        </Table>
+            </OrderableTableBody>
+        </OrderableTable>
     );
 };
 
