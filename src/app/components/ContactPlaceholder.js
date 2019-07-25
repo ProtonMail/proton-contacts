@@ -82,7 +82,7 @@ const FreeCards = () => {
                         eleifend orci. Etiam pharetra consequat tristique. Sed tristique ipsum quis suscipit
                         ullamcorper.
                     </p>
-                    <Link className="pm-button pm-button--primary" to="/settings/dashboard">{c('Action')
+                    <Link className="pm-button pm-button--primary" to="/settings/subscription">{c('Action')
                         .t`Upgrade`}</Link>
                 </div>
             </div>
@@ -94,7 +94,7 @@ const FreeCards = () => {
                         eleifend orci. Etiam pharetra consequat tristique. Sed tristique ipsum quis suscipit
                         ullamcorper.
                     </p>
-                    <Link className="pm-button pm-button--primary" to="/settings/dashboard">{c('Action')
+                    <Link className="pm-button pm-button--primary" to="/settings/subscription">{c('Action')
                         .t`Upgrade`}</Link>
                 </div>
             </div>
@@ -106,7 +106,7 @@ const FreeCards = () => {
                         eleifend orci. Etiam pharetra consequat tristique. Sed tristique ipsum quis suscipit
                         ullamcorper.
                     </p>
-                    <Link className="pm-button pm-button--primary" to="/settings/dashboard">{c('Action')
+                    <Link className="pm-button pm-button--primary" to="/settings/subscription">{c('Action')
                         .t`Upgrade`}</Link>
                 </div>
             </div>
