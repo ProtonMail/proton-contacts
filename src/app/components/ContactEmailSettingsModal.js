@@ -51,7 +51,8 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
     const { call } = useEventManager();
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
-    const [model, setModel] = useState({});
+    const [model, setModel] = useState({ keys: [] });
+    const [showPgpSettings, setShowPgpSettings] = useState(false);
     const [{ PGPScheme, Sign }, loadingMailSettings] = useMailSettings(); // NOTE MailSettings model needs to be loaded
 
     /**
@@ -261,13 +262,13 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
                 </Field>
             </Row>
             <div className="mb1">
-                <LinkButton onClick={() => setModel({ ...model, showPgpSettings: !model.showPgpSettings })}>
-                    {model.showPgpSettings
+                <LinkButton onClick={() => setShowPgpSettings(!showPgpSettings)}>
+                    {showPgpSettings
                         ? c('Action').t`Hide advanced PGP settings`
                         : c('Action').t`Show advanced PGP settings`}
                 </LinkButton>
             </div>
-            {model.showPgpSettings ? <ContactPgpSettings model={model} setModel={setModel} /> : null}
+            {showPgpSettings ? <ContactPgpSettings model={model} setModel={setModel} /> : null}
         </FormModal>
     );
 };
