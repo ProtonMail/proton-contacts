@@ -7,7 +7,7 @@ import { prepareContact, bothUserKeys } from '../helpers/decrypt';
 import ContactView from './ContactView';
 
 const Contact = ({ contactID, userKeysList }) => {
-    const [decrypting, withLoading] = useLoading();
+    const [decrypting, withLoading] = useLoading(true);
     const [model, setModel] = useState({ properties: [], errors: [] });
     const { properties, errors } = model;
     const { publicKeys, privateKeys } = bothUserKeys(userKeysList);
