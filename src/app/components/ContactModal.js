@@ -1,11 +1,20 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { FormModal, Alert, useUser, useApi, useEventManager, useUserKeys, useNotifications } from 'react-components';
+import {
+    FormModal,
+    Alert,
+    useUser,
+    useApi,
+    useEventManager,
+    useUserKeys,
+    useNotifications,
+    useModals,
+    ConfirmModal
+} from 'react-components';
 import { c } from 'ttag';
 import { addContacts } from 'proton-shared/lib/api/contacts';
 
 import ContactModalProperties from './ContactModalProperties';
-import ContactPromote from './ContactPromote';
 import { randomIntFromInterval } from 'proton-shared/lib/helpers/function';
 import { OTHER_INFORMATION_FIELDS } from '../constants';
 import { generateUID } from 'react-components/helpers/component';
@@ -51,6 +60,7 @@ const formatModel = (properties = []) => {
 };
 
 const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => {
+    const { createModal } = useModals();
     const api = useApi();
     const { call } = useEventManager();
     const { createNotification } = useNotifications();
@@ -59,9 +69,41 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
     const [properties, setProperties] = useState(formatModel(initialProperties));
     const title = contactID ? c('Title').t`Edit contact details` : c('Title').t`Add new contact`;
+    const upgradeModalRef = useRef();
+
+    const hasRequirement = (field) => {
+        if (['fn', 'email'].includes(field) || user.hasPaidMail) {
+            return true;
+        }
+
+        if (!upgradeModalRef.current) {
+            upgradeModalRef.current = true;
+            createModal(
+                <ConfirmModal
+                    title={c('Title').t`Upgrade required`}
+                    onConfirm={() => {
+                        document.location.replace(`${document.location.origin}/settings/subscription`);
+                        upgradeModalRef.current = false;
+                    }}
+                    onClose={() => {
+                        upgradeModalRef.current = false;
+                    }}
+                    confirm={c('Action').t`Upgrade`}
+                >
+                    <Alert type="warning">{c('Warning').t`This feature requires a paid Proton account`}</Alert>
+                </ConfirmModal>
+            );
+        }
+
+        return false;
+    };
 
     const handleRemove = (propertyUID) => {
-        setProperties(properties.filter(({ uid }) => uid !== propertyUID));
+        const { field } = properties.find(({ uid }) => uid === propertyUID) || {};
+
+        if (hasRequirement(field)) {
+            setProperties(properties.filter(({ uid }) => uid !== propertyUID));
+        }
     };
 
     const handleAdd = (field) => () => {
@@ -86,13 +128,17 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
     };
 
     const handleChange = ({ uid: propertyUID, value, key = 'value' }) => {
+        const { field } = properties.find(({ uid }) => uid === propertyUID) || {};
         const newProperties = properties.map((property) => {
             if (property.uid === propertyUID) {
                 property[key] = value;
             }
             return property;
         });
-        setProperties(newProperties);
+
+        if (hasRequirement(field)) {
+            setProperties(newProperties);
+        }
     };
 
     const handleOrderChange = useCallback(
@@ -134,32 +180,26 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
                 onOrderChange={handleOrderChange}
                 onAdd={handleAdd('email')}
             />
-            {user.hasPaidMail ? (
-                <>
-                    <ContactModalProperties
-                        properties={properties}
-                        field="tel"
-                        onChange={handleChange}
-                        onRemove={handleRemove}
-                        onAdd={handleAdd('tel')}
-                    />
-                    <ContactModalProperties
-                        properties={properties}
-                        field="adr"
-                        onChange={handleChange}
-                        onRemove={handleRemove}
-                        onAdd={handleAdd('adr')}
-                    />
-                    <ContactModalProperties
-                        properties={properties}
-                        onChange={handleChange}
-                        onRemove={handleRemove}
-                        onAdd={handleAdd()}
-                    />
-                </>
-            ) : (
-                <ContactPromote />
-            )}
+            <ContactModalProperties
+                properties={properties}
+                field="tel"
+                onChange={handleChange}
+                onRemove={handleRemove}
+                onAdd={handleAdd('tel')}
+            />
+            <ContactModalProperties
+                properties={properties}
+                field="adr"
+                onChange={handleChange}
+                onRemove={handleRemove}
+                onAdd={handleAdd('adr')}
+            />
+            <ContactModalProperties
+                properties={properties}
+                onChange={handleChange}
+                onRemove={handleRemove}
+                onAdd={handleAdd()}
+            />
         </FormModal>
     );
 };
