@@ -7,6 +7,7 @@ import {
     useApi,
     useEventManager,
     useUserKeys,
+    useEventManager,
     useNotifications,
     useModals,
     ConfirmModal
@@ -66,6 +67,7 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
     const { createNotification } = useNotifications();
     const [loading, setLoading] = useState(false);
     const [user] = useUser();
+    const { call } = useEventManager();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
     const [properties, setProperties] = useState(formatModel(initialProperties));
     const title = contactID ? c('Title').t`Edit contact details` : c('Title').t`Add new contact`;
@@ -122,7 +124,7 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
         const notEditableProperties = initialProperties.filter(({ field }) => !EDITABLE_FIELDS.includes(field));
         const Contacts = await prepareContacts([properties.concat(notEditableProperties)], userKeysList[0]);
         await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: 0 }));
-        call();
+        await call();
         rest.onClose();
         createNotification({ text: c('Success').t`Contact saved` });
     };
