@@ -1,20 +1,17 @@
 import React from 'react';
 import { c } from 'ttag';
 import PropTypes from 'prop-types';
-import { useModals, useUser, PrimaryButton, Button } from 'react-components';
+import { useModals, PrimaryButton, Button } from 'react-components';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 
-import './ContactView.scss';
 import ContactModal from './ContactModal';
 import ContactViewErrors from './ContactViewErrors';
 import { toICAL } from '../helpers/vcard';
 import ContactSummary from './ContactSummary';
 import ContactViewProperties from './ContactViewProperties';
-import ContactPromote from './ContactPromote';
 
 const ContactView = ({ properties, contactID, errors }) => {
     const { createModal } = useModals();
-    const [{ hasPaidMail }] = useUser();
 
     const openContactModal = () => {
         createModal(<ContactModal properties={properties} contactID={contactID} />);
@@ -45,16 +42,9 @@ const ContactView = ({ properties, contactID, errors }) => {
             <ContactSummary properties={properties} />
             <div className="pl1 pr1">
                 <ContactViewProperties contactID={contactID} properties={properties} field="email" />
-                <div className="relative">
-                    {hasPaidMail ? null : (
-                        <div className="contactView-locked-background">
-                            <ContactPromote />
-                        </div>
-                    )}
-                    <ContactViewProperties contactID={contactID} properties={properties} field="tel" />
-                    <ContactViewProperties contactID={contactID} properties={properties} field="adr" />
-                    <ContactViewProperties contactID={contactID} properties={properties} />
-                </div>
+                <ContactViewProperties contactID={contactID} properties={properties} field="tel" />
+                <ContactViewProperties contactID={contactID} properties={properties} field="adr" />
+                <ContactViewProperties contactID={contactID} properties={properties} />
             </div>
         </div>
     );
