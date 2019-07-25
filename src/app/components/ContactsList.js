@@ -53,7 +53,9 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
             return <MergeRow key={key} style={style} />;
         }
 
-        const { ID, Name, LabelIDs = [], emails, isChecked } = contacts[index];
+        const contactIndex = canMerge ? index - 1 : index;
+
+        const { ID, Name, LabelIDs = [], emails, isChecked } = contacts[contactIndex];
         const initial = getInitial(Name);
         return (
             <div

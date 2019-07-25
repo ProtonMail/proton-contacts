@@ -63,4 +63,8 @@ ContactView.propTypes = {
     errors: PropTypes.array
 };
 
+ContactView.defaultProps = {
+    properties: []
+};
+
 export default ContactView;

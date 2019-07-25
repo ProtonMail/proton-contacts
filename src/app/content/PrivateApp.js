@@ -10,6 +10,7 @@ import {
     SubscriptionModel
 } from 'proton-shared/lib/models';
 
+import ContactsProvider from '../containers/ContactProvider';
 import ContactsContainer from '../containers/ContactsContainer';
 
 const EVENT_MODELS = [UserModel, UserSettingsModel, ContactsModel, SubscriptionModel, ContactEmailsModel];
@@ -24,9 +25,11 @@ const PrivateApp = ({ onLogout }) => {
             preloadModels={PRELOAD_MODELS}
             eventModels={EVENT_MODELS}
         >
-            <ErrorBoundary>
-                <Route path="/contacts" component={ContactsContainer} />
-            </ErrorBoundary>
+            <ContactsProvider>
+                <ErrorBoundary>
+                    <Route path="/contacts" component={ContactsContainer} />
+                </ErrorBoundary>
+            </ContactsProvider>
         </StandardPrivateApp>
     );
 };
