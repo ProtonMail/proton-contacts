@@ -20,6 +20,11 @@ import { standarize, combine, display, toPreVcard } from './csvFormat';
  * "vCard property": A format we are using for vCard properties in the file './vcard.js'.
  *                   Namely a vCard property is the JS object:
  *                   { pref, field, group, type, value }
+ *                   The key pref stands for preference, and is used when a property is repeated in a vcard
+ *                   The key field indicates the field of this property. See the possibilities in './fields'
+ *                   The key type indicates the type of this property, which depends on the field. See the possibilities in './types'
+ *                   The key group is used for contact groups
+ *                   The Key value is the value of the property. An string-valued array for adr and nickname, a string for the rest
  *
  * "vCard contact": An array made of vCard properties
  *
@@ -133,7 +138,7 @@ const parse = ({ headers = [], contacts = [] }) => {
  * re-arranging them in the process
  * @param {Object} csvData
  * @param {Array<String>} csvData.headers           Array of csv properties
- * @param {Array<Array<String>>} csvData.contacts   Array of csv contacts
+ * @param {Array} csvData.contacts                  Array of csv contacts
  *
  * @return {Array<Object>}                          Array of pre-vCard contacts
  *

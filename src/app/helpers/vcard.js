@@ -85,7 +85,7 @@ export const parse = (vcard = '') => {
         .reduce((acc, property) => {
             const type = property.getParameter('type');
             const prefValue = property.getParameter('pref');
-            const pref = typeof prefValue === 'string' ? +prefValue : 0;
+            const pref = typeof prefValue === 'string' ? +prefValue : 1;
             const splitted = property.name.split('.');
             const field = splitted[1] ? splitted[1] : splitted[0];
 

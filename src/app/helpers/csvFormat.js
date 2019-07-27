@@ -84,7 +84,7 @@ export const toPreVcard = (header) => {
     if (property === 'nickname') {
         return (value) => ({
             header,
-            value,
+            value: [value],
             checked: true,
             field: 'nickname'
         });
@@ -207,20 +207,6 @@ export const toPreVcard = (header) => {
  * @return {String}             Value of the pre-vCards property
  */
 const getFirstValue = (preVcards) => (preVcards[0].checked ? preVcards[0].value : '');
-
-/**
- * Combine pre-vCards properties into a single vCard one
- * @param {Array} preVcards     Array of pre-vCards properties
- *
- * @return {Object}             vCard property
- */
-export const toVcard = (preVcards) => {
-    if (!preVcards.length) {
-        return {};
-    }
-    const { pref, field, type, combine, display } = preVcards[0];
-    return { pref, field, type, value: combine(preVcards), display: display(preVcards) };
-};
 
 const templates = {
     fn({ header, value, index }) {
@@ -392,9 +378,11 @@ export const display = {
         });
         return propertyORG.filter(Boolean).join('; ');
     },
+    nickname(preVcards) {
+        return getFirstValue(preVcards)[0];
+    },
     email: getFirstValue,
     tel: getFirstValue,
-    nickname: getFirstValue,
     photo: getFirstValue,
     bday: getFirstValue,
     anniversary: getFirstValue,
