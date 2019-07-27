@@ -1,22 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import {
-    useApi,
-    useModals,
-    useNotifications,
-    useEventManager,
-    FormModal,
-    Alert,
-    Table,
-    TableCell
-} from 'react-components';
-
-import { deleteContacts } from 'proton-shared/lib/api/contacts';
-import { SUCCESS_IMPORT_CODE } from '../../constants';
+import { useModals, FormModal, Alert, Table, TableCell } from 'react-components';
 
 import MergeTableBody from './MergeTableBody';
 import ContactDetails from './ContactDetails';
+import MergeContactPreview from './MergeContactPreview';
+import MergingModal from './MergingModal';
 
 const MergeTableHeader = () => {
     return (
@@ -32,19 +22,31 @@ const MergeTableHeader = () => {
     );
 };
 
-const MergeModal = ({ contacts, hasPaidMail, userKeysList, ...rest }) => {
-    const api = useApi();
+const MergeModal = ({ contacts, userKeysList, ...rest }) => {
     const { createModal } = useModals();
-    const { createNotification } = useNotifications();
-    const { call } = useEventManager();
+
     const [model, setModel] = useState({
         order: contacts.map((group) => group.map((_contact, index) => index)),
         isChecked: contacts.map((group) => group.map(() => true)),
         isDeleted: contacts.map((group) => group.map(() => false))
     });
 
-    const handleClickDetails = async (contactID) => {
-        createModal(<ContactDetails contactID={contactID} hasPaidMail={hasPaidMail} userKeysList={userKeysList} />);
+    const beMergedIDs = contacts
+        .map((group, i) =>
+            group.map(({ ID }, j) => model.isChecked[i][j] && !model.isDeleted[i][j] && ID).filter(Boolean)
+        )
+        .filter((group) => group.length > 1);
+
+    const handleClickDetails = (contactID) => {
+        createModal(<ContactDetails contactID={contactID} userKeysList={userKeysList} />);
+    };
+
+    const handlePreview = (contactsIDs) => {
+        createModal(<MergeContactPreview contactsIDs={contactsIDs} userKeysList={userKeysList} />);
+    };
+
+    const handleMerge = (contactsIDs) => {
+        createModal(<MergingModal contactsIDs={contactsIDs} userKeysList={userKeysList} />);
     };
 
     const handleToggleCheck = (groupIndex, index) => {
@@ -72,7 +74,12 @@ const MergeModal = ({ contacts, hasPaidMail, userKeysList, ...rest }) => {
     };
 
     return (
-        <FormModal title={c('Title').t`Merge contacts`} submit={c('Action').t`Merge`} {...rest}>
+        <FormModal
+            title={c('Title').t`Merge contacts`}
+            submit={c('Action').t`Merge`}
+            onSubmit={() => handleMerge(beMergedIDs)}
+            {...rest}
+        >
             <Alert>
                 {c('Description')
                     .jt`Use Drag and Drop to rank merging priority between contacts. Uncheck the contacts you do ${(
@@ -94,6 +101,7 @@ const MergeModal = ({ contacts, hasPaidMail, userKeysList, ...rest }) => {
                     onClickDetails={handleClickDetails}
                     onClickDelete={handleToggleDelete}
                     onClickUndelete={handleToggleDelete}
+                    onClickPreview={handlePreview}
                 />
             </Table>
         </FormModal>
@@ -102,7 +110,6 @@ const MergeModal = ({ contacts, hasPaidMail, userKeysList, ...rest }) => {
 
 MergeModal.propTypes = {
     contacts: PropTypes.array,
-    hasPaidMail: PropTypes.number,
     userKeysList: PropTypes.array
 };
 

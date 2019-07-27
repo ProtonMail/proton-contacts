@@ -2,12 +2,12 @@ import ICAL from 'ical.js';
 import { readFileAsString } from 'proton-shared/lib/helpers/file';
 import { sortByPref } from './properties';
 
-const ONE_OR_MORE_MUST_BE_PRESENT = '1*';
-const EXACTLY_ONE_MUST_BE_PRESENT = '1';
-const EXACTLY_ONE_MAY_BE_PRESENT = '*1';
-const ONE_OR_MORE_MAY_BE_PRESENT = '*';
+export const ONE_OR_MORE_MUST_BE_PRESENT = '1*';
+export const EXACTLY_ONE_MUST_BE_PRESENT = '1';
+export const EXACTLY_ONE_MAY_BE_PRESENT = '*1';
+export const ONE_OR_MORE_MAY_BE_PRESENT = '*';
 
-const PROPERTIES = {
+export const PROPERTIES = {
     fn: { cardinality: ONE_OR_MORE_MUST_BE_PRESENT },
     n: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT },
     nickname: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },

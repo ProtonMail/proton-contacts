@@ -1,16 +1,29 @@
 /**
  * Make sure we keep only valid properties
+ * In case adr property is badly formatted, re-format
  * @param {Array} properties
  * @returns {Array}
  */
 export const sanitizeProperties = (properties = []) => {
-    // properties should be either arrays or strings. Transform to string otherwise.
-    // usually the case of a date for bday or anniversary fields
+    /*
+        property values should be either arrays or strings
+        transform to string otherwise (usually the case of a date for bday or anniversary fields)
+        enforce value for adr field be an array
+    */
     return properties
         .filter(({ value }) => value)
         .map((property) =>
             Array.isArray(property.value) ? property : { ...property, value: property.value.toString() }
-        );
+        )
+        .map((property) => {
+            const { field, value } = property;
+            if (field !== 'adr' || Array.isArray(value)) {
+                return property;
+            }
+            // assume the bad formatting used commas instead of semicolons
+            const newValue = value.split(',').slice(0, 6);
+            return { ...property, value: newValue };
+        });
 };
 
 /**

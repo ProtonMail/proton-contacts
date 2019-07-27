@@ -11,7 +11,7 @@ import ExtendedContactSummary from './ExtendedContactSummary';
 
 import { FAIL_TO_LOAD } from '../../constants';
 
-const ContactDetails = ({ contactID, hasPaidMail, userKeysList, ...rest }) => {
+const ContactDetails = ({ contactID, userKeysList, ...rest }) => {
     const api = useApi();
     const [loading, setLoading] = useState(true);
     const [model, setModel] = useState({ properties: [], errors: [] });
@@ -46,7 +46,7 @@ const ContactDetails = ({ contactID, hasPaidMail, userKeysList, ...rest }) => {
             ) : (
                 <>
                     <ContactViewErrors errors={model.errors} />
-                    <ExtendedContactSummary properties={model.properties} hasPaidMail={hasPaidMail} />
+                    <ExtendedContactSummary properties={model.properties} />
                 </>
             )}
         </FormModal>
@@ -55,7 +55,6 @@ const ContactDetails = ({ contactID, hasPaidMail, userKeysList, ...rest }) => {
 
 ContactDetails.propTypes = {
     contactID: PropTypes.string,
-    hasPaidMail: PropTypes.number,
     userKeysList: PropTypes.array
 };
 

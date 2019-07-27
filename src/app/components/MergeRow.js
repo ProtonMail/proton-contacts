@@ -5,11 +5,11 @@ import { useModals, Icon } from 'react-components';
 
 import MergeModal from './merge/MergeModal';
 
-const MergeRow = ({ style, mergeableContacts, hasPaidMail, userKeysList }) => {
+const MergeRow = ({ style, mergeableContacts, userKeysList }) => {
     const { createModal } = useModals();
 
     const handleClick = () => {
-        createModal(<MergeModal contacts={mergeableContacts} hasPaidMail={hasPaidMail} userKeysList={userKeysList} />);
+        createModal(<MergeModal contacts={mergeableContacts} userKeysList={userKeysList} />);
     };
 
     return (
@@ -31,7 +31,6 @@ const MergeRow = ({ style, mergeableContacts, hasPaidMail, userKeysList }) => {
 
 MergeRow.propTypes = {
     style: PropTypes.object,
-    hasPaidMail: PropTypes.number,
     userKeysList: PropTypes.array
 };
 

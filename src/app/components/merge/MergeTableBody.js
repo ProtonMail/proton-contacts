@@ -1,81 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { TableBody, TableRow, Button, Dropdown, DropdownMenu, DropdownButton, Checkbox } from 'react-components';
+import { TableBody, TableRow, Button } from 'react-components';
 
-const opaqueClassName = (greyedOut) => (greyedOut ? 'opacity-50' : '');
-
-const ShowName = ({ name, checked, deleted, greyedOut, groupIndex, index, onToggle }) => {
-    const handleToggle = () => onToggle(groupIndex, index);
-
-    return (
-        <>
-            <Checkbox checked={checked} onChange={handleToggle} className={`mr0-5 ${deleted ? 'nonvisible' : ''}`} />
-            <span className={`mw100 inbl ellipsis ${opaqueClassName(greyedOut)}`}>{name}</span>
-        </>
-    );
-};
-
-ShowName.propTypes = {
-    groupIndex: PropTypes.number,
-    index: PropTypes.number,
-    checked: PropTypes.bool,
-    deleted: PropTypes.bool,
-    greyedOut: PropTypes.bool,
-    name: PropTypes.string,
-    onToggle: PropTypes.func
-};
-
-const ShowEmails = ({ emails, greyedOut }) => {
-    return <span className={`mw100 inbl ellipsis ${opaqueClassName(greyedOut)}`}>{emails.join(', ')}</span>;
-};
-
-ShowEmails.propTypes = {
-    emails: PropTypes.arrayOf(PropTypes.string),
-    greyedOut: PropTypes.bool
-};
-
-const OptionsDropdown = ({
-    contactID,
-    groupIndex,
-    index,
-    canDelete,
-    onClickDetails,
-    onClickDelete,
-    onClickUndelete
-}) => {
-    const color = canDelete ? 'color-global-warning' : 'color-pv-green';
-    const text = canDelete ? c('Action').t`Mark for deletion` : c('Action').t`Unmark for deletion`;
-    const handleClick = canDelete ? () => onClickDelete(groupIndex, index) : () => onClickUndelete(groupIndex, index);
-
-    return (
-        <Dropdown
-            caret
-            className="pm-button pm-group-button pm-button--for-icon pm-button--small"
-            content={c('Title').t`Options`}
-        >
-            <DropdownMenu>
-                {canDelete ? (
-                    <DropdownButton className="color-pm-blue" type="button" onClick={() => onClickDetails(contactID)}>
-                        {c('Action').t`Contact details`}
-                    </DropdownButton>
-                ) : null}
-                <DropdownButton className={color} type="button" onClick={handleClick}>
-                    {text}
-                </DropdownButton>
-            </DropdownMenu>
-        </Dropdown>
-    );
-};
-
-OptionsDropdown.propTypes = {
-    contactID: PropTypes.string,
-    groupIndex: PropTypes.number,
-    index: PropTypes.number,
-    canDelete: PropTypes.bool,
-    onClickDelete: PropTypes.func,
-    onClickUndelete: PropTypes.func
-};
+import NameTableCell from './NameTableCell';
+import EmailsTableCell from './EmailsTableCell';
+import OptionsDropdown from './OptionsDropdown';
 
 const MergeTableBody = ({
     contacts,
@@ -85,21 +15,27 @@ const MergeTableBody = ({
     onClickDetails,
     onClickDelete,
     onClickUndelete,
+    onClickPreview,
     ...rest
 }) => {
+    const isActive = isChecked.map((group, i) => group.map((checked, j) => checked && !isDeleted[i][j]));
+
     return (
         <TableBody colSpan={3} {...rest}>
-            {contacts.map((mergeable, i) => {
+            {contacts.map((group, i) => {
+                const activeIDs = group.map(({ ID }, j) => isActive[i][j] && ID).filter(Boolean);
+
                 return (
                     <React.Fragment key={i.toString()}>
-                        {mergeable.map(({ ID, Name, Emails }, j) => {
+                        {group.map(({ ID, Name, Emails }, j) => {
                             const deleted = isDeleted[i][j];
 
                             return (
                                 <TableRow
                                     key={j.toString()}
                                     cells={[
-                                        <ShowName
+                                        <NameTableCell
+                                            key="name"
                                             name={Name}
                                             groupIndex={i}
                                             index={j}
@@ -108,8 +44,9 @@ const MergeTableBody = ({
                                             greyedOut={deleted}
                                             onToggle={onClickCheckbox}
                                         />,
-                                        <ShowEmails emails={Emails} greyedOut={deleted} />,
+                                        <EmailsTableCell key="email" emails={Emails} greyedOut={deleted} />,
                                         <OptionsDropdown
+                                            key="options"
                                             contactID={ID}
                                             groupIndex={i}
                                             index={j}
@@ -124,10 +61,16 @@ const MergeTableBody = ({
                         })}
                         <tr key="merge" className="aligncenter">
                             <td colSpan={3}>
-                                <Button>{c('Action').t`Preview contact`}</Button>
+                                <Button
+                                    disabled={isActive[i].filter(Boolean).length < 2}
+                                    type="button"
+                                    onClick={() => onClickPreview(activeIDs)}
+                                >
+                                    {c('Action').t`Preview contact`}
+                                </Button>
                             </td>
                         </tr>
-                        {i !== mergeable.length - 1 ? (
+                        {i !== group.length - 1 ? (
                             <tr key="dummy" className="aligncenter">
                                 <td colSpan={3}></td>
                             </tr>
@@ -146,7 +89,8 @@ MergeTableBody.propTypes = {
     onClickCheckbox: PropTypes.func,
     onClickDetails: PropTypes.func,
     onClickDelete: PropTypes.func,
-    onClickUndelete: PropTypes.func
+    onClickUndelete: PropTypes.func,
+    onClickPreview: PropTypes.func
 };
 
 export default MergeTableBody;

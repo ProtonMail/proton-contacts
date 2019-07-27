@@ -53,13 +53,7 @@ const ContactsList = ({ contacts, onCheck, hasPaidMail, userKeysList, history, c
     }) => {
         if (canMerge && !index) {
             return (
-                <MergeRow
-                    key={key}
-                    style={style}
-                    mergeableContacts={mergeableContacts}
-                    hasPaidMail={hasPaidMail}
-                    userKeysList={userKeysList}
-                />
+                <MergeRow key={key} style={style} mergeableContacts={mergeableContacts} userKeysList={userKeysList} />
             );
         }
 

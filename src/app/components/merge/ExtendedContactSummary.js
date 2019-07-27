@@ -21,7 +21,7 @@ const getAllValues = (properties, field) => {
         .map(({ value }) => value);
 };
 
-const ExtendedContactSummary = ({ properties, hasPaidMail }) => {
+const ExtendedContactSummary = ({ properties }) => {
     const name = getFirstValue(properties, 'fn');
     const emails = getAllValues(properties, 'email');
     const tels = getAllValues(properties, 'tel');
@@ -46,7 +46,7 @@ const ExtendedContactSummary = ({ properties, hasPaidMail }) => {
 
     return (
         <Block className="flex flex-spacebetween flex-nowrap">
-            <div className="flex flex-column">
+            <div className="flex flex-column flex-nowrap">
                 {summary.map((items) => (
                     <div key={items[0].prop} className="mb1">
                         {items.map(({ prop, icon }, index) => (
@@ -62,7 +62,7 @@ const ExtendedContactSummary = ({ properties, hasPaidMail }) => {
                 {summary.map((items) => (
                     <div key={items[0].prop} className="mb1">
                         {items.map(({ component }, index) => (
-                            <div key={`icon-${index}`} className="flex flex-items-center">
+                            <div key={`icon-${index}`} className="flex flex-items-center mw100 ellipsis">
                                 {component}
                             </div>
                         ))}
@@ -74,8 +74,7 @@ const ExtendedContactSummary = ({ properties, hasPaidMail }) => {
 };
 
 ExtendedContactSummary.propTypes = {
-    properties: PropTypes.array.isRequired,
-    hasPaidMail: PropTypes.number
+    properties: PropTypes.array.isRequired
 };
 
 ExtendedContactSummary.defaultProps = {
