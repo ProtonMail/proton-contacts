@@ -3,18 +3,10 @@ import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { Dropdown, DropdownMenu, DropdownButton } from 'react-components';
 
-const OptionsDropdown = ({
-    contactID,
-    groupIndex,
-    index,
-    canDelete,
-    onClickDetails,
-    onClickDelete,
-    onClickUndelete
-}) => {
+const OptionsDropdown = ({ contactID, index, canDelete, onClickDetails, onClickDelete, onClickUndelete }) => {
     const color = canDelete ? 'color-global-warning' : 'color-pv-green';
     const text = canDelete ? c('Action').t`Mark for deletion` : c('Action').t`Unmark for deletion`;
-    const handleClick = canDelete ? () => onClickDelete(groupIndex, index) : () => onClickUndelete(groupIndex, index);
+    const handleClick = canDelete ? () => onClickDelete(index) : () => onClickUndelete(index);
 
     return (
         <Dropdown
@@ -38,7 +30,6 @@ const OptionsDropdown = ({
 
 OptionsDropdown.propTypes = {
     contactID: PropTypes.string.isRequired,
-    groupIndex: PropTypes.number.isRequired,
     index: PropTypes.number,
     canDelete: PropTypes.bool,
     onClickDelete: PropTypes.func,

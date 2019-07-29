@@ -1,32 +1,29 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { useModals, FormModal, Alert, Table, TableCell } from 'react-components';
+import { useModals, FormModal, Alert } from 'react-components';
 
-import MergeTableBody from './MergeTableBody';
+import { move } from 'proton-shared/lib/helpers/array';
+
+import MergeTable from './MergeTable';
 import ContactDetails from './ContactDetails';
 import MergeContactPreview from './MergeContactPreview';
 import MergingModal from './MergingModal';
 
-const MergeTableHeader = () => {
-    return (
-        <thead>
-            <tr>
-                <TableCell type="header" className="w30">{c('TableHeader').t`NAME`}</TableCell>
-                <TableCell type="header">{c('TableHeader').t`ADDRESS`}</TableCell>
-                <TableCell type="header" className="w20">
-                    {c('TableHeader').t`ACTIONS`}
-                </TableCell>
-            </tr>
-        </thead>
-    );
+const reOrderInGroup = (collection, groupIndex, { oldIndex, newIndex }) => {
+    return collection.map((group, i) => {
+        if (i === groupIndex) {
+            return move(group, oldIndex, newIndex);
+        }
+        return group;
+    });
 };
 
 const MergeModal = ({ contacts, userKeysList, ...rest }) => {
     const { createModal } = useModals();
 
     const [model, setModel] = useState({
-        order: contacts.map((group) => group.map((_contact, index) => index)),
+        orderedContacts: contacts,
         isChecked: contacts.map((group) => group.map(() => true)),
         isDeleted: contacts.map((group) => group.map(() => false))
     });
@@ -49,7 +46,7 @@ const MergeModal = ({ contacts, userKeysList, ...rest }) => {
         createModal(<MergingModal contactsIDs={contactsIDs} userKeysList={userKeysList} />);
     };
 
-    const handleToggleCheck = (groupIndex, index) => {
+    const handleToggleCheck = (groupIndex) => (index) => {
         setModel({
             ...model,
             isChecked: model.isChecked.map((group, i) => {
@@ -61,7 +58,7 @@ const MergeModal = ({ contacts, userKeysList, ...rest }) => {
         });
     };
 
-    const handleToggleDelete = (groupIndex, index) => {
+    const handleToggleDelete = (groupIndex) => (index) => {
         setModel({
             ...model,
             isDeleted: model.isDeleted.map((group, i) => {
@@ -70,6 +67,14 @@ const MergeModal = ({ contacts, userKeysList, ...rest }) => {
                 }
                 return group.map((bool, j) => (index === j ? !bool : bool));
             })
+        });
+    };
+
+    const handleSortEnd = (groupIndex) => ({ oldIndex, newIndex }) => {
+        setModel({
+            orderedContacts: reOrderInGroup(model.orderedContacts, groupIndex, { oldIndex, newIndex }),
+            isChecked: reOrderInGroup(model.isChecked, groupIndex, { oldIndex, newIndex }),
+            isDeleted: reOrderInGroup(model.isDeleted, groupIndex, { oldIndex, newIndex })
         });
     };
 
@@ -91,19 +96,17 @@ const MergeModal = ({ contacts, userKeysList, ...rest }) => {
                     .t`You can mark for deletion the contacts that you do not want neither to merge nor to keep.
                     Deletion will only take place after the merge process.`}
             </Alert>
-            <Table>
-                <MergeTableHeader />
-                <MergeTableBody
-                    contacts={contacts}
-                    isChecked={model.isChecked}
-                    isDeleted={model.isDeleted}
-                    onClickCheckbox={handleToggleCheck}
-                    onClickDetails={handleClickDetails}
-                    onClickDelete={handleToggleDelete}
-                    onClickUndelete={handleToggleDelete}
-                    onClickPreview={handlePreview}
-                />
-            </Table>
+            <MergeTable
+                onSortEnd={handleSortEnd}
+                contacts={model.orderedContacts}
+                isChecked={model.isChecked}
+                isDeleted={model.isDeleted}
+                onClickCheckbox={handleToggleCheck}
+                onClickDetails={handleClickDetails}
+                onClickDelete={handleToggleDelete}
+                onClickUndelete={handleToggleDelete}
+                onClickPreview={handlePreview}
+            />
         </FormModal>
     );
 };

@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Loader, GenericError } from 'react-components';
 
+import useContact from '../hooks/useContact';
 import { prepareContact, bothUserKeys } from '../helpers/decrypt';
 import ContactView from './ContactView';
 
@@ -10,18 +11,9 @@ const Contact = ({ contactID, userKeysList }) => {
     const ref = useRef(contactID);
     const [contact, contactLoading, contactFetchError] = useContact(contactID);
 
-    const request = async () => {
-        try {
-            setLoading(true);
-            const { Contact } = await api(getContact(contactID));
-            const { properties, errors } = await prepareContact(Contact, { publicKeys, privateKeys });
-            setModel({ properties, errors });
-            setLoading(false);
-        } catch (error) {
-            setLoading(false);
-            setModel({ ...model, errors: [FAIL_TO_LOAD] });
-            throw error;
-        }
+    const decryptContact = async () => {
+        const { properties, errors } = await prepareContact(contact, { publicKeys, privateKeys });
+        setModel({ properties, errors });
     };
 
     useEffect(() => {
