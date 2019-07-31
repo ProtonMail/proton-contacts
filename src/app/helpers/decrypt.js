@@ -73,7 +73,14 @@ const ACTIONS = {
 export const prepareContact = async (contact, { publicKeys, privateKeys }) => {
     const { Cards } = contact;
 
-    const data = await Promise.all(Cards.map((card) => ACTIONS[card.Type](card, { publicKeys, privateKeys })));
+    const data = await Promise.all(
+        Cards.map(async (card) => {
+            if (!ACTIONS[card.Type]) {
+                return { error: FAIL_TO_READ };
+            }
+            return ACTIONS[card.Type](card, { publicKeys, privateKeys });
+        })
+    );
 
     const { vcards, errors } = data.reduce(
         (acc, { data, error }) => {
@@ -108,4 +115,12 @@ export const bothUserKeys = (userKeysList) => {
         },
         { publicKeys: [], privateKeys: [] }
     );
+};
+
+export const decryptContactCards = async (contactCards, contactID, keys) => {
+    const { properties, errors } = await prepareContact({ Cards: contactCards }, bothUserKeys(keys));
+    if (errors.length !== 0) {
+        throw new Error('Error decrypting contact with contactID ', contactID);
+    }
+    return properties;
 };

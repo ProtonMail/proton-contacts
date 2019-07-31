@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { Progress, Icon } from 'react-components';
+import { Icon } from 'react-components';
 import contactLoader from 'design-system/assets/img/pm-images/contact-export-loader.gif';
 
-const DyanmicProgress = ({ id, alt, displayDuring, displayEnd, value, max, ...rest }) => {
+const DynamicProgress = ({ id, alt, displayDuring, displayEnd, value, max, endPostponed, ...rest }) => {
     return (
         <div className="aligncenter">
             {value < max ? (
@@ -12,27 +12,29 @@ const DyanmicProgress = ({ id, alt, displayDuring, displayEnd, value, max, ...re
             ) : (
                 <Icon name="on" fill="success" size={100} alt={`${alt}-finished`} />
             )}
-            <Progress className="progress-contact w100 mt1" aria-describedby={id} value={value} max={max} {...rest} />
+            <progress className="progress-contact w100 mt1" aria-describedby={id} value={value} max={max} {...rest} />
             <p aria-atomic="true" aria-live="polite" id="id">
-                {value < max ? `${displayDuring}: ${value}%` : displayEnd}
+                {value < max || endPostponed ? `${displayDuring}: ${value}%` : displayEnd}
             </p>
         </div>
     );
 };
 
-DyanmicProgress.propTypes = {
+DynamicProgress.propTypes = {
     id: PropTypes.string.isRequired,
     alt: PropTypes.string.isRequired,
     displayDuring: PropTypes.string,
     displayEnd: PropTypes.string,
     value: PropTypes.number.isRequired,
-    max: PropTypes.number.isRequired
+    max: PropTypes.number.isRequired,
+    endPostponed: PropTypes.bool.isRequired
 };
 
-DyanmicProgress.defaultProps = {
+DynamicProgress.defaultProps = {
     displayDuring: c('Progress bar description').t`Progress`,
     displayEnd: c('Progress bar description').t`Completed`,
-    max: 100
+    max: 100,
+    endPostponed: false
 };
 
-export default DyanmicProgress;
+export default DynamicProgress;

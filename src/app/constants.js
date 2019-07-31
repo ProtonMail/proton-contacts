@@ -35,3 +35,16 @@ export const FAIL_TO_LOAD = 3;
 export const FAIL_TO_DECRYPT = 4;
 export const PGP_INLINE = 'PGP/Inline';
 export const PGP_MIME = 'PGP/MIME';
+
+export const OVERWRITE = {
+    // when UID conflict at contact import
+    THROW_ERROR: 0,
+    OVERWRITE_CONTACT: 1
+};
+
+export const CATEGORIES = {
+    IGNORE: 0,
+    INCLUDE: 1
+};
+
+export const SUCCESS_IMPORT_CODE = 1000; // in POST API route /contacts

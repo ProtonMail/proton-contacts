@@ -1,12 +1,13 @@
 import ICAL from 'ical.js';
+import { readFileAsString } from 'proton-shared/lib/helpers/file';
 
-const ONE_ORE_MORE_MUST_BE_PRESENT = '1*';
+const ONE_OR_MORE_MUST_BE_PRESENT = '1*';
 const EXACTLY_ONE_MUST_BE_PRESENT = '1';
 const EXACTLY_ONE_MAY_BE_PRESENT = '*1';
 const ONE_OR_MORE_MAY_BE_PRESENT = '*';
 
 const PROPERTIES = {
-    fn: { cardinality: ONE_ORE_MORE_MUST_BE_PRESENT },
+    fn: { cardinality: ONE_OR_MORE_MUST_BE_PRESENT },
     n: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT },
     nickname: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
     photo: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
@@ -72,7 +73,7 @@ export const getValue = (property) => {
 };
 
 /**
- * Parse vCard String an return contact properties model as an Array
+ * Parse vCard String and return contact properties model as an Array
  * @param {String} vcard to parse
  * @returns {Array} contact properties ordered
  */
@@ -84,7 +85,7 @@ export const parse = (vcard = '') => {
         .reduce((acc, property) => {
             const type = property.getParameter('type');
             const prefValue = property.getParameter('pref');
-            const pref = typeof prefValue === 'string' ? +prefValue : 0;
+            const pref = typeof prefValue === 'string' ? +prefValue : 1;
             const splitted = property.name.split('.');
             const field = splitted[1] ? splitted[1] : splitted[0];
 
@@ -145,7 +146,7 @@ export const merge = (contact = []) => {
             const { field } = property;
             const { cardinality = ONE_OR_MORE_MAY_BE_PRESENT } = PROPERTIES[field] || {};
 
-            if ([ONE_ORE_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT].includes(cardinality)) {
+            if ([ONE_OR_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT].includes(cardinality)) {
                 acc.push(property);
             } else if (!acc.find(({ field: f }) => f === field)) {
                 acc.push(property);
@@ -155,6 +156,37 @@ export const merge = (contact = []) => {
     }, []);
 };
 
-export const orderProperties = (properties) => {
-    return properties;
+/**
+ * Basic test for the validity of a vCard file read as a string
+ * @param {String} vcf
+ *
+ * @return {Boolean}
+ */
+const isValid = (vcf = '') =>
+    !!vcf.match(/BEGIN:VCARD/g) && vcf.match(/BEGIN:VCARD/g).length === (vcf.match(/END:VCARD/g) || []).length;
+
+/**
+ * Read a vCard file as a string. If there are errors when parsing the csv, throw
+ * @param {File} vcf
+ *
+ * @return {String}
+ */
+export const readVcf = async (file) => {
+    const vcf = await readFileAsString(file);
+    if (!isValid(vcf)) {
+        throw new Error('Error when reading vcf file');
+    }
+    return vcf;
+};
+
+/**
+ * Extract array of vcards from a string containing several vcards
+ * @param {String} vcf
+ *
+ * @return {Array<String>}  Array of vcards
+ */
+export const extractVcards = (vcf = '') => {
+    const vcards = vcf.split('END:VCARD');
+    vcards.pop();
+    return vcards.map((vcard) => vcard.trim() + '\r\nEND:VCARD');
 };

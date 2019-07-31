@@ -45,6 +45,7 @@
         "file-saver": "^2.0.0",
         "ical.js": "^1.3.0",
         "keycode": "^2.2.0",
+        "papaparse": "^5.0.0",
         "pmcrypto": "github:ProtonMail/pmcrypto.git#semver:^6.0.0",
         "proton-pack": "github:ProtonMail/proton-pack.git#semver:^1.3.0",
         "proton-shared": "github:ProtonMail/proton-shared.git#master",

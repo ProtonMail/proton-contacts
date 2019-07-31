@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Label } from 'react-components';
 
-import { getLabels } from '../helpers/field';
+import { getFieldLabels } from '../helpers/fields';
 
 const ContactLabelProperty = ({ field, type, ...rest }) => {
-    const LABELS = getLabels();
-    const label = LABELS[type] || type || LABELS[field];
+    const labels = getFieldLabels();
+    const label = labels[type] || type || labels[field];
 
     return (
         <Label className="capitalize" {...rest}>
