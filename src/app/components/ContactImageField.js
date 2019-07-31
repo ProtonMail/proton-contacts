@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, RemoveImage } from 'react-components';
+import { Icon, RemoteImage } from 'react-components';
 
 const ContactImageField = ({ value }) => {
-    return <div className="mb1">{value ? <RemoveImage src={value} /> : <Icon name="contact" size={40} />}</div>;
+    return <div className="mb1">{value ? <RemoteImage src={value} /> : <Icon name="contact" size={40} />}</div>;
 };
 
 ContactImageField.propTypes = {
