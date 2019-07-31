@@ -93,7 +93,7 @@ const PrivateSidebar = ({ contactGroups }) => {
                 <PrimaryButton className="w100" onClick={() => createModal(<ContactModal />)}>{c('Action')
                     .t`Add contact`}</PrimaryButton>
             </div>
-            <nav className="navigation flex-item-fluid scroll-if-needed mb1">
+            <nav className="navigation mw100 flex-item-fluid scroll-if-needed mb1">
                 <NavMenu list={list} />
             </nav>
         </div>
