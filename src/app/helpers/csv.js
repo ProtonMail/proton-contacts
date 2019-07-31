@@ -122,13 +122,16 @@ const parse = ({ headers = [], contacts = [] }) => {
     const { headers: standardHeaders, contacts: standardContacts } = standarize(
         getNonEmptyCsvData({ headers, contacts })
     );
+
     const translator = standardHeaders.map(toPreVcard);
+    console.log('translator', translator);
+
     return standardContacts
         .map((contact) =>
             contact
                 .map((header, i) => translator[i](header))
                 // some headers can be mapped to several properties, so we need to flatten
-                .reduce((acc, val) => acc.concat(val), [])
+                .flat()
         )
         .map((contact) => contact.filter((preVcard) => !!preVcard));
 };

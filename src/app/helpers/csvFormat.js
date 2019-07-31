@@ -1,8 +1,43 @@
 // See './csv.js' for the definition of pre-vCard and pre-vCards contact
 
+/**
+ * Given csv properties and csv contacts from any csv file, transform the properties
+ * into csv properties from a standard outlook csv. Transform the contacts accordingly
+ * @param {Object} csvData
+ * @param {Array<String>} csvData.headers           Array of csv properties
+ * @param {Array<Array<String>>} csvData.contacts   Array of csv contacts
+ *
+ * @return {Object}                                 standarized { headers, contacts }
+ */
 export const standarize = ({ headers, contacts }) => {
-    // TODO
-    return { headers, contacts };
+    if (!contacts.length) {
+        return { headers, contacts };
+    }
+    const { beRemoved, beChanged } = headers.reduce(
+        (acc, header, i) => {
+            const { beRemoved, beChanged } = acc;
+            const value = contacts[0][i];
+            if (['short name', 'maiden name', 'directory server', 'event', 'group membership'].includes(header)) {
+                beRemoved[i] = true;
+            }
+            if (/(.*) - (type)$/i.test(header)) {
+                const [, property] = header.match(/(.*) - (type)$/i);
+                beRemoved[i] = true;
+                beChanged[i + 1] = toVcardType(value) ? toVcardType(value) + ' ' + property : property;
+            }
+
+            return acc;
+        },
+        { beRemoved: Object.create(null), beChanged: Object.create(null) }
+    );
+
+    const standardHeaders = headers
+        .map((header, index) => (beChanged[index] ? beChanged[index] : header))
+        .filter((_header, index) => !beRemoved[index]);
+
+    const standardContacts = contacts.map((values) => values.filter((_value, j) => !beRemoved[j]));
+
+    return { headers: standardHeaders, contacts: standardContacts };
 };
 
 /**
@@ -14,26 +49,29 @@ export const standarize = ({ headers, contacts }) => {
  */
 export const toPreVcard = (header) => {
     const property = header.toLowerCase();
-    if (property === 'prefix' || property === 'title') {
+    if (['prefix', 'title'].includes(property)) {
         return (value) => [templates['fn']({ header, value, index: 0 }), templates['n']({ header, value, index: 3 })];
     }
-    if (property === 'first name') {
+    if (['first name', 'given name'].includes(property)) {
         return (value) => [templates['fn']({ header, value, index: 1 }), templates['n']({ header, value, index: 1 })];
     }
-    if (property === 'middle name') {
+    if (['middle name', 'additional name'].includes(property)) {
         return (value) => [templates['fn']({ header, value, index: 2 }), templates['n']({ header, value, index: 2 })];
     }
-    if (property === 'last name') {
+    if (['last name', 'family name'].includes(property)) {
         return (value) => [templates['fn']({ header, value, index: 3 }), templates['n']({ header, value, index: 0 })];
     }
     if (property === 'suffix') {
         return (value) => [templates['fn']({ header, value, index: 4 }), templates['n']({ header, value, index: 4 })];
     }
-    if (property === 'given yomi') {
+    if (['given yomi', 'given name yomi'].includes(property)) {
         return (value) => templates['fnYomi']({ header, value, index: 0 });
     }
-    if (property === 'surname yomi') {
+    if (['middle name yomi', 'additional name yomi'].includes(property)) {
         return (value) => templates['fnYomi']({ header, value, index: 1 });
+    }
+    if (['surname yomi', 'family name yomi'].includes(property)) {
+        return (value) => templates['fnYomi']({ header, value, index: 2 });
     }
     if (property === 'company') {
         return (value) => templates['org']({ header, value, index: 0 });
@@ -41,13 +79,13 @@ export const toPreVcard = (header) => {
     if (property === 'department') {
         return (value) => templates['org']({ header, value, index: 1 });
     }
-    if (/^e-mail (\d*)/.test(property)) {
-        const match = property.match(/^e-mail (\d+)/);
-        return (value) => templates['email']({ pref: +(match && match[1]) || 1, header, value });
+    if (/^(\w+)?\s?e-mail (\d*)/.test(property)) {
+        const [, type, pref] = property.match(/^(\w+)?\s?e-mail (\d*)/);
+        return (value) => templates['email']({ pref, header, value, type: type ? toVcardType(type) : undefined });
     }
     if (/^(\w+\s*\w*) phone\s?(\d*)$/.test(property)) {
-        const match = property.match(/^(\w+\s*\w*) phone\s?(\d*)$/);
-        return (value) => templates['tel']({ pref: +match[2] || 1, header, value, type: toVcardType(match[1]) });
+        const [, type, pref] = property.match(/^(\w+\s*\w*) phone\s?(\d*)$/);
+        return (value) => templates['tel']({ pref, header, value, type: type ? toVcardType(type) : undefined });
     }
     if (/^(\w+)?\s?fax\s?(\d*)$/.test(property)) {
         const match = property.match(/^(\w+)?\s?fax\s?(\d*)$/);
@@ -191,6 +229,7 @@ export const toPreVcard = (header) => {
         });
     }
 
+    // convert any other property into custom note
     return (value) => ({
         header,
         value,
@@ -236,14 +275,14 @@ const templates = {
     n({ header, value, index }) {
         return { header, value, checked: true, field: 'n', combineInto: 'n', combineIndex: index };
     },
-    email({ pref, header, value }) {
+    email({ pref, header, value, type }) {
         return {
             pref,
             header,
             value,
             checked: true,
             field: 'email',
-            type: 'home',
+            type,
             group: pref
         };
     },
@@ -413,22 +452,32 @@ export const display = {
  * @return {String}
  */
 const toVcardType = (csvType) => {
-    switch (csvType) {
+    const type = csvType.toLowerCase();
+
+    switch (type) {
         case 'home':
             return 'home';
         case 'business':
+            return 'work';
+        case 'work':
             return 'work';
         case 'mobile':
             return 'cell';
         case 'other':
             return 'other';
+        case 'main':
+            return 'main';
         case 'primary':
             return 'main';
         case 'company main':
             return 'work';
         case 'pager':
             return 'pager';
+        case 'home fax':
+            return 'fax';
+        case 'work fax':
+            return 'fax';
         default:
-            return 'other';
+            return '';
     }
 };
