@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { useModals, FormModal, Alert } from 'react-components';
+import { useModals, FormModal, ResetButton, PrimaryButton, Alert } from 'react-components';
 
 import { move } from 'proton-shared/lib/helpers/array';
 
@@ -10,14 +10,14 @@ import ContactDetails from './ContactDetails';
 import MergeContactPreview from './MergeContactPreview';
 import MergingModal from './MergingModal';
 
-const reOrderInGroup = (collection, groupIndex, { oldIndex, newIndex }) => {
-    return collection.map((group, i) => {
+// helper to re-order arrays inside a list of arrays
+const reOrderInGroup = (collection, groupIndex, { oldIndex, newIndex }) =>
+    collection.map((group, i) => {
         if (i === groupIndex) {
             return move(group, oldIndex, newIndex);
         }
         return group;
     });
-};
 
 const MergeModal = ({ contacts, userKeysList, ...rest }) => {
     const { createModal } = useModals();
@@ -28,22 +28,40 @@ const MergeModal = ({ contacts, userKeysList, ...rest }) => {
         isDeleted: contacts.map((group) => group.map(() => false))
     });
 
-    const beMergedIDs = contacts
+    const beMergedIDs = model.orderedContacts
         .map((group, i) =>
             group.map(({ ID }, j) => model.isChecked[i][j] && !model.isDeleted[i][j] && ID).filter(Boolean)
         )
         .filter((group) => group.length > 1);
+    const beDeletedIDs = model.orderedContacts.map((group, i) =>
+        group.map(({ ID }, j) => model.isDeleted[i][j] && ID).filter(Boolean)
+    );
 
     const handleClickDetails = (contactID) => {
         createModal(<ContactDetails contactID={contactID} userKeysList={userKeysList} />);
     };
 
-    const handlePreview = (contactsIDs) => {
-        createModal(<MergeContactPreview contactsIDs={contactsIDs} userKeysList={userKeysList} />);
+    const handleRemoveMerged = (groupIndex) => {
+        setModel(({ orderedContacts, isChecked, isDeleted }) => ({
+            orderedContacts: orderedContacts.filter((_group, i) => i !== groupIndex),
+            isChecked: isChecked.filter((_group, i) => i !== groupIndex),
+            isDeleted: isDeleted.filter((_group, i) => i !== groupIndex)
+        }));
+    };
+
+    const handlePreview = (contactsIDs, groupIndex) => {
+        createModal(
+            <MergeContactPreview
+                groupIndex={groupIndex}
+                contactsIDs={contactsIDs}
+                userKeysList={userKeysList}
+                onMerge={handleRemoveMerged}
+            />
+        );
     };
 
     const handleMerge = (contactsIDs) => {
-        createModal(<MergingModal contactsIDs={contactsIDs} userKeysList={userKeysList} />);
+        createModal(<MergingModal contactsIDs={contactsIDs} userKeysList={userKeysList} beDeletedIDs={beDeletedIDs} />);
     };
 
     const handleToggleCheck = (groupIndex) => (index) => {
@@ -81,7 +99,12 @@ const MergeModal = ({ contacts, userKeysList, ...rest }) => {
     return (
         <FormModal
             title={c('Title').t`Merge contacts`}
-            submit={c('Action').t`Merge`}
+            footer={
+                <>
+                    <ResetButton>{c('Action').t`Cancel`}</ResetButton>
+                    <PrimaryButton disabled={!beMergedIDs.length}>{c('Action').t`Merge`}</PrimaryButton>
+                </>
+            }
             onSubmit={() => handleMerge(beMergedIDs)}
             {...rest}
         >
@@ -94,7 +117,7 @@ const MergeModal = ({ contacts, userKeysList, ...rest }) => {
             <Alert type="warning">
                 {c('Description')
                     .t`You can mark for deletion the contacts that you do not want neither to merge nor to keep.
-                    Deletion will only take place after the merge process.`}
+                    Deletion will only take place after the merge button is clicked.`}
             </Alert>
             <MergeTable
                 onSortEnd={handleSortEnd}
@@ -112,7 +135,7 @@ const MergeModal = ({ contacts, userKeysList, ...rest }) => {
 };
 
 MergeModal.propTypes = {
-    contacts: PropTypes.array,
+    contacts: PropTypes.arrayOf(PropTypes.array),
     userKeysList: PropTypes.array
 };
 

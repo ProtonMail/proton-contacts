@@ -55,7 +55,7 @@ const MergeTable = ({
                             className="aligcenter"
                             disabled={activeIDs.length < 2}
                             type="button"
-                            onClick={() => onClickPreview(activeIDs)}
+                            onClick={() => onClickPreview(activeIDs, i)}
                         >
                             {c('Action').t`Preview contact`}
                         </Button>

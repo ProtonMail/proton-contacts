@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import {
-    AppsSidebar,
-    Alert,
     Loader,
     useContactEmails,
     useContacts,
@@ -19,7 +17,6 @@ import {
 } from 'react-components';
 import { clearContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 import { normalize } from 'proton-shared/lib/helpers/string';
-import { APPS } from 'proton-shared/lib/constants';
 
 import ContactsList from '../components/ContactsList';
 import Contact from '../components/Contact';

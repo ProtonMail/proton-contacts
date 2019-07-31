@@ -125,11 +125,13 @@ const ImportingModalContent = ({
                     track.failedOnParse + track.failedOnEncrypt.length,
                     track.total
                 )}
-                displayEnd={c('Progress bar description').ngettext(
+                displaySuccess={c('Progress bar description').ngettext(
                     msgid`${track.imported} out of ${track.total} contact successfully imported.`,
                     `${track.imported} out of ${track.total} contacts successfully imported.`,
                     track.imported
                 )}
+                displayFailed={c('Progress bar description').t`No contacts imported`}
+                failed={!track.encrypted.length}
                 endPostponed={step !== FINISHED}
             />
         </>

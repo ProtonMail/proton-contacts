@@ -2,6 +2,7 @@ import { normalize } from 'proton-shared/lib/helpers/string';
 
 import { getEmails } from './contact';
 import { ONE_OR_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT, PROPERTIES, isCustomField } from './vcard';
+import { addGroup } from './properties';
 
 /**
  * Given a list of contacts, extract the ones that can be merged
@@ -120,7 +121,7 @@ export const merge = (contacts) => {
         return [];
     }
 
-    return contacts.reduce(
+    const merged = contacts.reduce(
         (acc, contact, index) => {
             const { mergedContact, mergedProperties, mergedPropertiesPrefs } = acc;
             if (index === 0) {
@@ -166,4 +167,7 @@ export const merge = (contacts) => {
         },
         { mergedContact: [], mergedProperties: Object.create(null), mergedPropertiesPrefs: Object.create(null) }
     ).mergedContact;
+
+    // fix groups for emails in case some are repeated
+    return addGroup(merged);
 };
