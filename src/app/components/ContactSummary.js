@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Image } from 'react-components';
+import { Icon, RemoteImage } from 'react-components';
 import { getInitial } from 'proton-shared/lib/helpers/string';
 
 import { formatAdr } from '../helpers/property';
@@ -29,7 +29,7 @@ const ContactSummary = ({ properties }) => {
         <div className="bg-global-light flex flex-nowrap p1 mb1 border-bottom">
             <div className="w20 aligncenter">
                 {photo ? (
-                    <Image src={photo} className="rounded50" />
+                    <RemoteImage src={photo} className="rounded50" />
                 ) : (
                     <div className="rounded50 bordered bg-white ratio-container-square h1 mb0">
                         <span className="inner-ratio-container flex">
