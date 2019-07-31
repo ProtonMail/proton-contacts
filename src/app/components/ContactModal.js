@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
     FormModal,
@@ -141,6 +141,16 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
         }
     };
 
+    const handleOrderChange = useCallback(
+        (field, orderedProperties) => {
+            const newProperties = properties.filter((property) => property.field !== field);
+            newProperties.unshift(...orderedProperties);
+
+            setProperties(newProperties);
+        },
+        [properties]
+    );
+
     return (
         <FormModal
             loading={loading || loadingUserKeys}
@@ -167,6 +177,7 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
                 field="email"
                 onChange={handleChange}
                 onRemove={handleRemove}
+                onOrderChange={handleOrderChange}
                 onAdd={handleAdd('email')}
             />
             <ContactModalProperties

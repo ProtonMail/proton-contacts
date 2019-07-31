@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Field, DropdownActions, useModals } from 'react-components';
+import { Row, OrderableHandle, Icon, Field, DropdownActions, useModals } from 'react-components';
 import { c } from 'ttag';
 
 import { clearType, getType } from '../helpers/property';
@@ -8,7 +8,7 @@ import ContactFieldProperty from './ContactFieldProperty';
 import ContactModalLabel from './ContactModalLabel';
 import ContactImageModal from './ContactImageModal';
 
-const ContactModalRow = ({ property, onChange, onRemove, onMoveUp, onMoveDown, first, last }) => {
+const ContactModalRow = ({ property, onChange, onRemove, onMoveUp, onMoveDown, first, last, isOrderable }) => {
     const { createModal } = useModals();
     const { field, uid } = property;
     const type = clearType(getType(property.type));
@@ -44,15 +44,22 @@ const ContactModalRow = ({ property, onChange, onRemove, onMoveUp, onMoveDown, f
 
     return (
         <Row>
+            {isOrderable && (
+                <OrderableHandle key="icon">
+                    <div style={{ cursor: 'row-resize' }} className="mr0-5 flex flex-items-center">
+                        <Icon name="text-justify" />
+                    </div>
+                </OrderableHandle>
+            )}
             <ContactModalLabel field={field} type={type} uid={property.uid} onChange={onChange} />
             <Field>
                 <ContactFieldProperty field={field} value={property.value} uid={property.uid} onChange={onChange} />
             </Field>
-            {list.length ? (
+            {list.length > 0 && (
                 <div className="ml1 flex flex-items-end">
                     <DropdownActions list={list} />
                 </div>
-            ) : null}
+            )}
         </Row>
     );
 };
@@ -65,12 +72,14 @@ ContactModalRow.propTypes = {
     onMoveUp: PropTypes.func,
     onMoveDown: PropTypes.func,
     first: PropTypes.bool,
-    last: PropTypes.bool
+    last: PropTypes.bool,
+    isOrderable: PropTypes.bool
 };
 
 ContactModalRow.defaultProps = {
     first: false,
-    last: false
+    last: false,
+    isOrderable: false
 };
 
 export default ContactModalRow;
