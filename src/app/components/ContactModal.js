@@ -5,7 +5,6 @@ import {
     Alert,
     useUser,
     useApi,
-    useEventManager,
     useUserKeys,
     useEventManager,
     useNotifications,
@@ -63,7 +62,6 @@ const formatModel = (properties = []) => {
 const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => {
     const { createModal } = useModals();
     const api = useApi();
-    const { call } = useEventManager();
     const { createNotification } = useNotifications();
     const [loading, setLoading] = useState(false);
     const [user] = useUser();
