@@ -23,7 +23,7 @@ const ContactViewProperty = ({ property, properties, contactID }) => {
             case 'email': {
                 return (
                     <>
-                        <a className="mr0-5" href={`mailto:${value}`} title={`${value}`}>
+                        <a className="mr0-5" href={`mailto:${value}`} title={value}>
                             {value}
                         </a>
                         {property.contactGroups.length
