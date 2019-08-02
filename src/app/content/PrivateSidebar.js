@@ -26,7 +26,7 @@ const PrivateSidebar = ({ contactGroups }) => {
             link: '/contacts'
         },
         {
-            icon: 'contacts-group',
+            icon: 'settings-singular',
             text: c('Link').t`Groups`,
             type: 'button',
             className: 'alignleft',
