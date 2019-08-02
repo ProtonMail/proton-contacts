@@ -50,12 +50,6 @@ const PrivateSidebar = ({ contactGroups }) => {
             onClick() {}
         },
         {
-            icon: 'delete',
-            text: c('Action').t`Delete all`,
-            type: 'button',
-            onClick() {}
-        },
-        {
             icon: 'contacts-group',
             text: c('Link').t`Group`,
             type: 'button',
