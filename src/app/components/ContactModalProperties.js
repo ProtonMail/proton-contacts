@@ -32,10 +32,8 @@ const ContactModalProperties = ({ properties: allProperties, field, onChange, on
     const canAdd = !fields.includes('fn');
     const rows = useMemo(
         () =>
-            properties.map((property, index) => (
+            properties.map((property) => (
                 <ContactModalRow
-                    first={!index}
-                    last={properties.length - 1 === index}
                     key={property.uid}
                     property={property}
                     onChange={onChange}
@@ -50,7 +48,6 @@ const ContactModalProperties = ({ properties: allProperties, field, onChange, on
     const handleSortEnd = useCallback(
         ({ newIndex, oldIndex }) => {
             const orderedProperties = move(properties, oldIndex, newIndex);
-
             onOrderChange(field, orderedProperties);
         },
         [properties, field]
