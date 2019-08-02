@@ -22,7 +22,7 @@ const ContactSummary = ({ properties }) => {
         email && {
             icon: 'email',
             component: (
-                <a href={`mailto:${email}`} title={`${email}`}>
+                <a href={`mailto:${email}`} title={email}>
                     {email}
                 </a>
             )
