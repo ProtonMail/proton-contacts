@@ -14,7 +14,8 @@ import {
     useNotifications,
     useEventManager,
     useContacts,
-    usePopperAnchor
+    usePopperAnchor,
+    generateUID
 } from 'react-components';
 import { c, msgid } from 'ttag';
 import { normalize } from 'proton-shared/lib/helpers/string';
@@ -83,6 +84,7 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
     const [contacts] = useContacts();
     const [contactGroups] = useContactGroups();
     const [model, setModel] = useState(Object.create(null));
+    const [uid] = useState(generateUID('contactGroupDropdown'));
 
     const normalizedKeyword = normalize(keyword);
     const groups = normalizedKeyword.length
@@ -178,19 +180,20 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
                 <div className="mb1">
                     <ul className="unstyled m0 dropDown-contentInner">
                         {groups.map(({ ID, Name, Color }) => {
+                            const checkboxId = `${uid}${ID}`;
                             return (
                                 <li
                                     key={ID}
                                     className="flex flex-spacebetween flex-nowrap border-bottom border-bottom--dashed pt0-5 pb0-5"
                                 >
-                                    <label htmlFor={ID} className="flex flex-nowrap">
+                                    <label htmlFor={checkboxId} className="flex flex-nowrap">
                                         <Icon name="contacts-groups" className="mr0-5" color={Color} />
                                         <span className="ellipsis" title={Name}>
                                             {Name}
                                         </span>
                                     </label>
                                     <Checkbox
-                                        id={ID}
+                                        id={checkboxId}
                                         checked={model[ID] === CHECKED}
                                         indeterminate={model[ID] === INDETERMINATE}
                                         onChange={handleCheck(ID)}
