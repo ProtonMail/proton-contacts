@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Row, Group, ButtonGroup, Copy, useModals, useUser, useContactEmails } from 'react-components';
+import { normalize } from 'proton-shared/lib/helpers/string';
 import { c } from 'ttag';
 
 import { clearType, getType, formatAdr } from '../helpers/property';
@@ -57,7 +58,12 @@ const ContactViewProperty = ({ property, properties, contactID }) => {
     const getActions = () => {
         switch (field) {
             case 'email': {
-                const contactEmail = contactEmails.find(({ Email }) => Email === value);
+                const contactEmail = contactEmails.find(({ Email = '' }) => Email === normalize(value));
+
+                if (!contactEmail) {
+                    return null;
+                }
+
                 const handleSettings = () => {
                     createModal(
                         <ContactEmailSettingsModal

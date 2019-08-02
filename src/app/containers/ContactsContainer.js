@@ -69,7 +69,7 @@ const ContactsContainer = ({ location }) => {
                 </ConfirmModal>
             );
         });
-        await api(checkAll ? clearContacts() : deleteContacts(getCheckedContactIDs()));
+        await api(checkAll && !contactGroupID ? clearContacts() : deleteContacts(getCheckedContactIDs()));
         await call();
         setCheckedContacts(Object.create(null));
         setCheckAll(false);
