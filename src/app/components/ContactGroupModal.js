@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { randomIntFromInterval } from 'proton-shared/lib/helpers/function';
@@ -60,7 +60,7 @@ const ContactGroupModal = ({ contactGroupID, ...rest }) => {
     const { createNotification } = useNotifications();
     const [contactGroups] = useContactGroups();
     const [contactEmails] = useContactEmails();
-    const options = contactEmails.map(({ ID, Email, Name }) => ({ label: `${Email} ${Name}`, value: ID }));
+
     const contactGroup = contactGroupID && contactGroups.find(({ ID }) => ID === contactGroupID);
     const existingContactEmails =
         contactGroupID && contactEmails.filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID));
@@ -69,9 +69,12 @@ const ContactGroupModal = ({ contactGroupID, ...rest }) => {
     const [model, setModel] = useState({
         name: contactGroupID ? contactGroup.Name : '',
         color: contactGroupID ? contactGroup.Color : LABEL_COLORS[randomIntFromInterval(0, LABEL_COLORS.length - 1)],
-        contactEmailID: contactEmails.length && options[0].value,
         contactEmails: contactGroupID ? existingContactEmails : []
     });
+    const contactEmailIDs = model.contactEmails.map(({ ID }) => ID);
+    const options = contactEmails
+        .filter(({ ID }) => !contactEmailIDs.includes(ID))
+        .map(({ ID, Email, Name }) => ({ label: `${Email} ${Name}`, value: ID }));
 
     const handleChangeName = ({ target }) => setModel({ ...model, name: target.value });
     const handleChangeColor = (color) => () => setModel({ ...model, color });
@@ -84,7 +87,7 @@ const ContactGroupModal = ({ contactGroupID, ...rest }) => {
         if (contactEmail && !alreadyExist) {
             const copy = [...model.contactEmails];
             copy.push(contactEmail);
-            setModel({ ...model, contactEmails: copy, contactEmailID: options[0].value });
+            setModel({ ...model, contactEmails: copy });
         }
     };
 
@@ -129,6 +132,15 @@ const ContactGroupModal = ({ contactGroupID, ...rest }) => {
         }
     };
 
+    useEffect(() => {
+        if (options.length) {
+            setModel({
+                ...model,
+                contactEmailID: options[0].value
+            });
+        }
+    }, [model.contactEmails.length]);
+
     return (
         <FormModal onSubmit={handleSubmit} loading={loading} submit={c('Action').t`Save`} title={title} {...rest}>
             <Row>
@@ -148,7 +160,7 @@ const ContactGroupModal = ({ contactGroupID, ...rest }) => {
                     <ColorSelector selected={model.color} onChange={handleChangeColor} />
                 </Field>
             </Row>
-            {contactEmails.length ? (
+            {options.length ? (
                 <Row>
                     <Label htmlFor="contactGroupEmail">{c('Label').t`Add email address`}</Label>
                     <Field>
