@@ -35,6 +35,12 @@ const ContactViewProperty = ({ property, properties, contactID }) => {
                     </>
                 );
             }
+            case 'url':
+                return (
+                    <a href={value} target="_blank" rel="noopener noreferrer">
+                        {value}
+                    </a>
+                );
             case 'tel':
                 return <a href={`tel:${value}`}>{value}</a>;
             case 'bday':
