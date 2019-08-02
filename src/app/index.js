@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import '@babel/polyfill';
-import 'yetch/polyfill';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 
 import App from './App';
 
