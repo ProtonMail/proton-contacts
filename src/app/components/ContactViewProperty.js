@@ -24,7 +24,7 @@ const ContactViewProperty = ({ property, properties, contactID }) => {
             case 'email': {
                 return (
                     <>
-                        <a className="mr0-5" href={`mailto:${value}`}>
+                        <a className="mr0-5" href={`mailto:${value}`} title={value}>
                             {value}
                         </a>
                         {property.contactGroups.length
@@ -103,8 +103,8 @@ const ContactViewProperty = ({ property, properties, contactID }) => {
         <Row>
             <ContactLabelProperty field={field} type={type} first={first} />
             <div className="flex flex-nowrap flex-items-center w100">
-                <span className="mr0-5">{getContent()}</span>
-                {getActions()}
+                <span className="mr0-5 ellipsis">{getContent()}</span>
+                <span className="flex-item-noshrink">{getActions()}</span>
             </div>
         </Row>
     );

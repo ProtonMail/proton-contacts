@@ -19,7 +19,14 @@ const ContactSummary = ({ properties }) => {
     const org = getFirstValue(properties, 'org');
 
     const summary = [
-        email && { icon: 'email', component: <a href={`mailto:${email}`}>{email}</a> },
+        email && {
+            icon: 'email',
+            component: (
+                <a href={`mailto:${email}`} title={email}>
+                    {email}
+                </a>
+            )
+        },
         tel && { icon: 'phone', component: <a href={`tel:${tel}`}>{tel}</a> },
         adr && { icon: 'address', component: formatAdr(adr) },
         org && { icon: 'organization', component: org }
@@ -39,13 +46,13 @@ const ContactSummary = ({ properties }) => {
                 )}
             </div>
             <div className="pl1">
-                <h2 className="mb0-5">{name}</h2>
+                <h2 className="mb0-5 ellipsis">{name}</h2>
                 <ul className="unstyled m0">
                     {summary.map(({ icon, component }) => {
                         return (
-                            <li key={icon} className="flex flex-items-center mb0-5">
+                            <li key={icon} className="flex flex-nowrap flex-items-center mb0-5">
                                 <Icon name={icon} className="mr0-5" />
-                                {component}
+                                <span className="ellipsis">{component}</span>
                             </li>
                         );
                     })}
