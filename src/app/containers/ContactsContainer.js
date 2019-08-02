@@ -4,6 +4,7 @@ import { c } from 'ttag';
 import { Route, Switch } from 'react-router-dom';
 import {
     AppsSidebar,
+    Alert,
     Loader,
     useContactEmails,
     useContacts,
@@ -12,7 +13,9 @@ import {
     useApi,
     useNotifications,
     useEventManager,
-    useContactGroups
+    useContactGroups,
+    useModals,
+    ConfirmModal
 } from 'react-components';
 import { clearContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 import { normalize } from 'proton-shared/lib/helpers/string';
@@ -26,6 +29,7 @@ import PrivateHeader from '../content/PrivateHeader';
 import PrivateSidebar from '../content/PrivateSidebar';
 
 const ContactsContainer = ({ location }) => {
+    const { createModal } = useModals();
     const [search, updateSearch] = useState('');
     const normalizedSearch = normalize(search);
     const api = useApi();
@@ -57,7 +61,15 @@ const ContactsContainer = ({ location }) => {
     };
 
     const handleDelete = async () => {
-        await api(checkAll ? clearContacts : deleteContacts(getCheckedContactIDs()));
+        await new Promise((resolve, reject) => {
+            createModal(
+                <ConfirmModal title={c('Title').t`Delete`} onConfirm={resolve} onClose={reject}>
+                    <Alert type="warning">{c('Warning')
+                        .t`Are you sure you want to delete the selected contacts?`}</Alert>
+                </ConfirmModal>
+            );
+        });
+        await api(checkAll ? clearContacts() : deleteContacts(getCheckedContactIDs()));
         await call();
         setCheckedContacts(Object.create(null));
         setCheckAll(false);
