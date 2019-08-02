@@ -35,8 +35,12 @@ const ContactGroupTable = ({ contactEmails, onDelete }) => {
             <TableBody>
                 {contactEmails.map(({ ID, Name, Email }) => {
                     const cells = [
-                        Name,
-                        Email,
+                        <div className="ellipsis mw100" key={ID} title={Name}>
+                            {Name}
+                        </div>,
+                        <div className="ellipsis mw100" key={ID} title={Email}>
+                            {Email}
+                        </div>,
                         <SmallButton key={ID} onClick={onDelete(ID)}>{c('Action').t`Delete`}</SmallButton>
                     ];
                     return <TableRow key={ID} cells={cells} />;
