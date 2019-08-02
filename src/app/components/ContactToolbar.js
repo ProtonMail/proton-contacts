@@ -17,13 +17,7 @@ const ContactToolbar = ({ onCheck, onDelete, checked, checkedContacts }) => {
     return (
         <div className="toolbar flex noprint">
             <Checkbox className="flex pl1 pr1" checked={checked} onChange={handleCheck} />
-            <button
-                disabled={!contactEntries.length}
-                type="button"
-                title={c('Tooltip').t`Delete`}
-                className="pl1 pr1"
-                onClick={onDelete}
-            >
+            <button type="button" title={c('Tooltip').t`Delete`} className="pl1 pr1" onClick={onDelete}>
                 <Icon name="delete" className="toolbar-icon" />
             </button>
             <ContactGroupDropdown disabled={!contactEmailsSelected.length} contactEmails={contactEmailsSelected}>

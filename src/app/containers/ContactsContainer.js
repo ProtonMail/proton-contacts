@@ -60,7 +60,18 @@ const ContactsContainer = ({ location }) => {
         }, []);
     };
 
+    const getCurrentContactID = () => {
+        const [, contactID] = location.pathname.split('/contacts/');
+        return contactID;
+    };
+
     const handleDelete = async () => {
+        const contactIDs = getCheckedContactIDs() || [getCurrentContactID()];
+
+        if (!contactIDs.length) {
+            return;
+        }
+
         await new Promise((resolve, reject) => {
             createModal(
                 <ConfirmModal title={c('Title').t`Delete`} onConfirm={resolve} onClose={reject}>
@@ -69,7 +80,7 @@ const ContactsContainer = ({ location }) => {
                 </ConfirmModal>
             );
         });
-        await api(checkAll && !contactGroupID ? clearContacts() : deleteContacts(getCheckedContactIDs()));
+        await api(checkAll && !contactGroupID ? clearContacts() : deleteContacts(contactIDs));
         await call();
         setCheckedContacts(Object.create(null));
         setCheckAll(false);
