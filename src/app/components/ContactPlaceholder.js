@@ -15,6 +15,7 @@ import {
 import ExportModal from './ExportModal';
 import ContactGroupModal from './ContactGroupModal';
 import ContactGroupsModal from './ContactGroupsModal';
+import ImportModal from './import/ImportModal';
 
 const PaidCards = ({ contactGroupID }) => {
     const { createModal } = useModals();
@@ -22,7 +23,7 @@ const PaidCards = ({ contactGroupID }) => {
     const handleGroups = () => createModal(<ContactGroupsModal />);
 
     const handleImport = () => {
-        // TODO open import modal
+        createModal(<ImportModal />);
     };
 
     return (
