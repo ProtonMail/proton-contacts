@@ -7,6 +7,7 @@ import { normalize } from 'proton-shared/lib/helpers/string';
 
 import ContactViewProperty from './ContactViewProperty';
 import { OTHER_INFORMATION_FIELDS } from '../constants';
+import EncryptedIcon from './EncryptedIcon';
 
 const ICONS = {
     email: 'email',
@@ -56,7 +57,7 @@ const ContactViewProperties = ({ properties: allProperties, contactID, field }) 
             <h3 className="mb1 flex flex-nowrap flex-items-center">
                 <Icon name={iconName} className="mr0-5" />
                 <span className="mr0-5">{title}</span>
-                {field === 'email' ? null : <Icon name="lock" />}
+                {field === 'email' ? null : <EncryptedIcon />}
             </h3>
             {properties.map((property, index) => {
                 return (
