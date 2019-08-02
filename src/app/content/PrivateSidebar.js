@@ -28,30 +28,8 @@ const PrivateSidebar = ({ contactGroups }) => {
             link: '/contacts'
         },
         {
-            icon: 'import',
-            text: c('Action').t`Import`,
-            type: 'button',
-            onClick() {
-                createModal(<ImportModal />);
-            }
-        },
-        {
-            icon: 'export',
-            text: c('Action').t`Export`,
-            type: 'button',
-            onClick() {
-                createModal(<ExportModal />);
-            }
-        },
-        {
-            icon: 'merge',
-            text: c('Action').t`Merge`,
-            type: 'button',
-            onClick() {}
-        },
-        {
             icon: 'contacts-group',
-            text: c('Link').t`Group`,
+            text: c('Link').t`Groups`,
             type: 'button',
             className: 'alignleft',
             onClick() {
