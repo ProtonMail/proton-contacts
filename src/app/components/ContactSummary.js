@@ -20,7 +20,7 @@ const ContactSummary = ({ properties }) => {
 
     const summary = [
         email && { icon: 'email', component: <a href={`mailto:${email}`}>{email}</a> },
-        tel && { icon: 'phone', component: <a href={`mailto:${tel}`}>{tel}</a> },
+        tel && { icon: 'phone', component: <a href={`tel:${tel}`}>{tel}</a> },
         adr && { icon: 'address', component: formatAdr(adr) },
         org && { icon: 'organization', component: org }
     ].filter(Boolean);
