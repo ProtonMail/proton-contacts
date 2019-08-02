@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/ProtonMail/proton-contacts.svg?style=svg)](https://circleci.com/gh/ProtonMail/proton-contacts)
+
 # protonmail-contacts
 
 Proton Contacts built with React.
