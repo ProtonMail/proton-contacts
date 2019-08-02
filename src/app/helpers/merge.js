@@ -1,8 +1,47 @@
 import { normalize } from 'proton-shared/lib/helpers/string';
 
-import { getEmails } from './contact';
 import { ONE_OR_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT, PROPERTIES, isCustomField } from './vcard';
 import { addGroup } from './properties';
+import { unique } from 'proton-shared/lib/helpers/array';
+
+const findAllConnections = (initialConnections, connections) => {
+    if (!connections.length) {
+        // nothing to do
+        return initialConnections;
+    }
+
+    let modified = false;
+    const newConnections = connections.reduce((acc, connection) => {
+        for (const index of connection) {
+            acc.forEach((oldConnection, i) => {
+                if (oldConnection.includes(index)) {
+                    const lengthBefore = acc[i].length;
+                    acc[i] = unique([...acc[i], ...connection]);
+                    if (acc[i].length !== lengthBefore) {
+                        modified = true;
+                    }
+                    return acc;
+                }
+            });
+        }
+        return acc;
+    }, initialConnections);
+
+    if (modified) {
+        return findAllConnections(newConnections, [connections, ...initialConnections]);
+    }
+    return newConnections.reduce(
+        (acc, connection) => {
+            const { filteredConnections, usedIndices } = acc;
+            if (!connection.some((index) => usedIndices.includes(index))) {
+                filteredConnections.push(connection);
+                usedIndices.push(...connection);
+            }
+            return acc;
+        },
+        { filteredConnections: [], usedIndices: [] }
+    ).filteredConnections;
+};
 
 /**
  * Given a list of contacts, extract the ones that can be merged
@@ -13,61 +52,44 @@ import { addGroup } from './properties';
 export const extractMergeable = (contacts = []) => {
     // detect duplicate names
     // namesConnections = { name: [contact indices with that name] }
-    const namesConnections = contacts.reduce((acc, { Name }, index) => {
-        const name = normalize(Name);
-        if (!acc[name]) {
-            acc[name] = [index];
-        } else {
-            acc[name].push(index);
-        }
-        return acc;
-    }, Object.create(null));
+    const namesConnections = Object.values(
+        contacts.reduce((acc, { Name }, index) => {
+            const name = normalize(Name);
+
+            if (!acc[name]) {
+                acc[name] = [index];
+            } else {
+                acc[name].push(index);
+            }
+
+            return acc;
+        }, Object.create(null))
+    )
+        .map(unique)
+        .filter((connection) => connection.length > 1);
 
     // detect duplicate emails
     // emailConnections = { email: [contact indices with that email] }
-    const emailConnections = contacts.reduce((acc, { Emails }, index) => {
-        Emails.map(normalize).forEach((email) => {
-            if (!acc[email]) {
-                acc[email] = [index];
-            } else {
-                acc[email].push(index);
-            }
-        });
-        return acc;
-    }, Object.create(null));
+    const emailConnections = Object.values(
+        contacts.reduce((acc, { Emails }, index) => {
+            Emails.map(normalize).forEach((email) => {
+                if (!acc[email]) {
+                    acc[email] = [index];
+                } else {
+                    acc[email].push(index);
+                }
+            });
+            return acc;
+        }, Object.create(null))
+    )
+        .map(unique)
+        .filter((connection) => connection.length > 1);
 
     // Now we collect contact indices that go together
     // either in duplicate names or duplicate emails.
-    const { mergeableIndices } = Object.keys(namesConnections).reduce(
-        (acc, name) => {
-            const { mergeableIndices, isUsed } = acc;
-            const indices = namesConnections[name];
-            for (const index of indices) {
-                if (!isUsed[index]) {
-                    if (!mergeableIndices[name]) {
-                        mergeableIndices[name] = [index];
-                    }
-                    for (const email of getEmails(contacts[index])) {
-                        for (const j of emailConnections[email]) {
-                            if (!mergeableIndices[name].includes(j) && !isUsed[j]) {
-                                mergeableIndices[name].push(j);
-                                isUsed[j] = true;
-                            }
-                        }
-                    }
-                    isUsed[index] = true;
-                } else {
-                    indices.splice(indices.indexOf(index), 1);
-                }
-            }
-            return acc;
-        },
-        { mergeableIndices: Object.create(null), isUsed: Object.create(null) }
-    );
+    const allConnections = findAllConnections(emailConnections, findAllConnections(namesConnections, emailConnections));
 
-    return Object.values(mergeableIndices)
-        .filter((arr) => arr.length > 1)
-        .map((indices) => indices.map((index) => contacts[index]));
+    return allConnections.map((indices) => indices.map((index) => contacts[index]));
 };
 
 /**

@@ -33,9 +33,10 @@ const MergeModal = ({ contacts, userKeysList, ...rest }) => {
             group.map(({ ID }, j) => model.isChecked[i][j] && !model.isDeleted[i][j] && ID).filter(Boolean)
         )
         .filter((group) => group.length > 1);
-    const beDeletedIDs = model.orderedContacts.map((group, i) =>
-        group.map(({ ID }, j) => model.isDeleted[i][j] && ID).filter(Boolean)
-    );
+    const beDeletedIDs = model.orderedContacts
+        .map((group, i) => group.map(({ ID }, j) => model.isDeleted[i][j] && ID).filter(Boolean))
+        .filter((group) => group.length)
+        .flat();
 
     const handleClickDetails = (contactID) => {
         createModal(<ContactDetails contactID={contactID} userKeysList={userKeysList} />);
@@ -55,13 +56,21 @@ const MergeModal = ({ contacts, userKeysList, ...rest }) => {
                 groupIndex={groupIndex}
                 contactsIDs={contactsIDs}
                 userKeysList={userKeysList}
+                beDeletedIDs={beDeletedIDs[groupIndex]}
                 onMerge={handleRemoveMerged}
             />
         );
     };
 
     const handleMerge = (contactsIDs) => {
-        createModal(<MergingModal contactsIDs={contactsIDs} userKeysList={userKeysList} beDeletedIDs={beDeletedIDs} />);
+        createModal(
+            <MergingModal
+                contactsIDs={contactsIDs}
+                userKeysList={userKeysList}
+                beDeletedIDs={beDeletedIDs}
+                onMerge={rest.onClose}
+            />
+        );
     };
 
     const handleToggleCheck = (groupIndex) => (index) => {
@@ -102,7 +111,7 @@ const MergeModal = ({ contacts, userKeysList, ...rest }) => {
             footer={
                 <>
                     <ResetButton>{c('Action').t`Cancel`}</ResetButton>
-                    <PrimaryButton disabled={!beMergedIDs.length}>{c('Action').t`Merge`}</PrimaryButton>
+                    <PrimaryButton type="submit" disabled={!beMergedIDs.length}>{c('Action').t`Merge`}</PrimaryButton>
                 </>
             }
             onSubmit={() => handleMerge(beMergedIDs)}

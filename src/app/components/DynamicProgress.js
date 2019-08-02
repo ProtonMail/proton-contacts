@@ -16,14 +16,14 @@ const DynamicProgress = ({
     failed = false,
     ...rest
 }) => {
-    const icon =
-        value < max ? (
-            <img src={contactLoader} alt={`${alt}-loader`} />
-        ) : failed ? (
-            <Icon name="off" fill="warning" size={100} alt={`${alt}-finished`} />
-        ) : (
-            <Icon name="on" fill="success" size={100} alt={`${alt}-finished`} />
-        );
+    const loading = value < max || endPostponed;
+    const icon = loading ? (
+        <img src={contactLoader} alt={`${alt}-loader`} />
+    ) : failed ? (
+        <Icon name="off" fill="warning" size={100} alt={`${alt}-finished`} />
+    ) : (
+        <Icon name="on" fill="success" size={100} alt={`${alt}-finished`} />
+    );
     const displayEnd = failed ? displayFailed : displaySuccess;
 
     return (
@@ -31,7 +31,7 @@ const DynamicProgress = ({
             {icon}
             <progress className="progress-contact w100 mt1" aria-describedby={id} value={value} max={max} {...rest} />
             <p aria-atomic="true" aria-live="polite" id="id">
-                {value < max || endPostponed ? `${displayDuring}: ${value}%` : displayEnd}
+                {loading ? `${displayDuring}: ${value}%` : displayEnd}
             </p>
         </div>
     );

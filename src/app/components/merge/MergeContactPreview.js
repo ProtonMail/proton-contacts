@@ -12,7 +12,7 @@ import MergingModal from './MergingModal';
 
 import { FAIL_TO_LOAD } from '../../constants';
 
-const MergeContactPreview = ({ groupIndex, contactsIDs, userKeysList, onMerge, ...rest }) => {
+const MergeContactPreview = ({ groupIndex, contactsIDs, beDeletedIDs, userKeysList, onMerge, ...rest }) => {
     const api = useApi();
     const { createModal } = useModals();
 
@@ -28,6 +28,7 @@ const MergeContactPreview = ({ groupIndex, contactsIDs, userKeysList, onMerge, .
                 contactsIDs={[contactsIDs]}
                 userKeysList={userKeysList}
                 mergedContact={mergedContact}
+                beDeletedIDs={beDeletedIDs}
                 onMerge={() => onMerge(groupIndex)}
             />
         );
@@ -93,6 +94,7 @@ const MergeContactPreview = ({ groupIndex, contactsIDs, userKeysList, onMerge, .
 MergeContactPreview.propTypes = {
     groupIndex: PropTypes.number,
     contactsIDs: PropTypes.arrayOf(PropTypes.string),
+    beDeletedIDs: PropTypes.arrayOf(PropTypes.string),
     userKeysList: PropTypes.array,
     onMerge: PropTypes.func
 };
