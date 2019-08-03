@@ -28,7 +28,7 @@ import { isInternalUser, isDisabledUser, getRawInternalKeys, allKeysExpired, has
 import { VCARD_KEY_FIELDS } from '../constants';
 import ContactPgpSettings from './ContactPgpSettings';
 import { prepareContacts } from '../helpers/encrypt';
-import { updateContact } from 'proton-shared/lib/api/contacts';
+import { addContacts } from 'proton-shared/lib/api/contacts';
 
 const { SEND_PGP_INLINE, SEND_PGP_MIME } = PACKAGE_TYPE;
 const { TYPE_NO_RECEIVE } = RECIPIENT_TYPE;
@@ -213,8 +213,8 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
             model.isPGPExternal && model.scheme && { field: 'x-pm-scheme', value: model.scheme, group: emailGroup },
             ...getKeysProperties(emailGroup) // [{ field: 'key' }, ]
         ].filter(Boolean);
-        const [contact] = await prepareContacts([otherProperties.concat(emailProperties)], userKeysList[0]);
-        await api(updateContact(contactID, contact));
+        const Contacts = await prepareContacts([otherProperties.concat(emailProperties)], userKeysList[0]);
+        await api(addContacts({ Contacts, Overwrite: 1, Labels: 0 }));
         await call();
         rest.onClose();
         createNotification({ text: c('Success').t`Preferences saved` });
