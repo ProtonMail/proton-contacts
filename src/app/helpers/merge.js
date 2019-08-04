@@ -39,8 +39,12 @@ export const linkConnections = (connections) => {
             const indexFound = findKeyIndex(connection, connected);
 
             if (indexFound !== -1) {
-                // newConnections[indexFound].push(...connection);
-                newConnections[indexFound] = unique(connection.concat(newConnections[indexFound]));
+                newConnections[indexFound] = unique([...connection, ...newConnections[indexFound]]);
+                for (const key of connection) {
+                    if (connected[key] === undefined) {
+                        connected[key] = indexFound;
+                    }
+                }
                 didModify = true;
             } else {
                 for (const key of connection) {
@@ -183,6 +187,14 @@ export const merge = (contacts) => {
                         mergedProperties[field] = [value];
                         mergedPropertiesPrefs[field] = [+pref];
                     } else {
+                        // if (field === 'fn') {
+                        //     console.log('merged names', mergedProperties[field]);
+                        //     console.log('new value', extractNewValue(value, field, mergedProperties[field]));
+                        //     console.log('canAdd', !isCustomField(field) &&
+                        //     [ONE_OR_MORE_MAY_BE_PRESENT, ONE_OR_MORE_MUST_BE_PRESENT].includes(
+                        //         PROPERTIES[field].cardinality
+                        //     ));
+                        // }
                         const newValue = extractNewValue(value, field, mergedProperties[field]);
                         const newPref = Math.max(...mergedPropertiesPrefs[field]) + 1;
                         const canAdd =
@@ -194,7 +206,7 @@ export const merge = (contacts) => {
 
                         if (!!newValue && canAdd) {
                             mergedContact.push({ pref: newPref, field, group, type, value: newValue });
-                            mergedProperties[field].push[newValue];
+                            mergedProperties[field].push(newValue);
                             mergedPropertiesPrefs[field] = [newPref];
                         }
                     }
