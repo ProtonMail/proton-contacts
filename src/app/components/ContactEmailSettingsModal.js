@@ -214,7 +214,7 @@ const ContactEmailSettingsModal = ({ contactID, properties, contactEmail, ...res
             ...getKeysProperties(emailGroup) // [{ field: 'key' }, ]
         ].filter(Boolean);
         const Contacts = await prepareContacts([otherProperties.concat(emailProperties)], userKeysList[0]);
-        await api(addContacts({ Contacts, Overwrite: 1, Labels: 0 }));
+        await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: 0 }));
         await call();
         rest.onClose();
         createNotification({ text: c('Success').t`Preferences saved` });
