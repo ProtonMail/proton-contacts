@@ -6,6 +6,7 @@ import {
     UserModel,
     ContactsModel,
     ContactEmailsModel,
+    ContactGroupsModel,
     UserSettingsModel,
     SubscriptionModel
 } from 'proton-shared/lib/models';
@@ -13,7 +14,14 @@ import {
 import ContactsProvider from '../containers/ContactProvider';
 import ContactsContainer from '../containers/ContactsContainer';
 
-const EVENT_MODELS = [UserModel, UserSettingsModel, ContactsModel, SubscriptionModel, ContactEmailsModel];
+const EVENT_MODELS = [
+    UserModel,
+    UserSettingsModel,
+    ContactsModel,
+    SubscriptionModel,
+    ContactEmailsModel,
+    ContactGroupsModel
+];
 
 const PRELOAD_MODELS = [UserSettingsModel, UserModel];
 
