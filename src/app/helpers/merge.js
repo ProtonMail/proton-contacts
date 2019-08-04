@@ -4,43 +4,58 @@ import { ONE_OR_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT, PROPERTIES, is
 import { addGroup } from './properties';
 import { unique } from 'proton-shared/lib/helpers/array';
 
-const findAllConnections = (initialConnections, connections) => {
-    if (!connections.length) {
-        // nothing to do
-        return initialConnections;
-    }
-
-    let modified = false;
-    const newConnections = connections.reduce((acc, connection) => {
-        for (const index of connection) {
-            acc.forEach((oldConnection, i) => {
-                if (oldConnection.includes(index)) {
-                    const lengthBefore = acc[i].length;
-                    acc[i] = unique([...acc[i], ...connection]);
-                    if (acc[i].length !== lengthBefore) {
-                        modified = true;
-                    }
-                    return acc;
-                }
-            });
+/**
+ * Given an array of object keys and and object storing indices,
+ * if the object contains any of these keys, return the index stored in the object
+ * for the first of such keys. Otherwise return -1
+ * @param {Array} keys
+ * @param {Object} obj
+ *
+ * @return {Number}
+ */
+const findKeyIndex = (keys, obj) => {
+    for (const key of keys) {
+        if (obj[key] !== undefined) {
+            return obj[key];
         }
-        return acc;
-    }, initialConnections);
-
-    if (modified) {
-        return findAllConnections(newConnections, [connections, ...initialConnections]);
     }
-    return newConnections.reduce(
-        (acc, connection) => {
-            const { filteredConnections, usedIndices } = acc;
-            if (!connection.some((index) => usedIndices.includes(index))) {
-                filteredConnections.push(connection);
-                usedIndices.push(...connection);
+    return -1;
+};
+
+/**
+ * Given a list of connections (a "connection" is a list of keys [key1, key2, ...] connected for some reason),
+ * find recursively all connections and return a new list of connections with no key repeated.
+ * E.g.: [[1, 2, 3], [3, 5], [4, 6]] ->  [[1, 2, 3, 5], [4, 6]]
+ * @param {Array} connections
+ *
+ * @return {Array}
+ */
+export const linkConnections = (connections) => {
+    let didModify = false;
+
+    const { newConnections } = connections.reduce(
+        (acc, connection, i) => {
+            const { connected, newConnections } = acc;
+            const indexFound = findKeyIndex(connection, connected);
+
+            if (indexFound !== -1) {
+                // newConnections[indexFound].push(...connection);
+                newConnections[indexFound] = unique(connection.concat(newConnections[indexFound]));
+                didModify = true;
+            } else {
+                for (const key of connection) {
+                    connected[key] = i;
+                }
+                newConnections.push(connection);
             }
             return acc;
         },
-        { filteredConnections: [], usedIndices: [] }
-    ).filteredConnections;
+        { connected: Object.create(null), newConnections: [] }
+    );
+    if (didModify) {
+        return linkConnections(newConnections);
+    }
+    return connections;
 };
 
 /**
@@ -87,7 +102,7 @@ export const extractMergeable = (contacts = []) => {
 
     // Now we collect contact indices that go together
     // either in duplicate names or duplicate emails.
-    const allConnections = findAllConnections(emailConnections, findAllConnections(namesConnections, emailConnections));
+    const allConnections = linkConnections([...namesConnections, ...emailConnections]);
 
     return allConnections.map((indices) => indices.map((index) => contacts[index]));
 };

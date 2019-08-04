@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { Dropdown, DropdownMenu, DropdownButton } from 'react-components';
+import { SimpleDropdown, DropdownMenu, DropdownButton } from 'react-components';
 
 const OptionsDropdown = ({ contactID, index, canDelete, onClickDetails, onClickDelete, onClickUndelete }) => {
     const color = canDelete ? 'color-global-warning' : 'color-pv-green';
@@ -9,8 +9,8 @@ const OptionsDropdown = ({ contactID, index, canDelete, onClickDetails, onClickD
     const handleClick = canDelete ? () => onClickDelete(index) : () => onClickUndelete(index);
 
     return (
-        <Dropdown
-            caret
+        <SimpleDropdown
+            hasCaret
             className="pm-button pm-group-button pm-button--for-icon pm-button--small"
             content={c('Title').t`Options`}
         >
@@ -24,7 +24,7 @@ const OptionsDropdown = ({ contactID, index, canDelete, onClickDetails, onClickD
                     {text}
                 </DropdownButton>
             </DropdownMenu>
-        </Dropdown>
+        </SimpleDropdown>
     );
 };
 
