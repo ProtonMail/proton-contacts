@@ -124,7 +124,6 @@ const parse = ({ headers = [], contacts = [] }) => {
     );
 
     const translator = standardHeaders.map(toPreVcard);
-    console.log('translator', translator);
 
     return standardContacts
         .map((contact) =>
