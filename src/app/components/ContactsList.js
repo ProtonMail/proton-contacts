@@ -61,6 +61,7 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
             <div
                 style={style}
                 key={ID}
+                onClick={handleClick(ID)}
                 className={`item-container bg-global-white  ${contactID === ID ? 'item-is-selected' : ''}`}
             >
                 <div className="flex flex-nowrap">
@@ -72,10 +73,7 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
                     >
                         {initial}
                     </ItemCheckbox>
-                    <div
-                        className="flex-item-fluid pl1 flex flex-column flex-spacebetween conversation-titlesender"
-                        onClick={handleClick(ID)}
-                    >
+                    <div className="flex-item-fluid pl1 flex flex-column flex-spacebetween conversation-titlesender">
                         <div className="flex">
                             <div className={`flex-item-fluid w0 ${LabelIDs.length ? 'pr1' : ''}`}>
                                 <span className="bold inbl mw100 ellipsis">{Name}</span>

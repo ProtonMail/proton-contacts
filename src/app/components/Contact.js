@@ -1,34 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useLoading, Loader } from 'react-components';
+import { Loader, GenericError } from 'react-components';
 
 import useContact from '../hooks/useContact';
 import { prepareContact, bothUserKeys } from '../helpers/decrypt';
 import ContactView from './ContactView';
 
 const Contact = ({ contactID, userKeysList }) => {
-    const [decrypting, withLoading] = useLoading(true);
-    const [model, setModel] = useState({ properties: [], errors: [] });
-    const { properties, errors } = model;
-    const { publicKeys, privateKeys } = bothUserKeys(userKeysList);
+    const [model, setModel] = useState({ ID: contactID });
+    const ref = useRef(contactID);
     const [contact, contactLoading, contactFetchError] = useContact(contactID);
-
-    const decryptContact = async () => {
-        const { properties, errors } = await prepareContact(contact, { publicKeys, privateKeys });
-        setModel({ properties, errors });
-    };
 
     useEffect(() => {
         if (contact && Array.isArray(userKeysList)) {
-            withLoading(decryptContact());
+            ref.current = contact.ID;
+            const { publicKeys, privateKeys } = bothUserKeys(userKeysList);
+
+            prepareContact(contact, { publicKeys, privateKeys }).then(({ properties, error }) => {
+                if (ref.current !== contact.ID) {
+                    return;
+                }
+                setModel({ ID: contact.ID, properties, error });
+            });
         }
     }, [contact, userKeysList]);
 
     if (contactFetchError) {
-        return 'TODO: Error';
+        return <GenericError />;
     }
 
-    if (contactLoading || decrypting) {
+    const { properties, errors, ID } = model;
+
+    if (contactLoading || !properties || ID !== contactID) {
         return <Loader />;
     }
 
