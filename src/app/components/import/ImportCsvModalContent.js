@@ -46,7 +46,6 @@ const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
     useEffect(() => {
         const parseFile = async () => {
             const preVcardsContacts = prepare(file);
-            console.log('prepared', preVcardsContacts);
             setPreVcardsContacts(preVcardsContacts);
             setIsParsingFile(false);
         };
