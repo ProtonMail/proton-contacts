@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import {
     AppsSidebar,
     Alert,
@@ -28,7 +28,7 @@ import ContactToolbar from '../components/ContactToolbar';
 import PrivateHeader from '../content/PrivateHeader';
 import PrivateSidebar from '../content/PrivateSidebar';
 
-const ContactsContainer = ({ location }) => {
+const ContactsContainer = ({ location, history }) => {
     const { createModal } = useModals();
     const [search, updateSearch] = useState('');
     const normalizedSearch = normalize(search);
@@ -81,6 +81,7 @@ const ContactsContainer = ({ location }) => {
             );
         });
         await api(checkAll && !contactGroupID ? clearContacts() : deleteContacts(contactIDs));
+        history.replace('/contacts');
         await call();
         setCheckedContacts(Object.create(null));
         setCheckAll(false);
@@ -188,7 +189,8 @@ const ContactsContainer = ({ location }) => {
 };
 
 ContactsContainer.propTypes = {
-    location: PropTypes.object.isRequired
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
 };
 
-export default ContactsContainer;
+export default withRouter(ContactsContainer);

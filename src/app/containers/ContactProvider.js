@@ -29,7 +29,7 @@ const ContactProvider = ({ children }) => {
                     continue;
                 }
                 if (Action === EVENT_ACTIONS.DELETE) {
-                    cache.remove(ID);
+                    cache.delete(ID);
                 }
                 if (Action === EVENT_ACTIONS.UPDATE) {
                     // The contact is always received in full, so we can ignore if the contact would be currently fetching (to merge the old data)
