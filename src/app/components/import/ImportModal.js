@@ -22,6 +22,7 @@ import { hasCategories } from '../../helpers/import';
 import { readCsv } from '../../helpers/csv';
 import { readVcf } from '../../helpers/vcard';
 import { BASE_SIZE } from 'proton-shared/lib/constants';
+import { splitExtension } from 'proton-shared/lib/helpers/file';
 
 const [ATTACHING, ATTACHED, CHECKING_CSV, IMPORTING, IMPORT_GROUPS] = [1, 2, 3, 4, 5];
 const MAX_SIZE = 10 * BASE_SIZE ** 2; // 10 MB
@@ -53,12 +54,13 @@ const ImportModal = ({ onClose, ...rest }) => {
     };
 
     const handleAttach = ({ target }) => {
-        const attachedFile = [...target.files].filter(({ type }) => ['text/vcard', 'text/csv'].includes(type))[0];
+        const ext = splitExtension(target.files[0].name)[1];
+        const attachedFile = ['csv', 'vcf'].includes(ext) ? target.files[0] : null;
 
         if (target.files.length && !attachedFile) {
             return createNotification({
                 type: 'error',
-                text: c('Error notification').t`No .csv or .vcard file selected`
+                text: c('Error notification').t`No .csv or .vcf file selected`
             });
         }
         if (attachedFile.size > MAX_SIZE) {
@@ -77,7 +79,7 @@ const ImportModal = ({ onClose, ...rest }) => {
         }
 
         setStep(ATTACHED);
-        setFile({ ...file, attached: attachedFile });
+        setFile({ attached: attachedFile, ext });
     };
 
     const handleEncryptingDone = () => setEncryptingDone(true);
@@ -86,7 +88,7 @@ const ImportModal = ({ onClose, ...rest }) => {
         if (step <= ATTACHED) {
             const handleSubmit = async () => {
                 try {
-                    if (file.attached.type === 'text/csv') {
+                    if (file.ext === 'csv') {
                         const read = await readCsv(file.attached);
                         setFile({ ...file, read });
                         setStep(CHECKING_CSV);
@@ -167,7 +169,7 @@ const ImportModal = ({ onClose, ...rest }) => {
             return {
                 content: (
                     <ImportingModalContent
-                        fileType={file.attached.type}
+                        fileExt={file.ext}
                         file={file.read}
                         vcardContacts={vcardContacts}
                         onSetVcardContacts={setVcardContacts}
