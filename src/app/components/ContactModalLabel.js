@@ -21,7 +21,7 @@ const ContactModalLabel = ({ field, uid, type, onChange }) => {
         tel: [
             { text: c('Property type').t`Phone`, value: '' },
             { text: c('Property type').t`Home`, value: 'home' },
-            { text: c('Property type').t`Professional`, value: 'professional' },
+            { text: c('Property type').t`Work`, value: 'work' },
             { text: c('Property type').t`Other`, value: 'other' },
             { text: c('Property type').t`Mobile`, value: 'cell' },
             { text: c('Property type').t`Main`, value: 'main' },
@@ -43,7 +43,8 @@ const ContactModalLabel = ({ field, uid, type, onChange }) => {
             { text: c('Property field').t`Title`, value: 'title' },
             { text: c('Property field').t`Role`, value: 'role' },
             { text: c('Property field').t`Logo`, value: 'logo' },
-            { text: c('Property field').t`Org`, value: 'org' },
+            { text: c('Property field').t`Photo`, value: 'photo' },
+            { text: c('Property field').t`Organization`, value: 'org' },
             { text: c('Property field').t`Member`, value: 'member' },
             { text: c('Property field').t`Note`, value: 'note' },
             { text: c('Property field').t`URL`, value: 'url' }
