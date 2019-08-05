@@ -27,14 +27,15 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
     }, Object.create(null));
 
     const handleCheck = (event) => {
-        const { target, shiftKey } = event;
+        const { target } = event;
+        const shiftKey = event.nativeEvent.shiftKey;
+
         const contactID = target.getAttribute('data-contact-id');
         const contactIDs = [contactID];
 
         if (lastChecked && shiftKey) {
             const start = contacts.findIndex(({ ID }) => ID === contactID);
-            const end = contactID.findIndex(({ ID }) => ID === lastChecked);
-            const contactIDs = contacts.slice(Math.min(start, end), Math.max(start, end) + 1);
+            const end = contacts.findIndex(({ ID }) => ID === lastChecked);
             contactIDs.push(...contacts.slice(Math.min(start, end), Math.max(start, end) + 1).map(({ ID }) => ID));
         }
 
@@ -43,6 +44,8 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
     };
 
     const handleClick = (ID) => () => history.push({ ...location, pathname: `/contacts/${ID}` });
+
+    const stop = (e) => e.stopPropagation();
 
     const Row = ({
         index, // Index of row within collection
@@ -65,14 +68,16 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
                 className={`item-container bg-global-white  ${contactID === ID ? 'item-is-selected' : ''}`}
             >
                 <div className="flex flex-nowrap">
-                    <ItemCheckbox
-                        checked={isChecked}
-                        className="item-checkbox sr-only"
-                        onChange={handleCheck}
-                        data-contact-id={ID}
-                    >
-                        {initial}
-                    </ItemCheckbox>
+                    <span onClick={stop}>
+                        <ItemCheckbox
+                            checked={isChecked}
+                            className="item-checkbox sr-only"
+                            onChange={handleCheck}
+                            data-contact-id={ID}
+                        >
+                            {initial}
+                        </ItemCheckbox>
+                    </span>
                     <div className="flex-item-fluid pl1 flex flex-column flex-spacebetween conversation-titlesender">
                         <div className="flex">
                             <div className={`flex-item-fluid w0 ${LabelIDs.length ? 'pr1' : ''}`}>
