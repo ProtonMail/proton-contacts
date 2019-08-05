@@ -17,7 +17,7 @@ const ContactViewProperty = ({ property, properties, contactID }) => {
     const { createModal } = useModals();
     const [contactEmails] = useContactEmails();
     const type = clearType(getType(property.type));
-    const value = Array.isArray(property.value) ? property.value.join(', ') : property.value;
+    const value = property.value;
 
     const getContent = () => {
         switch (field) {
