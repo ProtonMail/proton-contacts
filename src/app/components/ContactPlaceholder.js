@@ -23,11 +23,8 @@ const PaidCards = ({ contactGroupID }) => {
                 <div className="p1 aligncenter bordered-container">
                     <Icon name="import" className="icon-100p mb1" />
                     <div className="bold">{c('Title').t`Import contacts`}</div>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at tristique mauris, non
-                        eleifend orci. Etiam pharetra consequat tristique. Sed tristique ipsum quis suscipit
-                        ullamcorper.
-                    </p>
+                    <p>{c('Info')
+                        .t`Add contacts to your ProtonMail account by importing them from a CSV or vCard file.`}</p>
                     <PrimaryButton onClick={handleImport}>{c('Action').t`Import`}</PrimaryButton>
                 </div>
             </div>
@@ -35,11 +32,8 @@ const PaidCards = ({ contactGroupID }) => {
                 <div className="p1 aligncenter bordered-container">
                     <Icon name="export" className="icon-100p mb1" />
                     <div className="bold">{c('Title').t`Export contacts`}</div>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at tristique mauris, non
-                        eleifend orci. Etiam pharetra consequat tristique. Sed tristique ipsum quis suscipit
-                        ullamcorper.
-                    </p>
+                    <p>{c('Info')
+                        .t`Create an backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
                     <PrimaryButton onClick={handleExport}>{c('Action').t`Export`}</PrimaryButton>
                 </div>
             </div>
@@ -47,11 +41,8 @@ const PaidCards = ({ contactGroupID }) => {
                 <div className="p1 aligncenter bordered-container">
                     <Icon name="contacts" className="icon-100p mb1" />
                     <div className="bold">{c('Title').t`Contacts settings`}</div>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at tristique mauris, non
-                        eleifend orci. Etiam pharetra consequat tristique. Sed tristique ipsum quis suscipit
-                        ullamcorper.
-                    </p>
+                    <p>{c('Info')
+                        .t`Use groups to send email to a list of addresses you regularly communicate with.`}</p>
                     <PrimaryButton onClick={handleGroups}>{c('Action').t`Groups`}</PrimaryButton>
                 </div>
             </div>
@@ -69,11 +60,8 @@ const FreeCards = () => {
             <div className="flex-autogrid-item">
                 <div className="p1 aligncenter bordered-container">
                     <div className="bold">{c('Title').t`Contact picture`}</div>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at tristique mauris, non
-                        eleifend orci. Etiam pharetra consequat tristique. Sed tristique ipsum quis suscipit
-                        ullamcorper.
-                    </p>
+                    <p>{c('Info')
+                        .t`With a premium ProtonMail plan, you can add a picture to your contacts to easily identify the sender of received emails.`}</p>
                     <Link className="pm-button pm-button--primary" to="/settings/subscription">{c('Action')
                         .t`Upgrade`}</Link>
                 </div>
@@ -81,11 +69,8 @@ const FreeCards = () => {
             <div className="flex-autogrid-item">
                 <div className="p1 aligncenter bordered-container">
                     <div className="bold">{c('Title').t`Encrypted contact details`}</div>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at tristique mauris, non
-                        eleifend orci. Etiam pharetra consequat tristique. Sed tristique ipsum quis suscipit
-                        ullamcorper.
-                    </p>
+                    <p>{c('Info')
+                        .t`With a paid ProtonMail plan, you can fill your contacts details with phone numbers, addresses and more.`}</p>
                     <Link className="pm-button pm-button--primary" to="/settings/subscription">{c('Action')
                         .t`Upgrade`}</Link>
                 </div>
@@ -93,11 +78,8 @@ const FreeCards = () => {
             <div className="flex-autogrid-item">
                 <div className="p1 aligncenter bordered-container">
                     <div className="bold">{c('Title').t`Manage groups`}</div>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at tristique mauris, non
-                        eleifend orci. Etiam pharetra consequat tristique. Sed tristique ipsum quis suscipit
-                        ullamcorper.
-                    </p>
+                    <p>{c('Info')
+                        .t`With a paid ProtonMail plan, you can use groups to send email to a list of addresses you regularly communicate with.`}</p>
                     <Link className="pm-button pm-button--primary" to="/settings/subscription">{c('Action')
                         .t`Upgrade`}</Link>
                 </div>
