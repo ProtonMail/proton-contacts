@@ -3,16 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
 import { redirectTo } from 'proton-shared/lib/helpers/browser';
-import {
-    ContactGroupModal,
-    PrimaryButton,
-    Button,
-    AutoSaveContactsToggle,
-    Icon,
-    useMailSettings,
-    useModals,
-    useContactGroups
-} from 'react-components';
+import { ContactGroupModal, PrimaryButton, Button, Icon, useModals, useContactGroups } from 'react-components';
 
 import ExportModal from './ExportModal';
 import ImportModal from './import/ImportModal';
@@ -120,7 +111,6 @@ const ContactPlaceholder = ({ contacts, contactGroupID, user, onUncheck }) => {
     const countContacts = contacts.length;
     const selectedContacts = contacts.filter(({ isChecked }) => isChecked);
     const countSelectedContacts = selectedContacts.length;
-    const [{ AutoSaveContacts } = {}] = useMailSettings();
     const [contactGroups] = useContactGroups();
     const { createModal } = useModals();
 
@@ -166,18 +156,12 @@ const ContactPlaceholder = ({ contacts, contactGroupID, user, onUncheck }) => {
         <div className="p2 view-column-detail flex-item-fluid">
             <div className="aligncenter">
                 <h1>{c('Title').t`Contacts`}</h1>
-                <div className="mb1">
+                <div className="mb2">
                     {c('Info').ngettext(
                         msgid`You have ${countContacts} contact in your address book`,
                         `You have ${countContacts} contacts in your address book`,
                         countContacts
                     )}
-                </div>
-                <div className="w50 center flex flex-spacebetween flex-items-center mb2">
-                    <div>{c('Info').t`Automatically add contact`}</div>
-                    <div>
-                        <AutoSaveContactsToggle autoSaveContacts={!!AutoSaveContacts} />
-                    </div>
                 </div>
             </div>
             {hasPaidMail ? <PaidCards /> : <FreeCards />}
