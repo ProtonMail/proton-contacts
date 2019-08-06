@@ -82,11 +82,11 @@ export const prepareContact = async (contact, { publicKeys, privateKeys }) => {
         })
     );
     // remove UIDs put by mistake in encrypted cards
-    const sanitizedCards = decryptedCards.map(({ data }, i) => {
-        if (![ENCRYPTED_AND_SIGNED, ENCRYPTED].includes(Cards[i].Type)) {
-            return { data };
+    const sanitizedCards = decryptedCards.map((card, i) => {
+        if (![ENCRYPTED_AND_SIGNED, ENCRYPTED].includes(Cards[i].Type) || !card.data) {
+            return card;
         }
-        return { data: data.replace(/\nUID:.*\n/, '\n') };
+        return { ...card, data: card.data.replace(/\nUID:.*\n/, '\n') };
     });
 
     const { vcards, errors } = sanitizedCards.reduce(
