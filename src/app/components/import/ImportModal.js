@@ -54,8 +54,8 @@ const ImportModal = ({ onClose, ...rest }) => {
     };
 
     const handleAttach = ({ target }) => {
-        const ext = splitExtension(target.files[0].name)[1];
-        const attachedFile = ['csv', 'vcf'].includes(ext) ? target.files[0] : null;
+        const [, extension] = splitExtension(target.files[0].name)[1];
+        const attachedFile = ['csv', 'vcf'].includes(extension) ? target.files[0] : null;
 
         if (target.files.length && !attachedFile) {
             return createNotification({
@@ -79,7 +79,7 @@ const ImportModal = ({ onClose, ...rest }) => {
         }
 
         setStep(ATTACHED);
-        setFile({ attached: attachedFile, ext });
+        setFile({ attached: attachedFile, extension });
     };
 
     const handleEncryptingDone = () => setEncryptingDone(true);
@@ -88,7 +88,7 @@ const ImportModal = ({ onClose, ...rest }) => {
         if (step <= ATTACHED) {
             const handleSubmit = async () => {
                 try {
-                    if (file.ext === 'csv') {
+                    if (file.extension === 'csv') {
                         const read = await readCsv(file.attached);
                         setFile({ ...file, read });
                         setStep(CHECKING_CSV);
@@ -169,7 +169,7 @@ const ImportModal = ({ onClose, ...rest }) => {
             return {
                 content: (
                     <ImportingModalContent
-                        fileExt={file.ext}
+                        extension={file.extension}
                         file={file.read}
                         vcardContacts={vcardContacts}
                         onSetVcardContacts={setVcardContacts}
