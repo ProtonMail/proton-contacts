@@ -127,9 +127,11 @@ export const parse = (vcard = '') => {
  */
 export const toICAL = (properties = []) => {
     const comp = new ICAL.Component('vcard');
-    const versionProperty = new ICAL.Property('version');
-    versionProperty.setValue('4.0');
-    comp.addProperty(versionProperty);
+    if (!properties.some(({ field }) => field === 'version')) {
+        const versionProperty = new ICAL.Property('version');
+        versionProperty.setValue('4.0');
+        comp.addProperty(versionProperty);
+    }
     return properties.reduce((component, { field, type, value, group }) => {
         const fieldWithGroup = [group, field].filter(Boolean).join('.');
         const property = new ICAL.Property(fieldWithGroup);
