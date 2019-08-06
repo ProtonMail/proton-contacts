@@ -1,7 +1,7 @@
 import React from 'react';
 import { c } from 'ttag';
 import PropTypes from 'prop-types';
-import { SearchInput, MainLogo, Icon } from 'react-components';
+import { SearchInput, MainLogo, Icon, UserDropdown } from 'react-components';
 import { APPS } from 'proton-shared/lib/constants';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
@@ -12,16 +12,18 @@ const PrivateHeader = ({ search, onSearch, location }) => {
         <header className="header flex flex-nowrap reset4print">
             <MainLogo currentApp={APPS.PROTONCONTACTS} url="/contacts" />
             <div className="searchbox-container relative flex-item-centered-vert">
-                <label htmlFor="global_search">
-                    <span className="sr-only">{c('Placeholder').t`Search`}</span>
-                    <SearchInput
-                        value={search}
-                        onChange={onSearch}
-                        id="global_search"
-                        placeholder={c('Placeholder').t`Search`}
-                        className="searchbox-field"
-                    />
-                </label>
+                {inSettings ? null : (
+                    <label htmlFor="global_search">
+                        <span className="sr-only">{c('Placeholder').t`Search`}</span>
+                        <SearchInput
+                            value={search}
+                            onChange={onSearch}
+                            id="global_search"
+                            placeholder={c('Placeholder').t`Search`}
+                            className="searchbox-field"
+                        />
+                    </label>
+                )}
             </div>
             <div className="topnav-container flex-item-centered-vert flex-item-fluid">
                 <ul className="topnav-list unstyled mt0 mb0 ml1 flex flex-nowrap">
@@ -47,6 +49,9 @@ const PrivateHeader = ({ search, onSearch, location }) => {
                             />
                             {c('Title').t`Settings`}
                         </Link>
+                    </li>
+                    <li className="mlauto mtauto mbauto relative flex-item-noshrink">
+                        <UserDropdown />
                     </li>
                 </ul>
             </div>
