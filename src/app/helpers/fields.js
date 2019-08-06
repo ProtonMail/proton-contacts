@@ -1,6 +1,6 @@
 import { c } from 'ttag';
 
-export const getFields = () => [
+export const getAllFields = () => [
     { text: c('Contact field label').t`Name`, value: 'fn' },
     { text: c('Contact field label').t`Compact name`, value: 'n' },
     { text: c('Contact field label').t`Nickname`, value: 'nickname' },
@@ -27,7 +27,44 @@ export const getFields = () => [
     { text: c('Contact field label').t`Sound`, value: 'sound' }
 ];
 
-export const getFieldLabels = () => ({
+export const getEditableFields = () => [
+    { text: c('Contact field label').t`Name`, value: 'fn' },
+    { text: c('Contact field label').t`Email`, value: 'email' },
+    { text: c('Contact field label').t`Phone`, value: 'tel' },
+    { text: c('Contact field label').t`Address`, value: 'adr' },
+    { text: c('Contact field label').t`Photo`, value: 'photo' },
+    { text: c('Contact field label').t`Organization`, value: 'org' },
+    { text: c('Contact field label').t`Birthday`, value: 'bday' },
+    { text: c('Contact field label').t`Anniversary`, value: 'anniversary' },
+    { text: c('Contact field label').t`Title`, value: 'title' },
+    { text: c('Contact field label').t`Role`, value: 'role' },
+    { text: c('Contact field label').t`Member`, value: 'member' },
+    { text: c('Contact field label').t`Note`, value: 'note' },
+    { text: c('Contact field label').t`URL`, value: 'url' },
+    { text: c('Contact field label').t`Gender`, value: 'gender' },
+    { text: c('Contact field label').t`Language`, value: 'lang' },
+    { text: c('Contact field label').t`Timezone`, value: 'tz' },
+    { text: c('Contact field label').t`Geo`, value: 'geo' },
+    { text: c('Contact field label').t`Logo`, value: 'logo' }
+];
+export const getOtherInformationFields = () => [
+    { text: c('Contact field label').t`Photo`, value: 'photo' },
+    { text: c('Contact field label').t`Organization`, value: 'org' },
+    { text: c('Contact field label').t`Birthday`, value: 'bday' },
+    { text: c('Contact field label').t`Anniversary`, value: 'anniversary' },
+    { text: c('Contact field label').t`Title`, value: 'title' },
+    { text: c('Contact field label').t`Role`, value: 'role' },
+    { text: c('Contact field label').t`Member`, value: 'member' },
+    { text: c('Contact field label').t`Note`, value: 'note' },
+    { text: c('Contact field label').t`URL`, value: 'url' },
+    { text: c('Contact field label').t`Gender`, value: 'gender' },
+    { text: c('Contact field label').t`Language`, value: 'lang' },
+    { text: c('Contact field label').t`Timezone`, value: 'tz' },
+    { text: c('Contact field label').t`Geo`, value: 'geo' },
+    { text: c('Contact field label').t`Logo`, value: 'logo' }
+];
+
+export const getAllFieldLabels = () => ({
     fn: c('Contact field label').t`Name`,
     n: c('Contact field label').t`Compact name`,
     nickname: c('Contact field label').t`Nickname`,

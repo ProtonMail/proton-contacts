@@ -11,7 +11,7 @@ export const getTypeLabels = () => ({
     pager: c('Contact type label').t`Pager`
 });
 
-export const getTypes = () => ({
+export const getAllTypes = () => ({
     fn: [{ text: c('Property type').t`Name`, value: '' }, { text: c('Property type').t`Yomi`, value: 'yomi' }],
     n: [],
     nickname: [],
@@ -46,6 +46,7 @@ export const getTypes = () => ({
     title: [],
     role: [],
     logo: [],
+    photo: [],
     org: [],
     related: [
         { text: c('Property type').t`Contact`, value: 'contact' },

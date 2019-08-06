@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Label, Select } from 'react-components';
 
-import { getFields } from '../../helpers/fields';
+import { getAllFields } from '../../helpers/fields';
 
 const SelectImportField = ({ value, onChangeField }) => {
-    const fields = getFields();
+    const fields = getAllFields();
 
     const handleChangeField = ({ target }) => onChangeField(target.value);
 

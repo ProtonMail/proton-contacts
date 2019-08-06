@@ -17,9 +17,9 @@ import { redirectTo } from 'proton-shared/lib/helpers/browser';
 
 import ContactModalProperties from './ContactModalProperties';
 import { randomIntFromInterval } from 'proton-shared/lib/helpers/function';
-import { OTHER_INFORMATION_FIELDS } from '../constants';
 import { generateUID } from 'react-components/helpers/component';
 import { prepareContacts } from '../helpers/encrypt';
+import { getEditableFields, getOtherInformationFields } from '../helpers/fields';
 
 const DEFAULT_MODEL = [
     { field: 'fn', value: '' },
@@ -30,25 +30,8 @@ const DEFAULT_MODEL = [
     { field: 'note', value: '' }
 ];
 
-// List of field where we let the user interact with
-const EDITABLE_FIELDS = [
-    'fn',
-    'email',
-    'tel',
-    'adr',
-    'org',
-    'note',
-    'photo',
-    'logo',
-    'bday',
-    'anniversary',
-    'gender',
-    'title',
-    'role',
-    'member',
-    'url'
-];
-
+const editableFields = getEditableFields().map(({ value }) => value);
+const otherInformationFields = getOtherInformationFields().map(({ value }) => value);
 const UID_PREFIX = 'contact-property';
 
 const formatModel = (properties = []) => {
@@ -56,7 +39,7 @@ const formatModel = (properties = []) => {
         return DEFAULT_MODEL.map((property) => ({ ...property, uid: generateUID(UID_PREFIX) })); // Add UID to localize the property easily;
     }
     return properties
-        .filter(({ field }) => EDITABLE_FIELDS.includes(field)) // Only includes editable properties that we decided
+        .filter(({ field }) => editableFields.includes(field)) // Only includes editable properties that we decided
         .map((property) => ({ ...property, uid: generateUID(UID_PREFIX) })); // Add UID to localize the property easily
 };
 
@@ -110,18 +93,20 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
     const handleAdd = (field) => () => {
         if (!field) {
             // Get random field from other info
-            const index = randomIntFromInterval(0, OTHER_INFORMATION_FIELDS.length - 1);
+            const index = randomIntFromInterval(0, otherInformationFields.length - 1);
             return setProperties([
                 ...properties,
-                { field: OTHER_INFORMATION_FIELDS[index], value: '', uid: generateUID(UID_PREFIX) }
+                { field: otherInformationFields[index], value: '', uid: generateUID(UID_PREFIX) }
             ]);
         }
         setProperties([...properties, { field, value: '', uid: generateUID(UID_PREFIX) }]);
     };
 
     const handleSubmit = async () => {
-        const notEditableProperties = initialProperties.filter(({ field }) => !EDITABLE_FIELDS.includes(field));
+        const notEditableProperties = initialProperties.filter(({ field }) => !editableFields.includes(field));
+        console.log('properties to submit', properties.concat(notEditableProperties));
         const Contacts = await prepareContacts([properties.concat(notEditableProperties)], userKeysList[0]);
+        console.log('sent to API', { Contacts, Overwrite: +!!contactID, Labels: 0 });
         await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: 0 }));
         await call();
         rest.onClose();
