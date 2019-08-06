@@ -86,7 +86,7 @@ export const prepareContact = async (contact, { publicKeys, privateKeys }) => {
         if (![ENCRYPTED_AND_SIGNED, ENCRYPTED].includes(Cards[i].Type) || !card.data) {
             return card;
         }
-        return { ...card, data: card.data.replace(/\nUID:.*\n/, '\n') };
+        return { ...card, data: card.data.replace(/\nUID:.*\n/i, '\n') };
     });
 
     const { vcards, errors } = sanitizedCards.reduce(
