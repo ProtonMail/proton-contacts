@@ -26,9 +26,8 @@ export const getValues = (contact = {}, fields = []) => {
     }, []);
 };
 
-export const formatAdr = (adr = '') => {
+export const formatAdr = (adr = []) => {
     return adr
-        .split(',')
         .filter(Boolean)
         .map((value) => value.trim())
         .join(', ');

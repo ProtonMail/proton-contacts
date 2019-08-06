@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ErrorBoundary, StandardPrivateApp } from 'react-components';
-import { Route } from 'react-router';
+import { Route, Switch } from 'react-router';
 import {
     UserModel,
     ContactsModel,
@@ -13,6 +13,7 @@ import {
 
 import ContactsProvider from '../containers/ContactProvider';
 import ContactsContainer from '../containers/ContactsContainer';
+import SettingsContainer from '../containers/SettingsContainer';
 
 const EVENT_MODELS = [
     UserModel,
@@ -35,7 +36,10 @@ const PrivateApp = ({ onLogout }) => {
         >
             <ContactsProvider>
                 <ErrorBoundary>
-                    <Route path="/contacts" component={ContactsContainer} />
+                    <Switch>
+                        <Route path="/contacts/settings" component={SettingsContainer} />
+                        <Route path="/contacts" component={ContactsContainer} />
+                    </Switch>
                 </ErrorBoundary>
             </ContactsProvider>
         </StandardPrivateApp>

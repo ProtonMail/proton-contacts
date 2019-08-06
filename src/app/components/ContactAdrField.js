@@ -6,13 +6,13 @@ import { c } from 'ttag';
 import { POST_BOX, EXTENDED, STREET, LOCALITY, REGION, POSTAL_CODE, COUNTRY } from '../constants';
 
 const ContactAdrField = ({ value, onChange }) => {
-    const [address, setAddress] = useState(value.split(','));
+    const [address, setAddress] = useState(value);
 
     const handleChange = (index) => ({ target }) => {
         const newAddress = [...address];
         newAddress[index] = target.value;
         setAddress(newAddress);
-        onChange(newAddress.join(','));
+        onChange(newAddress);
     };
 
     return (

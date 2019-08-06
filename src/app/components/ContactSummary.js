@@ -7,7 +7,7 @@ import { formatAdr } from '../helpers/property';
 
 const getFirstValue = (properties, field) => {
     const { value } = properties.find(({ field: f }) => f === field) || {};
-    return Array.isArray(value) ? value.join(', ') : value;
+    return value;
 };
 
 const ContactSummary = ({ properties }) => {

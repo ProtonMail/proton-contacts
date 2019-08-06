@@ -61,15 +61,21 @@ const getRawValues = (property) => {
 };
 
 export const getValue = (property) => {
-    const values = getRawValues(property).map((val) => {
+    const [value] = getRawValues(property).map((val) => {
+        // adr
+        if (Array.isArray(val)) {
+            return val;
+        }
+
         if (typeof val === 'string') {
             return val;
         }
 
+        // date
         return val.toString();
     });
 
-    return property.isMultiValue ? values : values[0];
+    return value;
 };
 
 /**
@@ -127,7 +133,7 @@ export const toICAL = (properties = []) => {
     return properties.reduce((component, { field, type, value, group }) => {
         const fieldWithGroup = [group, field].filter(Boolean).join('.');
         const property = new ICAL.Property(fieldWithGroup);
-        property.isMultiValue ? property.setValues(value) : property.setValue(value);
+        property.setValue(value);
         type && property.setParameter('type', type);
         component.addProperty(property);
         return component;
