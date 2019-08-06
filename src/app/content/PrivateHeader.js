@@ -1,12 +1,13 @@
 import React from 'react';
 import { c } from 'ttag';
 import PropTypes from 'prop-types';
-import { SearchInput, MainLogo, Icon, UserDropdown } from 'react-components';
+import { SearchInput, MainLogo, Icon, UserDropdown, UpgradeButton, useUser } from 'react-components';
 import { APPS } from 'proton-shared/lib/constants';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 
 const PrivateHeader = ({ search, onSearch, location }) => {
+    const [{ isFree }] = useUser();
     const inSettings = location.pathname.startsWith('/contacts/settings');
     return (
         <header className="header flex flex-nowrap reset4print">
@@ -37,6 +38,11 @@ const PrivateHeader = ({ search, onSearch, location }) => {
                             {c('Title').t`Contacts`}
                         </Link>
                     </li>
+                    {isFree ? (
+                        <li className="mr1">
+                            <UpgradeButton className="topnav-link inline-flex flex-nowrap nodecoration rounded" />
+                        </li>
+                    ) : null}
                     <li className="mr1">
                         <Link
                             to="/contacts/settings"
