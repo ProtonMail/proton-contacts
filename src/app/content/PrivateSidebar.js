@@ -5,9 +5,6 @@ import PropTypes from 'prop-types';
 
 import ContactModal from '../components/ContactModal';
 
-import ContactGroupModal from '../components/ContactGroupModal';
-import ContactGroupsModal from '../components/ContactGroupsModal';
-
 const PrivateSidebar = ({ contactGroups }) => {
     const { createModal } = useModals();
 
@@ -28,11 +25,7 @@ const PrivateSidebar = ({ contactGroups }) => {
         {
             icon: 'settings-singular',
             text: c('Link').t`Groups`,
-            type: 'button',
-            className: 'alignleft',
-            onClick() {
-                createModal(<ContactGroupsModal />);
-            }
+            link: '/contacts/settings'
         }
     ].concat(
         contactGroups.map(({ Name: text, Color: color, ID: contactGroupID }) => ({
@@ -46,16 +39,6 @@ const PrivateSidebar = ({ contactGroups }) => {
             link: `/contacts?contactGroupID=${contactGroupID}`
         }))
     );
-
-    list.push({
-        icon: 'add',
-        text: c('Link').t`Add group`,
-        type: 'button',
-        className: 'alignleft',
-        onClick() {
-            createModal(<ContactGroupModal />);
-        }
-    });
 
     return (
         <div className="sidebar flex flex-column noprint">

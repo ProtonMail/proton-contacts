@@ -13,6 +13,7 @@ import {
 } from 'react-components';
 import { c } from 'ttag';
 import { addContacts } from 'proton-shared/lib/api/contacts';
+import { redirectTo } from 'proton-shared/lib/helpers/browser';
 
 import ContactModalProperties from './ContactModalProperties';
 import { randomIntFromInterval } from 'proton-shared/lib/helpers/function';
@@ -82,7 +83,7 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
                 <ConfirmModal
                     title={c('Title').t`Upgrade required`}
                     onConfirm={() => {
-                        document.location.replace(`${document.location.origin}/settings/subscription`);
+                        redirectTo('/settings/subscription');
                         upgradeModalRef.current = false;
                     }}
                     onClose={() => {

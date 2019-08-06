@@ -2,7 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
+import { redirectTo } from 'proton-shared/lib/helpers/browser';
 import {
+    ContactGroupModal,
     PrimaryButton,
     Button,
     AutoSaveContactsToggle,
@@ -13,14 +15,12 @@ import {
 } from 'react-components';
 
 import ExportModal from './ExportModal';
-import ContactGroupModal from './ContactGroupModal';
-import ContactGroupsModal from './ContactGroupsModal';
 import ImportModal from './import/ImportModal';
 
 const PaidCards = ({ contactGroupID }) => {
     const { createModal } = useModals();
     const handleExport = () => createModal(<ExportModal contactGroupID={contactGroupID} />);
-    const handleGroups = () => createModal(<ContactGroupsModal />);
+    const handleGroups = () => redirectTo('/contacts/settings');
 
     const handleImport = () => {
         createModal(<ImportModal />);
