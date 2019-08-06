@@ -11,7 +11,6 @@ import ContactSummary from './ContactSummary';
 import ContactViewProperties from './ContactViewProperties';
 
 const ContactView = ({ properties, contactID, errors }) => {
-    console.log({ properties });
     const { createModal } = useModals();
 
     const openContactModal = () => {

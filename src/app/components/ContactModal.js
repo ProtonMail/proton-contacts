@@ -104,9 +104,7 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
 
     const handleSubmit = async () => {
         const notEditableProperties = initialProperties.filter(({ field }) => !editableFields.includes(field));
-        console.log('properties to submit', properties.concat(notEditableProperties));
         const Contacts = await prepareContacts([properties.concat(notEditableProperties)], userKeysList[0]);
-        console.log('sent to API', { Contacts, Overwrite: +!!contactID, Labels: 0 });
         await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: 0 }));
         await call();
         rest.onClose();
