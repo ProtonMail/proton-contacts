@@ -4,7 +4,14 @@
  * @returns {Array}
  */
 export const sanitizeProperties = (properties = []) => {
-    return properties.filter(({ value }) => value);
+    // properties should be either arrays or strings. Transform to string otherwise.
+    // usually the case of a date for bday or anniversary fields
+    console.log('sanitized');
+    return properties
+        .filter(({ value }) => value)
+        .map((property) =>
+            Array.isArray(property.value) ? property : { ...property, value: property.value.toString() }
+        );
 };
 
 /**
