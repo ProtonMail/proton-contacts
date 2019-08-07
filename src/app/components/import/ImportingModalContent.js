@@ -19,7 +19,7 @@ const { CLEAR_TEXT } = CONTACT_CARD_TYPE;
 const [PARSING, ENCRYPTING, IMPORTING, FINISHED] = [1, 2, 3, 4];
 
 const ImportingModalContent = ({
-    fileType,
+    extension,
     file,
     vcardContacts,
     onSetVcardContacts,
@@ -39,7 +39,7 @@ const ImportingModalContent = ({
     });
 
     const parseFileIfNeeded = async () => {
-        if (fileType === 'text/vcard') {
+        if (extension === 'vcf') {
             const vcards = extractVcards(file);
             setTrack((track) => ({ ...track, total: vcards.length }));
             const parsedVcards = [];
@@ -137,7 +137,7 @@ const ImportingModalContent = ({
 };
 
 ImportingModalContent.propTypes = {
-    fileType: PropTypes.oneOf(['text/csv', 'text/vcard']),
+    extension: PropTypes.oneOf(['csv', 'vcf']),
     file: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.shape({ headers: PropTypes.array, contacts: PropTypes.array })

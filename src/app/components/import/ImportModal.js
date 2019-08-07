@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import {
+    useEventManager,
     useNotifications,
     useUser,
     useUserKeys,
@@ -22,6 +23,7 @@ import { hasCategories } from '../../helpers/import';
 import { readCsv } from '../../helpers/csv';
 import { readVcf } from '../../helpers/vcard';
 import { BASE_SIZE } from 'proton-shared/lib/constants';
+import { splitExtension } from 'proton-shared/lib/helpers/file';
 
 const [ATTACHING, ATTACHED, CHECKING_CSV, IMPORTING, IMPORT_GROUPS] = [1, 2, 3, 4, 5];
 const MAX_SIZE = 10 * BASE_SIZE ** 2; // 10 MB
@@ -39,6 +41,7 @@ const ImportModal = ({ onClose, ...rest }) => {
 
     const { createModal } = useModals();
     const { createNotification } = useNotifications();
+    const { call } = useEventManager();
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
 
@@ -53,12 +56,13 @@ const ImportModal = ({ onClose, ...rest }) => {
     };
 
     const handleAttach = ({ target }) => {
-        const attachedFile = [...target.files].filter(({ type }) => ['text/vcard', 'text/csv'].includes(type))[0];
+        const [, extension] = splitExtension(target.files[0].name)[1];
+        const attachedFile = ['csv', 'vcf'].includes(extension) ? target.files[0] : null;
 
         if (target.files.length && !attachedFile) {
             return createNotification({
                 type: 'error',
-                text: c('Error notification').t`No .csv or .vcard file selected`
+                text: c('Error notification').t`No .csv or .vcf file selected`
             });
         }
         if (attachedFile.size > MAX_SIZE) {
@@ -77,7 +81,7 @@ const ImportModal = ({ onClose, ...rest }) => {
         }
 
         setStep(ATTACHED);
-        setFile({ ...file, attached: attachedFile });
+        setFile({ attached: attachedFile, extension });
     };
 
     const handleEncryptingDone = () => setEncryptingDone(true);
@@ -86,7 +90,7 @@ const ImportModal = ({ onClose, ...rest }) => {
         if (step <= ATTACHED) {
             const handleSubmit = async () => {
                 try {
-                    if (file.attached.type === 'text/csv') {
+                    if (file.extension === 'csv') {
                         const read = await readCsv(file.attached);
                         setFile({ ...file, read });
                         setStep(CHECKING_CSV);
@@ -157,6 +161,7 @@ const ImportModal = ({ onClose, ...rest }) => {
                     return setStep(IMPORT_GROUPS);
                 }
                 onClose();
+                call();
             };
             const footer = (
                 <PrimaryButton loading={!encryptingDone} type="submit">
@@ -167,7 +172,7 @@ const ImportModal = ({ onClose, ...rest }) => {
             return {
                 content: (
                     <ImportingModalContent
-                        fileType={file.attached.type}
+                        extension={file.extension}
                         file={file.read}
                         vcardContacts={vcardContacts}
                         onSetVcardContacts={setVcardContacts}
@@ -182,7 +187,10 @@ const ImportModal = ({ onClose, ...rest }) => {
             };
         }
         if (step === IMPORT_GROUPS) {
-            const handleSubmit = onClose;
+            const handleSubmit = () => {
+                onClose();
+                call();
+            };
             const footer = <PrimaryButton type="submit">{c('Action').t`Create`}</PrimaryButton>;
 
             return {
