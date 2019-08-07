@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
 import { redirectTo } from 'proton-shared/lib/helpers/browser';
-import { ContactGroupModal, PrimaryButton, Button, Icon, useModals, useContactGroups } from 'react-components';
+import { PrimaryButton, Button, Icon, useModals, useContactGroups } from 'react-components';
 
+import ContactGroupModal from './ContactGroupModal';
 import ExportModal from './ExportModal';
 import ImportModal from './import/ImportModal';
 

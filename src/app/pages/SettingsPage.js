@@ -1,5 +1,7 @@
 import React from 'react';
-import { ContactsSection, ContactGroupsSection } from 'react-components';
+
+import ContactsSection from '../components/ContactsSection';
+import ContactGroupsSection from '../components/ContactGroupsSection';
 
 const SettingsPage = () => {
     return (

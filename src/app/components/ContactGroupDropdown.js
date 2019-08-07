@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-    ContactGroupModal,
     DropdownButton,
     Dropdown,
     SmallButton,
@@ -22,6 +21,7 @@ import { c, msgid } from 'ttag';
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { labelContactEmails, unLabelContactEmails } from 'proton-shared/lib/api/contacts';
 
+import ContactGroupModal from './ContactGroupModal';
 import SelectEmailsModal from './SelectEmailsModal';
 
 const UNCHECKED = 0;

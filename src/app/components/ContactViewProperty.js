@@ -1,20 +1,12 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import {
-    Row,
-    Group,
-    ButtonGroup,
-    Copy,
-    useModals,
-    useUser,
-    useContactEmails,
-    ContactGroupIcon
-} from 'react-components';
+import { Row, Group, ButtonGroup, Copy, useModals, useUser, useContactEmails } from 'react-components';
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { c } from 'ttag';
 
 import { clearType, getType, formatAdr } from '../helpers/property';
+import ContactGroupIcon from './ContactGroupIcon';
 import ContactGroupDropdown from './ContactGroupDropdown';
 import ContactLabelProperty from './ContactLabelProperty';
 import ContactEmailSettingsModal from './ContactEmailSettingsModal';

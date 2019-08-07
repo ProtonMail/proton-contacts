@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useContactGroups, useUser, ContactGroupIcon } from 'react-components';
+import { useContactGroups, useUser } from 'react-components';
 import { withRouter } from 'react-router';
 import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
 import List from 'react-virtualized/dist/commonjs/List';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 
+import ContactGroupIcon from './ContactGroupIcon';
 import ItemCheckbox from './ItemCheckbox';
 import { extract } from '../helpers/merge';
 import { c } from 'ttag';
