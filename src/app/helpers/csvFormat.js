@@ -184,8 +184,8 @@ export const toPreVcard = (header) => {
         const [, , pref] = property.match(/^(\w+)?\s?pager\s?(\d*)$/);
         return (value) => templates['tel']({ pref, header, value, type: 'pager' });
     }
-    if (/^[callback,telex]\s?(\d*)$/.test(property)) {
-        const [, pref] = property.match(/^[callback,telex]\s?(\d*)$/);
+    if (/^callback|telex\s?(\d*)$/.test(property)) {
+        const [, pref] = property.match(/^callback|telex\s?(\d*)$/);
         return (value) => templates['tel']({ pref, header, value, type: 'other' });
     }
     if (/^(\w+) po box\s?(\d*)$/.test(property)) {
