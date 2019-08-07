@@ -8,7 +8,7 @@ import ContactFieldProperty from './ContactFieldProperty';
 import ContactModalLabel from './ContactModalLabel';
 import ContactImageModal from './ContactImageModal';
 
-const ContactModalRow = ({ property, onChange, onRemove, isOrderable }) => {
+const ContactModalRow = ({ property, onChange, onRemove, isOrderable = false }) => {
     const { createModal } = useModals();
     const { field, uid } = property;
     const type = clearType(getType(property.type));
@@ -66,12 +66,6 @@ ContactModalRow.propTypes = {
     onAdd: PropTypes.func,
     onRemove: PropTypes.func,
     isOrderable: PropTypes.bool
-};
-
-ContactModalRow.defaultProps = {
-    first: false,
-    last: false,
-    isOrderable: false
 };
 
 export default ContactModalRow;

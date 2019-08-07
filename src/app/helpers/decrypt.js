@@ -73,7 +73,7 @@ const ACTIONS = {
 export const prepareContact = async (contact, { publicKeys, privateKeys }) => {
     const { Cards } = contact;
 
-    const data = await Promise.all(
+    const decryptedCards = await Promise.all(
         Cards.map(async (card) => {
             if (!ACTIONS[card.Type]) {
                 return { error: FAIL_TO_READ };
@@ -81,8 +81,15 @@ export const prepareContact = async (contact, { publicKeys, privateKeys }) => {
             return ACTIONS[card.Type](card, { publicKeys, privateKeys });
         })
     );
+    // remove UIDs put by mistake in encrypted cards
+    const sanitizedCards = decryptedCards.map((card, i) => {
+        if (![ENCRYPTED_AND_SIGNED, ENCRYPTED].includes(Cards[i].Type) || !card.data) {
+            return card;
+        }
+        return { ...card, data: card.data.replace(/\nUID:.*\n/i, '\n') };
+    });
 
-    const { vcards, errors } = data.reduce(
+    const { vcards, errors } = sanitizedCards.reduce(
         (acc, { data, error }) => {
             if (error) {
                 acc.errors.push(error);

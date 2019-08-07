@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Label } from 'react-components';
 
-import { getFieldLabels } from '../helpers/fields';
+import { getAllFieldLabels } from '../helpers/fields';
 
 const ContactLabelProperty = ({ field, type, ...rest }) => {
-    const labels = getFieldLabels();
+    const labels = getAllFieldLabels();
     const label = labels[type] || type || labels[field];
 
     return (
