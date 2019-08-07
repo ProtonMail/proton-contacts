@@ -5,9 +5,6 @@ import PropTypes from 'prop-types';
 
 import ContactModal from '../components/ContactModal';
 
-import ContactGroupModal from '../components/ContactGroupModal';
-import ContactGroupsModal from '../components/ContactGroupsModal';
-
 const PrivateSidebar = ({ contactGroups }) => {
     const { createModal } = useModals();
 
