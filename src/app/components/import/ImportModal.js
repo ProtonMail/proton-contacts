@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import {
+    useEventManager,
     useNotifications,
     useUser,
     useUserKeys,
@@ -40,6 +41,7 @@ const ImportModal = ({ onClose, ...rest }) => {
 
     const { createModal } = useModals();
     const { createNotification } = useNotifications();
+    const { call } = useEventManager();
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
 
@@ -159,6 +161,7 @@ const ImportModal = ({ onClose, ...rest }) => {
                     return setStep(IMPORT_GROUPS);
                 }
                 onClose();
+                call();
             };
             const footer = (
                 <PrimaryButton loading={!encryptingDone} type="submit">
@@ -184,7 +187,10 @@ const ImportModal = ({ onClose, ...rest }) => {
             };
         }
         if (step === IMPORT_GROUPS) {
-            const handleSubmit = onClose;
+            const handleSubmit = () => {
+                onClose();
+                call();
+            };
             const footer = <PrimaryButton type="submit">{c('Action').t`Create`}</PrimaryButton>;
 
             return {
