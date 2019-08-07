@@ -1,7 +1,7 @@
 import { normalize } from 'proton-shared/lib/helpers/string';
 
 import { ONE_OR_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT, PROPERTIES, isCustomField } from './vcard';
-import { addGroup } from './properties';
+import { generateNewGroupName } from './properties';
 import { unique } from 'proton-shared/lib/helpers/array';
 
 /**
@@ -121,7 +121,7 @@ export const extractMergeable = (contacts = []) => {
  * @return {?String}
  */
 const extractNewValue = (value, field, mergedValues) => {
-    //  the fields adr and nickname have to be treated separately since they have array values
+    //  the field adr has to be treated separately since it has an array value
     if (field === 'adr') {
         // the array structure of an 'adr' value is
         // value = [ PObox, extAdr, street, city, region, postalCode, country ]
@@ -143,10 +143,6 @@ const extractNewValue = (value, field, mergedValues) => {
         );
         return isNew ? value : null;
     }
-    if (field === 'nickname') {
-        const newNicknames = value.filter((nickname) => !mergedValues.flat().includes(nickname));
-        return newNicknames.length ? newNicknames : null;
-    }
     // for the other fields, value is a string, and mergedValues an array of strings
     return !mergedValues.includes(value) ? value : null;
 };
@@ -162,14 +158,14 @@ export const merge = (contacts) => {
         return [];
     }
 
-    const merged = contacts.reduce(
+    return contacts.reduce(
         (acc, contact, index) => {
-            const { mergedContact, mergedProperties, mergedPropertiesPrefs } = acc;
+            const { mergedContact, mergedProperties, mergedPropertiesPrefs, mergedGroups } = acc;
             if (index === 0) {
                 // merged contact inherits all properties from the first contact
                 mergedContact.push(...contact);
                 // keep track of merged properties and prefs
-                for (const { pref, field, value } of contact) {
+                for (const { pref, field, value, group } of contact) {
                     if (!mergedProperties[field]) {
                         mergedProperties[field] = [value];
                         mergedPropertiesPrefs[field] = [pref];
@@ -177,46 +173,55 @@ export const merge = (contacts) => {
                         mergedProperties[field].push(value);
                         mergedPropertiesPrefs[field].push(+pref);
                     }
+                    group && mergedGroups.push(group);
                 }
             } else {
                 // for the other contacts, keep only non-merged properties
-                for (const { pref, field, group, type, value } of contact) {
+
+                // but first prepare to change repeated groups
+                const groups = contact.map(({ group }) => group).filter(Boolean);
+                const changeGroup = groups.reduce((acc, group) => {
+                    if (!mergedGroups.includes(group)) {
+                        return acc;
+                    }
+                    acc[group] = generateNewGroupName(mergedGroups);
+                    return acc;
+                }, {});
+
+                for (const property of contact) {
+                    const { pref, field, group, value } = property;
+                    const newGroup = group ? changeGroup[group] : group;
                     if (!mergedProperties[field]) {
                         // an unseen property is directly merged
-                        mergedContact.push({ pref: +pref, field, group, type, value });
+                        mergedContact.push({ ...property, pref: +pref, group: newGroup });
                         mergedProperties[field] = [value];
                         mergedPropertiesPrefs[field] = [+pref];
+                        newGroup && mergedGroups.push(newGroup);
                     } else {
-                        // if (field === 'fn') {
-                        //     console.log('merged names', mergedProperties[field]);
-                        //     console.log('new value', extractNewValue(value, field, mergedProperties[field]));
-                        //     console.log('canAdd', !isCustomField(field) &&
-                        //     [ONE_OR_MORE_MAY_BE_PRESENT, ONE_OR_MORE_MUST_BE_PRESENT].includes(
-                        //         PROPERTIES[field].cardinality
-                        //     ));
-                        // }
                         const newValue = extractNewValue(value, field, mergedProperties[field]);
                         const newPref = Math.max(...mergedPropertiesPrefs[field]) + 1;
                         const canAdd =
-                            !isCustomField(field) &&
+                            isCustomField(field) ||
                             [ONE_OR_MORE_MAY_BE_PRESENT, ONE_OR_MORE_MUST_BE_PRESENT].includes(
                                 PROPERTIES[field].cardinality
                             );
-                        // TODO: what to do with custom properties
 
                         if (!!newValue && canAdd) {
-                            mergedContact.push({ pref: newPref, field, group, type, value: newValue });
+                            mergedContact.push({ ...property, pref: newPref, value: newValue, group: newGroup });
                             mergedProperties[field].push(newValue);
                             mergedPropertiesPrefs[field] = [newPref];
+                            newGroup && mergedGroups.push(newGroup);
                         }
                     }
                 }
             }
             return acc;
         },
-        { mergedContact: [], mergedProperties: Object.create(null), mergedPropertiesPrefs: Object.create(null) }
+        {
+            mergedContact: [],
+            mergedProperties: Object.create(null),
+            mergedPropertiesPrefs: Object.create(null),
+            mergedGroups: []
+        }
     ).mergedContact;
-
-    // fix groups for emails in case some are repeated
-    return addGroup(merged);
 };

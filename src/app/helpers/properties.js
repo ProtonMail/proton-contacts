@@ -73,14 +73,14 @@ export const generateNewGroupName = (existingGroups = []) => {
 };
 
 /**
- * Add `group` if missing for email. Fix `group` in case some is repeated for email
+ * Add `group` if missing for email.
  * @param {Array} properties
  * @returns {Array}
  */
 export const addGroup = (properties = []) => {
     const existingGroups = properties.map(({ group }) => group);
     return properties.map((property) => {
-        if (!['email'].includes(property.field) || !existingGroups.includes(property.group)) {
+        if (!['email'].includes(property.field) || property.group) {
             return property;
         }
 

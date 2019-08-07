@@ -50,7 +50,7 @@ const ExtendedContactSummary = ({ properties }) => {
                 {summary.map((items) => (
                     <div key={items[0].prop} className="mb1">
                         {items.map(({ prop, icon }, index) => (
-                            <div key={`icon-${index}`} className="flex flex-items-center">
+                            <div key={`icon-${index}`} className="flex flex-items-center flex-nowrap">
                                 <Icon name={icon} className={`mr0-5 ${index ? 'nonvisible' : ''}`} />
                                 <span>{prop}</span>
                             </div>

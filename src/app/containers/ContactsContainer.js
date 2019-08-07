@@ -208,6 +208,7 @@ const ContactsContainer = ({ location, history }) => {
                                                     contactID={contactID}
                                                     contacts={formattedContacts}
                                                     onCheck={handleCheck}
+                                                    userKeysList={userKeysList}
                                                 />
                                                 {hasChecked ? (
                                                     <ContactPlaceholder

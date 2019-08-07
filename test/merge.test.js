@@ -20,7 +20,7 @@ describe('merge', () => {
                 [[1, 8, 2], [9, 10, 5], [2, 4], [3, 5], [4, 9]],
                 [[1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [1, 8], [7, 9]]
             ];
-            const resultsSorted = cases.map((cs) => linkConnections(cs).map((c) => c.sort((a, b) => a > b)));
+            const resultsSorted = cases.map((cs) => linkConnections(cs).map((c) => c.sort((a, b) => a - b)));
             const expectedSorted = [
                 [[1, 2, 4, 8], [3, 5, 9, 10]],
                 [[1, 2, 3, 4, 5, 8, 9, 10]],
@@ -133,7 +133,7 @@ describe('merge', () => {
                 .map(({ field, group }) => field === 'email' && group)
                 .filter(Boolean);
 
-            expect(emailGroups).toEqual(['item2', 'item3', 'item4']);
+            expect(emailGroups).toEqual(['item1', 'item2', 'item3']);
         });
     });
 });
