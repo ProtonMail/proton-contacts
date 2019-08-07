@@ -86,7 +86,14 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
                                 <div>
                                     {LabelIDs.map((labelID) => {
                                         const { Color, Name } = mapContactGroups[labelID];
-                                        return <ContactGroupIcon key={labelID} name={Name} color={Color} />;
+                                        return (
+                                            <ContactGroupIcon
+                                                scrollContainerClass="contacts-list"
+                                                key={labelID}
+                                                name={Name}
+                                                color={Color}
+                                            />
+                                        );
                                     })}
                                 </div>
                             ) : null}
@@ -132,6 +139,7 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
             <AutoSizer>
                 {({ height, width }) => (
                     <List
+                        className="contacts-list"
                         ref={listRef}
                         rowRenderer={Row}
                         rowCount={contacts.length + canMerge}

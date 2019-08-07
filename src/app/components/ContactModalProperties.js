@@ -58,7 +58,7 @@ const ContactModalProperties = ({ properties: allProperties, field, onChange, on
             <h3 className="mb1 flex flex-nowrap flex-items-center">
                 <Icon className="mr0-5" name={iconName} />
                 <span className="mr0-5">{title}</span>
-                {['fn', 'email'].includes(field) ? null : <EncryptedIcon />}
+                {['fn', 'email'].includes(field) ? null : <EncryptedIcon scrollContainerClass="pm-modalContentInner" />}
             </h3>
             {onOrderChange ? (
                 <OrderableContainer helperClass="row--orderable" onSortEnd={handleSortEnd} useDragHandle>
