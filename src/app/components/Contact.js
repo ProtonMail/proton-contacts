@@ -11,11 +11,6 @@ const Contact = ({ contactID, userKeysList }) => {
     const ref = useRef(contactID);
     const [contact, contactLoading, contactFetchError] = useContact(contactID);
 
-    const decryptContact = async () => {
-        const { properties, errors } = await prepareContact(contact, { publicKeys, privateKeys });
-        setModel({ properties, errors });
-    };
-
     useEffect(() => {
         if (contact && Array.isArray(userKeysList)) {
             ref.current = contact.ID;

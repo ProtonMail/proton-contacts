@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import {
+    AppsSidebar,
+    Alert,
     Loader,
     useContactEmails,
     useContacts,
@@ -17,6 +19,7 @@ import {
 } from 'react-components';
 import { clearContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 import { normalize } from 'proton-shared/lib/helpers/string';
+import { APPS } from 'proton-shared/lib/constants';
 
 import ContactsList from '../components/ContactsList';
 import Contact from '../components/Contact';
@@ -180,33 +183,51 @@ const ContactsContainer = ({ location, history }) => {
         });
 
     return (
-        <>
-            <PrivateHeader search={search} onSearch={updateSearch} />
-            <div className="flex flex-nowrap">
-                <Route path="/:path" render={() => <PrivateSidebar contactGroups={contactGroups} />} />
-                <div className="main flex-item-fluid main-area">
-                    <ContactToolbar
-                        checkedContacts={checkedContacts}
-                        checked={checkAll}
-                        onCheck={handleCheckAll}
-                        onDelete={handleDelete}
-                    />
-                    <div className="flex flex-nowrap">
-                        <Switch>
-                            <Route
-                                path="/contacts/:contactID"
-                                render={({ match }) => {
-                                    const { contactID } = match.params;
-                                    return (
-                                        <>
-                                            <ContactsList
-                                                contactID={contactID}
-                                                contacts={formattedContacts}
-                                                onCheck={handleCheck}
-                                                hasPaidMail={user.hasPaidMail}
-                                                userKeysList={userKeysList}
-                                            />
-                                            {hasChecked ? (
+        <div className="flex flex-nowrap no-scroll">
+            <AppsSidebar currentApp={APPS.PROTONCONTACTS} />
+            <div className="content flex-item-fluid reset4print">
+                <PrivateHeader search={search} onSearch={updateSearch} />
+                <div className="flex flex-nowrap">
+                    <Route path="/:path" render={() => <PrivateSidebar contactGroups={contactGroups} />} />
+                    <div className="main flex-item-fluid main-area">
+                        <ContactToolbar
+                            checkedContacts={checkedContacts}
+                            checked={checkAll}
+                            onCheck={handleCheckAll}
+                            onDelete={handleDelete}
+                        />
+                        <div className="flex flex-nowrap">
+                            <Switch>
+                                <Route
+                                    path="/contacts/:contactID"
+                                    render={({ match }) => {
+                                        const { contactID } = match.params;
+                                        return (
+                                            <>
+                                                <ContactsList
+                                                    contactID={contactID}
+                                                    contacts={formattedContacts}
+                                                    onCheck={handleCheck}
+                                                />
+                                                {hasChecked ? (
+                                                    <ContactPlaceholder
+                                                        user={user}
+                                                        contactGroupID={contactGroupID}
+                                                        contacts={formattedContacts}
+                                                        onUncheck={handleUncheckAll}
+                                                    />
+                                                ) : (
+                                                    <Contact contactID={contactID} userKeysList={userKeysList} />
+                                                )}
+                                            </>
+                                        );
+                                    }}
+                                />
+                                <Route
+                                    render={() => {
+                                        return (
+                                            <>
+                                                <ContactsList contacts={formattedContacts} onCheck={handleCheck} />
                                                 <ContactPlaceholder
                                                     user={user}
                                                     userKeysList={userKeysList}
@@ -215,38 +236,16 @@ const ContactsContainer = ({ location, history }) => {
                                                     contacts={formattedContacts}
                                                     onUncheck={handleUncheckAll}
                                                 />
-                                            ) : (
-                                                <Contact contactID={contactID} userKeysList={userKeysList} />
-                                            )}
-                                        </>
-                                    );
-                                }}
-                            />
-                            <Route
-                                render={() => {
-                                    return (
-                                        <>
-                                            <ContactsList
-                                                contacts={formattedContacts}
-                                                onCheck={handleCheck}
-                                                hasPaidMail={user.hasPaidMail}
-                                                userKeysList={userKeysList}
-                                            />
-                                            <ContactPlaceholder
-                                                user={user}
-                                                contactGroupID={contactGroupID}
-                                                contacts={formattedContacts}
-                                                onUncheck={handleUncheckAll}
-                                            />
-                                        </>
-                                    );
-                                }}
-                            />
-                        </Switch>
+                                            </>
+                                        );
+                                    }}
+                                />
+                            </Switch>
+                        </div>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

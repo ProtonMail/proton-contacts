@@ -6,7 +6,6 @@ import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
 import List from 'react-virtualized/dist/commonjs/List';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 
-import ContactGroupIcon from './ContactGroupIcon';
 import ItemCheckbox from './ItemCheckbox';
 import ContactGroupIcon from './ContactGroupIcon';
 import { extractMergeable } from '../helpers/merge';
@@ -56,8 +55,9 @@ const ContactsList = ({ contacts, onCheck, hasPaidMail, userKeysList, history, c
                 <MergeRow key={key} style={style} mergeableContacts={mergeableContacts} userKeysList={userKeysList} />
             );
         }
+        const contactIndex = canMerge ? index - 1 : index;
 
-        const { ID, Name, LabelIDs = [], Emails, isChecked } = contacts[index];
+        const { ID, Name, LabelIDs = [], Emails, isChecked } = contacts[contactIndex];
         const initial = getInitial(Name);
         return (
             <div
