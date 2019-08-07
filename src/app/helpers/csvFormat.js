@@ -93,6 +93,8 @@ export const standarize = ({ headers, contacts }) => {
                     beChanged[i] = 'Job Title';
                 } else if (str === 'department') {
                     beChanged[i] = 'Department';
+                } else if (str === 'job description') {
+                    beChanged[i] = 'Role';
                 } else {
                     beRemoved[i] = true;
                 }
@@ -236,6 +238,14 @@ export const toPreVcard = (header) => {
             value,
             checked: true,
             field: 'title'
+        });
+    }
+    if (property === 'role') {
+        return (value) => ({
+            header,
+            value,
+            checked: true,
+            field: 'role'
         });
     }
     if (property.includes('relation')) {
