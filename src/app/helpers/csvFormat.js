@@ -185,7 +185,7 @@ export const toPreVcard = (header) => {
         return (value) => templates['tel']({ pref, header, value, type: 'pager' });
     }
     if (/^[callback,telex]\s?(\d*)$/.test(property)) {
-        const [, pref] = property.match(/^[pager,callback,telex]\s?(\d*)$/);
+        const [, pref] = property.match(/^[callback,telex]\s?(\d*)$/);
         return (value) => templates['tel']({ pref, header, value, type: 'other' });
     }
     if (/^(\w+) po box\s?(\d*)$/.test(property)) {
@@ -193,7 +193,7 @@ export const toPreVcard = (header) => {
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 0 });
     }
     if (/^(\w+) extended address\s?(\d*)$/.test(property)) {
-        const [, type, pref] = property.match(/^(\w+) street\s?(\d*)$/);
+        const [, type, pref] = property.match(/^(\w+) extended address\s?(\d*)$/);
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 1 });
     }
     if (/^(\w+) street\s?(\d*)$/.test(property)) {
