@@ -13,8 +13,7 @@ const getFirstValue = (properties, field) => {
 const getAllValues = (properties, field) => {
     return addPref(properties)
         .reduce((acc, { field: f, pref, value }) => {
-            const stdValue = Array.isArray(value) ? value.join(', ') : value;
-            f === field && acc.push({ value: stdValue, pref });
+            f === field && acc.push({ value, pref });
             return acc;
         }, [])
         .sort(sortByPref)
@@ -45,8 +44,8 @@ const ExtendedContactSummary = ({ properties }) => {
     ].filter(Boolean);
 
     return (
-        <Block className="flex flex-spacebetween flex-nowrap">
-            <div className="flex flex-column flex-nowrap">
+        <Block className="flex flex-nowrap">
+            <div className="flex flex-column flex-nowrap mr2">
                 {summary.map((items) => (
                     <div key={items[0].prop} className="mb1">
                         {items.map(({ prop, icon }, index) => (

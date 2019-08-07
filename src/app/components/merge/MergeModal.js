@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { useModals, FormModal, ResetButton, PrimaryButton, Alert } from 'react-components';
+import { useApi, useEventManager, useModals, FormModal, ResetButton, PrimaryButton } from 'react-components';
 
+import { getContact, addContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
+import { prepareContact as decrypt, bothUserKeys } from '../../helpers/decrypt';
+import { prepareContact as encrypt } from '../../helpers/encrypt';
+import { merge } from '../../helpers/merge';
 import { move } from 'proton-shared/lib/helpers/array';
+import { noop } from 'proton-shared/lib/helpers/function';
+import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE } from '../../constants';
 
-import MergeTable from './MergeTable';
 import ContactDetails from './ContactDetails';
 import MergeContactPreview from './MergeContactPreview';
-import MergingModal from './MergingModal';
+import MergeModalContent from './MergeModalContent';
+import MergingModalContent from './MergingModalContent';
+
+const { OVERWRITE_CONTACT } = OVERWRITE;
+const { IGNORE } = CATEGORIES;
 
 // helper to re-order arrays inside a list of arrays
 const reOrderInGroup = (collection, groupIndex, { oldIndex, newIndex }) =>
@@ -19,64 +28,60 @@ const reOrderInGroup = (collection, groupIndex, { oldIndex, newIndex }) =>
         return group;
     });
 
-const MergeModal = ({ contacts, userKeysList, ...rest }) => {
+const MergeModal = ({ contacts, userKeysList, onMerge = noop, ...rest }) => {
+    const api = useApi();
+    const { call } = useEventManager();
     const { createModal } = useModals();
+    const { publicKeys, privateKeys } = bothUserKeys(userKeysList);
 
+    const [isMerging, setIsMerging] = useState(false);
     const [model, setModel] = useState({
         orderedContacts: contacts,
         isChecked: contacts.map((group) => group.map(() => true)),
-        isDeleted: contacts.map((group) => group.map(() => false))
+        isDeleted: contacts.map((group) => group.map(() => false)),
+        merged: { success: [], error: [] },
+        submitted: { success: [], error: [] }
     });
 
-    const beMergedIDs = model.orderedContacts
-        .map((group, i) =>
-            group.map(({ ID }, j) => model.isChecked[i][j] && !model.isDeleted[i][j] && ID).filter(Boolean)
-        )
+    const { orderedContacts, isChecked, isDeleted, merged, submitted } = model;
+
+    const beMergedIDs = orderedContacts
+        .map((group, i) => group.map(({ ID }, j) => isChecked[i][j] && !isDeleted[i][j] && ID).filter(Boolean))
         .filter((group) => group.length > 1);
-    const beDeletedIDs = model.orderedContacts
-        .map((group, i) => group.map(({ ID }, j) => model.isDeleted[i][j] && ID).filter(Boolean))
+    const beDeletedIDs = orderedContacts
+        .map((group, i) => group.map(({ ID }, j) => isDeleted[i][j] && ID).filter(Boolean))
         .filter((group) => group.length)
         .flat();
+    const totalContacts = beMergedIDs.flat().length;
 
     const handleClickDetails = (contactID) => {
         createModal(<ContactDetails contactID={contactID} userKeysList={userKeysList} />);
     };
 
+    const handlePreview = (beMergedIDs, groupIndex) => {
+        createModal(
+            <MergeContactPreview
+                beMergedIDs={beMergedIDs}
+                userKeysList={userKeysList}
+                beDeletedIDs={beDeletedIDs[groupIndex]}
+                onMerge={() => handleRemoveMerged(groupIndex)}
+            />
+        );
+    };
+
     const handleRemoveMerged = (groupIndex) => {
-        setModel(({ orderedContacts, isChecked, isDeleted }) => ({
+        setModel({
+            ...model,
             orderedContacts: orderedContacts.filter((_group, i) => i !== groupIndex),
             isChecked: isChecked.filter((_group, i) => i !== groupIndex),
             isDeleted: isDeleted.filter((_group, i) => i !== groupIndex)
-        }));
-    };
-
-    const handlePreview = (contactsIDs, groupIndex) => {
-        createModal(
-            <MergeContactPreview
-                groupIndex={groupIndex}
-                contactsIDs={contactsIDs}
-                userKeysList={userKeysList}
-                beDeletedIDs={beDeletedIDs[groupIndex]}
-                onMerge={handleRemoveMerged}
-            />
-        );
-    };
-
-    const handleMerge = (contactsIDs) => {
-        createModal(
-            <MergingModal
-                contactsIDs={contactsIDs}
-                userKeysList={userKeysList}
-                beDeletedIDs={beDeletedIDs}
-                onMerge={rest.onClose}
-            />
-        );
+        });
     };
 
     const handleToggleCheck = (groupIndex) => (index) => {
         setModel({
             ...model,
-            isChecked: model.isChecked.map((group, i) => {
+            isChecked: isChecked.map((group, i) => {
                 if (i !== groupIndex) {
                     return group;
                 }
@@ -88,7 +93,7 @@ const MergeModal = ({ contacts, userKeysList, ...rest }) => {
     const handleToggleDelete = (groupIndex) => (index) => {
         setModel({
             ...model,
-            isDeleted: model.isDeleted.map((group, i) => {
+            isDeleted: isDeleted.map((group, i) => {
                 if (i !== groupIndex) {
                     return group;
                 }
@@ -99,53 +104,151 @@ const MergeModal = ({ contacts, userKeysList, ...rest }) => {
 
     const handleSortEnd = (groupIndex) => ({ oldIndex, newIndex }) => {
         setModel({
-            orderedContacts: reOrderInGroup(model.orderedContacts, groupIndex, { oldIndex, newIndex }),
-            isChecked: reOrderInGroup(model.isChecked, groupIndex, { oldIndex, newIndex }),
-            isDeleted: reOrderInGroup(model.isDeleted, groupIndex, { oldIndex, newIndex })
+            ...model,
+            orderedContacts: reOrderInGroup(orderedContacts, groupIndex, { oldIndex, newIndex }),
+            isChecked: reOrderInGroup(isChecked, groupIndex, { oldIndex, newIndex }),
+            isDeleted: reOrderInGroup(isDeleted, groupIndex, { oldIndex, newIndex })
         });
     };
 
-    return (
-        <FormModal
-            title={c('Title').t`Merge contacts`}
-            footer={
+    const handleMerge = async () => {
+        const encryptedContacts = [];
+        const beDeletedAfterMergeIDs = [];
+        for (const group of beMergedIDs) {
+            try {
+                const beMergedContacts = [];
+                for (const ID of group) {
+                    // decrypt contacts to be merged
+                    const { Contact } = await api(getContact(ID));
+                    const { properties, errors: contactErrors } = await decrypt(Contact, {
+                        privateKeys,
+                        publicKeys
+                    });
+                    if (contactErrors.length) {
+                        throw new Error(c('Error description').t`Error decrypting contact ${ID}`);
+                    }
+                    beMergedContacts.push(properties);
+                }
+                // merge contacts
+                const mergedContact = merge(beMergedContacts);
+                setModel((model) => ({
+                    ...model,
+                    merged: { ...model.merged, success: [...model.merged.success, ...group] }
+                }));
+                // encrypt merged contact
+                const encryptedContact = await encrypt(mergedContact, privateKeys, publicKeys);
+                encryptedContacts.push({ contact: encryptedContact, group });
+                beDeletedAfterMergeIDs.push(group.slice(1));
+            } catch (errror) {
+                setModel((model) => ({
+                    ...model,
+                    merged: { ...model.merged, error: [...model.merged.error, ...group] }
+                }));
+            }
+        }
+        // send encrypted merged contacts to API
+        const { Responses } = await api(
+            addContacts({
+                Contacts: encryptedContacts.map(({ contact }) => contact),
+                Overwrite: OVERWRITE_CONTACT,
+                Labels: IGNORE
+            })
+        );
+        // populate submitted depending on API responses
+        for (const { Index, Response } of Responses) {
+            if (Response.Code === SUCCESS_IMPORT_CODE) {
+                setModel((model) => ({
+                    ...model,
+                    submitted: {
+                        ...model.submitted,
+                        success: [...model.submitted.success, ...encryptedContacts[Index].group]
+                    }
+                }));
+                await api(deleteContacts(beDeletedAfterMergeIDs[Index]));
+            } else {
+                setModel((model) => ({
+                    ...model,
+                    submitted: {
+                        ...model.submitted,
+                        error: [...model.submitted.error, ...encryptedContacts[Index].group]
+                    }
+                }));
+            }
+        }
+        // delete contacts marked for deletion
+        if (beDeletedIDs && beDeletedIDs.length) {
+            await api(deleteContacts(beDeletedIDs));
+        }
+        onMerge();
+        await call();
+    };
+
+    const { content, ...modalProps } = (() => {
+        // display table with mergeable contacts
+        if (!isMerging) {
+            const handleSubmit = () => {
+                setIsMerging(true);
+                handleMerge();
+            };
+            const footer = (
                 <>
                     <ResetButton>{c('Action').t`Cancel`}</ResetButton>
                     <PrimaryButton type="submit" disabled={!beMergedIDs.length}>{c('Action').t`Merge`}</PrimaryButton>
                 </>
-            }
-            onSubmit={() => handleMerge(beMergedIDs)}
-            {...rest}
-        >
-            <Alert>
-                {c('Description')
-                    .jt`Use Drag and Drop to rank merging priority between contacts. Uncheck the contacts you do ${(
-                    <b key="boldface">not</b>
-                )} want to merge`}
-            </Alert>
-            <Alert type="warning">
-                {c('Description')
-                    .t`You can mark for deletion the contacts that you do not want neither to merge nor to keep.
-                    Deletion will only take place after the merge button is clicked.`}
-            </Alert>
-            <MergeTable
-                onSortEnd={handleSortEnd}
-                contacts={model.orderedContacts}
-                isChecked={model.isChecked}
-                isDeleted={model.isDeleted}
-                onClickCheckbox={handleToggleCheck}
-                onClickDetails={handleClickDetails}
-                onClickDelete={handleToggleDelete}
-                onClickUndelete={handleToggleDelete}
-                onClickPreview={handlePreview}
-            />
-        </FormModal>
-    );
+            );
+
+            return {
+                title: c('Title').t`Merge contacts`,
+                content: (
+                    <MergeModalContent
+                        onSortEnd={handleSortEnd}
+                        orderedContacts={orderedContacts}
+                        isChecked={isChecked}
+                        isDeleted={isDeleted}
+                        onClickCheckbox={handleToggleCheck}
+                        onClickDetails={handleClickDetails}
+                        onClickDelete={handleToggleDelete}
+                        onClickUndelete={handleToggleDelete}
+                        onClickPreview={handlePreview}
+                    />
+                ),
+                footer,
+                onSubmit: handleSubmit,
+                ...rest
+            };
+        }
+
+        // display progress bar while merging contacts
+        const footer = (
+            <PrimaryButton type="reset" loading={submitted.success.length + submitted.error.length !== totalContacts}>
+                {c('Action').t`Close`}
+            </PrimaryButton>
+        );
+        return {
+            title: c('Title').t`Merging contacts`,
+            hasClose: false,
+            content: (
+                <MergingModalContent
+                    merged={merged.success}
+                    notMerged={merged.error}
+                    submitted={submitted.success}
+                    notSubmitted={submitted.error}
+                    total={totalContacts}
+                />
+            ),
+            footer,
+            onSubmit: rest.onClose,
+            ...rest
+        };
+    })();
+
+    return <FormModal {...modalProps}>{content}</FormModal>;
 };
 
 MergeModal.propTypes = {
-    contacts: PropTypes.arrayOf(PropTypes.array),
-    userKeysList: PropTypes.array
+    contacts: PropTypes.arrayOf(PropTypes.array).isRequired,
+    userKeysList: PropTypes.array.isRequired,
+    onMerge: PropTypes.func
 };
 
 export default MergeModal;
