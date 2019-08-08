@@ -9,9 +9,9 @@ import ContactGroupModal from './ContactGroupModal';
 import ExportModal from './ExportModal';
 import ImportModal from './import/ImportModal';
 
-const PaidCards = ({ contactGroupID }) => {
+const PaidCards = ({ contactGroupID, userKeysList, loadingUserKeys }) => {
     const { createModal } = useModals();
-    const handleExport = () => createModal(<ExportModal contactGroupID={contactGroupID} />);
+    const handleExport = () => createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
     const handleGroups = () => redirectTo('/contacts/settings');
 
     const handleImport = () => {
@@ -35,7 +35,8 @@ const PaidCards = ({ contactGroupID }) => {
                     <div className="bold">{c('Title').t`Export contacts`}</div>
                     <p>{c('Info')
                         .t`Create an backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
-                    <PrimaryButton onClick={handleExport}>{c('Action').t`Export`}</PrimaryButton>
+                    <PrimaryButton onClick={handleExport} disabled={loadingUserKeys}>{c('Action')
+                        .t`Export`}</PrimaryButton>
                 </div>
             </div>
             <div className="flex-autogrid-item">
@@ -52,7 +53,9 @@ const PaidCards = ({ contactGroupID }) => {
 };
 
 PaidCards.propTypes = {
-    contactGroupID: PropTypes.string
+    contactGroupID: PropTypes.string,
+    userKeysList: PropTypes.array,
+    loadingUserKeys: PropTypes.bool
 };
 
 const FreeCards = () => {
@@ -89,7 +92,7 @@ const FreeCards = () => {
     );
 };
 
-const ContactPlaceholder = ({ contacts, contactGroupID, user, onUncheck }) => {
+const ContactPlaceholder = ({ contacts, contactGroupID, user, userKeysList, loadingUserKeys, onUncheck }) => {
     const { hasPaidMail } = user;
     const countContacts = contacts.length;
     const selectedContacts = contacts.filter(({ isChecked }) => isChecked);
@@ -129,7 +132,15 @@ const ContactPlaceholder = ({ contacts, contactGroupID, user, onUncheck }) => {
                     <div className="mb2">
                         <PrimaryButton onClick={handleClick}>{c('Action').t`Edit group`}</PrimaryButton>
                     </div>
-                    {hasPaidMail ? <PaidCards contactGroupID={contactGroupID} /> : <FreeCards />}
+                    {hasPaidMail ? (
+                        <PaidCards
+                            userKeysList={userKeysList}
+                            loadingUserKeys={loadingUserKeys}
+                            contactGroupID={contactGroupID}
+                        />
+                    ) : (
+                        <FreeCards />
+                    )}
                 </div>
             </div>
         );
@@ -147,7 +158,7 @@ const ContactPlaceholder = ({ contacts, contactGroupID, user, onUncheck }) => {
                     )}
                 </div>
             </div>
-            {hasPaidMail ? <PaidCards /> : <FreeCards />}
+            {hasPaidMail ? <PaidCards userKeysList={userKeysList} loadingUserKeys={loadingUserKeys} /> : <FreeCards />}
         </div>
     );
 };
@@ -156,6 +167,8 @@ ContactPlaceholder.propTypes = {
     contacts: PropTypes.array.isRequired,
     contactGroupID: PropTypes.string,
     user: PropTypes.object.isRequired,
+    userKeysList: PropTypes.array,
+    loadingUserKeys: PropTypes.bool,
     onUncheck: PropTypes.func
 };
 

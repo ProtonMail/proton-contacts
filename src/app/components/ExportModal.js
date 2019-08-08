@@ -2,16 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import moment from 'moment';
-import {
-    useContacts,
-    useUser,
-    useUserKeys,
-    useApi,
-    FormModal,
-    ResetButton,
-    PrimaryButton,
-    Alert
-} from 'react-components';
+import { useContacts, useApi, FormModal, ResetButton, PrimaryButton, Alert } from 'react-components';
 import { queryContactExport } from 'proton-shared/lib/api/contacts';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 import { wait } from 'proton-shared/lib/helpers/promise';
@@ -42,10 +33,8 @@ ExportFooter.propTypes = {
     loading: PropTypes.bool
 };
 
-const ExportModal = ({ contactGroupID: LabelID, onSave = noop, ...rest }) => {
+const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...rest }) => {
     const api = useApi();
-    const [user] = useUser();
-    const [userKeysList, loadingUserKeys] = useUserKeys(user);
     const { publicKeys, privateKeys } = bothUserKeys(userKeysList);
     const [contacts, loadingContacts] = useContacts();
 
@@ -112,25 +101,24 @@ const ExportModal = ({ contactGroupID: LabelID, onSave = noop, ...rest }) => {
             }
         };
 
-        !loadingUserKeys &&
-            exportContacts(abortController).catch((error) => {
-                if (error.name !== 'AbortError') {
-                    rest.onClose(); // close the modal; otherwise it is left hanging in there
-                    throw error;
-                }
-            });
+        exportContacts(abortController).catch((error) => {
+            if (error.name !== 'AbortError') {
+                rest.onClose(); // close the modal; otherwise it is left hanging in there
+                throw error;
+            }
+        });
 
         return () => {
             abortController.abort();
         };
-    }, [loadingUserKeys]);
+    }, []);
 
     return (
         <FormModal
             title={c('Title').t`Exporting contacts`}
             onSubmit={() => handleSave(contactsExported)}
             footer={ExportFooter({ loading: contactsExported.length + contactsNotExported.length !== countContacts })}
-            loading={loadingUserKeys || loadingContacts}
+            loading={loadingContacts}
             {...rest}
         >
             <Alert>
@@ -150,7 +138,8 @@ const ExportModal = ({ contactGroupID: LabelID, onSave = noop, ...rest }) => {
 
 ExportModal.propTypes = {
     onSave: PropTypes.func,
-    contactGroupID: PropTypes.string
+    contactGroupID: PropTypes.string,
+    userKeysList: PropTypes.array
 };
 
 export default ExportModal;

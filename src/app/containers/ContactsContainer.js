@@ -153,6 +153,8 @@ const ContactsContainer = ({ location, history }) => {
                                                 {hasChecked ? (
                                                     <ContactPlaceholder
                                                         user={user}
+                                                        userKeysList={userKeysList}
+                                                        loadingUserKeys={loadingUserKeys}
                                                         contactGroupID={contactGroupID}
                                                         contacts={formattedContacts}
                                                         onUncheck={handleUncheckAll}
@@ -171,6 +173,8 @@ const ContactsContainer = ({ location, history }) => {
                                                 <ContactsList contacts={formattedContacts} onCheck={handleCheck} />
                                                 <ContactPlaceholder
                                                     user={user}
+                                                    userKeysList={userKeysList}
+                                                    loadingUserKeys={loadingUserKeys}
                                                     contactGroupID={contactGroupID}
                                                     contacts={formattedContacts}
                                                     onUncheck={handleUncheckAll}
