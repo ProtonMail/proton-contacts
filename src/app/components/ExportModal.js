@@ -16,10 +16,11 @@ import { queryContactExport } from 'proton-shared/lib/api/contacts';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 import { wait } from 'proton-shared/lib/helpers/promise';
 
-import { bothUserKeys, prepareContact } from '../helpers/decrypt';
+import { bothUserKeys, prepareContact as decrypt } from '../helpers/decrypt';
 import { toICAL } from '../helpers/vcard';
 import { percentageProgress } from './../helpers/progress';
 import DynamicProgress from './DynamicProgress';
+import { noop } from 'proton-shared/lib/helpers/function';
 
 const DOWNLOAD_FILENAME = 'protonContacts';
 // BACK-END DATA
@@ -41,7 +42,7 @@ ExportFooter.propTypes = {
     loading: PropTypes.bool
 };
 
-const ExportModal = ({ contactGroupID: LabelID, onClose, ...rest }) => {
+const ExportModal = ({ contactGroupID: LabelID, onSave = noop, ...rest }) => {
     const api = useApi();
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
@@ -60,7 +61,8 @@ const ExportModal = ({ contactGroupID: LabelID, onClose, ...rest }) => {
         const allVcards = vcards.join('\n');
         const blob = new Blob([allVcards], { type: 'data:text/plain;charset=utf-8;' });
         downloadFile(blob, `${DOWNLOAD_FILENAME}-${moment().format('YYYY-MM-DD')}.vcf`);
-        onClose();
+        onSave();
+        rest.onClose();
     };
 
     useEffect(() => {
@@ -76,25 +78,25 @@ const ExportModal = ({ contactGroupID: LabelID, onClose, ...rest }) => {
                     return;
                 }
                 try {
-                    const { properties: contactDecrypted = [], errors = [] } = await prepareContact(
+                    const { properties: contactDecrypted = [], errors = [] } = await decrypt(
                         { Cards },
                         { publicKeys, privateKeys }
                     );
 
                     if (errors.length) {
+                        console.log('any error decrypting?', errors);
                         throw new Error('Error decrypting contact');
                     }
-
                     const contactExported = toICAL(contactDecrypted).toString();
                     /*
                         need to check again for signal.aborted because the abort
-                        may have taken place during await prepareContact
+                        may have taken place during await decrypt
                     */
                     !signal.aborted && addSuccess((contactsExported) => [...contactsExported, contactExported]);
                 } catch (error) {
                     /*
                         need to check again for signal.aborted because the abort
-                        may have taken place during await prepareContact
+                        may have taken place during await decrypt
                     */
                     !signal.aborted && addError((contactsNotExported) => [...contactsNotExported, ID]);
                 }
@@ -111,23 +113,23 @@ const ExportModal = ({ contactGroupID: LabelID, onClose, ...rest }) => {
             }
         };
 
-        exportContacts(abortController).catch((error) => {
-            if (error.name !== 'AbortError') {
-                onClose(); // close the modal; otherwise it is left hanging in there
-                throw error;
-            }
-        });
+        !loadingUserKeys &&
+            exportContacts(abortController).catch((error) => {
+                if (error.name !== 'AbortError') {
+                    rest.onClose(); // close the modal; otherwise it is left hanging in there
+                    throw error;
+                }
+            });
 
         return () => {
             abortController.abort();
         };
-    }, []);
+    }, [loadingUserKeys]);
 
     return (
         <FormModal
             title={c('Title').t`Exporting contacts`}
             onSubmit={() => handleSave(contactsExported)}
-            onClose={onClose}
             footer={ExportFooter({ loading: contactsExported.length + contactsNotExported.length !== countContacts })}
             loading={loadingUserKeys || loadingContacts}
             {...rest}
@@ -148,7 +150,7 @@ const ExportModal = ({ contactGroupID: LabelID, onClose, ...rest }) => {
 };
 
 ExportModal.propTypes = {
-    onClose: PropTypes.func.isRequired,
+    onSave: PropTypes.func,
     contactGroupID: PropTypes.string
 };
 

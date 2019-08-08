@@ -111,6 +111,9 @@ export const prepareContact = async (contact, { publicKeys, privateKeys }) => {
  * @return {Object}                 { publicKeys: Array<PGPkey>, privateKeys: Array<PGPkey>}
  */
 export const bothUserKeys = (userKeysList) => {
+    if (!userKeysList) {
+        return { publicKeys: [], privateKeys: [] };
+    }
     return userKeysList.reduce(
         (acc, { privateKey }) => {
             if (!privateKey.isDecrypted()) {
