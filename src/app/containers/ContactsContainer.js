@@ -69,7 +69,7 @@ const ContactsContainer = ({ location, history }) => {
 
     const contactEmailsMap = useMemo(() => {
         if (!Array.isArray(contactEmails)) {
-            return [];
+            return {};
         }
         return contactEmails.reduce((acc, contactEmail) => {
             const { ContactID } = contactEmail;
