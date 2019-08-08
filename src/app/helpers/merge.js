@@ -158,7 +158,7 @@ export const merge = (contacts) => {
         return [];
     }
 
-    return contacts.reduce(
+    const { mergedContact } = contacts.reduce(
         (acc, contact, index) => {
             const { mergedContact, mergedProperties, mergedPropertiesPrefs, mergedGroups } = acc;
             if (index === 0) {
@@ -198,6 +198,7 @@ export const merge = (contacts) => {
                         mergedPropertiesPrefs[field] = [+pref];
                         newGroup && mergedGroups.push(newGroup);
                     } else {
+                        // for properties already seen, check if we should merge a potential new value for it
                         const newValue = extractNewValue(value, field, mergedProperties[field]);
                         const newPref = Math.max(...mergedPropertiesPrefs[field]) + 1;
                         const canAdd =
@@ -223,5 +224,7 @@ export const merge = (contacts) => {
             mergedPropertiesPrefs: Object.create(null),
             mergedGroups: []
         }
-    ).mergedContact;
+    );
+
+    return mergedContact;
 };

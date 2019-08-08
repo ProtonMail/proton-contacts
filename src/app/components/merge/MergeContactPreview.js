@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { useApi, useEventManager, Loader, FormModal, Icon, PrimaryButton, ResetButton } from 'react-components';
+import { useApi, useLoading, useEventManager, Loader, FormModal, PrimaryButton, ResetButton } from 'react-components';
 
 import { getContact, addContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
+import { noop } from 'proton-shared/lib/helpers/function';
 import { prepareContact as decrypt, bothUserKeys } from '../../helpers/decrypt';
 import { prepareContact as encrypt } from '../../helpers/encrypt';
 import { merge } from '../../helpers/merge';
-import { noop } from 'proton-shared/lib/helpers/function';
 import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE } from '../../constants';
 
 import MergingModalContent from './MergingModalContent';
+import MergeErrorContent from './MergeErrorContent';
+import MergedContactSummary from './MergedContactSummary';
 
 const { OVERWRITE_CONTACT } = OVERWRITE;
 const { IGNORE } = CATEGORIES;
-
-import ExtendedContactSummary from './ExtendedContactSummary';
 
 const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onMerge = noop, ...rest }) => {
     const api = useApi();
     const { call } = useEventManager();
     const { privateKeys, publicKeys } = bothUserKeys(userKeysList);
 
-    const [loading, setLoading] = useState(true);
+    const [loading, withLoading] = useLoading(true);
     const [isMerging, setIsMerging] = useState(false);
     const [model, setModel] = useState({
         contacts: [],
@@ -34,9 +34,9 @@ const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onM
 
     const handleMerge = async () => {
         try {
-            // encrypt merged contact
+            // encrypt contact obtained after merge
             const encryptedContact = await encrypt(model.merged, privateKeys, publicKeys);
-            // send to API
+            // send it to API
             const { Responses } = await api(
                 addContacts({
                     Contacts: [encryptedContact],
@@ -47,6 +47,7 @@ const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onM
             if (Responses[0].Response.Code !== SUCCESS_IMPORT_CODE) {
                 throw new Error('Error submitting merged contact');
             }
+            // delete contacts that have been merged
             await api(deleteContacts(beMergedIDs.slice(1)));
             if (beDeletedIDs.length) {
                 await api(deleteContacts(beDeletedIDs));
@@ -60,38 +61,28 @@ const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onM
     };
 
     useEffect(() => {
+        // decrypt contacts to be merged
         const getContacts = async () => {
             for (const ID of beMergedIDs) {
-                try {
-                    const { Contact } = await api(getContact(ID));
-                    const { properties, errors } = await decrypt(Contact, { privateKeys, publicKeys });
-                    if (errors.length) {
-                        setModel((model) => ({ ...model, errorOnLoad: true }));
-                    }
-                    setModel((model) => ({
-                        ...model,
-                        contacts: [...model.contacts, properties]
-                    }));
-                } catch (error) {
-                    setModel((model) => ({ ...model, errorOnLoad: true }));
+                const { Contact } = await api(getContact(ID));
+                const { properties, errors } = await decrypt(Contact, { privateKeys, publicKeys });
+                if (errors.length) {
+                    throw new Error('Error decrypting contact');
                 }
-            }
-            setLoading(false);
-        };
-        const mergeContacts = () => {
-            try {
-                setModel((model) => ({ ...model, merged: merge(model.contacts) }));
-            } catch (error) {
-                setModel((model) => ({ ...model, errorOnMerge: true }));
+                setModel((model) => ({
+                    ...model,
+                    contacts: [...model.contacts, properties]
+                }));
             }
         };
+        // merge contacts
+        const mergeContacts = () => setModel((model) => ({ ...model, merged: merge(model.contacts) }));
 
-        if (loading) {
-            getContacts();
-        } else {
-            mergeContacts();
-        }
-    }, [loading]);
+        withLoading(getContacts())
+            .catch(() => setModel((model) => ({ ...model, errorOnLoad: true })))
+            .then(mergeContacts())
+            .catch(() => setModel((model) => ({ ...model, errorOnMerge: true })));
+    }, []);
 
     const { content, ...modalProps } = (() => {
         // display preview of merged contact
@@ -108,26 +99,10 @@ const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onM
                 if (loading) {
                     return <Loader />;
                 }
-                if (model.errorOnLoad) {
-                    return (
-                        <div className="bg-global-attention p1">
-                            <Icon name="attention" className="mr1" />
-                            <span className="mr1">
-                                {c('Warning')
-                                    .t`Some of the contacts to be merged display errors. Please review them individually`}
-                            </span>
-                        </div>
-                    );
+                if (model.errorOnLoad || model.errorOnMerge) {
+                    return <MergeErrorContent errorOnLoad={model.errorOnLoad} />;
                 }
-                if (model.errorOnMerge) {
-                    return (
-                        <div className="bg-global-attention p1">
-                            <Icon name="attention" className="mr1" />
-                            <span className="mr1">{c('Warning').t`Contacts could not be merged`}</span>
-                        </div>
-                    );
-                }
-                return <ExtendedContactSummary properties={model.merged} />;
+                return <MergedContactSummary properties={model.merged} />;
             })();
 
             return {

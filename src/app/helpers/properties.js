@@ -93,3 +93,31 @@ export const addGroup = (properties = []) => {
         };
     });
 };
+
+/**
+ * Given an array of vCard properties (see notation in the file './csv.js'),
+ * get the value for a certain field the first time it appears in the array
+ * @param {Array<Object>}   properties
+ * @param {String}          field
+ *
+ * @return {String,Array}
+ */
+export const getFirstValue = (properties, field) => {
+    const { value } = properties.find(({ field: f }) => f === field) || {};
+    return value;
+};
+
+/**
+ * Given an array of vCard properties (see notation in the file './csv.js'),
+ * get all the values for a certain field (which can appear several times in the array)
+ * @param {Array<Object>}   properties
+ * @param {String}          field
+ *
+ * @return {String,Array}
+ */
+export const getAllValues = (properties, field) => {
+    return addPref(properties)
+        .filter(({ field: f }) => f === field)
+        .sort(sortByPref)
+        .map(({ value }) => value);
+};

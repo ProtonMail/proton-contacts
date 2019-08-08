@@ -1,6 +1,7 @@
 import ICAL from 'ical.js';
 import { readFileAsString } from 'proton-shared/lib/helpers/file';
 import { sortByPref } from './properties';
+import { getValue } from './property';
 
 export const ONE_OR_MORE_MUST_BE_PRESENT = '1*';
 export const EXACTLY_ONE_MUST_BE_PRESENT = '1';
@@ -45,39 +46,6 @@ export const PROPERTIES = {
 
 export const getAllFields = () => Object.keys(PROPERTIES);
 export const isCustomField = (field = '') => field.startsWith('x-');
-
-/**
- * ICAL library can crash if the value saved in the vCard is improperly formatted
- * If it crash we get the raw value from jCal key
- * @param {ICAL.Property} property
- * @returns {Array<String>}
- */
-const getRawValues = (property) => {
-    try {
-        return property.getValues();
-    } catch (error) {
-        const [, , , value = ''] = property.jCal || [];
-        return [value];
-    }
-};
-
-export const getValue = (property) => {
-    const [value] = getRawValues(property).map((val) => {
-        // adr
-        if (Array.isArray(val)) {
-            return val;
-        }
-
-        if (typeof val === 'string') {
-            return val;
-        }
-
-        // date
-        return val.toString();
-    });
-
-    return value;
-};
 
 /**
  * Parse vCard String and return contact properties model as an Array

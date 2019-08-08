@@ -12,16 +12,7 @@ import { extractMergeable } from '../helpers/merge';
 import { c } from 'ttag';
 import MergeRow from './MergeRow';
 
-const ContactsList = ({
-    contacts,
-    onCheck,
-    hasPaidMail,
-    userKeysList,
-    loadingUserKeys,
-    history,
-    contactID,
-    location
-}) => {
+const ContactsList = ({ contacts, onCheck, user, userKeysList, loadingUserKeys, history, contactID, location }) => {
     const mergeableContacts = extractMergeable(contacts);
     const canMerge = mergeableContacts.length > 0;
     const listRef = useRef(null);
@@ -97,7 +88,7 @@ const ContactsList = ({
                             <div className={`flex-item-fluid w0 ${LabelIDs.length ? 'pr1' : ''}`}>
                                 <span className="bold inbl mw100 ellipsis">{Name}</span>
                             </div>
-                            {hasPaidMail && LabelIDs.length ? (
+                            {user.hasPaidMail && LabelIDs.length ? (
                                 <div>
                                     {LabelIDs.map((labelID) => {
                                         const { Color, Name } = mapContactGroups[labelID];
@@ -171,7 +162,7 @@ const ContactsList = ({
 ContactsList.propTypes = {
     contacts: PropTypes.array,
     onCheck: PropTypes.func,
-    hasPaidMail: PropTypes.number,
+    user: PropTypes.object,
     userKeysList: PropTypes.array,
     loadingUserKeys: PropTypes.bool,
     history: PropTypes.object.isRequired,

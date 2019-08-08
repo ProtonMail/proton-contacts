@@ -7,7 +7,7 @@ import { getContact, addContacts, deleteContacts } from 'proton-shared/lib/api/c
 import { prepareContact as decrypt, bothUserKeys } from '../../helpers/decrypt';
 import { prepareContact as encrypt } from '../../helpers/encrypt';
 import { merge } from '../../helpers/merge';
-import { move } from 'proton-shared/lib/helpers/array';
+import { moveInGroup } from '../../helpers/array';
 import { noop } from 'proton-shared/lib/helpers/function';
 import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE } from '../../constants';
 
@@ -18,15 +18,6 @@ import MergingModalContent from './MergingModalContent';
 
 const { OVERWRITE_CONTACT } = OVERWRITE;
 const { IGNORE } = CATEGORIES;
-
-// helper to re-order arrays inside a list of arrays
-const reOrderInGroup = (collection, groupIndex, { oldIndex, newIndex }) =>
-    collection.map((group, i) => {
-        if (i === groupIndex) {
-            return move(group, oldIndex, newIndex);
-        }
-        return group;
-    });
 
 const MergeModal = ({ contacts, userKeysList, onMerge = noop, ...rest }) => {
     const api = useApi();
@@ -105,9 +96,9 @@ const MergeModal = ({ contacts, userKeysList, onMerge = noop, ...rest }) => {
     const handleSortEnd = (groupIndex) => ({ oldIndex, newIndex }) => {
         setModel({
             ...model,
-            orderedContacts: reOrderInGroup(orderedContacts, groupIndex, { oldIndex, newIndex }),
-            isChecked: reOrderInGroup(isChecked, groupIndex, { oldIndex, newIndex }),
-            isDeleted: reOrderInGroup(isDeleted, groupIndex, { oldIndex, newIndex })
+            orderedContacts: moveInGroup(orderedContacts, groupIndex, { oldIndex, newIndex }),
+            isChecked: moveInGroup(isChecked, groupIndex, { oldIndex, newIndex }),
+            isDeleted: moveInGroup(isDeleted, groupIndex, { oldIndex, newIndex })
         });
     };
 

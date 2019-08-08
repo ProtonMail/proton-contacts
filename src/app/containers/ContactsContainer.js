@@ -206,6 +206,7 @@ const ContactsContainer = ({ location, history }) => {
                                             <>
                                                 <ContactsList
                                                     contactID={contactID}
+                                                    user={user}
                                                     contacts={formattedContacts}
                                                     onCheck={handleCheck}
                                                     userKeysList={userKeysList}
@@ -230,6 +231,7 @@ const ContactsContainer = ({ location, history }) => {
                                         return (
                                             <>
                                                 <ContactsList
+                                                    user={user}
                                                     contacts={formattedContacts}
                                                     onCheck={handleCheck}
                                                     userKeysList={userKeysList}

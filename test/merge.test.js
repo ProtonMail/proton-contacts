@@ -106,12 +106,13 @@ describe('merge', () => {
 
             expect(merge(beMerged)).toHaveLength(5);
         });
-        it('should change email groups when merging so that every email has a different group', async () => {
+        it('should change email groups when merging', async () => {
             const beMerged = [
                 [
                     { pref: 1, field: 'version', group: undefined, type: undefined, value: '4.0' },
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name1' },
-                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email1@domain.org' }
+                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email1@domain.org' },
+                    { pref: 1, field: 'email', group: 'item2', type: 'email', value: 'email2@domain.org' }
                 ],
                 [
                     { pref: 1, field: 'version', group: undefined, type: undefined, value: '4.0' },

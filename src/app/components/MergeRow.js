@@ -26,7 +26,9 @@ const MergeRow = ({ style, mergeableContacts, userKeysList, loadingUserKeys }) =
                         className="color-white underline"
                         onClick={handleClick}
                         disabled={loadingUserKeys}
-                    >{c('Action').t`Merge`}</button>
+                    >
+                        {c('Action').t`Merge`}
+                    </button>
                 </div>
             </div>
         </div>

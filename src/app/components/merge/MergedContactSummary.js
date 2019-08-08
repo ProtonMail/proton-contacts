@@ -3,24 +3,9 @@ import PropTypes from 'prop-types';
 import { Block, Icon } from 'react-components';
 
 import { formatAdr } from '../../helpers/property';
-import { addPref, sortByPref } from '../../helpers/properties';
+import { getFirstValue, getAllValues } from '../../helpers/properties';
 
-const getFirstValue = (properties, field) => {
-    const { value } = properties.find(({ field: f }) => f === field) || {};
-    return Array.isArray(value) ? value.join(', ') : value;
-};
-
-const getAllValues = (properties, field) => {
-    return addPref(properties)
-        .reduce((acc, { field: f, pref, value }) => {
-            f === field && acc.push({ value, pref });
-            return acc;
-        }, [])
-        .sort(sortByPref)
-        .map(({ value }) => value);
-};
-
-const ExtendedContactSummary = ({ properties }) => {
+const MergedContactSummary = ({ properties = [] }) => {
     const name = getFirstValue(properties, 'fn');
     const emails = getAllValues(properties, 'email');
     const tels = getAllValues(properties, 'tel');
@@ -72,12 +57,8 @@ const ExtendedContactSummary = ({ properties }) => {
     );
 };
 
-ExtendedContactSummary.propTypes = {
-    properties: PropTypes.array.isRequired
+MergedContactSummary.propTypes = {
+    properties: PropTypes.array
 };
 
-ExtendedContactSummary.defaultProps = {
-    properties: []
-};
-
-export default ExtendedContactSummary;
+export default MergedContactSummary;
