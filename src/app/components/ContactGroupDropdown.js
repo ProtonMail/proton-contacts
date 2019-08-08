@@ -177,8 +177,8 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
                         placeholder={c('Placeholder').t`Filter groups`}
                     />
                 </div>
-                <div className="mb1">
-                    <ul className="unstyled m0 dropDown-contentInner">
+                <div className="mb1 dropDown-content dropDown-content--narrow">
+                    <ul className="unstyled m0 pl1 pr1 dropDown-contentInner">
                         {groups.map(({ ID, Name, Color }) => {
                             const checkboxId = `${uid}${ID}`;
                             return (
