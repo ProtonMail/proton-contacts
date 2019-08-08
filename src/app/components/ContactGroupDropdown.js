@@ -177,22 +177,27 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
                         placeholder={c('Placeholder').t`Filter groups`}
                     />
                 </div>
-                <div className="mb1">
+                <div className="mb1 pl1 pr1">
                     <ul className="unstyled m0 dropDown-contentInner">
                         {groups.map(({ ID, Name, Color }) => {
                             const checkboxId = `${uid}${ID}`;
                             return (
                                 <li
                                     key={ID}
-                                    className="flex flex-spacebetween flex-nowrap border-bottom border-bottom--dashed pt0-5 pb0-5"
+                                    className="flex flex-nowrap border-bottom border-bottom--dashed pt0-5 pb0-5"
                                 >
-                                    <label htmlFor={checkboxId} className="flex flex-nowrap">
-                                        <Icon name="contacts-groups" className="mr0-5" color={Color} />
-                                        <span className="ellipsis" title={Name}>
+                                    <label htmlFor={checkboxId} className="flex flex-nowrap flex-item-fluid">
+                                        <Icon
+                                            name="contacts-groups"
+                                            className="mr0-5 mtauto mbauto flex-item-noshrink"
+                                            color={Color}
+                                        />
+                                        <span className="ellipsis flex-item-fluid" title={Name}>
                                             {Name}
                                         </span>
                                     </label>
                                     <Checkbox
+                                        className="flex mtauto mbauto"
                                         id={checkboxId}
                                         checked={model[ID] === CHECKED}
                                         indeterminate={model[ID] === INDETERMINATE}
