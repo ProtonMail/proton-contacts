@@ -15,7 +15,8 @@ import {
     useEventManager,
     useContacts,
     usePopperAnchor,
-    generateUID
+    generateUID,
+    useLoading
 } from 'react-components';
 import { c, msgid } from 'ttag';
 import { normalize } from 'proton-shared/lib/helpers/string';
@@ -75,7 +76,7 @@ const collectContacts = (contactEmails = [], contacts) => {
 
 const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) => {
     const [keyword, setKeyword] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [loading, withLoading] = useLoading();
     const { anchorRef, isOpen, toggle, close } = usePopperAnchor();
     const { createNotification } = useNotifications();
     const { call } = useEventManager();
@@ -95,46 +96,46 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
     const handleCheck = (contactGroupID) => ({ target }) => setModel({ ...model, [contactGroupID]: +target.checked });
 
     const handleApply = async () => {
-        try {
-            setLoading(true);
-            let selectedContactEmails = [...contactEmails];
-            const { contacts: collectedContacts } = collectContacts(contactEmails, contacts);
+        let selectedContactEmails = [...contactEmails];
+        const { contacts: collectedContacts } = collectContacts(contactEmails, contacts);
 
-            if (collectedContacts.length) {
-                selectedContactEmails = await new Promise((resolve, reject) => {
-                    createModal(<SelectEmailsModal contacts={collectedContacts} onSubmit={resolve} onClose={reject} />);
-                });
-            }
-            const groupEntries = Object.entries(model);
-            await Promise.all(
-                groupEntries.map(([contactGroupID, isChecked]) => {
-                    if (isChecked === INDETERMINATE) {
+        if (collectedContacts.length) {
+            selectedContactEmails = await new Promise((resolve, reject) => {
+                createModal(<SelectEmailsModal contacts={collectedContacts} onSubmit={resolve} onClose={reject} />);
+            });
+        }
+        const groupEntries = Object.entries(model);
+        await Promise.all(
+            groupEntries.map(([contactGroupID, isChecked]) => {
+                if (isChecked === INDETERMINATE) {
+                    return Promise.resolve();
+                }
+
+                if (isChecked === CHECKED) {
+                    const toLabel = selectedContactEmails
+                        .filter(({ LabelIDs = [] }) => !LabelIDs.includes(contactGroupID))
+                        .map(({ ID }) => ID);
+                    if (!toLabel.length) {
                         return Promise.resolve();
                     }
+                    return api(labelContactEmails({ LabelID: contactGroupID, ContactEmailIDs: toLabel }));
+                }
 
-                    if (isChecked === CHECKED) {
-                        const toLabel = selectedContactEmails
-                            .filter(({ LabelIDs = [] }) => !LabelIDs.includes(contactGroupID))
-                            .map(({ ID }) => ID);
-                        return api(labelContactEmails({ LabelID: contactGroupID, ContactEmailIDs: toLabel }));
-                    }
+                const toUnlabel = selectedContactEmails
+                    .filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID))
+                    .map(({ ID }) => ID);
 
-                    const toUnlabel = selectedContactEmails
-                        .filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID))
-                        .map(({ ID }) => ID);
-                    return api(unLabelContactEmails({ LabelID: contactGroupID, ContactEmailIDs: toUnlabel }));
-                })
-            );
-            await call();
-            createNotification({
-                text: c('Info').ngettext(msgid`Contact group apply`, `Contact groups apply`, groupEntries.length)
-            });
-            close();
-            setLoading(false);
-        } catch (error) {
-            setLoading(false);
-            throw error;
-        }
+                if (!toUnlabel.length) {
+                    return Promise.resolve();
+                }
+                return api(unLabelContactEmails({ LabelID: contactGroupID, ContactEmailIDs: toUnlabel }));
+            })
+        );
+        await call();
+        createNotification({
+            text: c('Info').ngettext(msgid`Contact group apply`, `Contact groups apply`, groupEntries.length)
+        });
+        close();
     };
 
     useEffect(() => {
@@ -177,8 +178,8 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
                         placeholder={c('Placeholder').t`Filter groups`}
                     />
                 </div>
-                <div className="mb1 pl1 pr1">
-                    <ul className="unstyled m0 dropDown-contentInner">
+                <div className="mb1 dropDown-content dropDown-content--narrow">
+                    <ul className="unstyled m0 pl1 pr1 dropDown-contentInner">
                         {groups.map(({ ID, Name, Color }) => {
                             const checkboxId = `${uid}${ID}`;
                             return (
@@ -186,7 +187,7 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
                                     key={ID}
                                     className="flex flex-nowrap border-bottom border-bottom--dashed pt0-5 pb0-5"
                                 >
-                                    <label htmlFor={checkboxId} className="flex flex-nowrap flex-item-fluid">
+                                    <label htmlFor={checkboxId} className="flex flex-item-fluid flex-nowrap">
                                         <Icon
                                             name="contacts-groups"
                                             className="mr0-5 mtauto mbauto flex-item-noshrink"
@@ -209,8 +210,11 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
                     </ul>
                 </div>
                 <div className="aligncenter mb1">
-                    <SmallButton loading={loading} className="pm-button--primary" onClick={handleApply}>{c('Action')
-                        .t`Apply`}</SmallButton>
+                    <SmallButton
+                        loading={loading}
+                        className="pm-button--primary"
+                        onClick={() => withLoading(handleApply())}
+                    >{c('Action').t`Apply`}</SmallButton>
                 </div>
             </Dropdown>
         </>
