@@ -187,8 +187,12 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
                                     key={ID}
                                     className="flex flex-spacebetween flex-nowrap border-bottom border-bottom--dashed pt0-5 pb0-5"
                                 >
-                                    <label htmlFor={checkboxId} className="flex flex-nowrap">
-                                        <Icon name="contacts-groups" className="mr0-5" color={Color} />
+                                    <label htmlFor={checkboxId} className="flex flex-nowrap flex-items-center">
+                                        <Icon
+                                            name="contacts-groups"
+                                            className="mr0-5 flex-item-noshrink"
+                                            color={Color}
+                                        />
                                         <span className="ellipsis" title={Name}>
                                             {Name}
                                         </span>
