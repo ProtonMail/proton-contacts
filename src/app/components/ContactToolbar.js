@@ -1,18 +1,22 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Checkbox, useContactEmails } from 'react-components';
+import { Icon, Checkbox } from 'react-components';
 import { c } from 'ttag';
 import ContactGroupDropdown from './ContactGroupDropdown';
 
-const ContactToolbar = ({ onCheck, onDelete, checked, checkedContacts }) => {
-    const [contactEmails] = useContactEmails();
+const ContactToolbar = ({ onCheck, onDelete, checked, checkedContacts, contactEmailsMap }) => {
     const handleCheck = ({ target }) => onCheck(target.checked);
-    const contactEntries = Object.entries(checkedContacts).filter(([, isChecked]) => isChecked);
 
-    const contactEmailsSelected = contactEntries.reduce((acc, [contactID]) => {
-        acc.push(...contactEmails.filter(({ ContactID }) => ContactID === contactID));
-        return acc;
-    }, []);
+    const contactEmailsSelected = useMemo(() => {
+        return Object.entries(checkedContacts)
+            .filter(([, isChecked]) => isChecked)
+            .reduce((acc, [contactID]) => {
+                if (!contactEmailsMap[contactID]) {
+                    return acc;
+                }
+                return acc.concat(contactEmailsMap[contactID]);
+            }, []);
+    }, [checkedContacts, contactEmailsMap]);
 
     return (
         <div className="toolbar flex noprint">
@@ -31,7 +35,8 @@ ContactToolbar.propTypes = {
     checked: PropTypes.bool,
     onCheck: PropTypes.func,
     onDelete: PropTypes.func,
-    checkedContacts: PropTypes.object
+    checkedContacts: PropTypes.object,
+    contactEmailsMap: PropTypes.object
 };
 
 ContactToolbar.defaultProps = {

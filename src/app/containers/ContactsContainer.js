@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { Route, Switch, withRouter } from 'react-router-dom';
@@ -35,16 +35,62 @@ const ContactsContainer = ({ location, history }) => {
     const api = useApi();
     const { createNotification } = useNotifications();
     const { call } = useEventManager();
-    const params = new URLSearchParams(location.search);
-    const contactGroupID = params.get('contactGroupID');
     const [checkAll, setCheckAll] = useState(false);
     const [contactEmails, loadingContactEmails] = useContactEmails();
     const [contacts, loadingContacts] = useContacts();
     const [contactGroups, loadingContactGroups] = useContactGroups();
     const [checkedContacts, setCheckedContacts] = useState(Object.create(null));
-    const hasChecked = Object.entries(checkedContacts).some(([, isChecked]) => isChecked);
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
+
+    const contactGroupID = useMemo(() => {
+        const params = new URLSearchParams(location.search);
+        return params.get('contactGroupID');
+    }, [location.search]);
+
+    const hasChecked = useMemo(() => {
+        return Object.keys(checkedContacts).some((key) => checkedContacts[key]);
+    }, [checkedContacts]);
+
+    const filteredContacts = useMemo(() => {
+        if (!Array.isArray(contacts)) {
+            return [];
+        }
+        return contacts.filter(({ Name, Email, LabelIDs }) => {
+            const searchFilter = normalizedSearch.length
+                ? normalize(`${Name} ${Email}`).includes(normalizedSearch)
+                : true;
+
+            const groupFilter = contactGroupID ? LabelIDs.includes(contactGroupID) : true;
+
+            return searchFilter && groupFilter;
+        });
+    }, [contacts, contactGroupID, normalizedSearch]);
+
+    const contactEmailsMap = useMemo(() => {
+        if (!Array.isArray(contactEmails)) {
+            return [];
+        }
+        return contactEmails.reduce((acc, contactEmail) => {
+            const { ContactID } = contactEmail;
+            if (!acc[ContactID]) {
+                acc[ContactID] = [];
+            }
+            acc[ContactID].push(contactEmail);
+            return acc;
+        }, Object.create(null));
+    }, [contactEmails]);
+
+    const formattedContacts = useMemo(() => {
+        return filteredContacts.map((contact) => {
+            const { ID } = contact;
+            return {
+                ...contact,
+                emails: (contactEmailsMap[ID] || []).map(({ Email }) => Email),
+                isChecked: !!checkedContacts[ID]
+            };
+        });
+    }, [filteredContacts, checkedContacts, contactEmailsMap]);
 
     if (loadingContactEmails || loadingContacts || loadingUserKeys || loadingContactGroups) {
         return <Loader />;
@@ -88,9 +134,6 @@ const ContactsContainer = ({ location, history }) => {
         createNotification({ text: c('Success').t`Contacts deleted` });
     };
 
-    const handleCheckAll = (checked = false) => handleCheck(contacts.map(({ ID }) => ID), checked);
-    const handleUncheckAll = () => handleCheckAll(false);
-
     const handleCheck = (contactIDs = [], checked = false) => {
         const update = contactIDs.reduce((acc, contactID) => {
             acc[contactID] = checked;
@@ -100,28 +143,8 @@ const ContactsContainer = ({ location, history }) => {
         setCheckAll(checked && contactIDs.length === contacts.length);
     };
 
-    const formattedContacts = contacts
-        .filter(({ LabelIDs = [] }) => {
-            if (!contactGroupID) {
-                return true;
-            }
-            return LabelIDs.includes(contactGroupID);
-        })
-        .filter(({ Email, Name }) => {
-            if (normalizedSearch.length) {
-                return normalize(`${Name} ${Email}`).includes(normalizedSearch);
-            }
-            return true;
-        })
-        .map((contact) => {
-            const { ID } = contact;
-            const emails = contactEmails.filter(({ ContactID }) => ContactID === ID).map(({ Email }) => Email);
-            return {
-                ...contact,
-                emails,
-                isChecked: !!checkedContacts[ID]
-            };
-        });
+    const handleCheckAll = (checked = false) => handleCheck(contacts.map(({ ID }) => ID), checked);
+    const handleUncheckAll = () => handleCheckAll(false);
 
     return (
         <div className="flex flex-nowrap no-scroll">
@@ -132,6 +155,7 @@ const ContactsContainer = ({ location, history }) => {
                     <Route path="/:path" render={() => <PrivateSidebar contactGroups={contactGroups} />} />
                     <div className="main flex-item-fluid main-area">
                         <ContactToolbar
+                            contactEmailsMap={contactEmailsMap}
                             checkedContacts={checkedContacts}
                             checked={checkAll}
                             onCheck={handleCheckAll}
