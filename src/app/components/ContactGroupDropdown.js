@@ -197,7 +197,7 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
                                         </span>
                                     </label>
                                     <Checkbox
-                                        className="flex mtauto mbauto"
+                                        className="flex flex-item-noshrink mtauto mbauto"
                                         id={checkboxId}
                                         checked={model[ID] === CHECKED}
                                         indeterminate={model[ID] === INDETERMINATE}
