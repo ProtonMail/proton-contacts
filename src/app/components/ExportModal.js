@@ -16,7 +16,7 @@ import { queryContactExport } from 'proton-shared/lib/api/contacts';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 import { wait } from 'proton-shared/lib/helpers/promise';
 
-import { bothUserKeys, prepareContact as decrypt } from '../helpers/decrypt';
+import { bothUserKeys, prepareContact } from '../helpers/decrypt';
 import { toICAL } from '../helpers/vcard';
 import { percentageProgress } from './../helpers/progress';
 import DynamicProgress from './DynamicProgress';
@@ -78,25 +78,24 @@ const ExportModal = ({ contactGroupID: LabelID, onSave = noop, ...rest }) => {
                     return;
                 }
                 try {
-                    const { properties: contactDecrypted = [], errors = [] } = await decrypt(
+                    const { properties: contactDecrypted = [], errors = [] } = await prepareContact(
                         { Cards },
                         { publicKeys, privateKeys }
                     );
 
                     if (errors.length) {
-                        console.log('any error decrypting?', errors);
                         throw new Error('Error decrypting contact');
                     }
                     const contactExported = toICAL(contactDecrypted).toString();
                     /*
                         need to check again for signal.aborted because the abort
-                        may have taken place during await decrypt
+                        may have taken place during await prepareContact
                     */
                     !signal.aborted && addSuccess((contactsExported) => [...contactsExported, contactExported]);
                 } catch (error) {
                     /*
                         need to check again for signal.aborted because the abort
-                        may have taken place during await decrypt
+                        may have taken place during await prepareContact
                     */
                     !signal.aborted && addError((contactsNotExported) => [...contactsNotExported, ID]);
                 }
