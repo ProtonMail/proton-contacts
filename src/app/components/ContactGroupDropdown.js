@@ -185,19 +185,20 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
                             return (
                                 <li
                                     key={ID}
-                                    className="flex flex-spacebetween flex-nowrap border-bottom border-bottom--dashed pt0-5 pb0-5"
+                                    className="flex flex-nowrap border-bottom border-bottom--dashed pt0-5 pb0-5"
                                 >
-                                    <label htmlFor={checkboxId} className="flex flex-nowrap flex-items-center">
+                                    <label htmlFor={checkboxId} className="flex flex-item-fluid flex-nowrap">
                                         <Icon
                                             name="contacts-groups"
-                                            className="mr0-5 flex-item-noshrink"
+                                            className="mr0-5 mtauto mbauto flex-item-noshrink"
                                             color={Color}
                                         />
-                                        <span className="ellipsis" title={Name}>
+                                        <span className="ellipsis flex-item-fluid" title={Name}>
                                             {Name}
                                         </span>
                                     </label>
                                     <Checkbox
+                                        className="flex flex-item-noshrink mtauto mbauto"
                                         id={checkboxId}
                                         checked={model[ID] === CHECKED}
                                         indeterminate={model[ID] === INDETERMINATE}
