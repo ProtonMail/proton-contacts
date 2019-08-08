@@ -174,10 +174,10 @@ const ContactsContainer = ({ location, history }) => {
         })
         .map((contact) => {
             const { ID } = contact;
-            const Emails = contactEmails.filter(({ ContactID }) => ContactID === ID).map(({ Email }) => Email);
+            const emails = contactEmails.filter(({ ContactID }) => ContactID === ID).map(({ Email }) => Email);
             return {
                 ...contact,
-                Emails,
+                emails,
                 isChecked: !!checkedContacts[ID]
             };
         });
@@ -209,6 +209,7 @@ const ContactsContainer = ({ location, history }) => {
                                                     contacts={formattedContacts}
                                                     onCheck={handleCheck}
                                                     userKeysList={userKeysList}
+                                                    loadingUserKeys={loadingUserKeys}
                                                 />
                                                 {hasChecked ? (
                                                     <ContactPlaceholder
@@ -228,7 +229,12 @@ const ContactsContainer = ({ location, history }) => {
                                     render={() => {
                                         return (
                                             <>
-                                                <ContactsList contacts={formattedContacts} onCheck={handleCheck} />
+                                                <ContactsList
+                                                    contacts={formattedContacts}
+                                                    onCheck={handleCheck}
+                                                    userKeysList={userKeysList}
+                                                    loadingUserKeys={loadingUserKeys}
+                                                />
                                                 <ContactPlaceholder
                                                     user={user}
                                                     userKeysList={userKeysList}

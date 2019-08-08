@@ -32,13 +32,13 @@ describe('merge', () => {
 
     describe('extractMergeable', () => {
         it('should capture together contacts with the same name', async () => {
-            const alice1 = { Name: 'Alice', Emails: ['alice@domain.com'] };
-            const alice2 = { Name: 'alice', Emails: ['ali@domain.com'] };
-            const alice3 = { Name: 'Alice', Emails: ['alias@domain.com'] };
-            const alicia1 = { Name: 'Alicia', Emails: ['alicia@domain.com'] };
-            const bob1 = { Name: 'Bob', Emails: ['wow@domain.com', 'batman@domain.com'] };
-            const bob2 = { Name: 'bob', Emails: ['bobby@domain.com'] };
-            const carol1 = { Name: 'Carol', Emails: ['carolinge@domain.com'] };
+            const alice1 = { Name: 'Alice', emails: ['alice@domain.com'] };
+            const alice2 = { Name: 'alice', emails: ['ali@domain.com'] };
+            const alice3 = { Name: 'Alice', emails: ['alias@domain.com'] };
+            const alicia1 = { Name: 'Alicia', emails: ['alicia@domain.com'] };
+            const bob1 = { Name: 'Bob', emails: ['wow@domain.com', 'batman@domain.com'] };
+            const bob2 = { Name: 'bob', emails: ['bobby@domain.com'] };
+            const carol1 = { Name: 'Carol', emails: ['carolinge@domain.com'] };
 
             const contacts = [alice1, alice2, alicia1, bob1, alice3, bob2, carol1];
             const mergeable = extractMergeable(contacts);
@@ -46,14 +46,14 @@ describe('merge', () => {
             expect(mergeable).toEqual([[alice1, alice2, alice3], [bob1, bob2]]);
         });
         it('should capture together contacts with the same email', async () => {
-            const alice1 = { Name: 'Alice', Emails: ['alice@domain.com'] };
-            const alice2 = { Name: 'RkX02xqw7U', Emails: ['ali@domain.com', 'alias@domain.com'] };
-            const alice3 = { Name: 'crypto', Emails: ['alias@domain.com'] };
-            const alicia1 = { Name: 'Alicia', Emails: ['alice@domain.com'] };
-            const bob1 = { Name: 'Bob', Emails: ['wow@domain.com', 'batman@domain.com'] };
-            const bob2 = { Name: 'bob', Emails: ['bobby@domain.com', 'batman@domain.com'] };
-            const carol1 = { Name: 'Carol', Emails: ['carolinge@domain.com'] };
-            const mallory = { Name: 'Mallory', Emails: ['mallory@domain.com', 'alice@domain.com'] };
+            const alice1 = { Name: 'Alice', emails: ['alice@domain.com'] };
+            const alice2 = { Name: 'RkX02xqw7U', emails: ['ali@domain.com', 'alias@domain.com'] };
+            const alice3 = { Name: 'crypto', emails: ['alias@domain.com'] };
+            const alicia1 = { Name: 'Alicia', emails: ['alice@domain.com'] };
+            const bob1 = { Name: 'Bob', emails: ['wow@domain.com', 'batman@domain.com'] };
+            const bob2 = { Name: 'bob', emails: ['bobby@domain.com', 'batman@domain.com'] };
+            const carol1 = { Name: 'Carol', emails: ['carolinge@domain.com'] };
+            const mallory = { Name: 'Mallory', emails: ['mallory@domain.com', 'alice@domain.com'] };
 
             const contacts = [alice1, alice2, alicia1, bob1, alice3, bob2, carol1, mallory];
             const mergeable = extractMergeable(contacts);
@@ -61,12 +61,12 @@ describe('merge', () => {
             expect(mergeable).toEqual([[bob1, bob2], [alice1, alicia1, mallory], [alice2, alice3]]);
         });
         it('should capture together contacts with the same email or the same name', async () => {
-            const onlyOne1 = { Name: 'name1', Emails: ['email1@domain.com'] };
-            const onlyOne2 = { Name: 'name2', Emails: ['email1@domain.com', 'email2@domain.com'] };
-            const onlyOne3 = { Name: 'name3', Emails: ['email2@domain.com', 'email3@domain.com'] };
-            const onlyOne4 = { Name: 'name4', Emails: ['email3@domain.com'] };
-            const onlyOne5 = { Name: 'name1', Emails: ['email4@domain.com'] };
-            const onlyOne6 = { Name: 'name6', Emails: ['email6@domain.com', 'email4@domain.com'] };
+            const onlyOne1 = { Name: 'name1', emails: ['email1@domain.com'] };
+            const onlyOne2 = { Name: 'name2', emails: ['email1@domain.com', 'email2@domain.com'] };
+            const onlyOne3 = { Name: 'name3', emails: ['email2@domain.com', 'email3@domain.com'] };
+            const onlyOne4 = { Name: 'name4', emails: ['email3@domain.com'] };
+            const onlyOne5 = { Name: 'name1', emails: ['email4@domain.com'] };
+            const onlyOne6 = { Name: 'name6', emails: ['email6@domain.com', 'email4@domain.com'] };
 
             const contacts = [onlyOne1, onlyOne2, onlyOne3, onlyOne4, onlyOne5, onlyOne6];
 

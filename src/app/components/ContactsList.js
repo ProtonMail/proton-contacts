@@ -12,7 +12,16 @@ import { extractMergeable } from '../helpers/merge';
 import { c } from 'ttag';
 import MergeRow from './MergeRow';
 
-const ContactsList = ({ contacts, onCheck, hasPaidMail, userKeysList, history, contactID, location }) => {
+const ContactsList = ({
+    contacts,
+    onCheck,
+    hasPaidMail,
+    userKeysList,
+    loadingUserKeys,
+    history,
+    contactID,
+    location
+}) => {
     const mergeableContacts = extractMergeable(contacts);
     const canMerge = mergeableContacts.length > 0;
     const listRef = useRef(null);
@@ -52,12 +61,18 @@ const ContactsList = ({ contacts, onCheck, hasPaidMail, userKeysList, history, c
     }) => {
         if (canMerge && !index) {
             return (
-                <MergeRow key={key} style={style} mergeableContacts={mergeableContacts} userKeysList={userKeysList} />
+                <MergeRow
+                    key={key}
+                    style={style}
+                    mergeableContacts={mergeableContacts}
+                    userKeysList={userKeysList}
+                    loadingUserKeys={loadingUserKeys}
+                />
             );
         }
         const contactIndex = canMerge ? index - 1 : index;
 
-        const { ID, Name, LabelIDs = [], Emails, isChecked } = contacts[contactIndex];
+        const { ID, Name, LabelIDs = [], emails, isChecked } = contacts[contactIndex];
         const initial = getInitial(Name);
         return (
             <div
@@ -98,8 +113,8 @@ const ContactsList = ({ contacts, onCheck, hasPaidMail, userKeysList, history, c
                                 </div>
                             ) : null}
                         </div>
-                        <div className="mw100 ellipsis" title={Emails.join(', ')}>
-                            {addPlus(Emails)}
+                        <div className="mw100 ellipsis" title={emails.join(', ')}>
+                            {addPlus(emails)}
                         </div>
                     </div>
                 </div>
@@ -158,6 +173,7 @@ ContactsList.propTypes = {
     onCheck: PropTypes.func,
     hasPaidMail: PropTypes.number,
     userKeysList: PropTypes.array,
+    loadingUserKeys: PropTypes.bool,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     contactID: PropTypes.string

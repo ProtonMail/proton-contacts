@@ -18,7 +18,7 @@ const MergeTableBody = ({
 }) => {
     return (
         <OrderableTableBody colSpan={4} {...rest}>
-            {contacts.map(({ ID, Name, Emails }, j) => {
+            {contacts.map(({ ID, Name, emails }, j) => {
                 const deleted = isDeleted[j];
                 const cells = [
                     <NameTableCell
@@ -30,7 +30,7 @@ const MergeTableBody = ({
                         greyedOut={deleted}
                         onToggle={onClickCheckbox}
                     />,
-                    <EmailsTableCell key="email" emails={Emails} greyedOut={deleted} />,
+                    <EmailsTableCell key="email" emails={emails} greyedOut={deleted} />,
                     <OptionsDropdown
                         key="options"
                         contactID={ID}

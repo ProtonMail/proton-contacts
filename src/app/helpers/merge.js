@@ -64,7 +64,7 @@ export const linkConnections = (connections) => {
 
 /**
  * Given a list of contacts, extract the ones that can be merged
- * @param {Array<Object>} contacts      Each contact is an object { ID, Emails, Name, LabelIDs }
+ * @param {Array<Object>} contacts      Each contact is an object { ID, emails, Name, LabelIDs }
  *
  * @returns {Array<Array<Object>>}      List of groups of contacts that can be merged
  */
@@ -90,8 +90,8 @@ export const extractMergeable = (contacts = []) => {
     // detect duplicate emails
     // emailConnections = { email: [contact indices with that email] }
     const emailConnections = Object.values(
-        contacts.reduce((acc, { Emails }, index) => {
-            Emails.map(normalize).forEach((email) => {
+        contacts.reduce((acc, { emails }, index) => {
+            emails.map(normalize).forEach((email) => {
                 if (!acc[email]) {
                     acc[email] = [index];
                 } else {
