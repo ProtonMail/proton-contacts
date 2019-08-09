@@ -160,32 +160,12 @@ const ContactsContainer = ({ location, history }) => {
         setCheckAll(checked && contactIDs.length === contacts.length);
     };
 
+    const handleCheckAll = (checked = false) => handleCheck(contacts.map(({ ID }) => ID), checked);
+    const handleUncheckAll = () => handleCheckAll(false);
+
     const handleMerge = (beMergedContacts) => {
         createModal(<MergeModal contacts={beMergedContacts} userKeysList={userKeysList} />);
     };
-
-    const formattedContacts = contacts
-        .filter(({ LabelIDs = [] }) => {
-            if (!contactGroupID) {
-                return true;
-            }
-            return LabelIDs.includes(contactGroupID);
-        })
-        .filter(({ Email, Name }) => {
-            if (normalizedSearch.length) {
-                return normalize(`${Name} ${Email}`).includes(normalizedSearch);
-            }
-            return true;
-        })
-        .map((contact) => {
-            const { ID } = contact;
-            const emails = contactEmails.filter(({ ContactID }) => ContactID === ID).map(({ Email }) => Email);
-            return {
-                ...contact,
-                emails,
-                isChecked: !!checkedContacts[ID]
-            };
-        });
 
     return (
         <div className="flex flex-nowrap no-scroll">
@@ -196,6 +176,7 @@ const ContactsContainer = ({ location, history }) => {
                     <Route path="/:path" render={() => <PrivateSidebar contactGroups={contactGroups} />} />
                     <div className="main flex-item-fluid main-area">
                         <ContactToolbar
+                            contactEmailsMap={contactEmailsMap}
                             checkedContacts={checkedContacts}
                             checked={checkAll}
                             onCheck={handleCheckAll}
@@ -211,14 +192,16 @@ const ContactsContainer = ({ location, history }) => {
                                             <>
                                                 <ContactsList
                                                     contactID={contactID}
-                                                    user={user}
                                                     contacts={formattedContacts}
+                                                    user={user}
                                                     onCheck={handleCheck}
                                                     onMerge={handleMerge}
                                                 />
                                                 {hasChecked ? (
                                                     <ContactPlaceholder
                                                         user={user}
+                                                        userKeysList={userKeysList}
+                                                        loadingUserKeys={loadingUserKeys}
                                                         contactGroupID={contactGroupID}
                                                         contacts={formattedContacts}
                                                         onUncheck={handleUncheckAll}
@@ -235,8 +218,8 @@ const ContactsContainer = ({ location, history }) => {
                                         return (
                                             <>
                                                 <ContactsList
-                                                    user={user}
                                                     contacts={formattedContacts}
+                                                    user={user}
                                                     onCheck={handleCheck}
                                                     onMerge={handleMerge}
                                                 />
