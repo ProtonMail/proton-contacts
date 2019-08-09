@@ -58,7 +58,7 @@ const getModel = (contactGroups = [], contactEmails = []) => {
 const collectContacts = (contactEmails = [], contacts) => {
     return contactEmails.reduce(
         (acc, { ContactID }) => {
-            acc.duplicate[ContactID] = +!!acc.duplicate[ContactID] + 1;
+            acc.duplicate[ContactID] = (acc.duplicate[ContactID] || 0) + 1;
 
             if (acc.duplicate[ContactID] === 2) {
                 const contact = contacts.find(({ ID }) => ID === ContactID);
