@@ -38,11 +38,6 @@ const PrivateHeader = ({ search, onSearch, location }) => {
                             {c('Title').t`Contacts`}
                         </Link>
                     </li>
-                    {isFree ? (
-                        <li className="mr1">
-                            <UpgradeButton className="topnav-link inline-flex flex-nowrap nodecoration rounded" />
-                        </li>
-                    ) : null}
                     <li className="mr1">
                         <Link
                             to="/contacts/settings"
@@ -56,6 +51,11 @@ const PrivateHeader = ({ search, onSearch, location }) => {
                             {c('Title').t`Settings`}
                         </Link>
                     </li>
+                    {isFree ? (
+                        <li className="mr1">
+                            <UpgradeButton className="topnav-link inline-flex flex-nowrap nodecoration rounded" />
+                        </li>
+                    ) : null}
                     <li className="mlauto mtauto mbauto relative flex-item-noshrink">
                         <UserDropdown />
                     </li>
