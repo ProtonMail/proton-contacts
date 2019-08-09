@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { Icon } from 'react-components';
-import contactLoader from 'design-system/assets/img/pm-images/contact-export-loader.gif';
+import { Icon, Loader } from 'react-components';
 
 const DynamicProgress = ({
     id,
@@ -18,7 +17,7 @@ const DynamicProgress = ({
 }) => {
     const loading = value < max || endPostponed;
     const icon = loading ? (
-        <img src={contactLoader} alt={`${alt}-loader`} />
+        <Loader />
     ) : failed ? (
         <Icon name="off" fill="warning" size={100} alt={`${alt}-finished`} />
     ) : (
