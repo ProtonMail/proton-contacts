@@ -27,6 +27,7 @@ import ContactPlaceholder from '../components/ContactPlaceholder';
 import ContactToolbar from '../components/ContactToolbar';
 import PrivateHeader from '../content/PrivateHeader';
 import PrivateSidebar from '../content/PrivateSidebar';
+import MergeModal from '../components/merge/MergeModal';
 
 const ContactsContainer = ({ location, history }) => {
     const { createModal } = useModals();
@@ -159,6 +160,10 @@ const ContactsContainer = ({ location, history }) => {
         setCheckAll(checked && contactIDs.length === contacts.length);
     };
 
+    const handleMerge = (beMergedContacts) => {
+        createModal(<MergeModal contacts={beMergedContacts} userKeysList={userKeysList} />);
+    };
+
     const formattedContacts = contacts
         .filter(({ LabelIDs = [] }) => {
             if (!contactGroupID) {
@@ -209,8 +214,7 @@ const ContactsContainer = ({ location, history }) => {
                                                     user={user}
                                                     contacts={formattedContacts}
                                                     onCheck={handleCheck}
-                                                    userKeysList={userKeysList}
-                                                    loadingUserKeys={loadingUserKeys}
+                                                    onMerge={handleMerge}
                                                 />
                                                 {hasChecked ? (
                                                     <ContactPlaceholder
@@ -234,8 +238,7 @@ const ContactsContainer = ({ location, history }) => {
                                                     user={user}
                                                     contacts={formattedContacts}
                                                     onCheck={handleCheck}
-                                                    userKeysList={userKeysList}
-                                                    loadingUserKeys={loadingUserKeys}
+                                                    onMerge={handleMerge}
                                                 />
                                                 <ContactPlaceholder
                                                     user={user}

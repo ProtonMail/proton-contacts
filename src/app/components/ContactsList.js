@@ -1,19 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { c } from 'ttag';
 import { useContactGroups } from 'react-components';
 import { withRouter } from 'react-router';
-import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
 import List from 'react-virtualized/dist/commonjs/List';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 
+import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
+import { extractMergeable } from '../helpers/merge';
+
 import ItemCheckbox from './ItemCheckbox';
 import ContactGroupIcon from './ContactGroupIcon';
-import { extractMergeable } from '../helpers/merge';
-import { c } from 'ttag';
 import MergeRow from './MergeRow';
 
-const ContactsList = ({ contacts, onCheck, user, userKeysList, loadingUserKeys, history, contactID, location }) => {
-    const mergeableContacts = extractMergeable(contacts);
+const ContactsList = ({ contacts, onCheck, onMerge, user, history, contactID, location }) => {
+    const mergeableContacts = useMemo(() => extractMergeable(contacts), [contacts]);
     const canMerge = mergeableContacts.length > 0;
     const listRef = useRef(null);
     const containerRef = useRef(null);
@@ -41,6 +42,8 @@ const ContactsList = ({ contacts, onCheck, user, userKeysList, loadingUserKeys, 
         onCheck(contactIDs, target.checked);
     };
 
+    const handleMerge = () => onMerge(mergeableContacts);
+
     const handleClick = (ID) => () => history.push({ ...location, pathname: `/contacts/${ID}` });
 
     const stop = (e) => e.stopPropagation();
@@ -51,15 +54,7 @@ const ContactsList = ({ contacts, onCheck, user, userKeysList, loadingUserKeys, 
         key
     }) => {
         if (canMerge && !index) {
-            return (
-                <MergeRow
-                    key={key}
-                    style={style}
-                    mergeableContacts={mergeableContacts}
-                    userKeysList={userKeysList}
-                    loadingUserKeys={loadingUserKeys}
-                />
-            );
+            return <MergeRow key={key} style={style} onMerge={handleMerge} />;
         }
         const contactIndex = canMerge ? index - 1 : index;
 
@@ -162,9 +157,8 @@ const ContactsList = ({ contacts, onCheck, user, userKeysList, loadingUserKeys, 
 ContactsList.propTypes = {
     contacts: PropTypes.array,
     onCheck: PropTypes.func,
+    onMerge: PropTypes.func,
     user: PropTypes.object,
-    userKeysList: PropTypes.array,
-    loadingUserKeys: PropTypes.bool,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     contactID: PropTypes.string

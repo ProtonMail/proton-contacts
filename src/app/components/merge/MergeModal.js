@@ -4,16 +4,17 @@ import { c } from 'ttag';
 import { useApi, useEventManager, useModals, FormModal, ResetButton, PrimaryButton } from 'react-components';
 
 import { getContact, addContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
+import { noop } from 'proton-shared/lib/helpers/function';
 import { prepareContact as decrypt, bothUserKeys } from '../../helpers/decrypt';
 import { prepareContact as encrypt } from '../../helpers/encrypt';
 import { merge } from '../../helpers/merge';
 import { moveInGroup } from '../../helpers/array';
-import { noop } from 'proton-shared/lib/helpers/function';
 import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE } from '../../constants';
 
 import ContactDetails from './ContactDetails';
 import MergeContactPreview from './MergeContactPreview';
 import MergeModalContent from './MergeModalContent';
+import MergeTable from './MergeTable';
 import MergingModalContent from './MergingModalContent';
 
 const { OVERWRITE_CONTACT } = OVERWRITE;
@@ -36,23 +37,27 @@ const MergeModal = ({ contacts, userKeysList, onMerge = noop, ...rest }) => {
 
     const { orderedContacts, isChecked, isDeleted, merged, submitted } = model;
 
+    // contacts that should be merged
+    // beMergedIDs = [[group of ordered contacts to be merged], ...]
     const beMergedIDs = orderedContacts
         .map((group, i) => group.map(({ ID }, j) => isChecked[i][j] && !isDeleted[i][j] && ID).filter(Boolean))
         .filter((group) => group.length > 1);
+    // IDs of contacts marked for deletion
     const beDeletedIDs = orderedContacts
         .map((group, i) => group.map(({ ID }, j) => isDeleted[i][j] && ID).filter(Boolean))
         .filter((group) => group.length)
         .flat();
+    // total number of contacts to be merged
     const totalContacts = beMergedIDs.flat().length;
 
     const handleClickDetails = (contactID) => {
         createModal(<ContactDetails contactID={contactID} userKeysList={userKeysList} />);
     };
 
-    const handlePreview = (beMergedIDs, groupIndex) => {
+    const handlePreview = (groupIDs, groupIndex) => {
         createModal(
             <MergeContactPreview
-                beMergedIDs={beMergedIDs}
+                beMergedIDs={groupIDs}
                 userKeysList={userKeysList}
                 beDeletedIDs={beDeletedIDs[groupIndex]}
                 onMerge={() => handleRemoveMerged(groupIndex)}
@@ -72,24 +77,18 @@ const MergeModal = ({ contacts, userKeysList, onMerge = noop, ...rest }) => {
     const handleToggleCheck = (groupIndex) => (index) => {
         setModel({
             ...model,
-            isChecked: isChecked.map((group, i) => {
-                if (i !== groupIndex) {
-                    return group;
-                }
-                return group.map((bool, j) => (index === j ? !bool : bool));
-            })
+            isChecked: isChecked.map((group, i) =>
+                i !== groupIndex ? group : group.map((bool, j) => (index === j ? !bool : bool))
+            )
         });
     };
 
     const handleToggleDelete = (groupIndex) => (index) => {
         setModel({
             ...model,
-            isDeleted: isDeleted.map((group, i) => {
-                if (i !== groupIndex) {
-                    return group;
-                }
-                return group.map((bool, j) => (index === j ? !bool : bool));
-            })
+            isDeleted: isDeleted.map((group, i) =>
+                i !== groupIndex ? group : group.map((bool, j) => (index === j ? !bool : bool))
+            )
         });
     };
 
@@ -191,17 +190,19 @@ const MergeModal = ({ contacts, userKeysList, onMerge = noop, ...rest }) => {
             return {
                 title: c('Title').t`Merge contacts`,
                 content: (
-                    <MergeModalContent
-                        onSortEnd={handleSortEnd}
-                        orderedContacts={orderedContacts}
-                        isChecked={isChecked}
-                        isDeleted={isDeleted}
-                        onClickCheckbox={handleToggleCheck}
-                        onClickDetails={handleClickDetails}
-                        onClickDelete={handleToggleDelete}
-                        onClickUndelete={handleToggleDelete}
-                        onClickPreview={handlePreview}
-                    />
+                    <MergeModalContent>
+                        <MergeTable
+                            onSortEnd={handleSortEnd}
+                            contacts={orderedContacts}
+                            isChecked={isChecked}
+                            isDeleted={isDeleted}
+                            onClickCheckbox={handleToggleCheck}
+                            onClickDetails={handleClickDetails}
+                            onClickDelete={handleToggleDelete}
+                            onClickUndelete={handleToggleDelete}
+                            onClickPreview={handlePreview}
+                        />
+                    </MergeModalContent>
                 ),
                 footer,
                 onSubmit: handleSubmit,

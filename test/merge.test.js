@@ -1,20 +1,20 @@
-import { linkConnections, extractMergeable, merge } from '../src/app/helpers/merge';
+import { linkConnections, extractMergeable, extractNewValue, merge } from '../src/app/helpers/merge';
 
 describe('merge', () => {
     describe('linkConnections', () => {
-        it('should return same if no connections should be linked', async () => {
+        it('should return same if no connections should be linked', () => {
             const connections = [[1, 2], [3, 4]];
             expect(linkConnections(connections)).toEqual(connections);
         });
-        it('should return same if there is only one connection', async () => {
+        it('should return same if there is only one connection', () => {
             const connections = [[1, 2, 3, 4]];
             expect(linkConnections(connections)).toEqual(connections);
         });
-        it('should return same if there are no connections', async () => {
+        it('should return same if there are no connections', () => {
             const connections = [];
             expect(linkConnections(connections)).toEqual(connections);
         });
-        it('should work as expected for a few cases', async () => {
+        it('should work as expected for a few cases', () => {
             const cases = [
                 [[1, 8, 2], [9, 10, 5], [2, 4], [3, 5]],
                 [[1, 8, 2], [9, 10, 5], [2, 4], [3, 5], [4, 9]],
@@ -31,7 +31,7 @@ describe('merge', () => {
     });
 
     describe('extractMergeable', () => {
-        it('should capture together contacts with the same name', async () => {
+        it('should capture together contacts with the same name', () => {
             const alice1 = { Name: 'Alice', emails: ['alice@domain.com'] };
             const alice2 = { Name: 'alice', emails: ['ali@domain.com'] };
             const alice3 = { Name: 'Alice', emails: ['alias@domain.com'] };
@@ -45,7 +45,7 @@ describe('merge', () => {
 
             expect(mergeable).toEqual([[alice1, alice2, alice3], [bob1, bob2]]);
         });
-        it('should capture together contacts with the same email', async () => {
+        it('should capture together contacts with the same email', () => {
             const alice1 = { Name: 'Alice', emails: ['alice@domain.com'] };
             const alice2 = { Name: 'RkX02xqw7U', emails: ['ali@domain.com', 'alias@domain.com'] };
             const alice3 = { Name: 'crypto', emails: ['alias@domain.com'] };
@@ -60,7 +60,7 @@ describe('merge', () => {
 
             expect(mergeable).toEqual([[bob1, bob2], [alice1, alicia1, mallory], [alice2, alice3]]);
         });
-        it('should capture together contacts with the same email or the same name', async () => {
+        it('should capture together contacts with the same email or the same name', () => {
             const onlyOne1 = { Name: 'name1', emails: ['email1@domain.com'] };
             const onlyOne2 = { Name: 'name2', emails: ['email1@domain.com', 'email2@domain.com'] };
             const onlyOne3 = { Name: 'name3', emails: ['email2@domain.com', 'email3@domain.com'] };
@@ -74,8 +74,39 @@ describe('merge', () => {
         });
     });
 
+    describe('extractNewValue', () => {
+        it('should return the value if there are no merged values', () => {
+            const value = 'new';
+            const newValue = extractNewValue(value, 'name', []);
+            expect(newValue).toEqual(value);
+        });
+        it('should capture only new values for fields different from adr', () => {
+            const mergedValues = ['old', 'older'];
+            const values = ['old', 'new'];
+            const expectedNewValues = ['', 'new'];
+            const newValues = values.map((value) => extractNewValue(value, 'name', mergedValues));
+            expect(newValues).toEqual(expectedNewValues);
+        });
+        it('should capture only new values for adr field', () => {
+            const mergedValues = [
+                ['', '', 'old street', 'old city', 'old region', 'old postal code', 'old country'],
+                ['', '', 'older street', 'older city', 'older region', 'older postal code', 'older country']
+            ];
+            const values = [
+                ['', '', 'old street', 'old city', 'old region', 'old postal code', 'old country'],
+                ['', '', 'older street', 'new city', 'older region', 'older postal code', 'older country']
+            ];
+            const expectedNewValues = [
+                '',
+                ['', '', 'older street', 'new city', 'older region', 'older postal code', 'older country']
+            ];
+            const newValues = values.map((value) => extractNewValue(value, 'adr', mergedValues));
+            expect(newValues).toEqual(expectedNewValues);
+        });
+    });
+
     describe('merge', () => {
-        it('should merge fn properties in proper order', async () => {
+        it('should merge fn properties in proper order', () => {
             const beMerged = [
                 [{ pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name1' }],
                 [{ pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name2' }],
@@ -85,7 +116,7 @@ describe('merge', () => {
             const mergedPrefs = merge(beMerged).map(({ pref }) => pref);
             expect(mergedPrefs).toEqual([1, 2, 3]);
         });
-        it('should only merge properties with different value', async () => {
+        it('should only merge properties with different value', () => {
             const beMerged = [
                 [
                     { pref: 1, field: 'version', group: undefined, type: undefined, value: '4.0' },
@@ -106,7 +137,7 @@ describe('merge', () => {
 
             expect(merge(beMerged)).toHaveLength(5);
         });
-        it('should change email groups when merging', async () => {
+        it('should change email groups when merging', () => {
             const beMerged = [
                 [
                     { pref: 1, field: 'version', group: undefined, type: undefined, value: '4.0' },

@@ -80,7 +80,7 @@ const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onM
 
         withLoading(getContacts())
             .catch(() => setModel((model) => ({ ...model, errorOnLoad: true })))
-            .then(mergeContacts())
+            .then(mergeContacts)
             .catch(() => setModel((model) => ({ ...model, errorOnMerge: true })));
     }, []);
 

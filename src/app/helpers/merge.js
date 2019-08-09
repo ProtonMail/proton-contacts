@@ -5,7 +5,7 @@ import { generateNewGroupName } from './properties';
 import { unique } from 'proton-shared/lib/helpers/array';
 
 /**
- * Given an array of object keys and and object storing indices,
+ * Given an array of object keys and and object storing indices for keys,
  * if the object contains any of these keys, return the index stored in the object
  * for the first of such keys. Otherwise return -1
  * @param {Array} keys
@@ -36,17 +36,21 @@ export const linkConnections = (connections) => {
     const { newConnections } = connections.reduce(
         (acc, connection, i) => {
             const { connected, newConnections } = acc;
+            // check if some index in current connection has been connected already
             const indexFound = findKeyIndex(connection, connected);
 
             if (indexFound !== -1) {
+                // add indices in current connection to the connected connection
                 newConnections[indexFound] = unique([...connection, ...newConnections[indexFound]]);
                 for (const key of connection) {
+                    // update list of connected indices
                     if (connected[key] === undefined) {
                         connected[key] = indexFound;
                     }
                 }
                 didModify = true;
             } else {
+                // update list of connected indices
                 for (const key of connection) {
                     connected[key] = i;
                 }
@@ -56,9 +60,12 @@ export const linkConnections = (connections) => {
         },
         { connected: Object.create(null), newConnections: [] }
     );
+    // if some indices previously unconnected have been connected,
+    // run linkConnections again
     if (didModify) {
         return linkConnections(newConnections);
     }
+    // otherwise no more connections to be established
     return connections;
 };
 
@@ -70,7 +77,7 @@ export const linkConnections = (connections) => {
  */
 export const extractMergeable = (contacts = []) => {
     // detect duplicate names
-    // namesConnections = { name: [contact indices with that name] }
+    // namesConnections = { name: [contact indices with this name] }
     const namesConnections = Object.values(
         contacts.reduce((acc, { Name }, index) => {
             const name = normalize(Name);
@@ -88,7 +95,7 @@ export const extractMergeable = (contacts = []) => {
         .filter((connection) => connection.length > 1);
 
     // detect duplicate emails
-    // emailConnections = { email: [contact indices with that email] }
+    // emailConnections = { email: [contact indices with this email] }
     const emailConnections = Object.values(
         contacts.reduce((acc, { emails }, index) => {
             emails.map(normalize).forEach((email) => {
@@ -113,38 +120,49 @@ export const extractMergeable = (contacts = []) => {
 
 /**
  * Given the value and field of a contact property, and a list of merged properties,
- * return null if the value has been merged, or the new value to be merged otherwise
+ * return '' if the value has been merged, or the new value to be merged otherwise
  * @param {String|Array} value
  * @param {String} field
- * @param {Array} mergedValues
+ * @param {Array<String|Array>} mergedValues
  *
- * @return {?String}
+ * @return {String}
  */
-const extractNewValue = (value, field, mergedValues) => {
+export const extractNewValue = (value, field, mergedValues = []) => {
     //  the field adr has to be treated separately since it has an array value
     if (field === 'adr') {
         // the array structure of an 'adr' value is
         // value = [ PObox, extAdr, street, city, region, postalCode, country ]
         // each of the elements inside value can be a string or an array of strings
 
-        // check adr element by adr element to see if there are new values
-        const isNew = mergedValues.map((mergedValue) =>
-            mergedValue.map((component, index) => {
-                const componentIsArray = Array.isArray(component);
-                const valueIsArray = Array.isArray(value[index]);
-                if (componentIsArray && valueIsArray) {
-                    return value.some((str) => !component.includes(str));
-                }
-                if (!componentIsArray && !valueIsArray) {
-                    return component !== value;
-                }
-                return true;
+        // compare with merged addresses
+        const isNotNewAdr = mergedValues
+            .map((mergedAdr) => {
+                // check adr element by adr element to see if there are new values
+                const isNewComponent = mergedAdr
+                    .map((component, index) => {
+                        // each of the components inside adr may be an array itself
+                        const componentIsArray = Array.isArray(component);
+                        const valueIsArray = Array.isArray(value[index]);
+                        if (componentIsArray && valueIsArray) {
+                            return value[index].some((str) => !component.includes(str));
+                        }
+                        if (!componentIsArray && !valueIsArray) {
+                            return component !== value[index];
+                        }
+                        return true;
+                    })
+                    .filter(Boolean);
+
+                return !isNewComponent.length;
             })
-        );
-        return isNew ? value : null;
+            // keep track of only repeated addresses
+            .filter(Boolean);
+
+        // if some address is repeated, it is not new
+        return !isNotNewAdr.length ? value : '';
     }
     // for the other fields, value is a string, and mergedValues an array of strings
-    return !mergedValues.includes(value) ? value : null;
+    return !mergedValues.includes(value) ? value : '';
 };
 
 /**
@@ -164,7 +182,7 @@ export const merge = (contacts) => {
             if (index === 0) {
                 // merged contact inherits all properties from the first contact
                 mergedContact.push(...contact);
-                // keep track of merged properties and prefs
+                // keep track of merged properties with respective prefs and merged groups
                 for (const { pref, field, value, group } of contact) {
                     if (!mergedProperties[field]) {
                         mergedProperties[field] = [value];
@@ -180,6 +198,7 @@ export const merge = (contacts) => {
 
                 // but first prepare to change repeated groups
                 const groups = contact.map(({ group }) => group).filter(Boolean);
+                // establish groups that must be changed
                 const changeGroup = groups.reduce((acc, group) => {
                     if (!mergedGroups.includes(group)) {
                         return acc;
@@ -198,9 +217,11 @@ export const merge = (contacts) => {
                         mergedPropertiesPrefs[field] = [+pref];
                         newGroup && mergedGroups.push(newGroup);
                     } else {
-                        // for properties already seen, check if we should merge a potential new value for it
+                        // for properties already seen,
+                        // check if there is a new value for it
                         const newValue = extractNewValue(value, field, mergedProperties[field]);
                         const newPref = Math.max(...mergedPropertiesPrefs[field]) + 1;
+                        // check if the new value can be added
                         const canAdd =
                             isCustomField(field) ||
                             [ONE_OR_MORE_MAY_BE_PRESENT, ONE_OR_MORE_MUST_BE_PRESENT].includes(
