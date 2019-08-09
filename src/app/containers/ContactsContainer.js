@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { c } from 'ttag';
+import { c, msgid } from 'ttag';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import {
     AppsSidebar,
@@ -111,18 +111,34 @@ const ContactsContainer = ({ location, history }) => {
         return contactID;
     };
 
-    const handleDelete = async () => {
-        const contactIDs = getCheckedContactIDs() || [getCurrentContactID()];
+    const getContactIDsToDelete = () => {
+        const checkedContactIDs = getCheckedContactIDs();
+        if (checkedContactIDs.length) {
+            return checkedContactIDs;
+        }
+        const currentContactID = getCurrentContactID();
+        if (currentContactID) {
+            return [currentContactID];
+        }
+    };
 
-        if (!contactIDs.length) {
+    const handleDelete = async () => {
+        const contactIDs = getContactIDsToDelete();
+
+        if (!Array.isArray(contactIDs) && !contactIDs.length) {
             return;
         }
 
         await new Promise((resolve, reject) => {
             createModal(
                 <ConfirmModal title={c('Title').t`Delete`} onConfirm={resolve} onClose={reject}>
-                    <Alert type="warning">{c('Warning')
-                        .t`Are you sure you want to delete the selected contacts?`}</Alert>
+                    <Alert type="warning">
+                        {c('Warning').ngettext(
+                            msgid`Are you sure you want to delete the selected contact?`,
+                            `Are you sure you want to delete the selected contacts?`,
+                            contactIDs.length
+                        )}
+                    </Alert>
                 </ConfirmModal>
             );
         });
