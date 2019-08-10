@@ -5,8 +5,13 @@ import { c } from 'ttag';
 
 import { POST_BOX, EXTENDED, STREET, LOCALITY, REGION, POSTAL_CODE, COUNTRY } from '../constants';
 
+const initialAddress = (address) => {
+    const addressArray = Array.isArray(address) ? address : address.split(',');
+    return Array.from({ length: 7 }).map((_, i) => addressArray[i] || '');
+};
+
 const ContactAdrField = ({ value, onChange }) => {
-    const [address, setAddress] = useState(value);
+    const [address, setAddress] = useState(initialAddress(value));
 
     const handleChange = (index) => ({ target }) => {
         const newAddress = [...address];

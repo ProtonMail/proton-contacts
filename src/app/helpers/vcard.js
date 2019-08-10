@@ -1,12 +1,14 @@
 import ICAL from 'ical.js';
 import { readFileAsString } from 'proton-shared/lib/helpers/file';
+import { sortByPref } from './properties';
+import { getValue } from './property';
 
-const ONE_OR_MORE_MUST_BE_PRESENT = '1*';
-const EXACTLY_ONE_MUST_BE_PRESENT = '1';
-const EXACTLY_ONE_MAY_BE_PRESENT = '*1';
-const ONE_OR_MORE_MAY_BE_PRESENT = '*';
+export const ONE_OR_MORE_MUST_BE_PRESENT = '1*';
+export const EXACTLY_ONE_MUST_BE_PRESENT = '1';
+export const EXACTLY_ONE_MAY_BE_PRESENT = '*1';
+export const ONE_OR_MORE_MAY_BE_PRESENT = '*';
 
-const PROPERTIES = {
+export const PROPERTIES = {
     fn: { cardinality: ONE_OR_MORE_MUST_BE_PRESENT },
     n: { cardinality: EXACTLY_ONE_MAY_BE_PRESENT },
     nickname: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT },
@@ -46,39 +48,6 @@ export const getAllFields = () => Object.keys(PROPERTIES);
 export const isCustomField = (field = '') => field.startsWith('x-');
 
 /**
- * ICAL library can crash if the value saved in the vCard is improperly formatted
- * If it crash we get the raw value from jCal key
- * @param {ICAL.Property} property
- * @returns {Array<String>}
- */
-const getRawValues = (property) => {
-    try {
-        return property.getValues();
-    } catch (error) {
-        const [, , , value = ''] = property.jCal || [];
-        return [value];
-    }
-};
-
-export const getValue = (property) => {
-    const [value] = getRawValues(property).map((val) => {
-        // adr
-        if (Array.isArray(val)) {
-            return val;
-        }
-
-        if (typeof val === 'string') {
-            return val;
-        }
-
-        // date
-        return val.toString();
-    });
-
-    return value;
-};
-
-/**
  * Parse vCard String and return contact properties model as an Array
  * @param {String} vcard to parse
  * @returns {Array} contact properties ordered
@@ -114,10 +83,7 @@ export const parse = (vcard = '') => {
 
             return acc;
         }, [])
-        .sort((firstEl, secondEl) => {
-            // WARNING `sort` is mutating the new array returned by reduce
-            return firstEl.pref <= secondEl.pref;
-        });
+        .sort(sortByPref);
 };
 
 /**

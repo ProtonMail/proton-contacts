@@ -1,16 +1,29 @@
 /**
  * Make sure we keep only valid properties
+ * In case adr property is badly formatted, re-format
  * @param {Array} properties
  * @returns {Array}
  */
 export const sanitizeProperties = (properties = []) => {
-    // properties should be either arrays or strings. Transform to string otherwise.
-    // usually the case of a date for bday or anniversary fields
+    /*
+        property values should be either arrays or strings
+        transform to string otherwise (usually the case of a date for bday or anniversary fields)
+        enforce value for adr field be an array
+    */
     return properties
         .filter(({ value }) => value)
         .map((property) =>
             Array.isArray(property.value) ? property : { ...property, value: property.value.toString() }
-        );
+        )
+        .map((property) => {
+            const { field, value } = property;
+            if (field !== 'adr' || Array.isArray(value)) {
+                return property;
+            }
+            // assume the bad formatting used commas instead of semicolons
+            const newValue = value.split(',').slice(0, 6);
+            return { ...property, value: newValue };
+        });
 };
 
 /**
@@ -35,6 +48,11 @@ export const addPref = (properties = []) => {
 };
 
 /**
+ * Function that sorts properties by preference
+ */
+export const sortByPref = (firstEl, secondEl) => firstEl.pref <= secondEl.pref;
+
+/**
  * Generate new group name that doesn't exist
  * @param {Array<String>} existingGroups
  * @returns {String}
@@ -55,7 +73,7 @@ export const generateNewGroupName = (existingGroups = []) => {
 };
 
 /**
- * Add `group` if missing for email
+ * Add `group` if missing for email.
  * @param {Array} properties
  * @returns {Array}
  */
@@ -74,4 +92,32 @@ export const addGroup = (properties = []) => {
             group
         };
     });
+};
+
+/**
+ * Given an array of vCard properties (see notation in the file './csv.js'),
+ * get the value for a certain field the first time it appears in the array
+ * @param {Array<Object>}   properties
+ * @param {String}          field
+ *
+ * @return {String,Array}
+ */
+export const getFirstValue = (properties, field) => {
+    const { value } = properties.find(({ field: f }) => f === field) || {};
+    return value;
+};
+
+/**
+ * Given an array of vCard properties (see notation in the file './csv.js'),
+ * get all the values for a certain field (which can appear several times in the array)
+ * @param {Array<Object>}   properties
+ * @param {String}          field
+ *
+ * @return {String,Array}
+ */
+export const getAllValues = (properties, field) => {
+    return addPref(properties)
+        .filter(({ field: f }) => f === field)
+        .sort(sortByPref)
+        .map(({ value }) => value);
 };

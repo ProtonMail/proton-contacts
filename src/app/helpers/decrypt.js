@@ -1,5 +1,6 @@
 import { getMessage, decryptMessage, getSignature, verifyMessage, createCleartextMessage } from 'pmcrypto';
 import { merge, parse } from './vcard';
+import { sanitizeProperties } from './properties';
 
 import { CONTACT_CARD_TYPE } from 'proton-shared/lib/constants';
 import { SIGNATURE_NOT_VERIFIED, FAIL_TO_READ, FAIL_TO_DECRYPT } from '../constants';
@@ -102,7 +103,7 @@ export const prepareContact = async (contact, { publicKeys, privateKeys }) => {
         { vcards: [], errors: [] }
     );
 
-    return { properties: merge(vcards.map(parse)), errors };
+    return { properties: sanitizeProperties(merge(vcards.map(parse))), errors };
 };
 
 /**

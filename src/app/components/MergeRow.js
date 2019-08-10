@@ -3,13 +3,9 @@ import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { Icon } from 'react-components';
 
-const MergeRow = ({ style }) => {
-    const handleClick = () => {
-        // TODO start merge process
-    };
-
+const MergeRow = ({ style, onMerge, ...rest }) => {
     return (
-        <div style={style} className="p1 flex flex-nowrap flex-items-center bg-pm-blue color-white">
+        <div style={style} className="p1 flex flex-nowrap flex-items-center bg-pm-blue color-white" {...rest}>
             <div className="mr1">
                 <Icon name="merge" color="white" />
             </div>
@@ -17,8 +13,9 @@ const MergeRow = ({ style }) => {
                 <div className="bold">{c('Info').t`Two or more contacts appear to be identical.`}</div>
                 <div className="flex flex-items-center">
                     <span className="mr0-5">{c('Info').t`Do you want to merge these contacts now?`}</span>
-                    <button type="button" className="color-white underline" onClick={handleClick}>{c('Action')
-                        .t`Merge`}</button>
+                    <button type="button" className="color-white underline" onClick={onMerge}>
+                        {c('Action').t`Merge`}
+                    </button>
                 </div>
             </div>
         </div>
@@ -26,7 +23,8 @@ const MergeRow = ({ style }) => {
 };
 
 MergeRow.propTypes = {
-    style: PropTypes.object
+    style: PropTypes.object,
+    onMerge: PropTypes.func
 };
 
 export default MergeRow;

@@ -75,6 +75,7 @@ const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...
                     if (errors.length) {
                         throw new Error('Error decrypting contact');
                     }
+
                     const contactExported = toICAL(contactDecrypted).toString();
                     /*
                         need to check again for signal.aborted because the abort
@@ -129,8 +130,10 @@ const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...
                 id="progress-export-contacts"
                 alt="contact-loader"
                 value={percentageProgress(contactsExported.length, contactsNotExported.length, countContacts)}
-                displayEnd={c('Progress bar description')
+                failed={!contactsExported.length}
+                displaySuccess={c('Progress bar description')
                     .t`${contactsExported.length} out of ${countContacts} contacts successfully exported.`}
+                displayFailed={c('Progress bar description').t`No contacts exported.`}
             />
         </FormModal>
     );

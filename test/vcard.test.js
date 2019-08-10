@@ -1,4 +1,4 @@
-import { parse } from './vcard';
+import { parse } from '../src/app/helpers/vcard';
 
 const vcard = `BEGIN:VCARD
 FN:edu

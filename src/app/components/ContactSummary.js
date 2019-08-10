@@ -3,12 +3,8 @@ import PropTypes from 'prop-types';
 import { Icon, RemoteImage } from 'react-components';
 import { getInitial } from 'proton-shared/lib/helpers/string';
 
+import { getFirstValue } from '../helpers/properties';
 import { formatAdr } from '../helpers/property';
-
-const getFirstValue = (properties, field) => {
-    const { value } = properties.find(({ field: f }) => f === field) || {};
-    return value;
-};
 
 const ContactSummary = ({ properties }) => {
     const photo = getFirstValue(properties, 'photo');

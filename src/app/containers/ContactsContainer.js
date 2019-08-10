@@ -27,6 +27,7 @@ import ContactPlaceholder from '../components/ContactPlaceholder';
 import ContactToolbar from '../components/ContactToolbar';
 import PrivateHeader from '../content/PrivateHeader';
 import PrivateSidebar from '../content/PrivateSidebar';
+import MergeModal from '../components/merge/MergeModal';
 
 const ContactsContainer = ({ location, history }) => {
     const { createModal } = useModals();
@@ -162,6 +163,10 @@ const ContactsContainer = ({ location, history }) => {
     const handleCheckAll = (checked = false) => handleCheck(contacts.map(({ ID }) => ID), checked);
     const handleUncheckAll = () => handleCheckAll(false);
 
+    const handleMerge = (beMergedContacts) => {
+        createModal(<MergeModal contacts={beMergedContacts} userKeysList={userKeysList} />);
+    };
+
     return (
         <div className="flex flex-nowrap no-scroll">
             <AppsSidebar currentApp={APPS.PROTONCONTACTS} />
@@ -188,7 +193,9 @@ const ContactsContainer = ({ location, history }) => {
                                                 <ContactsList
                                                     contactID={contactID}
                                                     contacts={formattedContacts}
+                                                    user={user}
                                                     onCheck={handleCheck}
+                                                    onMerge={handleMerge}
                                                 />
                                                 {hasChecked ? (
                                                     <ContactPlaceholder
@@ -210,7 +217,12 @@ const ContactsContainer = ({ location, history }) => {
                                     render={() => {
                                         return (
                                             <>
-                                                <ContactsList contacts={formattedContacts} onCheck={handleCheck} />
+                                                <ContactsList
+                                                    contacts={formattedContacts}
+                                                    user={user}
+                                                    onCheck={handleCheck}
+                                                    onMerge={handleMerge}
+                                                />
                                                 <ContactPlaceholder
                                                     user={user}
                                                     userKeysList={userKeysList}

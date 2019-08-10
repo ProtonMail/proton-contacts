@@ -1,22 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useContactGroups, useUser } from 'react-components';
+import { c } from 'ttag';
+import { useContactGroups } from 'react-components';
 import { withRouter } from 'react-router';
-import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
 import List from 'react-virtualized/dist/commonjs/List';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 
-import ContactGroupIcon from './ContactGroupIcon';
+import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
+import { extractMergeable } from '../helpers/merge';
+
 import ItemCheckbox from './ItemCheckbox';
-import { extract } from '../helpers/merge';
-import { c } from 'ttag';
+import ContactGroupIcon from './ContactGroupIcon';
 import MergeRow from './MergeRow';
 
-const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
-    const [{ hasPaidMail }] = useUser();
-    const emails = extract(contacts);
-    const duplicates = Object.values(emails).reduce((acc, arr) => acc + arr.length, 0);
-    const canMerge = duplicates > 0;
+const ContactsList = ({ contacts, onCheck, onMerge, user, history, contactID, location }) => {
+    const mergeableContacts = useMemo(() => extractMergeable(contacts), [contacts]);
+    const canMerge = mergeableContacts.length > 0;
     const listRef = useRef(null);
     const containerRef = useRef(null);
     const [lastChecked, setLastChecked] = useState(); // Store ID of the last contact ID checked
@@ -43,6 +42,8 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
         onCheck(contactIDs, target.checked);
     };
 
+    const handleMerge = () => onMerge(mergeableContacts);
+
     const handleClick = (ID) => () => history.push({ ...location, pathname: `/contacts/${ID}` });
 
     const stop = (e) => e.stopPropagation();
@@ -53,9 +54,8 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
         key
     }) => {
         if (canMerge && !index) {
-            return <MergeRow key={key} style={style} />;
+            return <MergeRow key={key} style={style} onMerge={handleMerge} />;
         }
-
         const contactIndex = canMerge ? index - 1 : index;
 
         const { ID, Name, LabelIDs = [], emails, isChecked } = contacts[contactIndex];
@@ -83,7 +83,7 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
                             <div className={`flex-item-fluid w0 ${LabelIDs.length ? 'pr1' : ''}`}>
                                 <span className="bold inbl mw100 ellipsis">{Name}</span>
                             </div>
-                            {hasPaidMail && LabelIDs.length ? (
+                            {user.hasPaidMail && LabelIDs.length ? (
                                 <div>
                                     {LabelIDs.map((labelID) => {
                                         const { Color, Name } = mapContactGroups[labelID];
@@ -157,6 +157,8 @@ const ContactsList = ({ contacts, onCheck, history, contactID, location }) => {
 ContactsList.propTypes = {
     contacts: PropTypes.array,
     onCheck: PropTypes.func,
+    onMerge: PropTypes.func,
+    user: PropTypes.object,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     contactID: PropTypes.string
