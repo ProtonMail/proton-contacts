@@ -53,7 +53,7 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
     const [properties, setProperties] = useState(formatModel(initialProperties));
     const title = contactID ? c('Title').t`Edit contact details` : c('Title').t`Add new contact`;
-    const upgradeModalRef = useRef();
+    const upgradeModalRef = useRef(false);
 
     const hasRequirement = (field) => {
         if (['fn', 'email'].includes(field) || user.hasPaidMail) {

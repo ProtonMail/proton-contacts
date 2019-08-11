@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Input, TextArea, EmailInput, DateInput } from 'react-components';
+import { Input, TextArea, EmailInput, DateInput, TelInput } from 'react-components';
 
 import ContactImageField from './ContactImageField';
 import ContactAdrField from './ContactAdrField';
@@ -14,6 +14,10 @@ const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
 
     if (field === 'email') {
         return <EmailInput value={val} placeholder={labels.email} onChange={handleChange} {...rest} />;
+    }
+
+    if (field === 'tel') {
+        return <TelInput value={val} placeholder={labels.tel} onChange={handleChange} {...rest} />;
     }
 
     if (field === 'adr') {
