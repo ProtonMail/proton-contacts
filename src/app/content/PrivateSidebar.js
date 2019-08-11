@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import ContactModal from '../components/ContactModal';
 
-const PrivateSidebar = ({ contactGroups }) => {
+const PrivateSidebar = ({ user, contactGroups }) => {
     const { createModal } = useModals();
 
     const list = [
@@ -27,18 +27,22 @@ const PrivateSidebar = ({ contactGroups }) => {
             text: c('Link').t`Groups`,
             link: '/contacts/settings'
         }
-    ].concat(
-        contactGroups.map(({ Name: text, Color: color, ID: contactGroupID }) => ({
-            icon: 'contacts-groups',
-            isActive(match, location) {
-                const params = new URLSearchParams(location.search);
-                return params.get('contactGroupID') === contactGroupID;
-            },
-            color,
-            text,
-            link: `/contacts?contactGroupID=${contactGroupID}`
-        }))
-    );
+    ];
+    
+    if (user.hasPaidMail) {
+        list.push(
+            ...(contactGroups.map(({ Name: text, Color: color, ID: contactGroupID }) => ({
+                icon: 'contacts-groups',
+                isActive(match, location) {
+                    const params = new URLSearchParams(location.search);
+                    return params.get('contactGroupID') === contactGroupID;
+                },
+                color,
+                text,
+                link: `/contacts?contactGroupID=${contactGroupID}`
+            })))
+        );
+    }
 
     return (
         <div className="sidebar flex flex-column noprint">
@@ -54,6 +58,7 @@ const PrivateSidebar = ({ contactGroups }) => {
 };
 
 PrivateSidebar.propTypes = {
+    user: PropTypes.object,
     contactGroups: PropTypes.array
 };
 

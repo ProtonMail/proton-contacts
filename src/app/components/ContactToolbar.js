@@ -4,7 +4,7 @@ import { Icon, Checkbox } from 'react-components';
 import { c } from 'ttag';
 import ContactGroupDropdown from './ContactGroupDropdown';
 
-const ContactToolbar = ({ onCheck, onDelete, checked, checkedContacts, contactEmailsMap }) => {
+const ContactToolbar = ({ user, onCheck, onDelete, checked, checkedContacts, contactEmailsMap }) => {
     const handleCheck = ({ target }) => onCheck(target.checked);
 
     const contactEmailsSelected = useMemo(() => {
@@ -24,15 +24,16 @@ const ContactToolbar = ({ onCheck, onDelete, checked, checkedContacts, contactEm
             <button type="button" title={c('Tooltip').t`Delete`} className="pl1 pr1" onClick={onDelete}>
                 <Icon name="delete" className="toolbar-icon" />
             </button>
-            <ContactGroupDropdown disabled={!contactEmailsSelected.length} contactEmails={contactEmailsSelected}>
+            {user.hasPaidMail ? <ContactGroupDropdown disabled={!contactEmailsSelected.length} contactEmails={contactEmailsSelected}>
                 <Icon name="contacts-groups" className="toolbar-icon" />
-            </ContactGroupDropdown>
+            </ContactGroupDropdown> : null}
         </div>
     );
 };
 
 ContactToolbar.propTypes = {
     checked: PropTypes.bool,
+    user: PropTypes.object,
     onCheck: PropTypes.func,
     onDelete: PropTypes.func,
     checkedContacts: PropTypes.object,
