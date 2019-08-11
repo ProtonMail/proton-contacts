@@ -1,7 +1,7 @@
 import React from 'react';
 import { c } from 'ttag';
 import PropTypes from 'prop-types';
-import { SearchInput, MainLogo, Icon, UserDropdown, UpgradeButton, useUser } from 'react-components';
+import { SearchInput, MainLogo, Icon, UserDropdown, SupportDropdown, UpgradeButton, useUser } from 'react-components';
 import { APPS } from 'proton-shared/lib/constants';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
@@ -56,6 +56,9 @@ const PrivateHeader = ({ search, onSearch, location }) => {
                             <UpgradeButton className="topnav-link inline-flex flex-nowrap nodecoration rounded" />
                         </li>
                     ) : null}
+                    <li className="mr1">
+                        <SupportDropdown />
+                    </li>
                     <li className="mlauto mtauto mbauto relative flex-item-noshrink">
                         <UserDropdown />
                     </li>
