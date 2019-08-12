@@ -115,7 +115,10 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
         const { field } = properties.find(({ uid }) => uid === propertyUID) || {};
         const newProperties = properties.map((property) => {
             if (property.uid === propertyUID) {
-                property[key] = value;
+                return {
+                    ...property,
+                    [key]: value
+                };
             }
             return property;
         });
