@@ -21,17 +21,17 @@ const PrivateSidebar = ({ user, contactGroups }) => {
             },
             text: c('Link').t`Contacts`,
             link: '/contacts'
-        },
-        {
+        }
+    ];
+
+    if (user.hasPaidMail) {
+        list.push({
             icon: 'settings-singular',
             text: c('Link').t`Groups`,
             link: '/contacts/settings'
-        }
-    ];
-    
-    if (user.hasPaidMail) {
+        });
         list.push(
-            ...(contactGroups.map(({ Name: text, Color: color, ID: contactGroupID }) => ({
+            ...contactGroups.map(({ Name: text, Color: color, ID: contactGroupID }) => ({
                 icon: 'contacts-groups',
                 isActive(match, location) {
                     const params = new URLSearchParams(location.search);
@@ -40,7 +40,7 @@ const PrivateSidebar = ({ user, contactGroups }) => {
                 color,
                 text,
                 link: `/contacts?contactGroupID=${contactGroupID}`
-            })))
+            }))
         );
     }
 
