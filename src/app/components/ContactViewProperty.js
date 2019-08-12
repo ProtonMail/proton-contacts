@@ -105,11 +105,20 @@ const ContactViewProperty = ({ property, properties, contactID }) => {
         }
     };
 
+    const applyEllipsisClass = () => {
+        switch (field) {
+            case 'note':
+                return null;
+            default:
+                return 'ellipsis';
+        }
+    };
+
     return (
         <Row>
             <ContactLabelProperty field={field} type={type} first={first} />
             <div className="flex flex-nowrap flex-items-center w100">
-                <span className="mr0-5 ellipsis">{getContent()}</span>
+                <span className={'mr0-5 flex-item-fluid ' + applyEllipsisClass()}>{getContent()}</span>
                 <span className="flex-item-noshrink">{getActions()}</span>
             </div>
         </Row>
