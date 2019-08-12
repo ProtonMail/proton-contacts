@@ -92,9 +92,16 @@ const FreeCards = () => {
     );
 };
 
-const ContactPlaceholder = ({ contacts, contactGroupID, user, userKeysList, loadingUserKeys, onUncheck }) => {
+const ContactPlaceholder = ({
+    totalContacts = 0,
+    contacts = [],
+    contactGroupID,
+    user,
+    userKeysList,
+    loadingUserKeys,
+    onUncheck
+}) => {
     const { hasPaidMail } = user;
-    const countContacts = contacts.length;
     const selectedContacts = contacts.filter(({ isChecked }) => isChecked);
     const countSelectedContacts = selectedContacts.length;
     const [contactGroups] = useContactGroups();
@@ -124,9 +131,9 @@ const ContactPlaceholder = ({ contacts, contactGroupID, user, userKeysList, load
                     <h1 className="ellipsis lh-standard">{Name}</h1>
                     <div className="mb1">
                         {c('Info').ngettext(
-                            msgid`You have ${countContacts} contact in your address book`,
-                            `You have ${countContacts} contacts in your address book`,
-                            countContacts
+                            msgid`You have ${totalContacts} contact in your address book`,
+                            `You have ${totalContacts} contacts in your address book`,
+                            totalContacts
                         )}
                     </div>
                     <div className="mb2">
@@ -152,9 +159,9 @@ const ContactPlaceholder = ({ contacts, contactGroupID, user, userKeysList, load
                 <h1>{c('Title').t`Contacts`}</h1>
                 <div className="mb2">
                     {c('Info').ngettext(
-                        msgid`You have ${countContacts} contact in your address book`,
-                        `You have ${countContacts} contacts in your address book`,
-                        countContacts
+                        msgid`You have ${totalContacts} contact in your address book`,
+                        `You have ${totalContacts} contacts in your address book`,
+                        totalContacts
                     )}
                 </div>
             </div>
@@ -164,16 +171,13 @@ const ContactPlaceholder = ({ contacts, contactGroupID, user, userKeysList, load
 };
 
 ContactPlaceholder.propTypes = {
-    contacts: PropTypes.array.isRequired,
+    totalContacts: PropTypes.number,
+    contacts: PropTypes.array,
     contactGroupID: PropTypes.string,
     user: PropTypes.object.isRequired,
     userKeysList: PropTypes.array,
     loadingUserKeys: PropTypes.bool,
     onUncheck: PropTypes.func
-};
-
-ContactPlaceholder.defaultProps = {
-    contacts: []
 };
 
 export default ContactPlaceholder;

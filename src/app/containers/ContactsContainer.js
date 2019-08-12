@@ -210,6 +210,7 @@ const ContactsContainer = ({ location, history }) => {
                                                         loadingUserKeys={loadingUserKeys}
                                                         contactGroupID={contactGroupID}
                                                         contacts={formattedContacts}
+                                                        totalContacts={contacts.length}
                                                         onUncheck={handleUncheckAll}
                                                     />
                                                 ) : (
@@ -236,6 +237,7 @@ const ContactsContainer = ({ location, history }) => {
                                                     userKeysList={userKeysList}
                                                     loadingUserKeys={loadingUserKeys}
                                                     contactGroupID={contactGroupID}
+                                                    totalContacts={contacts.length}
                                                     contacts={formattedContacts}
                                                     onUncheck={handleUncheckAll}
                                                 />
