@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { useContactGroups } from 'react-components';
+import { useModals, useContactGroups, IllustrationPlaceholder } from 'react-components';
 import { withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
 import List from 'react-virtualized/dist/commonjs/List';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 
@@ -12,18 +13,40 @@ import { extractMergeable } from '../helpers/merge';
 import ItemCheckbox from './ItemCheckbox';
 import ContactGroupIcon from './ContactGroupIcon';
 import MergeRow from './MergeRow';
+import ImportModal from './import/ImportModal';
+import ContactModal from './ContactModal';
+import noContactsImg from 'design-system/assets/img/shared/empty-address-book.svg';
+import noResultsImg from 'design-system/assets/img/shared/no-results-found.svg';
 
-const ContactsList = ({ contacts, onCheck, onMerge, user, history, contactID, location }) => {
+const ContactsList = ({
+    emptyAddressBook,
+    contacts,
+    onCheck,
+    onMerge,
+    onClear,
+    user,
+    history,
+    contactID,
+    location
+}) => {
     const mergeableContacts = useMemo(() => extractMergeable(contacts), [contacts]);
     const canMerge = mergeableContacts.length > 0;
     const listRef = useRef(null);
     const containerRef = useRef(null);
     const [lastChecked, setLastChecked] = useState(); // Store ID of the last contact ID checked
+    const { createModal } = useModals();
     const [contactGroups] = useContactGroups();
     const mapContactGroups = contactGroups.reduce((acc, contactGroup) => {
         acc[contactGroup.ID] = contactGroup;
         return acc;
     }, Object.create(null));
+
+    const handleImport = () => {
+        createModal(<ImportModal />);
+    };
+    const handleAddContact = () => {
+        createModal(<ContactModal />);
+    };
 
     const handleCheck = (event) => {
         const { target } = event;
@@ -127,10 +150,49 @@ const ContactsList = ({ contacts, onCheck, onMerge, user, history, contactID, lo
         };
     }, []);
 
-    if (!contacts.length) {
+    if (emptyAddressBook) {
+        const addContact = (
+            <button key="add" type="button" className="color-pm-blue underline ml0-5 mr0-5" onClick={handleAddContact}>
+                {c('Action').t`Add a contact`}
+            </button>
+        );
+        const upgrade = (
+            <Link key="upgrade" className="color-pm-blue underline ml0-5 mr0-5" to="/settings/subscription">
+                {c('Action').t`Upgrade`}
+            </Link>
+        );
+        const importContact = (
+            <button key="import" type="button" className="color-pm-blue underline ml0-5 mr0-5" onClick={handleImport}>
+                {c('Action').t`Import contact`}
+            </button>
+        );
+        const message = user.hasPaidMail
+            ? c('Actions message').jt`You can either ${addContact} or ${importContact} from a file`
+            : c('Actions message').jt`You can ${addContact} or ${upgrade} to import contacts from a file`;
+
         return (
-            <div className="items-column-list p1 aligncenter">
-                {c('Info').t`You have 0 contacts in your address book`}
+            <div className="p2 aligncenter w50">
+                <IllustrationPlaceholder title={c('Info message').t`Your address book is empty`} url={noContactsImg}>
+                    <div className="flex flex-items-center">{message}</div>
+                </IllustrationPlaceholder>
+            </div>
+        );
+    }
+
+    if (!contacts.length) {
+        const clearSearch = (
+            <button key="add" type="button" className="color-pm-blue underline ml0-5 mr0-5" onClick={onClear}>
+                {c('Action').t`Clear it`}
+            </button>
+        );
+
+        return (
+            <div className="p2 aligncenter w50">
+                <IllustrationPlaceholder title={c('Info message').t`No results found`} url={noResultsImg}>
+                    <div className="flex flex-items-center">
+                        {c('Actions message').jt`You can either update your query search or ${clearSearch}`}
+                    </div>
+                </IllustrationPlaceholder>
             </div>
         );
     }
@@ -155,9 +217,11 @@ const ContactsList = ({ contacts, onCheck, onMerge, user, history, contactID, lo
 };
 
 ContactsList.propTypes = {
+    emptyAddressBook: PropTypes.bool,
     contacts: PropTypes.array,
     onCheck: PropTypes.func,
     onMerge: PropTypes.func,
+    onClear: PropTypes.func,
     user: PropTypes.object,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,

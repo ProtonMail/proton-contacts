@@ -160,6 +160,8 @@ const ContactsContainer = ({ location, history }) => {
         setCheckAll(checked && contactIDs.length === contacts.length);
     };
 
+    const handleClearSearch = () => updateSearch('');
+
     const handleCheckAll = (checked = false) => handleCheck(contacts.map(({ ID }) => ID), checked);
     const handleUncheckAll = () => handleCheckAll(false);
 
@@ -192,11 +194,13 @@ const ContactsContainer = ({ location, history }) => {
                                         return (
                                             <>
                                                 <ContactsList
+                                                    emptyAddressBook={!contacts.length}
                                                     contactID={contactID}
                                                     contacts={formattedContacts}
                                                     user={user}
                                                     onCheck={handleCheck}
                                                     onMerge={handleMerge}
+                                                    onClear={handleClearSearch}
                                                 />
                                                 {hasChecked ? (
                                                     <ContactPlaceholder
@@ -219,10 +223,12 @@ const ContactsContainer = ({ location, history }) => {
                                         return (
                                             <>
                                                 <ContactsList
+                                                    emptyAddressBook={!contacts.length}
                                                     contacts={formattedContacts}
                                                     user={user}
                                                     onCheck={handleCheck}
                                                     onMerge={handleMerge}
+                                                    onClear={handleClearSearch}
                                                 />
                                                 <ContactPlaceholder
                                                     user={user}
