@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Row, Group, ButtonGroup, Copy, useModals, useUser, useContactEmails } from 'react-components';
+import { Row, Group, ButtonGroup, Copy, useModals, useUser, useContactEmails, classnames } from 'react-components';
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { c } from 'ttag';
 
@@ -105,20 +105,13 @@ const ContactViewProperty = ({ property, properties, contactID }) => {
         }
     };
 
-    const applyEllipsisClass = () => {
-        switch (field) {
-            case 'note':
-                return null;
-            default:
-                return 'ellipsis';
-        }
-    };
-
     return (
         <Row>
             <ContactLabelProperty field={field} type={type} first={first} />
             <div className="flex flex-nowrap flex-items-center w100">
-                <span className={'mr0-5 flex-item-fluid ' + applyEllipsisClass()}>{getContent()}</span>
+                <span className={classnames(['mr0-5 flex-item-fluid', !['note'].includes(field) && 'ellipsis'])}>
+                    {getContent()}
+                </span>
                 <span className="flex-item-noshrink">{getActions()}</span>
             </div>
         </Row>
