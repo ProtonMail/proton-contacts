@@ -8,6 +8,8 @@ import List from 'react-virtualized/dist/commonjs/List';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 
 import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
+import noContactsImg from 'design-system/assets/img/shared/empty-address-book.svg';
+import noResultsImg from 'design-system/assets/img/shared/no-results-found.svg';
 import { extractMergeable } from '../helpers/merge';
 
 import ItemCheckbox from './ItemCheckbox';
@@ -15,8 +17,6 @@ import ContactGroupIcon from './ContactGroupIcon';
 import MergeRow from './MergeRow';
 import ImportModal from './import/ImportModal';
 import ContactModal from './ContactModal';
-import noContactsImg from 'design-system/assets/img/shared/empty-address-book.svg';
-import noResultsImg from 'design-system/assets/img/shared/no-results-found.svg';
 
 const ContactsList = ({
     emptyAddressBook,
