@@ -196,6 +196,7 @@ const ContactsContainer = ({ location, history }) => {
                                                 <ContactsList
                                                     emptyAddressBook={!contacts.length}
                                                     contactID={contactID}
+                                                    totalContacts={contacts.length}
                                                     contacts={formattedContacts}
                                                     user={user}
                                                     onCheck={handleCheck}
@@ -223,7 +224,7 @@ const ContactsContainer = ({ location, history }) => {
                                         return (
                                             <>
                                                 <ContactsList
-                                                    emptyAddressBook={!contacts.length}
+                                                    totalContacts={contacts.length}
                                                     contacts={formattedContacts}
                                                     user={user}
                                                     onCheck={handleCheck}

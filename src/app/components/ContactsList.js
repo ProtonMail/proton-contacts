@@ -18,17 +18,7 @@ import MergeRow from './MergeRow';
 import ImportModal from './import/ImportModal';
 import ContactModal from './ContactModal';
 
-const ContactsList = ({
-    emptyAddressBook,
-    contacts,
-    onCheck,
-    onMerge,
-    onClear,
-    user,
-    history,
-    contactID,
-    location
-}) => {
+const ContactsList = ({ totalContacts, contacts, onCheck, onMerge, onClear, user, history, contactID, location }) => {
     const mergeableContacts = useMemo(() => extractMergeable(contacts), [contacts]);
     const canMerge = mergeableContacts.length > 0;
     const listRef = useRef(null);
@@ -150,7 +140,7 @@ const ContactsList = ({
         };
     }, []);
 
-    if (emptyAddressBook) {
+    if (!totalContacts) {
         const addContact = (
             <button key="add" type="button" className="color-pm-blue underline ml0-5 mr0-5" onClick={handleAddContact}>
                 {c('Action').t`Add a contact`}
@@ -217,7 +207,7 @@ const ContactsList = ({
 };
 
 ContactsList.propTypes = {
-    emptyAddressBook: PropTypes.bool,
+    totalContacts: PropTypes.number,
     contacts: PropTypes.array,
     onCheck: PropTypes.func,
     onMerge: PropTypes.func,
