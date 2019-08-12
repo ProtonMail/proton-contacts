@@ -10,28 +10,27 @@ import { getAllFieldLabels } from '../helpers/fields';
 const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
     const handleChange = ({ target }) => onChange({ value: target.value, uid });
     const labels = getAllFieldLabels();
-    const val = Array.isArray(value) ? value[0] : value;
 
     if (field === 'email') {
-        return <EmailInput value={val} placeholder={labels.email} onChange={handleChange} {...rest} />;
+        return <EmailInput value={value} placeholder={labels.email} onChange={handleChange} {...rest} />;
     }
 
     if (field === 'tel') {
-        return <TelInput value={val} placeholder={labels.tel} onChange={handleChange} {...rest} />;
+        return <TelInput value={value} placeholder={labels.tel} onChange={handleChange} {...rest} />;
     }
 
     if (field === 'adr') {
         const handleChangeAdr = (adr) => onChange({ value: adr, uid });
-        return <ContactAdrField value={val} onChange={handleChangeAdr} />;
+        return <ContactAdrField value={value} onChange={handleChangeAdr} />;
     }
 
     if (field === 'note') {
-        return <TextArea value={val} placeholder={labels.note} onChange={handleChange} {...rest} />;
+        return <TextArea value={value} placeholder={labels.note} onChange={handleChange} {...rest} />;
     }
 
     if (field === 'bday' || field === 'anniversary') {
-        const m = moment(val);
-        if (val === '' || m.isValid()) {
+        const m = moment(value);
+        if (value === '' || m.isValid()) {
             const handleSelectDate = (date) => onChange({ value: date, uid });
             return (
                 <DateInput
@@ -48,9 +47,9 @@ const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
 
     if (field === 'photo' || field === 'logo') {
         const handleChangeImage = (url) => onChange({ value: url, uid });
-        return <ContactImageField value={val} onChange={handleChangeImage} {...rest} />;
+        return <ContactImageField value={value} onChange={handleChangeImage} {...rest} />;
     }
-    return <Input value={val} placeholder={labels[field]} onChange={handleChange} {...rest} />;
+    return <Input value={value} placeholder={labels[field]} onChange={handleChange} {...rest} />;
 };
 
 ContactFieldProperty.propTypes = {
