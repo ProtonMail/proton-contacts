@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-    DropdownButton,
     Dropdown,
     SmallButton,
     Icon,
@@ -24,6 +23,7 @@ import { labelContactEmails, unLabelContactEmails } from 'proton-shared/lib/api/
 
 import ContactGroupModal from './ContactGroupModal';
 import SelectEmailsModal from './SelectEmailsModal';
+import ContactGroupDropdownButton from './ContactGroupDropdownButton';
 
 const UNCHECKED = 0;
 const CHECKED = 1;
@@ -144,17 +144,16 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
 
     return (
         <>
-            <DropdownButton
+            <ContactGroupDropdownButton
                 className={className}
                 disabled={disabled}
-                aria-describedby="contact-group-dropdown"
                 buttonRef={anchorRef}
                 isOpen={isOpen}
                 onClick={toggle}
                 hasCaret
             >
                 {children}
-            </DropdownButton>
+            </ContactGroupDropdownButton>
             <Dropdown
                 id="contact-group-dropdown"
                 isOpen={isOpen}

@@ -24,9 +24,15 @@ const ContactToolbar = ({ user, onCheck, onDelete, checked, checkedContacts, con
             <button type="button" title={c('Tooltip').t`Delete`} className="pl1 pr1" onClick={onDelete}>
                 <Icon name="delete" className="toolbar-icon" />
             </button>
-            {user.hasPaidMail ? <ContactGroupDropdown disabled={!contactEmailsSelected.length} contactEmails={contactEmailsSelected}>
-                <Icon name="contacts-groups" className="toolbar-icon" />
-            </ContactGroupDropdown> : null}
+            {user.hasPaidMail ? (
+                <ContactGroupDropdown
+                    className="pl1 pr1 color-white"
+                    disabled={!contactEmailsSelected.length}
+                    contactEmails={contactEmailsSelected}
+                >
+                    <Icon name="contacts-groups" className="toolbar-icon" />
+                </ContactGroupDropdown>
+            ) : null}
         </div>
     );
 };

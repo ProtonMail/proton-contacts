@@ -85,7 +85,7 @@ const ContactViewProperty = ({ property, properties, contactID }) => {
                         {hasPaidMail ? (
                             <>
                                 <ContactGroupDropdown
-                                    className="pm-button--small pm-group-button"
+                                    className="pm-button pm-button--small pm-group-button"
                                     contactEmails={[contactEmail]}
                                 >{c('Contact group dropdown').t`Group`}</ContactGroupDropdown>
                                 <ButtonGroup onClick={handleSettings} className="pm-button--small">{c('Action')
