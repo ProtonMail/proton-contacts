@@ -126,7 +126,7 @@ const ContactPlaceholder = ({
         const { Name } = contactGroups.find(({ ID }) => ID === contactGroupID);
         const handleClick = () => createModal(<ContactGroupModal contactGroupID={contactGroupID} />);
         return (
-            <div className="p2 view-column-detail flex-item-fluid">
+            <div className="p2 view-column-detail flex-item-fluid scroll-if-needed">
                 <div className="aligncenter">
                     <h1 className="ellipsis lh-standard">{Name}</h1>
                     <div className="mb1">
@@ -154,7 +154,7 @@ const ContactPlaceholder = ({
     }
 
     return (
-        <div className="p2 view-column-detail flex-item-fluid">
+        <div className="p2 view-column-detail flex-item-fluid scroll-if-needed">
             <div className="aligncenter">
                 <h1>{c('Title').t`Contacts`}</h1>
                 <div className="mb2">

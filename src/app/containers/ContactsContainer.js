@@ -185,7 +185,7 @@ const ContactsContainer = ({ location, history }) => {
                             onCheck={handleCheckAll}
                             onDelete={handleDelete}
                         />
-                        <div className="flex flex-nowrap">
+                        <div className="main-area--withToolbar no-scroll flex flex-nowrap">
                             <Switch>
                                 <Route
                                     path="/contacts/:contactID"
