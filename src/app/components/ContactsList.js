@@ -192,7 +192,7 @@ const ContactsList = ({ totalContacts, contacts, onCheck, onMerge, onClear, user
             <AutoSizer>
                 {({ height, width }) => (
                     <List
-                        className="contacts-list"
+                        className="contacts-list no-outline"
                         ref={listRef}
                         rowRenderer={Row}
                         rowCount={contacts.length + canMerge}
