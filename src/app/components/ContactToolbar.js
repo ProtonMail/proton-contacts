@@ -18,16 +18,24 @@ const ContactToolbar = ({ user, onCheck, onDelete, checked, checkedContacts, con
             }, []);
     }, [checkedContacts, contactEmailsMap]);
 
+    const disabled = !contactEmailsSelected.length && !location.pathname.split('/contacts/')[1];
+
     return (
         <div className="toolbar flex noprint">
             <Checkbox className="flex pl1 pr1" checked={checked} onChange={handleCheck} />
-            <button type="button" title={c('Tooltip').t`Delete`} className="pl1 pr1" onClick={onDelete}>
+            <button
+                type="button"
+                title={c('Tooltip').t`Delete`}
+                className="pl1 pr1"
+                onClick={onDelete}
+                disabled={disabled}
+            >
                 <Icon name="delete" className="toolbar-icon" />
             </button>
             {user.hasPaidMail ? (
                 <ContactGroupDropdown
                     className="pl1 pr1 color-white"
-                    disabled={!contactEmailsSelected.length}
+                    disabled={disabled}
                     contactEmails={contactEmailsSelected}
                 >
                     <Icon name="contacts-groups" className="toolbar-icon" />
