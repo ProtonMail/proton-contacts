@@ -15,7 +15,9 @@ import {
     useEventManager,
     useContactGroups,
     useModals,
-    ConfirmModal
+    ConfirmModal,
+    StorageSpaceStatus,
+    Href
 } from 'react-components';
 import { clearContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 import { normalize } from 'proton-shared/lib/helpers/string';
@@ -171,7 +173,16 @@ const ContactsContainer = ({ location, history }) => {
 
     return (
         <div className="flex flex-nowrap no-scroll">
-            <AppsSidebar currentApp={APPS.PROTONCONTACTS} />
+            <AppsSidebar
+                currentApp={APPS.PROTONCONTACTS}
+                items={[
+                    <StorageSpaceStatus key="storage">
+                        <Href url="/settings/subscription" className="pm-button pm-button--primary">
+                            {c('Action').t`Upgrade`}
+                        </Href>
+                    </StorageSpaceStatus>
+                ]}
+            />
             <div className="content flex-item-fluid reset4print">
                 <PrivateHeader search={search} onSearch={updateSearch} />
                 <div className="flex flex-nowrap">
