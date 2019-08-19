@@ -112,7 +112,7 @@ const ContactsContainer = ({ location, history }) => {
         return contactID;
     };
 
-    const getContactIDsToDelete = () => {
+    const getActiveIDs = () => {
         const checkedContactIDs = getCheckedContactIDs();
         if (checkedContactIDs.length) {
             return checkedContactIDs;
@@ -121,10 +121,11 @@ const ContactsContainer = ({ location, history }) => {
         if (currentContactID) {
             return [currentContactID];
         }
+        return [];
     };
 
     const handleDelete = async () => {
-        const contactIDs = getContactIDsToDelete();
+        const contactIDs = getActiveIDs();
 
         if (!Array.isArray(contactIDs) && !contactIDs.length) {
             return;
@@ -180,8 +181,7 @@ const ContactsContainer = ({ location, history }) => {
                         <ContactToolbar
                             user={user}
                             contactEmailsMap={contactEmailsMap}
-                            contactID={getCurrentContactID()}
-                            checkedContacts={checkedContacts}
+                            activeIDs={getActiveIDs()}
                             checked={checkAll}
                             onCheck={handleCheckAll}
                             onDelete={handleDelete}
