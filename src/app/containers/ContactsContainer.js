@@ -93,11 +93,7 @@ const ContactsContainer = ({ location, history }) => {
         });
     }, [filteredContacts, checkedContacts, contactEmailsMap]);
 
-    if (loadingContactEmails || loadingContacts || loadingUserKeys || loadingContactGroups) {
-        return <Loader />;
-    }
-
-    const getCheckedContactIDs = () => {
+    const checkedContactIDs = useMemo(() => {
         return Object.entries(checkedContacts).reduce((acc, [contactID, isChecked]) => {
             if (!isChecked) {
                 return acc;
@@ -105,16 +101,15 @@ const ContactsContainer = ({ location, history }) => {
             acc.push(contactID);
             return acc;
         }, []);
-    };
+    }, [checkedContacts]);
 
     const getCurrentContactID = () => {
         const [, contactID] = location.pathname.split('/contacts/');
         return contactID;
     };
 
-    const getActiveIDs = () => {
-        const checkedContactIDs = getCheckedContactIDs();
-        if (checkedContactIDs.length) {
+    const activeIDs = useMemo(() => {
+        if (checkedContactIDs && checkedContactIDs.length) {
             return checkedContactIDs;
         }
         const currentContactID = getCurrentContactID();
@@ -122,10 +117,14 @@ const ContactsContainer = ({ location, history }) => {
             return [currentContactID];
         }
         return [];
-    };
+    }, [checkedContactIDs, location.pathname]);
+
+    if (loadingContactEmails || loadingContacts || loadingUserKeys || loadingContactGroups) {
+        return <Loader />;
+    }
 
     const handleDelete = async () => {
-        const contactIDs = getActiveIDs();
+        const contactIDs = activeIDs();
 
         if (!Array.isArray(contactIDs) && !contactIDs.length) {
             return;
@@ -181,7 +180,7 @@ const ContactsContainer = ({ location, history }) => {
                         <ContactToolbar
                             user={user}
                             contactEmailsMap={contactEmailsMap}
-                            activeIDs={getActiveIDs()}
+                            activeIDs={activeIDs}
                             checked={checkAll}
                             onCheck={handleCheckAll}
                             onDelete={handleDelete}
