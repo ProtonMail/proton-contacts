@@ -180,6 +180,7 @@ const ContactsContainer = ({ location, history }) => {
                         <ContactToolbar
                             user={user}
                             contactEmailsMap={contactEmailsMap}
+                            contactID={getCurrentContactID()}
                             checkedContacts={checkedContacts}
                             checked={checkAll}
                             onCheck={handleCheckAll}

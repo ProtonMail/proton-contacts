@@ -4,21 +4,23 @@ import { Icon, Checkbox } from 'react-components';
 import { c } from 'ttag';
 import ContactGroupDropdown from './ContactGroupDropdown';
 
-const ContactToolbar = ({ user, onCheck, onDelete, checked, checkedContacts, contactEmailsMap }) => {
+const ContactToolbar = ({ user, onCheck, onDelete, checked = false, contactID, checkedContacts, contactEmailsMap }) => {
+    // Include current contact as selected if none is checked
+    const activeContacts =
+        !!Object.values(checkedContacts).filter(Boolean).length || !contactID ? checkedContacts : { [contactID]: true };
+
     const handleCheck = ({ target }) => onCheck(target.checked);
 
     const contactEmailsSelected = useMemo(() => {
-        return Object.entries(checkedContacts)
+        return Object.entries(activeContacts)
             .filter(([, isChecked]) => isChecked)
-            .reduce((acc, [contactID]) => {
-                if (!contactEmailsMap[contactID]) {
+            .reduce((acc, [ID]) => {
+                if (!contactEmailsMap[ID]) {
                     return acc;
                 }
-                return acc.concat(contactEmailsMap[contactID]);
+                return acc.concat(contactEmailsMap[ID]);
             }, []);
-    }, [checkedContacts, contactEmailsMap]);
-
-    const disabled = !contactEmailsSelected.length && !location.pathname.split('/contacts/')[1];
+    }, [checkedContacts, contactEmailsMap, contactID]);
 
     return (
         <div className="toolbar flex noprint">
@@ -28,14 +30,14 @@ const ContactToolbar = ({ user, onCheck, onDelete, checked, checkedContacts, con
                 title={c('Tooltip').t`Delete`}
                 className="pl1 pr1"
                 onClick={onDelete}
-                disabled={disabled}
+                disabled={!contactEmailsSelected.length}
             >
                 <Icon name="delete" className="toolbar-icon" />
             </button>
             {user.hasPaidMail ? (
                 <ContactGroupDropdown
                     className="pl1 pr1 color-white"
-                    disabled={disabled}
+                    disabled={!contactEmailsSelected.length}
                     contactEmails={contactEmailsSelected}
                 >
                     <Icon name="contacts-groups" className="toolbar-icon" />
@@ -50,12 +52,9 @@ ContactToolbar.propTypes = {
     user: PropTypes.object,
     onCheck: PropTypes.func,
     onDelete: PropTypes.func,
+    contactID: PropTypes.string,
     checkedContacts: PropTypes.object,
     contactEmailsMap: PropTypes.object
-};
-
-ContactToolbar.defaultProps = {
-    checked: false
 };
 
 export default ContactToolbar;
