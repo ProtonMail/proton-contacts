@@ -124,12 +124,6 @@ const ContactsContainer = ({ location, history }) => {
     }
 
     const handleDelete = async () => {
-        const contactIDs = activeIDs();
-
-        if (!Array.isArray(contactIDs) && !contactIDs.length) {
-            return;
-        }
-
         await new Promise((resolve, reject) => {
             createModal(
                 <ConfirmModal title={c('Title').t`Delete`} onConfirm={resolve} onClose={reject}>
