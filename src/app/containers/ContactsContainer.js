@@ -93,11 +93,7 @@ const ContactsContainer = ({ location, history }) => {
         });
     }, [filteredContacts, checkedContacts, contactEmailsMap]);
 
-    if (loadingContactEmails || loadingContacts || loadingUserKeys || loadingContactGroups) {
-        return <Loader />;
-    }
-
-    const getCheckedContactIDs = () => {
+    const checkedContactIDs = useMemo(() => {
         return Object.entries(checkedContacts).reduce((acc, [contactID, isChecked]) => {
             if (!isChecked) {
                 return acc;
@@ -105,31 +101,29 @@ const ContactsContainer = ({ location, history }) => {
             acc.push(contactID);
             return acc;
         }, []);
-    };
+    }, [checkedContacts]);
 
     const getCurrentContactID = () => {
         const [, contactID] = location.pathname.split('/contacts/');
         return contactID;
     };
 
-    const getContactIDsToDelete = () => {
-        const checkedContactIDs = getCheckedContactIDs();
-        if (checkedContactIDs.length) {
+    const activeIDs = useMemo(() => {
+        if (checkedContactIDs && checkedContactIDs.length) {
             return checkedContactIDs;
         }
         const currentContactID = getCurrentContactID();
         if (currentContactID) {
             return [currentContactID];
         }
-    };
+        return [];
+    }, [checkedContactIDs, location.pathname]);
+
+    if (loadingContactEmails || loadingContacts || loadingUserKeys || loadingContactGroups) {
+        return <Loader />;
+    }
 
     const handleDelete = async () => {
-        const contactIDs = getContactIDsToDelete();
-
-        if (!Array.isArray(contactIDs) && !contactIDs.length) {
-            return;
-        }
-
         await new Promise((resolve, reject) => {
             createModal(
                 <ConfirmModal title={c('Title').t`Delete`} onConfirm={resolve} onClose={reject}>
@@ -180,7 +174,7 @@ const ContactsContainer = ({ location, history }) => {
                         <ContactToolbar
                             user={user}
                             contactEmailsMap={contactEmailsMap}
-                            checkedContacts={checkedContacts}
+                            activeIDs={activeIDs}
                             checked={checkAll}
                             onCheck={handleCheckAll}
                             onDelete={handleDelete}
