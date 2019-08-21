@@ -133,13 +133,13 @@ const ContactsContainer = ({ location, history }) => {
                         {c('Warning').ngettext(
                             msgid`Are you sure you want to delete the selected contact?`,
                             `Are you sure you want to delete the selected contacts?`,
-                            contactIDs.length
+                            activeIDs.length
                         )}
                     </Alert>
                 </ConfirmModal>
             );
         });
-        await api(checkAll && !contactGroupID ? clearContacts() : deleteContacts(contactIDs));
+        await api(checkAll && !contactGroupID ? clearContacts() : deleteContacts(activeIDs));
         history.replace('/contacts');
         await call();
         setCheckedContacts(Object.create(null));
