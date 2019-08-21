@@ -21,7 +21,6 @@ import {
 } from 'react-components';
 import { clearContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 import { normalize } from 'proton-shared/lib/helpers/string';
-import { APPS } from 'proton-shared/lib/constants';
 
 import ContactsList from '../components/ContactsList';
 import Contact from '../components/Contact';
@@ -168,7 +167,6 @@ const ContactsContainer = ({ location, history }) => {
     return (
         <div className="flex flex-nowrap no-scroll">
             <AppsSidebar
-                currentApp={APPS.PROTONCONTACTS}
                 items={[
                     <StorageSpaceStatus key="storage">
                         <Href url="/settings/subscription" className="pm-button pm-button--primary">

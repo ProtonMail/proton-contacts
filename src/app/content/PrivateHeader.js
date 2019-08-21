@@ -2,7 +2,6 @@ import React from 'react';
 import { c } from 'ttag';
 import PropTypes from 'prop-types';
 import { SearchInput, MainLogo, Icon, UserDropdown, SupportDropdown, UpgradeButton, useUser } from 'react-components';
-import { APPS } from 'proton-shared/lib/constants';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 
@@ -11,7 +10,7 @@ const PrivateHeader = ({ search, onSearch, location }) => {
     const inSettings = location.pathname.startsWith('/contacts/settings');
     return (
         <header className="header flex flex-nowrap reset4print">
-            <MainLogo currentApp={APPS.PROTONCONTACTS} url="/contacts" />
+            <MainLogo url="/contacts" />
             <div className="searchbox-container relative flex-item-centered-vert">
                 {inSettings ? null : (
                     <label htmlFor="global_search">
