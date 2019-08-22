@@ -139,7 +139,7 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
     };
 
     useEffect(() => {
-        setModel(getModel(contactGroups, contactEmails));
+        isOpen && setModel(getModel(contactGroups, contactEmails));
     }, [contactGroups, contactEmails, isOpen]);
 
     return (
