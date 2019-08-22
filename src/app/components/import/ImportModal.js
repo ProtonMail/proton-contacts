@@ -56,7 +56,7 @@ const ImportModal = ({ onClose, ...rest }) => {
     };
 
     const handleAttach = ({ target }) => {
-        const [, extension] = splitExtension(target.files[0].name)[1];
+        const [, extension] = splitExtension(target.files[0].name);
         const attachedFile = ['csv', 'vcf'].includes(extension) ? target.files[0] : null;
 
         if (target.files.length && !attachedFile) {
