@@ -58,7 +58,6 @@ ContactGroupTable.propTypes = {
 const mapIDs = (contactEmails) => contactEmails.map(({ ID }) => ID);
 
 const ContactGroupModal = ({ contactGroupID, ...rest }) => {
-    const inputNameRef = useRef();
     const [loading, setLoading] = useState(false);
     const { call } = useEventManager();
     const api = useApi();
@@ -146,19 +145,12 @@ const ContactGroupModal = ({ contactGroupID, ...rest }) => {
         }
     }, [model.contactEmails.length]);
 
-    useEffect(() => {
-        if (!contactGroupID) {
-            inputNameRef.current.focus();
-        }
-    }, []);
-
     return (
         <FormModal onSubmit={handleSubmit} loading={loading} submit={c('Action').t`Save`} title={title} {...rest}>
             <Row>
                 <Label htmlFor="contactGroupName">{c('Label for contact group name').t`Name`}</Label>
                 <Field>
                     <Input
-                        ref={inputNameRef}
                         id="contactGroupName"
                         placeholder={c('Placeholder for contact group name').t`Name`}
                         value={model.name}
