@@ -4,12 +4,15 @@ import { ProtonApp, Loader, useAuthentication, useInstance } from 'react-compone
 import createSecureSessionStorage from 'proton-shared/lib/createSecureSessionStorage';
 import { MAILBOX_PASSWORD_KEY, UID_KEY } from 'proton-shared/lib/constants';
 import { redirectTo } from 'proton-shared/lib/helpers/browser';
+import sentry from 'proton-shared/lib/helpers/sentry';
 
 import * as config from './config';
 import PrivateApp from './content/PrivateApp';
 import PublicApp from './content/PublicApp';
 
 import './app.scss';
+
+sentry(config);
 
 const Redirect = () => {
     redirectTo();
