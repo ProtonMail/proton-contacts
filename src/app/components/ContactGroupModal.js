@@ -147,10 +147,10 @@ const ContactGroupModal = ({ contactGroupID, ...rest }) => {
     }, [model.contactEmails.length]);
 
     useEffect(() => {
-        if (!contactGroupID) {
+        if (!contactGroupID && !!inputNameRef.current) {
             inputNameRef.current.focus();
         }
-    }, []);
+    }, [inputNameRef]);
 
     return (
         <FormModal onSubmit={handleSubmit} loading={loading} submit={c('Action').t`Save`} title={title} {...rest}>
