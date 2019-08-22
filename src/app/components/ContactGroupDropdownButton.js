@@ -12,7 +12,7 @@ const ContactGroupDropdownButton = ({ buttonRef, children, isOpen, ...rest }) =>
 };
 
 ContactGroupDropdownButton.propTypes = {
-    buttonRef: PropTypes.node,
+    buttonRef: PropTypes.object,
     children: PropTypes.node,
     isOpen: PropTypes.bool
 };

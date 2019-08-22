@@ -150,7 +150,6 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
                 buttonRef={anchorRef}
                 isOpen={isOpen}
                 onClick={toggle}
-                hasCaret
             >
                 {children}
             </ContactGroupDropdownButton>
