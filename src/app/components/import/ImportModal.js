@@ -19,7 +19,8 @@ import ImportCsvModalContent from './ImportCsvModalContent';
 import ImportingModalContent from './ImportingModalContent';
 import ImportGroupsModalContent from './ImportGroupsModalContent';
 
-import { hasCategories } from '../../helpers/import';
+// temporarily disabled
+// import { hasCategories } from '../../helpers/import';
 import { readCsv } from '../../helpers/csv';
 import { readVcf } from '../../helpers/vcard';
 import { BASE_SIZE } from 'proton-shared/lib/constants';
@@ -157,15 +158,16 @@ const ImportModal = ({ onClose, ...rest }) => {
 
         if (step === IMPORTING) {
             const handleSubmit = () => {
-                if (hasCategories(vcardContacts)) {
-                    return setStep(IMPORT_GROUPS);
-                }
+                // temporarily disabled
+                // if (hasCategories(vcardContacts)) {
+                //     return setStep(IMPORT_GROUPS);
+                // }
                 onClose();
                 call();
             };
             const footer = (
                 <PrimaryButton loading={!encryptingDone} type="submit">
-                    {c('Action').t`Next`}
+                    {c('Action').t`Close`}
                 </PrimaryButton>
             );
 
