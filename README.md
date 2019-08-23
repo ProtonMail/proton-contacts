@@ -32,6 +32,13 @@ Currently available in the `deploy-contacts` branch.
 
 2. Deploy via npm `npm run deploy`.
 
+### Deploy to prod
+
+`$ npm run deploy:prod` 
+
+> Build from master post git clone into /tmp. `--no-remote` build from local.
+
+
 ### CLI Flags
 
 - `--branch` : Deploy branch dest

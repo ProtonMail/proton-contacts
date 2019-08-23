@@ -17,7 +17,8 @@
         "i18n:validate": "proton-i18n validate lint-functions",
         "i18n:validate:context": "proton-i18n extract && proton-i18n validate",
         "i18n:getlatest": "proton-i18n upgrade",
-        "deploy": "proton-bundler"
+        "deploy": "proton-bundler",
+        "deploy:prod": "proton-bundler --remote --branch=deploy-prod"
     },
     "repository": {
         "type": "git",
@@ -43,15 +44,15 @@
     },
     "dependencies": {
         "abortcontroller-polyfill": "^1.2.1",
-        "design-system": "github:ProtonMail/design-system.git#master",
+        "design-system": "github:ProtonMail/design-system#master",
         "ical.js": "^1.3.0",
         "jest": "^24.8.0",
         "papaparse": "^5.0.0",
-        "pmcrypto": "github:ProtonMail/pmcrypto.git#semver:^6.0.0",
-        "proton-pack": "github:ProtonMail/proton-pack.git#semver:^1.3.0",
-        "proton-shared": "github:ProtonMail/proton-shared.git#master",
+        "pmcrypto": "github:ProtonMail/pmcrypto#semver:^6.0.0",
+        "proton-pack": "github:ProtonMail/proton-pack#semver:^1.3.0",
+        "proton-shared": "github:ProtonMail/proton-shared#master",
         "react": "^16.8.1",
-        "react-components": "github:ProtonMail/react-components.git#master",
+        "react-components": "github:ProtonMail/react-components#master",
         "react-dom": "^16.8.1",
         "react-router": "^4.3.1",
         "react-router-dom": "^4.3.1",
