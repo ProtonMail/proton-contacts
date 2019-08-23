@@ -121,11 +121,9 @@ export const prepareContact = async (properties, privateKeys, publicKeys) => {
  * @param {Object} primaryKey
  * @returns {Promise} data
  */
-export const prepareContacts = async (contacts = [], primaryKey) => {
-    const { privateKey } = primaryKey;
-    const publicKey = privateKey.toPublic();
+export const prepareContacts = async (contacts = [], { privateKey, publicKey }) => {
     const promises = contacts.reduce((acc, properties) => {
-        acc.push(prepareContact(properties, [privateKey], [publicKey]));
+        acc.push(prepareContact(properties, privateKey, publicKey));
         return acc;
     }, []);
 

@@ -1,9 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Loader, GenericError } from 'react-components';
+import { splitKeys } from 'proton-shared/lib/keys/keys';
 
 import useContact from '../hooks/useContact';
-import { prepareContact, bothUserKeys } from '../helpers/decrypt';
+import { prepareContact } from '../helpers/decrypt';
 import ContactView from './ContactView';
 
 const Contact = ({ contactID, userKeysList }) => {
@@ -14,7 +15,7 @@ const Contact = ({ contactID, userKeysList }) => {
     useEffect(() => {
         if (contact && Array.isArray(userKeysList)) {
             ref.current = contact.ID;
-            const { publicKeys, privateKeys } = bothUserKeys(userKeysList);
+            const { publicKeys, privateKeys } = splitKeys(userKeysList);
 
             prepareContact(contact, { publicKeys, privateKeys }).then(({ properties, error }) => {
                 if (ref.current !== contact.ID) {

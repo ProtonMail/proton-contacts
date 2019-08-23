@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { useApi, useLoading, useEventManager, Loader, FormModal, PrimaryButton, ResetButton } from 'react-components';
-
+import { splitKeys } from 'proton-shared/lib/keys/keys';
 import { getContact, addContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 import { noop } from 'proton-shared/lib/helpers/function';
-import { prepareContact as decrypt, bothUserKeys } from '../../helpers/decrypt';
+
+import { prepareContact as decrypt } from '../../helpers/decrypt';
 import { prepareContact as encrypt } from '../../helpers/encrypt';
 import { merge } from '../../helpers/merge';
 import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE } from '../../constants';
@@ -20,7 +21,7 @@ const { IGNORE } = CATEGORIES;
 const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onMerge = noop, ...rest }) => {
     const api = useApi();
     const { call } = useEventManager();
-    const { privateKeys, publicKeys } = bothUserKeys(userKeysList);
+    const { privateKeys, publicKeys } = useMemo(() => splitKeys(userKeysList), []);
 
     const [loading, withLoading] = useLoading(true);
     const [isMerging, setIsMerging] = useState(false);

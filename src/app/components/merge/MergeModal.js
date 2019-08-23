@@ -5,7 +5,7 @@ import { useApi, useEventManager, useModals, FormModal, ResetButton, PrimaryButt
 
 import { getContact, addContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 import { noop } from 'proton-shared/lib/helpers/function';
-import { prepareContact as decrypt, bothUserKeys } from '../../helpers/decrypt';
+import { prepareContact as decrypt } from '../../helpers/decrypt';
 import { prepareContact as encrypt } from '../../helpers/encrypt';
 import { merge } from '../../helpers/merge';
 import { moveInGroup } from '../../helpers/array';
@@ -16,6 +16,7 @@ import MergeContactPreview from './MergeContactPreview';
 import MergeModalContent from './MergeModalContent';
 import MergeTable from './MergeTable';
 import MergingModalContent from './MergingModalContent';
+import { splitKeys } from 'proton-shared/lib/keys/keys';
 
 const { OVERWRITE_CONTACT } = OVERWRITE;
 const { IGNORE } = CATEGORIES;
@@ -24,7 +25,6 @@ const MergeModal = ({ contacts, userKeysList, onMerge = noop, ...rest }) => {
     const api = useApi();
     const { call } = useEventManager();
     const { createModal } = useModals();
-    const { publicKeys, privateKeys } = bothUserKeys(userKeysList);
 
     const [isMerging, setIsMerging] = useState(false);
     const [model, setModel] = useState({
@@ -102,6 +102,8 @@ const MergeModal = ({ contacts, userKeysList, onMerge = noop, ...rest }) => {
     };
 
     const handleMerge = async () => {
+        const { publicKeys, privateKeys } = splitKeys(userKeysList);
+
         const encryptedContacts = [];
         const beDeletedAfterMergeIDs = [];
         for (const group of beMergedIDs) {

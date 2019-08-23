@@ -6,12 +6,13 @@ import { useContacts, useApi, FormModal, ResetButton, PrimaryButton, Alert } fro
 import { queryContactExport } from 'proton-shared/lib/api/contacts';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 import { wait } from 'proton-shared/lib/helpers/promise';
+import { noop } from 'proton-shared/lib/helpers/function';
+import { splitKeys } from 'proton-shared/lib/keys/keys';
 
-import { bothUserKeys, prepareContact } from '../helpers/decrypt';
+import { prepareContact } from '../helpers/decrypt';
 import { toICAL } from '../helpers/vcard';
 import { percentageProgress } from './../helpers/progress';
 import DynamicProgress from './DynamicProgress';
-import { noop } from 'proton-shared/lib/helpers/function';
 
 const DOWNLOAD_FILENAME = 'protonContacts';
 // BACK-END DATA
@@ -35,7 +36,6 @@ ExportFooter.propTypes = {
 
 const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...rest }) => {
     const api = useApi();
-    const { publicKeys, privateKeys } = bothUserKeys(userKeysList);
     const [contacts, loadingContacts] = useContacts();
 
     const [contactsExported, addSuccess] = useState([]);
@@ -57,6 +57,8 @@ const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...
     useEffect(() => {
         const abortController = new AbortController();
         const apiWithAbort = (config) => api({ ...config, signal: abortController.signal });
+
+        const { publicKeys, privateKeys } = splitKeys(userKeysList);
 
         const exportBatch = async (i, { signal }) => {
             const { Contacts: contacts } = await apiWithAbort(

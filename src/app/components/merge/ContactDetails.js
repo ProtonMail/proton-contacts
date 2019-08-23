@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { useApi, useLoading, Loader, FormModal, PrimaryButton } from 'react-components';
-
+import { splitKeys } from 'proton-shared/lib/keys/keys';
 import { getContact } from 'proton-shared/lib/api/contacts';
-import { prepareContact, bothUserKeys } from '../../helpers/decrypt';
+
+import { FAIL_TO_LOAD } from '../../constants';
+import { prepareContact } from '../../helpers/decrypt';
 
 import ContactViewErrors from '../ContactViewErrors';
 import MergedContactSummary from './MergedContactSummary';
-
-import { FAIL_TO_LOAD } from '../../constants';
 
 const ContactDetails = ({ contactID, userKeysList, ...rest }) => {
     const api = useApi();
@@ -19,7 +19,7 @@ const ContactDetails = ({ contactID, userKeysList, ...rest }) => {
     useEffect(() => {
         const request = async () => {
             const { Contact } = await api(getContact(contactID));
-            const { properties, errors } = await prepareContact(Contact, bothUserKeys(userKeysList));
+            const { properties, errors } = await prepareContact(Contact, splitKeys(userKeysList));
             setModel({ properties, errors });
         };
 

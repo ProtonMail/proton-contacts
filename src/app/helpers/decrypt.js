@@ -4,6 +4,7 @@ import { sanitizeProperties } from './properties';
 
 import { CONTACT_CARD_TYPE } from 'proton-shared/lib/constants';
 import { SIGNATURE_NOT_VERIFIED, FAIL_TO_READ, FAIL_TO_DECRYPT } from '../constants';
+import { splitKeys } from 'proton-shared/lib/keys/keys';
 
 const { CLEAR_TEXT, ENCRYPTED_AND_SIGNED, ENCRYPTED, SIGNED } = CONTACT_CARD_TYPE;
 
@@ -106,27 +107,8 @@ export const prepareContact = async (contact, { publicKeys, privateKeys }) => {
     return { properties: sanitizeProperties(merge(vcards.map(parse))), errors };
 };
 
-/**
- * generate list of public keys corresponding to a list of private keys
- * @param {Object} userKeysList     { privateKeys: Array<PGPkey> }
- * @return {Object}                 { publicKeys: Array<PGPkey>, privateKeys: Array<PGPkey>}
- */
-export const bothUserKeys = (userKeysList = []) => {
-    return userKeysList.reduce(
-        (acc, { privateKey }) => {
-            if (!privateKey.isDecrypted()) {
-                return acc;
-            }
-            acc.publicKeys.push(privateKey.toPublic());
-            acc.privateKeys.push(privateKey);
-            return acc;
-        },
-        { publicKeys: [], privateKeys: [] }
-    );
-};
-
 export const decryptContactCards = async (contactCards, contactID, keys) => {
-    const { properties, errors } = await prepareContact({ Cards: contactCards }, bothUserKeys(keys));
+    const { properties, errors } = await prepareContact({ Cards: contactCards }, splitKeys(keys));
     if (errors.length !== 0) {
         throw new Error('Error decrypting contact with contactID ', contactID);
     }
