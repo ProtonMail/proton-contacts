@@ -34,7 +34,7 @@ const PrivateHeader = ({ search, onSearch, location }) => {
                             aria-current={!inSettings}
                         >
                             <Icon name="contacts" className="topnav-icon mr0-5 flex-item-centered-vert fill-white" />
-                            {c('Title').t`Contacts`}
+                            <span className="navigation-title topnav-linkText">{c('Title').t`Contacts`}</span>
                         </Link>
                     </li>
                     <li className="mr1">
@@ -47,7 +47,7 @@ const PrivateHeader = ({ search, onSearch, location }) => {
                                 name="settings-master"
                                 className="topnav-icon mr0-5 flex-item-centered-vert fill-white"
                             />
-                            {c('Title').t`Settings`}
+                            <span className="navigation-title topnav-linkText">{c('Title').t`Settings`}</span>
                         </Link>
                     </li>
                     {isFree ? (
