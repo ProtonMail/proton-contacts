@@ -6,7 +6,7 @@ const ContactGroupDropdownButton = ({ buttonRef, children, isOpen, ...rest }) =>
     return (
         <button type="button" role="button" ref={buttonRef} {...rest}>
             {children}
-            <DropdownCaret isOpen={isOpen} className="ml0-5 expand-caret mtauto mbauto" />
+            <DropdownCaret isOpen={isOpen} className="ml0-25 toolbar-icon expand-caret mtauto mbauto" />
         </button>
     );
 };
