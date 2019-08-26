@@ -19,32 +19,38 @@ const PaidCards = ({ contactGroupID, userKeysList, loadingUserKeys }) => {
     };
 
     return (
-        <div className="flex-autogrid">
-            <div className="flex-autogrid-item">
-                <div className="p1 aligncenter bordered-container">
+        <div className="flex flex-nowrap">
+            <div className="bordered-container flex-item-fluid mr1 p1 aligncenter flex flex-column ">
+                <div className="flex-item-fluid">
                     <Icon name="import" className="icon-100p mb1" />
                     <div className="bold">{c('Title').t`Import contacts`}</div>
                     <p>{c('Info')
                         .t`Add contacts to your ProtonMail account by importing them from a CSV or vCard file.`}</p>
-                    <PrimaryButton onClick={handleImport}>{c('Action').t`Import`}</PrimaryButton>
+                </div>
+                <div className="flex-item-noshrink p1">
+                    <PrimaryButton className="bold" onClick={handleImport}>{c('Action').t`Import`}</PrimaryButton>
                 </div>
             </div>
-            <div className="flex-autogrid-item">
-                <div className="p1 aligncenter bordered-container">
+            <div className="bordered-container flex-item-fluid mr1 p1 aligncenter">
+                <div className="flex-item-fluid">
                     <Icon name="export" className="icon-100p mb1" />
                     <div className="bold">{c('Title').t`Export contacts`}</div>
                     <p>{c('Info')
                         .t`Create an backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
+                </div>
+                <div className="flex-item-noshrink p1">
                     <PrimaryButton onClick={handleExport} disabled={loadingUserKeys}>{c('Action')
                         .t`Export`}</PrimaryButton>
                 </div>
             </div>
-            <div className="flex-autogrid-item">
-                <div className="p1 aligncenter bordered-container">
+            <div className="bordered-container flex-item-fluid p1 aligncenter">
+                <div className="flex-item-fluid">
                     <Icon name="contacts" className="icon-100p mb1" />
                     <div className="bold">{c('Title').t`Contacts settings`}</div>
                     <p>{c('Info')
                         .t`Use groups to send email to a list of addresses you regularly communicate with.`}</p>
+                </div>
+                <div className="flex-item-noshrink p1">
                     <PrimaryButton onClick={handleGroups}>{c('Action').t`Groups`}</PrimaryButton>
                 </div>
             </div>
