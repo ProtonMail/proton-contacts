@@ -25,7 +25,9 @@ const AttachedFile = ({ file, iconName, className, clear, onClear, ...rest }) =>
             </div>
             <div className="message-attachmentInfo p0-5 flex flex-nowrap w90">
                 <div className="flex-item-fluid pr1">
-                    <div className="ellipsis">{fileName}</div>
+                    <div className="ellipsis" title={fileName}>
+                        {fileName}
+                    </div>
                     <div>{`${extension.toUpperCase()} - ${humanSize(file.size)}`}</div>
                 </div>
                 <Button className="flex-item-noshrink" onClick={onClear}>
