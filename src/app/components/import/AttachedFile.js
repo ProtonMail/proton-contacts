@@ -19,16 +19,18 @@ const AttachedFile = ({ file, iconName, className, clear, onClear, ...rest }) =>
     const [fileName, extension] = splitExtension(file.name);
 
     return (
-        <div className={`flex w100 ${className}`} {...rest}>
-            <div className="bordered-container p0-5 mb1 flex flex-spacebetween w10">
-                <Icon name={iconName} />
+        <div className={`flex bordered-container w100 ${className}`} {...rest}>
+            <div className=" p0-5 flex flex-item-noshrink w10">
+                <Icon name={iconName} className="mauto" />
             </div>
-            <div className="bordered-container p0-5 mb1 flex flex-spacebetween w90">
-                <div>
-                    <div>{fileName}</div>
+            <div className="message-attachmentInfo p0-5 flex flex-nowrap w90">
+                <div className="flex-item-fluid pr1">
+                    <div className="ellipsis">{fileName}</div>
                     <div>{`${extension.toUpperCase()} - ${humanSize(file.size)}`}</div>
                 </div>
-                <Button onClick={onClear}>{clear}</Button>
+                <Button className="flex-item-noshrink" onClick={onClear}>
+                    {clear}
+                </Button>
             </div>
         </div>
     );
