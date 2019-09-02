@@ -127,4 +127,4 @@ MergeModal.propTypes = {
     userKeysList: PropTypes.array.isRequired
 };
 
-export default MergeModal;
+export default withRouter(MergeModal);
