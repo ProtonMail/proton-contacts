@@ -33,7 +33,7 @@ MergingModalContent.propTypes = {
     notMerged: PropTypes.array,
     submitted: PropTypes.array,
     notSubmitted: PropTypes.array,
-    isFinished: PropTypes.bool
+    total: PropTypes.number
 };
 
 export default MergingModalContent;

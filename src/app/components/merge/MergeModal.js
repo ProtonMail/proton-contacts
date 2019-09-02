@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { useApi, useEventManager, useModals, FormModal, ResetButton, PrimaryButton } from 'react-components';
@@ -21,7 +22,18 @@ import { splitKeys } from 'proton-shared/lib/keys/keys';
 const { OVERWRITE_CONTACT } = OVERWRITE;
 const { IGNORE } = CATEGORIES;
 
-const MergeModal = ({ contacts, userKeysList, onMerge = noop, ...rest }) => {
+// pull staticContext to avoid it being passed with rest
+const MergeModal = ({
+    contacts,
+    contactID,
+    userKeysList,
+    onMerge = noop,
+    history,
+    location,
+    // eslint-disable-next-line no-unused-vars
+    staticContext,
+    ...rest
+}) => {
     const api = useApi();
     const { call } = useEventManager();
     const { createModal } = useModals();
@@ -38,7 +50,7 @@ const MergeModal = ({ contacts, userKeysList, onMerge = noop, ...rest }) => {
     const { orderedContacts, isChecked, isDeleted, merged, submitted } = model;
 
     // contacts that should be merged
-    // beMergedIDs = [[group of ordered contacts to be merged], ...]
+    // beMergedIDs = [[group of (ordered) contact IDs to be merged], ...]
     const beMergedIDs = orderedContacts
         .map((group, i) => group.map(({ ID }, j) => isChecked[i][j] && !isDeleted[i][j] && ID).filter(Boolean))
         .filter((group) => group.length > 1);
@@ -54,17 +66,6 @@ const MergeModal = ({ contacts, userKeysList, onMerge = noop, ...rest }) => {
         createModal(<ContactDetails contactID={contactID} userKeysList={userKeysList} />);
     };
 
-    const handlePreview = (groupIDs, groupIndex) => {
-        createModal(
-            <MergeContactPreview
-                beMergedIDs={groupIDs}
-                userKeysList={userKeysList}
-                beDeletedIDs={beDeletedIDs[groupIndex]}
-                onMerge={() => handleRemoveMerged(groupIndex)}
-            />
-        );
-    };
-
     const handleRemoveMerged = (groupIndex) => {
         setModel({
             ...model,
@@ -72,6 +73,25 @@ const MergeModal = ({ contacts, userKeysList, onMerge = noop, ...rest }) => {
             isChecked: isChecked.filter((_group, i) => i !== groupIndex),
             isDeleted: isDeleted.filter((_group, i) => i !== groupIndex)
         });
+    };
+
+    const handlePreview = (groupIDs, groupIndex) => {
+        const handleMergePreview = () => {
+            const newContactID = groupIDs[0];
+            if (groupIDs.includes(contactID) && newContactID !== contactID) {
+                history.push({ ...location, pathname: `/contacts/${newContactID}` });
+            }
+            handleRemoveMerged(groupIndex);
+        };
+
+        createModal(
+            <MergeContactPreview
+                beMergedIDs={groupIDs}
+                userKeysList={userKeysList}
+                beDeletedIDs={beDeletedIDs[groupIndex]}
+                onMerge={handleMergePreview}
+            />
+        );
     };
 
     const handleToggleCheck = (groupIndex) => (index) => {
@@ -106,6 +126,7 @@ const MergeModal = ({ contacts, userKeysList, onMerge = noop, ...rest }) => {
 
         const encryptedContacts = [];
         const beDeletedAfterMergeIDs = [];
+        let newContactID = contactID;
         for (const group of beMergedIDs) {
             try {
                 const beMergedContacts = [];
@@ -120,21 +141,32 @@ const MergeModal = ({ contacts, userKeysList, onMerge = noop, ...rest }) => {
                         throw new Error(c('Error description').t`Error decrypting contact ${ID}`);
                     }
                     beMergedContacts.push(properties);
+                    // if the current contact is merged, prepare to update contactID
+                    if (ID && ID === contactID) {
+                        newContactID = group[0];
+                    }
                 }
                 // merge contacts
                 const mergedContact = merge(beMergedContacts);
+                // encrypt merged contact
+                const encryptedContact = await encrypt(mergedContact, {
+                    privateKey: privateKeys[0],
+                    publicKey: publicKeys[0]
+                });
+                encryptedContacts.push({ contact: encryptedContact, group });
+                beDeletedAfterMergeIDs.push(group.slice(1));
                 setModel((model) => ({
                     ...model,
                     merged: { ...model.merged, success: [...model.merged.success, ...group] }
                 }));
-                // encrypt merged contact
-                const encryptedContact = await encrypt(mergedContact, privateKeys, publicKeys);
-                encryptedContacts.push({ contact: encryptedContact, group });
-                beDeletedAfterMergeIDs.push(group.slice(1));
             } catch (errror) {
                 setModel((model) => ({
                     ...model,
-                    merged: { ...model.merged, error: [...model.merged.error, ...group] }
+                    merged: { ...model.merged, error: [...model.merged.error, ...group] },
+                    submitted: {
+                        ...model.submitted,
+                        error: [...model.submitted.error, ...group]
+                    }
                 }));
             }
         }
@@ -172,6 +204,10 @@ const MergeModal = ({ contacts, userKeysList, onMerge = noop, ...rest }) => {
             await api(deleteContacts(beDeletedIDs));
         }
         onMerge();
+        // if the current contact has been merged, update contactID
+        if (newContactID && newContactID !== contactID) {
+            history.push({ ...location, pathname: `/contacts/${newContactID}` });
+        }
         await call();
     };
 
@@ -241,8 +277,12 @@ const MergeModal = ({ contacts, userKeysList, onMerge = noop, ...rest }) => {
 
 MergeModal.propTypes = {
     contacts: PropTypes.arrayOf(PropTypes.array).isRequired,
+    contactID: PropTypes.string,
     userKeysList: PropTypes.array.isRequired,
-    onMerge: PropTypes.func
+    onMerge: PropTypes.func,
+    history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    staticContext: PropTypes.object
 };
 
-export default MergeModal;
+export default withRouter(MergeModal);

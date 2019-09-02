@@ -23,7 +23,8 @@ const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onM
     const { call } = useEventManager();
     const { privateKeys, publicKeys } = useMemo(() => splitKeys(userKeysList), []);
 
-    const [loading, withLoading] = useLoading(true);
+    const [loadingContacts, withLoadingContacts] = useLoading(true);
+    const [loadingMerge, withLoadingMerge] = useLoading(true);
     const [isMerging, setIsMerging] = useState(false);
     const [model, setModel] = useState({
         contacts: [],
@@ -36,7 +37,10 @@ const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onM
     const handleMerge = async () => {
         try {
             // encrypt contact obtained after merge
-            const encryptedContact = await encrypt(model.merged, privateKeys, publicKeys);
+            const encryptedContact = await encrypt(model.merged, {
+                privateKey: privateKeys[0],
+                publicKey: publicKeys[0]
+            });
             // send it to API
             const { Responses } = await api(
                 addContacts({
@@ -48,6 +52,7 @@ const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onM
             if (Responses[0].Response.Code !== SUCCESS_IMPORT_CODE) {
                 throw new Error('Error submitting merged contact');
             }
+            setModel((model) => ({ ...model, submitted: beMergedIDs }));
             // delete contacts that have been merged
             await api(deleteContacts(beMergedIDs.slice(1)));
             if (beDeletedIDs.length) {
@@ -58,7 +63,6 @@ const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onM
         } catch (error) {
             setModel((model) => ({ ...model, errorOnSubmit: true }));
         }
-        setModel((model) => ({ ...model, submitted: beMergedIDs }));
     };
 
     useEffect(() => {
@@ -79,7 +83,7 @@ const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onM
         // merge contacts
         const mergeContacts = () => setModel((model) => ({ ...model, merged: merge(model.contacts) }));
 
-        withLoading(getContacts())
+        withLoadingContacts(getContacts())
             .catch(() => setModel((model) => ({ ...model, errorOnLoad: true })))
             .then(mergeContacts)
             .catch(() => setModel((model) => ({ ...model, errorOnMerge: true })));
@@ -97,7 +101,7 @@ const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onM
                 </>
             );
             const content = (() => {
-                if (loading) {
+                if (loadingContacts) {
                     return <Loader />;
                 }
                 if (model.errorOnLoad || model.errorOnMerge) {
@@ -112,7 +116,7 @@ const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onM
                 footer,
                 onSubmit: () => {
                     setIsMerging(true);
-                    handleMerge();
+                    withLoadingMerge(handleMerge());
                 },
                 ...rest
             };
@@ -120,7 +124,7 @@ const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onM
 
         // display progress bar
         const footer = (
-            <PrimaryButton type="reset" loading={!model.submitted.length}>
+            <PrimaryButton type="reset" loading={loadingMerge}>
                 {c('Action').t`Close`}
             </PrimaryButton>
         );
