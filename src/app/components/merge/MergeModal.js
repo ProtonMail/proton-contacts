@@ -2,7 +2,15 @@ import React, { useState } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { useApi, useEventManager, useModals, FormModal, ResetButton, PrimaryButton } from 'react-components';
+import {
+    useApi,
+    useLoading,
+    useEventManager,
+    useModals,
+    FormModal,
+    ResetButton,
+    PrimaryButton
+} from 'react-components';
 
 import { getContact, addContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 import { noop } from 'proton-shared/lib/helpers/function';
@@ -39,6 +47,7 @@ const MergeModal = ({
     const { createModal } = useModals();
 
     const [isMerging, setIsMerging] = useState(false);
+    const [loading, withLoading] = useLoading(false);
     const [model, setModel] = useState({
         orderedContacts: contacts,
         isChecked: contacts.map((group) => group.map(() => true)),
@@ -216,7 +225,7 @@ const MergeModal = ({
         if (!isMerging) {
             const handleSubmit = () => {
                 setIsMerging(true);
-                handleMerge();
+                withLoading(handleMerge());
             };
             const footer = (
                 <>
@@ -250,7 +259,7 @@ const MergeModal = ({
 
         // display progress bar while merging contacts
         const footer = (
-            <PrimaryButton type="reset" loading={submitted.success.length + submitted.error.length !== totalContacts}>
+            <PrimaryButton type="reset" loading={loading}>
                 {c('Action').t`Close`}
             </PrimaryButton>
         );
