@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
@@ -57,6 +57,12 @@ const MergeModal = ({
     });
 
     const { orderedContacts, isChecked, isDeleted, merged, submitted } = model;
+
+    useEffect(() => {
+        if (!orderedContacts.length) {
+            rest.onClose();
+        }
+    }, model);
 
     // contacts that should be merged
     // beMergedIDs = [[group of (ordered) contact IDs to be merged], ...]
