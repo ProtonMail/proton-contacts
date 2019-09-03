@@ -4,8 +4,8 @@ import { Checkbox } from 'react-components';
 
 import { opaqueClassName } from '../../helpers/css';
 
-const NameTableCell = ({ name, checked, deleted, greyedOut, index, onToggle }) => {
-    const handleToggle = () => onToggle(index);
+const NameTableCell = ({ name, contactID, checked, deleted, greyedOut, onToggle }) => {
+    const handleToggle = () => onToggle(contactID);
 
     return (
         <div className="flex flex-nowrap flex-items-center">
@@ -20,7 +20,7 @@ const NameTableCell = ({ name, checked, deleted, greyedOut, index, onToggle }) =
 };
 
 NameTableCell.propTypes = {
-    index: PropTypes.number.isRequired,
+    contactID: PropTypes.string.isRequired,
     checked: PropTypes.bool,
     deleted: PropTypes.bool,
     greyedOut: PropTypes.bool,

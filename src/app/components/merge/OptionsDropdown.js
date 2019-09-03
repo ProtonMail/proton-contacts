@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { SimpleDropdown, DropdownMenu, DropdownButton } from 'react-components';
 
-const OptionsDropdown = ({ contactID, index, canDelete, onClickDetails, onClickDelete, onClickUndelete }) => {
-    const color = canDelete ? 'color-global-warning' : 'color-pv-green';
+const OptionsDropdown = ({ contactID, canDelete, onClickDetails, onClickDelete, onClickUndelete }) => {
+    const color = canDelete ? 'pm-button--redborder' : 'pv-button-greenborder';
     const text = canDelete ? c('Action').t`Mark for deletion` : c('Action').t`Unmark for deletion`;
-    const handleClick = canDelete ? () => onClickDelete(index) : () => onClickUndelete(index);
+    const handleClick = canDelete ? () => onClickDelete(contactID) : () => onClickUndelete(contactID);
 
     return (
         <SimpleDropdown
@@ -16,7 +16,11 @@ const OptionsDropdown = ({ contactID, index, canDelete, onClickDetails, onClickD
         >
             <DropdownMenu>
                 {canDelete ? (
-                    <DropdownButton className="color-pm-blue" type="button" onClick={() => onClickDetails(contactID)}>
+                    <DropdownButton
+                        className="pm-button-blueborder"
+                        type="button"
+                        onClick={() => onClickDetails(contactID)}
+                    >
                         {c('Action').t`Contact details`}
                     </DropdownButton>
                 ) : null}
@@ -30,7 +34,6 @@ const OptionsDropdown = ({ contactID, index, canDelete, onClickDetails, onClickD
 
 OptionsDropdown.propTypes = {
     contactID: PropTypes.string.isRequired,
-    index: PropTypes.number,
     canDelete: PropTypes.bool,
     onClickDelete: PropTypes.func,
     onClickUndelete: PropTypes.func

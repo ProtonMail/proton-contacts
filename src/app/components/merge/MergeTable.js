@@ -22,8 +22,8 @@ const MergeTableHeader = () => {
 
 const MergeTable = ({
     contacts = [],
-    isChecked,
-    isDeleted,
+    isChecked = {},
+    isDeleted = {},
     onClickCheckbox,
     onClickDetails,
     onClickDelete,
@@ -34,8 +34,7 @@ const MergeTable = ({
     return (
         <>
             {contacts.map((group, i) => {
-                const isActive = isChecked.map((group, i) => group.map((checked, j) => checked && !isDeleted[i][j]));
-                const activeIDs = group.map(({ ID }, j) => isActive[i][j] && ID).filter(Boolean);
+                const activeIDs = group.map(({ ID }) => isChecked[ID] && !isDeleted[ID] && ID).filter(Boolean);
 
                 return (
                     <Block key={`${group && group[0].Name}`} className="mb2 flex flex-column flex-items-center">
@@ -43,12 +42,12 @@ const MergeTable = ({
                             <MergeTableHeader />
                             <MergeTableBody
                                 contacts={group}
-                                isChecked={isChecked[i]}
-                                isDeleted={isDeleted[i]}
-                                onClickCheckbox={onClickCheckbox(i)}
+                                isChecked={isChecked}
+                                isDeleted={isDeleted}
+                                onClickCheckbox={onClickCheckbox}
                                 onClickDetails={onClickDetails}
-                                onClickDelete={onClickDelete(i)}
-                                onClickUndelete={onClickUndelete(i)}
+                                onClickDelete={onClickDelete}
+                                onClickUndelete={onClickUndelete}
                             />
                         </OrderableTable>
                         <Button
@@ -68,8 +67,8 @@ const MergeTable = ({
 
 MergeTable.propTypes = {
     contacts: PropTypes.array,
-    isChecked: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.bool)),
-    isDeleted: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.bool)),
+    isChecked: PropTypes.object,
+    isDeleted: PropTypes.object,
     onClickCheckbox: PropTypes.func,
     onClickDetails: PropTypes.func,
     onClickDelete: PropTypes.func,

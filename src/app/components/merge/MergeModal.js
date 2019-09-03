@@ -50,8 +50,14 @@ const MergeModal = ({
     const [loading, withLoading] = useLoading(false);
     const [model, setModel] = useState({
         orderedContacts: contacts,
-        isChecked: contacts.map((group) => group.map(() => true)),
-        isDeleted: contacts.map((group) => group.map(() => false)),
+        isChecked: contacts.flat().reduce((acc, { ID }) => {
+            acc[ID] = true;
+            return acc;
+        }, {}),
+        isDeleted: contacts.flat().reduce((acc, { ID }) => {
+            acc[ID] = false;
+            return acc;
+        }, {}),
         merged: { success: [], error: [] },
         submitted: { success: [], error: [] }
     });
@@ -67,41 +73,46 @@ const MergeModal = ({
     // contacts that should be merged
     // beMergedIDs = [[group of (ordered) contact IDs to be merged], ...]
     const beMergedIDs = orderedContacts
-        .map((group, i) => group.map(({ ID }, j) => isChecked[i][j] && !isDeleted[i][j] && ID).filter(Boolean))
-        .filter((group) => group.length > 1);
-    // IDs of contacts marked for deletion
-    const beDeletedIDs = orderedContacts
-        .map((group, i) => group.map(({ ID }, j) => isDeleted[i][j] && ID).filter(Boolean))
-        .filter((group) => group.length)
-        .flat();
+        .map((group) => group.map(({ ID }) => isChecked[ID] && !isDeleted[ID] && ID).filter(Boolean))
+        .map((group) => (group.length > 1 ? group : []));
+    // contacts marked for deletion
+    // beDeletedIDs = [[group of (ordered) contact IDs to be deleted], ...]
+    const beDeletedIDs = orderedContacts.map((group) => group.map(({ ID }) => isDeleted[ID] && ID).filter(Boolean));
     // total number of contacts to be merged
-    const totalContacts = beMergedIDs.flat().length;
+    const totalBeMerged = beMergedIDs.flat().length;
 
     const handleClickDetails = (contactID) => {
         createModal(<ContactDetails contactID={contactID} userKeysList={userKeysList} />);
     };
 
-    const handleRemoveMerged = (groupIndex) => {
+    const handleRemoveMerged = (beRemovedIDs, groupIndex) => {
+        // groupIndex not really needed here, but it can help with performance
         setModel({
             ...model,
-            orderedContacts: orderedContacts.filter((_group, i) => i !== groupIndex),
-            isChecked: isChecked.filter((_group, i) => i !== groupIndex),
-            isDeleted: isDeleted.filter((_group, i) => i !== groupIndex)
+            orderedContacts: orderedContacts
+                .map((group, i) => (i !== groupIndex ? group : group.filter(({ ID }) => !beRemovedIDs.includes(ID))))
+                .filter((group) => group.length > 1)
         });
     };
 
-    const handlePreview = (groupIDs, groupIndex) => {
+    const handlePreview = (contactIDs, groupIndex) => {
         const handleMergePreview = () => {
-            const newContactID = groupIDs[0];
-            if (groupIDs.includes(contactID) && newContactID !== contactID) {
+            // deal with a potential change of current contact ID
+            const newContactID = contactIDs[0];
+            if (contactIDs.includes(contactID) && newContactID !== contactID) {
                 history.push({ ...location, pathname: `/contacts/${newContactID}` });
             }
-            handleRemoveMerged(groupIndex);
+            // update model
+            const beRemovedIDs =
+                orderedContacts[groupIndex].length === contactIDs.length
+                    ? contactIDs.concat(beDeletedIDs[groupIndex])
+                    : contactIDs.slice(1).concat(beDeletedIDs[groupIndex]);
+            handleRemoveMerged(beRemovedIDs, groupIndex);
         };
 
         createModal(
             <MergeContactPreview
-                beMergedIDs={groupIDs}
+                beMergedIDs={contactIDs}
                 userKeysList={userKeysList}
                 beDeletedIDs={beDeletedIDs[groupIndex]}
                 onMerge={handleMergePreview}
@@ -109,30 +120,24 @@ const MergeModal = ({
         );
     };
 
-    const handleToggleCheck = (groupIndex) => (index) => {
+    const handleToggleCheck = (ID) => {
         setModel({
             ...model,
-            isChecked: isChecked.map((group, i) =>
-                i !== groupIndex ? group : group.map((bool, j) => (index === j ? !bool : bool))
-            )
+            isChecked: { ...isChecked, [ID]: !isChecked[ID] }
         });
     };
 
-    const handleToggleDelete = (groupIndex) => (index) => {
+    const handleToggleDelete = (ID) => {
         setModel({
             ...model,
-            isDeleted: isDeleted.map((group, i) =>
-                i !== groupIndex ? group : group.map((bool, j) => (index === j ? !bool : bool))
-            )
+            isDeleted: { ...isDeleted, [ID]: !isDeleted[ID] }
         });
     };
 
     const handleSortEnd = (groupIndex) => ({ oldIndex, newIndex }) => {
         setModel({
             ...model,
-            orderedContacts: moveInGroup(orderedContacts, groupIndex, { oldIndex, newIndex }),
-            isChecked: moveInGroup(isChecked, groupIndex, { oldIndex, newIndex }),
-            isDeleted: moveInGroup(isDeleted, groupIndex, { oldIndex, newIndex })
+            orderedContacts: moveInGroup(orderedContacts, groupIndex, { oldIndex, newIndex })
         });
     };
 
@@ -143,6 +148,9 @@ const MergeModal = ({
         const beDeletedAfterMergeIDs = [];
         let newContactID = contactID;
         for (const group of beMergedIDs) {
+            if (!beMergedIDs.length) {
+                continue;
+            }
             try {
                 const beMergedContacts = [];
                 for (const ID of group) {
@@ -215,8 +223,8 @@ const MergeModal = ({
             }
         }
         // delete contacts marked for deletion
-        if (beDeletedIDs && beDeletedIDs.length) {
-            await api(deleteContacts(beDeletedIDs));
+        if (beDeletedIDs && beDeletedIDs.flat().length) {
+            await api(deleteContacts(beDeletedIDs.flat()));
         }
         onMerge();
         // if the current contact has been merged, update contactID
@@ -227,7 +235,9 @@ const MergeModal = ({
     };
 
     const { content, ...modalProps } = (() => {
-        // display table with mergeable contacts
+        /*
+            display table with mergeable contacts
+        */
         if (!isMerging) {
             const handleSubmit = () => {
                 setIsMerging(true);
@@ -236,7 +246,7 @@ const MergeModal = ({
             const footer = (
                 <>
                     <ResetButton>{c('Action').t`Cancel`}</ResetButton>
-                    <PrimaryButton type="submit" disabled={!beMergedIDs.length}>{c('Action').t`Merge`}</PrimaryButton>
+                    <PrimaryButton type="submit" disabled={!totalBeMerged}>{c('Action').t`Merge`}</PrimaryButton>
                 </>
             );
 
@@ -263,7 +273,9 @@ const MergeModal = ({
             };
         }
 
-        // display progress bar while merging contacts
+        /*
+            display progress bar while merging contacts
+        */
         const footer = (
             <PrimaryButton type="reset" loading={loading}>
                 {c('Action').t`Close`}
@@ -278,7 +290,7 @@ const MergeModal = ({
                     notMerged={merged.error}
                     submitted={submitted.success}
                     notSubmitted={submitted.error}
-                    total={totalContacts}
+                    total={totalBeMerged}
                 />
             ),
             footer,

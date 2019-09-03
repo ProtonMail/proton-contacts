@@ -19,13 +19,14 @@ const MergeTableBody = ({
     return (
         <OrderableTableBody colSpan={4} {...rest}>
             {contacts.map(({ ID, Name, emails }, j) => {
-                const deleted = isDeleted[j];
+                const deleted = isDeleted[ID];
                 const cells = [
                     <NameTableCell
                         key="name"
                         name={Name}
+                        contactID={ID}
                         index={j}
-                        checked={isChecked[j]}
+                        checked={isChecked[ID]}
                         deleted={deleted}
                         greyedOut={deleted}
                         onToggle={onClickCheckbox}
@@ -54,8 +55,8 @@ const MergeTableBody = ({
 
 MergeTableBody.propTypes = {
     contacts: PropTypes.arrayOf(PropTypes.object),
-    isChecked: PropTypes.arrayOf(PropTypes.bool),
-    isDeleted: PropTypes.arrayOf(PropTypes.bool),
+    isChecked: PropTypes.object,
+    isDeleted: PropTypes.object,
     onClickCheckbox: PropTypes.func,
     onClickDetails: PropTypes.func,
     onClickDelete: PropTypes.func,
