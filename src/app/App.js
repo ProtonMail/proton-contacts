@@ -1,6 +1,6 @@
 import { hot } from 'react-hot-loader/root';
 import React from 'react';
-import { ProtonApp, Loader, useAuthentication, useInstance } from 'react-components';
+import { ProtonApp, LoaderPage, useAuthentication, useInstance } from 'react-components';
 import createSecureSessionStorage from 'proton-shared/lib/createSecureSessionStorage';
 import { MAILBOX_PASSWORD_KEY, UID_KEY } from 'proton-shared/lib/constants';
 import { redirectTo } from 'proton-shared/lib/helpers/browser';
@@ -16,7 +16,7 @@ sentry(config);
 
 const Redirect = () => {
     redirectTo();
-    return <Loader />;
+    return <LoaderPage />;
 };
 
 const Setup = () => {
@@ -36,11 +36,9 @@ const Setup = () => {
 const App = () => {
     const storage = useInstance(() => createSecureSessionStorage([MAILBOX_PASSWORD_KEY, UID_KEY]));
     return (
-        <div className="App body mod--hidden content">
-            <ProtonApp config={config} storage={storage}>
-                <Setup />
-            </ProtonApp>
-        </div>
+        <ProtonApp config={config} storage={storage}>
+            <Setup />
+        </ProtonApp>
     );
 };
 
