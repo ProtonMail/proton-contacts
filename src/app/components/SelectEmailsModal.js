@@ -31,8 +31,8 @@ const SelectEmailsModal = ({ contacts, onSubmit, ...rest }) => {
             });
             return acc;
         }, []);
-        rest.onClose();
         onSubmit(toSubmit);
+        rest.onClose();
     };
 
     const handleCheck = (contactID, contactEmailID) => ({ target }) => {
