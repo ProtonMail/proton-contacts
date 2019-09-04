@@ -9,7 +9,7 @@ import OptionsDropdown from './OptionsDropdown';
 const MergeTableBody = ({
     contacts,
     isChecked,
-    isDeleted,
+    beDeleted,
     onClickCheckbox,
     onClickDetails,
     onClickDelete,
@@ -19,7 +19,7 @@ const MergeTableBody = ({
     return (
         <OrderableTableBody colSpan={4} {...rest}>
             {contacts.map(({ ID, Name, emails }, j) => {
-                const deleted = isDeleted[ID];
+                const deleted = beDeleted[ID];
                 const cells = [
                     <NameTableCell
                         key="name"
@@ -56,7 +56,7 @@ const MergeTableBody = ({
 MergeTableBody.propTypes = {
     contacts: PropTypes.arrayOf(PropTypes.object),
     isChecked: PropTypes.object,
-    isDeleted: PropTypes.object,
+    beDeleted: PropTypes.object,
     onClickCheckbox: PropTypes.func,
     onClickDetails: PropTypes.func,
     onClickDelete: PropTypes.func,

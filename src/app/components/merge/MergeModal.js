@@ -54,7 +54,7 @@ const MergeModal = ({
             acc[ID] = true;
             return acc;
         }, {}),
-        isDeleted: contacts.flat().reduce((acc, { ID }) => {
+        beDeleted: contacts.flat().reduce((acc, { ID }) => {
             acc[ID] = false;
             return acc;
         }, {}),
@@ -62,7 +62,7 @@ const MergeModal = ({
         submitted: { success: [], error: [] }
     });
 
-    const { orderedContacts, isChecked, isDeleted, merged, submitted } = model;
+    const { orderedContacts, isChecked, beDeleted, merged, submitted } = model;
 
     useEffect(() => {
         if (!orderedContacts.length) {
@@ -73,11 +73,11 @@ const MergeModal = ({
     // contacts that should be merged
     // beMergedIDs = [[group of (ordered) contact IDs to be merged], ...]
     const beMergedIDs = orderedContacts
-        .map((group) => group.map(({ ID }) => isChecked[ID] && !isDeleted[ID] && ID).filter(Boolean))
+        .map((group) => group.map(({ ID }) => isChecked[ID] && !beDeleted[ID] && ID).filter(Boolean))
         .map((group) => (group.length > 1 ? group : []));
     // contacts marked for deletion
     // beDeletedIDs = [[group of (ordered) contact IDs to be deleted], ...]
-    const beDeletedIDs = orderedContacts.map((group) => group.map(({ ID }) => isDeleted[ID] && ID).filter(Boolean));
+    const beDeletedIDs = orderedContacts.map((group) => group.map(({ ID }) => beDeleted[ID] && ID).filter(Boolean));
     // total number of contacts to be merged
     const totalBeMerged = beMergedIDs.flat().length;
 
@@ -130,7 +130,7 @@ const MergeModal = ({
     const handleToggleDelete = (ID) => {
         setModel({
             ...model,
-            isDeleted: { ...isDeleted, [ID]: !isDeleted[ID] }
+            beDeleted: { ...beDeleted, [ID]: !beDeleted[ID] }
         });
     };
 
@@ -258,7 +258,7 @@ const MergeModal = ({
                             onSortEnd={handleSortEnd}
                             contacts={orderedContacts}
                             isChecked={isChecked}
-                            isDeleted={isDeleted}
+                            beDeleted={beDeleted}
                             onClickCheckbox={handleToggleCheck}
                             onClickDetails={handleClickDetails}
                             onClickDelete={handleToggleDelete}

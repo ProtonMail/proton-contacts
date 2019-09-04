@@ -23,7 +23,7 @@ const MergeTableHeader = () => {
 const MergeTable = ({
     contacts = [],
     isChecked = {},
-    isDeleted = {},
+    beDeleted = {},
     onClickCheckbox,
     onClickDetails,
     onClickDelete,
@@ -34,7 +34,7 @@ const MergeTable = ({
     return (
         <>
             {contacts.map((group, i) => {
-                const activeIDs = group.map(({ ID }) => isChecked[ID] && !isDeleted[ID] && ID).filter(Boolean);
+                const activeIDs = group.map(({ ID }) => isChecked[ID] && !beDeleted[ID] && ID).filter(Boolean);
 
                 return (
                     <Block key={`${group && group[0].Name}`} className="mb2 flex flex-column flex-items-center">
@@ -43,7 +43,7 @@ const MergeTable = ({
                             <MergeTableBody
                                 contacts={group}
                                 isChecked={isChecked}
-                                isDeleted={isDeleted}
+                                beDeleted={beDeleted}
                                 onClickCheckbox={onClickCheckbox}
                                 onClickDetails={onClickDetails}
                                 onClickDelete={onClickDelete}
@@ -68,7 +68,7 @@ const MergeTable = ({
 MergeTable.propTypes = {
     contacts: PropTypes.array,
     isChecked: PropTypes.object,
-    isDeleted: PropTypes.object,
+    beDeleted: PropTypes.object,
     onClickCheckbox: PropTypes.func,
     onClickDetails: PropTypes.func,
     onClickDelete: PropTypes.func,
