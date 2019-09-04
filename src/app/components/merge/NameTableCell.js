@@ -4,7 +4,7 @@ import { Checkbox, classnames } from 'react-components';
 
 import { opaqueClassName } from '../../helpers/css';
 
-const NameTableCell = ({ name, contactID, index, checked, deleted, greyedOut, onToggle }) => {
+const NameTableCell = ({ name, contactID, highlightedID, checked, deleted, greyedOut, onToggle }) => {
     const handleToggle = () => onToggle(contactID);
 
     return (
@@ -15,7 +15,13 @@ const NameTableCell = ({ name, contactID, index, checked, deleted, greyedOut, on
                 className={`flex flex-items-center mr0-5 ${deleted ? 'nonvisible' : ''}`}
             />
             <span
-                className={classnames(['mw100', 'inbl', 'ellipsis', opaqueClassName(greyedOut), index === 0 && 'bold'])}
+                className={classnames([
+                    'mw100',
+                    'inbl',
+                    'ellipsis',
+                    opaqueClassName(greyedOut),
+                    contactID === highlightedID && 'bold'
+                ])}
             >
                 {name}
             </span>
@@ -25,7 +31,7 @@ const NameTableCell = ({ name, contactID, index, checked, deleted, greyedOut, on
 
 NameTableCell.propTypes = {
     contactID: PropTypes.string.isRequired,
-    index: PropTypes.number.isRequired,
+    highlightedID: PropTypes.string,
     checked: PropTypes.bool,
     deleted: PropTypes.bool,
     greyedOut: PropTypes.bool,

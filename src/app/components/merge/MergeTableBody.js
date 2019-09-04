@@ -8,6 +8,7 @@ import OptionsDropdown from './OptionsDropdown';
 
 const MergeTableBody = ({
     contacts,
+    highlightedID,
     isChecked,
     beDeleted,
     onClickCheckbox,
@@ -25,13 +26,19 @@ const MergeTableBody = ({
                         key="name"
                         name={Name}
                         contactID={ID}
-                        index={j}
+                        highlightedID={highlightedID}
                         checked={isChecked[ID]}
                         deleted={deleted}
                         greyedOut={deleted}
                         onToggle={onClickCheckbox}
                     />,
-                    <EmailsTableCell key="email" emails={emails} index={j} greyedOut={deleted} />,
+                    <EmailsTableCell
+                        key="email"
+                        contactID={ID}
+                        highlightedID={highlightedID}
+                        emails={emails}
+                        greyedOut={deleted}
+                    />,
                     <OptionsDropdown
                         key="options"
                         contactID={ID}
@@ -55,6 +62,7 @@ const MergeTableBody = ({
 
 MergeTableBody.propTypes = {
     contacts: PropTypes.arrayOf(PropTypes.object),
+    highlightedID: PropTypes.string,
     isChecked: PropTypes.object,
     beDeleted: PropTypes.object,
     onClickCheckbox: PropTypes.func,

@@ -4,7 +4,7 @@ import { classnames } from 'react-components';
 
 import { opaqueClassName } from '../../helpers/css';
 
-const EmailsTableCell = ({ emails = [], index, greyedOut }) => {
+const EmailsTableCell = ({ contactID, emails = [], highlightedID, greyedOut }) => {
     return (
         <span
             className={classnames([
@@ -14,7 +14,7 @@ const EmailsTableCell = ({ emails = [], index, greyedOut }) => {
                 'inbl',
                 'ellipsis',
                 opaqueClassName(greyedOut),
-                index === 0 && 'bold'
+                contactID === highlightedID && 'bold'
             ])}
         >
             {emails.map((email) => `<${email}>`).join(', ')}
@@ -24,7 +24,8 @@ const EmailsTableCell = ({ emails = [], index, greyedOut }) => {
 
 EmailsTableCell.propTypes = {
     emails: PropTypes.arrayOf(PropTypes.string),
-    index: PropTypes.number.isRequired,
+    contactID: PropTypes.string.isRequired,
+    highlightedID: PropTypes.string,
     greyedOut: PropTypes.bool
 };
 

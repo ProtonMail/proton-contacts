@@ -35,6 +35,7 @@ const MergeTable = ({
         <>
             {contacts.map((group, i) => {
                 const activeIDs = group.map(({ ID }) => isChecked[ID] && !beDeleted[ID] && ID).filter(Boolean);
+                const highlightedID = activeIDs.length > 1 ? activeIDs[0] : undefined;
 
                 return (
                     <Block key={`${group && group[0].Name}`} className="mb2 flex flex-column flex-items-center">
@@ -42,6 +43,7 @@ const MergeTable = ({
                             <MergeTableHeader />
                             <MergeTableBody
                                 contacts={group}
+                                highlightedID={highlightedID}
                                 isChecked={isChecked}
                                 beDeleted={beDeleted}
                                 onClickCheckbox={onClickCheckbox}
