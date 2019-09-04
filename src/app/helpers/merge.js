@@ -5,7 +5,7 @@ import { generateNewGroupName } from './properties';
 import { unique } from 'proton-shared/lib/helpers/array';
 
 /**
- * Given an array of object keys and and object storing indices for keys,
+ * Given an array of keys and an object storing an index for each key,
  * if the object contains any of these keys, return the index stored in the object
  * for the first of such keys. Otherwise return -1
  * @param {Array} keys
@@ -34,7 +34,7 @@ export const linkConnections = (connections) => {
     let didModify = false;
 
     const { newConnections } = connections.reduce(
-        (acc, connection, i) => {
+        (acc, connection) => {
             const { connected, newConnections } = acc;
             // check if some index in current connection has been connected already
             const indexFound = findKeyIndex(connection, connected);
@@ -52,7 +52,7 @@ export const linkConnections = (connections) => {
             } else {
                 // update list of connected indices
                 for (const key of connection) {
-                    connected[key] = i;
+                    connected[key] = newConnections.length;
                 }
                 newConnections.push(connection);
             }
