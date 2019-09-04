@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { Icon, useContactEmails, useContactGroups } from 'react-components';
-import { toMap } from 'proton-shared/lib/helpers/object';
-import { normalize } from 'proton-shared/lib/helpers/string';
+import { Icon, useContactEmails } from 'react-components';
 
 import ContactViewProperty from './ContactViewProperty';
 import { OTHER_INFORMATION_FIELDS } from '../constants';
@@ -23,30 +21,26 @@ const ContactViewProperties = ({ properties: allProperties, contactID, field }) 
         adr: c('Title').t`Addresses`,
         other: c('Title').t`Other information`
     };
-
-    const [contactEmails] = useContactEmails();
-    const [contactGroups] = useContactGroups();
-    const mapContactGroups = toMap(contactGroups);
-    const filteredContactEmails = contactEmails.filter(({ ContactID }) => ContactID === contactID);
     const title = field ? TITLES[field] : TITLES.other;
     const iconName = field ? ICONS[field] : ICONS.other;
     const toExclude = ['photo', 'org', 'logo'];
     const fields = field ? [field] : OTHER_INFORMATION_FIELDS.filter((field) => !toExclude.includes(field));
-    const properties = allProperties
-        .filter(({ field }) => fields.includes(field))
-        .map((property) => {
-            if (field === 'email') {
-                const email = Array.isArray(property.value) ? property.value[0] : property.value;
-                const { LabelIDs = [] } =
-                    filteredContactEmails.find(({ Email = '' }) => normalize(Email) === normalize(email)) || {};
 
-                return {
-                    ...property,
-                    contactGroups: LabelIDs.map((labelID) => mapContactGroups[labelID])
-                };
-            }
-            return property;
-        });
+    const [contactEmails] = useContactEmails();
+    const filteredContactEmails = contactEmails.filter(({ ContactID }) => ContactID === contactID);
+    /*
+        Each email has an emailD. This ID is present in `contactEmails`, but lost in `properties`.
+        The emailID is needed for dealing with contact groups, so we need a way to recover it from `properties`
+        To do that, we use the fact that for a given user, the email properties appear in the same order as
+        in the variable `filteredContactEmails`. We add the contactEmail to these email properties
+    */
+    const reservoir = [...filteredContactEmails];
+    const mapContactEmails = allProperties.map((property) =>
+        property.field === 'email' ? reservoir.shift() : undefined
+    );
+    const properties = allProperties
+        .map((property, i) => (field === 'email' ? { ...property, contactEmail: mapContactEmails[i] } : property))
+        .filter(({ field }) => fields.includes(field));
 
     if (!properties.length) {
         return null;
