@@ -31,7 +31,7 @@ const MergeTableBody = ({
                         greyedOut={deleted}
                         onToggle={onClickCheckbox}
                     />,
-                    <EmailsTableCell key="email" emails={emails} greyedOut={deleted} />,
+                    <EmailsTableCell key="email" emails={emails} index={j} greyedOut={deleted} />,
                     <OptionsDropdown
                         key="options"
                         contactID={ID}
