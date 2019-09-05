@@ -232,7 +232,11 @@ ContactsList.propTypes = {
     onClear: PropTypes.func,
     user: PropTypes.object,
     userKeysList: PropTypes.array,
+<<<<<<< HEAD
     loadingUserKeys: PropTypes.bool.isRequired,
+=======
+    loadingUserKeys: PropTypes.bool,
+>>>>>>> * load keys before import modal
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     contactID: PropTypes.string
