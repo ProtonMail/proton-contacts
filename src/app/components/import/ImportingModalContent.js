@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
-import { useApi, useLoading, Alert } from 'react-components';
+import { Alert, useApi, useLoading } from 'react-components';
 
 import DynamicProgress from '../DynamicProgress';
 import ErrorDetails from './ErrorDetails';
@@ -17,200 +17,91 @@ import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE, API_SAFE_INTERVAL, ADD_CONT
 
 const { OVERWRITE_CONTACT } = OVERWRITE;
 const { IGNORE, INCLUDE } = CATEGORIES;
+const { CLEAR_TEXT } = CONTACT_CARD_TYPE;
 
-const createParseErrorMessage = (index, message) =>
-    c('Info on errors importing contacts').t`Contact ${index} from your list could not be parsed. ${message}`;
-const createEncryptErrorMessage = (index) =>
-    c('Info on errors importing contacts').t`Contact ${index} from your list could not be encrypted.`;
-const createSubmitErrorMessage = (index, message) =>
-    c('Info on errors importing contacts').t`Contact ${index} from your list could not be imported. ${message}`;
-
-const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, onFinish }) => {
+const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onFinish }) => {
     const api = useApi();
 
     const [loading, withLoading] = useLoading(true);
     const [model, setModel] = useState({
         total: vcardContacts.length,
-        parsed: vcardContacts.map((contact, index) => ({ index, contact })),
+        failedOnParse: 0,
         encrypted: [],
-        submitted: [],
         failedOnEncrypt: [],
         failedOnParse: [],
         failedOnSubmit: []
     });
 
     useEffect(() => {
-        // Prepare api for allowing cancellation in the middle of the import
-        const abortController = new AbortController();
-        const apiWithAbort = (config) => api({ ...config, signal: abortController.signal });
+        // extract and parse contacts from a vcf file. Returns succesfully parsed vCard contacts
+        const parseVcf = (vcf) => {
+            const vcards = extractVcards(vcf);
+            setModel({ ...model, total: vcards.length });
 
-        /**
-         * Extract and parse contacts from a vcf file. Return succesfully parsed vCard contacts
-         * together with their index in vcardContacts to keep track of original contact order
-         */
-        const parseVcfContacts = ({ signal }) => {
-            const vcards = extractVcards(file);
-            !signal.aborted && setModel({ ...model, total: vcards.length });
-
-            return signal.aborted
-                ? []
-                : vcards.reduce((acc, vcard, index) => {
-                      try {
-                          if (vcard.includes('VERSION:2.1') || vcard.includes('VERSION:3.0')) {
-                              throw new Error('vCard versions < 4.0 not supported');
-                          }
-                          const parsedVcard = parseVcard(vcard);
-                          acc.push({ index, contact: parsedVcard });
-                      } catch ({ message }) {
-                          !signal.aborted &&
-                              setModel((model) => ({
-                                  ...model,
-                                  failedOnParse: [
-                                      ...model.failedOnParse,
-                                      { index, message: createParseErrorMessage(index + 1, message) }
-                                  ]
-                              }));
-                      }
-                      return acc;
-                  }, []);
-        };
-
-        /**
-         * Encrypt vCard contacts. Return succesfully encrypted contacts
-         */
-        const encryptContacts = async (contacts = [], { signal }) => {
-            const publicKey = privateKey.toPublic();
-
-            const encryptedContacts = [];
-            for (const { index, contact } of contacts) {
-                if (signal.aborted) {
-                    return [];
-                }
-                try {
-                    const contactEncrypted = await prepareContact(contact, { privateKey, publicKey });
-                    !signal.aborted &&
-                        setModel((model) => ({ ...model, encrypted: [...model.encrypted, contactEncrypted] }));
-                    encryptedContacts.push({ index, contact: contactEncrypted });
-                } catch (error) {
-                    !signal.aborted &&
-                        setModel((model) => ({
-                            ...model,
-                            failedOnEncrypt: [
-                                ...model.failedOnEncrypt,
-                                { index, message: createEncryptErrorMessage(index + 1) }
-                            ]
-                        }));
-                    encryptedContacts.push('error'); // must keep for a proper counting when displaying errors
-                }
-            }
-
-            return encryptedContacts;
-        };
-
-        /**
-         * Send a batch of contacts to the API
-         */
-        const submitBatch = async ({ contacts = [], labels }, { signal }) => {
-            if (signal.aborted || !contacts.length) {
-                return;
-            }
-
-            const indexMap = contacts.map(({ index }) => index);
-
-            const responses = (await apiWithAbort(
-                addContacts({
-                    Contacts: contacts.map(({ contact }) => contact),
-                    Overwrite: OVERWRITE_CONTACT,
-                    Labels: labels
-                })
-            )).Responses.map(({ Response }) => Response);
-
-            if (signal.aborted) {
-                return;
-            }
-            const { submittedBatch, failedOnSubmitBatch } = responses.reduce(
-                (acc, { Code, Error, Contact: { ID } }, i) => {
-                    const index = indexMap[i];
-                    if (Code === SUCCESS_IMPORT_CODE) {
-                        acc.submittedBatch.push(ID);
-                    } else {
-                        acc.failedOnSubmitBatch.push({ index, message: createSubmitErrorMessage(index + 1, Error) });
+            return vcards
+                .map((vcard) => {
+                    try {
+                        return parseVcard(vcard);
+                    } catch {
+                        setModel((model) => ({ ...model, failedOnParse: model.failedOnParse + 1 }));
+                        return;
                     }
-                    return acc;
-                },
-                { submittedBatch: [], failedOnSubmitBatch: [] }
+                })
+                .filter(Boolean);
+        };
+
+        // encrypt vCard contacts. Returns succesfully encrypted contacts
+        const encryptContacts = async (contacts) => {
+            const publicKey = privateKey.toPublic();
+            return (await Promise.all(
+                contacts.map(async (contact) => {
+                    try {
+                        const contactEncrypted = await prepareContact(contact, privateKey, publicKey);
+                        setModel((model) => ({ ...model, encrypted: [...model.encrypted, contactEncrypted] }));
+                        return contactEncrypted;
+                    } catch (error) {
+                        setModel((model) => ({ ...model, failedOnEncrypt: [...model.failed, contact] }));
+                        return;
+                    }
+                })
+            )).filter(Boolean);
+        };
+
+        const saveContacts = async (contacts) => {
+            // split encrypted contacts depending on having the CATEGORIES property
+            const withCategories = contacts.filter(({ Cards }) =>
+                Cards.some(({ Type, Data }) => Type === CLEAR_TEXT && Data.includes('CATEGORIES'))
             );
-            setModel((model) => ({
-                ...model,
-                submitted: [...model.submitted, ...submittedBatch],
-                failedOnSubmit: [...model.failedOnSubmit, ...failedOnSubmitBatch]
-            }));
+            const withoutCategories = contacts.filter(({ Cards }) =>
+                Cards.every(({ Type, Data }) => Type !== CLEAR_TEXT || !Data.includes('CATEGORIES'))
+            );
+
+            // send encrypted contacts to API
+            const responses = (await api(
+                addContacts({ Contacts: withCategories, Overwrite: OVERWRITE_CONTACT, Labels: INCLUDE })
+            )).Responses.concat(
+                (await api(addContacts({ Contacts: withoutCategories, Overwrite: OVERWRITE_CONTACT, Labels: IGNORE })))
+                    .Responses
+            ).map(({ Response }) => Response);
+
+            const imported = responses.reduce((acc, { Code }) => {
+                if (Code === SUCCESS_IMPORT_CODE) {
+                    return acc + 1;
+                }
+                return acc;
+            }, 0);
+            setModel((model) => ({ ...model, imported }));
         };
 
-        /**
-         * Send contacts to the API in batches
-         */
-        const submitContacts = async ({ contacts = [], labels }, { signal }) => {
-            if (signal.aborted) {
-                return;
-            }
-            // divide contacts and indexMap in batches
-            const contactBatches = chunk(contacts, ADD_CONTACTS_MAX_SIZE);
-            const apiCalls = contactBatches.length;
-
-            for (let i = 0; i < apiCalls; i++) {
-                // avoid overloading API in the unlikely case submitBatch is too fast
-                await Promise.all([
-                    submitBatch({ contacts: contactBatches[i], labels }, { signal }),
-                    wait(API_SAFE_INTERVAL)
-                ]);
-            }
+        const importContacts = async () => {
+            const parsedContacts = extension === 'vcf' ? parseVcf(file) : vcardContacts;
+            const encryptedContacts = await encryptContacts(parsedContacts);
+            await saveContacts(encryptedContacts);
+            onFinish();
         };
 
-        /**
-         * All steps of the import process
-         */
-        const importContacts = async ({ signal }) => {
-            const parsedVcfContacts = parseVcfContacts({ signal });
-            if (isVcf) {
-                !signal.aborted && setModel((model) => ({ ...model, parsed: parsedVcfContacts }));
-            }
-            const parsedContacts = isVcf ? parsedVcfContacts : vcardContacts;
-            const encryptedContacts = await encryptContacts(parsedContacts, { signal });
-            const { withCategories, withoutCategories } = splitContacts(encryptedContacts);
-            await submitContacts({ contacts: withCategories, labels: INCLUDE }, { signal });
-            await submitContacts({ contacts: withoutCategories, labels: IGNORE }, { signal });
-            !signal.aborted && (await onFinish());
-        };
-
-        withLoading(importContacts(abortController));
-
-        return () => {
-            abortController.abort();
-        };
+        withLoading(importContacts());
     }, []);
-
-    // Allocate 5% of the progress to parsing, 90% to encrypting, and 5% to sending to API
-    const combinedProgress = combineProgress([
-        {
-            allocated: 0.05,
-            successful: model.parsed.length,
-            failed: model.failedOnParse.length,
-            total: model.total
-        },
-        {
-            allocated: 0.9,
-            successful: model.encrypted.length,
-            failed: model.failedOnEncrypt.length,
-            total: model.total - model.failedOnParse.length
-        },
-        {
-            allocated: 0.05,
-            successful: model.submitted.length,
-            failed: model.failedOnSubmit.length,
-            total: model.total - model.failedOnParse.length - model.failedOnEncrypt.length
-        }
-    ]);
 
     return (
         <>
@@ -221,21 +112,19 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
             <DynamicProgress
                 id="progress-import-contacts"
                 alt="contact-loader"
-                value={combinedProgress}
+                value={percentageProgress(
+                    model.encrypted.length,
+                    model.failedOnParse + model.failedOnEncrypt.length,
+                    model.total
+                )}
                 displaySuccess={c('Progress bar description').ngettext(
-                    msgid`${model.submitted.length} out of ${model.total} contact successfully imported.`,
-                    `${model.submitted.length} out of ${model.total} contacts successfully imported.`,
-                    model.submitted.length
+                    msgid`${model.imported} out of ${model.total} contact successfully imported.`,
+                    `${model.imported} out of ${model.total} contacts successfully imported.`,
+                    model.imported
                 )}
                 displayFailed={c('Progress bar description').t`No contacts imported`}
-                failed={!model.submitted.length}
+                failed={!model.imported}
                 endPostponed={loading}
-            />
-            <ErrorDetails
-                loading={loading}
-                errors={[...model.failedOnParse, ...model.failedOnEncrypt, ...model.failedOnSubmit]}
-                summary={c('Info on errors importing contacts')
-                    .t`Some contacts could not be imported. Click for details`}
             />
         </>
     );

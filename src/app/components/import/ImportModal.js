@@ -35,7 +35,7 @@ const getI18nTitle = () => ({
     [IMPORT_GROUPS]: c(`Title`).t`Import groups`
 });
 
-const ImportModal = ({ userKeysList, ...rest }) => {
+const ImportModal = ({ user, userKeysList, ...rest }) => {
     const title = getI18nTitle();
 
     const { createModal } = useModals();
@@ -179,9 +179,9 @@ const ImportModal = ({ userKeysList, ...rest }) => {
             };
         }
         if (step === IMPORT_GROUPS) {
-            const handleSubmit = async () => {
-                await call();
+            const handleSubmit = () => {
                 rest.onClose();
+                call();
             };
             const submit = <PrimaryButton type="submit">{c('Action').t`Create`}</PrimaryButton>;
 
@@ -201,6 +201,7 @@ const ImportModal = ({ userKeysList, ...rest }) => {
 };
 
 ImportModal.propTypes = {
+    user: PropTypes.object.isRequired,
     userKeysList: PropTypes.array.isRequired
 };
 
