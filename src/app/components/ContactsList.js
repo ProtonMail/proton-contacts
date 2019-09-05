@@ -44,7 +44,7 @@ const ContactsList = ({
     }, Object.create(null));
 
     const handleImport = () => {
-        createModal(<ImportModal user={user} userKeysList={userKeysList} />);
+        createModal(<ImportModal userKeysList={userKeysList} />);
     };
     const handleAddContact = () => {
         createModal(<ContactModal />);
@@ -232,7 +232,7 @@ ContactsList.propTypes = {
     onClear: PropTypes.func,
     user: PropTypes.object,
     userKeysList: PropTypes.array,
-    loadingUserKeys: PropTypes.bool,
+    loadingUserKeys: PropTypes.bool.isRequired,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     contactID: PropTypes.string

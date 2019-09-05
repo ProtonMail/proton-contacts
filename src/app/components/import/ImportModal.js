@@ -35,7 +35,7 @@ const getI18nTitle = () => ({
     [IMPORT_GROUPS]: c(`Title`).t`Import groups`
 });
 
-const ImportModal = ({ user, userKeysList, ...rest }) => {
+const ImportModal = ({ userKeysList, ...rest }) => {
     const title = getI18nTitle();
 
     const { createModal } = useModals();
@@ -201,7 +201,6 @@ const ImportModal = ({ user, userKeysList, ...rest }) => {
 };
 
 ImportModal.propTypes = {
-    user: PropTypes.object.isRequired,
     userKeysList: PropTypes.array.isRequired
 };
 
