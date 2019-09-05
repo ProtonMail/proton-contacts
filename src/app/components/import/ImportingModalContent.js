@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
-<<<<<<< HEAD
-import { useApi, useLoading, Alert } from 'react-components';
-=======
-import { Alert, useApi, useLoading } from 'react-components';
->>>>>>> * load keys before import modal
+import { useApi, useLoading, Alert, Details, Summary, Bordered } from 'react-components';
 
 import DynamicProgress from '../DynamicProgress';
 import ErrorDetails from './ErrorDetails';
