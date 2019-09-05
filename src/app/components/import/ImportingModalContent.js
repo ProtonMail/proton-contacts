@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
-import { Alert, useApi } from 'react-components';
+import { Alert, useApi, useLoading } from 'react-components';
 
 import DynamicProgress from '../DynamicProgress';
 
@@ -16,100 +16,88 @@ const { OVERWRITE_CONTACT } = OVERWRITE;
 const { IGNORE, INCLUDE } = CATEGORIES;
 const { CLEAR_TEXT } = CONTACT_CARD_TYPE;
 
-const [PARSING, ENCRYPTING, IMPORTING, FINISHED] = [1, 2, 3, 4];
-
-const ImportingModalContent = ({
-    extension,
-    file,
-    vcardContacts,
-    onSetVcardContacts,
-    loadingKeys,
-    privateKey,
-    onEncryptingDone
-}) => {
+const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onFinish }) => {
     const api = useApi();
 
-    const [step, setStep] = useState(PARSING);
-    const [track, setTrack] = useState({
-        total: 0,
-        encrypted: [],
+    const [loading, withLoading] = useLoading(true);
+    const [model, setModel] = useState({
+        total: vcardContacts.length,
         failedOnParse: 0,
+        encrypted: [],
         failedOnEncrypt: [],
         imported: 0
     });
 
-    const parseFileIfNeeded = async () => {
-        if (extension === 'vcf') {
-            const vcards = extractVcards(file);
-            setTrack((track) => ({ ...track, total: vcards.length }));
-            const parsedVcards = [];
-            for (const vcard of vcards) {
-                try {
-                    parsedVcards.push(parseVcard(vcard));
-                } catch {
-                    setTrack((track) => ({ ...track, failedOnParse: track.failedOnParse + 1 }));
-                }
-            }
-            onSetVcardContacts(parsedVcards);
-        } else {
-            // in the case of a csv file, the parsing has occurred in the previous step
-            setTrack((track) => ({ ...track, total: vcardContacts.length }));
-        }
-        setStep(ENCRYPTING);
-    };
-
-    const encryptContacts = async () => {
-        const publicKey = privateKey.toPublic();
-        for (const vcardContact of vcardContacts) {
-            try {
-                const contactEncrypted = await prepareContact(vcardContact, privateKey, publicKey);
-                setTrack((track) => ({ ...track, encrypted: [...track.encrypted, contactEncrypted] }));
-            } catch (error) {
-                setTrack((track) => ({ ...track, failedOnEncrypt: [...track.failed, vcardContact] }));
-            }
-        }
-        onEncryptingDone();
-        setStep(IMPORTING);
-    };
-
-    const importContacts = async (contacts) => {
-        // split encrypted contacts depending on having the CATEGORIES property
-        const withCategories = contacts.filter(({ Cards }) =>
-            Cards.some(({ Type, Data }) => Type === CLEAR_TEXT && Data.includes('CATEGORIES'))
-        );
-        const withoutCategories = contacts.filter(({ Cards }) =>
-            Cards.every(({ Type, Data }) => Type !== CLEAR_TEXT || !Data.includes('CATEGORIES'))
-        );
-
-        // send encrypted contacts to API
-        const responses = (await api(
-            addContacts({ Contacts: withCategories, Overwrite: OVERWRITE_CONTACT, Labels: INCLUDE })
-        )).Responses.concat(
-            (await api(addContacts({ Contacts: withoutCategories, Overwrite: OVERWRITE_CONTACT, Labels: IGNORE })))
-                .Responses
-        ).map(({ Response }) => Response);
-
-        const imported = responses.reduce((acc, { Code }) => {
-            if (Code === SUCCESS_IMPORT_CODE) {
-                return acc + 1;
-            }
-            return acc;
-        }, 0);
-        setTrack((track) => ({ ...track, imported }));
-        setStep(FINISHED);
-    };
-
     useEffect(() => {
-        if (step === PARSING) {
-            parseFileIfNeeded();
-        }
-        if (step === ENCRYPTING) {
-            !loadingKeys && encryptContacts();
-        }
-        if (step === IMPORTING) {
-            importContacts(track.encrypted);
-        }
-    }, [step, loadingKeys]);
+        // extract and parse contacts from a vcf file. Returns succesfully parsed vCard contacts
+        const parseVcf = (vcf) => {
+            const vcards = extractVcards(vcf);
+            setModel({ ...model, total: vcards.length });
+
+            return vcards
+                .map((vcard) => {
+                    try {
+                        return parseVcard(vcard);
+                    } catch {
+                        setModel((model) => ({ ...model, failedOnParse: model.failedOnParse + 1 }));
+                        return;
+                    }
+                })
+                .filter(Boolean);
+        };
+
+        // encrypt vCard contacts. Returns succesfully encrypted contacts
+        const encryptContacts = async (contacts) => {
+            const publicKey = privateKey.toPublic();
+            return (await Promise.all(
+                contacts.map(async (contact) => {
+                    try {
+                        const contactEncrypted = await prepareContact(contact, privateKey, publicKey);
+                        setModel((model) => ({ ...model, encrypted: [...model.encrypted, contactEncrypted] }));
+                        return contactEncrypted;
+                    } catch (error) {
+                        setModel((model) => ({ ...model, failedOnEncrypt: [...model.failed, contact] }));
+                        return;
+                    }
+                })
+            )).filter(Boolean);
+        };
+
+        const saveContacts = async (contacts) => {
+            // split encrypted contacts depending on having the CATEGORIES property
+            const withCategories = contacts.filter(({ Cards }) =>
+                Cards.some(({ Type, Data }) => Type === CLEAR_TEXT && Data.includes('CATEGORIES'))
+            );
+            const withoutCategories = contacts.filter(({ Cards }) =>
+                Cards.every(({ Type, Data }) => Type !== CLEAR_TEXT || !Data.includes('CATEGORIES'))
+            );
+
+            // send encrypted contacts to API
+            const responses = (await api(
+                addContacts({ Contacts: withCategories, Overwrite: OVERWRITE_CONTACT, Labels: INCLUDE })
+            )).Responses.concat(
+                (await api(addContacts({ Contacts: withoutCategories, Overwrite: OVERWRITE_CONTACT, Labels: IGNORE })))
+                    .Responses
+            ).map(({ Response }) => Response);
+
+            const imported = responses.reduce((acc, { Code }) => {
+                if (Code === SUCCESS_IMPORT_CODE) {
+                    return acc + 1;
+                }
+                return acc;
+            }, 0);
+            setModel((model) => ({ ...model, imported }));
+        };
+
+        const importContacts = async () => {
+            const parsedContacts = extension === 'vcf' ? parseVcf(file) : vcardContacts;
+            const encryptedContacts = await encryptContacts(parsedContacts);
+            await saveContacts(encryptedContacts);
+            onFinish();
+        };
+
+        withLoading(importContacts());
+    }, []);
 
     return (
         <>
@@ -121,18 +109,18 @@ const ImportingModalContent = ({
                 id="progress-import-contacts"
                 alt="contact-loader"
                 value={percentageProgress(
-                    track.encrypted.length,
-                    track.failedOnParse + track.failedOnEncrypt.length,
-                    track.total
+                    model.encrypted.length,
+                    model.failedOnParse + model.failedOnEncrypt.length,
+                    model.total
                 )}
                 displaySuccess={c('Progress bar description').ngettext(
-                    msgid`${track.imported} out of ${track.total} contact successfully imported.`,
-                    `${track.imported} out of ${track.total} contacts successfully imported.`,
-                    track.imported
+                    msgid`${model.imported} out of ${model.total} contact successfully imported.`,
+                    `${model.imported} out of ${model.total} contacts successfully imported.`,
+                    model.imported
                 )}
                 displayFailed={c('Progress bar description').t`No contacts imported`}
-                failed={!track.encrypted.length}
-                endPostponed={step !== FINISHED}
+                failed={!model.imported}
+                endPostponed={loading}
             />
         </>
     );
@@ -145,11 +133,8 @@ ImportingModalContent.propTypes = {
         PropTypes.shape({ headers: PropTypes.array, contacts: PropTypes.array })
     ]).isRequired,
     vcardContacts: PropTypes.array.isRequired,
-    onSetVcardContacts: PropTypes.func,
-    loadingKeys: PropTypes.bool,
     privateKey: PropTypes.object.isRequired,
-    encryptingDone: PropTypes.bool,
-    onEncryptingDone: PropTypes.func
+    onFinish: PropTypes.func
 };
 
 export default ImportingModalContent;

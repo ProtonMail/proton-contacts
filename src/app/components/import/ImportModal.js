@@ -4,8 +4,6 @@ import { c } from 'ttag';
 import {
     useEventManager,
     useNotifications,
-    useUser,
-    useUserKeys,
     useModals,
     FormModal,
     ConfirmModal,
@@ -37,19 +35,17 @@ const getI18nTitle = () => ({
     [IMPORT_GROUPS]: c(`Title`).t`Import groups`
 });
 
-const ImportModal = ({ onClose, ...rest }) => {
+const ImportModal = ({ user, userKeysList, ...rest }) => {
     const title = getI18nTitle();
 
     const { createModal } = useModals();
     const { createNotification } = useNotifications();
     const { call } = useEventManager();
-    const [user] = useUser();
-    const [userKeysList, loadingUserKeys] = useUserKeys(user);
 
     const [step, setStep] = useState(ATTACHING);
     const [file, setFile] = useState({});
     const [vcardContacts, setVcardContacts] = useState([]);
-    const [encryptingDone, setEncryptingDone] = useState(false);
+    const [importFinished, setImportFinished] = useState(false);
 
     const handleClear = () => {
         setFile({});
@@ -84,8 +80,6 @@ const ImportModal = ({ onClose, ...rest }) => {
         setStep(ATTACHED);
         setFile({ attached: attachedFile, extension });
     };
-
-    const handleEncryptingDone = () => setEncryptingDone(true);
 
     const { content, ...modalProps } = (() => {
         if (step <= ATTACHED) {
@@ -162,11 +156,11 @@ const ImportModal = ({ onClose, ...rest }) => {
                 // if (hasCategories(vcardContacts)) {
                 //     return setStep(IMPORT_GROUPS);
                 // }
-                onClose();
+                rest.onClose();
                 call();
             };
             const footer = (
-                <PrimaryButton loading={!encryptingDone} type="submit">
+                <PrimaryButton loading={!importFinished} type="submit">
                     {c('Action').t`Close`}
                 </PrimaryButton>
             );
@@ -178,9 +172,8 @@ const ImportModal = ({ onClose, ...rest }) => {
                         file={file.read}
                         vcardContacts={vcardContacts}
                         onSetVcardContacts={setVcardContacts}
-                        loadingKeys={loadingUserKeys}
                         privateKey={userKeysList[0].privateKey}
-                        onEncryptingDone={handleEncryptingDone}
+                        onFinish={() => setImportFinished(true)}
                     />
                 ),
                 footer,
@@ -190,7 +183,7 @@ const ImportModal = ({ onClose, ...rest }) => {
         }
         if (step === IMPORT_GROUPS) {
             const handleSubmit = () => {
-                onClose();
+                rest.onClose();
                 call();
             };
             const footer = <PrimaryButton type="submit">{c('Action').t`Create`}</PrimaryButton>;
@@ -204,14 +197,15 @@ const ImportModal = ({ onClose, ...rest }) => {
     })();
 
     return (
-        <FormModal title={title[step]} onClose={onClose} {...modalProps} {...rest}>
+        <FormModal title={title[step]} {...modalProps} {...rest}>
             {content}
         </FormModal>
     );
 };
 
 ImportModal.propTypes = {
-    onClose: PropTypes.func
+    user: PropTypes.object.isRequired,
+    userKeysList: PropTypes.array.isRequired
 };
 
 export default ImportModal;
