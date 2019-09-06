@@ -49,8 +49,8 @@ const Contact = ({ contactID, contactEmails, contactGroupsMap, userKeysList }) =
 
 Contact.propTypes = {
     contactID: PropTypes.string.isRequired,
-    contactEmails: PropTypes.arrayOf(PropTypes.object).isRequired,
-    contactGroupsMap: PropTypes.object.isRequired,
+    contactEmails: PropTypes.arrayOf(PropTypes.object),
+    contactGroupsMap: PropTypes.object,
     userKeysList: PropTypes.array
 };
 

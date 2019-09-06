@@ -65,8 +65,8 @@ const ContactPropertyPropTypes = PropTypes.shape({
 
 ContactView.propTypes = {
     contactID: PropTypes.string.isRequired,
-    contactEmails: PropTypes.arrayOf(PropTypes.object).isRequired,
-    contactGroupsMap: PropTypes.object.isRequired,
+    contactEmails: PropTypes.arrayOf(PropTypes.object),
+    contactGroupsMap: PropTypes.object,
     properties: PropTypes.arrayOf(ContactPropertyPropTypes),
     errors: PropTypes.array
 };
