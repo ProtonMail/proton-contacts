@@ -7,7 +7,7 @@ import ImportCsvTableHeader from './ImportCsvTableHeader';
 import ImportCsvTableBody from './ImportCsvTableBody';
 
 import { prepare, toVcardContacts } from '../../helpers/csv';
-import { modifyContactField, modifyContactType, toggleContactChecked } from '../../helpers/import';
+import { modifyContactField, modifyContactType, toggleContactChecked } from '../../helpers/importCsv';
 
 const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
     const { createNotification } = useNotifications();
