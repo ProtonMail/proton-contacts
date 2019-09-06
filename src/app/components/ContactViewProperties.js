@@ -14,7 +14,13 @@ const ICONS = {
     other: 'info'
 };
 
-const ContactViewProperties = ({ properties: allProperties, contactID, contactEmails, contactGroupsMap, field }) => {
+const ContactViewProperties = ({
+    properties: allProperties,
+    contactID,
+    contactEmails,
+    contactGroupsMap = {},
+    field
+}) => {
     const TITLES = {
         email: c('Title').t`Email addresses`,
         tel: c('Title').t`Phone numbers`,
