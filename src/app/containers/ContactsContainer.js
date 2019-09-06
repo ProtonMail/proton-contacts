@@ -21,6 +21,7 @@ import {
 } from 'react-components';
 import { clearContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 import { normalize } from 'proton-shared/lib/helpers/string';
+import { toMap } from 'proton-shared/lib/helpers/object';
 
 import ContactsList from '../components/ContactsList';
 import Contact from '../components/Contact';
@@ -82,6 +83,8 @@ const ContactsContainer = ({ location, history }) => {
             return acc;
         }, Object.create(null));
     }, [contactEmails]);
+
+    const contactGroupsMap = useMemo(() => toMap(contactGroups), [contactGroups]);
 
     const formattedContacts = useMemo(() => {
         return filteredContacts.map((contact) => {
@@ -220,6 +223,7 @@ const ContactsContainer = ({ location, history }) => {
                                                     <Contact
                                                         contactID={contactID}
                                                         contactEmails={contactEmailsMap[contactID]}
+                                                        contactGroupsMap={contactGroupsMap}
                                                         userKeysList={userKeysList}
                                                     />
                                                 )}

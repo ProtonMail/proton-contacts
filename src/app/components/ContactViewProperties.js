@@ -14,7 +14,7 @@ const ICONS = {
     other: 'info'
 };
 
-const ContactViewProperties = ({ properties: allProperties, contactID, contactEmails, field }) => {
+const ContactViewProperties = ({ properties: allProperties, contactID, contactEmails, contactGroupsMap, field }) => {
     const TITLES = {
         email: c('Title').t`Email addresses`,
         tel: c('Title').t`Phone numbers`,
@@ -40,6 +40,9 @@ const ContactViewProperties = ({ properties: allProperties, contactID, contactEm
                 {field === 'email' ? null : <EncryptedIcon />}
             </h3>
             {properties.map((property, index) => {
+                const contactEmail = contactEmails && contactEmails[index];
+                const contactGroups = contactEmail && contactEmail.LabelIDs.map((ID) => contactGroupsMap[ID]);
+
                 return (
                     /*
                         Here we are hiddenly using the fact that the emails in
@@ -48,7 +51,8 @@ const ContactViewProperties = ({ properties: allProperties, contactID, contactEm
                     <ContactViewProperty
                         key={index.toString()}
                         contactID={contactID}
-                        contactEmail={contactEmails && contactEmails[index]}
+                        contactEmail={contactEmail}
+                        contactGroups={contactGroups}
                         property={property}
                         properties={allProperties}
                     />
@@ -62,6 +66,7 @@ ContactViewProperties.propTypes = {
     properties: PropTypes.array,
     contactID: PropTypes.string.isRequired,
     contactEmails: PropTypes.arrayOf(PropTypes.object),
+    contactGroupsMap: PropTypes.object,
     field: PropTypes.string
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Row, Group, ButtonGroup, Copy, useModals, useUser, useContactGroups, classnames } from 'react-components';
+import { Row, Group, ButtonGroup, Copy, useModals, useUser, classnames } from 'react-components';
 import { c } from 'ttag';
 
 import { clearType, getType, formatAdr } from '../helpers/property';
@@ -9,14 +9,11 @@ import ContactGroupIcon from './ContactGroupIcon';
 import ContactGroupDropdown from './ContactGroupDropdown';
 import ContactLabelProperty from './ContactLabelProperty';
 import ContactEmailSettingsModal from './ContactEmailSettingsModal';
-import { toMap } from 'proton-shared/lib/helpers/object';
 
-const ContactViewProperty = ({ property, properties, contactID, contactEmail }) => {
+const ContactViewProperty = ({ property, properties, contactID, contactEmail, contactGroups }) => {
     const { field, first } = property;
     const [{ hasPaidMail }] = useUser();
     const { createModal } = useModals();
-    const [contactGroups] = useContactGroups();
-    const mapContactGroups = toMap(contactGroups);
     const type = clearType(getType(property.type));
     const value = property.value;
 
@@ -28,12 +25,9 @@ const ContactViewProperty = ({ property, properties, contactID, contactEmail }) 
                         <a className="mr0-5" href={`mailto:${value}`} title={value}>
                             {value}
                         </a>
-                        {contactEmail &&
-                            contactEmail.LabelIDs.length > 0 &&
-                            contactEmail.LabelIDs.map((ID) => {
-                                const { Name, Color } = mapContactGroups[ID];
-                                return <ContactGroupIcon key={ID} name={Name} color={Color} />;
-                            })}
+                        {contactGroups.map(({ ID, Name, Color }) => (
+                            <ContactGroupIcon key={ID} name={Name} color={Color} />
+                        ))}
                     </>
                 );
             }
@@ -122,7 +116,8 @@ ContactViewProperty.propTypes = {
     property: PropTypes.object.isRequired,
     properties: PropTypes.array,
     contactID: PropTypes.string.isRequired,
-    contactEmail: PropTypes.object
+    contactEmail: PropTypes.object,
+    contactGroups: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default ContactViewProperty;
