@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 import { CONTACT_CARD_TYPE } from 'proton-shared/lib/constants';
 
+=======
+>>>>>>> import in batches
 // See './csv.js' for the definition of pre-vCard and pre-vCards contact
 
 const { CLEAR_TEXT } = CONTACT_CARD_TYPE;
@@ -13,6 +16,7 @@ const { CLEAR_TEXT } = CONTACT_CARD_TYPE;
 export const hasCategories = (vcardContacts) => {
     return vcardContacts.some((contact) => contact.some(({ field, value }) => value && field === 'categories'));
 };
+<<<<<<< HEAD
 
 /**
  * Split encrypted contacts depending on having the CATEGORIES property.
@@ -35,3 +39,5 @@ export const splitContacts = (contacts = []) =>
         },
         { withCategories: [], withoutCategories: [] }
     );
+=======
+>>>>>>> import in batches
