@@ -11,8 +11,8 @@ import ContactLabelProperty from './ContactLabelProperty';
 import ContactEmailSettingsModal from './ContactEmailSettingsModal';
 import { toMap } from 'proton-shared/lib/helpers/object';
 
-const ContactViewProperty = ({ property, properties, contactID }) => {
-    const { field, first, contactEmail } = property;
+const ContactViewProperty = ({ property, properties, contactID, contactEmail }) => {
+    const { field, first } = property;
     const [{ hasPaidMail }] = useUser();
     const { createModal } = useModals();
     const [contactGroups] = useContactGroups();
@@ -121,7 +121,8 @@ const ContactViewProperty = ({ property, properties, contactID }) => {
 ContactViewProperty.propTypes = {
     property: PropTypes.object.isRequired,
     properties: PropTypes.array,
-    contactID: PropTypes.string
+    contactID: PropTypes.string.isRequired,
+    contactEmail: PropTypes.object
 };
 
 export default ContactViewProperty;

@@ -217,7 +217,11 @@ const ContactsContainer = ({ location, history }) => {
                                                         onUncheck={handleUncheckAll}
                                                     />
                                                 ) : (
-                                                    <Contact contactID={contactID} userKeysList={userKeysList} />
+                                                    <Contact
+                                                        contactID={contactID}
+                                                        contactEmails={contactEmailsMap[contactID]}
+                                                        userKeysList={userKeysList}
+                                                    />
                                                 )}
                                             </>
                                         );

@@ -10,7 +10,7 @@ import { toICAL } from '../helpers/vcard';
 import ContactSummary from './ContactSummary';
 import ContactViewProperties from './ContactViewProperties';
 
-const ContactView = ({ properties, contactID, errors }) => {
+const ContactView = ({ properties = [], contactID, contactEmails, errors }) => {
     const { createModal } = useModals();
 
     const openContactModal = () => {
@@ -41,7 +41,12 @@ const ContactView = ({ properties, contactID, errors }) => {
             <ContactViewErrors errors={errors} />
             <ContactSummary properties={properties} />
             <div className="pl1 pr1">
-                <ContactViewProperties contactID={contactID} properties={properties} field="email" />
+                <ContactViewProperties
+                    contactID={contactID}
+                    contactEmails={contactEmails}
+                    properties={properties}
+                    field="email"
+                />
                 <ContactViewProperties contactID={contactID} properties={properties} field="tel" />
                 <ContactViewProperties contactID={contactID} properties={properties} field="adr" />
                 <ContactViewProperties contactID={contactID} properties={properties} />
@@ -58,13 +63,10 @@ const ContactPropertyPropTypes = PropTypes.shape({
 });
 
 ContactView.propTypes = {
-    contactID: PropTypes.string,
+    contactID: PropTypes.string.isRequired,
+    contactEmails: PropTypes.arrayOf(PropTypes.object).isRequired,
     properties: PropTypes.arrayOf(ContactPropertyPropTypes),
     errors: PropTypes.array
-};
-
-ContactView.defaultProps = {
-    properties: []
 };
 
 export default ContactView;
