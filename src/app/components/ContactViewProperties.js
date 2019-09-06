@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { Icon, useContactEmails, useContactGroups } from 'react-components';
-import { toMap } from 'proton-shared/lib/helpers/object';
-import { normalize } from 'proton-shared/lib/helpers/string';
+import { Icon } from 'react-components';
 
 import ContactViewProperty from './ContactViewProperty';
 import { OTHER_INFORMATION_FIELDS } from '../constants';
@@ -16,37 +14,19 @@ const ICONS = {
     other: 'info'
 };
 
-const ContactViewProperties = ({ properties: allProperties, contactID, field }) => {
+const ContactViewProperties = ({ properties: allProperties, contactID, contactEmails, contactGroupsMap, field }) => {
     const TITLES = {
         email: c('Title').t`Email addresses`,
         tel: c('Title').t`Phone numbers`,
         adr: c('Title').t`Addresses`,
         other: c('Title').t`Other information`
     };
-
-    const [contactEmails] = useContactEmails();
-    const [contactGroups] = useContactGroups();
-    const mapContactGroups = toMap(contactGroups);
-    const filteredContactEmails = contactEmails.filter(({ ContactID }) => ContactID === contactID);
     const title = field ? TITLES[field] : TITLES.other;
     const iconName = field ? ICONS[field] : ICONS.other;
     const toExclude = ['photo', 'org', 'logo'];
     const fields = field ? [field] : OTHER_INFORMATION_FIELDS.filter((field) => !toExclude.includes(field));
-    const properties = allProperties
-        .filter(({ field }) => fields.includes(field))
-        .map((property) => {
-            if (field === 'email') {
-                const email = Array.isArray(property.value) ? property.value[0] : property.value;
-                const { LabelIDs = [] } =
-                    filteredContactEmails.find(({ Email = '' }) => normalize(Email) === normalize(email)) || {};
 
-                return {
-                    ...property,
-                    contactGroups: LabelIDs.map((labelID) => mapContactGroups[labelID])
-                };
-            }
-            return property;
-        });
+    const properties = allProperties.filter(({ field }) => fields.includes(field));
 
     if (!properties.length) {
         return null;
@@ -60,10 +40,19 @@ const ContactViewProperties = ({ properties: allProperties, contactID, field }) 
                 {field === 'email' ? null : <EncryptedIcon />}
             </h3>
             {properties.map((property, index) => {
+                const contactEmail = contactEmails && contactEmails[index];
+                const contactGroups = contactEmail && contactEmail.LabelIDs.map((ID) => contactGroupsMap[ID]);
+
                 return (
+                    /*
+                        Here we are hiddenly using the fact that the emails in
+                        `properties` appear in the same order as in `contactEmails`
+                    */
                     <ContactViewProperty
                         key={index.toString()}
                         contactID={contactID}
+                        contactEmail={contactEmail}
+                        contactGroups={contactGroups}
                         property={property}
                         properties={allProperties}
                     />
@@ -75,7 +64,9 @@ const ContactViewProperties = ({ properties: allProperties, contactID, field }) 
 
 ContactViewProperties.propTypes = {
     properties: PropTypes.array,
-    contactID: PropTypes.string,
+    contactID: PropTypes.string.isRequired,
+    contactEmails: PropTypes.arrayOf(PropTypes.object),
+    contactGroupsMap: PropTypes.object,
     field: PropTypes.string
 };
 

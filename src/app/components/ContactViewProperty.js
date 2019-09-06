@@ -1,8 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Row, Group, ButtonGroup, Copy, useModals, useUser, useContactEmails, classnames } from 'react-components';
-import { normalize } from 'proton-shared/lib/helpers/string';
+import { Row, Group, ButtonGroup, Copy, useModals, useUser, classnames } from 'react-components';
 import { c } from 'ttag';
 
 import { clearType, getType, formatAdr } from '../helpers/property';
@@ -11,11 +10,10 @@ import ContactGroupDropdown from './ContactGroupDropdown';
 import ContactLabelProperty from './ContactLabelProperty';
 import ContactEmailSettingsModal from './ContactEmailSettingsModal';
 
-const ContactViewProperty = ({ property, properties, contactID }) => {
+const ContactViewProperty = ({ property, properties, contactID, contactEmail, contactGroups }) => {
     const { field, first } = property;
     const [{ hasPaidMail }] = useUser();
     const { createModal } = useModals();
-    const [contactEmails] = useContactEmails();
     const type = clearType(getType(property.type));
     const value = property.value;
 
@@ -27,11 +25,9 @@ const ContactViewProperty = ({ property, properties, contactID }) => {
                         <a className="mr0-5" href={`mailto:${value}`} title={value}>
                             {value}
                         </a>
-                        {property.contactGroups.length
-                            ? property.contactGroups.map(({ Name, Color, ID }) => (
-                                  <ContactGroupIcon key={ID} name={Name} color={Color} />
-                              ))
-                            : null}
+                        {contactGroups.map(({ ID, Name, Color }) => (
+                            <ContactGroupIcon key={ID} name={Name} color={Color} />
+                        ))}
                     </>
                 );
             }
@@ -64,8 +60,6 @@ const ContactViewProperty = ({ property, properties, contactID }) => {
     const getActions = () => {
         switch (field) {
             case 'email': {
-                const contactEmail = contactEmails.find(({ Email = '' }) => Email === normalize(value));
-
                 if (!contactEmail) {
                     return null;
                 }
@@ -121,7 +115,9 @@ const ContactViewProperty = ({ property, properties, contactID }) => {
 ContactViewProperty.propTypes = {
     property: PropTypes.object.isRequired,
     properties: PropTypes.array,
-    contactID: PropTypes.string
+    contactID: PropTypes.string.isRequired,
+    contactEmail: PropTypes.object,
+    contactGroups: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default ContactViewProperty;
