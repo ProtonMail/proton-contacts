@@ -10,11 +10,9 @@ const MergeTableHeader = () => {
         <thead className="orderableTableHeader">
             <tr>
                 <TableCell type="header" />
-                <TableCell type="header" className="w30">{c('TableHeader').t`NAME`}</TableCell>
+                <TableCell type="header">{c('TableHeader').t`NAME`}</TableCell>
                 <TableCell type="header">{c('TableHeader').t`ADDRESS`}</TableCell>
-                <TableCell type="header" className="w20">
-                    {c('TableHeader').t`ACTIONS`}
-                </TableCell>
+                <TableCell type="header">{c('TableHeader').t`ACTIONS`}</TableCell>
             </tr>
         </thead>
     );
@@ -26,8 +24,7 @@ const MergeTable = ({
     beDeleted = {},
     onClickCheckbox,
     onClickDetails,
-    onClickDelete,
-    onClickUndelete,
+    onToggleDelete,
     onClickPreview,
     onSortEnd
 }) => {
@@ -48,8 +45,7 @@ const MergeTable = ({
                                 beDeleted={beDeleted}
                                 onClickCheckbox={onClickCheckbox}
                                 onClickDetails={onClickDetails}
-                                onClickDelete={onClickDelete}
-                                onClickUndelete={onClickUndelete}
+                                onToggleDelete={onToggleDelete}
                             />
                         </OrderableTable>
                         <Button
@@ -73,8 +69,7 @@ MergeTable.propTypes = {
     beDeleted: PropTypes.object,
     onClickCheckbox: PropTypes.func,
     onClickDetails: PropTypes.func,
-    onClickDelete: PropTypes.func,
-    onClickUndelete: PropTypes.func,
+    onToggleDelete: PropTypes.func,
     onClickPreview: PropTypes.func,
     onSortEnd: PropTypes.func
 };

@@ -261,8 +261,7 @@ const MergeModal = ({
                             beDeleted={beDeleted}
                             onClickCheckbox={handleToggleCheck}
                             onClickDetails={handleClickDetails}
-                            onClickDelete={handleToggleDelete}
-                            onClickUndelete={handleToggleDelete}
+                            onToggleDelete={handleToggleDelete}
                             onClickPreview={handlePreview}
                         />
                     </MergeModalContent>

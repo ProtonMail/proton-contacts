@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { OrderableTableBody, OrderableTableRow, TableRow } from 'react-components';
+import { c } from 'ttag';
+import { OrderableTableBody, OrderableTableRow, TableRow, DropdownActions } from 'react-components';
 
 import NameTableCell from './NameTableCell';
 import EmailsTableCell from './EmailsTableCell';
-import OptionsDropdown from './OptionsDropdown';
 
 const MergeTableBody = ({
     contacts,
@@ -13,14 +13,27 @@ const MergeTableBody = ({
     beDeleted,
     onClickCheckbox,
     onClickDetails,
-    onClickDelete,
-    onClickUndelete,
+    onToggleDelete,
     ...rest
 }) => {
     return (
         <OrderableTableBody colSpan={4} {...rest}>
             {contacts.map(({ ID, Name, emails }, j) => {
                 const deleted = beDeleted[ID];
+                const options = [
+                    !deleted && {
+                        text: c('Action').t`Contact details`,
+                        onClick() {
+                            onClickDetails(ID);
+                        }
+                    },
+                    {
+                        text: deleted ? c('Action').t`Unmark for deletion` : c('Action').t`Mark for deletion`,
+                        onClick() {
+                            onToggleDelete(ID);
+                        }
+                    }
+                ].filter(Boolean);
                 const cells = [
                     <NameTableCell
                         key="name"
@@ -39,15 +52,7 @@ const MergeTableBody = ({
                         emails={emails}
                         greyedOut={deleted}
                     />,
-                    <OptionsDropdown
-                        key="options"
-                        contactID={ID}
-                        index={j}
-                        canDelete={!deleted}
-                        onClickDetails={onClickDetails}
-                        onClickDelete={onClickDelete}
-                        onClickUndelete={onClickUndelete}
-                    />
+                    <DropdownActions key="options" className="pm-button--small" list={options} />
                 ];
 
                 return deleted ? (
@@ -67,8 +72,7 @@ MergeTableBody.propTypes = {
     beDeleted: PropTypes.object,
     onClickCheckbox: PropTypes.func,
     onClickDetails: PropTypes.func,
-    onClickDelete: PropTypes.func,
-    onClickUndelete: PropTypes.func,
+    onToggleDelete: PropTypes.func,
     onClickPreview: PropTypes.func
 };
 
