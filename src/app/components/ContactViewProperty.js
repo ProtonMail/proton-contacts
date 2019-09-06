@@ -10,7 +10,7 @@ import ContactGroupDropdown from './ContactGroupDropdown';
 import ContactLabelProperty from './ContactLabelProperty';
 import ContactEmailSettingsModal from './ContactEmailSettingsModal';
 
-const ContactViewProperty = ({ property, properties, contactID, contactEmail, contactGroups }) => {
+const ContactViewProperty = ({ property, properties, contactID, contactEmail, contactGroups = [] }) => {
     const { field, first } = property;
     const [{ hasPaidMail }] = useUser();
     const { createModal } = useModals();
