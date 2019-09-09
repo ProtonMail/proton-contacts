@@ -17,7 +17,7 @@ import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE, API_SAFE_INTERVAL, ADD_CONT
 const { OVERWRITE_CONTACT } = OVERWRITE;
 const { IGNORE, INCLUDE } = CATEGORIES;
 
-const ImportingModalContent = ({ isVcf, file, vcardContacts, privateKey, onFinish }) => {
+const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, onFinish }) => {
     const api = useApi();
 
     const [loading, withLoading] = useLoading(true);
@@ -26,10 +26,10 @@ const ImportingModalContent = ({ isVcf, file, vcardContacts, privateKey, onFinis
         total: vcardContacts.length,
         parsed: [...vcardContacts],
         encrypted: [],
-        imported: 0,
+        submitted: 0,
         failedOnEncrypt: [],
         failedOnParse: [],
-        failedOnImport: []
+        failedOnSubmit: []
     });
 
     useEffect(() => {
@@ -43,9 +43,9 @@ const ImportingModalContent = ({ isVcf, file, vcardContacts, privateKey, onFinis
 			Extract and parse contacts from a vcf file.
 			Return succesfully parsed vCard contacts and an indexMap to keep track of original contact order
 		*/
-        const parseVcf = (vcf = '', { signal }) => {
+        const parseVcf = ({ signal }) => {
             // deal with cancellation by hand through signal.aborted
-            const vcards = extractVcards(vcf);
+            const vcards = extractVcards(file);
             !signal.aborted && setModel({ ...model, total: vcards.length });
 
             const { parsedContacts, indexMap } = signal.aborted
@@ -124,8 +124,8 @@ const ImportingModalContent = ({ isVcf, file, vcardContacts, privateKey, onFinis
         /*
 			Send a batch of contacts to the API
 		*/
-        const saveBatch = async ({ contacts = [], indexMap, labels }, { signal }) => {
-            if (signal.aborted) {
+        const submitBatch = async ({ contacts = [], indexMap, labels }, { signal }) => {
+            if (signal.aborted || !contacts.length) {
                 return;
             }
 
@@ -133,27 +133,27 @@ const ImportingModalContent = ({ isVcf, file, vcardContacts, privateKey, onFinis
                 addContacts({ Contacts: contacts, Overwrite: OVERWRITE_CONTACT, Labels: labels })
             )).Responses.map(({ Response }) => Response);
 
-            const { importedBatch, failedOnImportBatch } = responses.reduce(
+            const { submittedBatch, failedOnSubmitBatch } = responses.reduce(
                 (acc, { Code, Error }, i) => {
                     if (Code === SUCCESS_IMPORT_CODE) {
-                        return { ...acc, importedBatch: acc.importedBatch + 1 };
+                        return { ...acc, submittedBatch: acc.submittedBatch + 1 };
                     }
-                    return { ...acc, failedOnImportBatch: [...acc.failedOnImportBatch, { index: indexMap[i], Error }] };
+                    return { ...acc, failedOnSubmitBatch: [...acc.failedOnSubmitBatch, { index: indexMap[i], Error }] };
                 },
-                { importedBatch: 0, failedOnImportBatch: [] }
+                { submittedBatch: 0, failedOnSubmitBatch: [] }
             );
             !signal.aborted &&
                 setModel((model) => ({
                     ...model,
-                    imported: model.imported + importedBatch,
-                    failedOnImport: [...model.failedOnImport, ...failedOnImportBatch]
+                    submitted: model.submitted + submittedBatch,
+                    failedOnSubmit: [...model.failedOnSubmit, ...failedOnSubmitBatch]
                 }));
         };
 
         /*
 			Send contacts to the API in batches
 		*/
-        const saveContacts = async ({ contacts = [], indexMap, labels }, { signal }) => {
+        const submitContacts = async ({ contacts = [], indexMap, labels }, { signal }) => {
             if (signal.aborted) {
                 return;
             }
@@ -163,19 +163,19 @@ const ImportingModalContent = ({ isVcf, file, vcardContacts, privateKey, onFinis
             const apiCalls = contactBatches.length;
 
             for (let i = 0; i < apiCalls; i++) {
-                /*
-					typically saveBatch will take longer than apiTimeout, but we include the
-					latter to avoid API overload it just in case exportBatch is too fast
-				*/
+                // avoid overloading API in the unlikely case submitBatch is too fast
                 await Promise.all([
-                    saveBatch({ contacts: contactBatches[i], indexMap: indexMapBatches[i], labels }, { signal }),
+                    submitBatch({ contacts: contactBatches[i], indexMap: indexMapBatches[i], labels }, { signal }),
                     wait(API_SAFE_INTERVAL)
                 ]);
             }
         };
 
+        /*
+            All steps of the import process
+        */
         const importContacts = async ({ signal }) => {
-            const parsedVcf = parseVcf(file, { signal });
+            const parsedVcf = parseVcf({ signal });
             if (isVcf) {
                 !signal.aborted && setModel((model) => ({ ...model, parsed: parsedVcf.parsedContacts }));
             }
@@ -189,8 +189,11 @@ const ImportingModalContent = ({ isVcf, file, vcardContacts, privateKey, onFinis
                 contacts: encryptedContacts,
                 indexMap: updatedIndexMap
             });
-            await saveContacts({ contacts: withCategories, indexMap: indexMapWith, labels: INCLUDE }, { signal });
-            await saveContacts({ contacts: withoutCategories, indexMap: indexMapWithout, labels: IGNORE }, { signal });
+            await submitContacts({ contacts: withCategories, indexMap: indexMapWith, labels: INCLUDE }, { signal });
+            await submitContacts(
+                { contacts: withoutCategories, indexMap: indexMapWithout, labels: IGNORE },
+                { signal }
+            );
             !signal.aborted && onFinish();
         };
 
@@ -219,13 +222,13 @@ const ImportingModalContent = ({ isVcf, file, vcardContacts, privateKey, onFinis
                 {c('Info on errors importing contacts').t`Contact ${index + 1} from your list could not be encrypted.`}
             </div>
         ));
-        const divsFailedOnImport = model.failedOnImport.map(({ index, Error }) => (
+        const divsFailedOnSubmit = model.failedOnSubmit.map(({ index, Error }) => (
             <div key={index}>
                 {c('Info on errors importing contacts').t`Contact ${index +
                     1} from your list could not be imported. ${Error}`}
             </div>
         ));
-        const sortedErrorDivs = [...divsFailedOnParse, ...divsFailedOnEncrypt, ...divsFailedOnImport].sort(
+        const sortedErrorDivs = [...divsFailedOnParse, ...divsFailedOnEncrypt, ...divsFailedOnSubmit].sort(
             (div1, div2) => div1.key - div2.key
         );
 
@@ -239,15 +242,15 @@ const ImportingModalContent = ({ isVcf, file, vcardContacts, privateKey, onFinis
     const totalToEncrypt = model.total - model.failedOnParse.length;
     const progressEncrypting =
         totalToEncrypt === 0 && model.total !== 0
-            ? 100
+            ? 100 // set to 100 if there are no contacts to encrypt but there are contacts to import
             : percentageProgress(model.encrypted.length, model.failedOnEncrypt.length, totalToEncrypt);
-    const totalToImport = totalToEncrypt - model.failedOnEncrypt.length;
-    const progressImporting =
-        totalToImport === 0 && model.total !== 0
-            ? 100
-            : percentageProgress(model.imported, model.failedOnImport.length, totalToImport);
+    const totalToSubmit = totalToEncrypt - model.failedOnEncrypt.length;
+    const progressSubmitting =
+        totalToSubmit === 0 && model.total !== 0
+            ? 100 // set to 100 if there are no contacts to submit but there are contacts to import
+            : percentageProgress(model.submitted, model.failedOnSubmit.length, totalToSubmit);
 
-    const adjustedProgress = Math.round(0.05 * progressParsing + 0.9 * progressEncrypting + 0.05 * progressImporting);
+    const adjustedProgress = Math.round(0.05 * progressParsing + 0.9 * progressEncrypting + 0.05 * progressSubmitting);
 
     return (
         <>
@@ -260,12 +263,12 @@ const ImportingModalContent = ({ isVcf, file, vcardContacts, privateKey, onFinis
                 alt="contact-loader"
                 value={adjustedProgress}
                 displaySuccess={c('Progress bar description').ngettext(
-                    msgid`${model.imported} out of ${model.total} contact successfully imported.`,
-                    `${model.imported} out of ${model.total} contacts successfully imported.`,
-                    model.imported
+                    msgid`${model.submitted} out of ${model.total} contact successfully imported.`,
+                    `${model.submitted} out of ${model.total} contacts successfully imported.`,
+                    model.submitted
                 )}
                 displayFailed={c('Progress bar description').t`No contacts imported`}
-                failed={!model.imported}
+                failed={!model.submitted}
                 endPostponed={loading}
             />
             {errorCollection.length !== 0 && (
