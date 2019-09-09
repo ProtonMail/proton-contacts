@@ -10,13 +10,14 @@ import { addContacts } from 'proton-shared/lib/api/contacts';
 import { wait } from 'proton-shared/lib/helpers/promise';
 import { extractVcards, parse as parseVcard } from '../../helpers/vcard';
 import { prepareContact } from '../../helpers/encrypt';
+import { splitContacts, divideInBatches, trivialIndexMap } from '../../helpers/import';
 import { percentageProgress } from '../../helpers/progress';
 import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE, API_SAFE_INTERVAL } from '../../constants';
-import { CONTACT_CARD_TYPE } from 'proton-shared/lib/constants';
 
 const { OVERWRITE_CONTACT } = OVERWRITE;
 const { IGNORE, INCLUDE } = CATEGORIES;
-const { CLEAR_TEXT } = CONTACT_CARD_TYPE;
+// Manual limit on number of imported contacts to be sent to the API,
+// so that the response does not take too long (there's a 30s limit)
 const IMPORT_BATCH_MAX_SIZE = 500;
 
 const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onFinish }) => {
@@ -35,94 +36,94 @@ const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onF
 
     useEffect(() => {
         /*
+            Prepare api for allowing cancellation in the middle of the import
+        */
+        const abortController = new AbortController();
+        const apiWithAbort = (config) => api({ ...config, signal: abortController.signal });
+
+        /*
             Extract and parse contacts from a vcf file.
             Return succesfully parsed vCard contacts and an indexMap to keep track of original contact order
         */
-        const parseVcf = (vcf = '') => {
+        const parseVcf = (vcf = '', { signal }) => {
+            // deal with cancellation by hand through signal.aborted
             const vcards = extractVcards(vcf);
-            setModel({ ...model, total: vcards.length });
+            !signal.aborted && setModel({ ...model, total: vcards.length });
 
-            return vcards.reduce(
-                (acc, vcard, i) => {
-                    const { parsedContacts, indexMap } = acc;
-                    try {
-                        const parsedVcard = parseVcard(vcard);
-                        indexMap[acc.parsedContacts.length] = i;
-                        parsedContacts.push(parsedVcard);
-                    } catch {
-                        setModel((model) => ({ ...model, failedOnParse: [...model.failedOnParse, i] }));
-                    }
-                    return acc;
-                },
-                { parsedContacts: [], indexMap: Object.create(null) }
-            );
+            return signal.aborted
+                ? {}
+                : vcards.reduce(
+                      (acc, vcard, i) => {
+                          const { parsedContacts, indexMap } = acc;
+                          try {
+                              const parsedVcard = parseVcard(vcard);
+                              indexMap[acc.parsedContacts.length] = i;
+                              parsedContacts.push(parsedVcard);
+                          } catch {
+                              !signal.aborted &&
+                                  setModel((model) => ({ ...model, failedOnParse: [...model.failedOnParse, i] }));
+                          }
+                          return acc;
+                      },
+                      { parsedContacts: [], indexMap: Object.create(null) }
+                  );
         };
 
         /*
             Encrypt vCard contacts. Return succesfully encrypted contacts
             and an indexMap to keep track of original contact order
         */
-        const encryptContacts = async (contacts, indexMap) => {
+        const encryptContacts = async ({ contacts = [], indexMap }, { signal }) => {
+            // deal with cancellation by hand through signal.aborted
             const publicKey = privateKey.toPublic();
 
-            const encryptContacts = await Promise.all(
-                contacts.map(async (contact, i) => {
-                    try {
-                        const contactEncrypted = await prepareContact(contact, privateKey, publicKey);
-                        setModel((model) => ({ ...model, encrypted: [...model.encrypted, contactEncrypted] }));
-                        return contactEncrypted;
-                    } catch (error) {
-                        setModel((model) => ({ ...model, failedOnEncrypt: [...model.failedOnEncrypt, indexMap[i]] }));
-                        return 'error'; // must keep for a proper counting when displaying errors
-                    }
-                })
-            );
-            const { newIndexMap } = encryptContacts.reduce(
-                (acc, contact, i) => {
-                    const { newIndexMap } = acc;
-                    if (contact === 'error') {
-                        acc.errors++;
-                        return acc;
-                    }
-                    newIndexMap[i - acc.errors] = indexMap[i];
-                    return acc;
-                },
-                { newIndexMap: Object.create(null), errors: 0 }
-            );
-
-            return { encryptedContacts: encryptContacts.filter(Boolean), indexMap: newIndexMap };
-        };
-
-        /*
-            Split encrypted contacts depending on having the CATEGORIES property.
-            Return splitted contacts and indexMaps
-        */
-        const splitContacts = (contacts, indexMap) =>
-            contacts.reduce(
-                (acc, { Cards }, i) => {
-                    const { withCategories, withoutCategories, IndexMapWith, indexMapWithout } = acc;
-                    if (Cards.some(({ Type, Data }) => Type === CLEAR_TEXT && Data.includes('CATEGORIES'))) {
-                        IndexMapWith[withCategories.length] = indexMap[i];
-                        withCategories.push({ Cards });
-                    } else {
-                        indexMapWithout[withoutCategories.length] = indexMap[i];
-                        withoutCategories.push({ Cards });
-                    }
-                    return acc;
-                },
-                {
-                    withCategories: [],
-                    withoutCategories: [],
-                    IndexMapWith: Object.create(null),
-                    indexMapWithout: Object.create(null)
+            const encryptedContacts = [];
+            for (const [i, contact] of contacts.entries()) {
+                if (signal.aborted) {
+                    return {};
                 }
-            );
+                try {
+                    const contactEncrypted = await prepareContact(contact, privateKey, publicKey);
+                    !signal.aborted &&
+                        setModel((model) => ({ ...model, encrypted: [...model.encrypted, contactEncrypted] }));
+                    encryptedContacts.push(contactEncrypted);
+                } catch (error) {
+                    !signal.aborted &&
+                        setModel((model) => ({ ...model, failedOnEncrypt: [...model.failedOnEncrypt, indexMap[i]] }));
+                    encryptedContacts.push('error'); // must keep for a proper counting when displaying errors
+                }
+            }
+
+            const { newIndexMap } = signal.aborted
+                ? {}
+                : encryptedContacts.reduce(
+                      (acc, contact, i) => {
+                          const { newIndexMap } = acc;
+                          if (contact === 'error') {
+                              acc.errors++;
+                              return acc;
+                          }
+                          newIndexMap[i - acc.errors] = indexMap[i];
+                          return acc;
+                      },
+                      { newIndexMap: Object.create(null), errors: 0 }
+                  );
+
+            return {
+                encryptedContacts: signal.aborted ? [] : encryptedContacts.filter(Boolean),
+                indexMap: newIndexMap
+            };
+        };
 
         /*
             Send a batch of contacts to the API
         */
-        const saveBatch = async (contacts, indexMap, labels) => {
-            const responses = (await api(
+        const saveBatch = async ({ contacts = [], indexMap, labels }, { signal }) => {
+            if (signal.aborted) {
+                return;
+            }
+
+            const responses = (await apiWithAbort(
                 addContacts({ Contacts: contacts, Overwrite: OVERWRITE_CONTACT, Labels: labels })
             )).Responses.map(({ Response }) => Response);
 
@@ -135,67 +136,60 @@ const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onF
                 },
                 { importedBatch: 0, failedOnImportBatch: [] }
             );
-            setModel((model) => ({
-                ...model,
-                imported: model.imported + importedBatch,
-                failedOnImport: [...model.failedOnImport, ...failedOnImportBatch]
-            }));
+            !signal.aborted &&
+                setModel((model) => ({
+                    ...model,
+                    imported: model.imported + importedBatch,
+                    failedOnImport: [...model.failedOnImport, ...failedOnImportBatch]
+                }));
         };
 
         /*
             Send contacts to the API in batches
         */
-        const saveContacts = async (contacts, indexMap, labels) => {
-            const apiCalls = Math.ceil(contacts.length / IMPORT_BATCH_MAX_SIZE);
+        const saveContacts = async ({ contacts = [], indexMap, labels }, { signal }) => {
+            if (signal.aborted) {
+                return;
+            }
+
             // divide contacts and indexMap in batches
-            const { contactBatches, IndexMapBatches } = contacts.reduce(
-                (acc, contact, i) => {
-                    const { contactBatches, IndexMapBatches } = acc;
-                    const iInBatch = i % IMPORT_BATCH_MAX_SIZE;
-                    if (iInBatch === 0) {
-                        acc.index++;
-                    }
-                    contactBatches[acc.index].push(contact);
-                    IndexMapBatches[acc.index][iInBatch] = indexMap[i];
-                    return acc;
-                },
-                {
-                    contactBatches: Array.from({ length: apiCalls }).map(() => []),
-                    IndexMapBatches: Array.from({ length: apiCalls }).map(() => Object.create(null)),
-                    index: -1
-                }
-            );
+            const { contactBatches, indexMapBatches } = divideInBatches({ contacts, indexMap }, IMPORT_BATCH_MAX_SIZE);
+            const apiCalls = contactBatches.length;
 
             for (let i = 0; i < apiCalls; i++) {
                 /*
                     typically saveBatch will take longer than apiTimeout, but we include the
                     latter to avoid API overload it just in case exportBatch is too fast
                 */
-                await Promise.all([saveBatch(contactBatches[i], IndexMapBatches[i], labels), wait(API_SAFE_INTERVAL)]);
+                await Promise.all([
+                    saveBatch({ contacts: contactBatches[i], indexMap: indexMapBatches[i], labels }, { signal }),
+                    wait(API_SAFE_INTERVAL)
+                ]);
             }
         };
 
-        const importContacts = async () => {
-            const parsedVcf = parseVcf(file);
+        const importContacts = async ({ signal }) => {
+            const parsedVcf = parseVcf(file, { signal });
             const parsedContacts = extension === 'vcf' ? parsedVcf.parsedContacts : [...vcardContacts];
-            const indexMap =
-                extension === 'vcf'
-                    ? parsedVcf.indexMap
-                    : vcardContacts.reduce((acc, _contact, i) => {
-                          acc[i] = i;
-                          return acc;
-                      }, Object.create(null));
-            const { encryptedContacts, indexMap: updatedIndexMap } = await encryptContacts(parsedContacts, indexMap);
-            const { withCategories, withoutCategories, IndexMapWith, indexMapWithout } = splitContacts(
-                encryptedContacts,
-                updatedIndexMap
+            const indexMap = extension === 'vcf' ? parsedVcf.indexMap : trivialIndexMap(vcardContacts);
+            const { encryptedContacts, indexMap: updatedIndexMap } = await encryptContacts(
+                { contacts: parsedContacts, indexMap },
+                { signal }
             );
-            await saveContacts(withCategories, IndexMapWith, INCLUDE);
-            await saveContacts(withoutCategories, indexMapWithout, IGNORE);
-            onFinish();
+            const { withCategories, withoutCategories, indexMapWith, indexMapWithout } = splitContacts({
+                contacts: encryptedContacts,
+                indexMap: updatedIndexMap
+            });
+            await saveContacts({ contacts: withCategories, indexMap: indexMapWith, labels: INCLUDE }, { signal });
+            await saveContacts({ contacts: withoutCategories, indexMap: indexMapWithout, labels: IGNORE }, { signal });
+            !signal.aborted && onFinish();
         };
 
-        withLoading(importContacts());
+        withLoading(importContacts(abortController));
+
+        return () => {
+            abortController.abort();
+        };
     }, []);
 
     useEffect(() => {

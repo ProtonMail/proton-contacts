@@ -159,8 +159,17 @@ const ImportModal = ({ userKeysList, ...rest }) => {
                 // if (hasCategories(vcardContacts)) {
                 //     return setStep(IMPORT_GROUPS);
                 // }
-                setImportFinished(true);
+                call();
+                rest.onClose();
             };
+            const footer = (
+                <>
+                    <ResetButton>{c('Action').t`Cancel`}</ResetButton>
+                    <PrimaryButton loading={!importFinished} type="submit">
+                        {c('Action').t`Close`}
+                    </PrimaryButton>
+                </>
+            );
 
             return {
                 content: (
@@ -173,15 +182,14 @@ const ImportModal = ({ userKeysList, ...rest }) => {
                         onFinish={handleFinish}
                     />
                 ),
-                close,
-                submit,
-                onSubmit: rest.onClose
+                footer,
+                onSubmit: handleSubmit
             };
         }
         if (step === IMPORT_GROUPS) {
             const handleSubmit = () => {
-                rest.onClose();
                 call();
+                rest.onClose();
             };
             const submit = <PrimaryButton type="submit">{c('Action').t`Create`}</PrimaryButton>;
 
