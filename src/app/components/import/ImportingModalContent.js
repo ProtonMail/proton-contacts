@@ -35,15 +35,15 @@ const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onF
 
     useEffect(() => {
         /*
-            Prepare api for allowing cancellation in the middle of the import
-        */
+			Prepare api for allowing cancellation in the middle of the import
+		*/
         const abortController = new AbortController();
         const apiWithAbort = (config) => api({ ...config, signal: abortController.signal });
 
         /*
-            Extract and parse contacts from a vcf file.
-            Return succesfully parsed vCard contacts and an indexMap to keep track of original contact order
-        */
+			Extract and parse contacts from a vcf file.
+			Return succesfully parsed vCard contacts and an indexMap to keep track of original contact order
+		*/
         const parseVcf = (vcf = '', { signal }) => {
             // deal with cancellation by hand through signal.aborted
             const vcards = extractVcards(vcf);
@@ -55,12 +55,18 @@ const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onF
                       (acc, vcard, i) => {
                           const { parsedContacts, indexMap } = acc;
                           try {
+                              if (vcard.includes('VERSION:2.1') || vcard.includes('VERSION:3.0')) {
+                                  throw new Error('vCard versions < 4.0 not supported');
+                              }
                               const parsedVcard = parseVcard(vcard);
                               indexMap[acc.parsedContacts.length] = i;
                               parsedContacts.push(parsedVcard);
-                          } catch {
+                          } catch ({ message }) {
                               !signal.aborted &&
-                                  setModel((model) => ({ ...model, failedOnParse: [...model.failedOnParse, i] }));
+                                  setModel((model) => ({
+                                      ...model,
+                                      failedOnParse: [...model.failedOnParse, { index: i, Error: message }]
+                                  }));
                           }
                           return acc;
                       },
@@ -71,9 +77,9 @@ const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onF
         };
 
         /*
-            Encrypt vCard contacts. Return succesfully encrypted contacts
-            and an indexMap to keep track of original contact order
-        */
+			Encrypt vCard contacts. Return succesfully encrypted contacts
+			and an indexMap to keep track of original contact order
+		*/
         const encryptContacts = async ({ contacts = [], indexMap }, { signal }) => {
             // deal with cancellation by hand through signal.aborted
             const publicKey = privateKey.toPublic();
@@ -117,8 +123,8 @@ const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onF
         };
 
         /*
-            Send a batch of contacts to the API
-        */
+			Send a batch of contacts to the API
+		*/
         const saveBatch = async ({ contacts = [], indexMap, labels }, { signal }) => {
             if (signal.aborted) {
                 return;
@@ -146,8 +152,8 @@ const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onF
         };
 
         /*
-            Send contacts to the API in batches
-        */
+			Send contacts to the API in batches
+		*/
         const saveContacts = async ({ contacts = [], indexMap, labels }, { signal }) => {
             if (signal.aborted) {
                 return;
@@ -159,9 +165,9 @@ const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onF
 
             for (let i = 0; i < apiCalls; i++) {
                 /*
-                    typically saveBatch will take longer than apiTimeout, but we include the
-                    latter to avoid API overload it just in case exportBatch is too fast
-                */
+					typically saveBatch will take longer than apiTimeout, but we include the
+					latter to avoid API overload it just in case exportBatch is too fast
+				*/
                 await Promise.all([
                     saveBatch({ contacts: contactBatches[i], indexMap: indexMapBatches[i], labels }, { signal }),
                     wait(API_SAFE_INTERVAL)
@@ -197,24 +203,27 @@ const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onF
     }, []);
 
     useEffect(() => {
+        /*
+			Collect errors on import
+		*/
         if (loading) {
             return;
         }
-        const divsFailedOnParse = model.failedOnParse.map((index) => (
+        const divsFailedOnParse = model.failedOnParse.map(({ index, Error }) => (
             <div key={index}>
-                {c('Info on errors importing contacts')
-                    .t`Contact ${index} from your list could not be parsed. Invalid format`}
+                {c('Info on errors importing contacts').t`Contact ${index +
+                    1} from your list could not be parsed. ${Error}`}
             </div>
         ));
         const divsFailedOnEncrypt = model.failedOnEncrypt.map((index) => (
             <div key={index}>
-                {c('Info on errors importing contacts').t`Contact ${index} from your list could not be encrypted.`}
+                {c('Info on errors importing contacts').t`Contact ${index + 1} from your list could not be encrypted.`}
             </div>
         ));
         const divsFailedOnImport = model.failedOnImport.map(({ index, Error }) => (
             <div key={index}>
-                {c('Info on errors importing contacts')
-                    .t`Contact ${index} from your list could not be imported. ${Error}`}
+                {c('Info on errors importing contacts').t`Contact ${index +
+                    1} from your list could not be imported. ${Error}`}
             </div>
         ));
         const sortedErrorDivs = [...divsFailedOnParse, ...divsFailedOnEncrypt, ...divsFailedOnImport].sort(
@@ -225,19 +234,19 @@ const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onF
     }, [loading]);
 
     /*
-        Allocate 5% of the progress to parsing, 90% to encrypting, and 5% to sending to API
-    */
+		Allocate 5% of the progress to parsing, 90% to encrypting, and 5% to sending to API
+	*/
     const progressParsing = percentageProgress(model.parsed.length, model.failedOnParse.length, model.total);
-    const progressEncrypting = percentageProgress(
-        model.encrypted.length,
-        model.failedOnEncrypt.length,
-        model.total - model.failedOnParse.length
-    );
-    const progressImporting = percentageProgress(
-        model.imported,
-        model.failedOnImport.length,
-        model.total - model.failedOnParse.length - model.failedOnEncrypt.length
-    );
+    const totalToEncrypt = model.total - model.failedOnParse.length;
+    const progressEncrypting =
+        totalToEncrypt === 0 && model.total !== 0
+            ? 100
+            : percentageProgress(model.encrypted.length, model.failedOnEncrypt.length, totalToEncrypt);
+    const totalToImport = totalToEncrypt - model.failedOnEncrypt.length;
+    const progressImporting =
+        totalToImport === 0 && model.total !== 0
+            ? 100
+            : percentageProgress(model.imported, model.failedOnImport.length, totalToImport);
 
     const adjustedProgress = Math.round(0.05 * progressParsing + 0.9 * progressEncrypting + 0.05 * progressImporting);
 
