@@ -1,13 +1,226 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { Alert } from 'react-components';
+import { useApi, useLoading, Alert } from 'react-components';
 
+import { getContact, addContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
+import { splitKeys } from 'proton-shared/lib/keys/keys';
+import { wait } from 'proton-shared/lib/helpers/promise';
+import { prepareContact as decrypt } from '../../helpers/decrypt';
+import { prepareContact as encrypt } from '../../helpers/encrypt';
+import { merge } from '../../helpers/merge';
+import { divideInBatches, trivialIndexMap } from '../../helpers/import';
 import { percentageProgress } from '../../helpers/progress';
+import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE, API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
 
 import DynamicProgress from '../DynamicProgress';
 
-const MergingModalContent = ({ merged = [], notMerged = [], submitted = [], notSubmitted = [], total = 0 }) => {
+const { OVERWRITE_CONTACT } = OVERWRITE;
+const { IGNORE } = CATEGORIES;
+
+const MergingModalContent = ({
+    contactID,
+    userKeysList,
+    beMergedIDs = [],
+    alreadyMerged = [],
+    beDeletedIDs = [],
+    totalBeMerged = 0,
+    onFinish,
+    history,
+    location
+}) => {
+    const api = useApi();
+    const { privateKeys, publicKeys } = useMemo(() => splitKeys(userKeysList), []);
+
+    const [loading, withLoading] = useLoading(true);
+    const [newContactID, setNewContactID] = useState(contactID);
+    const [model, setModel] = useState({
+        mergedAndEncrypted: [],
+        failedOnMergeAndEncrypt: [],
+        submitted: [],
+        failedOnSubmit: []
+    });
+
+    useEffect(() => {
+        /*
+            if the current contact has been merged, update contactID
+        */
+        const isMerged = model.submitted.flat().includes(contactID);
+        if (newContactID !== contactID && isMerged) {
+            history.push({ ...location, pathname: `/contacts/${newContactID}` });
+        }
+    }, [newContactID, model.submitted]);
+
+    useEffect(() => {
+        /*
+            Get a contact from its ID and decrypt it. Return contact as a list of properties
+        */
+        const getDecryptedContact = async (ID) => {
+            const { Contact } = await api(getContact(ID));
+            const { properties, errors: contactErrors } = await decrypt(Contact, {
+                privateKeys,
+                publicKeys
+            });
+            if (contactErrors.length) {
+                throw new Error('Error decrypting contact ${ID}');
+            }
+            return properties;
+        };
+
+        /*
+            Get and decrypt a group of contacts to be merged. Return contacts as list of properties
+        */
+        const getDecryptedGroup = async (IDs = []) => {
+            const decryptedGroup = [];
+            for (const ID of IDs) {
+                // avoid overloading API in case getDecryptedContact is too fast
+                const [decryptedContact] = await Promise.all([getDecryptedContact(ID), wait(API_SAFE_INTERVAL)]);
+                decryptedGroup.push(decryptedContact);
+                // if the current contact is merged, prepare to update contactID
+                if (ID === contactID) {
+                    setNewContactID(IDs[0]);
+                }
+            }
+            return decryptedGroup;
+        };
+
+        /*
+            Encrypt a contact already merged. Useful for the case of `preview merge`
+        */
+        const encryptAlreadyMerged = async () => {
+            const groupIDs = beMergedIDs[0];
+            const beSubmittedContacts = [];
+            const beDeletedAfterMergeIDs = [];
+            try {
+                const encryptedMergedContact = await encrypt(alreadyMerged, {
+                    privateKey: privateKeys[0],
+                    publicKey: publicKeys[0]
+                });
+                beSubmittedContacts.push(encryptedMergedContact);
+                beDeletedAfterMergeIDs.push(groupIDs.slice(1));
+                setModel((model) => ({ ...model, mergedAndEncrypted: [...model.mergedAndEncrypted, ...groupIDs] }));
+            } catch {
+                setModel((model) => ({
+                    ...model,
+                    failedOnMergeAndEncrypt: [...model.failedOnMergeAndEncrypt, ...groupIDs]
+                }));
+            }
+            return { beSubmittedContacts, beDeletedAfterMergeIDs };
+        };
+
+        /*
+            Merge groups of contacts characterized by their ID. Return the encrypted merged contacts
+            to be submitted plus the IDs of the contacts to be deleted after the merge
+        */
+        const mergeAndEncrypt = async () => {
+            const beSubmittedContacts = [];
+            const beDeletedAfterMergeIDs = [];
+            for (const groupIDs of beMergedIDs) {
+                try {
+                    const beMergedGroup = await getDecryptedGroup(groupIDs);
+                    const encryptedMergedContact = await encrypt(merge(beMergedGroup), {
+                        privateKey: privateKeys[0],
+                        publicKey: publicKeys[0]
+                    });
+                    beSubmittedContacts.push(encryptedMergedContact);
+                    beDeletedAfterMergeIDs.push(groupIDs.slice(1));
+                    setModel((model) => ({ ...model, mergedAndEncrypted: [...model.mergedAndEncrypted, ...groupIDs] }));
+                } catch {
+                    setModel((model) => ({
+                        ...model,
+                        failedOnMergeAndEncrypt: [...model.failedOnMergeAndEncrypt, ...groupIDs]
+                    }));
+                }
+            }
+            return { beSubmittedContacts, beDeletedAfterMergeIDs };
+        };
+
+        /*
+            Submit a batch of merged contacts to the API
+        */
+        const submitBatch = async ({ beSubmittedContacts, beDeletedAfterMergeIDs, indexMap }) => {
+            const beDeletedBatchIDs = [];
+            const { Responses } = await api(
+                addContacts({
+                    Contacts: beSubmittedContacts,
+                    Overwrite: OVERWRITE_CONTACT,
+                    Labels: IGNORE
+                })
+            );
+            for (const { Index, Response } of Responses) {
+                const groupIDs = beMergedIDs[indexMap[Index]];
+                if (Response.Code === SUCCESS_IMPORT_CODE) {
+                    setModel((model) => ({ ...model, submitted: [...model.submitted, ...groupIDs] }));
+                    beDeletedBatchIDs.push(beDeletedAfterMergeIDs[Index]);
+                } else {
+                    setModel((model) => ({ ...model, failedOnSubmit: [...model.failedOnSubmit, ...groupIDs] }));
+                }
+            }
+            await api(deleteContacts(beDeletedBatchIDs.flat()));
+        };
+
+        /*
+            Submit all merged contacts to the API
+        */
+        const submitContacts = async (beSubmittedContacts, beDeletedAfterMergeIDs) => {
+            // split contacts to be submitted and deleted in batches in case there are too many
+            const { contactBatches: beSubmittedBatches, indexMapBatches } = divideInBatches(
+                { contacts: beSubmittedContacts, indexMap: trivialIndexMap(beMergedIDs) },
+                ADD_CONTACTS_MAX_SIZE
+            );
+            const { contactBatches: beDeletedIDsBatches } = divideInBatches(
+                { contacts: beDeletedAfterMergeIDs },
+                ADD_CONTACTS_MAX_SIZE
+            );
+            const apiCalls = beSubmittedBatches.length;
+
+            for (let i = 0; i < apiCalls; i++) {
+                // avoid overloading API in the case submitBatch is too fast
+                await Promise.all([
+                    submitBatch({
+                        beSubmittedContacts: beSubmittedBatches[i],
+                        beDeletedAfterMergeIDs: beDeletedIDsBatches[i],
+                        indexMap: indexMapBatches[i]
+                    }),
+                    wait(API_SAFE_INTERVAL)
+                ]);
+            }
+        };
+        /*
+            All steps of the merge process
+        */
+        const mergeContacts = async () => {
+            const { beSubmittedContacts, beDeletedAfterMergeIDs } = alreadyMerged
+                ? await mergeAndEncrypt()
+                : await encryptAlreadyMerged();
+            await submitContacts(beSubmittedContacts, beDeletedAfterMergeIDs);
+            // delete contacts marked for deletion
+            if (beDeletedIDs && beDeletedIDs.flat().length) {
+                await api(deleteContacts(beDeletedIDs.flat()));
+            }
+            await onFinish();
+        };
+
+        withLoading(mergeContacts());
+    }, []);
+
+    /*
+		Allocate 90% of the progress to merging and encrypting, 10% to sending to API
+	*/
+    const progressMergeAndEncrypting = percentageProgress(
+        model.mergedAndEncrypted.length,
+        model.failedOnMergeAndEncrypt.length,
+        totalBeMerged
+    );
+    const totalToSubmit = totalBeMerged - model.failedOnMergeAndEncrypt.length;
+    const progressSubmitting =
+        totalToSubmit === 0 && totalBeMerged !== 0
+            ? 100 // set to 100 if there are no contacts to submit but there are contacts to merge
+            : percentageProgress(model.submitted.length, model.failedOnSubmit.length, totalToSubmit);
+
+    const adjustedProgress = Math.round(0.9 * progressMergeAndEncrypting + 0.1 * progressSubmitting);
+
     return (
         <>
             <Alert>
@@ -17,23 +230,27 @@ const MergingModalContent = ({ merged = [], notMerged = [], submitted = [], notS
             <DynamicProgress
                 id="progress-merge-contacts"
                 alt="contact-loader"
-                value={percentageProgress(merged.length, notMerged.length, total)}
-                failed={!submitted.length}
+                value={adjustedProgress}
+                failed={!model.submitted.length}
                 displaySuccess={c('Progress bar description')
-                    .t`${submitted.length} out of ${total} contacts successfully merged.`}
+                    .t`${model.submitted.length} out of ${totalBeMerged} contacts successfully merged.`}
                 displayFailed={c('Progress bar description').t`No contacts merged.`}
-                endPostponed={submitted.length + notSubmitted.length !== total}
+                endPostponed={loading}
             />
         </>
     );
 };
 
 MergingModalContent.propTypes = {
-    merged: PropTypes.array,
-    notMerged: PropTypes.array,
-    submitted: PropTypes.array,
-    notSubmitted: PropTypes.array,
-    total: PropTypes.number
+    contactID: PropTypes.string,
+    userKeysList: PropTypes.array.isRequired,
+    beMergedIDs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+    alreadyMerged: PropTypes.arrayOf(PropTypes.object),
+    beDeletedIDs: PropTypes.arrayOf(PropTypes.string),
+    totalBeMerged: PropTypes.number,
+    onFinish: PropTypes.func,
+    history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired
 };
 
-export default MergingModalContent;
+export default withRouter(MergingModalContent);

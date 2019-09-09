@@ -12,7 +12,7 @@ const NameTableCell = ({ name, contactID, highlightedID, checked, deleted, greye
             <Checkbox
                 checked={checked}
                 onChange={handleToggle}
-                className={`flex flex-items-center mr0-5 ${deleted ? 'nonvisible' : ''}`}
+                className={`flex flex-items-center flex-item-noshrink mr0-5 ${deleted ? 'nonvisible' : ''}`}
             />
             <span
                 className={classnames([

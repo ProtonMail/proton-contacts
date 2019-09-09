@@ -171,7 +171,7 @@ export const extractNewValue = (value, field, mergedValues = []) => {
  *
  * @return {Array}                          The merged contact
  */
-export const merge = (contacts) => {
+export const merge = (contacts = []) => {
     if (!contacts.length) {
         return [];
     }

@@ -6,19 +6,17 @@ import { opaqueClassName } from '../../helpers/css';
 
 const EmailsTableCell = ({ contactID, emails = [], highlightedID, greyedOut }) => {
     return (
-        <span
+        <div
             className={classnames([
                 'flex',
                 'flex-items-center',
                 'mw100',
-                'inbl',
-                'ellipsis',
                 opaqueClassName(greyedOut),
                 contactID === highlightedID && 'bold'
             ])}
         >
-            {emails.map((email) => `<${email}>`).join(', ')}
-        </span>
+            <span className="inbl ellipsis">{emails.map((email) => `<${email}>`).join(', ')}</span>
+        </div>
     );
 };
 

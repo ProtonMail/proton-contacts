@@ -1,130 +1,100 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { useApi, useLoading, useEventManager, Loader, FormModal, PrimaryButton, ResetButton } from 'react-components';
+import { useApi, useLoading, Loader, FormModal, PrimaryButton, ResetButton } from 'react-components';
 import { splitKeys } from 'proton-shared/lib/keys/keys';
-import { getContact, addContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
-import { noop } from 'proton-shared/lib/helpers/function';
+import { getContact } from 'proton-shared/lib/api/contacts';
 
-import { prepareContact as decrypt } from '../../helpers/decrypt';
-import { prepareContact as encrypt } from '../../helpers/encrypt';
+import { prepareContact } from '../../helpers/decrypt';
 import { merge } from '../../helpers/merge';
-import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE } from '../../constants';
 
-import MergingModalContent from './MergingModalContent';
 import MergeErrorContent from './MergeErrorContent';
 import MergedContactSummary from './MergedContactSummary';
+import MergingModalContent from './MergingModalContent';
 
-const { OVERWRITE_CONTACT } = OVERWRITE;
-const { IGNORE } = CATEGORIES;
-
-const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onMerge = noop, ...rest }) => {
+const MergeContactPreview = ({ contactID, beMergedIDs, beDeletedIDs = [], userKeysList, updateModel, ...rest }) => {
     const api = useApi();
-    const { call } = useEventManager();
     const { privateKeys, publicKeys } = useMemo(() => splitKeys(userKeysList), []);
 
-    const [loadingContacts, withLoadingContacts] = useLoading(true);
-    const [loadingMerge, withLoadingMerge] = useLoading(true);
+    const [loading, withLoading] = useLoading(true);
     const [isMerging, setIsMerging] = useState(false);
-    const [model, setModel] = useState({
-        contacts: [],
-        errorOnLoad: false,
-        errorOnMerge: false,
-        errorOnSubmit: false,
-        submitted: []
-    });
+    const [mergeFinished, setMergeFinished] = useState(false);
+    const [model, setModel] = useState({});
 
-    const handleMerge = async () => {
-        try {
-            // encrypt contact obtained after merge
-            const encryptedContact = await encrypt(model.merged, {
-                privateKey: privateKeys[0],
-                publicKey: publicKeys[0]
-            });
-            // send it to API
-            const { Responses } = await api(
-                addContacts({
-                    Contacts: [encryptedContact],
-                    Overwrite: OVERWRITE_CONTACT,
-                    Labels: IGNORE
-                })
-            );
-            if (Responses[0].Response.Code !== SUCCESS_IMPORT_CODE) {
-                throw new Error('Error submitting merged contact');
-            }
-            setModel((model) => ({ ...model, submitted: beMergedIDs }));
-            // delete contacts that have been merged
-            await api(deleteContacts(beMergedIDs.slice(1)));
-            if (beDeletedIDs.length) {
-                await api(deleteContacts(beDeletedIDs));
-            }
-            onMerge();
-            await call();
-        } catch (error) {
-            setModel((model) => ({ ...model, errorOnSubmit: true }));
-        }
+    const handleRemoveMerged = () => {
+        const beRemovedIDs = beMergedIDs.slice(1).concat(beDeletedIDs);
+        updateModel((model) => ({
+            ...model,
+            orderedContacts: model.orderedContacts
+                .map((group) => group.filter(({ ID }) => !beRemovedIDs.includes(ID)))
+                .filter((group) => group.length > 1)
+        }));
     };
 
     useEffect(() => {
-        // decrypt contacts to be merged
-        const getContacts = async () => {
-            for (const ID of beMergedIDs) {
-                const { Contact } = await api(getContact(ID));
-                const { properties, errors } = await decrypt(Contact, { privateKeys, publicKeys });
-                if (errors.length) {
-                    throw new Error('Error decrypting contact');
+        const mergeContacts = async () => {
+            try {
+                const beMergedContacts = [];
+                for (const ID of beMergedIDs) {
+                    const { Contact } = await api(getContact(ID));
+                    const { properties, errors } = await prepareContact(Contact, { privateKeys, publicKeys });
+                    if (errors.length) {
+                        setModel({ ...model, errorOnLoad: true });
+                        throw new Error('Error decrypting contact');
+                    }
+                    beMergedContacts.push(properties);
                 }
-                setModel((model) => ({
-                    ...model,
-                    contacts: [...model.contacts, properties]
-                }));
+                setModel({ ...model, mergedContact: merge(beMergedContacts) });
+            } catch {
+                setModel({ ...model, errorOnMerge: true });
             }
         };
-        // merge contacts
-        const mergeContacts = () => setModel((model) => ({ ...model, merged: merge(model.contacts) }));
 
-        withLoadingContacts(getContacts())
-            .catch(() => setModel((model) => ({ ...model, errorOnLoad: true })))
-            .then(mergeContacts)
-            .catch(() => setModel((model) => ({ ...model, errorOnMerge: true })));
+        withLoading(mergeContacts());
     }, []);
 
     const { content, ...modalProps } = (() => {
-        // display preview of merged contact
+        /*
+            display preview
+        */
         if (!isMerging) {
             const footer = (
                 <>
                     <ResetButton>{c('Action').t`Cancel`}</ResetButton>
-                    <PrimaryButton type="submit" disabled={!model.merged}>
+                    <PrimaryButton type="submit" disabled={!model.mergedContact}>
                         {c('Action').t`Merge`}
                     </PrimaryButton>
                 </>
             );
             const content = (() => {
-                if (loadingContacts) {
+                if (loading) {
                     return <Loader />;
                 }
                 if (model.errorOnLoad || model.errorOnMerge) {
                     return <MergeErrorContent errorOnLoad={model.errorOnLoad} />;
                 }
-                return <MergedContactSummary properties={model.merged} />;
+                return <MergedContactSummary properties={model.mergedContact} />;
             })();
+            const handleSubmit = () => setIsMerging(true);
 
             return {
-                title: c('Title').t`Contact Details`,
                 content,
+                title: c('Title').t`Contact Details`,
                 footer,
-                onSubmit: () => {
-                    setIsMerging(true);
-                    withLoadingMerge(handleMerge());
-                },
+                onSubmit: handleSubmit,
                 ...rest
             };
         }
 
-        // display progress bar
+        /*
+            display progress bar while merging contacts
+        */
+        const handleFinish = async () => {
+            handleRemoveMerged();
+            setMergeFinished(true);
+        };
         const footer = (
-            <PrimaryButton type="reset" loading={loadingMerge}>
+            <PrimaryButton type="reset" loading={!mergeFinished}>
                 {c('Action').t`Close`}
             </PrimaryButton>
         );
@@ -133,11 +103,13 @@ const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onM
             hasClose: false,
             content: (
                 <MergingModalContent
-                    merged={model.submitted}
-                    notMerged={model.errorOnSubmit ? beMergedIDs : []}
-                    submitted={model.submitted}
-                    notSubmitted={model.errorOnSubmit ? beMergedIDs : []}
-                    total={beMergedIDs.length}
+                    contactID={contactID}
+                    userKeysList={userKeysList}
+                    beMergedIDs={[beMergedIDs]}
+                    alreadyMerged={model.mergedContact}
+                    beDeletedIDs={beDeletedIDs}
+                    totalBeMerged={beMergedIDs.length}
+                    onFinish={handleFinish}
                 />
             ),
             footer,
@@ -150,10 +122,11 @@ const MergeContactPreview = ({ beMergedIDs, beDeletedIDs = [], userKeysList, onM
 };
 
 MergeContactPreview.propTypes = {
+    contactID: PropTypes.string,
     beMergedIDs: PropTypes.arrayOf(PropTypes.string).isRequired,
     beDeletedIDs: PropTypes.arrayOf(PropTypes.string),
-    userKeysList: PropTypes.array,
-    onMerge: PropTypes.func
+    userKeysList: PropTypes.array.isRequired,
+    updateModel: PropTypes.func
 };
 
 export default MergeContactPreview;
