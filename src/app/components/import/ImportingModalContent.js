@@ -11,21 +11,20 @@ import { extractVcards, parse as parseVcard } from '../../helpers/vcard';
 import { prepareContact } from '../../helpers/encrypt';
 import { splitContacts, divideInBatches, trivialIndexMap } from '../../helpers/import';
 import { percentageProgress } from '../../helpers/progress';
-import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE, API_SAFE_INTERVAL } from '../../constants';
+import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE, API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
 
 const { OVERWRITE_CONTACT } = OVERWRITE;
 const { IGNORE, INCLUDE } = CATEGORIES;
-// Manual limit on number of imported contacts to be sent to the API,
-// so that the response does not take too long (there's a 30s limit)
-const IMPORT_BATCH_MAX_SIZE = 500;
 
 const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onFinish }) => {
     const api = useApi();
 
+    const isVcf = extension === 'vcf';
     const [loading, withLoading] = useLoading(true);
     const [errorCollection, setErrorCollection] = useState([]);
     const [model, setModel] = useState({
         total: vcardContacts.length,
+        parsed: [...vcardContacts],
         encrypted: [],
         imported: 0,
         failedOnEncrypt: [],
@@ -49,7 +48,7 @@ const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onF
             const vcards = extractVcards(vcf);
             !signal.aborted && setModel({ ...model, total: vcards.length });
 
-            return signal.aborted
+            const { parsedContacts, indexMap } = signal.aborted
                 ? {}
                 : vcards.reduce(
                       (acc, vcard, i) => {
@@ -66,6 +65,8 @@ const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onF
                       },
                       { parsedContacts: [], indexMap: Object.create(null) }
                   );
+
+            return { parsedContacts, indexMap };
         };
 
         /*
@@ -152,7 +153,7 @@ const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onF
             }
 
             // divide contacts and indexMap in batches
-            const { contactBatches, indexMapBatches } = divideInBatches({ contacts, indexMap }, IMPORT_BATCH_MAX_SIZE);
+            const { contactBatches, indexMapBatches } = divideInBatches({ contacts, indexMap }, ADD_CONTACTS_MAX_SIZE);
             const apiCalls = contactBatches.length;
 
             for (let i = 0; i < apiCalls; i++) {
@@ -169,8 +170,11 @@ const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onF
 
         const importContacts = async ({ signal }) => {
             const parsedVcf = parseVcf(file, { signal });
-            const parsedContacts = extension === 'vcf' ? parsedVcf.parsedContacts : [...vcardContacts];
-            const indexMap = extension === 'vcf' ? parsedVcf.indexMap : trivialIndexMap(vcardContacts);
+            if (isVcf) {
+                !signal.aborted && setModel((model) => ({ ...model, parsed: parsedVcf.parsedContacts }));
+            }
+            const parsedContacts = isVcf ? parsedVcf.parsedContacts : [...vcardContacts];
+            const indexMap = isVcf ? parsedVcf.indexMap : trivialIndexMap(vcardContacts);
             const { encryptedContacts, indexMap: updatedIndexMap } = await encryptContacts(
                 { contacts: parsedContacts, indexMap },
                 { signal }
@@ -219,6 +223,23 @@ const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onF
         setErrorCollection(sortedErrorDivs);
     }, [loading]);
 
+    /*
+        Allocate 5% of the progress to parsing, 90% to encrypting, and 5% to sending to API
+    */
+    const progressParsing = percentageProgress(model.parsed.length, model.failedOnParse.length, model.total);
+    const progressEncrypting = percentageProgress(
+        model.encrypted.length,
+        model.failedOnEncrypt.length,
+        model.total - model.failedOnParse.length
+    );
+    const progressImporting = percentageProgress(
+        model.imported,
+        model.failedOnImport.length,
+        model.total - model.failedOnParse.length - model.failedOnEncrypt.length
+    );
+
+    const adjustedProgress = Math.round(0.05 * progressParsing + 0.9 * progressEncrypting + 0.05 * progressImporting);
+
     return (
         <>
             <Alert>
@@ -228,11 +249,7 @@ const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onF
             <DynamicProgress
                 id="progress-import-contacts"
                 alt="contact-loader"
-                value={percentageProgress(
-                    model.encrypted.length,
-                    model.failedOnParse.length + model.failedOnEncrypt.length,
-                    model.total
-                )}
+                value={adjustedProgress}
                 displaySuccess={c('Progress bar description').ngettext(
                     msgid`${model.imported} out of ${model.total} contact successfully imported.`,
                     `${model.imported} out of ${model.total} contacts successfully imported.`,
