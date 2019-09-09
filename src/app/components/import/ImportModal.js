@@ -171,7 +171,7 @@ const ImportModal = ({ userKeysList, ...rest }) => {
             return {
                 content: (
                     <ImportingModalContent
-                        extension={file.extension}
+                        isVcf={file.extension === 'vcf'}
                         file={file.read}
                         vcardContacts={vcardContacts}
                         onSetVcardContacts={setVcardContacts}

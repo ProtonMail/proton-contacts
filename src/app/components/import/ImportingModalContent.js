@@ -16,10 +16,9 @@ import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE, API_SAFE_INTERVAL, ADD_CONT
 const { OVERWRITE_CONTACT } = OVERWRITE;
 const { IGNORE, INCLUDE } = CATEGORIES;
 
-const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onFinish }) => {
+const ImportingModalContent = ({ isVcf, file, vcardContacts, privateKey, onFinish }) => {
     const api = useApi();
 
-    const isVcf = extension === 'vcf';
     const [loading, withLoading] = useLoading(true);
     const [errorCollection, setErrorCollection] = useState([]);
     const [model, setModel] = useState({
@@ -282,7 +281,7 @@ const ImportingModalContent = ({ extension, file, vcardContacts, privateKey, onF
 };
 
 ImportingModalContent.propTypes = {
-    extension: PropTypes.oneOf(['csv', 'vcf']),
+    isVcf: PropTypes.bool,
     file: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.shape({ headers: PropTypes.array, contacts: PropTypes.array })
