@@ -94,10 +94,7 @@ const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...
 
         const exportContacts = async (abortController) => {
             for (let i = 0; i < apiCalls; i++) {
-                /*
-                    typically exportBatch will take longer than apiTimeout, but we include the
-                    latter to avoid API overload it just in case exportBatch is too fast
-                */
+                // avoid overloading API in the unlikely case exportBatch is too fast
                 await Promise.all([exportBatch(i, abortController), wait(API_SAFE_INTERVAL)]);
             }
         };
