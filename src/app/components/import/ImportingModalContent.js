@@ -11,8 +11,13 @@ import { chunk } from 'proton-shared/lib/helpers/array';
 import { wait } from 'proton-shared/lib/helpers/promise';
 import { extractVcards, parse as parseVcard } from '../../helpers/vcard';
 import { prepareContact } from '../../helpers/encrypt';
+<<<<<<< HEAD
 import { splitContacts } from '../../helpers/import';
 import { combineProgress } from '../../helpers/progress';
+=======
+import { splitContacts, divideInBatches, trivialIndexMap } from '../../helpers/import';
+import { percentageProgress } from '../../helpers/progress';
+>>>>>>> adjust progress
 import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE, API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
 
 const { OVERWRITE_CONTACT } = OVERWRITE;
@@ -28,6 +33,7 @@ const createSubmitErrorMessage = (index, message) =>
 const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, onFinish }) => {
     const api = useApi();
 
+    const isVcf = extension === 'vcf';
     const [loading, withLoading] = useLoading(true);
     const [model, setModel] = useState({
         total: vcardContacts.length,
@@ -211,6 +217,23 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
             total: model.total - model.failedOnParse.length - model.failedOnEncrypt.length
         }
     ]);
+
+    /*
+        Allocate 5% of the progress to parsing, 90% to encrypting, and 5% to sending to API
+    */
+    const progressParsing = percentageProgress(model.parsed.length, model.failedOnParse.length, model.total);
+    const progressEncrypting = percentageProgress(
+        model.encrypted.length,
+        model.failedOnEncrypt.length,
+        model.total - model.failedOnParse.length
+    );
+    const progressImporting = percentageProgress(
+        model.imported,
+        model.failedOnImport.length,
+        model.total - model.failedOnParse.length - model.failedOnEncrypt.length
+    );
+
+    const adjustedProgress = Math.round(0.05 * progressParsing + 0.9 * progressEncrypting + 0.05 * progressImporting);
 
     return (
         <>
