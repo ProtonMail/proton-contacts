@@ -28,7 +28,6 @@ const createSubmitErrorMessage = (index, message) =>
 const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, onFinish }) => {
     const api = useApi();
 
-    const isVcf = extension === 'vcf';
     const [loading, withLoading] = useLoading(true);
     const [model, setModel] = useState({
         total: vcardContacts.length,
