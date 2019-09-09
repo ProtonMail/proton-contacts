@@ -13,11 +13,9 @@ import { prepareContact } from '../helpers/decrypt';
 import { toICAL } from '../helpers/vcard';
 import { percentageProgress } from './../helpers/progress';
 import DynamicProgress from './DynamicProgress';
+import { QUERY_EXPORT_MAX_PAGESIZE, API_SAFE_INTERVAL } from '../constants';
 
 const DOWNLOAD_FILENAME = 'protonContacts';
-// BACK-END DATA
-const QUERY_EXPORT_MAX_PAGESIZE = 50;
-const API_SAFE_INTERVAL = 100; // API request limit: 100 requests / 10 seconds, so 1 request every 100 ms is safe
 
 const ExportFooter = ({ loading }) => {
     return (
