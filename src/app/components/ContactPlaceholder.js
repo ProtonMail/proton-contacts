@@ -31,7 +31,7 @@ const PaidCards = ({ contactGroupID, userKeysList, loadingUserKeys }) => {
                     <PrimaryButton className="bold" onClick={handleImport}>{c('Action').t`Import`}</PrimaryButton>
                 </div>
             </div>
-            <div className="bordered-container flex-item-fluid mr1 p1 aligncenter">
+            <div className="bordered-container flex-item-fluid mr1 p1 aligncenter flex flex-column">
                 <div className="flex-item-fluid">
                     <Icon name="export" className="icon-100p mb1" />
                     <div className="bold">{c('Title').t`Export contacts`}</div>
