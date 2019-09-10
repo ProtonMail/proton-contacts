@@ -58,13 +58,10 @@ const MergeContactPreview = ({ contactID, beMergedIDs, beDeletedIDs = [], userKe
             display preview
         */
         if (!isMerging) {
-            const footer = (
-                <>
-                    <ResetButton>{c('Action').t`Cancel`}</ResetButton>
-                    <PrimaryButton type="submit" disabled={!model.mergedContact}>
-                        {c('Action').t`Merge`}
-                    </PrimaryButton>
-                </>
+            const submit = (
+                <PrimaryButton type="submit" disabled={!model.mergedContact}>
+                    {c('Action').t`Merge`}
+                </PrimaryButton>
             );
             const content = (() => {
                 if (loading) {
@@ -75,12 +72,13 @@ const MergeContactPreview = ({ contactID, beMergedIDs, beDeletedIDs = [], userKe
                 }
                 return <MergedContactSummary properties={model.mergedContact} />;
             })();
+
             const handleSubmit = () => setIsMerging(true);
 
             return {
                 content,
                 title: c('Title').t`Contact Details`,
-                footer,
+                submit,
                 onSubmit: handleSubmit,
                 ...rest
             };
@@ -89,15 +87,18 @@ const MergeContactPreview = ({ contactID, beMergedIDs, beDeletedIDs = [], userKe
         /*
             display progress bar while merging contacts
         */
+        const close = !mergeFinished && <ResetButton>{c('Action').t`Cancel`}</ResetButton>;
+        const submit = (
+            <PrimaryButton type="submit" loading={!mergeFinished}>
+                {c('Action').t`Close`}
+            </PrimaryButton>
+        );
+
         const handleFinish = async () => {
             handleRemoveMerged();
             setMergeFinished(true);
         };
-        const footer = (
-            <PrimaryButton type="reset" loading={!mergeFinished}>
-                {c('Action').t`Close`}
-            </PrimaryButton>
-        );
+
         return {
             title: c('Title').t`Merging contacts`,
             hasClose: false,
@@ -112,7 +113,8 @@ const MergeContactPreview = ({ contactID, beMergedIDs, beDeletedIDs = [], userKe
                     onFinish={handleFinish}
                 />
             ),
-            footer,
+            close,
+            submit,
             onSubmit: rest.onClose,
             ...rest
         };

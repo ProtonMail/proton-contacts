@@ -45,6 +45,9 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
     );
     const totalBeMerged = useMemo(() => beMergedIDs.flat().length, [beMergedIDs]);
 
+    console.log({ beMergedIDs });
+    console.log({ beDeletedIDs });
+
     const { content, ...modalProps } = (() => {
         /*
             display table with mergeable contacts
@@ -80,15 +83,16 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
         /*
             display progress bar while merging contacts
         */
+        const close = !mergeFinished && <ResetButton>{c('Action').t`Cancel`}</ResetButton>;
+        const submit = (
+            <PrimaryButton type="submit" loading={!mergeFinished}>
+                {c('Action').t`Close`}
+            </PrimaryButton>
+        );
         const handleFinish = async () => {
             await call();
             setMergeFinished(true);
         };
-        const footer = (
-            <PrimaryButton type="reset" loading={!mergeFinished}>
-                {c('Action').t`Close`}
-            </PrimaryButton>
-        );
 
         return {
             title: c('Title').t`Merging contacts`,
@@ -103,7 +107,8 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
                     onFinish={handleFinish}
                 />
             ),
-            footer,
+            close,
+            submit,
             onSubmit: rest.onClose,
             ...rest
         };
