@@ -151,13 +151,13 @@ const ImportModal = ({ userKeysList, ...rest }) => {
         }
 
         if (step === IMPORTING) {
-            const handleSubmit = () => {
+            const handleFinish = async () => {
                 // temporarily disabled
                 // if (hasCategories(vcardContacts)) {
                 //     return setStep(IMPORT_GROUPS);
                 // }
-                call();
-                rest.onClose();
+                await call();
+                setImportFinished(true);
             };
             const footer = (
                 <>
@@ -176,11 +176,11 @@ const ImportModal = ({ userKeysList, ...rest }) => {
                         vcardContacts={vcardContacts}
                         onSetVcardContacts={setVcardContacts}
                         privateKey={userKeysList[0].privateKey}
-                        onFinish={() => setImportFinished(true)}
+                        onFinish={handleFinish}
                     />
                 ),
                 footer,
-                onSubmit: handleSubmit
+                onSubmit: rest.onClose
             };
         }
         if (step === IMPORT_GROUPS) {
