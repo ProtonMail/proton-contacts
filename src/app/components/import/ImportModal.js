@@ -161,7 +161,7 @@ const ImportModal = ({ userKeysList, ...rest }) => {
             };
             const footer = (
                 <>
-                    <ResetButton>{c('Action').t`Cancel`}</ResetButton>
+                    {!importFinished && <ResetButton>{c('Action').t`Cancel`}</ResetButton>}
                     <PrimaryButton loading={!importFinished} type="submit">
                         {c('Action').t`Close`}
                     </PrimaryButton>
