@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
-import { useApi, useLoading, Alert, Details, Summary, Bordered } from 'react-components';
+import { useApi, useLoading, Alert } from 'react-components';
 
 import DynamicProgress from '../DynamicProgress';
+import ErrorDetails from './ErrorDetails';
 
 import { addContacts } from 'proton-shared/lib/api/contacts';
 import { wait } from 'proton-shared/lib/helpers/promise';
@@ -16,11 +17,17 @@ import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE, API_SAFE_INTERVAL, ADD_CONT
 const { OVERWRITE_CONTACT } = OVERWRITE;
 const { IGNORE, INCLUDE } = CATEGORIES;
 
+const createParseErrorMessage = (message) => (index) =>
+    c('Info on errors importing contacts').t`Contact ${index + 1} from your list could not be parsed. ${message}`;
+const createEncryptErrorMessage = (index) =>
+    c('Info on errors importing contacts').t`Contact ${index + 1} from your list could not be encrypted.`;
+const createSubmitErrorMessage = (message) => (index) =>
+    c('Info on errors importing contacts').t`Contact ${index + 1} from your list could not be imported. ${message}`;
+
 const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, onFinish }) => {
     const api = useApi();
 
     const [loading, withLoading] = useLoading(true);
-    const [errorCollection, setErrorCollection] = useState([]);
     const [model, setModel] = useState({
         total: vcardContacts.length,
         parsed: [...vcardContacts],
@@ -63,7 +70,10 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
                               !signal.aborted &&
                                   setModel((model) => ({
                                       ...model,
-                                      failedOnParse: [...model.failedOnParse, { index: i, Error: message }]
+                                      failedOnParse: [
+                                          ...model.failedOnParse,
+                                          { index: i, createMessage: createParseErrorMessage(message) }
+                                      ]
                                   }));
                           }
                           return acc;
@@ -94,7 +104,13 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
                     encryptedContacts.push(contactEncrypted);
                 } catch (error) {
                     !signal.aborted &&
-                        setModel((model) => ({ ...model, failedOnEncrypt: [...model.failedOnEncrypt, indexMap[i]] }));
+                        setModel((model) => ({
+                            ...model,
+                            failedOnEncrypt: [
+                                ...model.failedOnEncrypt,
+                                { index: indexMap[i], createMessage: createEncryptErrorMessage }
+                            ]
+                        }));
                     encryptedContacts.push('error'); // must keep for a proper counting when displaying errors
                 }
             }
@@ -137,7 +153,13 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
                     if (Code === SUCCESS_IMPORT_CODE) {
                         return { ...acc, submittedBatch: acc.submittedBatch + 1 };
                     }
-                    return { ...acc, failedOnSubmitBatch: [...acc.failedOnSubmitBatch, { index: indexMap[i], Error }] };
+                    return {
+                        ...acc,
+                        failedOnSubmitBatch: [
+                            ...acc.failedOnSubmitBatch,
+                            { index: indexMap[i], createMessage: createSubmitErrorMessage(Error) }
+                        ]
+                    };
                 },
                 { submittedBatch: 0, failedOnSubmitBatch: [] }
             );
@@ -203,37 +225,6 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
         };
     }, []);
 
-    useEffect(() => {
-        /*
-			Collect errors on import
-		*/
-        if (loading) {
-            return;
-        }
-        const divsFailedOnParse = model.failedOnParse.map(({ index, Error }) => (
-            <div key={index}>
-                {c('Info on errors importing contacts').t`Contact ${index +
-                    1} from your list could not be parsed. ${Error}`}
-            </div>
-        ));
-        const divsFailedOnEncrypt = model.failedOnEncrypt.map((index) => (
-            <div key={index}>
-                {c('Info on errors importing contacts').t`Contact ${index + 1} from your list could not be encrypted.`}
-            </div>
-        ));
-        const divsFailedOnSubmit = model.failedOnSubmit.map(({ index, Error }) => (
-            <div key={index}>
-                {c('Info on errors importing contacts').t`Contact ${index +
-                    1} from your list could not be imported. ${Error}`}
-            </div>
-        ));
-        const sortedErrorDivs = [...divsFailedOnParse, ...divsFailedOnEncrypt, ...divsFailedOnSubmit].sort(
-            (div1, div2) => div1.key - div2.key
-        );
-
-        setErrorCollection(sortedErrorDivs);
-    }, [loading]);
-
     /*
 		Allocate 5% of the progress to parsing, 90% to encrypting, and 5% to sending to API
 	*/
@@ -270,15 +261,12 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
                 failed={!model.submitted}
                 endPostponed={loading}
             />
-            {errorCollection.length !== 0 && (
-                <Details>
-                    <Summary>
-                        {c('Info on errors importing contacts')
-                            .t`Some contacts could not be imported. Click for details`}
-                    </Summary>
-                    <Bordered>{errorCollection}</Bordered>
-                </Details>
-            )}
+            <ErrorDetails
+                loading={loading}
+                errors={[...model.failedOnParse, ...model.failedOnEncrypt, ...model.failedOnSubmit]}
+                summary={c('Info on errors importing contacts')
+                    .t`Some contacts could not be imported. Click for details`}
+            />
         </>
     );
 };

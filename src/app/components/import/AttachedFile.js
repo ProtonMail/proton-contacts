@@ -4,18 +4,9 @@ import { c } from 'ttag';
 import { Icon, Button } from 'react-components';
 
 import humanSize from 'proton-shared/lib/helpers/humanSize';
+import { splitExtension } from 'proton-shared/lib/helpers/file';
 
-const splitExtension = (filename) => {
-    if (!/\./.test(filename)) {
-        return [filename, ''];
-    }
-    const ext = filename.split('.').pop();
-    const name = filename.substring(0, filename.length - ext.length - 1);
-
-    return [name, ext];
-};
-
-const AttachedFile = ({ file, iconName, className, clear, onClear, ...rest }) => {
+const AttachedFile = ({ file, iconName, className, clear = c('Action').t`Delete`, onClear, ...rest }) => {
     const [fileName, extension] = splitExtension(file.name);
 
     return (
@@ -43,10 +34,6 @@ AttachedFile.propTypes = {
     iconName: PropTypes.string.isRequired,
     clear: PropTypes.string,
     onClear: PropTypes.func
-};
-
-AttachedFile.defaultProps = {
-    clear: c('Action').t`Delete`
 };
 
 export default AttachedFile;
