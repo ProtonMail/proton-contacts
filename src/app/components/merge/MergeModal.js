@@ -11,7 +11,7 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
 
     const [isMerging, setIsMerging] = useState(false);
     const [mergeFinished, setMergeFinished] = useState(false);
-    const [model, setModel] = useState({
+    const [model, setModel] = useState(() => ({
         orderedContacts: contacts,
         isChecked: contacts.flat().reduce((acc, { ID }) => {
             acc[ID] = true;
@@ -21,7 +21,7 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
             acc[ID] = false;
             return acc;
         }, {})
-    });
+    }));
 
     const { orderedContacts, isChecked, beDeleted } = model;
 
