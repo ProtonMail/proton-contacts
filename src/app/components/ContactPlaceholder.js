@@ -9,7 +9,7 @@ import ContactGroupModal from './ContactGroupModal';
 import ExportModal from './ExportModal';
 import ImportModal from './import/ImportModal';
 
-const PaidCards = ({ contactGroupID, user, userKeysList, loadingUserKeys }) => {
+const PaidCards = ({ contactGroupID, userKeysList, loadingUserKeys }) => {
     const { createModal } = useModals();
     const handleExport = () => createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
     const handleGroups = () => redirectTo('/contacts/settings');
@@ -61,7 +61,6 @@ const PaidCards = ({ contactGroupID, user, userKeysList, loadingUserKeys }) => {
 
 PaidCards.propTypes = {
     contactGroupID: PropTypes.string,
-    user: PropTypes.object.isRequired,
     userKeysList: PropTypes.array,
     loadingUserKeys: PropTypes.bool
 };
