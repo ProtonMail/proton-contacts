@@ -45,23 +45,16 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
     );
     const totalBeMerged = useMemo(() => beMergedIDs.flat().length, [beMergedIDs]);
 
-    console.log({ beMergedIDs });
-    console.log({ beDeletedIDs });
-
     const { content, ...modalProps } = (() => {
         /*
             display table with mergeable contacts
         */
         if (!isMerging) {
-            const handleSubmit = () => {
-                setIsMerging(true);
-            };
-            const footer = (
-                <>
-                    <ResetButton>{c('Action').t`Cancel`}</ResetButton>
-                    <PrimaryButton type="submit" disabled={!totalBeMerged}>{c('Action').t`Merge`}</PrimaryButton>
-                </>
+            const submit = (
+                <PrimaryButton type="submit" disabled={!totalBeMerged}>{c('Action').t`Merge`}</PrimaryButton>
             );
+
+            const handleSubmit = () => setIsMerging(true);
 
             return {
                 title: c('Title').t`Merge contacts`,
@@ -74,7 +67,7 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
                         beDeletedIDs={beDeletedIDs}
                     />
                 ),
-                footer,
+                submit,
                 onSubmit: handleSubmit,
                 ...rest
             };
@@ -89,6 +82,7 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
                 {c('Action').t`Close`}
             </PrimaryButton>
         );
+
         const handleFinish = async () => {
             await call();
             setMergeFinished(true);

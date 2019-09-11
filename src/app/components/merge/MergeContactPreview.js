@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { useApi, useLoading, Loader, FormModal, PrimaryButton, ResetButton } from 'react-components';
+import { useApi, useLoading, useEventManager, Loader, FormModal, PrimaryButton, ResetButton } from 'react-components';
 import { splitKeys } from 'proton-shared/lib/keys/keys';
 import { getContact } from 'proton-shared/lib/api/contacts';
 
@@ -13,6 +13,7 @@ import MergedContactSummary from './MergedContactSummary';
 import MergingModalContent from './MergingModalContent';
 
 const MergeContactPreview = ({ contactID, beMergedIDs, beDeletedIDs = [], userKeysList, updateModel, ...rest }) => {
+    const { call } = useEventManager();
     const api = useApi();
     const { privateKeys, publicKeys } = useMemo(() => splitKeys(userKeysList), []);
 
@@ -96,6 +97,7 @@ const MergeContactPreview = ({ contactID, beMergedIDs, beDeletedIDs = [], userKe
 
         const handleFinish = async () => {
             handleRemoveMerged();
+            await call();
             setMergeFinished(true);
         };
 
