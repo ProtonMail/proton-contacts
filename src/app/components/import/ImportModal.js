@@ -159,7 +159,6 @@ const ImportModal = ({ userKeysList, ...rest }) => {
                 // if (hasCategories(vcardContacts)) {
                 //     return setStep(IMPORT_GROUPS);
                 // }
-                await call();
                 setImportFinished(true);
             };
 
