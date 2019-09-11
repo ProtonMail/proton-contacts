@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { c } from 'ttag';
 import { Details, Summary, Bordered } from 'react-components';
 
 const ErrorDetails = ({ errors = [], loading, summary = c('Info on errors').t`Click for details` }) => {

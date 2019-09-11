@@ -11,7 +11,7 @@ import { wait } from 'proton-shared/lib/helpers/promise';
 import { extractVcards, parse as parseVcard } from '../../helpers/vcard';
 import { prepareContact } from '../../helpers/encrypt';
 import { splitContacts, divideInBatches, trivialIndexMap } from '../../helpers/import';
-import { percentageProgress } from '../../helpers/progress';
+import { combineProgress } from '../../helpers/progress';
 import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE, API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
 
 const { OVERWRITE_CONTACT } = OVERWRITE;
@@ -227,20 +227,27 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
 
     /*
 		Allocate 5% of the progress to parsing, 90% to encrypting, and 5% to sending to API
-	*/
-    const progressParsing = percentageProgress(model.parsed.length, model.failedOnParse.length, model.total);
-    const totalToEncrypt = model.total - model.failedOnParse.length;
-    const progressEncrypting =
-        totalToEncrypt === 0 && model.total !== 0
-            ? 100 // set to 100 if there are no contacts to encrypt but there are contacts to import
-            : percentageProgress(model.encrypted.length, model.failedOnEncrypt.length, totalToEncrypt);
-    const totalToSubmit = totalToEncrypt - model.failedOnEncrypt.length;
-    const progressSubmitting =
-        totalToSubmit === 0 && model.total !== 0
-            ? 100 // set to 100 if there are no contacts to submit but there are contacts to import
-            : percentageProgress(model.submitted, model.failedOnSubmit.length, totalToSubmit);
-
-    const adjustedProgress = Math.round(0.05 * progressParsing + 0.9 * progressEncrypting + 0.05 * progressSubmitting);
+    */
+    const combinedProgress = combineProgress([
+        {
+            allocated: 0.05,
+            successful: model.parsed.length,
+            failed: model.failedOnParse.length,
+            total: model.total
+        },
+        {
+            allocated: 0.9,
+            successful: model.encrypted.length,
+            failed: model.failedOnEncrypt.length,
+            total: model.total - model.failedOnParse.length
+        },
+        {
+            allocated: 0.05,
+            successful: model.submitted,
+            failed: model.failedOnSubmit.length,
+            total: model.total - model.failedOnParse.length - model.failedOnEncrypt.length
+        }
+    ]);
 
     return (
         <>
@@ -251,7 +258,7 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
             <DynamicProgress
                 id="progress-import-contacts"
                 alt="contact-loader"
-                value={adjustedProgress}
+                value={combinedProgress}
                 displaySuccess={c('Progress bar description').ngettext(
                     msgid`${model.submitted} out of ${model.total} contact successfully imported.`,
                     `${model.submitted} out of ${model.total} contacts successfully imported.`,
