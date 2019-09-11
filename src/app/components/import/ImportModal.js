@@ -83,6 +83,12 @@ const ImportModal = ({ userKeysList, ...rest }) => {
 
     const { content, ...modalProps } = (() => {
         if (step <= ATTACHED) {
+            const submit = (
+                <PrimaryButton disabled={step === ATTACHING} type="submit">
+                    {c('Action').t`Import`}
+                </PrimaryButton>
+            );
+
             const handleSubmit = async () => {
                 try {
                     if (file.extension === 'csv') {
@@ -103,14 +109,6 @@ const ImportModal = ({ userKeysList, ...rest }) => {
                     handleClear();
                 }
             };
-            const footer = (
-                <>
-                    <ResetButton>{c('Action').t`Cancel`}</ResetButton>
-                    <PrimaryButton disabled={step === ATTACHING} type="submit">
-                        {c('Action').t`Import`}
-                    </PrimaryButton>
-                </>
-            );
 
             return {
                 content: (
@@ -121,21 +119,19 @@ const ImportModal = ({ userKeysList, ...rest }) => {
                         onClear={handleClear}
                     />
                 ),
-                footer,
+                submit,
                 onSubmit: handleSubmit
             };
         }
 
         if (step === CHECKING_CSV) {
-            const handleSubmit = () => setStep(IMPORTING);
-            const footer = (
-                <>
-                    <ResetButton>{c('Action').t`Cancel`}</ResetButton>
-                    <PrimaryButton disabled={!vcardContacts.length} type="submit">
-                        {c('Action').t`Import`}
-                    </PrimaryButton>
-                </>
+            const submit = (
+                <PrimaryButton disabled={!vcardContacts.length} type="submit">
+                    {c('Action').t`Import`}
+                </PrimaryButton>
             );
+
+            const handleSubmit = () => setStep(IMPORTING);
 
             return {
                 content: (
@@ -145,28 +141,30 @@ const ImportModal = ({ userKeysList, ...rest }) => {
                         onSetVcardContacts={setVcardContacts}
                     />
                 ),
-                footer,
+                submit,
                 onSubmit: handleSubmit
             };
         }
 
         if (step === IMPORTING) {
+            const close = !importFinished && <ResetButton>{c('Action').t`Cancel`}</ResetButton>;
+            const submit = (
+                <PrimaryButton loading={!importFinished} type="submit">
+                    {c('Action').t`Close`}
+                </PrimaryButton>
+            );
+
             const handleFinish = async () => {
                 // temporarily disabled
                 // if (hasCategories(vcardContacts)) {
                 //     return setStep(IMPORT_GROUPS);
                 // }
-                await call();
                 setImportFinished(true);
             };
-            const footer = (
-                <>
-                    {!importFinished && <ResetButton>{c('Action').t`Cancel`}</ResetButton>}
-                    <PrimaryButton loading={!importFinished} type="submit">
-                        {c('Action').t`Close`}
-                    </PrimaryButton>
-                </>
-            );
+            const handleSubmit = async () => {
+                await call();
+                rest.onClose();
+            };
 
             return {
                 content: (
@@ -179,20 +177,21 @@ const ImportModal = ({ userKeysList, ...rest }) => {
                         onFinish={handleFinish}
                     />
                 ),
-                footer,
-                onSubmit: rest.onClose
+                close,
+                submit,
+                onSubmit: handleSubmit
             };
         }
         if (step === IMPORT_GROUPS) {
-            const handleSubmit = () => {
-                call();
+            const handleSubmit = async () => {
+                await call();
                 rest.onClose();
             };
-            const footer = <PrimaryButton type="submit">{c('Action').t`Create`}</PrimaryButton>;
+            const submit = <PrimaryButton type="submit">{c('Action').t`Create`}</PrimaryButton>;
 
             return {
                 content: <ImportGroupsModalContent vcardContacts={vcardContacts} />,
-                footer,
+                submit,
                 onSubmit: handleSubmit
             };
         }
