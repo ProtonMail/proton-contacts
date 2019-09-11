@@ -194,7 +194,7 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
                 { contacts: withoutCategories, indexMap: indexMapWithout, labels: IGNORE },
                 { signal }
             );
-            !signal.aborted && (await onFinish());
+            !signal.aborted && onFinish();
         };
 
         withLoading(importContacts(abortController));
