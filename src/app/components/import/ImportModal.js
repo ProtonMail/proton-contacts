@@ -167,11 +167,8 @@ const ImportModal = ({ userKeysList, ...rest }) => {
                 // if (hasCategories(vcardContacts)) {
                 //     return setStep(IMPORT_GROUPS);
                 // }
-                setImportFinished(true);
-            };
-            const handleSubmit = async () => {
                 await call();
-                rest.onClose();
+                setImportFinished(true);
             };
 
             return {
@@ -187,7 +184,7 @@ const ImportModal = ({ userKeysList, ...rest }) => {
                 ),
                 close,
                 submit,
-                onSubmit: handleSubmit
+                onSubmit: rest.onClose
             };
         }
         if (step === IMPORT_GROUPS) {
