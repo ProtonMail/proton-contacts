@@ -9,7 +9,7 @@ import ContactDetails from './ContactDetails';
 import MergeContactPreview from './MergeContactPreview';
 import MergeTable from './MergeTable';
 
-const MergeModalContent = ({ contactID, userKeysList, model, updateModel, beDeletedIDs }) => {
+const MergeModalContent = ({ contactID, userKeysList, model, updateModel, beMergedModel, beDeletedModel }) => {
     const { createModal } = useModals();
 
     const { orderedContacts, isChecked, beDeleted } = model;
@@ -37,16 +37,23 @@ const MergeModalContent = ({ contactID, userKeysList, model, updateModel, beDele
         createModal(<ContactDetails contactID={contactID} userKeysList={userKeysList} />);
     };
 
-    const handlePreview = (contactIDs, groupIndex) =>
+    const handlePreview = (beMergedID, beDeletedIDs) => {
+        const beMergedModelSingle = { [beMergedID]: beMergedModel[beMergedID] };
+        const beDeletedModelSingle = beDeletedIDs.reduce((acc, ID) => {
+            acc[ID] = beDeletedModel[ID];
+            return acc;
+        }, {});
+
         createModal(
             <MergeContactPreview
                 contactID={contactID}
-                beMergedIDs={contactIDs}
                 userKeysList={userKeysList}
-                beDeletedIDs={beDeletedIDs[groupIndex]}
+                beMergedModel={beMergedModelSingle}
+                beDeletedModel={beDeletedModelSingle}
                 updateModel={updateModel}
             />
         );
+    };
 
     return (
         <>
@@ -57,7 +64,7 @@ const MergeModalContent = ({ contactID, userKeysList, model, updateModel, beDele
             <Alert type="warning">
                 {c('Description')
                     .t`You can mark for deletion the contacts that you do not want neither to merge nor to keep.
-                    Deletion will only take place after the merge button is clicked.`}
+                    Deletion will only take place after the merge button is clicked`}
             </Alert>
             <MergeTable
                 onSortEnd={handleSortEnd}
@@ -78,7 +85,8 @@ MergeModalContent.propTypes = {
     userKeysList: PropTypes.array.isRequired,
     model: PropTypes.object.isRequired,
     updateModel: PropTypes.func.isRequired,
-    beDeletedIDs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired
+    beMergedModel: PropTypes.shape({ ID: PropTypes.arrayOf(PropTypes.string) }),
+    beDeletedModel: PropTypes.shape({ ID: PropTypes.string })
 };
 
 export default MergeModalContent;

@@ -7,10 +7,10 @@ import { useApi, useLoading, Alert } from 'react-components';
 import { getContact, addContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 import { splitKeys } from 'proton-shared/lib/keys/keys';
 import { wait } from 'proton-shared/lib/helpers/promise';
+import { chunk } from 'proton-shared/lib/helpers/array';
 import { prepareContact as decrypt } from '../../helpers/decrypt';
 import { prepareContact as encrypt } from '../../helpers/encrypt';
 import { merge } from '../../helpers/merge';
-import { divideInBatches, trivialIndexMap } from '../../helpers/import';
 import { combineProgress } from '../../helpers/progress';
 import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE, API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
 
@@ -22,9 +22,9 @@ const { IGNORE } = CATEGORIES;
 const MergingModalContent = ({
     contactID,
     userKeysList,
-    beMergedIDs = [],
     alreadyMerged,
-    beDeletedIDs = [],
+    beMergedModel = {},
+    beDeletedModel = {},
     totalBeMerged = 0,
     onFinish,
     history,
@@ -34,7 +34,6 @@ const MergingModalContent = ({
     const { privateKeys, publicKeys } = useMemo(() => splitKeys(userKeysList), []);
 
     const [loading, withLoading] = useLoading(true);
-    const [newContactID, setNewContactID] = useState(contactID);
     const [model, setModel] = useState({
         mergedAndEncrypted: [],
         failedOnMergeAndEncrypt: [],
@@ -42,16 +41,9 @@ const MergingModalContent = ({
         failedOnSubmit: []
     });
 
-    // useEffect(() => {
-    //     // if the current contact has been merged or deleted, update contactID
-    //     if (newContactID !== contactID) {
-    //         history.push({ ...location, pathname: `/contacts/${newContactID}` });
-    //     }
-    // }, [newContactID]);
-
     useEffect(() => {
         /*
-			Prepare api for allowing cancellation in the middle of the import
+			Prepare api for allowing cancellation in the middle of the merge
 		*/
         const abortController = new AbortController();
         const apiWithAbort = (config) => api({ ...config, signal: abortController.signal });
@@ -75,11 +67,11 @@ const MergingModalContent = ({
         };
 
         /*
-            Get and decrypt a group of contacts to be merged. Return contacts as list of properties
+            Get and decrypt a group of contacts to be merged. Return array of decrypted contacts
         */
-        const getDecryptedGroup = async (IDs = [], { signal }) => {
+        const getDecryptedGroup = async (groupIDs = [], { signal }) => {
             const decryptedGroup = [];
-            for (const ID of IDs) {
+            for (const ID of groupIDs) {
                 // avoid overloading API in case getDecryptedContact is too fast
                 const [decryptedContact] = await Promise.all([
                     getDecryptedContact(ID, { signal }),
@@ -97,16 +89,15 @@ const MergingModalContent = ({
             if (signal.aborted) {
                 return {};
             }
-            const groupIDs = beMergedIDs[0];
+            const { mergedContact, groupIDs } = alreadyMerged;
             const beSubmittedContacts = [];
-            const beDeletedAfterMergeIDs = [];
             try {
-                const encryptedMergedContact = await encrypt(alreadyMerged, {
+                const encryptedMergedContact = await encrypt(mergedContact, {
                     privateKey: privateKeys[0],
                     publicKey: publicKeys[0]
                 });
                 beSubmittedContacts.push(encryptedMergedContact);
-                beDeletedAfterMergeIDs.push(groupIDs.slice(1));
+
                 !signal.aborted &&
                     setModel((model) => ({ ...model, mergedAndEncrypted: [...model.mergedAndEncrypted, ...groupIDs] }));
             } catch {
@@ -116,7 +107,7 @@ const MergingModalContent = ({
                         failedOnMergeAndEncrypt: [...model.failedOnMergeAndEncrypt, ...groupIDs]
                     }));
             }
-            return { beSubmittedContacts, beDeletedAfterMergeIDs };
+            return beSubmittedContacts;
         };
 
         /*
@@ -125,19 +116,17 @@ const MergingModalContent = ({
         */
         const mergeAndEncrypt = async ({ signal }) => {
             const beSubmittedContacts = [];
-            const beDeletedAfterMergeIDs = [];
-            for (const groupIDs of beMergedIDs) {
+            for (const groupIDs of Object.values(beMergedModel)) {
                 if (signal.aborted) {
                     return {};
                 }
                 try {
-                    const beMergedGroup = await getDecryptedGroup(groupIDs, { signal });
-                    const encryptedMergedContact = await encrypt(merge(beMergedGroup), {
+                    const decryptedGroup = await getDecryptedGroup(groupIDs, { signal });
+                    const encryptedMergedContact = await encrypt(merge(decryptedGroup), {
                         privateKey: privateKeys[0],
                         publicKey: publicKeys[0]
                     });
                     beSubmittedContacts.push(encryptedMergedContact);
-                    beDeletedAfterMergeIDs.push(groupIDs.slice(1));
                     !signal.aborted &&
                         setModel((model) => ({
                             ...model,
@@ -151,13 +140,13 @@ const MergingModalContent = ({
                         }));
                 }
             }
-            return { beSubmittedContacts, beDeletedAfterMergeIDs };
+            return beSubmittedContacts;
         };
 
         /*
             Submit a batch of merged contacts to the API
         */
-        const submitBatch = async ({ beSubmittedContacts, indexMap }, { signal }) => {
+        const submitBatch = async (beSubmittedContacts, { signal }) => {
             if (signal.aborted) {
                 return;
             }
@@ -171,14 +160,19 @@ const MergingModalContent = ({
                         Labels: IGNORE
                     })
                 ));
-            for (const { Index, Response } of Responses) {
-                const groupIDs = beMergedIDs[indexMap[Index]];
-                if (Response.Code === SUCCESS_IMPORT_CODE) {
+            for (const {
+                Response: { Code, Contact: ID }
+            } of Responses) {
+                const groupIDs = beMergedModel[ID];
+                const beDeletedAfterMergeIDs = groupIDs.slice(1);
+                if (Code === SUCCESS_IMPORT_CODE) {
                     !signal.aborted &&
                         setModel((model) => ({ ...model, submitted: [...model.submitted, ...groupIDs] }));
-                    beDeletedBatchIDs.push(...groupIDs.slice(1));
-                    // if the current contact is merged, prepare to update contactID
-                    // !signal.aborted && groupIDs.slice(1).includes(contactID) && history.replace({ ...location, pathname: `/contacts/${groupIDs[0]}` });;
+                    beDeletedBatchIDs.push(...beDeletedAfterMergeIDs);
+                    if (!signal.aborted && beDeletedAfterMergeIDs.includes(contactID)) {
+                        // if the current contact is merged, update URL
+                        history.replace({ ...location, state: { ignoreClose: true }, pathname: `/contacts/${ID}` });
+                    }
                 } else {
                     !signal.aborted &&
                         setModel((model) => ({ ...model, failedOnSubmit: [...model.failedOnSubmit, ...groupIDs] }));
@@ -190,26 +184,14 @@ const MergingModalContent = ({
         /*
             Submit all merged contacts to the API
         */
-        const submitContacts = async ({ beSubmittedContacts }, { signal }) => {
+        const submitContacts = async (beSubmittedContacts, { signal }) => {
             // split contacts to be submitted and deleted in batches in case there are too many
-            const { contactBatches: beSubmittedBatches, indexMapBatches } = divideInBatches(
-                { contacts: beSubmittedContacts, indexMap: trivialIndexMap(beMergedIDs) },
-                ADD_CONTACTS_MAX_SIZE
-            );
+            const beSubmittedBatches = chunk(beSubmittedContacts, ADD_CONTACTS_MAX_SIZE);
             const apiCalls = beSubmittedBatches.length;
 
             for (let i = 0; i < apiCalls; i++) {
                 // avoid overloading API in the case submitBatch is too fast
-                await Promise.all([
-                    submitBatch(
-                        {
-                            beSubmittedContacts: beSubmittedBatches[i],
-                            indexMap: indexMapBatches[i]
-                        },
-                        { signal }
-                    ),
-                    wait(API_SAFE_INTERVAL)
-                ]);
+                await Promise.all([submitBatch(beSubmittedBatches[i], { signal }), wait(API_SAFE_INTERVAL)]);
             }
         };
 
@@ -217,19 +199,28 @@ const MergingModalContent = ({
             Delete contacts marked for deletion
         */
         const deleteMarkedForDeletion = async ({ signal }) => {
-            !signal.aborted && !!beDeletedIDs.length && (await apiWithAbort(deleteContacts(beDeletedIDs)));
-            // if current contact is deleted, route to /contacts
-            // !signal.aborted && beDeletedIDs.includes(contactID) && setNewContactID('');
+            const beDeletedIDs = Object.keys(beDeletedModel);
+            if (!signal.aborted && !!beDeletedIDs.length) {
+                await apiWithAbort(deleteContacts(beDeletedIDs));
+            }
+            if (!signal.aborted && beDeletedIDs.includes(contactID)) {
+                // if current contact is deleted, route to merged contact or to /contacts if no associated contact is merged
+                history.replace({
+                    ...location,
+                    state: { ignoreClose: true },
+                    pathname: `/contacts/${beDeletedModel[contactID]}`
+                });
+            }
         };
 
         /*
             All steps of the merge process
         */
         const mergeContacts = async ({ signal }) => {
-            const { beSubmittedContacts, beDeletedAfterMergeIDs } = !alreadyMerged
+            const beSubmittedContacts = !alreadyMerged
                 ? await mergeAndEncrypt({ signal })
                 : await encryptAlreadyMerged({ signal });
-            await submitContacts({ beSubmittedContacts, beDeletedAfterMergeIDs }, { signal });
+            await submitContacts(beSubmittedContacts, { signal });
             await deleteMarkedForDeletion({ signal });
             !signal.aborted && (await onFinish());
         };
@@ -282,9 +273,9 @@ const MergingModalContent = ({
 MergingModalContent.propTypes = {
     contactID: PropTypes.string,
     userKeysList: PropTypes.array.isRequired,
-    beMergedIDs: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
     alreadyMerged: PropTypes.arrayOf(PropTypes.object),
-    beDeletedIDs: PropTypes.arrayOf(PropTypes.string),
+    beMergedModel: PropTypes.shape({ ID: PropTypes.arrayOf(PropTypes.string) }),
+    beDeletedModel: PropTypes.shape({ ID: PropTypes.string }),
     totalBeMerged: PropTypes.number,
     onFinish: PropTypes.func,
     history: PropTypes.object.isRequired,

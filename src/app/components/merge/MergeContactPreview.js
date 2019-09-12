@@ -12,7 +12,7 @@ import MergeErrorContent from './MergeErrorContent';
 import MergedContactSummary from './MergedContactSummary';
 import MergingModalContent from './MergingModalContent';
 
-const MergeContactPreview = ({ contactID, beMergedIDs, beDeletedIDs = [], userKeysList, updateModel, ...rest }) => {
+const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeletedModel, updateModel, ...rest }) => {
     const { call } = useEventManager();
     const api = useApi();
     const { privateKeys, publicKeys } = useMemo(() => splitKeys(userKeysList), []);
@@ -21,6 +21,9 @@ const MergeContactPreview = ({ contactID, beMergedIDs, beDeletedIDs = [], userKe
     const [isMerging, setIsMerging] = useState(false);
     const [mergeFinished, setMergeFinished] = useState(false);
     const [model, setModel] = useState({});
+
+    const beMergedIDs = Object.values(beDeletedModel);
+    const beDeletedIDs = Object.keys(beDeletedModel);
 
     const handleRemoveMerged = () => {
         const beRemovedIDs = beMergedIDs.slice(1).concat(beDeletedIDs);
@@ -108,9 +111,9 @@ const MergeContactPreview = ({ contactID, beMergedIDs, beDeletedIDs = [], userKe
                 <MergingModalContent
                     contactID={contactID}
                     userKeysList={userKeysList}
-                    beMergedIDs={[beMergedIDs]}
                     alreadyMerged={model.mergedContact}
-                    beDeletedIDs={beDeletedIDs}
+                    beMergedModel={beMergedModel}
+                    beDeletedModel={beDeletedModel}
                     totalBeMerged={beMergedIDs.length}
                     onFinish={handleFinish}
                 />
@@ -127,9 +130,9 @@ const MergeContactPreview = ({ contactID, beMergedIDs, beDeletedIDs = [], userKe
 
 MergeContactPreview.propTypes = {
     contactID: PropTypes.string,
-    beMergedIDs: PropTypes.arrayOf(PropTypes.string).isRequired,
-    beDeletedIDs: PropTypes.arrayOf(PropTypes.string),
     userKeysList: PropTypes.array.isRequired,
+    beMergedModel: PropTypes.shape({ ID: PropTypes.arrayOf(PropTypes.string) }),
+    beDeletedModel: PropTypes.shape({ ID: PropTypes.string }),
     updateModel: PropTypes.func
 };
 

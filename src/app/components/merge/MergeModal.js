@@ -32,18 +32,28 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
         }
     }, model);
 
-    const beMergedIDs = useMemo(
+    const { beMergedModel, beDeletedModel, totalBeMerged } = useMemo(
         () =>
-            orderedContacts
-                .map((group) => group.map(({ ID }) => isChecked[ID] && !beDeleted[ID] && ID).filter(Boolean))
-                .map((group) => (group.length > 1 ? group : [])),
+            orderedContacts.reduce(
+                (acc, group) => {
+                    const groupIDs = group.map(({ ID }) => ID);
+                    const beMergedIDs = groupIDs.map(({ ID }) => isChecked[ID] && !beDeleted[ID] && ID).filter(Boolean);
+                    const beDeletedIDs = groupIDs.map(({ ID }) => beDeleted[ID] && ID).filter(Boolean);
+                    const willBeMerged = beMergedIDs.length > 1;
+
+                    if (willBeMerged) {
+                        acc.beMergedModel[beMergedIDs[0]] = beMergedIDs;
+                        acc.totalBeMerged += beMergedIDs.length;
+                    }
+                    for (const ID of beDeletedIDs) {
+                        acc.beDeletedModel[ID] = willBeMerged ? beMergedIDs[0] : '';
+                    }
+                    return acc;
+                },
+                { beMergedModel: {}, beDeletedModel: {}, totalBeMerged: 0 }
+            ),
         [orderedContacts, isChecked, beDeleted]
     );
-    const beDeletedIDs = useMemo(
-        () => orderedContacts.map((group) => group.map(({ ID }) => beDeleted[ID] && ID).filter(Boolean)),
-        [orderedContacts, beDeleted]
-    );
-    const totalBeMerged = useMemo(() => beMergedIDs.flat().length, [beMergedIDs]);
 
     const { content, ...modalProps } = (() => {
         /*
@@ -64,7 +74,8 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
                         userKeysList={userKeysList}
                         model={model}
                         updateModel={setModel}
-                        beDeletedIDs={beDeletedIDs}
+                        beMergedModel={beMergedModel}
+                        beDeletedModel={beDeletedModel}
                     />
                 ),
                 submit,
@@ -95,8 +106,8 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
                 <MergingModalContent
                     contactID={contactID}
                     userKeysList={userKeysList}
-                    beMergedIDs={beMergedIDs.filter((group) => group.length > 1)}
-                    beDeletedIDs={beDeletedIDs.flat()}
+                    beMergedModel={beMergedModel}
+                    beDeletedModel={beDeletedModel}
                     totalBeMerged={totalBeMerged}
                     onFinish={handleFinish}
                 />

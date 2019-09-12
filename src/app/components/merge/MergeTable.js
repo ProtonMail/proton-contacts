@@ -32,7 +32,8 @@ const MergeTable = ({
         <>
             {contacts.map((group, i) => {
                 const activeIDs = group.map(({ ID }) => isChecked[ID] && !beDeleted[ID] && ID).filter(Boolean);
-                const highlightedID = activeIDs.length > 1 ? activeIDs[0] : undefined;
+                const beDeletedIDs = group.map(({ ID }) => beDeleted[ID] && ID).filter(Boolean);
+                const beMergedIDs = activeIDs.length > 1 ? activeIDs : [];
 
                 return (
                     <Block key={`${group && group[0].Name}`} className="mb2 flex flex-column flex-items-center">
@@ -40,7 +41,7 @@ const MergeTable = ({
                             <MergeTableHeader />
                             <MergeTableBody
                                 contacts={group}
-                                highlightedID={highlightedID}
+                                highlightedID={beMergedIDs[0]}
                                 isChecked={isChecked}
                                 beDeleted={beDeleted}
                                 onClickCheckbox={onClickCheckbox}
@@ -50,9 +51,9 @@ const MergeTable = ({
                         </OrderableTable>
                         <Button
                             className="aligcenter"
-                            disabled={activeIDs.length < 2}
+                            disabled={!beMergedIDs.length}
                             type="button"
-                            onClick={() => onClickPreview(activeIDs, i)}
+                            onClick={() => onClickPreview(beMergedIDs[0], beDeletedIDs)}
                         >
                             {c('Action').t`Preview contact`}
                         </Button>
