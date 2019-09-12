@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { useApi, useLoading, Alert } from 'react-components';
@@ -42,13 +42,12 @@ const MergingModalContent = ({
         failedOnSubmit: []
     });
 
-    useEffect(() => {
-        // if the current contact has been merged or deleted, update contactID
-        if (newContactID !== contactID) {
-            console.log(newContactID);
-            history.push({ ...location, pathname: `/contacts/${newContactID}` });
-        }
-    }, [newContactID]);
+    // useEffect(() => {
+    //     // if the current contact has been merged or deleted, update contactID
+    //     if (newContactID !== contactID) {
+    //         history.push({ ...location, pathname: `/contacts/${newContactID}` });
+    //     }
+    // }, [newContactID]);
 
     useEffect(() => {
         /*
@@ -179,7 +178,7 @@ const MergingModalContent = ({
                         setModel((model) => ({ ...model, submitted: [...model.submitted, ...groupIDs] }));
                     beDeletedBatchIDs.push(...groupIDs.slice(1));
                     // if the current contact is merged, prepare to update contactID
-                    !signal.aborted && groupIDs.slice(1).includes(contactID) && setNewContactID(groupIDs[0]);
+                    // !signal.aborted && groupIDs.slice(1).includes(contactID) && history.replace({ ...location, pathname: `/contacts/${groupIDs[0]}` });;
                 } else {
                     !signal.aborted &&
                         setModel((model) => ({ ...model, failedOnSubmit: [...model.failedOnSubmit, ...groupIDs] }));
@@ -220,7 +219,7 @@ const MergingModalContent = ({
         const deleteMarkedForDeletion = async ({ signal }) => {
             !signal.aborted && !!beDeletedIDs.length && (await apiWithAbort(deleteContacts(beDeletedIDs)));
             // if current contact is deleted, route to /contacts
-            !signal.aborted && beDeletedIDs.includes(contactID) && setNewContactID('');
+            // !signal.aborted && beDeletedIDs.includes(contactID) && setNewContactID('');
         };
 
         /*
