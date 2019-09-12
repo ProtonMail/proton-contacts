@@ -1,36 +1,16 @@
-import React, { useState, useLayoutEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
-import { GenericError, LoaderPage, LoginForm, ModalsChildren } from 'react-components';
-import { loadOpenPGP } from 'proton-shared/lib/openpgp';
+import { StandardPublicApp, LoginForm, ModalsChildren } from 'react-components';
 
 const PublicApp = ({ onLogin }) => {
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
-
-    useLayoutEffect(() => {
-        (async () => {
-            await Promise.all([loadOpenPGP()]);
-        })()
-            .then(() => setLoading(false))
-            .catch(() => setError(true));
-    }, []);
-
-    if (error) {
-        return <GenericError />;
-    }
-
-    if (loading) {
-        return <LoaderPage />;
-    }
-
     return (
-        <>
+        <StandardPublicApp>
             <ModalsChildren />
             <Switch>
                 <Route render={() => <LoginForm onLogin={onLogin} />} />
             </Switch>
-        </>
+        </StandardPublicApp>
     );
 };
 
