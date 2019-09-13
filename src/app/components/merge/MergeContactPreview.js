@@ -70,8 +70,14 @@ const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeleted
                     return <Loader />;
                 }
                 if (model.errorOnLoad || model.errorOnMerge) {
-                    return <MergeErrorContent errorOnLoad={model.errorOnLoad} />;
+                    const error = model.errorOnLoad
+                        ? c('Warning')
+                              .t`Some of the contacts to be merged display errors. Please review them individually`
+                        : c('Warning').t`Contacts could not be merged`;
+
+                    return <MergeErrorContent error={error} />;
                 }
+
                 return <MergedContactSummary properties={model.mergedContact} />;
             })();
 

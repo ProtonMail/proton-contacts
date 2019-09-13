@@ -30,7 +30,7 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
         if (!orderedContacts.flat().length) {
             rest.onClose();
         }
-    }, model);
+    }, [orderedContacts]);
 
     // beMergedModel = { 'ID of be-merged contact': [IDs to be merged] }
     // beDeletedModel = { 'ID of be-deleted contact': 'ID to navigate to in case it is the current ID' }

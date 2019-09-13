@@ -59,7 +59,7 @@ const MergingModalContent = ({
                 publicKeys
             });
             if (contactErrors.length) {
-                throw new Error('Error decrypting contact ${ID}');
+                throw new Error(`Error decrypting contact ${ID}`);
             }
             return properties;
         };
