@@ -42,15 +42,13 @@ const MergingModalContent = ({
     });
 
     useEffect(() => {
-        /*
-			Prepare api for allowing cancellation in the middle of the merge
-		*/
+        // Prepare api for allowing cancellation in the middle of the merge
         const abortController = new AbortController();
         const apiWithAbort = (config) => api({ ...config, signal: abortController.signal });
 
-        /*
-            Get a contact from its ID and decrypt it. Return contact as a list of properties
-        */
+        /**
+         * Get a contact from its ID and decrypt it. Return contact as a list of properties
+         */
         const getDecryptedContact = async (ID, { signal }) => {
             if (signal.aborted) {
                 return [];
@@ -66,9 +64,9 @@ const MergingModalContent = ({
             return properties;
         };
 
-        /*
-            Get and decrypt a group of contacts to be merged. Return array of decrypted contacts
-        */
+        /**
+         * Get and decrypt a group of contacts to be merged. Return array of decrypted contacts
+         */
         const getDecryptedGroup = async (groupIDs = [], { signal }) => {
             const decryptedGroup = [];
             for (const ID of groupIDs) {
@@ -82,9 +80,9 @@ const MergingModalContent = ({
             return decryptedGroup;
         };
 
-        /*
-            Encrypt a contact already merged. Useful for the case of `preview merge`
-        */
+        /**
+         * Encrypt a contact already merged. Useful for the case of `preview merge`
+         */
         const encryptAlreadyMerged = async ({ signal }) => {
             if (signal.aborted) {
                 return {};
@@ -111,10 +109,10 @@ const MergingModalContent = ({
             return beSubmittedContacts;
         };
 
-        /*
-            Merge groups of contacts characterized by their ID. Return the encrypted merged contacts
-            to be submitted plus the IDs of the contacts to be deleted after the merge
-        */
+        /**
+         * Merge groups of contacts characterized by their ID. Return the encrypted merged contacts
+         * to be submitted plus the IDs of the contacts to be deleted after the merge
+         */
         const mergeAndEncrypt = async ({ signal }) => {
             const beSubmittedContacts = [];
             for (const groupIDs of Object.values(beMergedModel)) {
@@ -144,9 +142,9 @@ const MergingModalContent = ({
             return beSubmittedContacts;
         };
 
-        /*
-            Submit a batch of merged contacts to the API
-        */
+        /**
+         * Submit a batch of merged contacts to the API
+         */
         const submitBatch = async (beSubmittedContacts, { signal }) => {
             if (signal.aborted) {
                 return;
@@ -185,9 +183,9 @@ const MergingModalContent = ({
             !signal.aborted && !!beDeletedBatchIDs.length && (await apiWithAbort(deleteContacts(beDeletedBatchIDs)));
         };
 
-        /*
-            Submit all merged contacts to the API
-        */
+        /**
+         * Submit all merged contacts to the API
+         */
         const submitContacts = async (beSubmittedContacts, { signal }) => {
             if (signal.aborted) {
                 return;
@@ -202,9 +200,9 @@ const MergingModalContent = ({
             }
         };
 
-        /*
-            Delete contacts marked for deletion
-        */
+        /**
+         * Delete contacts marked for deletion
+         */
         const deleteMarkedForDeletion = async ({ signal }) => {
             const beDeletedIDs = Object.keys(beDeletedModel);
             if (!signal.aborted && !!beDeletedIDs.length) {
@@ -219,9 +217,9 @@ const MergingModalContent = ({
             }
         };
 
-        /*
-            All steps of the merge process
-        */
+        /**
+         * All steps of the merge process
+         */
         const mergeContacts = async ({ signal }) => {
             const beSubmittedContacts = !alreadyMerged
                 ? await mergeAndEncrypt({ signal })
@@ -238,9 +236,7 @@ const MergingModalContent = ({
         };
     }, []);
 
-    /*
-		Allocate 90% of the progress to merging and encrypting, 10% to sending to API
-	*/
+    // Allocate 90% of the progress to merging and encrypting, 10% to sending to API
     const combinedProgress = combineProgress([
         {
             allocated: 0.9,

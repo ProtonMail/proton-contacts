@@ -59,9 +59,7 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
     );
 
     const { content, ...modalProps } = (() => {
-        /*
-            display table with mergeable contacts
-        */
+        // Display table with mergeable contacts
         if (!isMerging) {
             const submit = (
                 <PrimaryButton type="submit" disabled={!totalBeMerged}>{c('Action').t`Merge`}</PrimaryButton>
@@ -87,9 +85,7 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
             };
         }
 
-        /*
-            display progress bar while merging contacts
-        */
+        // Display progress bar while merging contacts
         const close = !mergeFinished && <ResetButton>{c('Action').t`Cancel`}</ResetButton>;
         const submit = (
             <PrimaryButton type="submit" loading={!mergeFinished}>

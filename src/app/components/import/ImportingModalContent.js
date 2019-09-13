@@ -40,7 +40,7 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
     });
 
     useEffect(() => {
-        // prepare api for allowing cancellation in the middle of the import
+        // Prepare api for allowing cancellation in the middle of the import
         const abortController = new AbortController();
         const apiWithAbort = (config) => api({ ...config, signal: abortController.signal });
 
@@ -190,7 +190,7 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
         };
     }, []);
 
-    // allocate 5% of the progress to parsing, 90% to encrypting, and 5% to sending to API
+    // Allocate 5% of the progress to parsing, 90% to encrypting, and 5% to sending to API
     const combinedProgress = combineProgress([
         {
             allocated: 0.05,

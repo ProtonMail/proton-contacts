@@ -58,9 +58,7 @@ const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeleted
     }, []);
 
     const { content, ...modalProps } = (() => {
-        /*
-            display preview
-        */
+        // Display preview
         if (!isMerging) {
             const submit = (
                 <PrimaryButton type="submit" disabled={!model.mergedContact}>
@@ -88,9 +86,7 @@ const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeleted
             };
         }
 
-        /*
-            display progress bar while merging contacts
-        */
+        // Display progress bar while merging contacts
         const close = !mergeFinished && <ResetButton>{c('Action').t`Cancel`}</ResetButton>;
         const submit = (
             <PrimaryButton type="submit" loading={!mergeFinished}>
