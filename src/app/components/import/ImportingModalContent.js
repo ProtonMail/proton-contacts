@@ -19,11 +19,11 @@ const { OVERWRITE_CONTACT } = OVERWRITE;
 const { IGNORE, INCLUDE } = CATEGORIES;
 
 const createParseErrorMessage = (index, message) =>
-    c('Info on errors importing contacts').t`Contact ${index + 1} from your list could not be parsed. ${message}`;
+    c('Info on errors importing contacts').t`Contact ${index} from your list could not be parsed. ${message}`;
 const createEncryptErrorMessage = (index) =>
-    c('Info on errors importing contacts').t`Contact ${index + 1} from your list could not be encrypted.`;
+    c('Info on errors importing contacts').t`Contact ${index} from your list could not be encrypted.`;
 const createSubmitErrorMessage = (index, message) =>
-    c('Info on errors importing contacts').t`Contact ${index + 1} from your list could not be imported. ${message}`;
+    c('Info on errors importing contacts').t`Contact ${index} from your list could not be imported. ${message}`;
 
 const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, onFinish }) => {
     const api = useApi();
@@ -71,7 +71,7 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
                                   ...model,
                                   failedOnParse: [
                                       ...model.failedOnParse,
-                                      { index, message: createParseErrorMessage(index, message) }
+                                      { index, message: createParseErrorMessage(index + 1, message) }
                                   ]
                               }));
                       }
@@ -102,7 +102,7 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
                             ...model,
                             failedOnEncrypt: [
                                 ...model.failedOnEncrypt,
-                                { index, message: createEncryptErrorMessage(index) }
+                                { index, message: createEncryptErrorMessage(index + 1) }
                             ]
                         }));
                     encryptedContacts.push('error'); // must keep for a proper counting when displaying errors
@@ -136,7 +136,7 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
                     if (Code === SUCCESS_IMPORT_CODE) {
                         acc.submittedBatch.push(ID);
                     } else {
-                        acc.failedOnSubmitBatch.push({ index, message: createSubmitErrorMessage(index, Error) });
+                        acc.failedOnSubmitBatch.push({ index, message: createSubmitErrorMessage(index + 1, Error) });
                     }
                     return acc;
                 },
