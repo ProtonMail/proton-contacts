@@ -47,40 +47,6 @@ const ImportModal = ({ userKeysList, ...rest }) => {
     const [vcardContacts, setVcardContacts] = useState([]);
     const [importFinished, setImportFinished] = useState(false);
 
-    const handleClear = () => {
-        setFile({});
-        setStep(ATTACHING);
-    };
-
-    const handleAttach = ({ target }) => {
-        const [, extension] = splitExtension(target.files[0].name);
-        const attachedFile = ['csv', 'vcf'].includes(extension) ? target.files[0] : null;
-
-        if (target.files.length && !attachedFile) {
-            return createNotification({
-                type: 'error',
-                text: c('Error notification').t`No .csv or .vcf file selected`
-            });
-        }
-        if (attachedFile.size > MAX_SIZE) {
-            return createModal(
-                <ConfirmModal
-                    onConfirm={handleClear}
-                    onClose={handleClear}
-                    confirm={c('Action').t`Go back`}
-                    close={null}
-                    title={c('Title').t`File is too big!`}
-                >
-                    <Alert type="error">{c('Error info')
-                        .t`We only support importing files smaller than 10 MB. Please split your contacts into several smaller files.`}</Alert>
-                </ConfirmModal>
-            );
-        }
-
-        setStep(ATTACHED);
-        setFile({ attached: attachedFile, extension });
-    };
-
     const { content, ...modalProps } = (() => {
         if (step <= ATTACHED) {
             const submit = (
@@ -88,6 +54,40 @@ const ImportModal = ({ userKeysList, ...rest }) => {
                     {c('Action').t`Import`}
                 </PrimaryButton>
             );
+
+            const handleClear = () => {
+                setFile({});
+                setStep(ATTACHING);
+            };
+
+            const handleAttach = ({ target }) => {
+                const [, extension] = splitExtension(target.files[0].name);
+                const attachedFile = ['csv', 'vcf'].includes(extension) ? target.files[0] : null;
+
+                if (target.files.length && !attachedFile) {
+                    return createNotification({
+                        type: 'error',
+                        text: c('Error notification').t`No .csv or .vcf file selected`
+                    });
+                }
+                if (attachedFile.size > MAX_SIZE) {
+                    return createModal(
+                        <ConfirmModal
+                            onConfirm={handleClear}
+                            onClose={handleClear}
+                            confirm={c('Action').t`Go back`}
+                            close={null}
+                            title={c('Title').t`File is too big!`}
+                        >
+                            <Alert type="error">{c('Error info')
+                                .t`We only support importing files smaller than 10 MB. Please split your contacts into several smaller files.`}</Alert>
+                        </ConfirmModal>
+                    );
+                }
+
+                setStep(ATTACHED);
+                setFile({ attached: attachedFile, extension });
+            };
 
             const handleSubmit = async () => {
                 try {
