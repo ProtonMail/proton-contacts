@@ -31,9 +31,7 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
     const [loading, withLoading] = useLoading(true);
     const [model, setModel] = useState({
         total: vcardContacts.length,
-        parsed: vcardContacts.map((contact, index) => {
-            index, contact;
-        }),
+        parsed: vcardContacts.map((contact, index) => ({ index, contact })),
         encrypted: [],
         submitted: [],
         failedOnEncrypt: [],
@@ -42,16 +40,14 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
     });
 
     useEffect(() => {
-        /*
-			Prepare api for allowing cancellation in the middle of the import
-		*/
+        // prepare api for allowing cancellation in the middle of the import
         const abortController = new AbortController();
         const apiWithAbort = (config) => api({ ...config, signal: abortController.signal });
 
-        /*
-            Extract and parse contacts from a vcf file. Return succesfully parsed vCard contacts
-            together with their index in vcardContacts to keep track of original contact order
-		*/
+        /**
+         * Extract and parse contacts from a vcf file. Return succesfully parsed vCard contacts
+         * together with their index in vcardContacts to keep track of original contact order
+         */
         const parseVcfContacts = ({ signal }) => {
             const vcards = extractVcards(file);
             !signal.aborted && setModel({ ...model, total: vcards.length });
@@ -79,10 +75,9 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
                   }, []);
         };
 
-        /*
-			Encrypt vCard contacts. Return succesfully encrypted contacts
-			and an indexMap to keep track of original contact order
-		*/
+        /**
+         * Encrypt vCard contacts. Return succesfully encrypted contacts
+         */
         const encryptContacts = async (contacts = [], { signal }) => {
             const publicKey = privateKey.toPublic();
 
@@ -112,9 +107,9 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
             return encryptedContacts;
         };
 
-        /*
-			Send a batch of contacts to the API
-		*/
+        /**
+         * Send a batch of contacts to the API
+         */
         const submitBatch = async ({ contacts = [], labels }, { signal }) => {
             if (signal.aborted || !contacts.length) {
                 return;
@@ -130,6 +125,9 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
                 })
             )).Responses.map(({ Response }) => Response);
 
+            if (signal.aborted) {
+                return;
+            }
             const { submittedBatch, failedOnSubmitBatch } = responses.reduce(
                 (acc, { Code, Error, Contact: { ID } }, i) => {
                     const index = indexMap[i];
@@ -142,17 +140,16 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
                 },
                 { submittedBatch: [], failedOnSubmitBatch: [] }
             );
-            !signal.aborted &&
-                setModel((model) => ({
-                    ...model,
-                    submitted: [...model.submitted, ...submittedBatch],
-                    failedOnSubmit: [...model.failedOnSubmit, ...failedOnSubmitBatch]
-                }));
+            setModel((model) => ({
+                ...model,
+                submitted: [...model.submitted, ...submittedBatch],
+                failedOnSubmit: [...model.failedOnSubmit, ...failedOnSubmitBatch]
+            }));
         };
 
-        /*
-			Send contacts to the API in batches
-		*/
+        /**
+         * Send contacts to the API in batches
+         */
         const submitContacts = async ({ contacts = [], labels }, { signal }) => {
             if (signal.aborted) {
                 return;
@@ -170,9 +167,9 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
             }
         };
 
-        /*
-            All steps of the import process
-        */
+        /**
+         * All steps of the import process
+         */
         const importContacts = async ({ signal }) => {
             const parsedVcfContacts = parseVcfContacts({ signal });
             if (isVcf) {
@@ -193,9 +190,7 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
         };
     }, []);
 
-    /*
-		Allocate 5% of the progress to parsing, 90% to encrypting, and 5% to sending to API
-    */
+    // allocate 5% of the progress to parsing, 90% to encrypting, and 5% to sending to API
     const combinedProgress = combineProgress([
         {
             allocated: 0.05,
