@@ -103,15 +103,16 @@ export const prepareCards = (properties = [], privateKeys, publicKeys) => {
  * Clean properties
  * Parse properties to build vCards
  * @param {Array} properties
- * @param {Array} privateKeys
- * @param {Array} publicKeys
+ * @param {Object} primaryKey
  * @return {Object}
+ *
+ * @dev  For encryption, only the primary key is needed
  */
-export const prepareContact = async (properties, privateKeys, publicKeys) => {
+export const prepareContact = async (properties, { privateKey, publicKey }) => {
     const sanitized = sanitizeProperties(properties);
     const withPref = addPref(sanitized);
     const withGroup = addGroup(withPref);
-    const Cards = await prepareCards(withGroup, privateKeys, publicKeys);
+    const Cards = await prepareCards(withGroup, [privateKey], [publicKey]);
     return { Cards };
 };
 
@@ -123,7 +124,7 @@ export const prepareContact = async (properties, privateKeys, publicKeys) => {
  */
 export const prepareContacts = async (contacts = [], { privateKey, publicKey }) => {
     const promises = contacts.reduce((acc, properties) => {
-        acc.push(prepareContact(properties, privateKey, publicKey));
+        acc.push(prepareContact(properties, { privateKey, publicKey }));
         return acc;
     }, []);
 
