@@ -84,7 +84,7 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
             const encryptedContacts = [];
             for (const { index, contact } of contacts) {
                 if (signal.aborted) {
-                    return {};
+                    return [];
                 }
                 try {
                     const contactEncrypted = await prepareContact(contact, { privateKey, publicKey });

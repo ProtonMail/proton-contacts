@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { c } from 'ttag';
 import { Icon } from 'react-components';
 
 const MergeErrorContent = ({ error }) => {
