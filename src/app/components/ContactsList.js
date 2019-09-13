@@ -7,16 +7,12 @@ import { Link } from 'react-router-dom';
 import List from 'react-virtualized/dist/commonjs/List';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 
-import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
 import noContactsImg from 'design-system/assets/img/shared/empty-address-book.svg';
 import noResultsImg from 'design-system/assets/img/shared/no-results-found.svg';
-import { extractMergeable } from '../helpers/merge';
 
-import ItemCheckbox from './ItemCheckbox';
-import ContactGroupIcon from './ContactGroupIcon';
-import MergeRow from './MergeRow';
 import ImportModal from './import/ImportModal';
 import ContactModal from './ContactModal';
+import ContactRow from './ContactRow';
 
 const ContactsList = ({
     totalContacts,
@@ -31,8 +27,6 @@ const ContactsList = ({
     contactID,
     location
 }) => {
-    const mergeableContacts = useMemo(() => extractMergeable(contacts), [contacts]);
-    const canMerge = mergeableContacts.length > 0;
     const listRef = useRef(null);
     const containerRef = useRef(null);
     const [lastChecked, setLastChecked] = useState(); // Store ID of the last contact ID checked
@@ -67,77 +61,23 @@ const ContactsList = ({
         onCheck(contactIDs, target.checked);
     };
 
-    const handleMerge = () => onMerge(mergeableContacts);
-
     const handleClick = (ID) => () => history.push({ ...location, pathname: `/contacts/${ID}` });
 
-    const stop = (e) => e.stopPropagation();
+    const handleStop = (e) => e.stopPropagation();
 
-    const Row = ({
-        index, // Index of row within collection
-        style, // Style object to be applied to row (to position it)
-        key
-    }) => {
-        if (canMerge && !index) {
-            return <MergeRow key={key} style={style} onMerge={handleMerge} />;
-        }
-        const contactIndex = canMerge ? index - 1 : index;
-
-        const { ID, Name, LabelIDs = [], emails, isChecked } = contacts[contactIndex];
-        const initial = getInitial(Name);
-        return (
-            <div
-                style={style}
-                key={ID}
-                onClick={handleClick(ID)}
-                className={`item-container bg-global-white  ${contactID === ID ? 'item-is-selected' : ''}`}
-            >
-                <div className="flex flex-nowrap">
-                    <span onClick={stop}>
-                        <ItemCheckbox
-                            checked={isChecked}
-                            className="item-checkbox sr-only"
-                            onChange={handleCheck}
-                            data-contact-id={ID}
-                        >
-                            {initial}
-                        </ItemCheckbox>
-                    </span>
-                    <div className="flex-item-fluid pl1 flex flex-column flex-spacebetween conversation-titlesender">
-                        <div className="flex">
-                            <div className={`flex-item-fluid w0 ${LabelIDs.length ? 'pr1' : ''}`}>
-                                <span className="bold inbl mw100 ellipsis">{Name}</span>
-                            </div>
-                            {user.hasPaidMail && LabelIDs.length ? (
-                                <div>
-                                    {LabelIDs.map((labelID) => {
-                                        const { Color, Name } = mapContactGroups[labelID];
-                                        return (
-                                            <ContactGroupIcon
-                                                scrollContainerClass="contacts-list"
-                                                key={labelID}
-                                                name={Name}
-                                                color={Color}
-                                            />
-                                        );
-                                    })}
-                                </div>
-                            ) : null}
-                        </div>
-                        <div className="mw100 ellipsis" title={emails.join(', ')}>
-                            {addPlus(emails)}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    };
-
-    Row.propTypes = {
-        key: PropTypes.string,
-        index: PropTypes.number,
-        style: PropTypes.string
-    };
+    const Row = ({ index, style, key }) => (
+        <ContactRow
+            style={style}
+            key={key}
+            contactID={contactID}
+            hasPaidMail={user.hasPaidMail}
+            mapContactGroups={mapContactGroups}
+            contact={contacts[index]}
+            onClick={handleClick}
+            onCheck={handleCheck}
+            onStop={handleStop}
+        />
+    );
 
     useEffect(() => {
         const timeoutID = setTimeout(() => {
@@ -213,7 +153,7 @@ const ContactsList = ({
                         className="contacts-list no-outline"
                         ref={listRef}
                         rowRenderer={Row}
-                        rowCount={contacts.length + canMerge}
+                        rowCount={contacts.length}
                         height={height}
                         width={width}
                         rowHeight={76}

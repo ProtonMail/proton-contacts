@@ -10,9 +10,10 @@ const MergeRow = ({ style, onMerge, ...rest }) => {
                 <Icon name="merge" color="white" />
             </div>
             <div className="flex flex-column">
-                <div className="bold">{c('Info').t`Two or more contacts appear to be identical.`}</div>
                 <div className="flex flex-items-center">
-                    <span className="mr0-5">{c('Info').t`Do you want to merge these contacts now?`}</span>
+                    <span className="bold">{c('Info').t`Two or more contacts appear to be identical.`}</span>
+                    <span className="mr0-5">{c('Info')
+                        .jt`<b key="boldface">Two or more contacts appear to be identical.</b>Do you want to merge these contacts now?`}</span>
                     <button type="button" className="color-white underline" onClick={onMerge}>
                         {c('Action').t`Merge`}
                     </button>

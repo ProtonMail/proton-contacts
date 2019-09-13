@@ -8,15 +8,14 @@ import { PrimaryButton, Button, Icon, useModals, useContactGroups } from 'react-
 import ContactGroupModal from './ContactGroupModal';
 import ExportModal from './ExportModal';
 import ImportModal from './import/ImportModal';
+import MergeRow from './MergeRow';
 
 const PaidCards = ({ contactGroupID, userKeysList, loadingUserKeys }) => {
     const { createModal } = useModals();
+
+    const handleImport = () => createModal(<ImportModal userKeysList={userKeysList} />);
     const handleExport = () => createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
     const handleGroups = () => redirectTo('/contacts/settings');
-
-    const handleImport = () => {
-        createModal(<ImportModal userKeysList={userKeysList} />);
-    };
 
     return (
         <div className="flex flex-nowrap">
@@ -106,7 +105,9 @@ const ContactPlaceholder = ({
     user,
     userKeysList,
     loadingUserKeys,
-    onUncheck
+    onUncheck,
+    canMerge,
+    onMerge
 }) => {
     const { hasPaidMail } = user;
     const selectedContacts = contacts.filter(({ isChecked }) => isChecked);
@@ -172,6 +173,11 @@ const ContactPlaceholder = ({
                         totalContacts
                     )}
                 </div>
+                {canMerge && (
+                    <div className="mb2">
+                        <MergeRow onMerge={onMerge} />
+                    </div>
+                )}
             </div>
             {hasPaidMail ? (
                 <PaidCards user={user} userKeysList={userKeysList} loadingUserKeys={loadingUserKeys} />

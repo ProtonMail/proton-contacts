@@ -22,6 +22,7 @@ import {
 import { clearContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { toMap } from 'proton-shared/lib/helpers/object';
+import { extractMergeable } from '../helpers/merge';
 
 import ContactsList from '../components/ContactsList';
 import Contact from '../components/Contact';
@@ -97,6 +98,9 @@ const ContactsContainer = ({ location, history }) => {
         });
     }, [filteredContacts, checkedContacts, contactEmailsMap]);
 
+    const mergeableContacts = useMemo(() => extractMergeable(formattedContacts), [formattedContacts]);
+    const canMerge = mergeableContacts.length > 0;
+
     const checkedContactIDs = useMemo(() => {
         return Object.entries(checkedContacts).reduce((acc, [contactID, isChecked]) => {
             if (!isChecked) {
@@ -163,10 +167,10 @@ const ContactsContainer = ({ location, history }) => {
     const handleCheckAll = (checked = false) => handleCheck(contacts.map(({ ID }) => ID), checked);
     const handleUncheckAll = () => handleCheckAll(false);
 
-    const handleMerge = (beMergedContacts) => {
+    const handleMerge = () => {
         const currentContactID = getCurrentContactID();
         createModal(
-            <MergeModal contacts={beMergedContacts} contactID={currentContactID} userKeysList={userKeysList} />
+            <MergeModal contacts={mergeableContacts} contactID={currentContactID} userKeysList={userKeysList} />
         );
     };
 
@@ -211,7 +215,6 @@ const ContactsContainer = ({ location, history }) => {
                                                     userKeysList={userKeysList}
                                                     loadingUserKeys={loadingUserKeys}
                                                     onCheck={handleCheck}
-                                                    onMerge={handleMerge}
                                                     onClear={handleClearSearch}
                                                 />
                                                 {hasChecked ? (
@@ -258,6 +261,8 @@ const ContactsContainer = ({ location, history }) => {
                                                     totalContacts={contacts.length}
                                                     contacts={formattedContacts}
                                                     onUncheck={handleUncheckAll}
+                                                    canMerge={canMerge}
+                                                    onMerge={handleMerge}
                                                 />
                                             </>
                                         );
