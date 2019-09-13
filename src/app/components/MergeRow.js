@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { Icon } from 'react-components';
 
-const MergeRow = ({ style, onMerge, ...rest }) => {
+const MergeRow = ({ loadingUserKeys, style, onMerge, ...rest }) => {
     const boldText = <b key="boldface">{c('Info').t`Two or more contacts appear to be identical`}</b>;
 
     return (
@@ -14,7 +14,12 @@ const MergeRow = ({ style, onMerge, ...rest }) => {
             <div className="flex flex-column">
                 <div>
                     <span className="mr0-5">{c('Info').jt`${boldText}. Do you want to merge these contacts now?`}</span>
-                    <button type="button" className="color-white underline" onClick={onMerge}>
+                    <button
+                        type="button"
+                        className="color-white underline"
+                        disabled={loadingUserKeys}
+                        onClick={onMerge}
+                    >
                         {c('Action').t`Merge`}
                     </button>
                 </div>
@@ -25,7 +30,8 @@ const MergeRow = ({ style, onMerge, ...rest }) => {
 
 MergeRow.propTypes = {
     style: PropTypes.object,
-    onMerge: PropTypes.func
+    onMerge: PropTypes.func,
+    loadingUserKeys: PropTypes.bool
 };
 
 export default MergeRow;

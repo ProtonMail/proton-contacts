@@ -22,7 +22,7 @@ const ErrorDetails = ({ errors = [], loading, summary = c('Info on errors').t`Cl
 };
 
 ErrorDetails.propTypes = {
-    errors: PropTypes.arrayOf(PropTypes.shape({ index: PropTypes.number, createMessage: PropTypes.func })),
+    errors: PropTypes.arrayOf(PropTypes.shape({ index: PropTypes.number, message: PropTypes.func })),
     loading: PropTypes.bool,
     summary: PropTypes.string
 };

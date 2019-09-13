@@ -17,8 +17,7 @@ const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeleted
     const api = useApi();
     const { privateKeys, publicKeys } = useMemo(() => splitKeys(userKeysList), []);
 
-    const [loadingContacts, withLoadingContacts] = useLoading(true);
-    const [loadingMerge, withLoadingMerge] = useLoading(true);
+    const [loading, withLoading] = useLoading(true);
     const [isMerging, setIsMerging] = useState(false);
     const [mergeFinished, setMergeFinished] = useState(false);
     const [model, setModel] = useState({});
@@ -67,7 +66,7 @@ const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeleted
                 </PrimaryButton>
             );
             const content = (() => {
-                if (loadingContacts) {
+                if (loading) {
                     return <Loader />;
                 }
                 if (model.errorOnLoad || model.errorOnMerge) {

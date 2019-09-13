@@ -18,7 +18,7 @@ export const hasCategories = (vcardContacts) => {
  * Split encrypted contacts depending on having the CATEGORIES property.
  * @param {Array} obj.contacts      List of encrypted contacts. contact = { contact: { Cards }, index }
  *
- * @return {Object}                 { withCategories, withoutCategories, indexMapWith, indexMapWithout }
+ * @return {Object}                 { withCategories, withoutCategories }
  */
 export const splitContacts = (contacts = []) =>
     contacts.reduce(

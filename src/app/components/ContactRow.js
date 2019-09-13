@@ -6,7 +6,7 @@ import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
 import ItemCheckbox from './ItemCheckbox';
 import ContactGroupIcon from './ContactGroupIcon';
 
-const ContactRow = ({ style, contactID, hasPaidMail, mapContactGroups, contact, onClick, onCheck, onStop }) => {
+const ContactRow = ({ style, contactID, hasPaidMail, contactGroupsMap, contact, onClick, onCheck, onStop }) => {
     const { ID, Name, LabelIDs = [], emails = [], isChecked } = contact;
 
     return (
@@ -35,7 +35,7 @@ const ContactRow = ({ style, contactID, hasPaidMail, mapContactGroups, contact, 
                         {hasPaidMail && LabelIDs.length ? (
                             <div>
                                 {LabelIDs.map((labelID) => {
-                                    const { Color, Name } = mapContactGroups[labelID];
+                                    const { Color, Name } = contactGroupsMap[labelID];
                                     return (
                                         <ContactGroupIcon
                                             scrollContainerClass="contacts-list"
@@ -61,7 +61,7 @@ ContactRow.propTypes = {
     style: PropTypes.object,
     contactID: PropTypes.string,
     hasPaidMail: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
-    mapContactGroups: PropTypes.object,
+    contactGroupsMap: PropTypes.object,
     contact: PropTypes.shape({
         ID: PropTypes.string,
         Name: PropTypes.string,

@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { useModals, useContactGroups, IllustrationPlaceholder } from 'react-components';
+import { useModals, IllustrationPlaceholder } from 'react-components';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import List from 'react-virtualized/dist/commonjs/List';
@@ -17,8 +17,8 @@ import ContactRow from './ContactRow';
 const ContactsList = ({
     totalContacts,
     contacts,
+    contactGroupsMap,
     onCheck,
-    onMerge,
     onClear,
     user,
     userKeysList,
@@ -31,11 +31,6 @@ const ContactsList = ({
     const containerRef = useRef(null);
     const [lastChecked, setLastChecked] = useState(); // Store ID of the last contact ID checked
     const { createModal } = useModals();
-    const [contactGroups] = useContactGroups();
-    const mapContactGroups = contactGroups.reduce((acc, contactGroup) => {
-        acc[contactGroup.ID] = contactGroup;
-        return acc;
-    }, Object.create(null));
 
     const handleImport = () => {
         createModal(<ImportModal userKeysList={userKeysList} />);
@@ -71,7 +66,7 @@ const ContactsList = ({
             key={key}
             contactID={contactID}
             hasPaidMail={user.hasPaidMail}
-            mapContactGroups={mapContactGroups}
+            contactGroupsMap={contactGroupsMap}
             contact={contacts[index]}
             onClick={handleClick}
             onCheck={handleCheck}
@@ -168,7 +163,6 @@ ContactsList.propTypes = {
     totalContacts: PropTypes.number,
     contacts: PropTypes.array,
     onCheck: PropTypes.func,
-    onMerge: PropTypes.func,
     onClear: PropTypes.func,
     user: PropTypes.object,
     userKeysList: PropTypes.array,

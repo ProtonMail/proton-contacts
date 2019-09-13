@@ -31,6 +31,8 @@ import ContactToolbar from '../components/ContactToolbar';
 import PrivateHeader from '../content/PrivateHeader';
 import PrivateSidebar from '../content/PrivateSidebar';
 import MergeModal from '../components/merge/MergeModal';
+import ImportModal from '../components/import/ImportModal';
+import ExportModal from '../components/ExportModal';
 
 const ContactsContainer = ({ location, history }) => {
     const { createModal } = useModals();
@@ -85,7 +87,7 @@ const ContactsContainer = ({ location, history }) => {
         }, Object.create(null));
     }, [contactEmails]);
 
-    const contactGroupsMap = useMemo(() => toMap(contactGroups), [contactGroups]);
+    const contactGroupsMap = useMemo(() => toMap(contactGroups && contactGroups.filter(Boolean)), [contactGroups]);
 
     const formattedContacts = useMemo(() => {
         return filteredContacts.map((contact) => {
@@ -173,6 +175,10 @@ const ContactsContainer = ({ location, history }) => {
             <MergeModal contacts={mergeableContacts} contactID={currentContactID} userKeysList={userKeysList} />
         );
     };
+    const handleImport = () => createModal(<ImportModal userKeysList={userKeysList} />);
+    const handleExport = (contactGroupID) =>
+        createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
+    const handleGroups = () => history.push({ ...location, pathname: `/contacts/settings` });
 
     return (
         <div className="flex flex-nowrap no-scroll">
@@ -211,6 +217,7 @@ const ContactsContainer = ({ location, history }) => {
                                                     contactID={contactID}
                                                     totalContacts={contacts.length}
                                                     contacts={formattedContacts}
+                                                    contactGroupsMap={contactGroupsMap}
                                                     user={user}
                                                     userKeysList={userKeysList}
                                                     loadingUserKeys={loadingUserKeys}
@@ -246,6 +253,7 @@ const ContactsContainer = ({ location, history }) => {
                                                 <ContactsList
                                                     totalContacts={contacts.length}
                                                     contacts={formattedContacts}
+                                                    contactGroupsMap={contactGroupsMap}
                                                     user={user}
                                                     userKeysList={userKeysList}
                                                     loadingUserKeys={loadingUserKeys}
@@ -263,6 +271,9 @@ const ContactsContainer = ({ location, history }) => {
                                                     onUncheck={handleUncheckAll}
                                                     canMerge={canMerge}
                                                     onMerge={handleMerge}
+                                                    onImport={handleImport}
+                                                    onExport={handleExport}
+                                                    onGroups={handleGroups}
                                                 />
                                             </>
                                         );

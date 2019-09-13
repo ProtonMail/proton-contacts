@@ -4,11 +4,7 @@ import { Checkbox, classnames } from 'react-components';
 
 import { opaqueClassName } from '../../helpers/css';
 
-<<<<<<< HEAD
 const NameTableCell = ({ name, contactID, highlightedID, checked, deleted, greyedOut, onToggle }) => {
-=======
-const NameTableCell = ({ name, contactID, checked, deleted, greyedOut, onToggle }) => {
->>>>>>> refactor merge modal
     const handleToggle = () => onToggle(contactID);
 
     return (
@@ -35,10 +31,7 @@ const NameTableCell = ({ name, contactID, checked, deleted, greyedOut, onToggle 
 
 NameTableCell.propTypes = {
     contactID: PropTypes.string.isRequired,
-<<<<<<< HEAD
     highlightedID: PropTypes.string,
-=======
->>>>>>> refactor merge modal
     checked: PropTypes.bool,
     deleted: PropTypes.bool,
     greyedOut: PropTypes.bool,

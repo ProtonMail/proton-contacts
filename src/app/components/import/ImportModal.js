@@ -89,14 +89,6 @@ const ImportModal = ({ userKeysList, ...rest }) => {
                 setFile({ attached: attachedFile, extension });
             };
 
-    const { content, ...modalProps } = (() => {
-        if (step <= ATTACHED) {
-            const submit = (
-                <PrimaryButton disabled={step === ATTACHING} type="submit">
-                    {c('Action').t`Import`}
-                </PrimaryButton>
-            );
-
             const handleSubmit = async () => {
                 try {
                     if (file.extension === 'csv') {
@@ -167,7 +159,6 @@ const ImportModal = ({ userKeysList, ...rest }) => {
                 // if (hasCategories(vcardContacts)) {
                 //     return setStep(IMPORT_GROUPS);
                 // }
-                await call();
                 setImportFinished(true);
             };
 

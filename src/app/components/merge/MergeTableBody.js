@@ -19,7 +19,6 @@ const MergeTableBody = ({
     return (
         <OrderableTableBody colSpan={4} {...rest}>
             {contacts.map(({ ID, Name, emails }, j) => {
-<<<<<<< HEAD
                 const deleted = beDeleted[ID];
                 const options = [
                     !deleted && {
@@ -35,19 +34,12 @@ const MergeTableBody = ({
                         }
                     }
                 ].filter(Boolean);
-=======
-                const deleted = isDeleted[ID];
->>>>>>> refactor merge modal
                 const cells = [
                     <NameTableCell
                         key="name"
                         name={Name}
                         contactID={ID}
-<<<<<<< HEAD
                         highlightedID={highlightedID}
-=======
-                        index={j}
->>>>>>> refactor merge modal
                         checked={isChecked[ID]}
                         deleted={deleted}
                         greyedOut={deleted}
@@ -75,14 +67,9 @@ const MergeTableBody = ({
 
 MergeTableBody.propTypes = {
     contacts: PropTypes.arrayOf(PropTypes.object),
-<<<<<<< HEAD
     highlightedID: PropTypes.string,
     isChecked: PropTypes.object,
     beDeleted: PropTypes.object,
-=======
-    isChecked: PropTypes.object,
-    isDeleted: PropTypes.object,
->>>>>>> refactor merge modal
     onClickCheckbox: PropTypes.func,
     onClickDetails: PropTypes.func,
     onToggleDelete: PropTypes.func,
