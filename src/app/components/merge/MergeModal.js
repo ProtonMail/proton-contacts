@@ -32,13 +32,15 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
         }
     }, model);
 
+    // beMergedModel = { 'ID of be-merged contact': [IDs to be merged] }
+    // beDeletedModel = { 'ID of be-deleted contact': 'ID to navigate to in case it is the current ID' }
     const { beMergedModel, beDeletedModel, totalBeMerged } = useMemo(
         () =>
             orderedContacts.reduce(
                 (acc, group) => {
                     const groupIDs = group.map(({ ID }) => ID);
-                    const beMergedIDs = groupIDs.map(({ ID }) => isChecked[ID] && !beDeleted[ID] && ID).filter(Boolean);
-                    const beDeletedIDs = groupIDs.map(({ ID }) => beDeleted[ID] && ID).filter(Boolean);
+                    const beMergedIDs = groupIDs.map((ID) => isChecked[ID] && !beDeleted[ID] && ID).filter(Boolean);
+                    const beDeletedIDs = groupIDs.map((ID) => beDeleted[ID] && ID).filter(Boolean);
                     const willBeMerged = beMergedIDs.length > 1;
 
                     if (willBeMerged) {
@@ -46,6 +48,7 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
                         acc.totalBeMerged += beMergedIDs.length;
                     }
                     for (const ID of beDeletedIDs) {
+                        // route to merged contact or to /contacts if no associated contact is merged
                         acc.beDeletedModel[ID] = willBeMerged ? beMergedIDs[0] : '';
                     }
                     return acc;

@@ -22,7 +22,7 @@ const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeleted
     const [mergeFinished, setMergeFinished] = useState(false);
     const [model, setModel] = useState({});
 
-    const beMergedIDs = Object.values(beDeletedModel);
+    const [beMergedIDs] = Object.values(beMergedModel);
     const beDeletedIDs = Object.keys(beDeletedModel);
 
     const handleRemoveMerged = () => {

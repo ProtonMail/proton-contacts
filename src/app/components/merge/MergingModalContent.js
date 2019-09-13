@@ -89,10 +89,11 @@ const MergingModalContent = ({
             if (signal.aborted) {
                 return {};
             }
-            const { mergedContact, groupIDs } = alreadyMerged;
+            // beMergedModel only contains one entry in this case
+            const [groupIDs] = Object.values(beMergedModel);
             const beSubmittedContacts = [];
             try {
-                const encryptedMergedContact = await encrypt(mergedContact, {
+                const encryptedMergedContact = await encrypt(alreadyMerged, {
                     privateKey: privateKeys[0],
                     publicKey: publicKeys[0]
                 });
@@ -161,7 +162,10 @@ const MergingModalContent = ({
                     })
                 ));
             for (const {
-                Response: { Code, Contact: ID }
+                Response: {
+                    Code,
+                    Contact: { ID }
+                }
             } of Responses) {
                 const groupIDs = beMergedModel[ID];
                 const beDeletedAfterMergeIDs = groupIDs.slice(1);
@@ -185,6 +189,9 @@ const MergingModalContent = ({
             Submit all merged contacts to the API
         */
         const submitContacts = async (beSubmittedContacts, { signal }) => {
+            if (signal.aborted) {
+                return;
+            }
             // split contacts to be submitted and deleted in batches in case there are too many
             const beSubmittedBatches = chunk(beSubmittedContacts, ADD_CONTACTS_MAX_SIZE);
             const apiCalls = beSubmittedBatches.length;
@@ -204,7 +211,6 @@ const MergingModalContent = ({
                 await apiWithAbort(deleteContacts(beDeletedIDs));
             }
             if (!signal.aborted && beDeletedIDs.includes(contactID)) {
-                // if current contact is deleted, route to merged contact or to /contacts if no associated contact is merged
                 history.replace({
                     ...location,
                     state: { ignoreClose: true },
