@@ -12,8 +12,8 @@ const ErrorDetails = ({ errors = [], loading, summary = c('Info on errors').t`Cl
                 <Bordered>
                     {errors
                         .sort(({ index: index1 }, { index: index2 }) => index1 - index2)
-                        .map(({ index, createMessage }) => (
-                            <div key={index}>{createMessage(index)}</div>
+                        .map(({ index, message }) => (
+                            <div key={index}>{message}</div>
                         ))}
                 </Bordered>
             </Details>

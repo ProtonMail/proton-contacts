@@ -16,70 +16,22 @@ export const hasCategories = (vcardContacts) => {
 
 /**
  * Split encrypted contacts depending on having the CATEGORIES property.
- * @param {Array} obj.contacts      List of encrypted contacts. contact = { Cards }
- * @param {Object} obj.indexMap     A map that points each contact index to another index
+ * @param {Array} obj.contacts      List of encrypted contacts. contact = { contact: { Cards }, index }
  *
  * @return {Object}                 { withCategories, withoutCategories, indexMapWith, indexMapWithout }
  */
-export const splitContacts = ({ contacts = [], indexMap = {} }) =>
+export const splitContacts = (contacts = []) =>
     contacts.reduce(
-        (acc, { Cards }, i) => {
-            const { withCategories, withoutCategories, indexMapWith, indexMapWithout } = acc;
+        (acc, contact) => {
+            const {
+                contact: { Cards }
+            } = contact;
             if (Cards.some(({ Type, Data }) => Type === CLEAR_TEXT && Data.includes('CATEGORIES'))) {
-                indexMapWith[withCategories.length] = indexMap[i];
-                withCategories.push({ Cards });
+                acc.withCategories.push(contact);
             } else {
-                indexMapWithout[withoutCategories.length] = indexMap[i];
-                withoutCategories.push({ Cards });
+                acc.withoutCategories.push(contact);
             }
             return acc;
         },
-        {
-            withCategories: [],
-            withoutCategories: [],
-            indexMapWith: Object.create(null),
-            indexMapWithout: Object.create(null)
-        }
+        { withCategories: [], withoutCategories: [] }
     );
-
-/**
- * Divide a list of contacts with an associated indexMap into batches of a certain size
- * @param {Array} obj.contacts      List of contacts
- * @param {Object} obj.indexMap     A map that points each contact index to another index
- * @param {Number} batchSize        Size of each batch
- *
- * @return {Object}
- */
-export const divideInBatches = ({ contacts = [], indexMap = {} }, batchSize = 1) => {
-    const { contactBatches, indexMapBatches } = contacts.reduce(
-        (acc, contact, i) => {
-            const { contactBatches, indexMapBatches } = acc;
-            const iInBatch = i % batchSize;
-            if (iInBatch === 0) {
-                acc.index++;
-                contactBatches.push([]);
-                indexMapBatches.push({});
-            }
-            contactBatches[acc.index].push(contact);
-            indexMapBatches[acc.index][iInBatch] = indexMap[i];
-            return acc;
-        },
-        {
-            contactBatches: [],
-            indexMapBatches: [],
-            index: -1
-        }
-    );
-
-    return { contactBatches, indexMapBatches };
-};
-
-/**
- * Create a trivial index map for an array
- * @param {Array} collection
- */
-export const trivialIndexMap = (collection) =>
-    collection.reduce((acc, _item, i) => {
-        acc[i] = i;
-        return acc;
-    }, Object.create(null));
