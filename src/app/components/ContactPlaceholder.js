@@ -15,7 +15,7 @@ const PaidCards = ({ contactGroupID, userKeysList, loadingUserKeys }) => {
     const handleGroups = () => redirectTo('/contacts/settings');
 
     const handleImport = () => {
-        createModal(<ImportModal />);
+        createModal(<ImportModal userKeysList={userKeysList} />);
     };
 
     return (
@@ -28,7 +28,8 @@ const PaidCards = ({ contactGroupID, userKeysList, loadingUserKeys }) => {
                         .t`Add contacts to your ProtonMail account by importing them from a CSV or vCard file.`}</p>
                 </div>
                 <div className="flex-item-noshrink p1">
-                    <PrimaryButton className="bold" onClick={handleImport}>{c('Action').t`Import`}</PrimaryButton>
+                    <PrimaryButton className="bold" onClick={handleImport} disabled={loadingUserKeys}>{c('Action')
+                        .t`Import`}</PrimaryButton>
                 </div>
             </div>
             <div className="bordered-container flex-item-fluid mr1 p1 aligncenter flex flex-column">
@@ -147,6 +148,7 @@ const ContactPlaceholder = ({
                     </div>
                     {hasPaidMail ? (
                         <PaidCards
+                            user={user}
                             userKeysList={userKeysList}
                             loadingUserKeys={loadingUserKeys}
                             contactGroupID={contactGroupID}
@@ -171,7 +173,11 @@ const ContactPlaceholder = ({
                     )}
                 </div>
             </div>
-            {hasPaidMail ? <PaidCards userKeysList={userKeysList} loadingUserKeys={loadingUserKeys} /> : <FreeCards />}
+            {hasPaidMail ? (
+                <PaidCards user={user} userKeysList={userKeysList} loadingUserKeys={loadingUserKeys} />
+            ) : (
+                <FreeCards />
+            )}
         </div>
     );
 };

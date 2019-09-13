@@ -4,8 +4,6 @@ import { c } from 'ttag';
 import {
     useEventManager,
     useNotifications,
-    useUser,
-    useUserKeys,
     useModals,
     FormModal,
     ConfirmModal,
@@ -37,58 +35,60 @@ const getI18nTitle = () => ({
     [IMPORT_GROUPS]: c(`Title`).t`Import groups`
 });
 
-const ImportModal = ({ onClose, ...rest }) => {
+const ImportModal = ({ userKeysList, ...rest }) => {
     const title = getI18nTitle();
 
     const { createModal } = useModals();
     const { createNotification } = useNotifications();
     const { call } = useEventManager();
-    const [user] = useUser();
-    const [userKeysList, loadingUserKeys] = useUserKeys(user);
 
     const [step, setStep] = useState(ATTACHING);
     const [file, setFile] = useState({});
     const [vcardContacts, setVcardContacts] = useState([]);
-    const [encryptingDone, setEncryptingDone] = useState(false);
-
-    const handleClear = () => {
-        setFile({});
-        setStep(ATTACHING);
-    };
-
-    const handleAttach = ({ target }) => {
-        const [, extension] = splitExtension(target.files[0].name);
-        const attachedFile = ['csv', 'vcf'].includes(extension) ? target.files[0] : null;
-
-        if (target.files.length && !attachedFile) {
-            return createNotification({
-                type: 'error',
-                text: c('Error notification').t`No .csv or .vcf file selected`
-            });
-        }
-        if (attachedFile.size > MAX_SIZE) {
-            return createModal(
-                <ConfirmModal
-                    onConfirm={handleClear}
-                    onClose={handleClear}
-                    confirm={c('Action').t`Go back`}
-                    close={null}
-                    title={c('Title').t`File is too big!`}
-                >
-                    <Alert type="error">{c('Error info')
-                        .t`We only support importing files smaller than 10 MB. Please split your contacts into several smaller files.`}</Alert>
-                </ConfirmModal>
-            );
-        }
-
-        setStep(ATTACHED);
-        setFile({ attached: attachedFile, extension });
-    };
-
-    const handleEncryptingDone = () => setEncryptingDone(true);
+    const [importFinished, setImportFinished] = useState(false);
 
     const { content, ...modalProps } = (() => {
         if (step <= ATTACHED) {
+            const submit = (
+                <PrimaryButton disabled={step === ATTACHING} type="submit">
+                    {c('Action').t`Import`}
+                </PrimaryButton>
+            );
+
+            const handleClear = () => {
+                setFile({});
+                setStep(ATTACHING);
+            };
+
+            const handleAttach = ({ target }) => {
+                const [, extension] = splitExtension(target.files[0].name);
+                const attachedFile = ['csv', 'vcf'].includes(extension) ? target.files[0] : null;
+
+                if (target.files.length && !attachedFile) {
+                    return createNotification({
+                        type: 'error',
+                        text: c('Error notification').t`No .csv or .vcf file selected`
+                    });
+                }
+                if (attachedFile.size > MAX_SIZE) {
+                    return createModal(
+                        <ConfirmModal
+                            onConfirm={handleClear}
+                            onClose={handleClear}
+                            confirm={c('Action').t`Go back`}
+                            close={null}
+                            title={c('Title').t`File is too big!`}
+                        >
+                            <Alert type="error">{c('Error info')
+                                .t`We only support importing files smaller than 10 MB. Please split your contacts into several smaller files.`}</Alert>
+                        </ConfirmModal>
+                    );
+                }
+
+                setStep(ATTACHED);
+                setFile({ attached: attachedFile, extension });
+            };
+
             const handleSubmit = async () => {
                 try {
                     if (file.extension === 'csv') {
@@ -109,14 +109,6 @@ const ImportModal = ({ onClose, ...rest }) => {
                     handleClear();
                 }
             };
-            const footer = (
-                <>
-                    <ResetButton>{c('Action').t`Cancel`}</ResetButton>
-                    <PrimaryButton disabled={step === ATTACHING} type="submit">
-                        {c('Action').t`Import`}
-                    </PrimaryButton>
-                </>
-            );
 
             return {
                 content: (
@@ -127,21 +119,19 @@ const ImportModal = ({ onClose, ...rest }) => {
                         onClear={handleClear}
                     />
                 ),
-                footer,
+                submit,
                 onSubmit: handleSubmit
             };
         }
 
         if (step === CHECKING_CSV) {
-            const handleSubmit = () => setStep(IMPORTING);
-            const footer = (
-                <>
-                    <ResetButton>{c('Action').t`Cancel`}</ResetButton>
-                    <PrimaryButton disabled={!vcardContacts.length} type="submit">
-                        {c('Action').t`Import`}
-                    </PrimaryButton>
-                </>
+            const submit = (
+                <PrimaryButton disabled={!vcardContacts.length} type="submit">
+                    {c('Action').t`Import`}
+                </PrimaryButton>
             );
+
+            const handleSubmit = () => setStep(IMPORTING);
 
             return {
                 content: (
@@ -151,67 +141,68 @@ const ImportModal = ({ onClose, ...rest }) => {
                         onSetVcardContacts={setVcardContacts}
                     />
                 ),
-                footer,
+                submit,
                 onSubmit: handleSubmit
             };
         }
 
         if (step === IMPORTING) {
-            const handleSubmit = () => {
-                // temporarily disabled
-                // if (hasCategories(vcardContacts)) {
-                //     return setStep(IMPORT_GROUPS);
-                // }
-                onClose();
-                call();
-            };
-            const footer = (
-                <PrimaryButton loading={!encryptingDone} type="submit">
+            const close = !importFinished && <ResetButton>{c('Action').t`Cancel`}</ResetButton>;
+            const submit = (
+                <PrimaryButton loading={!importFinished} type="submit">
                     {c('Action').t`Close`}
                 </PrimaryButton>
             );
 
+            const handleFinish = async () => {
+                // temporarily disabled
+                // if (hasCategories(vcardContacts)) {
+                //     return setStep(IMPORT_GROUPS);
+                // }
+                await call();
+                setImportFinished(true);
+            };
+
             return {
                 content: (
                     <ImportingModalContent
-                        extension={file.extension}
+                        isVcf={file.extension === 'vcf'}
                         file={file.read}
                         vcardContacts={vcardContacts}
                         onSetVcardContacts={setVcardContacts}
-                        loadingKeys={loadingUserKeys}
                         privateKey={userKeysList[0].privateKey}
-                        onEncryptingDone={handleEncryptingDone}
+                        onFinish={handleFinish}
                     />
                 ),
-                footer,
-                hasClose: false,
-                onSubmit: handleSubmit
+                close,
+                submit,
+                onSubmit: rest.onClose
             };
         }
         if (step === IMPORT_GROUPS) {
-            const handleSubmit = () => {
-                onClose();
-                call();
+            const handleSubmit = async () => {
+                await call();
+                rest.onClose();
             };
-            const footer = <PrimaryButton type="submit">{c('Action').t`Create`}</PrimaryButton>;
+            const submit = <PrimaryButton type="submit">{c('Action').t`Create`}</PrimaryButton>;
 
             return {
                 content: <ImportGroupsModalContent vcardContacts={vcardContacts} />,
-                footer,
+                submit,
                 onSubmit: handleSubmit
             };
         }
     })();
 
     return (
-        <FormModal title={title[step]} onClose={onClose} {...modalProps} {...rest}>
+        <FormModal title={title[step]} {...modalProps} {...rest}>
             {content}
         </FormModal>
     );
 };
 
 ImportModal.propTypes = {
-    onClose: PropTypes.func
+    userKeysList: PropTypes.array.isRequired
 };
 
 export default ImportModal;

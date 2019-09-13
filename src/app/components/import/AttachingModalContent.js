@@ -10,7 +10,7 @@ const AttachingModalContent = ({ attached, file, onAttach, onClear }) => {
         <>
             <Alert learnMore="https://protonmail.com/support/knowledge-base/adding-contacts/">
                 {c('Description')
-                    .t`We support importing CSV files from Outlook, Outlook Express, Yahoo! Mail, Hotmail, Eudora and some other apps. We also support importing vCard. (UTF-8 encoding).`}
+                    .t`We support importing CSV files from Outlook, Outlook Express, Yahoo! Mail, Hotmail, Eudora and some other apps. We also support importing vCard 4.0. (UTF-8 encoding).`}
             </Alert>
             <Bordered className="flex">
                 {/* TODO: drag&drop component here. There seems to be no React component for this kind of behavior yet */}

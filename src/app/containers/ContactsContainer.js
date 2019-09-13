@@ -205,6 +205,8 @@ const ContactsContainer = ({ location, history }) => {
                                                     totalContacts={contacts.length}
                                                     contacts={formattedContacts}
                                                     user={user}
+                                                    userKeysList={userKeysList}
+                                                    loadingUserKeys={loadingUserKeys}
                                                     onCheck={handleCheck}
                                                     onMerge={handleMerge}
                                                     onClear={handleClearSearch}
@@ -239,6 +241,8 @@ const ContactsContainer = ({ location, history }) => {
                                                     totalContacts={contacts.length}
                                                     contacts={formattedContacts}
                                                     user={user}
+                                                    userKeysList={userKeysList}
+                                                    loadingUserKeys={loadingUserKeys}
                                                     onCheck={handleCheck}
                                                     onMerge={handleMerge}
                                                     onClear={handleClearSearch}

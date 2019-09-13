@@ -116,7 +116,7 @@ const getNonEmptyCsvData = ({ headers, contacts }) => {
  *       so an array of new headers is returned together with the pre-vCard contacts
  */
 const parse = ({ headers = [], contacts = [] }) => {
-    if (contacts.length === 0) {
+    if (!contacts.length) {
         return [];
     }
     const { headers: standardHeaders, contacts: standardContacts } = standarize(

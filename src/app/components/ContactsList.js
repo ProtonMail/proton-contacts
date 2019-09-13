@@ -18,7 +18,19 @@ import MergeRow from './MergeRow';
 import ImportModal from './import/ImportModal';
 import ContactModal from './ContactModal';
 
-const ContactsList = ({ totalContacts, contacts, onCheck, onMerge, onClear, user, history, contactID, location }) => {
+const ContactsList = ({
+    totalContacts,
+    contacts,
+    onCheck,
+    onMerge,
+    onClear,
+    user,
+    userKeysList,
+    loadingUserKeys,
+    history,
+    contactID,
+    location
+}) => {
     const mergeableContacts = useMemo(() => extractMergeable(contacts), [contacts]);
     const canMerge = mergeableContacts.length > 0;
     const listRef = useRef(null);
@@ -32,7 +44,7 @@ const ContactsList = ({ totalContacts, contacts, onCheck, onMerge, onClear, user
     }, Object.create(null));
 
     const handleImport = () => {
-        createModal(<ImportModal />);
+        createModal(<ImportModal userKeysList={userKeysList} />);
     };
     const handleAddContact = () => {
         createModal(<ContactModal />);
@@ -152,7 +164,13 @@ const ContactsList = ({ totalContacts, contacts, onCheck, onMerge, onClear, user
             </Link>
         );
         const importContact = (
-            <button key="import" type="button" className="color-pm-blue underline ml0-5 mr0-5" onClick={handleImport}>
+            <button
+                key="import"
+                type="button"
+                className="color-pm-blue underline ml0-5 mr0-5"
+                onClick={handleImport}
+                disabled={loadingUserKeys}
+            >
                 {c('Action').t`Import contact`}
             </button>
         );
@@ -213,6 +231,8 @@ ContactsList.propTypes = {
     onMerge: PropTypes.func,
     onClear: PropTypes.func,
     user: PropTypes.object,
+    userKeysList: PropTypes.array,
+    loadingUserKeys: PropTypes.bool.isRequired,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     contactID: PropTypes.string
