@@ -11,7 +11,7 @@ const AttachedFile = ({ file, iconName, className, clear = c('Action').t`Delete`
 
     return (
         <div className={`flex bordered-container w100 ${className}`} {...rest}>
-            <div className=" p0-5 flex flex-item-noshrink w10">
+            <div className="p0-5 flex flex-item-noshrink w10">
                 <Icon name={iconName} className="mauto" />
             </div>
             <div className="message-attachmentInfo p0-5 flex flex-nowrap w90">
