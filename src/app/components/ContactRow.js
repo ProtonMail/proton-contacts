@@ -13,11 +13,16 @@ const ContactRow = ({ style, contactID, hasPaidMail, contactGroupsMap, contact, 
         <div
             style={style}
             key={ID}
-            onClick={onClick(ID)}
+            onClick={() => onClick(ID)}
             className={`item-container bg-global-white  ${contactID === ID ? 'item-is-selected' : ''}`}
         >
             <div className="flex flex-nowrap">
-                <span onClick={onStop}>
+                <button
+                    onClick={(e) => {
+                        console.log('hi');
+                        onStop(e);
+                    }}
+                >
                     <ItemCheckbox
                         checked={isChecked}
                         className="item-checkbox sr-only"
@@ -26,7 +31,7 @@ const ContactRow = ({ style, contactID, hasPaidMail, contactGroupsMap, contact, 
                     >
                         {getInitial(Name)}
                     </ItemCheckbox>
-                </span>
+                </button>
                 <div className="flex-item-fluid pl1 flex flex-column flex-spacebetween conversation-titlesender">
                     <div className="flex">
                         <div className={`flex-item-fluid w0 ${LabelIDs.length ? 'pr1' : ''}`}>

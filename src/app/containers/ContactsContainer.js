@@ -178,7 +178,7 @@ const ContactsContainer = ({ location, history }) => {
     const handleImport = () => createModal(<ImportModal userKeysList={userKeysList} />);
     const handleExport = (contactGroupID) =>
         createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
-    const handleGroups = () => history.push({ ...location, pathname: `/contacts/settings` });
+    const handleGroups = () => history.push('/contacts/settings');
 
     return (
         <div className="flex flex-nowrap no-scroll">
