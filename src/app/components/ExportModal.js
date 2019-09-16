@@ -77,16 +77,12 @@ const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...
                     }
 
                     const contactExported = toICAL(contactDecrypted).toString();
-                    /*
-                        need to check again for signal.aborted because the abort
-                        may have taken place during await prepareContact
-                    */
+                    // need to check again for signal.aborted because the abort
+                    // may have taken place during await prepareContact
                     !signal.aborted && addSuccess((contactsExported) => [...contactsExported, contactExported]);
                 } catch (error) {
-                    /*
-                        need to check again for signal.aborted because the abort
-                        may have taken place during await prepareContact
-                    */
+                    // need to check again for signal.aborted because the abort
+                    // may have taken place during await prepareContact
                     !signal.aborted && addError((contactsNotExported) => [...contactsNotExported, ID]);
                 }
             }

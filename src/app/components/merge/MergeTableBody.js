@@ -1,45 +1,58 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { OrderableTableBody, OrderableTableRow, TableRow } from 'react-components';
+import { c } from 'ttag';
+import { OrderableTableBody, OrderableTableRow, TableRow, DropdownActions } from 'react-components';
 
 import NameTableCell from './NameTableCell';
 import EmailsTableCell from './EmailsTableCell';
-import OptionsDropdown from './OptionsDropdown';
 
 const MergeTableBody = ({
     contacts,
+    highlightedID,
     isChecked,
-    isDeleted,
+    beDeleted,
     onClickCheckbox,
     onClickDetails,
-    onClickDelete,
-    onClickUndelete,
+    onToggleDelete,
     ...rest
 }) => {
     return (
         <OrderableTableBody colSpan={4} {...rest}>
             {contacts.map(({ ID, Name, emails }, j) => {
-                const deleted = isDeleted[j];
+                const deleted = beDeleted[ID];
+                const options = [
+                    !deleted && {
+                        text: c('Action').t`Contact details`,
+                        onClick() {
+                            onClickDetails(ID);
+                        }
+                    },
+                    {
+                        text: deleted ? c('Action').t`Unmark for deletion` : c('Action').t`Mark for deletion`,
+                        onClick() {
+                            onToggleDelete(ID);
+                        }
+                    }
+                ].filter(Boolean);
                 const cells = [
                     <NameTableCell
                         key="name"
                         name={Name}
-                        index={j}
-                        checked={isChecked[j]}
+                        contactID={ID}
+                        highlightedID={highlightedID}
+                        checked={isChecked[ID]}
                         deleted={deleted}
                         greyedOut={deleted}
                         onToggle={onClickCheckbox}
                     />,
-                    <EmailsTableCell key="email" emails={emails} greyedOut={deleted} />,
-                    <OptionsDropdown
-                        key="options"
+                    <EmailsTableCell
+                        key="email"
                         contactID={ID}
-                        index={j}
-                        canDelete={!deleted}
-                        onClickDetails={onClickDetails}
-                        onClickDelete={onClickDelete}
-                        onClickUndelete={onClickUndelete}
-                    />
+                        highlightedID={highlightedID}
+                        emails={emails}
+                        greyedOut={deleted}
+                    />,
+                    <DropdownActions key="options" className="pm-button--small" list={options} />
                 ];
 
                 return deleted ? (
@@ -54,12 +67,12 @@ const MergeTableBody = ({
 
 MergeTableBody.propTypes = {
     contacts: PropTypes.arrayOf(PropTypes.object),
-    isChecked: PropTypes.arrayOf(PropTypes.bool),
-    isDeleted: PropTypes.arrayOf(PropTypes.bool),
+    highlightedID: PropTypes.string,
+    isChecked: PropTypes.object,
+    beDeleted: PropTypes.object,
     onClickCheckbox: PropTypes.func,
     onClickDetails: PropTypes.func,
-    onClickDelete: PropTypes.func,
-    onClickUndelete: PropTypes.func,
+    onToggleDelete: PropTypes.func,
     onClickPreview: PropTypes.func
 };
 

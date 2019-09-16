@@ -50,10 +50,8 @@ const ContactViewProperties = ({
                 const contactGroups = contactEmail && contactEmail.LabelIDs.map((ID) => contactGroupsMap[ID]);
 
                 return (
-                    /*
-                        Here we are hiddenly using the fact that the emails in
-                        `properties` appear in the same order as in `contactEmails`
-                    */
+                    // here we are hiddenly using the fact that the emails in
+                    // `properties` appear in the same order as in `contactEmails`
                     <ContactViewProperty
                         key={index.toString()}
                         contactID={contactID}

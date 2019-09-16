@@ -10,11 +10,9 @@ const MergeTableHeader = () => {
         <thead className="orderableTableHeader">
             <tr>
                 <TableCell type="header" />
-                <TableCell type="header" className="w30">{c('TableHeader').t`NAME`}</TableCell>
+                <TableCell type="header">{c('TableHeader').t`NAME`}</TableCell>
                 <TableCell type="header">{c('TableHeader').t`ADDRESS`}</TableCell>
-                <TableCell type="header" className="w20">
-                    {c('TableHeader').t`ACTIONS`}
-                </TableCell>
+                <TableCell type="header">{c('TableHeader').t`ACTIONS`}</TableCell>
             </tr>
         </thead>
     );
@@ -22,20 +20,20 @@ const MergeTableHeader = () => {
 
 const MergeTable = ({
     contacts = [],
-    isChecked,
-    isDeleted,
+    isChecked = {},
+    beDeleted = {},
     onClickCheckbox,
     onClickDetails,
-    onClickDelete,
-    onClickUndelete,
+    onToggleDelete,
     onClickPreview,
     onSortEnd
 }) => {
     return (
         <>
             {contacts.map((group, i) => {
-                const isActive = isChecked.map((group, i) => group.map((checked, j) => checked && !isDeleted[i][j]));
-                const activeIDs = group.map(({ ID }, j) => isActive[i][j] && ID).filter(Boolean);
+                const activeIDs = group.map(({ ID }) => isChecked[ID] && !beDeleted[ID] && ID).filter(Boolean);
+                const beDeletedIDs = group.map(({ ID }) => beDeleted[ID] && ID).filter(Boolean);
+                const beMergedIDs = activeIDs.length > 1 ? activeIDs : [];
 
                 return (
                     <Block key={`${group && group[0].Name}`} className="mb2 flex flex-column flex-items-center">
@@ -43,19 +41,19 @@ const MergeTable = ({
                             <MergeTableHeader />
                             <MergeTableBody
                                 contacts={group}
-                                isChecked={isChecked[i]}
-                                isDeleted={isDeleted[i]}
-                                onClickCheckbox={onClickCheckbox(i)}
+                                highlightedID={beMergedIDs[0]}
+                                isChecked={isChecked}
+                                beDeleted={beDeleted}
+                                onClickCheckbox={onClickCheckbox}
                                 onClickDetails={onClickDetails}
-                                onClickDelete={onClickDelete(i)}
-                                onClickUndelete={onClickUndelete(i)}
+                                onToggleDelete={onToggleDelete}
                             />
                         </OrderableTable>
                         <Button
                             className="aligcenter"
-                            disabled={activeIDs.length < 2}
+                            disabled={!beMergedIDs.length}
                             type="button"
-                            onClick={() => onClickPreview(activeIDs, i)}
+                            onClick={() => onClickPreview(beMergedIDs[0], beDeletedIDs)}
                         >
                             {c('Action').t`Preview contact`}
                         </Button>
@@ -68,12 +66,11 @@ const MergeTable = ({
 
 MergeTable.propTypes = {
     contacts: PropTypes.array,
-    isChecked: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.bool)),
-    isDeleted: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.bool)),
+    isChecked: PropTypes.object,
+    beDeleted: PropTypes.object,
     onClickCheckbox: PropTypes.func,
     onClickDetails: PropTypes.func,
-    onClickDelete: PropTypes.func,
-    onClickUndelete: PropTypes.func,
+    onToggleDelete: PropTypes.func,
     onClickPreview: PropTypes.func,
     onSortEnd: PropTypes.func
 };

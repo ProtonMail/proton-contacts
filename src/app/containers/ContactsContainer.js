@@ -164,7 +164,10 @@ const ContactsContainer = ({ location, history }) => {
     const handleUncheckAll = () => handleCheckAll(false);
 
     const handleMerge = (beMergedContacts) => {
-        createModal(<MergeModal contacts={beMergedContacts} userKeysList={userKeysList} />);
+        const currentContactID = getCurrentContactID();
+        createModal(
+            <MergeModal contacts={beMergedContacts} contactID={currentContactID} userKeysList={userKeysList} />
+        );
     };
 
     return (
