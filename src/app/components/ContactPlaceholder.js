@@ -20,7 +20,7 @@ const PaidCards = ({ contactGroupID, userKeysList, loadingUserKeys }) => {
 
     return (
         <div className="flex flex-nowrap">
-            <div className="bordered-container flex-item-fluid mr1 p1 aligncenter flex flex-column ">
+            <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
                 <div className="flex-item-fluid">
                     <Icon name="import" className="icon-100p mb1" />
                     <div className="bold">{c('Title').t`Import contacts`}</div>
@@ -32,7 +32,7 @@ const PaidCards = ({ contactGroupID, userKeysList, loadingUserKeys }) => {
                         .t`Import`}</PrimaryButton>
                 </div>
             </div>
-            <div className="bordered-container flex-item-fluid mr1 p1 aligncenter flex flex-column">
+            <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
                 <div className="flex-item-fluid">
                     <Icon name="export" className="icon-100p mb1" />
                     <div className="bold">{c('Title').t`Export contacts`}</div>
@@ -44,7 +44,7 @@ const PaidCards = ({ contactGroupID, userKeysList, loadingUserKeys }) => {
                         .t`Export`}</PrimaryButton>
                 </div>
             </div>
-            <div className="bordered-container flex-item-fluid p1 aligncenter">
+            <div className="bordered-container flex-item-fluid onmobile-mr0 onmobile-mb1 p1 aligncenter">
                 <div className="flex-item-fluid">
                     <Icon name="contacts" className="icon-100p mb1" />
                     <div className="bold">{c('Title').t`Contacts settings`}</div>
@@ -67,30 +67,36 @@ PaidCards.propTypes = {
 
 const FreeCards = () => {
     return (
-        <div className="flex-autogrid">
-            <div className="flex-autogrid-item">
-                <div className="p1 aligncenter bordered-container">
+        <div className="flex flex-nowrap onmobile-flex-column">
+            <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
+                <div className="flex-item-fluid-auto">
                     <div className="bold">{c('Title').t`Contact picture`}</div>
                     <p>{c('Info')
                         .t`With a premium ProtonMail plan, you can add a picture to your contacts to easily identify the sender of received emails.`}</p>
+                </div>
+                <div className="flex-item-noshrink p1">
                     <Link className="pm-button pm-button--primary" to="/settings/subscription">{c('Action')
                         .t`Upgrade`}</Link>
                 </div>
             </div>
-            <div className="flex-autogrid-item">
-                <div className="p1 aligncenter bordered-container">
+            <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
+                <div className="flex-item-fluid-auto">
                     <div className="bold">{c('Title').t`Encrypted contact details`}</div>
                     <p>{c('Info')
                         .t`With a paid ProtonMail plan, you can fill your contacts details with phone numbers, addresses and more.`}</p>
+                </div>
+                <div className="flex-item-noshrink p1">
                     <Link className="pm-button pm-button--primary" to="/settings/subscription">{c('Action')
                         .t`Upgrade`}</Link>
                 </div>
             </div>
-            <div className="flex-autogrid-item">
-                <div className="p1 aligncenter bordered-container">
+            <div className="bordered-container flex-item-fluid onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
+                <div className="flex-item-fluid-auto">
                     <div className="bold">{c('Title').t`Manage groups`}</div>
                     <p>{c('Info')
                         .t`With a paid ProtonMail plan, you can use groups to send email to a list of addresses you regularly communicate with.`}</p>
+                </div>
+                <div className="flex-item-noshrink p1">
                     <Link className="pm-button pm-button--primary" to="/settings/subscription">{c('Action')
                         .t`Upgrade`}</Link>
                 </div>
