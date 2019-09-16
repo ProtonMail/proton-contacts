@@ -7,7 +7,7 @@ import PrivateHeader from '../content/PrivateHeader';
 import SettingsPage from '../pages/SettingsPage';
 
 const SettingsContainer = () => {
-    const list = [{ link: '/contacts/settings', icon: 'contacts', text: c('Link').t`General` }];
+    const list = [{ link: '/contacts', icon: 'contacts', text: c('Link').t`General` }];
     return (
         <div className="flex flex-nowrap no-scroll">
             <AppsSidebar
