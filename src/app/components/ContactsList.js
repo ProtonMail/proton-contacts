@@ -56,7 +56,7 @@ const ContactsList = ({
         onCheck(contactIDs, target.checked);
     };
 
-    const handleClick = (ID) => () => history.push({ ...location, pathname: `/contacts/${ID}` });
+    const handleClick = (ID) => history.push({ ...location, pathname: `/contacts/${ID}` });
 
     const handleStop = (e) => e.stopPropagation();
 

@@ -17,12 +17,7 @@ const ContactRow = ({ style, contactID, hasPaidMail, contactGroupsMap, contact, 
             className={`item-container bg-global-white  ${contactID === ID ? 'item-is-selected' : ''}`}
         >
             <div className="flex flex-nowrap">
-                <button
-                    onClick={(e) => {
-                        console.log('hi');
-                        onStop(e);
-                    }}
-                >
+                <button onClick={onStop}>
                     <ItemCheckbox
                         checked={isChecked}
                         className="item-checkbox sr-only"
