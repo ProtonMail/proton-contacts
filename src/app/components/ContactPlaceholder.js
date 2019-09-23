@@ -2,22 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
-import { redirectTo } from 'proton-shared/lib/helpers/browser';
 import { PrimaryButton, Button, Icon, useModals, useContactGroups } from 'react-components';
 
 import ContactGroupModal from './ContactGroupModal';
-import ExportModal from './ExportModal';
-import ImportModal from './import/ImportModal';
+import MergeRow from './MergeRow';
 
-const PaidCards = ({ contactGroupID, userKeysList, loadingUserKeys }) => {
-    const { createModal } = useModals();
-    const handleExport = () => createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
-    const handleGroups = () => redirectTo('/contacts/settings');
-
-    const handleImport = () => {
-        createModal(<ImportModal userKeysList={userKeysList} />);
-    };
-
+const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
     return (
         <div className="flex flex-nowrap">
             <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
@@ -28,7 +18,7 @@ const PaidCards = ({ contactGroupID, userKeysList, loadingUserKeys }) => {
                         .t`Add contacts to your ProtonMail account by importing them from a CSV or vCard file.`}</p>
                 </div>
                 <div className="flex-item-noshrink p1">
-                    <PrimaryButton className="bold" onClick={handleImport} disabled={loadingUserKeys}>{c('Action')
+                    <PrimaryButton className="bold" onClick={onImport} disabled={loadingUserKeys}>{c('Action')
                         .t`Import`}</PrimaryButton>
                 </div>
             </div>
@@ -40,8 +30,7 @@ const PaidCards = ({ contactGroupID, userKeysList, loadingUserKeys }) => {
                         .t`Create an backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
                 </div>
                 <div className="flex-item-noshrink p1">
-                    <PrimaryButton onClick={handleExport} disabled={loadingUserKeys}>{c('Action')
-                        .t`Export`}</PrimaryButton>
+                    <PrimaryButton onClick={onExport} disabled={loadingUserKeys}>{c('Action').t`Export`}</PrimaryButton>
                 </div>
             </div>
             <div className="bordered-container flex-item-fluid onmobile-mr0 onmobile-mb1 p1 aligncenter">
@@ -52,7 +41,7 @@ const PaidCards = ({ contactGroupID, userKeysList, loadingUserKeys }) => {
                         .t`Use groups to send email to a list of addresses you regularly communicate with.`}</p>
                 </div>
                 <div className="flex-item-noshrink p1">
-                    <PrimaryButton onClick={handleGroups}>{c('Action').t`Groups`}</PrimaryButton>
+                    <PrimaryButton onClick={onGroups}>{c('Action').t`Groups`}</PrimaryButton>
                 </div>
             </div>
         </div>
@@ -62,7 +51,10 @@ const PaidCards = ({ contactGroupID, userKeysList, loadingUserKeys }) => {
 PaidCards.propTypes = {
     contactGroupID: PropTypes.string,
     userKeysList: PropTypes.array,
-    loadingUserKeys: PropTypes.bool
+    loadingUserKeys: PropTypes.bool,
+    onImport: PropTypes.func,
+    onExport: PropTypes.func,
+    onGroups: PropTypes.func
 };
 
 const FreeCards = () => {
@@ -112,7 +104,12 @@ const ContactPlaceholder = ({
     user,
     userKeysList,
     loadingUserKeys,
-    onUncheck
+    onUncheck,
+    canMerge,
+    onMerge,
+    onImport,
+    onExport,
+    onGroups
 }) => {
     const { hasPaidMail } = user;
     const selectedContacts = contacts.filter(({ isChecked }) => isChecked);
@@ -158,6 +155,9 @@ const ContactPlaceholder = ({
                             userKeysList={userKeysList}
                             loadingUserKeys={loadingUserKeys}
                             contactGroupID={contactGroupID}
+                            onImport={onImport}
+                            onExport={() => onExport(contactGroupID)}
+                            onGroups={onGroups}
                         />
                     ) : (
                         <FreeCards />
@@ -178,9 +178,21 @@ const ContactPlaceholder = ({
                         totalContacts
                     )}
                 </div>
+                {canMerge && (
+                    <div className="mb2">
+                        <MergeRow loadingUserKeys={loadingUserKeys} onMerge={onMerge} />
+                    </div>
+                )}
             </div>
             {hasPaidMail ? (
-                <PaidCards user={user} userKeysList={userKeysList} loadingUserKeys={loadingUserKeys} />
+                <PaidCards
+                    user={user}
+                    userKeysList={userKeysList}
+                    loadingUserKeys={loadingUserKeys}
+                    onImport={onImport}
+                    onExport={() => onExport()}
+                    onGroups={onGroups}
+                />
             ) : (
                 <FreeCards />
             )}
@@ -195,7 +207,12 @@ ContactPlaceholder.propTypes = {
     user: PropTypes.object.isRequired,
     userKeysList: PropTypes.array,
     loadingUserKeys: PropTypes.bool,
-    onUncheck: PropTypes.func
+    onUncheck: PropTypes.func,
+    canMerge: PropTypes.bool,
+    onMerge: PropTypes.func,
+    onImport: PropTypes.func,
+    onExport: PropTypes.func,
+    onGroups: PropTypes.func
 };
 
 export default ContactPlaceholder;
