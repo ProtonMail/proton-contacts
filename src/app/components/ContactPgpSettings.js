@@ -7,6 +7,7 @@ import ContactSchemeSelect from './ContactSchemeSelect';
 import ContactKeysTable from './ContactKeysTable';
 
 const ContactPgpSettings = ({ model, setModel }) => {
+    console.log(model);
     const { createNotification } = useNotifications();
 
     /**

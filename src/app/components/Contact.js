@@ -42,6 +42,7 @@ const Contact = ({ contactID, contactEmails, contactGroupsMap, userKeysList }) =
             contactID={contactID}
             contactEmails={contactEmails}
             contactGroupsMap={contactGroupsMap}
+            userKeysList={userKeysList}
             errors={errors}
         />
     );

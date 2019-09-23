@@ -11,7 +11,7 @@ import ContactSummary from './ContactSummary';
 import ContactViewProperties from './ContactViewProperties';
 import UpsellFree from './UpsellFree';
 
-const ContactView = ({ properties = [], contactID, contactEmails, contactGroupsMap, errors }) => {
+const ContactView = ({ properties = [], contactID, contactEmails, contactGroupsMap, userKeysList, errors }) => {
     const { createModal } = useModals();
     const [user] = useUser();
 
@@ -44,6 +44,7 @@ const ContactView = ({ properties = [], contactID, contactEmails, contactGroupsM
             <ContactSummary properties={properties} />
             <div className="pl1 pr1">
                 <ContactViewProperties
+                    userKeysList={userKeysList}
                     contactID={contactID}
                     contactEmails={contactEmails}
                     contactGroupsMap={contactGroupsMap}
@@ -76,6 +77,7 @@ ContactView.propTypes = {
     contactEmails: PropTypes.arrayOf(PropTypes.object),
     contactGroupsMap: PropTypes.object,
     properties: PropTypes.arrayOf(ContactPropertyPropTypes),
+    userKeysList: PropTypes.array,
     errors: PropTypes.array
 };
 
