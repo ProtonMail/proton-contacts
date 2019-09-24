@@ -7,7 +7,6 @@ import ContactSchemeSelect from './ContactSchemeSelect';
 import ContactKeysTable from './ContactKeysTable';
 
 const ContactPgpSettings = ({ model, setModel }) => {
-    console.log(model);
     const { createNotification } = useNotifications();
 
     /**
@@ -24,7 +23,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
 
         // Update existing keys by looking on the fingerprint
         // And add new one
-        const existingFingerprints = model.keys((publicKey) => publicKey.getFingerprint());
+        const existingFingerprints = model.keys.map((publicKey) => publicKey.getFingerprint());
         const { toAdd, toUpdate } = files.reduce(
             (acc, publicKey) => {
                 const fingerprint = publicKey.getFingerprint();
@@ -98,6 +97,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         <Toggle
                             id="encrypt-toggle"
                             checked={model.encrypt}
+                            disabled={!model.keys.length || model.keysExpired}
                             onChange={({ target }) =>
                                 setModel({
                                     ...model,

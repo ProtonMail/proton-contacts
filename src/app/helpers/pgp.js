@@ -12,12 +12,12 @@ const { ENABLE_ENCRYPTION } = KEY_FLAGS;
 export const isInternalUser = ({ RecipientType }) => RecipientType === TYPE_INTERNAL;
 
 /**
- * Test if every keys are not enabled
+ * Test if no key is enabled
  * @param {Object} config from API
  * @returns {Boolean}
  */
 export const isDisabledUser = (config) =>
-    isInternalUser(config) && config.Keys.some(({ Flags }) => Flags & ENABLE_ENCRYPTION);
+    isInternalUser(config) && !config.Keys.some(({ Flags }) => Flags & ENABLE_ENCRYPTION);
 
 export const getRawInternalKeys = ({ Keys = [] }) => {
     return Promise.all(
@@ -58,7 +58,7 @@ export const emailMismatch = ({ users = [] }, currentEmail) => {
             return acc;
         }
         // we don't normalize anything here because enigmail / pgp also doesn't normalize it.
-        const [, email = userId.userid] = /<([^>]*)>/.exec(userId.userid);
+        const [, email = userId.userid] = /<([^>]*)>/.exec(userId.userid) || [];
         acc.push(email);
         return acc;
     }, []);

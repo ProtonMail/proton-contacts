@@ -23,7 +23,7 @@ import { noop } from 'proton-shared/lib/helpers/function';
 
 import ContactMIMETypeSelect from './ContactMIMETypeSelect';
 import { isInternalUser, isDisabledUser, getRawInternalKeys, allKeysExpired, hasNoPrimary } from '../helpers/pgp';
-import { VCARD_KEY_FIELDS } from '../constants';
+import { VCARD_KEY_FIELDS, PGP_INLINE, PGP_MIME } from '../constants';
 import ContactPgpSettings from './ContactPgpSettings';
 import { prepareContacts } from '../helpers/encrypt';
 import { addContacts } from 'proton-shared/lib/api/contacts';
@@ -35,8 +35,8 @@ const EMAIL_ERRORS = [KEY_GET_ADDRESS_MISSING, KEY_GET_DOMAIN_MISSING_MX, KEY_GE
 const SIGN = 1;
 
 const PGP_MAP = {
-    [SEND_PGP_INLINE]: 'pgp-inline',
-    [SEND_PGP_MIME]: 'pgp-mime'
+    [SEND_PGP_INLINE]: PGP_INLINE,
+    [SEND_PGP_MIME]: PGP_MIME
 };
 
 const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailProperty, ...rest }) => {
