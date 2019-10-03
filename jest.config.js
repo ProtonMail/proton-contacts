@@ -3,9 +3,10 @@ module.exports = {
     verbose: true,
     moduleDirectories: ['node_modules'],
     transform: {
-        '^.+\\.js$': 'babel-jest'
+        '^.+\\.js$': 'babel-jest',
+        '^.+\\.tsx?$': 'ts-jest'
     },
     collectCoverage: true,
-    collectCoverageFrom: ['src/**/*.{js,jsx}'],
+    collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}'],
     transformIgnorePatterns: ['node_modules/(?!(proton-shared)/)']
 };

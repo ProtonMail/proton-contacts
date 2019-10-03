@@ -8,8 +8,8 @@
     },
     "scripts": {
         "start": "proton-pack dev-server $npm_package_config_publicPathFlag --appMode=standalone",
-        "lint": "eslint src --ext .js --quiet --cache",
-        "pretty": "prettier --write  $(find src/app -type f -name '*.js')",
+        "lint": "eslint src --ext .js,.ts,.tsx --quiet --cache",
+        "pretty": "prettier --write  $(find src/app -type f -name '*.js' -o -name '*.ts' -o -name '*.tsx')",
         "test": "jest",
         "preversion": "git update-index --no-assume-unchanged package-lock.json",
         "postversion": "git update-index --assume-unchanged package-lock.json && git push --tags",
@@ -18,7 +18,8 @@
         "i18n:validate:context": "proton-i18n extract && proton-i18n validate",
         "i18n:getlatest": "proton-i18n upgrade",
         "deploy": "proton-bundler",
-        "deploy:prod": "proton-bundler --remote --branch=deploy-prod"
+        "deploy:prod": "proton-bundler --remote --branch=deploy-prod",
+        "check-types": "tsc"
     },
     "repository": {
         "type": "git",
@@ -34,22 +35,28 @@
     "devDependencies": {
         "@testing-library/jest-dom": "^4.0.0",
         "@testing-library/react": "^8.0.7",
+        "@types/jest": "^24.0.18",
+        "@typescript-eslint/eslint-plugin": "^2.3.2",
+        "@typescript-eslint/parser": "^2.3.2",
         "babel-jest": "^24.8.0",
         "cross-env": "^5.2.0",
         "husky": "^2.4.1",
+        "jest": "^24.9.0",
         "lint-staged": "^8.1.5",
         "prettier": "^1.16.4",
         "proton-bundler": "github:ProtonMail/proton-bundler#semver:^1.0.0",
-        "proton-i18n": "github:ProtonMail/proton-i18n#semver:^1.4.0"
+        "proton-i18n": "github:ProtonMail/proton-i18n#semver:^1.4.0",
+        "proton-pack": "github:ProtonMail/proton-pack#semver:^2.0.0",
+        "ts-jest": "^24.1.0",
+        "typescript": "^3.6.3"
     },
     "dependencies": {
         "abortcontroller-polyfill": "^1.2.1",
+        "core-js": "^3.2.1",
         "design-system": "github:ProtonMail/design-system#master",
         "ical.js": "^1.3.0",
-        "jest": "^24.8.0",
         "papaparse": "^5.0.0",
         "pmcrypto": "github:ProtonMail/pmcrypto#semver:^6.0.0",
-        "proton-pack": "github:ProtonMail/proton-pack#semver:^1.3.0",
         "proton-shared": "github:ProtonMail/proton-shared#master",
         "react": "^16.8.1",
         "react-components": "github:ProtonMail/react-components#master",
@@ -61,14 +68,15 @@
         "yetch": "^1.1.0"
     },
     "lint-staged": {
-        "*.js": [
+        "(*.ts|*.tsx|*.js)": [
             "prettier --write",
+            "eslint",
             "git add"
         ]
     },
     "husky": {
         "hooks": {
-            "pre-commit": "lint-staged"
+            "pre-commit": "npm run check-types && lint-staged"
         }
     }
 }
