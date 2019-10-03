@@ -33,6 +33,7 @@
     },
     "homepage": "https://github.com/ProtonMail/proton-contacts#readme",
     "devDependencies": {
+        "@babel/preset-typescript": "^7.6.0",
         "@testing-library/jest-dom": "^4.0.0",
         "@testing-library/react": "^8.0.7",
         "@types/jest": "^24.0.18",
@@ -47,7 +48,6 @@
         "proton-bundler": "github:ProtonMail/proton-bundler#semver:^1.0.0",
         "proton-i18n": "github:ProtonMail/proton-i18n#semver:^1.4.0",
         "proton-pack": "github:ProtonMail/proton-pack#semver:^2.0.0",
-        "ts-jest": "^24.1.0",
         "typescript": "^3.6.3"
     },
     "dependencies": {
