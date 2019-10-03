@@ -52,6 +52,7 @@
     },
     "dependencies": {
         "abortcontroller-polyfill": "^1.2.1",
+        "core-js": "^3.2.1",
         "design-system": "github:ProtonMail/design-system#master",
         "ical.js": "^1.3.0",
         "papaparse": "^5.0.0",
