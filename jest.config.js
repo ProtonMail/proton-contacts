@@ -3,8 +3,7 @@ module.exports = {
     verbose: true,
     moduleDirectories: ['node_modules'],
     transform: {
-        '^.+\\.js$': 'babel-jest',
-        '^.+\\.tsx?$': 'ts-jest'
+        '^.+\\.(js|tsx?)$': 'babel-jest'
     },
     collectCoverage: true,
     collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}'],
