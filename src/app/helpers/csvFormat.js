@@ -16,6 +16,46 @@ const beIgnoredCsvProperties = [
     'priority',
     'subject'
 ];
+
+/**
+ * Standarize a custom vcard type coming from a csv property
+ * @param {String} csvType
+ *
+ * @return {String}
+ */
+const toVcardType = (csvType) => {
+    const type = csvType.toLowerCase();
+
+    switch (type) {
+        case 'home':
+            return 'home';
+        case 'business':
+            return 'work';
+        case 'work':
+            return 'work';
+        case 'mobile':
+            return 'cell';
+        case 'cell':
+            return 'cell';
+        case 'other':
+            return 'other';
+        case 'main':
+            return 'main';
+        case 'primary':
+            return 'main';
+        case 'company main':
+            return 'work';
+        case 'pager':
+            return 'pager';
+        case 'home fax':
+            return 'fax';
+        case 'work fax':
+            return 'fax';
+        default:
+            return '';
+    }
+};
+
 /**
  * Given csv properties and csv contacts from any csv file, transform the properties
  * into csv properties from a standard outlook csv. Transform the contacts accordingly
@@ -125,6 +165,80 @@ export const standarize = ({ headers, contacts }) => {
     const standardContacts = contacts.map((values) => values.filter((_value, j) => !beRemoved[j]));
 
     return { headers: standardHeaders, contacts: standardContacts };
+};
+
+const templates = {
+    fn({ header, value, index }) {
+        return {
+            header,
+            value,
+            checked: true,
+            pref: 1,
+            field: 'fn',
+            type: 'main',
+            combineInto: 'fn-main',
+            combineIndex: index
+        };
+    },
+    fnYomi({ header, value, index }) {
+        return {
+            header,
+            value,
+            checked: true,
+            pref: 2,
+            field: 'fn',
+            type: 'yomi',
+            combineInto: 'fn-yomi',
+            combineIndex: index
+        };
+    },
+    n({ header, value, index }) {
+        return { header, value, checked: true, field: 'n', combineInto: 'n', combineIndex: index };
+    },
+    email({ pref, header, value, type }) {
+        return {
+            pref,
+            header,
+            value,
+            checked: true,
+            field: 'email',
+            type,
+            group: pref
+        };
+    },
+    tel({ pref, header, value, type }) {
+        return {
+            pref,
+            header,
+            value,
+            checked: true,
+            field: 'tel',
+            type
+        };
+    },
+    adr({ pref, header, type, value, index }) {
+        return {
+            pref,
+            header,
+            value,
+            checked: true,
+            field: 'adr',
+            type,
+            combineInto: `adr-${type}`,
+            combineIndex: index
+        };
+    },
+    org({ pref, header, value, index }) {
+        return {
+            pref,
+            header,
+            value,
+            checked: true,
+            field: 'org',
+            combineInto: 'org',
+            combineIndex: index
+        };
+    }
 };
 
 /**
@@ -352,80 +466,6 @@ export const toPreVcard = (header) => {
  */
 const getFirstValue = (preVcards) => (preVcards[0].checked ? preVcards[0].value : '');
 
-const templates = {
-    fn({ header, value, index }) {
-        return {
-            header,
-            value,
-            checked: true,
-            pref: 1,
-            field: 'fn',
-            type: 'main',
-            combineInto: 'fn-main',
-            combineIndex: index
-        };
-    },
-    fnYomi({ header, value, index }) {
-        return {
-            header,
-            value,
-            checked: true,
-            pref: 2,
-            field: 'fn',
-            type: 'yomi',
-            combineInto: 'fn-yomi',
-            combineIndex: index
-        };
-    },
-    n({ header, value, index }) {
-        return { header, value, checked: true, field: 'n', combineInto: 'n', combineIndex: index };
-    },
-    email({ pref, header, value, type }) {
-        return {
-            pref,
-            header,
-            value,
-            checked: true,
-            field: 'email',
-            type,
-            group: pref
-        };
-    },
-    tel({ pref, header, value, type }) {
-        return {
-            pref,
-            header,
-            value,
-            checked: true,
-            field: 'tel',
-            type
-        };
-    },
-    adr({ pref, header, type, value, index }) {
-        return {
-            pref,
-            header,
-            value,
-            checked: true,
-            field: 'adr',
-            type,
-            combineInto: `adr-${type}`,
-            combineIndex: index
-        };
-    },
-    org({ pref, header, value, index }) {
-        return {
-            pref,
-            header,
-            value,
-            checked: true,
-            field: 'org',
-            combineInto: 'org',
-            combineIndex: index
-        };
-    }
-};
-
 /**
  * This object contains the functions that must be used when combining pre-vCard properties into
  * vCard ones. The keys correspond to the field of the pre-vCards to be combined.
@@ -549,44 +589,5 @@ export const display = {
     custom(preVcards) {
         const { header, value, checked } = preVcards[0];
         return checked && value ? `${header}: ${getFirstValue(preVcards)}` : '';
-    }
-};
-
-/**
- * Standarize a custom vcard type coming from a csv property
- * @param {String} csvType
- *
- * @return {String}
- */
-const toVcardType = (csvType) => {
-    const type = csvType.toLowerCase();
-
-    switch (type) {
-        case 'home':
-            return 'home';
-        case 'business':
-            return 'work';
-        case 'work':
-            return 'work';
-        case 'mobile':
-            return 'cell';
-        case 'cell':
-            return 'cell';
-        case 'other':
-            return 'other';
-        case 'main':
-            return 'main';
-        case 'primary':
-            return 'main';
-        case 'company main':
-            return 'work';
-        case 'pager':
-            return 'pager';
-        case 'home fax':
-            return 'fax';
-        case 'work fax':
-            return 'fax';
-        default:
-            return '';
     }
 };
