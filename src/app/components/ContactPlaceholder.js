@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
 import { PrimaryButton, Button, Icon, useModals, useContactGroups } from 'react-components';
+import { withRouter } from 'react-router';
 
 import ContactGroupModal from './ContactGroupModal';
 import MergeRow from './MergeRow';
 
 const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
     return (
-        <div className="flex flex-nowrap">
+        <div className="flex flex-nowrap onmobile-flex-column">
             <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
                 <div className="flex-item-fluid">
                     <Icon name="import" className="icon-100p mb1" />
@@ -57,40 +58,44 @@ PaidCards.propTypes = {
     onGroups: PropTypes.func
 };
 
-const FreeCards = () => {
+const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
     return (
         <div className="flex flex-nowrap onmobile-flex-column">
             <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
-                <div className="flex-item-fluid-auto">
-                    <div className="bold">{c('Title').t`Contact picture`}</div>
+                <div className="flex-item-fluid">
+                    <Icon name="import" className="icon-100p mb1" />
+                    <div className="bold">{c('Title').t`Import contacts`}</div>
                     <p>{c('Info')
-                        .t`With a premium ProtonMail plan, you can add a picture to your contacts to easily identify the sender of received emails.`}</p>
+                        .t`Add contacts to your ProtonMail account by importing them from a CSV or vCard file.`}</p>
                 </div>
                 <div className="flex-item-noshrink p1">
-                    <Link className="pm-button pm-button--primary" to="/settings/subscription">{c('Action')
-                        .t`Upgrade`}</Link>
+                    <PrimaryButton className="bold" onClick={onImport} disabled={loadingUserKeys}>{c('Action')
+                        .t`Import`}</PrimaryButton>
                 </div>
             </div>
             <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
-                <div className="flex-item-fluid-auto">
-                    <div className="bold">{c('Title').t`Encrypted contact details`}</div>
+                <div className="flex-item-fluid">
+                    <Icon name="export" className="icon-100p mb1" />
+                    <div className="bold">{c('Title').t`Export contacts`}</div>
                     <p>{c('Info')
-                        .t`With a paid ProtonMail plan, you can fill your contacts details with phone numbers, addresses and more.`}</p>
+                        .t`Create an backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
                 </div>
                 <div className="flex-item-noshrink p1">
-                    <Link className="pm-button pm-button--primary" to="/settings/subscription">{c('Action')
-                        .t`Upgrade`}</Link>
+                    <PrimaryButton className="bold" onClick={onExport} disabled={loadingUserKeys}>{c('Action')
+                        .t`Export`}</PrimaryButton>
                 </div>
             </div>
-            <div className="bordered-container flex-item-fluid onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
-                <div className="flex-item-fluid-auto">
-                    <div className="bold">{c('Title').t`Manage groups`}</div>
+            <div className="bordered-container flex-item-fluid onmobile-mr0 onmobile-mb1 p1 aligncenter">
+                <div className="flex-item-fluid">
+                    <Icon name="contacts" className="icon-100p mb1" />
+                    <div className="bold">{c('Title').t`Unlock features`}</div>
                     <p>{c('Info')
-                        .t`With a paid ProtonMail plan, you can use groups to send email to a list of addresses you regularly communicate with.`}</p>
+                        .t`Upgrade to a paid plan to enable encrypted contact details and manage contact groups.`}</p>
                 </div>
-                <div className="flex-item-noshrink p1">
-                    <Link className="pm-button pm-button--primary" to="/settings/subscription">{c('Action')
-                        .t`Upgrade`}</Link>
+                <div className="flex aligncenter flex-item-noshrink p1">
+                    <Link className="bold pm-button pm-button--primary p1" to="/settings/subscription">
+                        {c('Action').t`Upgrade`}
+                    </Link>
                 </div>
             </div>
         </div>
@@ -151,10 +156,7 @@ const ContactPlaceholder = ({
                     </div>
                     {hasPaidMail ? (
                         <PaidCards
-                            user={user}
-                            userKeysList={userKeysList}
                             loadingUserKeys={loadingUserKeys}
-                            contactGroupID={contactGroupID}
                             onImport={onImport}
                             onExport={() => onExport(contactGroupID)}
                             onGroups={onGroups}
@@ -194,7 +196,7 @@ const ContactPlaceholder = ({
                     onGroups={onGroups}
                 />
             ) : (
-                <FreeCards />
+                <FreeCards loadingUserKeys={loadingUserKeys} onImport={onImport} onExport={() => onExport()} />
             )}
         </div>
     );
@@ -215,4 +217,4 @@ ContactPlaceholder.propTypes = {
     onGroups: PropTypes.func
 };
 
-export default ContactPlaceholder;
+export default withRouter(ContactPlaceholder);
