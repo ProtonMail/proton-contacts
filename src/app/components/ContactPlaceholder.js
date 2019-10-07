@@ -1,9 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
-import { PrimaryButton, Button, Icon, useModals, useContactGroups } from 'react-components';
-import { withRouter } from 'react-router';
+import { PrimaryButton, Button, Icon, Href, useModals, useContactGroups } from 'react-components';
 
 import ContactGroupModal from './ContactGroupModal';
 import MergeRow from './MergeRow';
@@ -50,8 +48,6 @@ const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
 };
 
 PaidCards.propTypes = {
-    contactGroupID: PropTypes.string,
-    userKeysList: PropTypes.array,
     loadingUserKeys: PropTypes.bool,
     onImport: PropTypes.func,
     onExport: PropTypes.func,
@@ -93,13 +89,19 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
                         .t`Upgrade to a paid plan to enable encrypted contact details and manage contact groups.`}</p>
                 </div>
                 <div className="flex aligncenter flex-item-noshrink p1">
-                    <Link className="bold pm-button pm-button--primary p1" to="/settings/subscription">
+                    <Href className="bold pm-button pm-button--primary p1" url="/settings/subscription" target="_self">
                         {c('Action').t`Upgrade`}
-                    </Link>
+                    </Href>
                 </div>
             </div>
         </div>
     );
+};
+
+FreeCards.propTypes = {
+    loadingUserKeys: PropTypes.bool,
+    onImport: PropTypes.func,
+    onExport: PropTypes.func
 };
 
 const ContactPlaceholder = ({
@@ -217,4 +219,4 @@ ContactPlaceholder.propTypes = {
     onGroups: PropTypes.func
 };
 
-export default withRouter(ContactPlaceholder);
+export default ContactPlaceholder;
