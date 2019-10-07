@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
 import { PrimaryButton, Button, Icon, Href, useModals, useContactGroups } from 'react-components';
 
+import importSvg from 'design-system/assets/img/pm-images/contact-import.svg';
+import exportSvg from 'design-system/assets/img/pm-images/contact-export.svg';
+import contactGroupsSvg from 'design-system/assets/img/pm-images/contact-groups.svg';
+
 import ContactGroupModal from './ContactGroupModal';
 import MergeRow from './MergeRow';
 
@@ -11,7 +15,7 @@ const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
         <div className="flex flex-nowrap onmobile-flex-column">
             <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
                 <div className="flex-item-fluid">
-                    <Icon name="import" className="icon-100p mb1" />
+                    <img src={importSvg} alt="contact-import" />
                     <div className="bold">{c('Title').t`Import contacts`}</div>
                     <p>{c('Info')
                         .t`Add contacts to your ProtonMail account by importing them from a CSV or vCard file.`}</p>
@@ -23,7 +27,7 @@ const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
             </div>
             <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
                 <div className="flex-item-fluid">
-                    <Icon name="export" className="icon-100p mb1" />
+                    <img src={exportSvg} alt="contact-export" />
                     <div className="bold">{c('Title').t`Export contacts`}</div>
                     <p>{c('Info')
                         .t`Create an backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
@@ -34,8 +38,8 @@ const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
             </div>
             <div className="bordered-container flex-item-fluid onmobile-mr0 onmobile-mb1 p1 aligncenter">
                 <div className="flex-item-fluid">
-                    <Icon name="contacts" className="icon-100p mb1" />
-                    <div className="bold">{c('Title').t`Contacts settings`}</div>
+                    <img src={contactGroupsSvg} alt="contact-groups" />
+                    <div className="bold">{c('Title').t`Contacts settings UEEEEEEEEEEEEEEEEEEEE`}</div>
                     <p>{c('Info')
                         .t`Use groups to send email to a list of addresses you regularly communicate with.`}</p>
                 </div>
@@ -59,7 +63,7 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
         <div className="flex flex-nowrap onmobile-flex-column">
             <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
                 <div className="flex-item-fluid">
-                    <Icon name="import" className="icon-100p mb1" />
+                    <img src={importSvg} alt="contact-import" />
                     <div className="bold">{c('Title').t`Import contacts`}</div>
                     <p>{c('Info')
                         .t`Add contacts to your ProtonMail account by importing them from a CSV or vCard file.`}</p>
@@ -71,7 +75,7 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
             </div>
             <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
                 <div className="flex-item-fluid">
-                    <Icon name="export" className="icon-100p mb1" />
+                    <img src={exportSvg} alt="contact-export" />
                     <div className="bold">{c('Title').t`Export contacts`}</div>
                     <p>{c('Info')
                         .t`Create an backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
