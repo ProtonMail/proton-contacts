@@ -20,6 +20,7 @@ const PrivateHeader = ({ search, onSearch, location }) => {
             <MainLogo url="/contacts" />
             {!inSettings && <Searchbox placeholder={c('Placeholder').t`Search`} value={search} onChange={onSearch} />}
             <TopNavbar>
+                {isFree && <UpgradeButton />}
                 <TopNavbarLink
                     to="/contacts"
                     icon="contacts"
@@ -33,7 +34,6 @@ const PrivateHeader = ({ search, onSearch, location }) => {
                     aria-current={inSettings}
                 />
                 <SupportDropdown />
-                {isFree && <UpgradeButton />}
             </TopNavbar>
         </header>
     );
