@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { useModals, IllustrationPlaceholder } from 'react-components';
 import { withRouter } from 'react-router';
-import { Link } from 'react-router-dom';
 import List from 'react-virtualized/dist/commonjs/List';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 
@@ -60,20 +59,6 @@ const ContactsList = ({
 
     const handleStop = (e) => e.stopPropagation();
 
-    const Row = ({ index, style, key }) => (
-        <ContactRow
-            style={style}
-            key={key}
-            contactID={contactID}
-            hasPaidMail={user.hasPaidMail}
-            contactGroupsMap={contactGroupsMap}
-            contact={contacts[index]}
-            onClick={handleClick}
-            onCheck={handleCheck}
-            onStop={handleStop}
-        />
-    );
-
     useEffect(() => {
         const timeoutID = setTimeout(() => {
             if (contactID) {
@@ -89,34 +74,28 @@ const ContactsList = ({
 
     if (!totalContacts) {
         const addContact = (
-            <button key="add" type="button" className="color-pm-blue underline ml0-5 mr0-5" onClick={handleAddContact}>
+            <button key="add" type="button" className="color-pm-blue ml0-5 mr0-5" onClick={handleAddContact}>
                 {c('Action').t`Add a contact`}
             </button>
-        );
-        const upgrade = (
-            <Link key="upgrade" className="color-pm-blue underline ml0-5 mr0-5" to="/settings/subscription">
-                {c('Action').t`Upgrade`}
-            </Link>
         );
         const importContact = (
             <button
                 key="import"
                 type="button"
-                className="color-pm-blue underline ml0-5 mr0-5"
+                className="color-pm-blue ml0-5 mr0-5"
                 onClick={handleImport}
                 disabled={loadingUserKeys}
             >
                 {c('Action').t`Import contact`}
             </button>
         );
-        const message = user.hasPaidMail
-            ? c('Actions message').jt`You can either ${addContact} or ${importContact} from a file`
-            : c('Actions message').jt`You can ${addContact} or ${upgrade} to import contacts from a file`;
 
         return (
-            <div className="p2 aligncenter w50">
+            <div className="p2 aligncenter w100">
                 <IllustrationPlaceholder title={c('Info message').t`Your address book is empty`} url={noContactsImg}>
-                    <div className="flex flex-items-center">{message}</div>
+                    <div className="flex flex-items-center">
+                        {c('Actions message').jt`You can either ${addContact} or ${importContact} from a file`}
+                    </div>
                 </IllustrationPlaceholder>
             </div>
         );
@@ -147,7 +126,19 @@ const ContactsList = ({
                     <List
                         className="contacts-list no-outline"
                         ref={listRef}
-                        rowRenderer={Row}
+                        rowRenderer={({ index, style, key }) => (
+                            <ContactRow
+                                style={style}
+                                key={key}
+                                contactID={contactID}
+                                hasPaidMail={user.hasPaidMail}
+                                contactGroupsMap={contactGroupsMap}
+                                contact={contacts[index]}
+                                onClick={handleClick}
+                                onCheck={handleCheck}
+                                onStop={handleStop}
+                            />
+                        )}
                         rowCount={contacts.length}
                         height={height}
                         width={width}
@@ -162,6 +153,7 @@ const ContactsList = ({
 ContactsList.propTypes = {
     totalContacts: PropTypes.number,
     contacts: PropTypes.array,
+    contactGroupsMap: PropTypes.object,
     onCheck: PropTypes.func,
     onClear: PropTypes.func,
     user: PropTypes.object,
