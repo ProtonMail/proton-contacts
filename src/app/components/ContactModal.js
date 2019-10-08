@@ -19,6 +19,7 @@ import { generateUID } from 'react-components/helpers/component';
 import { prepareContacts } from '../helpers/encrypt';
 import { getEditableFields, getOtherInformationFields } from '../helpers/fields';
 import UpgradeModal from './UpgradeModal';
+import UpsellFree from './UpsellFree';
 
 const DEFAULT_MODEL = [{ field: 'fn', value: '' }, { field: 'email', value: '' }];
 
@@ -154,26 +155,32 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
                 onOrderChange={handleOrderChange}
                 onAdd={handleAdd('email')}
             />
-            <ContactModalProperties
-                properties={properties}
-                field="tel"
-                onChange={handleChange}
-                onRemove={handleRemove}
-                onAdd={handleAdd('tel')}
-            />
-            <ContactModalProperties
-                properties={properties}
-                field="adr"
-                onChange={handleChange}
-                onRemove={handleRemove}
-                onAdd={handleAdd('adr')}
-            />
-            <ContactModalProperties
-                properties={properties}
-                onChange={handleChange}
-                onRemove={handleRemove}
-                onAdd={handleAdd()}
-            />
+            {user.hasPaidMail ? (
+                <>
+                    <ContactModalProperties
+                        properties={properties}
+                        field="tel"
+                        onChange={handleChange}
+                        onRemove={handleRemove}
+                        onAdd={handleAdd('tel')}
+                    />
+                    <ContactModalProperties
+                        properties={properties}
+                        field="adr"
+                        onChange={handleChange}
+                        onRemove={handleRemove}
+                        onAdd={handleAdd('adr')}
+                    />
+                    <ContactModalProperties
+                        properties={properties}
+                        onChange={handleChange}
+                        onRemove={handleRemove}
+                        onAdd={handleAdd()}
+                    />
+                </>
+            ) : (
+                <UpsellFree />
+            )}
         </FormModal>
     );
 };
