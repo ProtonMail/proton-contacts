@@ -5,7 +5,6 @@ import {
     Row,
     Group,
     ButtonGroup,
-    Copy,
     Icon,
     useModals,
     useUser,
@@ -20,6 +19,7 @@ import ContactGroupIcon from './ContactGroupIcon';
 import ContactGroupDropdown from './ContactGroupDropdown';
 import ContactLabelProperty from './ContactLabelProperty';
 import ContactEmailSettingsModal from './ContactEmailSettingsModal';
+import TooltipCopy from '../components/TootipCopy';
 
 const ContactViewProperty = ({
     property,
@@ -111,14 +111,14 @@ const ContactViewProperty = ({
                                 <Icon name="settings-singular" />
                             </Tooltip>
                         </ButtonGroup>
-                        <Copy className="pm-button--small pm-group-button" value={value} />
+                        <TooltipCopy className="pm-button--small" value={value} />
                     </Group>
                 );
             }
             case 'tel':
-                return <Copy className="pm-button--small" value={value} />;
+                return <TooltipCopy className="pm-button--small" value={value} />;
             case 'adr':
-                return <Copy className="pm-button--small" value={formatAdr(value)} />;
+                return <TooltipCopy className="pm-button--small" value={formatAdr(value)} />;
             default:
                 return null;
         }
