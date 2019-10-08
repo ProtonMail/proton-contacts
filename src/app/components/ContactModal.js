@@ -120,6 +120,7 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
                         field="tel"
                         onChange={handleChange}
                         onRemove={handleRemove}
+                        onOrderChange={handleOrderChange}
                         onAdd={handleAdd('tel')}
                     />
                     <ContactModalProperties
@@ -127,6 +128,7 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
                         field="adr"
                         onChange={handleChange}
                         onRemove={handleRemove}
+                        onOrderChange={handleOrderChange}
                         onAdd={handleAdd('adr')}
                     />
                     <ContactModalProperties
