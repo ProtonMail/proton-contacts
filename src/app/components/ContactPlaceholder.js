@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
-import { PrimaryButton, Button, Icon, Href, useModals, useContactGroups } from 'react-components';
+import { PrimaryButton, Button, Icon, useModals, useContactGroups } from 'react-components';
+import { withRouter } from 'react-router-dom';
 
+import { redirectTo } from 'proton-shared/lib/helpers/browser';
 import importSvg from 'design-system/assets/img/pm-images/contact-import.svg';
 import exportSvg from 'design-system/assets/img/pm-images/contact-export.svg';
 import contactGroupsSvg from 'design-system/assets/img/pm-images/contact-groups.svg';
@@ -15,7 +17,7 @@ const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
         <div className="flex flex-nowrap onmobile-flex-column">
             <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
                 <div className="flex-item-fluid">
-                    <img src={importSvg} alt="contact-import" />
+                    <img src={importSvg} alt="contact-import" className="mb1" />
                     <div className="bold">{c('Title').t`Import contacts`}</div>
                     <p>{c('Info')
                         .t`Add contacts to your ProtonMail account by importing them from a CSV or vCard file.`}</p>
@@ -27,7 +29,7 @@ const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
             </div>
             <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
                 <div className="flex-item-fluid">
-                    <img src={exportSvg} alt="contact-export" />
+                    <img src={exportSvg} alt="contact-export" className="mb1" />
                     <div className="bold">{c('Title').t`Export contacts`}</div>
                     <p>{c('Info')
                         .t`Create an backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
@@ -38,8 +40,8 @@ const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
             </div>
             <div className="bordered-container flex-item-fluid onmobile-mr0 onmobile-mb1 p1 aligncenter">
                 <div className="flex-item-fluid">
-                    <img src={contactGroupsSvg} alt="contact-groups" />
-                    <div className="bold">{c('Title').t`Contacts settings UEEEEEEEEEEEEEEEEEEEE`}</div>
+                    <img src={contactGroupsSvg} alt="contact-groups" className="mb1" />
+                    <div className="bold">{c('Title').t`Manage groups`}</div>
                     <p>{c('Info')
                         .t`Use groups to send email to a list of addresses you regularly communicate with.`}</p>
                 </div>
@@ -59,11 +61,13 @@ PaidCards.propTypes = {
 };
 
 const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
+    const handleUpgrade = () => redirectTo('/settings/subscription');
+
     return (
         <div className="flex flex-nowrap onmobile-flex-column">
             <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
                 <div className="flex-item-fluid">
-                    <img src={importSvg} alt="contact-import" />
+                    <img src={importSvg} alt="contact-import" className="mb1" />
                     <div className="bold">{c('Title').t`Import contacts`}</div>
                     <p>{c('Info')
                         .t`Add contacts to your ProtonMail account by importing them from a CSV or vCard file.`}</p>
@@ -75,7 +79,7 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
             </div>
             <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex flex-column">
                 <div className="flex-item-fluid">
-                    <img src={exportSvg} alt="contact-export" />
+                    <img src={exportSvg} alt="contact-export" className="mb1" />
                     <div className="bold">{c('Title').t`Export contacts`}</div>
                     <p>{c('Info')
                         .t`Create an backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
@@ -92,10 +96,10 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
                     <p>{c('Info')
                         .t`Upgrade to a paid plan to enable encrypted contact details and manage contact groups.`}</p>
                 </div>
-                <div className="flex aligncenter flex-item-noshrink p1">
-                    <Href className="bold pm-button pm-button--primary p1" url="/settings/subscription" target="_self">
+                <div className="flex-item-noshrink p1">
+                    <PrimaryButton className="bold" onClick={handleUpgrade}>
                         {c('Action').t`Upgrade`}
-                    </Href>
+                    </PrimaryButton>
                 </div>
             </div>
         </div>
@@ -103,6 +107,7 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
 };
 
 FreeCards.propTypes = {
+    history: PropTypes.object,
     loadingUserKeys: PropTypes.bool,
     onImport: PropTypes.func,
     onExport: PropTypes.func
@@ -120,7 +125,8 @@ const ContactPlaceholder = ({
     onMerge,
     onImport,
     onExport,
-    onGroups
+    onGroups,
+    history
 }) => {
     const { hasPaidMail } = user;
     const selectedContacts = contacts.filter(({ isChecked }) => isChecked);
@@ -202,7 +208,12 @@ const ContactPlaceholder = ({
                     onGroups={onGroups}
                 />
             ) : (
-                <FreeCards loadingUserKeys={loadingUserKeys} onImport={onImport} onExport={() => onExport()} />
+                <FreeCards
+                    history={history}
+                    loadingUserKeys={loadingUserKeys}
+                    onImport={onImport}
+                    onExport={() => onExport()}
+                />
             )}
         </div>
     );
@@ -220,7 +231,8 @@ ContactPlaceholder.propTypes = {
     onMerge: PropTypes.func,
     onImport: PropTypes.func,
     onExport: PropTypes.func,
-    onGroups: PropTypes.func
+    onGroups: PropTypes.func,
+    history: PropTypes.object
 };
 
-export default ContactPlaceholder;
+export default withRouter(ContactPlaceholder);
