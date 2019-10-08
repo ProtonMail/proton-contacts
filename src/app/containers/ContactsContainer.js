@@ -143,7 +143,7 @@ const ContactsContainer = ({ location, history }) => {
         await new Promise((resolve, reject) => {
             createModal(
                 <ConfirmModal title={c('Title').t`Delete`} onConfirm={resolve} confirm={confirm} onClose={reject}>
-                    <Alert type="error">
+                    <Alert type="warning">
                         {c('Warning').ngettext(
                             msgid`This action will permanently delete the selected contact. Are you sure you want to delete this contact?`,
                             `This action will permanently delete selected contacts. Are you sure you want to delete these contacts?`,
