@@ -224,7 +224,7 @@ const ContactsContainer = ({ location, history }) => {
                                                     onCheck={handleCheck}
                                                     onClear={handleClearSearch}
                                                 />
-                                                {hasChecked ? (
+                                                {!!contacts.length && hasChecked ? (
                                                     <ContactPlaceholder
                                                         user={user}
                                                         userKeysList={userKeysList}
@@ -261,20 +261,22 @@ const ContactsContainer = ({ location, history }) => {
                                                     onMerge={handleMerge}
                                                     onClear={handleClearSearch}
                                                 />
-                                                <ContactPlaceholder
-                                                    user={user}
-                                                    userKeysList={userKeysList}
-                                                    loadingUserKeys={loadingUserKeys}
-                                                    contactGroupID={contactGroupID}
-                                                    totalContacts={contacts.length}
-                                                    contacts={formattedContacts}
-                                                    onUncheck={handleUncheckAll}
-                                                    canMerge={canMerge}
-                                                    onMerge={handleMerge}
-                                                    onImport={handleImport}
-                                                    onExport={handleExport}
-                                                    onGroups={handleGroups}
-                                                />
+                                                {!!contacts.length && (
+                                                    <ContactPlaceholder
+                                                        user={user}
+                                                        userKeysList={userKeysList}
+                                                        loadingUserKeys={loadingUserKeys}
+                                                        contactGroupID={contactGroupID}
+                                                        totalContacts={contacts.length}
+                                                        contacts={formattedContacts}
+                                                        onUncheck={handleUncheckAll}
+                                                        canMerge={canMerge}
+                                                        onMerge={handleMerge}
+                                                        onImport={handleImport}
+                                                        onExport={handleExport}
+                                                        onGroups={handleGroups}
+                                                    />
+                                                )}
                                             </>
                                         );
                                     }}

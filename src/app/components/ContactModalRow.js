@@ -50,7 +50,7 @@ const ContactModalRow = ({ property, onChange, onRemove, isOrderable = false }) 
                 </OrderableHandle>
             )}
             <ContactModalLabel field={field} type={type} uid={property.uid} onChange={onChange} />
-            <Field className={field === 'adr' && 'pm-field-container--address'}>
+            <Field className={classnames([field === 'adr' && 'pm-field-container--address'])}>
                 <ContactFieldProperty field={field} value={property.value} uid={property.uid} onChange={onChange} />
             </Field>
             {list.length > 0 && (
