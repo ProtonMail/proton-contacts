@@ -29,7 +29,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                 try {
                     const date = +serverTime();
                     const creationTime = publicKey.getCreationTime();
-                    const expirationTime = publicKey.getExpirationTime('encrypt');
+                    const expirationTime = await publicKey.getExpirationTime('encrypt');
                     const isExpired = !(creationTime <= date && date <= expirationTime);
                     const isRevoked = await publicKey.isRevoked();
                     const algoInfo = publicKey.getAlgorithmInfo();
@@ -57,7 +57,7 @@ const ContactKeysTable = ({ model, setModel }) => {
 
     useEffect(() => {
         parse();
-    }, [model.keys]);
+    }, [model.keys, model.trustedFingerprints]);
 
     return (
         <Table>
@@ -92,7 +92,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                                     }
                                 },
                             model.isPGPInternal &&
-                                isTrusted && {
+                                !isTrusted && {
                                     text: c('Action').t`Trust`,
                                     onClick() {
                                         setModel({
@@ -102,7 +102,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                                     }
                                 },
                             model.isPGPInternal &&
-                                !isTrusted && {
+                                isTrusted && {
                                     text: c('Action').t`Untrust`,
                                     onClick() {
                                         setModel({

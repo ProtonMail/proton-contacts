@@ -19,7 +19,8 @@ const ContactViewProperties = ({
     contactID,
     contactEmails,
     contactGroupsMap = {},
-    field
+    field,
+    userKeysList
 }) => {
     const TITLES = {
         email: c('Title').t`Email addresses`,
@@ -59,6 +60,7 @@ const ContactViewProperties = ({
                         contactGroups={contactGroups}
                         property={property}
                         properties={allProperties}
+                        userKeysList={userKeysList}
                     />
                 );
             })}
@@ -71,7 +73,8 @@ ContactViewProperties.propTypes = {
     contactID: PropTypes.string.isRequired,
     contactEmails: PropTypes.arrayOf(PropTypes.object),
     contactGroupsMap: PropTypes.object,
-    field: PropTypes.string
+    field: PropTypes.string,
+    userKeysList: PropTypes.array
 };
 
 export default ContactViewProperties;

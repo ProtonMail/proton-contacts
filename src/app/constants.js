@@ -33,8 +33,10 @@ export const SIGNATURE_NOT_VERIFIED = 1;
 export const FAIL_TO_READ = 2;
 export const FAIL_TO_LOAD = 3;
 export const FAIL_TO_DECRYPT = 4;
-export const PGP_INLINE = 'PGP/Inline';
-export const PGP_MIME = 'PGP/MIME';
+export const PGP_INLINE = 'pgp-inline';
+export const PGP_MIME = 'pgp-mime';
+export const PGP_INLINE_TEXT = 'PGP/Inline';
+export const PGP_MIME_TEXT = 'PGP/MIME';
 
 export const OVERWRITE = {
     // when UID conflict at contact import
