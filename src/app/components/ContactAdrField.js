@@ -22,36 +22,65 @@ const ContactAdrField = ({ value, onChange }) => {
 
     return (
         <>
-            <div>
-                <label className="small opacity-50" htmlFor="street">{c('Label').t`Street address`}</label>
-                <Input id="street" value={address[STREET]} onChange={handleChange(STREET)} />
+            <div className="mb1">
+                <Input
+                    id="street"
+                    value={address[STREET]}
+                    placeholder={c('Label').t`Street address`}
+                    onChange={handleChange(STREET)}
+                />
             </div>
-            <div>
-                <label className="small opacity-50" htmlFor="locality">{c('Label').t`City`}</label>
-                <Input id="locality" value={address[LOCALITY]} onChange={handleChange(LOCALITY)} />
+            <div className="mb1">
+                <Input
+                    id="locality"
+                    value={address[LOCALITY]}
+                    placeholder={c('Label').t`City`}
+                    onChange={handleChange(LOCALITY)}
+                />
             </div>
-            <div>
-                <label className="small opacity-50" htmlFor="region">{c('Label').t`Region`}</label>
-                <Input id="region" value={address[REGION]} onChange={handleChange(REGION)} />
+            <div className="mb1">
+                <label className="small opacity-50" htmlFor="region"></label>
+                <Input
+                    id="region"
+                    value={address[REGION]}
+                    placeholder={c('Label').t`Region`}
+                    onChange={handleChange(REGION)}
+                />
             </div>
-            <div>
-                <label className="small opacity-50" htmlFor="postalCode">{c('Label').t`Postal code`}</label>
-                <Input id="postalCode" value={address[POSTAL_CODE]} onChange={handleChange(POSTAL_CODE)} />
+            <div className="mb1">
+                <Input
+                    id="postalCode"
+                    value={address[POSTAL_CODE]}
+                    placeholder={c('Label').t`Postal code`}
+                    onChange={handleChange(POSTAL_CODE)}
+                />
             </div>
-            <div>
-                <label className="small opacity-50" htmlFor="country">{c('Label').t`Country`}</label>
-                <Input id="country" value={address[COUNTRY]} onChange={handleChange(COUNTRY)} />
+            <div className="mb1">
+                <Input
+                    id="country"
+                    value={address[COUNTRY]}
+                    placeholder={c('Label').t`Country`}
+                    onChange={handleChange(COUNTRY)}
+                />
             </div>
             {address[POST_BOX] ? (
-                <div>
-                    <label className="small opacity-50" htmlFor="postBox">{c('Label').t`Post office box`}</label>
-                    <Input id="postBox" value={address[POST_BOX]} onChange={handleChange(POST_BOX)} />
+                <div className="mb1">
+                    <Input
+                        id="postBox"
+                        value={address[POST_BOX]}
+                        placeholder={c('Label').t`Post office box`}
+                        onChange={handleChange(POST_BOX)}
+                    />
                 </div>
             ) : null}
             {address[EXTENDED] ? (
-                <div>
-                    <label className="small opacity-50" htmlFor="extended">{c('Label').t`Extended address`}</label>
-                    <Input id="extended" value={address[EXTENDED]} onChange={handleChange(EXTENDED)} />
+                <div className="mb1">
+                    <Input
+                        id="extended"
+                        value={address[EXTENDED]}
+                        placeholder={c('Label').t`Extended address`}
+                        onChange={handleChange(EXTENDED)}
+                    />
                 </div>
             ) : null}
         </>
