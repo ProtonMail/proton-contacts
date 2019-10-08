@@ -18,7 +18,7 @@ import {
     ConfirmModal,
     StorageSpaceStatus,
     Href,
-    Button
+    ErrorButton
 } from 'react-components';
 import { clearContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 import { normalize } from 'proton-shared/lib/helpers/string';
@@ -135,11 +135,7 @@ const ContactsContainer = ({ location, history }) => {
     }
 
     const handleDelete = async () => {
-        const confirm = (
-            <Button type="submit" className="pm-button--error">
-                {c('Action').t`Delete`}
-            </Button>
-        );
+        const confirm = <ErrorButton type="submit">{c('Action').t`Delete`}</ErrorButton>;
         await new Promise((resolve, reject) => {
             createModal(
                 <ConfirmModal title={c('Title').t`Delete`} onConfirm={resolve} confirm={confirm} onClose={reject}>
