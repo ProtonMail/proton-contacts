@@ -13,14 +13,14 @@ import {
 import { withRouter } from 'react-router';
 
 const PrivateHeader = ({ search, onSearch, location }) => {
-    const [{ isFree }] = useUser();
+    const [{ hasPaidMail }] = useUser();
     const inSettings = location.pathname.startsWith('/contacts/settings');
     return (
         <header className="header flex flex-nowrap reset4print">
             <MainLogo url="/contacts" />
             {!inSettings && <Searchbox placeholder={c('Placeholder').t`Search`} value={search} onChange={onSearch} />}
             <TopNavbar>
-                {isFree && <UpgradeButton />}
+                {hasPaidMail ? null : <UpgradeButton external={true} />}
                 <TopNavbarLink
                     to="/contacts"
                     icon="contacts"
