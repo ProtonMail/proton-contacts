@@ -1,7 +1,8 @@
 import React from 'react';
 import { c } from 'ttag';
-import { Href } from 'react-components';
+import { PrimaryButton } from 'react-components';
 import upgradeToPaidPlanSvg from 'design-system/assets/img/pm-images/upgrade.svg';
+import { redirectTo } from 'proton-shared/lib/helpers/browser';
 
 const UpsellFree = () => {
     const title = c('Title').t`Upgrade to a paid plan`;
@@ -14,9 +15,9 @@ const UpsellFree = () => {
                     <div className="mb2">{c('Info')
                         .t`Unlock access to encrypted contact details such as phone numbers and addresses with ProtonMail Plus.`}</div>
                     <div>
-                        <Href className="pm-button pm-button--primary" target="_self" url="/settings/subscription">
+                        <PrimaryButton onClick={() => redirectTo('/settings/subscription')}>
                             {c('Action').t`Upgrade ProtonMail`}
-                        </Href>
+                        </PrimaryButton>
                     </div>
                 </div>
                 <div className="flex-autogrid-item flex flex-column flex-items-end">

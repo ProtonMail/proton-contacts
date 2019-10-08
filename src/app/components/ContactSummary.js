@@ -6,6 +6,8 @@ import { getInitial } from 'proton-shared/lib/helpers/string';
 import { getFirstValue } from '../helpers/properties';
 import { formatAdr } from '../helpers/property';
 
+import './ContactSummary.scss';
+
 const ContactSummary = ({ properties }) => {
     const [user] = useUser();
     const { hasPaidMail } = user;
@@ -32,7 +34,7 @@ const ContactSummary = ({ properties }) => {
 
     return (
         <div className="bg-global-light flex flex-nowrap p1 mb1 border-bottom">
-            <div className="w20 aligncenter">
+            <div className="aligncenter contactsummary-photo-container">
                 {photo ? (
                     <RemoteImage src={photo} className="rounded50" />
                 ) : (
