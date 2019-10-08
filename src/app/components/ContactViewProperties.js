@@ -20,7 +20,9 @@ const ContactViewProperties = ({
     contactEmails,
     contactGroupsMap = {},
     field,
-    userKeysList
+    userKeysList,
+    leftBlockWidth = 'w30',
+    rightBlockWidth = 'w70'
 }) => {
     const TITLES = {
         email: c('Title').t`Email addresses`,
@@ -61,6 +63,8 @@ const ContactViewProperties = ({
                         property={property}
                         properties={allProperties}
                         userKeysList={userKeysList}
+                        leftBlockWidth={leftBlockWidth}
+                        rightBlockWidth={rightBlockWidth}
                     />
                 );
             })}
@@ -74,7 +78,9 @@ ContactViewProperties.propTypes = {
     contactEmails: PropTypes.arrayOf(PropTypes.object),
     contactGroupsMap: PropTypes.object,
     field: PropTypes.string,
-    userKeysList: PropTypes.array
+    userKeysList: PropTypes.array,
+    leftBlockWidth: PropTypes.string,
+    rightBlockWidth: PropTypes.string
 };
 
 export default ContactViewProperties;

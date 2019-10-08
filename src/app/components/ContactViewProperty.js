@@ -21,7 +21,16 @@ import ContactGroupDropdown from './ContactGroupDropdown';
 import ContactLabelProperty from './ContactLabelProperty';
 import ContactEmailSettingsModal from './ContactEmailSettingsModal';
 
-const ContactViewProperty = ({ property, properties, contactID, contactEmail, contactGroups = [], userKeysList }) => {
+const ContactViewProperty = ({
+    property,
+    properties,
+    contactID,
+    contactEmail,
+    contactGroups = [],
+    userKeysList,
+    leftBlockWidth = 'w30',
+    rightBlockWidth = 'w70'
+}) => {
     const { field, first } = property;
     const [{ hasPaidMail }] = useUser();
     const { createModal } = useModals();
@@ -117,10 +126,10 @@ const ContactViewProperty = ({ property, properties, contactID, contactEmail, co
 
     return (
         <Row>
-            <div className="w30">
+            <div className={leftBlockWidth}>
                 <ContactLabelProperty field={field} type={type} first={first} />
             </div>
-            <div className="flex flex-nowrap flex-items-center w70 pl1">
+            <div className={classnames(['flex flex-nowrap flex-items-center pl1', rightBlockWidth])}>
                 <span className={classnames(['mr0-5 flex-item-fluid', !['note'].includes(field) && 'ellipsis'])}>
                     {getContent()}
                 </span>
@@ -136,7 +145,9 @@ ContactViewProperty.propTypes = {
     contactID: PropTypes.string.isRequired,
     contactEmail: PropTypes.object,
     contactGroups: PropTypes.arrayOf(PropTypes.object),
-    userKeysList: PropTypes.array
+    userKeysList: PropTypes.array,
+    leftBlockWidth: PropTypes.string,
+    rightBlockWidth: PropTypes.string
 };
 
 export default ContactViewProperty;
