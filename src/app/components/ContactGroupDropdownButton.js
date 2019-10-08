@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DropdownCaret } from 'react-components';
+import { DropdownCaret, classnames } from 'react-components';
 
-const ContactGroupDropdownButton = ({ buttonRef, children, isOpen, ...rest }) => {
+const ContactGroupDropdownButton = ({ buttonRef, caretClassName = '', children, isOpen, ...rest }) => {
     return (
         <button type="button" role="button" ref={buttonRef} {...rest}>
             {children}
-            <DropdownCaret isOpen={isOpen} className="ml0-25 expand-caret mtauto mbauto" />
+            <DropdownCaret
+                isOpen={isOpen}
+                className={classnames(['ml0-25 expand-caret mtauto mbauto', caretClassName])}
+            />
         </button>
     );
 };
@@ -14,7 +17,8 @@ const ContactGroupDropdownButton = ({ buttonRef, children, isOpen, ...rest }) =>
 ContactGroupDropdownButton.propTypes = {
     buttonRef: PropTypes.object,
     children: PropTypes.node,
-    isOpen: PropTypes.bool
+    isOpen: PropTypes.bool,
+    caretClassName: PropTypes.string
 };
 
 export default ContactGroupDropdownButton;

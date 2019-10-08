@@ -74,7 +74,7 @@ const collectContacts = (contactEmails = [], contacts) => {
     );
 };
 
-const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) => {
+const ContactGroupDropdown = ({ children, className, contactEmails, disabled, forToolbar = false }) => {
     const [keyword, setKeyword] = useState('');
     const [loading, withLoading] = useLoading();
     const { anchorRef, isOpen, toggle, close } = usePopperAnchor();
@@ -145,6 +145,7 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled }) 
     return (
         <>
             <ContactGroupDropdownButton
+                caretClassName={forToolbar ? 'toolbar-icon' : ''}
                 className={className}
                 disabled={disabled}
                 buttonRef={anchorRef}

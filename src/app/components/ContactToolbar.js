@@ -33,6 +33,7 @@ const ContactToolbar = ({ user, onCheck, onDelete, checked = false, activeIDs, c
                     className="toolbar-button toolbar-button--dropdown"
                     disabled={!contactEmailsSelected.length}
                     contactEmails={contactEmailsSelected}
+                    forToolbar={true}
                 >
                     <Icon name="contacts-groups" className="toolbar-icon mauto" />
                 </ContactGroupDropdown>
