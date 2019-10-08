@@ -17,7 +17,7 @@ const SettingsContainer = ({ location }) => {
     }, [location.pathname]);
 
     const list = [
-        { link: '/contacts/settings/general', icon: 'general', text: c('Link').t`General` },
+        { link: '/contacts/settings/general', icon: 'settings-singular', text: c('Link').t`General` },
         hasPaidMail && { link: '/contacts/settings/groups', icon: 'contacts-groups', text: c('Link').t`Contact groups` }
     ].filter(Boolean);
 

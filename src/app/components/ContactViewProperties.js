@@ -43,7 +43,7 @@ const ContactViewProperties = ({
             <h3 className="mb1 flex flex-nowrap flex-items-center">
                 <Icon name={iconName} className="mr0-5" />
                 <span className="mr0-5">{title}</span>
-                {field === 'email' ? null : <EncryptedIcon />}
+                {field === 'email' ? null : <EncryptedIcon className="flex" />}
             </h3>
             {properties.map((property, index) => {
                 const contactEmail = contactEmails && contactEmails[index];

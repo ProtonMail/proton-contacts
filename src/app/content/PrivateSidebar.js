@@ -48,7 +48,7 @@ const PrivateSidebar = ({ user, contactGroups, history }) => {
         {
             type: 'button',
             className: 'alignleft',
-            icon: 'general',
+            icon: 'settings-singular',
             text: c('Link').t`Groups`,
             onClick() {
                 if (!hasPaidMail) {
