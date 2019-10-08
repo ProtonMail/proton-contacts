@@ -8,18 +8,17 @@ import {
     useUserKeys,
     useEventManager,
     useNotifications,
-    useModals,
-    ConfirmModal
+    useModals
 } from 'react-components';
 import { c } from 'ttag';
 import { addContacts } from 'proton-shared/lib/api/contacts';
-import { redirectTo } from 'proton-shared/lib/helpers/browser';
 
 import ContactModalProperties from './ContactModalProperties';
 import { randomIntFromInterval } from 'proton-shared/lib/helpers/function';
 import { generateUID } from 'react-components/helpers/component';
 import { prepareContacts } from '../helpers/encrypt';
 import { getEditableFields, getOtherInformationFields } from '../helpers/fields';
+import UpgradeModal from './UpgradeModal';
 
 const DEFAULT_MODEL = [
     { field: 'fn', value: '' },
@@ -63,19 +62,14 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
         if (!upgradeModalRef.current) {
             upgradeModalRef.current = true;
             createModal(
-                <ConfirmModal
-                    title={c('Title').t`Upgrade required`}
+                <UpgradeModal
                     onConfirm={() => {
-                        redirectTo('/settings/subscription');
                         upgradeModalRef.current = false;
                     }}
                     onClose={() => {
                         upgradeModalRef.current = false;
                     }}
-                    confirm={c('Action').t`Upgrade`}
-                >
-                    <Alert type="warning">{c('Warning').t`This feature requires a paid Proton account`}</Alert>
-                </ConfirmModal>
+                />
             );
         }
 
