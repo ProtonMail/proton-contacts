@@ -194,7 +194,10 @@ const ContactsContainer = ({ location, history }) => {
             <div className="content flex-item-fluid reset4print">
                 <PrivateHeader search={search} onSearch={updateSearch} />
                 <div className="flex flex-nowrap">
-                    <Route path="/:path" render={() => <PrivateSidebar user={user} contactGroups={contactGroups} />} />
+                    <Route
+                        path="/:path"
+                        render={() => <PrivateSidebar history={history} user={user} contactGroups={contactGroups} />}
+                    />
                     <div className="main flex-item-fluid main-area">
                         <ContactToolbar
                             user={user}
