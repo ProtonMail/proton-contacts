@@ -40,7 +40,7 @@ const PrivateSidebar = ({ user, contactGroups, history }) => {
             type: 'button',
             className: 'alignleft',
             icon: 'export',
-            text: c('Link').t`Export`,
+            text: c('Link').t`Export all`,
             onClick() {
                 createModal(<ExportModal userKeysList={userKeysList} />);
             }
