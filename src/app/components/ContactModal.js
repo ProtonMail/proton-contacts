@@ -20,14 +20,7 @@ import { prepareContacts } from '../helpers/encrypt';
 import { getEditableFields, getOtherInformationFields } from '../helpers/fields';
 import UpgradeModal from './UpgradeModal';
 
-const DEFAULT_MODEL = [
-    { field: 'fn', value: '' },
-    { field: 'email', value: '' },
-    { field: 'tel', value: '' },
-    { field: 'adr', value: '' },
-    { field: 'org', value: '' },
-    { field: 'note', value: '' }
-];
+const DEFAULT_MODEL = [{ field: 'fn', value: '' }, { field: 'email', value: '' }];
 
 const editableFields = getEditableFields().map(({ value }) => value);
 const otherInformationFields = getOtherInformationFields().map(({ value }) => value);
