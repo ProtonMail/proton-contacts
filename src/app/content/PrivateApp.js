@@ -37,7 +37,10 @@ const PrivateApp = ({ onLogout }) => {
             <ContactsProvider>
                 <ErrorBoundary>
                     <Switch>
-                        <Route path="/contacts/settings" component={SettingsContainer} />
+                        <Route
+                            path="/contacts/settings"
+                            render={({ location }) => <SettingsContainer location={location} />}
+                        />
                         <Route path="/contacts" component={ContactsContainer} />
                     </Switch>
                 </ErrorBoundary>
