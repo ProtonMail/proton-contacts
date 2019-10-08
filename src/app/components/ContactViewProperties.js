@@ -39,7 +39,7 @@ const ContactViewProperties = ({
     }
 
     return (
-        <div className="border-bottom mb1 pl1 pr1">
+        <div className="border-bottom mb1">
             <h3 className="mb1 flex flex-nowrap flex-items-center">
                 <Icon name={iconName} className="mr0-5" />
                 <span className="mr0-5">{title}</span>

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, OrderableHandle, Icon, Field, DropdownActions, useModals, classnames } from 'react-components';
+import { Row, OrderableHandle, Icon, Field, DropdownActions, useModals } from 'react-components';
 import { c } from 'ttag';
 
 import { clearType, getType } from '../helpers/property';
@@ -38,8 +38,6 @@ const ContactModalRow = ({ property, onChange, onRemove, isOrderable = false }) 
         }
     ].filter(Boolean);
 
-    const classNameActions = classnames(['ml1 flex ', canEdit ? 'flex-items-start' : 'flex-items-end']);
-
     return (
         <Row>
             {isOrderable && (
@@ -50,11 +48,11 @@ const ContactModalRow = ({ property, onChange, onRemove, isOrderable = false }) 
                 </OrderableHandle>
             )}
             <ContactModalLabel field={field} type={type} uid={property.uid} onChange={onChange} />
-            <Field className={classnames([field === 'adr' && 'pm-field-container--address'])}>
+            <Field>
                 <ContactFieldProperty field={field} value={property.value} uid={property.uid} onChange={onChange} />
             </Field>
             {list.length > 0 && (
-                <div className={classNameActions}>
+                <div className="ml1 flex flex-items-start">
                     <DropdownActions list={list} />
                 </div>
             )}
