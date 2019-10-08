@@ -38,9 +38,9 @@ const ContactSummary = ({ properties }) => {
                 {photo ? (
                     <RemoteImage src={photo} className="rounded50" />
                 ) : (
-                    <div className="rounded50 bordered bg-white ratio-container-square h1 mb0">
+                    <div className="rounded50 bordered bg-white ratio-container-square mb0">
                         <span className="inner-ratio-container flex">
-                            <span className="mauto color-global-border">{getInitial(name)}</span>
+                            <span className="mauto color-global-border h1">{getInitial(name)}</span>
                         </span>
                     </div>
                 )}
