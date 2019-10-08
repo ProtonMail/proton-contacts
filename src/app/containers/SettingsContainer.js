@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { AppsSidebar, Sidebar, StorageSpaceStatus, Href, MainAreaContext, useUser } from 'react-components';
 import { Route, Switch, Redirect } from 'react-router';
 import { c } from 'ttag';
@@ -7,7 +8,7 @@ import PrivateHeader from '../content/PrivateHeader';
 import GeneralPage from '../pages/GeneralPage';
 import ContactGroupsPage from '../pages/ContactGroupsPage';
 
-const SettingsContainer = () => {
+const SettingsContainer = ({ location }) => {
     const mainAreaRef = useRef();
     const [{ hasPaidMail }] = useUser();
 
@@ -50,6 +51,10 @@ const SettingsContainer = () => {
             </div>
         </div>
     );
+};
+
+SettingsContainer.propTypes = {
+    location: PropTypes.object.isRequired
 };
 
 export default SettingsContainer;
