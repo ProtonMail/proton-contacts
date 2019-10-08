@@ -74,7 +74,7 @@ const ContactsList = ({
 
     if (!totalContacts) {
         const addContact = (
-            <button key="add" type="button" className="color-pm-blue ml0-5 mr0-5" onClick={handleAddContact}>
+            <button key="add" type="button" className="color-primary ml0-5 mr0-5 underline" onClick={handleAddContact}>
                 {c('Action').t`Add a contact`}
             </button>
         );
@@ -82,7 +82,7 @@ const ContactsList = ({
             <button
                 key="import"
                 type="button"
-                className="color-pm-blue ml0-5 mr0-5"
+                className="color-primary ml0-5 mr0-5 underline"
                 onClick={handleImport}
                 disabled={loadingUserKeys}
             >
@@ -103,7 +103,7 @@ const ContactsList = ({
 
     if (!contacts.length) {
         const clearSearch = (
-            <button key="add" type="button" className="color-pm-blue underline ml0-5 mr0-5" onClick={onClear}>
+            <button key="add" type="button" className="color-primary underline ml0-5 mr0-5" onClick={onClear}>
                 {c('Action').t`Clear it`}
             </button>
         );
