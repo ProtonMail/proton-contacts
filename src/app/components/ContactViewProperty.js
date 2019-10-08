@@ -117,8 +117,10 @@ const ContactViewProperty = ({ property, properties, contactID, contactEmail, co
 
     return (
         <Row>
-            <ContactLabelProperty field={field} type={type} first={first} />
-            <div className="flex flex-nowrap flex-items-center w100">
+            <div className="w30">
+                <ContactLabelProperty field={field} type={type} first={first} />
+            </div>
+            <div className="flex flex-nowrap flex-items-center w70 pl1">
                 <span className={classnames(['mr0-5 flex-item-fluid', !['note'].includes(field) && 'ellipsis'])}>
                     {getContent()}
                 </span>
