@@ -126,7 +126,7 @@ const ContactViewProperty = ({
 
     return (
         <Row>
-            <div className={leftBlockWidth}>
+            <div className={classnames(['flex flex-items-center', leftBlockWidth])}>
                 <ContactLabelProperty field={field} type={type} first={first} />
             </div>
             <div className={classnames(['flex flex-nowrap flex-items-center pl1', rightBlockWidth])}>
