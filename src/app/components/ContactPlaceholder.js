@@ -36,7 +36,8 @@ const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
                         .t`Create an backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
                 </div>
                 <div className="flex-item-noshrink p1">
-                    <PrimaryButton onClick={onExport} disabled={loadingUserKeys}>{c('Action').t`Export`}</PrimaryButton>
+                    <PrimaryButton className="bold" onClick={onExport} disabled={loadingUserKeys}>{c('Action')
+                        .t`Export`}</PrimaryButton>
                 </div>
             </div>
             <div className="bordered-container flex-item-fluid onmobile-mr0 onmobile-mb1 p1 aligncenter">
@@ -47,7 +48,7 @@ const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
                         .t`Use groups to send email to a list of addresses you regularly communicate with.`}</p>
                 </div>
                 <div className="flex-item-noshrink p1">
-                    <PrimaryButton onClick={onGroups}>{c('Action').t`Groups`}</PrimaryButton>
+                    <PrimaryButton className="bold" onClick={onGroups}>{c('Action').t`Groups`}</PrimaryButton>
                 </div>
             </div>
         </div>
