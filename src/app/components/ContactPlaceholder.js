@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
-import { PrimaryButton, Button, Icon, useModals, useContactGroups } from 'react-components';
+import { PrimaryButton, Button, Icon, Href, useModals, useContactGroups } from 'react-components';
 import { withRouter } from 'react-router-dom';
 
 import { redirectTo } from 'proton-shared/lib/helpers/browser';
 import importSvg from 'design-system/assets/img/pm-images/contact-import.svg';
 import exportSvg from 'design-system/assets/img/pm-images/contact-export.svg';
 import contactGroupsSvg from 'design-system/assets/img/pm-images/contact-groups.svg';
+import upgradeSvg from 'design-system/assets/img/pm-images/contact-unlock-features.svg';
 
 import ContactGroupModal from './ContactGroupModal';
 import MergeRow from './MergeRow';
@@ -91,7 +92,7 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
             </div>
             <div className="bordered-container flex-item-fluid onmobile-mr0 onmobile-mb1 p1 aligncenter">
                 <div className="flex-item-fluid">
-                    <Icon name="contacts" className="icon-100p mb1" />
+                    <img src={upgradeSvg} alt="contact-unlock-features" className="mb1" />
                     <div className="bold">{c('Title').t`Unlock features`}</div>
                     <p>{c('Info')
                         .t`Upgrade to a paid plan to enable encrypted contact details and manage contact groups.`}</p>
@@ -133,6 +134,13 @@ const ContactPlaceholder = ({
     const countSelectedContacts = selectedContacts.length;
     const [contactGroups] = useContactGroups();
     const { createModal } = useModals();
+    const boldTotalContacts =
+        totalContacts === 1 ? (
+            <b key="boldface">{c('Info').t`one contact`}</b>
+        ) : (
+            <b key="boldface">{c('Info').t`${totalContacts} contacts`}</b>
+        );
+    const navigateTo = <b key="boldface-2">{c('Info').t`Settings > General > Contacts`}</b>;
 
     if (countSelectedContacts) {
         return (
@@ -157,11 +165,7 @@ const ContactPlaceholder = ({
                 <div className="aligncenter">
                     <h1 className="ellipsis lh-standard">{Name}</h1>
                     <div className="mb1">
-                        {c('Info').ngettext(
-                            msgid`You have ${totalContacts} contact in your address book`,
-                            `You have ${totalContacts} contacts in your address book`,
-                            totalContacts
-                        )}
+                        {c('Info').jt`You have ${boldTotalContacts} contacts in your address book`}
                     </div>
                     <div className="mb2">
                         <PrimaryButton onClick={handleClick}>{c('Action').t`Edit group`}</PrimaryButton>
@@ -185,13 +189,23 @@ const ContactPlaceholder = ({
         <div className="p2 view-column-detail flex-item-fluid scroll-if-needed">
             <div className="aligncenter">
                 <h1>{c('Title').t`Contacts`}</h1>
-                <div className="mb2">
-                    {c('Info').ngettext(
-                        msgid`You have ${totalContacts} contact in your address book`,
-                        `You have ${totalContacts} contacts in your address book`,
-                        totalContacts
-                    )}
+                <div className="mb2">{c('Info').jt`You have ${boldTotalContacts} contacts in your address book`}</div>
+                <div className="mb1">
+                    {c('Info')
+                        .jt`You can decide whether or not contacts are automatically added to your address book by navigating to ${navigateTo}`}
                 </div>
+                <div className="mb1">
+                    <Href
+                        url="/settings"
+                        target="_self"
+                        rel="noreferrer help"
+                        className="inline-flex flex-nowrap nodecoration"
+                    >
+                        <Icon className="mr0-5 flex-item-centered-vert fill-primary" name="settings-master" />
+                        <span>{c('Title').t`Settings`}</span>
+                    </Href>
+                </div>
+
                 {canMerge && (
                     <div className="mb2">
                         <MergeRow loadingUserKeys={loadingUserKeys} onMerge={onMerge} />
