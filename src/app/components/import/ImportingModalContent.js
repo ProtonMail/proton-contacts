@@ -129,7 +129,7 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
                 return;
             }
             const { submittedBatch, failedOnSubmitBatch } = responses.reduce(
-                (acc, { Code, Error, Contact: { ID = '' } = {} }, i) => {
+                (acc, { Code, Error, Contact: { ID } = {} }, i) => {
                     const index = indexMap[i];
                     if (Code === SUCCESS_IMPORT_CODE) {
                         acc.submittedBatch.push(ID);
