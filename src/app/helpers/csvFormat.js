@@ -333,7 +333,7 @@ export const toPreVcard = (header) => {
     if (property === 'nickname') {
         return (value) => ({
             header,
-            value: [value],
+            value: value,
             checked: true,
             field: 'nickname'
         });

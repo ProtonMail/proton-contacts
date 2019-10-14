@@ -178,6 +178,7 @@ const ImportModal = ({ userKeysList, ...rest }) => {
                 onSubmit: rest.onClose
             };
         }
+
         if (step === IMPORT_GROUPS) {
             const handleSubmit = async () => {
                 await call();

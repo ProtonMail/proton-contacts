@@ -45,7 +45,7 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
         const apiWithAbort = (config) => api({ ...config, signal: abortController.signal });
 
         /**
-         * Extract and parse contacts from a vcf file. Return succesfully parsed vCard contacts
+         * Extract and parse contacts from a vcf file. Return array of succesfully parsed vCard contacts
          * together with their index in vcardContacts to keep track of original contact order
          */
         const parseVcfContacts = ({ signal }) => {
@@ -100,7 +100,7 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
                                 { index, message: createEncryptErrorMessage(index + 1) }
                             ]
                         }));
-                    encryptedContacts.push('error'); // must keep for a proper counting when displaying errors
+                    encryptedContacts.push({ index, contact: { error: true } }); // must keep for a proper counting when displaying errors
                 }
             }
 
@@ -129,7 +129,7 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
                 return;
             }
             const { submittedBatch, failedOnSubmitBatch } = responses.reduce(
-                (acc, { Code, Error, Contact: { ID } }, i) => {
+                (acc, { Code, Error, Contact: { ID = '' } = {} }, i) => {
                     const index = indexMap[i];
                     if (Code === SUCCESS_IMPORT_CODE) {
                         acc.submittedBatch.push(ID);
@@ -171,11 +171,12 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
          * All steps of the import process
          */
         const importContacts = async ({ signal }) => {
-            const parsedVcfContacts = parseVcfContacts({ signal });
+            const parsedContacts = isVcf
+                ? parseVcfContacts({ signal })
+                : vcardContacts.map((contact, index) => ({ index, contact }));
             if (isVcf) {
-                !signal.aborted && setModel((model) => ({ ...model, parsed: parsedVcfContacts }));
+                !signal.aborted && setModel((model) => ({ ...model, parsed: parsedContacts }));
             }
-            const parsedContacts = isVcf ? parsedVcfContacts : vcardContacts;
             const encryptedContacts = await encryptContacts(parsedContacts, { signal });
             const { withCategories, withoutCategories } = splitContacts(encryptedContacts);
             await submitContacts({ contacts: withCategories, labels: INCLUDE }, { signal });
