@@ -11,21 +11,23 @@ const ImportCsvTableHeader = ({ disabledPrevious, disabledNext, onPrevious, onNe
                     {c('TableHeader').t`IMPORT`}
                 </TableCell>
                 <TableCell type="header" className="aligncenter">{c('TableHeader').t`CSV FIELD`}</TableCell>
-                <TableCell type="header">{c('TableHeader').t`VCARD FIELD`}</TableCell>
-                <TableCell type="header">
-                    <span className="mr0-5">{c('TableHeader').t`VALUES`}</span>
-                    <span>
-                        <Button
-                            disabled={disabledPrevious}
-                            icon={<Icon name="caret" className="flex-item-noshrink rotateZ-90" />}
-                            onClick={onPrevious}
-                        />
-                        <Button
-                            disabled={disabledNext}
-                            icon={<Icon name="caret" className="flex-item-noshrink rotateZ-270" />}
-                            onClick={onNext}
-                        />
-                    </span>
+                <TableCell type="header" className="aligncenter">{c('TableHeader').t`VCARD FIELD`}</TableCell>
+                <TableCell type="header" className="w30 aligncenter">
+                    <div className="inline-flex">
+                        <span className="flex-item-centered-vert mr0-5">{c('TableHeader').t`VALUES`}</span>
+                        <span className="flex flex-nowrap">
+                            <Button
+                                disabled={disabledPrevious}
+                                icon={<Icon name="caret" className="flex-item-noshrink rotateZ-90" />}
+                                onClick={onPrevious}
+                            />
+                            <Button
+                                disabled={disabledNext}
+                                icon={<Icon name="caret" className="flex-item-noshrink rotateZ-270" />}
+                                onClick={onNext}
+                            />
+                        </span>
+                    </div>
                 </TableCell>
             </tr>
         </thead>
