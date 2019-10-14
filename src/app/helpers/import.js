@@ -24,8 +24,11 @@ export const splitContacts = (contacts = []) =>
     contacts.reduce(
         (acc, contact) => {
             const {
-                contact: { Cards }
+                contact: { Cards, error }
             } = contact;
+            if (error) {
+                return acc;
+            }
             if (Cards.some(({ Type, Data }) => Type === CLEAR_TEXT && Data.includes('CATEGORIES'))) {
                 acc.withCategories.push(contact);
             } else {

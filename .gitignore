@@ -30,6 +30,7 @@ env.json
 .env
 src/config.js
 src/app/config.js
+src/app/config.ts
 env.json
 po/i18n.txt
 package-lock.json

@@ -154,6 +154,10 @@ const ImportModal = ({ userKeysList, ...rest }) => {
                 </PrimaryButton>
             );
 
+            const handleSubmit = async () => {
+                await call();
+                rest.onClose();
+            };
             const handleFinish = async () => {
                 // temporarily disabled
                 // if (hasCategories(vcardContacts)) {
@@ -175,9 +179,10 @@ const ImportModal = ({ userKeysList, ...rest }) => {
                 ),
                 close,
                 submit,
-                onSubmit: rest.onClose
+                onSubmit: handleSubmit
             };
         }
+
         if (step === IMPORT_GROUPS) {
             const handleSubmit = async () => {
                 await call();
