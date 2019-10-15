@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Block, Icon } from 'react-components';
+import { Block, Icon, classnames } from 'react-components';
 
 import { formatAdr } from '../../helpers/property';
 import { getFirstValue, getAllValues } from '../../helpers/properties';
@@ -42,7 +42,10 @@ const MergedContactSummary = ({ properties = [], hasPaidMail }) => {
                         <div key={items[0].prop} className="mb1">
                             {items.map(({ prop, icon }, index) => (
                                 <div key={`icon-${index}`} className="flex flex-items-center flex-nowrap">
-                                    <Icon name={icon} className={`mr0-5 ${index ? 'nonvisible' : ''}`} />
+                                    <Icon
+                                        name={icon}
+                                        className={classnames(['mr0-5 flex-item-noshrink', index && 'nonvisible'])}
+                                    />
                                     <span>{prop}</span>
                                 </div>
                             ))}
