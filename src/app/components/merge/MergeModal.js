@@ -126,7 +126,7 @@ MergeModal.propTypes = {
     contacts: PropTypes.arrayOf(PropTypes.array).isRequired,
     contactID: PropTypes.string,
     userKeysList: PropTypes.array.isRequired,
-    hasPaidMail: PropTypes.oneOfType([PropTypes.number, PropTypes.bool])
+    hasPaidMail: PropTypes.oneOfType(PropTypes.bool)
 };
 
 export default MergeModal;

@@ -179,7 +179,7 @@ const ContactsContainer = ({ location, history }) => {
                 contacts={mergeableContacts}
                 contactID={currentContactID}
                 userKeysList={userKeysList}
-                hasPaidMail={hasPaidMail}
+                hasPaidMail={!!hasPaidMail}
             />
         );
     };

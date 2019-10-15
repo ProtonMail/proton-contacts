@@ -60,7 +60,7 @@ const ContactRow = ({ style, contactID, hasPaidMail, contactGroupsMap, contact, 
 ContactRow.propTypes = {
     style: PropTypes.object,
     contactID: PropTypes.string,
-    hasPaidMail: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+    hasPaidMail: PropTypes.bool,
     contactGroupsMap: PropTypes.object,
     contact: PropTypes.shape({
         ID: PropTypes.string,
