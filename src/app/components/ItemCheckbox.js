@@ -9,7 +9,7 @@ const ItemCheckbox = ({ children, ...rest }) => {
             <span className="item-icon flex-item-noshrink rounded50 bg-white inline-flex">
                 <span className="mauto item-abbr">{children}</span>
                 <span className="item-icon-fakecheck mauto">
-                    <Icon name="on" className="fill-white" />
+                    <Icon name="on" className="item-icon-fakecheck-icon" />
                 </span>
             </span>
         </label>
