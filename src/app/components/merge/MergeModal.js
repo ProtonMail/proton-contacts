@@ -6,7 +6,7 @@ import { useEventManager, FormModal, ResetButton, PrimaryButton } from 'react-co
 import MergeModalContent from './MergeModalContent';
 import MergingModalContent from './MergingModalContent';
 
-const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
+const MergeModal = ({ contacts, contactID, userKeysList, hasPaidMail, ...rest }) => {
     const { call } = useEventManager();
 
     const [isMerging, setIsMerging] = useState(false);
@@ -73,6 +73,7 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
                     <MergeModalContent
                         contactID={contactID}
                         userKeysList={userKeysList}
+                        hasPaidMail={!!hasPaidMail}
                         model={model}
                         updateModel={setModel}
                         beMergedModel={beMergedModel}
@@ -124,7 +125,8 @@ const MergeModal = ({ contacts, contactID, userKeysList, ...rest }) => {
 MergeModal.propTypes = {
     contacts: PropTypes.arrayOf(PropTypes.array).isRequired,
     contactID: PropTypes.string,
-    userKeysList: PropTypes.array.isRequired
+    userKeysList: PropTypes.array.isRequired,
+    hasPaidMail: PropTypes.oneOfType([PropTypes.number, PropTypes.bool])
 };
 
 export default MergeModal;

@@ -9,7 +9,15 @@ import ContactDetails from './ContactDetails';
 import MergeContactPreview from './MergeContactPreview';
 import MergeTable from './MergeTable';
 
-const MergeModalContent = ({ contactID, userKeysList, model, updateModel, beMergedModel, beDeletedModel }) => {
+const MergeModalContent = ({
+    contactID,
+    userKeysList,
+    hasPaidMail,
+    model,
+    updateModel,
+    beMergedModel,
+    beDeletedModel
+}) => {
     const { createModal } = useModals();
 
     const { orderedContacts, isChecked, beDeleted } = model;
@@ -34,7 +42,7 @@ const MergeModalContent = ({ contactID, userKeysList, model, updateModel, beMerg
     };
 
     const handleClickDetails = (contactID) => {
-        createModal(<ContactDetails contactID={contactID} userKeysList={userKeysList} />);
+        createModal(<ContactDetails contactID={contactID} userKeysList={userKeysList} hasPaidMail={hasPaidMail} />);
     };
 
     const handlePreview = (beMergedID, beDeletedIDs) => {
@@ -48,6 +56,7 @@ const MergeModalContent = ({ contactID, userKeysList, model, updateModel, beMerg
             <MergeContactPreview
                 contactID={contactID}
                 userKeysList={userKeysList}
+                hasPaidMail={hasPaidMail}
                 beMergedModel={beMergedModelSingle}
                 beDeletedModel={beDeletedModelSingle}
                 updateModel={updateModel}
@@ -83,6 +92,7 @@ const MergeModalContent = ({ contactID, userKeysList, model, updateModel, beMerg
 MergeModalContent.propTypes = {
     contactID: PropTypes.string,
     userKeysList: PropTypes.array.isRequired,
+    hasPaidMail: PropTypes.bool,
     model: PropTypes.object.isRequired,
     updateModel: PropTypes.func.isRequired,
     beMergedModel: PropTypes.shape({ ID: PropTypes.arrayOf(PropTypes.string) }),

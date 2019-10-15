@@ -4,8 +4,9 @@ import { Block, Icon } from 'react-components';
 
 import { formatAdr } from '../../helpers/property';
 import { getFirstValue, getAllValues } from '../../helpers/properties';
+import UpsellFree from '../../components/UpsellFree';
 
-const MergedContactSummary = ({ properties = [] }) => {
+const MergedContactSummary = ({ properties = [], hasPaidMail }) => {
     const name = getFirstValue(properties, 'fn');
     const emails = getAllValues(properties, 'email');
     const tels = getAllValues(properties, 'tel');
@@ -21,44 +22,57 @@ const MergedContactSummary = ({ properties = [] }) => {
                 icon: 'email',
                 component: <a href={`mailto:${email}`}>{email}</a>
             })),
-        tels.length &&
+        hasPaidMail &&
+            tels.length &&
             tels.map((tel) => ({ prop: 'Phone', icon: 'phone', component: <a href={`tel:${tel}`}>{tel}</a> })),
-        adrs.length && adrs.map((adr) => ({ prop: 'Address', icon: 'address', component: formatAdr(adr) })),
-        orgs.length && orgs.map((org) => ({ prop: 'Organization', icon: 'organization', component: org })),
-        notes.length && notes.map((note) => ({ prop: 'Note', icon: 'note', component: note }))
+        hasPaidMail &&
+            adrs.length &&
+            adrs.map((adr) => ({ prop: 'Address', icon: 'address', component: formatAdr(adr) })),
+        hasPaidMail &&
+            orgs.length &&
+            orgs.map((org) => ({ prop: 'Organization', icon: 'organization', component: org })),
+        hasPaidMail && notes.length && notes.map((note) => ({ prop: 'Note', icon: 'note', component: note }))
     ].filter(Boolean);
 
     return (
-        <Block className="flex flex-nowrap">
-            <div className="flex flex-column flex-nowrap mr2">
-                {summary.map((items) => (
-                    <div key={items[0].prop} className="mb1">
-                        {items.map(({ prop, icon }, index) => (
-                            <div key={`icon-${index}`} className="flex flex-items-center flex-nowrap">
-                                <Icon name={icon} className={`mr0-5 ${index ? 'nonvisible' : ''}`} />
-                                <span>{prop}</span>
-                            </div>
-                        ))}
-                    </div>
-                ))}
-            </div>
-            <div className="flex flex-column">
-                {summary.map((items) => (
-                    <div key={items[0].prop} className="mb1">
-                        {items.map(({ component }, index) => (
-                            <div key={`icon-${index}`} className="flex flex-items-center mw100 ellipsis">
-                                {component}
-                            </div>
-                        ))}
-                    </div>
-                ))}
-            </div>
-        </Block>
+        <>
+            <Block className="flex flex-nowrap">
+                <div className="flex flex-column flex-nowrap mr2">
+                    {summary.map((items) => (
+                        <div key={items[0].prop} className="mb1">
+                            {items.map(({ prop, icon }, index) => (
+                                <div key={`icon-${index}`} className="flex flex-items-center flex-nowrap">
+                                    <Icon name={icon} className={`mr0-5 ${index ? 'nonvisible' : ''}`} />
+                                    <span>{prop}</span>
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+                <div className="flex flex-column">
+                    {summary.map((items) => (
+                        <div key={items[0].prop} className="mb1">
+                            {items.map(({ component }, index) => (
+                                <div key={`icon-${index}`} className="flex flex-items-center mw100 ellipsis">
+                                    {component}
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            </Block>
+            {!hasPaidMail && [...tels, ...adrs, ...orgs, ...notes].length && (
+                <Block>
+                    <UpsellFree />
+                </Block>
+            )}
+        </>
     );
 };
 
 MergedContactSummary.propTypes = {
-    properties: PropTypes.array
+    properties: PropTypes.array,
+    hasPaidMail: PropTypes.bool
 };
 
 export default MergedContactSummary;
