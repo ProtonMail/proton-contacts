@@ -231,6 +231,7 @@ const ContactsContainer = ({ location, history }) => {
                                                 />
                                                 {!!contacts.length && hasChecked ? (
                                                     <ContactPlaceholder
+                                                        history={history}
                                                         user={user}
                                                         userKeysList={userKeysList}
                                                         loadingUserKeys={loadingUserKeys}
@@ -268,6 +269,7 @@ const ContactsContainer = ({ location, history }) => {
                                                 />
                                                 {!!contacts.length && (
                                                     <ContactPlaceholder
+                                                        history={history}
                                                         user={user}
                                                         userKeysList={userKeysList}
                                                         loadingUserKeys={loadingUserKeys}

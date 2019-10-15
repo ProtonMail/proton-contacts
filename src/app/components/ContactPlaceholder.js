@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
 import { PrimaryButton, Button, Icon, Href, useModals, useContactGroups } from 'react-components';
-import { withRouter } from 'react-router-dom';
 
 import { redirectTo } from 'proton-shared/lib/helpers/browser';
 import importSvg from 'design-system/assets/img/pm-images/contact-import.svg';
@@ -116,6 +115,7 @@ FreeCards.propTypes = {
 };
 
 const ContactPlaceholder = ({
+    history,
     totalContacts = 0,
     contacts = [],
     contactGroupID,
@@ -127,8 +127,7 @@ const ContactPlaceholder = ({
     onMerge,
     onImport,
     onExport,
-    onGroups,
-    history
+    onGroups
 }) => {
     const { hasPaidMail } = user;
     const selectedContacts = contacts.filter(({ isChecked }) => isChecked);
@@ -235,6 +234,7 @@ const ContactPlaceholder = ({
 };
 
 ContactPlaceholder.propTypes = {
+    history: PropTypes.object,
     totalContacts: PropTypes.number,
     contacts: PropTypes.array,
     contactGroupID: PropTypes.string,
@@ -246,8 +246,7 @@ ContactPlaceholder.propTypes = {
     onMerge: PropTypes.func,
     onImport: PropTypes.func,
     onExport: PropTypes.func,
-    onGroups: PropTypes.func,
-    history: PropTypes.object
+    onGroups: PropTypes.func
 };
 
-export default withRouter(ContactPlaceholder);
+export default ContactPlaceholder;
