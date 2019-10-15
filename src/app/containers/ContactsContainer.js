@@ -103,6 +103,7 @@ const ContactsContainer = ({ location, history }) => {
 
     const mergeableContacts = useMemo(() => extractMergeable(formattedContacts), [formattedContacts]);
     const canMerge = mergeableContacts.length > 0;
+    const { hasPaidMail } = user;
 
     const checkedContactIDs = useMemo(() => {
         return Object.entries(checkedContacts).reduce((acc, [contactID, isChecked]) => {
@@ -174,7 +175,12 @@ const ContactsContainer = ({ location, history }) => {
     const handleMerge = () => {
         const currentContactID = getCurrentContactID();
         createModal(
-            <MergeModal contacts={mergeableContacts} contactID={currentContactID} userKeysList={userKeysList} />
+            <MergeModal
+                contacts={mergeableContacts}
+                contactID={currentContactID}
+                userKeysList={userKeysList}
+                hasPaidMail={!!hasPaidMail}
+            />
         );
     };
     const handleImport = () => createModal(<ImportModal userKeysList={userKeysList} />);
@@ -263,7 +269,6 @@ const ContactsContainer = ({ location, history }) => {
                                                     userKeysList={userKeysList}
                                                     loadingUserKeys={loadingUserKeys}
                                                     onCheck={handleCheck}
-                                                    onMerge={handleMerge}
                                                     onClear={handleClearSearch}
                                                 />
                                                 {!!contacts.length && (

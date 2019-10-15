@@ -12,7 +12,15 @@ import MergeErrorContent from './MergeErrorContent';
 import MergedContactSummary from './MergedContactSummary';
 import MergingModalContent from './MergingModalContent';
 
-const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeletedModel, updateModel, ...rest }) => {
+const MergeContactPreview = ({
+    contactID,
+    userKeysList,
+    hasPaidMail,
+    beMergedModel,
+    beDeletedModel,
+    updateModel,
+    ...rest
+}) => {
     const { call } = useEventManager();
     const api = useApi();
     const { privateKeys, publicKeys } = useMemo(() => splitKeys(userKeysList), []);
@@ -78,7 +86,7 @@ const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeleted
                     return <MergeErrorContent error={error} />;
                 }
 
-                return <MergedContactSummary properties={model.mergedContact} />;
+                return <MergedContactSummary properties={model.mergedContact} hasPaidMail={hasPaidMail} />;
             })();
 
             const handleSubmit = () => setIsMerging(true);
@@ -133,6 +141,7 @@ const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeleted
 MergeContactPreview.propTypes = {
     contactID: PropTypes.string,
     userKeysList: PropTypes.array.isRequired,
+    hasPaidMail: PropTypes.bool,
     beMergedModel: PropTypes.shape({ ID: PropTypes.arrayOf(PropTypes.string) }),
     beDeletedModel: PropTypes.shape({ ID: PropTypes.string }),
     updateModel: PropTypes.func

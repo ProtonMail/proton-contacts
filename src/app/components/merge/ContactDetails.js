@@ -11,7 +11,7 @@ import { prepareContact } from '../../helpers/decrypt';
 import ContactViewErrors from '../ContactViewErrors';
 import MergedContactSummary from './MergedContactSummary';
 
-const ContactDetails = ({ contactID, userKeysList, ...rest }) => {
+const ContactDetails = ({ contactID, userKeysList, hasPaidMail, ...rest }) => {
     const api = useApi();
     const [loading, withLoading] = useLoading(true);
     const [model, setModel] = useState({ properties: [], errors: [] });
@@ -43,7 +43,7 @@ const ContactDetails = ({ contactID, userKeysList, ...rest }) => {
             ) : (
                 <>
                     <ContactViewErrors errors={model.errors} />
-                    <MergedContactSummary properties={model.properties} />
+                    <MergedContactSummary properties={model.properties} hasPaidMail={hasPaidMail} />
                 </>
             )}
         </FormModal>
@@ -52,7 +52,8 @@ const ContactDetails = ({ contactID, userKeysList, ...rest }) => {
 
 ContactDetails.propTypes = {
     contactID: PropTypes.string,
-    userKeysList: PropTypes.array
+    userKeysList: PropTypes.array,
+    hasPaidMail: PropTypes.bool
 };
 
 export default ContactDetails;
