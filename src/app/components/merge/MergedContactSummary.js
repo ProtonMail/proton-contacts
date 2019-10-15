@@ -61,7 +61,7 @@ const MergedContactSummary = ({ properties = [], hasPaidMail }) => {
                     ))}
                 </div>
             </Block>
-            {!hasPaidMail && [...tels, ...adrs, ...orgs, ...notes].length && (
+            {!hasPaidMail && !![...tels, ...adrs, ...orgs, ...notes].length && (
                 <Block>
                     <UpsellFree />
                 </Block>
