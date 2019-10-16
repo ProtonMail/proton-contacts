@@ -13,9 +13,8 @@ import {
     useEventManager,
     useNotifications
 } from 'react-components';
-import { binaryStringToArray, decodeBase64 } from 'pmcrypto';
+import { getKeys, binaryStringToArray, arrayToBinaryString, encodeBase64, decodeBase64 } from 'pmcrypto';
 import { c } from 'ttag';
-import { getKeys } from 'pmcrypto';
 import { RECIPIENT_TYPE, PACKAGE_TYPE } from 'proton-shared/lib/constants';
 import { API_CUSTOM_ERROR_CODES } from 'proton-shared/lib/errors';
 import { getPublicKeys } from 'proton-shared/lib/api/keys';
@@ -177,7 +176,9 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     const getKeysProperties = (group) => {
         const toKeyProperty = (publicKey, index) => ({
             field: 'key',
-            value: publicKey.armor(),
+            value:
+                'data:application/pgp-keys;base64,' +
+                encodeBase64(arrayToBinaryString(publicKey.toPacketlist().write())),
             group,
             pref: `${index + 1}`
         });
