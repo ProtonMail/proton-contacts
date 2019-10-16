@@ -164,9 +164,7 @@ const ContactPlaceholder = ({
         const { Name } = contactGroups.find(({ ID }) => ID === contactGroupID);
         const total = contacts.filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID)).length;
         const totalContactsText = (
-            <span key="total-contacts" className="color-primary bold">
-                {total === 1 ? c('Info').t`1 contact` : c('Info').t`${total} contacts`}
-            </span>
+            <b key="total-contacts">{total === 1 ? c('Info').t`1 contact` : c('Info').t`${total} contacts`}</b>
         );
 
         const handleEdit = () => createModal(<ContactGroupModal contactGroupID={contactGroupID} />);
