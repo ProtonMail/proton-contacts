@@ -164,17 +164,14 @@ const ContactPlaceholder = ({
         const { Name } = contactGroups.find(({ ID }) => ID === contactGroupID);
         const total = contacts.filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID)).length;
         const totalContactsText = (
-            <span className="color-primary bold">
+            <span key="total-contacts" className="color-primary bold">
                 {total === 1 ? c('Info').t`1 contact` : c('Info').t`${total} contacts`}
             </span>
         );
-        console.log(totalContactsText);
 
         const handleEdit = () => createModal(<ContactGroupModal contactGroupID={contactGroupID} />);
         const handleExport = () =>
-            createModal(
-                <ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} disabled={loadingUserKeys} />
-            );
+            createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
 
         return (
             <div className="p2 view-column-detail flex-item-fluid scroll-if-needed">
@@ -186,7 +183,7 @@ const ContactPlaceholder = ({
                     </div>
                     <div className="mb2">
                         <Button className="mr1" onClick={handleEdit}>{c('Action').t`Edit`}</Button>
-                        <Button onClick={handleExport}>{c('Action').t`Export`}</Button>
+                        <Button onClick={handleExport} disabled={loadingUserKeys}>{c('Action').t`Export`}</Button>
                     </div>
                 </div>
             </div>
