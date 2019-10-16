@@ -14,7 +14,7 @@ const ContactRow = ({ style, contactID, hasPaidMail, contactGroupsMap, contact, 
             style={style}
             key={ID}
             onClick={() => onClick(ID)}
-            className={`item-container bg-global-white  ${contactID === ID ? 'item-is-selected' : ''}`}
+            className={`item-container cursor-pointer bg-global-white  ${contactID === ID ? 'item-is-selected' : ''}`}
         >
             <div className="flex flex-nowrap">
                 <button onClick={onStop}>
