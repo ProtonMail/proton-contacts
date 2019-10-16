@@ -1,15 +1,6 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import {
-    FormModal,
-    Alert,
-    useUser,
-    useApi,
-    useUserKeys,
-    useEventManager,
-    useNotifications,
-    useModals
-} from 'react-components';
+import { FormModal, Alert, useUser, useApi, useUserKeys, useEventManager, useNotifications } from 'react-components';
 import { c } from 'ttag';
 import { addContacts } from 'proton-shared/lib/api/contacts';
 
@@ -18,7 +9,6 @@ import { randomIntFromInterval } from 'proton-shared/lib/helpers/function';
 import { generateUID } from 'react-components/helpers/component';
 import { prepareContacts } from '../helpers/encrypt';
 import { getEditableFields, getOtherInformationFields } from '../helpers/fields';
-import UpgradeModal from './UpgradeModal';
 import UpsellFree from './UpsellFree';
 
 const DEFAULT_MODEL = [{ field: 'fn', value: '' }, { field: 'email', value: '' }];
@@ -37,7 +27,6 @@ const formatModel = (properties = []) => {
 };
 
 const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => {
-    const { createModal } = useModals();
     const api = useApi();
     const { createNotification } = useNotifications();
     const [loading, setLoading] = useState(false);
@@ -46,36 +35,9 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
     const [properties, setProperties] = useState(formatModel(initialProperties));
     const title = contactID ? c('Title').t`Edit contact details` : c('Title').t`Add new contact`;
-    const upgradeModalRef = useRef(false);
-
-    const hasRequirement = (field) => {
-        if (['fn', 'email'].includes(field) || user.hasPaidMail) {
-            return true;
-        }
-
-        if (!upgradeModalRef.current) {
-            upgradeModalRef.current = true;
-            createModal(
-                <UpgradeModal
-                    onConfirm={() => {
-                        upgradeModalRef.current = false;
-                    }}
-                    onClose={() => {
-                        upgradeModalRef.current = false;
-                    }}
-                />
-            );
-        }
-
-        return false;
-    };
 
     const handleRemove = (propertyUID) => {
-        const { field } = properties.find(({ uid }) => uid === propertyUID) || {};
-
-        if (hasRequirement(field)) {
-            setProperties(properties.filter(({ uid }) => uid !== propertyUID));
-        }
+        setProperties(properties.filter(({ uid }) => uid !== propertyUID));
     };
 
     const handleAdd = (field) => () => {
@@ -100,7 +62,6 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
     };
 
     const handleChange = ({ uid: propertyUID, value, key = 'value' }) => {
-        const { field } = properties.find(({ uid }) => uid === propertyUID) || {};
         const newProperties = properties.map((property) => {
             if (property.uid === propertyUID) {
                 return {
@@ -110,10 +71,7 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
             }
             return property;
         });
-
-        if (hasRequirement(field)) {
-            setProperties(newProperties);
-        }
+        setProperties(newProperties);
     };
 
     const handleOrderChange = useCallback(
