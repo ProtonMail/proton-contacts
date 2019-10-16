@@ -62,7 +62,7 @@ const ImportModal = ({ userKeysList, ...rest }) => {
 
             const handleAttach = ({ target }) => {
                 const [, extension] = splitExtension(target.files[0].name);
-                const attachedFile = ['csv', 'vcf'].includes(extension) ? target.files[0] : null;
+                const attachedFile = ['csv', 'vcf'].includes(extension.toLowerCase()) ? target.files[0] : null;
 
                 if (target.files.length && !attachedFile) {
                     return createNotification({
