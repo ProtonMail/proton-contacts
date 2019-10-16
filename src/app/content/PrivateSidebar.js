@@ -77,7 +77,7 @@ const PrivateSidebar = ({ user, contactGroups, history }) => {
     return (
         <div className="sidebar flex flex-column noprint">
             <div className="pl1 pr1">
-                <PrimaryButton className="w100" onClick={() => createModal(<ContactModal />)}>{c('Action')
+                <PrimaryButton className="pm-button--large bold mt0-25 w100" onClick={() => createModal(<ContactModal />)}>{c('Action')
                     .t`Add contact`}</PrimaryButton>
             </div>
             <nav className="navigation mw100 flex-item-fluid scroll-if-needed mb1">
