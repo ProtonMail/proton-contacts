@@ -9,7 +9,10 @@ import exportSvg from 'design-system/assets/img/pm-images/contact-export.svg';
 import contactGroupsSvg from 'design-system/assets/img/pm-images/contact-groups.svg';
 import upgradeSvg from 'design-system/assets/img/pm-images/contact-unlock-features.svg';
 
+import contactGroupCard from 'design-system/assets/img/pm-images/contact-group-card.svg';
+
 import ContactGroupModal from './ContactGroupModal';
+import ExportModal from './ExportModal';
 import MergeRow from './MergeRow';
 
 const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
@@ -159,27 +162,27 @@ const ContactPlaceholder = ({
 
     if (contactGroupID) {
         const { Name } = contactGroups.find(({ ID }) => ID === contactGroupID);
-        const handleClick = () => createModal(<ContactGroupModal contactGroupID={contactGroupID} />);
+        const total = contacts.filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID)).length;
+        const totalContactsText = (
+            <b key="total-contacts">{total === 1 ? c('Info').t`1 contact` : c('Info').t`${total} contacts`}</b>
+        );
+
+        const handleEdit = () => createModal(<ContactGroupModal contactGroupID={contactGroupID} />);
+        const handleExport = () =>
+            createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
+
         return (
             <div className="p2 view-column-detail flex-item-fluid scroll-if-needed">
                 <div className="aligncenter">
                     <h1 className="ellipsis lh-standard">{Name}</h1>
-                    <div className="mb1">
-                        {c('Info').jt`You have ${boldTotalContacts} contacts in your address book`}
+                    <div className="mb2">{c('Info').jt`You have ${totalContactsText} in this group.`}</div>
+                    <div className="aligncenter mb2">
+                        <img src={contactGroupCard} alt="contact-group-card" />
                     </div>
                     <div className="mb2">
-                        <PrimaryButton onClick={handleClick}>{c('Action').t`Edit group`}</PrimaryButton>
+                        <Button className="mr1" onClick={handleEdit}>{c('Action').t`Edit`}</Button>
+                        <Button onClick={handleExport} disabled={loadingUserKeys}>{c('Action').t`Export`}</Button>
                     </div>
-                    {hasPaidMail ? (
-                        <PaidCards
-                            loadingUserKeys={loadingUserKeys}
-                            onImport={onImport}
-                            onExport={() => onExport(contactGroupID)}
-                            onGroups={onGroups}
-                        />
-                    ) : (
-                        <FreeCards />
-                    )}
                 </div>
             </div>
         );
