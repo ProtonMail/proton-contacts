@@ -8,7 +8,7 @@ import ImportModal from '../components/import/ImportModal';
 import ExportModal from '../components/ExportModal';
 import UpgradeModal from '../components/UpgradeModal';
 
-const PrivateSidebar = ({ user, contactGroups, history }) => {
+const PrivateSidebar = ({ user, totalContacts, contactGroups, history }) => {
     const { hasPaidMail } = user;
     const { createModal } = useModals();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
@@ -36,15 +36,16 @@ const PrivateSidebar = ({ user, contactGroups, history }) => {
                 createModal(<ImportModal userKeysList={userKeysList} />);
             }
         },
-        !loadingUserKeys && {
-            type: 'button',
-            className: 'alignleft',
-            icon: 'export',
-            text: c('Link').t`Export all`,
-            onClick() {
-                createModal(<ExportModal userKeysList={userKeysList} />);
-            }
-        },
+        totalContacts &&
+            !loadingUserKeys && {
+                type: 'button',
+                className: 'alignleft',
+                icon: 'export',
+                text: c('Link').t`Export all`,
+                onClick() {
+                    createModal(<ExportModal userKeysList={userKeysList} />);
+                }
+            },
         {
             type: 'button',
             className: 'alignleft',
@@ -77,8 +78,10 @@ const PrivateSidebar = ({ user, contactGroups, history }) => {
     return (
         <div className="sidebar flex flex-column noprint">
             <div className="pl1 pr1">
-                <PrimaryButton className="pm-button--large bold mt0-25 w100" onClick={() => createModal(<ContactModal />)}>{c('Action')
-                    .t`Add contact`}</PrimaryButton>
+                <PrimaryButton
+                    className="pm-button--large bold mt0-25 w100"
+                    onClick={() => createModal(<ContactModal />)}
+                >{c('Action').t`Add contact`}</PrimaryButton>
             </div>
             <nav className="navigation mw100 flex-item-fluid scroll-if-needed mb1">
                 <NavMenu list={list.filter(Boolean)} />
@@ -89,6 +92,7 @@ const PrivateSidebar = ({ user, contactGroups, history }) => {
 
 PrivateSidebar.propTypes = {
     user: PropTypes.object,
+    totalContacts: PropTypes.number,
     contactGroups: PropTypes.array,
     history: PropTypes.object.isRequired
 };

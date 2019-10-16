@@ -111,14 +111,12 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
 };
 
 FreeCards.propTypes = {
-    history: PropTypes.object,
     loadingUserKeys: PropTypes.bool,
     onImport: PropTypes.func,
     onExport: PropTypes.func
 };
 
 const ContactPlaceholder = ({
-    history,
     totalContacts = 0,
     contacts = [],
     contactGroupID,
@@ -217,7 +215,6 @@ const ContactPlaceholder = ({
             </div>
             {hasPaidMail ? (
                 <PaidCards
-                    user={user}
                     userKeysList={userKeysList}
                     loadingUserKeys={loadingUserKeys}
                     onImport={onImport}
@@ -225,19 +222,13 @@ const ContactPlaceholder = ({
                     onGroups={onGroups}
                 />
             ) : (
-                <FreeCards
-                    history={history}
-                    loadingUserKeys={loadingUserKeys}
-                    onImport={onImport}
-                    onExport={() => onExport()}
-                />
+                <FreeCards loadingUserKeys={loadingUserKeys} onImport={onImport} onExport={() => onExport()} />
             )}
         </div>
     );
 };
 
 ContactPlaceholder.propTypes = {
-    history: PropTypes.object,
     totalContacts: PropTypes.number,
     contacts: PropTypes.array,
     contactGroupID: PropTypes.string,
