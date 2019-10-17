@@ -6,7 +6,7 @@ import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
 import ItemCheckbox from './ItemCheckbox';
 import ContactGroupIcon from './ContactGroupIcon';
 
-const ContactRow = ({ style, contactID, hasPaidMail, contactGroupsMap, contact, onClick, onCheck, onStop }) => {
+const ContactRow = ({ style, contactID, hasPaidMail, contactGroupsMap, contact, onClick, onCheck }) => {
     const { ID, Name, LabelIDs = [], emails = [], isChecked } = contact;
 
     return (
@@ -17,19 +17,17 @@ const ContactRow = ({ style, contactID, hasPaidMail, contactGroupsMap, contact, 
             className={`item-container cursor-pointer bg-global-white  ${contactID === ID ? 'item-is-selected' : ''}`}
         >
             <div className="flex flex-nowrap">
-                <button onClick={onStop}>
-                    <ItemCheckbox
-                        checked={isChecked}
-                        className="item-checkbox sr-only"
-                        onChange={onCheck}
-                        data-contact-id={ID}
-                    >
-                        {getInitial(Name)}
-                    </ItemCheckbox>
-                </button>
+                <ItemCheckbox
+                    checked={isChecked}
+                    onChange={onCheck}
+                    onClick={(event) => event.stopPropagation()}
+                    data-contact-id={ID}
+                >
+                    {getInitial(Name)}
+                </ItemCheckbox>
                 <div className="flex-item-fluid pl1 flex flex-column flex-spacebetween conversation-titlesender">
                     <div className="flex">
-                        <div className={`flex-item-fluid w0 ${LabelIDs.length ? 'pr1' : ''}`}>
+                        <div className={`flex flex-item-fluid w0 ${LabelIDs.length ? 'pr1' : ''}`}>
                             <span className="bold inbl mw100 ellipsis">{Name}</span>
                         </div>
                         {hasPaidMail && LabelIDs.length ? (
@@ -58,6 +56,8 @@ const ContactRow = ({ style, contactID, hasPaidMail, contactGroupsMap, contact, 
 };
 
 ContactRow.propTypes = {
+    onClick: PropTypes.func,
+    onCheck: PropTypes.func,
     style: PropTypes.object,
     contactID: PropTypes.string,
     hasPaidMail: PropTypes.bool,
@@ -68,8 +68,7 @@ ContactRow.propTypes = {
         LabelIDs: PropTypes.array,
         emails: PropTypes.array,
         isChecked: PropTypes.bool
-    }),
-    onStop: PropTypes.func
+    })
 };
 
 export default ContactRow;

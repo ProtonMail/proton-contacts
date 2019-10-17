@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'react-components';
 
-const ItemCheckbox = ({ children, ...rest }) => {
+const ItemCheckbox = ({ children, onClick, ...rest }) => {
     return (
-        <label>
+        <label onClick={onClick}>
             <input type="checkbox" className="item-checkbox sr-only" {...rest} />
             <span className="item-icon flex-item-noshrink rounded50 bg-white inline-flex">
                 <span className="mauto item-abbr">{children}</span>
@@ -17,6 +17,7 @@ const ItemCheckbox = ({ children, ...rest }) => {
 };
 
 ItemCheckbox.propTypes = {
+    onClick: PropTypes.func,
     children: PropTypes.node
 };
 

@@ -57,8 +57,6 @@ const ContactsList = ({
 
     const handleClick = (ID) => history.push({ ...location, pathname: `/contacts/${ID}` });
 
-    const handleStop = (e) => e.stopPropagation();
-
     useEffect(() => {
         const timeoutID = setTimeout(() => {
             if (contactID) {
@@ -136,13 +134,12 @@ const ContactsList = ({
                                 contact={contacts[index]}
                                 onClick={handleClick}
                                 onCheck={handleCheck}
-                                onStop={handleStop}
                             />
                         )}
                         rowCount={contacts.length}
                         height={height}
                         width={width}
-                        rowHeight={76}
+                        rowHeight={70}
                     />
                 )}
             </AutoSizer>
