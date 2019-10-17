@@ -204,7 +204,14 @@ const ContactsContainer = ({ location, history }) => {
                 <div className="flex flex-nowrap">
                     <Route
                         path="/:path"
-                        render={() => <PrivateSidebar history={history} user={user} contactGroups={contactGroups} />}
+                        render={() => (
+                            <PrivateSidebar
+                                history={history}
+                                user={user}
+                                totalContacts={contacts.length}
+                                contactGroups={contactGroups}
+                            />
+                        )}
                     />
                     <div className="main flex-item-fluid main-area">
                         <ContactToolbar
