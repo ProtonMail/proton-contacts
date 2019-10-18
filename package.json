@@ -16,6 +16,7 @@
         "build": "cross-env NODE_ENV=production proton-pack compile $npm_package_config_publicPathFlag",
         "i18n:validate": "proton-i18n validate lint-functions",
         "i18n:validate:context": "proton-i18n extract && proton-i18n validate",
+        "i18n:upgrade": "proton-i18n extract && proton-i18n crowdin -u && proton-i18n commit update",
         "i18n:getlatest": "proton-i18n upgrade",
         "deploy": "proton-bundler",
         "deploy:prod": "proton-bundler --remote --branch=deploy-prod",
