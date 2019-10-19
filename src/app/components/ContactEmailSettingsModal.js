@@ -11,7 +11,8 @@ import {
     useApi,
     useMailSettings,
     useEventManager,
-    useNotifications
+    useNotifications,
+    useLoading
 } from 'react-components';
 import { getKeys, binaryStringToArray, arrayToBinaryString, encodeBase64, decodeBase64 } from 'pmcrypto';
 import { c } from 'ttag';
@@ -40,7 +41,7 @@ const PGP_MAP = {
 
 const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailProperty, ...rest }) => {
     const { value: Email, group: emailGroup } = emailProperty;
-    const [loading, setLoading] = useState(false);
+    const [loading, withLoading] = useLoading();
     const { createNotification } = useNotifications();
     const api = useApi();
     const { call } = useEventManager();
@@ -217,23 +218,25 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
 
     useEffect(() => {
         if (!loadingMailSettings) {
-            setLoading(true);
-            prepare()
-                .then(() => setLoading(false))
-                .catch(() => setLoading(false));
+            withLoading(prepare());
         }
     }, [loadingMailSettings]);
+
+    useEffect(() => {
+        const updateEncryptToggle = async (keys) => {
+            const expired = await allKeysExpired(keys);
+            if (expired || !keys.length) {
+                setModel((model) => ({ ...model, encrypt: false, keysExpired: expired }));
+            }
+        };
+        updateEncryptToggle(model.keys);
+    }, [model.keys]);
 
     return (
         <FormModal
             loading={loading || loadingMailSettings}
             submit={c('Action').t`Save`}
-            onSubmit={() => {
-                setLoading(true);
-                handleSubmit()
-                    .then(() => setLoading(false))
-                    .catch(() => setLoading(false));
-            }}
+            onSubmit={() => withLoading(handleSubmit())}
             title={c('Title').t`Email settings (${Email})`}
             {...rest}
         >
