@@ -77,18 +77,16 @@ const ContactViewProperty = ({ property, properties, contactID, contactEmail, co
                 return (
                     <Group>
                         {hasPaidMail ? (
-                            <>
-                                <ContactGroupDropdown
-                                    className="pm-button pm-button--small pm-group-button"
-                                    contactEmails={[contactEmail]}
-                                >
-                                    <Icon name="contacts-groups" />
-                                </ContactGroupDropdown>
-                                <ButtonGroup onClick={handleSettings} className="pm-button--small">
-                                    <Icon name="settings-singular" />
-                                </ButtonGroup>
-                            </>
+                            <ContactGroupDropdown
+                                className="pm-button pm-button--small pm-group-button"
+                                contactEmails={[contactEmail]}
+                            >
+                                <Icon name="contacts-groups" />
+                            </ContactGroupDropdown>
                         ) : null}
+                        <ButtonGroup onClick={handleSettings} className="pm-button--small">
+                            <Icon name="settings-singular" />
+                        </ButtonGroup>
                         <Copy className="pm-button--small pm-group-button" value={value} />
                     </Group>
                 );
