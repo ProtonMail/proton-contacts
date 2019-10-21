@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { classnames } from 'react-components';
 
 import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
 
@@ -14,7 +15,10 @@ const ContactRow = ({ style, contactID, hasPaidMail, contactGroupsMap, contact, 
             style={style}
             key={ID}
             onClick={() => onClick(ID)}
-            className={`item-container cursor-pointer bg-global-white  ${contactID === ID ? 'item-is-selected' : ''}`}
+            className={classnames([
+                'item-container cursor-pointer bg-global-white',
+                contactID === ID && 'item-is-selected'
+            ])}
         >
             <div className="flex flex-nowrap">
                 <ItemCheckbox
@@ -27,7 +31,7 @@ const ContactRow = ({ style, contactID, hasPaidMail, contactGroupsMap, contact, 
                 </ItemCheckbox>
                 <div className="flex-item-fluid pl1 flex flex-column flex-spacebetween conversation-titlesender">
                     <div className="flex">
-                        <div className={`flex flex-item-fluid w0 ${LabelIDs.length ? 'pr1' : ''}`}>
+                        <div className={classnames(['flex flex-item-fluid w0', LabelIDs.length && 'pr1'])}>
                             <span className="bold inbl mw100 ellipsis">{Name}</span>
                         </div>
                         {hasPaidMail && LabelIDs.length ? (
