@@ -40,22 +40,32 @@ const ContactModalRow = ({ property, onChange, onRemove, isOrderable = false }) 
 
     return (
         <Row>
-            {isOrderable && (
-                <OrderableHandle key="icon">
-                    <div className="cursor-row-resize mr0-5 flex flex-items-center">
-                        <Icon name="text-justify" />
+            <span className="w30 flex flex-nowrap mr1">
+                {isOrderable ? (
+                    <OrderableHandle key="icon">
+                        <div className="cursor-row-resize mr0-5 flex flex-items-center">
+                            <Icon name="text-justify" />
+                        </div>
+                    </OrderableHandle>
+                ) : (
+                    <div className="mr0-5 flex flex-items-center">
+                        <Icon name="text-justify nonvisible" />
                     </div>
-                </OrderableHandle>
-            )}
-            <ContactModalLabel field={field} type={type} uid={property.uid} onChange={onChange} />
-            <Field>
-                <ContactFieldProperty field={field} value={property.value} uid={property.uid} onChange={onChange} />
-            </Field>
-            {list.length > 0 && (
-                <div className="ml1 flex flex-items-start">
-                    <DropdownActions list={list} />
-                </div>
-            )}
+                )}
+                <ContactModalLabel field={field} type={type} uid={property.uid} onChange={onChange} />
+            </span>
+            <span className="w50">
+                <Field>
+                    <ContactFieldProperty field={field} value={property.value} uid={property.uid} onChange={onChange} />
+                </Field>
+            </span>
+            <span className="w20">
+                {list.length > 0 && (
+                    <div className="ml1 flex flex-item-noshrink flex-items-start">
+                        <DropdownActions list={list} />
+                    </div>
+                )}
+            </span>
         </Row>
     );
 };

@@ -1,6 +1,15 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { FormModal, Alert, useUser, useApi, useUserKeys, useEventManager, useNotifications } from 'react-components';
+import {
+    FormModal,
+    Alert,
+    useUser,
+    useApi,
+    useUserKeys,
+    useEventManager,
+    useNotifications,
+    useLoading
+} from 'react-components';
 import { c } from 'ttag';
 import { addContacts } from 'proton-shared/lib/api/contacts';
 
@@ -29,7 +38,7 @@ const formatModel = (properties = []) => {
 const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => {
     const api = useApi();
     const { createNotification } = useNotifications();
-    const [loading, setLoading] = useState(false);
+    const [loading, withLoading] = useLoading();
     const [user] = useUser();
     const { call } = useEventManager();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
@@ -87,12 +96,7 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
     return (
         <FormModal
             loading={loading || loadingUserKeys}
-            onSubmit={() => {
-                setLoading(true);
-                handleSubmit()
-                    .then(() => setLoading(false))
-                    .catch(() => setLoading(false));
-            }}
+            onSubmit={() => withLoading(handleSubmit())}
             title={title}
             submit={c('Action').t`Save`}
             {...rest}
