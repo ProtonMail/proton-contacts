@@ -31,7 +31,7 @@ const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
     if (field === 'bday' || field === 'anniversary') {
         const m = moment(value);
         if (value === '' || m.isValid()) {
-            const handleSelectDate = (date) => onChange({ value: date, uid });
+            const handleSelectDate = (date) => onChange({ value: date.toISOString(), uid });
             return (
                 <DateInput
                     setDefaultDate

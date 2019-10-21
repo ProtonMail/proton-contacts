@@ -17,43 +17,42 @@ const ContactViewProperty = ({ property, properties, contactID, contactEmail, co
     const value = property.value;
 
     const getContent = () => {
-        switch (field) {
-            case 'email': {
-                return (
-                    <>
-                        <a className="mr0-5" href={`mailto:${value}`} title={value}>
-                            {value}
-                        </a>
-                        {contactGroups.map(({ ID, Name, Color }) => (
-                            <ContactGroupIcon key={ID} name={Name} color={Color} />
-                        ))}
-                    </>
-                );
-            }
-            case 'url':
-                return (
-                    <a href={value} target="_blank" rel="noopener noreferrer">
+        if (field === 'email') {
+            return (
+                <>
+                    <a className="mr0-5" href={`mailto:${value}`} title={value}>
                         {value}
                     </a>
-                );
-            case 'tel':
-                return <a href={`tel:${value}`}>{value}</a>;
-            case 'bday':
-            case 'anniversary': {
-                const date = moment(value);
-                if (date.isValid()) {
-                    return date.format('LL');
-                }
-                return value;
-            }
-            case 'photo':
-            case 'logo':
-                return <img src={value} alt={field} />;
-            case 'adr':
-                return formatAdr(value);
-            default:
-                return value;
+                    {contactGroups.map(({ ID, Name, Color }) => (
+                        <ContactGroupIcon key={ID} name={Name} color={Color} />
+                    ))}
+                </>
+            );
         }
+        if (field === 'url') {
+            return (
+                <a href={value} target="_blank" rel="noopener noreferrer">
+                    {value}
+                </a>
+            );
+        }
+        if (field === 'tel') {
+            return <a href={`tel:${value}`}>{value}</a>;
+        }
+        if (['bday', 'anniversary'].includes(field)) {
+            const date = moment(value);
+            if (date.isValid()) {
+                return date.format('LL');
+            }
+            return value;
+        }
+        if (field === 'logo') {
+            return <img src={value} alt={field} />;
+        }
+        if (field === 'adr') {
+            return formatAdr(value);
+        }
+        return value;
     };
 
     const getActions = () => {

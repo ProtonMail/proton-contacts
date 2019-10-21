@@ -88,7 +88,7 @@ const ContactAdrField = ({ value, onChange }) => {
 };
 
 ContactAdrField.propTypes = {
-    value: PropTypes.string,
+    value: PropTypes.oneOfType(PropTypes.arrayOf(PropTypes.string), PropTypes.string),
     onChange: PropTypes.func
 };
 
