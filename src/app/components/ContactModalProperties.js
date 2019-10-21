@@ -55,8 +55,8 @@ const ContactModalProperties = ({ properties: allProperties, field, onChange, on
 
     return (
         <div className="border-bottom mb1">
-            <h3 className="mb1 flex flex-nowrap flex-items-center">
-                <Icon className="mr0-5" name={iconName} />
+            <h3 className="mb1 flex flex-nowrap flex-items-center flex-item-noshrink">
+                <Icon className="mr0-5 flex-item-noshrink" name={iconName} />
                 <span className="mr0-5">{title}</span>
                 {['fn', 'email'].includes(field) ? null : <EncryptedIcon scrollContainerClass="pm-modalContentInner" />}
             </h3>
