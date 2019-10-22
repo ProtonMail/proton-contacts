@@ -58,7 +58,12 @@ const ContactModalProperties = ({ properties: allProperties, field, onChange, on
             <h3 className="mb1 flex flex-nowrap flex-items-center flex-item-noshrink">
                 <Icon className="mr0-5 flex-item-noshrink" name={iconName} />
                 <span className="mr0-5">{title}</span>
-                {['fn', 'email'].includes(field) ? null : <EncryptedIcon scrollContainerClass="pm-modalContentInner" />}
+                {!['fn', 'email'].includes(field) && (
+                    <EncryptedIcon
+                        scrollContainerClass="pm-modalContentInner"
+                        className="flex flex-item-centered-vert flex-item-noshrink"
+                    />
+                )}
             </h3>
             {onOrderChange ? (
                 <OrderableContainer helperClass="row--orderable" onSortEnd={handleSortEnd} useDragHandle>
@@ -75,10 +80,12 @@ const ContactModalProperties = ({ properties: allProperties, field, onChange, on
             )}
             {canAdd && (
                 <div className="flex flex-nowrap flex-item-noshrink">
-                    <div className="mr0-5 flex flex-items-center">
+                    <div className="mr0-5 flex flex-items-center flex-item-noshrink">
                         <Icon name="text-justify nonvisible" />
                     </div>
-                    <PrimaryButton className="mb1" onClick={onAdd}>{c('Action').t`Add`}</PrimaryButton>
+                    <div className="flex flex-nowrap onmobile-flex-column w95">
+                        <PrimaryButton className="mb1" onClick={onAdd}>{c('Action').t`Add`}</PrimaryButton>
+                    </div>
                 </div>
             )}
         </div>

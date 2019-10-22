@@ -47,7 +47,7 @@ const ContactModalRow = ({ property, onChange, onRemove, isOrderable = false }) 
                     </div>
                 </OrderableHandle>
             ) : (
-                <div className="mr0-5 flex flex-items-center">
+                <div className="mr0-5 flex flex-items-center flex-item-noshrink">
                     <Icon name="text-justify nonvisible" />
                 </div>
             )}
