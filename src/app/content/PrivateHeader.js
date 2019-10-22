@@ -11,13 +11,18 @@ import {
     SearchDropdown,
     TopNavbar,
     TopNavbarLink,
-    Icon
+    Icon,
+    FloatingButton,
+    useModals
 } from 'react-components';
 import { isMobile as isItMobile } from 'proton-shared/lib/helpers/responsive';
 import { withRouter } from 'react-router';
 
+import ContactModal from '../components/ContactModal';
+
 const PrivateHeader = ({ title, search, onSearch, location, expanded, onToggleExpand }) => {
     const [{ hasPaidMail }] = useUser();
+    const { createModal } = useModals();
     const inSettings = location.pathname.startsWith('/contacts/settings');
     const activeBreakpoint = useActiveBreakpoint();
     const isMobile = isItMobile(activeBreakpoint);
@@ -64,6 +69,7 @@ const PrivateHeader = ({ title, search, onSearch, location, expanded, onToggleEx
                     />
                 )}
             </TopNavbar>
+            {isMobile ? <FloatingButton onClick={() => createModal(<ContactModal />)} icon="add" /> : null}
         </header>
     );
 };
