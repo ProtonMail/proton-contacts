@@ -25,7 +25,7 @@ const PrivateHeader = ({ title, search, onSearch, location, expanded, onToggleEx
         <header className="header flex flex-nowrap reset4print">
             <MainLogo url="/contacts" className="nomobile" />
             <Hamburger expanded={expanded} onToggle={onToggleExpand} />
-            {title ? <span className="big ellipsis">{title}</span> : null}
+            {title && isMobile ? <span className="big ellipsis">{title}</span> : null}
             {inSettings || isMobile ? null : (
                 <Searchbox placeholder={c('Placeholder').t`Search`} value={search} onChange={onSearch} />
             )}
