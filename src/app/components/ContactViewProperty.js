@@ -1,7 +1,8 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Row, Group, ButtonGroup, Copy, Icon, useModals, useUser, classnames } from 'react-components';
+import { Row, Group, ButtonGroup, Copy, Icon, useModals, useUser, classnames, Tooltip } from 'react-components';
+import { c } from 'ttag';
 
 import { clearType, getType, formatAdr } from '../helpers/property';
 import ContactGroupIcon from './ContactGroupIcon';
@@ -80,11 +81,15 @@ const ContactViewProperty = ({ property, properties, contactID, contactEmail, co
                                 className="pm-button pm-button--small pm-group-button"
                                 contactEmails={[contactEmail]}
                             >
-                                <Icon name="contacts-groups" />
+                                <Tooltip title={c('Title').t`Contact group`}>
+                                    <Icon name="contacts-groups" />
+                                </Tooltip>
                             </ContactGroupDropdown>
                         ) : null}
                         <ButtonGroup onClick={handleSettings} className="pm-button--small">
-                            <Icon name="settings-singular" />
+                            <Tooltip title={c('Title').t`Email settings`}>
+                                <Icon name="settings-singular" />
+                            </Tooltip>
                         </ButtonGroup>
                         <Copy className="pm-button--small pm-group-button" value={value} />
                     </Group>
