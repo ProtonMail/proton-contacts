@@ -131,10 +131,6 @@ const ContactsContainer = ({ location, history }) => {
         return [];
     }, [checkedContactIDs, location.pathname]);
 
-    if (loadingContactEmails || loadingContacts || loadingUserKeys || loadingContactGroups) {
-        return <Loader />;
-    }
-
     const handleDelete = async () => {
         const confirm = <ErrorButton type="submit">{c('Action').t`Delete`}</ErrorButton>;
         await new Promise((resolve, reject) => {
@@ -167,10 +163,20 @@ const ContactsContainer = ({ location, history }) => {
         setCheckAll(checked && contactIDs.length === contacts.length);
     };
 
-    const handleClearSearch = () => updateSearch('');
+    const handleClearSearch = () => {
+        updateSearch('');
+    };
 
-    const handleCheckAll = (checked = false) => handleCheck(contacts.map(({ ID }) => ID), checked);
-    const handleUncheckAll = () => handleCheckAll(false);
+    const handleCheckAll = (checked = false) => {
+        if (!Array.isArray(contacts)) {
+            return;
+        }
+        handleCheck(contacts.map(({ ID }) => ID), checked);
+    };
+
+    const handleUncheckAll = () => {
+        handleCheckAll(false);
+    };
 
     const handleMerge = () => {
         const currentContactID = getCurrentContactID();
@@ -186,7 +192,10 @@ const ContactsContainer = ({ location, history }) => {
     const handleImport = () => createModal(<ImportModal userKeysList={userKeysList} />);
     const handleExport = (contactGroupID) =>
         createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
-    const handleGroups = () => history.push('/contacts/settings');
+    const handleGroups = () => history.push('/contacts/settings/groups');
+
+    const isLoading = loadingContactEmails || loadingContacts || loadingUserKeys || loadingContactGroups;
+    const contactsLength = contacts ? contacts.length : 0;
 
     return (
         <PrivateLayout>
@@ -207,12 +216,12 @@ const ContactsContainer = ({ location, history }) => {
                             user={user}
                             expanded={expanded}
                             onToggleExpand={onToggleExpand}
-                            totalContacts={contacts.length}
+                            totalContacts={contactsLength}
                             contactGroups={contactGroups}
                         />
                     )}
                 />
-                <div className="main flex-item-fluid main-area">
+                <div className="main flex-item-fluid">
                     <ContactToolbar
                         user={user}
                         contactEmailsMap={contactEmailsMap}
@@ -224,15 +233,18 @@ const ContactsContainer = ({ location, history }) => {
                     <div className="main-area--withToolbar no-scroll flex flex-nowrap">
                         <Switch>
                             <Route
-                                path="/contacts/:contactID"
+                                path="/contacts/:contactID?"
                                 render={({ match }) => {
+                                    if (isLoading) {
+                                        return <Loader />;
+                                    }
                                     const { contactID } = match.params;
                                     return (
                                         <>
                                             <ContactsList
-                                                emptyAddressBook={!contacts.length}
+                                                emptyAddressBook={!contactsLength}
                                                 contactID={contactID}
-                                                totalContacts={contacts.length}
+                                                totalContacts={contactsLength}
                                                 contacts={formattedContacts}
                                                 contactGroupsMap={contactGroupsMap}
                                                 user={user}
@@ -241,51 +253,21 @@ const ContactsContainer = ({ location, history }) => {
                                                 onCheck={handleCheck}
                                                 onClear={handleClearSearch}
                                             />
-                                            {!!contacts.length && hasChecked ? (
-                                                <ContactPlaceholder
-                                                    history={history}
-                                                    user={user}
-                                                    userKeysList={userKeysList}
-                                                    loadingUserKeys={loadingUserKeys}
-                                                    contactGroupID={contactGroupID}
-                                                    contacts={formattedContacts}
-                                                    totalContacts={contacts.length}
-                                                    onUncheck={handleUncheckAll}
-                                                />
-                                            ) : (
+                                            {contactsLength && contactID && !hasChecked ? (
                                                 <Contact
                                                     contactID={contactID}
                                                     contactEmails={contactEmailsMap[contactID]}
                                                     contactGroupsMap={contactGroupsMap}
                                                     userKeysList={userKeysList}
                                                 />
-                                            )}
-                                        </>
-                                    );
-                                }}
-                            />
-                            <Route
-                                render={() => {
-                                    return (
-                                        <>
-                                            <ContactsList
-                                                totalContacts={contacts.length}
-                                                contacts={formattedContacts}
-                                                contactGroupsMap={contactGroupsMap}
-                                                user={user}
-                                                userKeysList={userKeysList}
-                                                loadingUserKeys={loadingUserKeys}
-                                                onCheck={handleCheck}
-                                                onClear={handleClearSearch}
-                                            />
-                                            {!!contacts.length && (
+                                            ) : (
                                                 <ContactPlaceholder
                                                     history={history}
                                                     user={user}
                                                     userKeysList={userKeysList}
                                                     loadingUserKeys={loadingUserKeys}
                                                     contactGroupID={contactGroupID}
-                                                    totalContacts={contacts.length}
+                                                    totalContacts={contactsLength}
                                                     contacts={formattedContacts}
                                                     onUncheck={handleUncheckAll}
                                                     canMerge={canMerge}

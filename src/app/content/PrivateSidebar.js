@@ -1,5 +1,5 @@
 import React from 'react';
-import { useModals, PrimaryButton, useUserKeys, Sidebar } from 'react-components';
+import { useModals, PrimaryButton, Sidebar } from 'react-components';
 import { c } from 'ttag';
 import PropTypes from 'prop-types';
 
@@ -8,10 +8,9 @@ import ImportModal from '../components/import/ImportModal';
 import ExportModal from '../components/ExportModal';
 import UpgradeModal from '../components/UpgradeModal';
 
-const PrivateSidebar = ({ url, onToggleExpand, user, totalContacts, contactGroups, expanded, history }) => {
+const PrivateSidebar = ({ url, onToggleExpand, expanded, user, userKeysList = [], loadingUserKeys, totalContacts, contactGroups = [], history }) => {
     const { hasPaidMail } = user;
     const { createModal } = useModals();
-    const [userKeysList, loadingUserKeys] = useUserKeys(user);
 
     const list = [
         {
@@ -103,9 +102,11 @@ PrivateSidebar.propTypes = {
     user: PropTypes.object,
     totalContacts: PropTypes.number,
     contactGroups: PropTypes.array,
-    history: PropTypes.object.isRequired,
     expanded: PropTypes.bool,
-    onToggleExpand: PropTypes.func
+    onToggleExpand: PropTypes.func,
+    userKeysList: PropTypes.array,
+    loadingUserKeys: PropTypes.bool,
+    history: PropTypes.object.isRequired
 };
 
 export default PrivateSidebar;

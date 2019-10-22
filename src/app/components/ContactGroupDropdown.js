@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
     Dropdown,
@@ -87,11 +87,6 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled, fo
     const [model, setModel] = useState(Object.create(null));
     const [uid] = useState(generateUID('contactGroupDropdown'));
 
-    const normalizedKeyword = normalize(keyword);
-    const groups = normalizedKeyword.length
-        ? contactGroups.filter(({ Name }) => normalize(Name).includes(normalizedKeyword))
-        : contactGroups;
-
     const handleAdd = () => createModal(<ContactGroupModal />);
     const handleCheck = (contactGroupID) => ({ target }) => setModel({ ...model, [contactGroupID]: +target.checked });
 
@@ -142,6 +137,17 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled, fo
         isOpen && setModel(getModel(contactGroups, contactEmails));
     }, [contactGroups, contactEmails, isOpen]);
 
+    const filteredContactGroups = useMemo(() => {
+        if (!Array.isArray(contactGroups)) {
+            return [];
+        }
+        const normalizedKeyword = normalize(keyword);
+        if (!normalizedKeyword.length) {
+            return contactGroups;
+        }
+        return contactGroups.filter(({ Name }) => normalize(Name).includes(normalizedKeyword));
+    }, [keyword, contactGroups]);
+
     return (
         <>
             <ContactGroupDropdownButton
@@ -179,7 +185,7 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled, fo
                 </div>
                 <div className="mb1 dropDown-content dropDown-content--narrow">
                     <ul className="unstyled m0 pl1 pr1 dropDown-contentInner">
-                        {groups.map(({ ID, Name, Color }) => {
+                        {filteredContactGroups.map(({ ID, Name, Color }) => {
                             const checkboxId = `${uid}${ID}`;
                             return (
                                 <li
