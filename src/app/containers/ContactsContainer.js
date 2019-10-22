@@ -191,6 +191,7 @@ const ContactsContainer = ({ location, history }) => {
     return (
         <PrivateLayout>
             <PrivateHeader
+                title={c('Title').t`Contacts`}
                 expanded={expanded}
                 onToggleExpand={onToggleExpand}
                 search={search}

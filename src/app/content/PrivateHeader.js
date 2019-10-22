@@ -15,7 +15,7 @@ import {
 } from 'react-components';
 import { withRouter } from 'react-router';
 
-const PrivateHeader = ({ search, onSearch, location, expanded, onToggleExpand }) => {
+const PrivateHeader = ({ title, search, onSearch, location, expanded, onToggleExpand }) => {
     const [{ hasPaidMail }] = useUser();
     const inSettings = location.pathname.startsWith('/contacts/settings');
     const activeBreakpoint = useActiveBreakpoint();
@@ -25,12 +25,13 @@ const PrivateHeader = ({ search, onSearch, location, expanded, onToggleExpand })
         <header className="header flex flex-nowrap reset4print">
             <MainLogo url="/contacts" className="nomobile" />
             <Hamburger expanded={expanded} onToggle={onToggleExpand} />
+            {title ? <span className="big ellipsis">{title}</span> : null}
             {inSettings || isMobile ? null : (
                 <Searchbox placeholder={c('Placeholder').t`Search`} value={search} onChange={onSearch} />
             )}
             <TopNavbar>
                 {hasPaidMail || isMobile ? null : <UpgradeButton external={true} />}
-                {isMobile ? null : (
+                {isMobile && !inSettings ? null : (
                     <TopNavbarLink
                         className="nomobile"
                         to="/contacts"
@@ -39,7 +40,7 @@ const PrivateHeader = ({ search, onSearch, location, expanded, onToggleExpand })
                         aria-current={!inSettings}
                     />
                 )}
-                {isMobile ? (
+                {!inSettings && isMobile ? (
                     <SearchDropdown
                         content={
                             <Icon
@@ -53,18 +54,21 @@ const PrivateHeader = ({ search, onSearch, location, expanded, onToggleExpand })
                         hasCaret={false}
                     />
                 ) : null}
-                <TopNavbarLink
-                    to="/contacts/settings"
-                    icon="settings-master"
-                    text={c('Title').t`Settings`}
-                    aria-current={inSettings}
-                />
+                {isMobile && inSettings ? null : (
+                    <TopNavbarLink
+                        to="/contacts/settings"
+                        icon="settings-master"
+                        text={c('Title').t`Settings`}
+                        aria-current={inSettings}
+                    />
+                )}
             </TopNavbar>
         </header>
     );
 };
 
 PrivateHeader.propTypes = {
+    title: PropTypes.string,
     search: PropTypes.string,
     expanded: PropTypes.bool,
     onToggleExpand: PropTypes.func,

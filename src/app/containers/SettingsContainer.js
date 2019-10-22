@@ -30,7 +30,7 @@ const SettingsContainer = ({ location }) => {
 
     return (
         <PrivateLayout>
-            <PrivateHeader expanded={expanded} onToggleExpand={onToggleExpand} />
+            <PrivateHeader title={c('Title').t`Settings`} expanded={expanded} onToggleExpand={onToggleExpand} />
             <div className="flex flex-nowrap">
                 <Sidebar
                     url="/contacts"
