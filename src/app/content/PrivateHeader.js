@@ -13,13 +13,14 @@ import {
     TopNavbarLink,
     Icon
 } from 'react-components';
+import { isMobile as isItMobile } from 'proton-shared/lib/helpers/responsive';
 import { withRouter } from 'react-router';
 
 const PrivateHeader = ({ title, search, onSearch, location, expanded, onToggleExpand }) => {
     const [{ hasPaidMail }] = useUser();
     const inSettings = location.pathname.startsWith('/contacts/settings');
     const activeBreakpoint = useActiveBreakpoint();
-    const isMobile = activeBreakpoint === 'mobile';
+    const isMobile = isItMobile(activeBreakpoint);
 
     return (
         <header className="header flex flex-nowrap reset4print">
