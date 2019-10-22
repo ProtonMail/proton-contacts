@@ -23,11 +23,22 @@ const SettingsContainer = ({ location }) => {
         hasPaidMail && { link: '/contacts/settings/groups', icon: 'contacts-groups', text: c('Link').t`Contact groups` }
     ].filter(Boolean);
 
+    const mobileLinks = [
+        { to: '/inbox', icon: 'protonmail', external: true, current: false },
+        { to: '/contacts', icon: 'protoncontacts', external: false, current: true }
+    ];
+
     return (
         <PrivateLayout>
             <PrivateHeader expanded={expanded} onToggleExpand={onToggleExpand} />
             <div className="flex flex-nowrap">
-                <Sidebar url="/contacts" list={list} expanded={expanded} onToggleExpand={onToggleExpand} />
+                <Sidebar
+                    url="/contacts"
+                    list={list}
+                    expanded={expanded}
+                    onToggleExpand={onToggleExpand}
+                    mobileLinks={mobileLinks}
+                />
                 <div className="main flex-item-fluid main-area" ref={mainAreaRef}>
                     <div className="flex flex-reverse">
                         <MainAreaContext.Provider value={mainAreaRef}>

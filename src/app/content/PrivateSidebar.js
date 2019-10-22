@@ -75,8 +75,19 @@ const PrivateSidebar = ({ url, onToggleExpand, user, totalContacts, contactGroup
         );
     }
 
+    const mobileLinks = [
+        { to: '/inbox', icon: 'protonmail', external: true, current: false },
+        { to: '/contacts', icon: 'protoncontacts', external: false, current: true }
+    ];
+
     return (
-        <Sidebar expanded={expanded} onToggleExpand={onToggleExpand} url={url} list={list.filter(Boolean)}>
+        <Sidebar
+            expanded={expanded}
+            onToggleExpand={onToggleExpand}
+            url={url}
+            list={list.filter(Boolean)}
+            mobileLinks={mobileLinks}
+        >
             <div className="pl1 pr1 nomobile">
                 <PrimaryButton
                     className="pm-button--large bold mt0-25 w100"
