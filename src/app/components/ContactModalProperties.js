@@ -73,7 +73,14 @@ const ContactModalProperties = ({ properties: allProperties, field, onChange, on
             ) : (
                 rows
             )}
-            {canAdd ? <PrimaryButton className="mb1" onClick={onAdd}>{c('Action').t`Add`}</PrimaryButton> : null}
+            {canAdd && (
+                <div className="flex flex-nowrap flex-item-noshrink">
+                    <div className="mr0-5 flex flex-items-center">
+                        <Icon name="text-justify nonvisible" />
+                    </div>
+                    <PrimaryButton className="mb1" onClick={onAdd}>{c('Action').t`Add`}</PrimaryButton>
+                </div>
+            )}
         </div>
     );
 };
