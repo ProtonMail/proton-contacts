@@ -1,7 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
-import { PrimaryButton, Button, Icon, Href, useModals, useContactGroups } from 'react-components';
+import { PrimaryButton, Button, Icon, useModals, useContactGroups } from 'react-components';
 
 import { redirectTo } from 'proton-shared/lib/helpers/browser';
 import importSvg from 'design-system/assets/img/pm-images/contact-import.svg';
@@ -190,21 +191,16 @@ const ContactPlaceholder = ({
         <div className="p2 view-column-detail flex-item-fluid scroll-if-needed">
             <div className="aligncenter">
                 <h1>{c('Title').t`Contacts`}</h1>
-                <div className="mb2">{c('Info').jt`You have ${boldTotalContacts} contacts in your address book`}</div>
+                <div className="mb2">{c('Info').jt`You have ${boldTotalContacts} in your address book`}</div>
                 <div className="mb1">
                     {c('Info')
                         .jt`You can decide whether or not contacts are automatically added to your address book by navigating to ${navigateTo}`}
                 </div>
                 <div className="mb1">
-                    <Href
-                        url="/settings"
-                        target="_self"
-                        rel="noreferrer help"
-                        className="inline-flex flex-nowrap nodecoration"
-                    >
+                    <Link to="/contacts/settings" className="inline-flex flex-nowrap nodecoration">
                         <Icon className="mr0-5 flex-item-centered-vert fill-primary" name="settings-master" />
                         <span>{c('Title').t`Settings`}</span>
-                    </Href>
+                    </Link>
                 </div>
 
                 {canMerge && (
