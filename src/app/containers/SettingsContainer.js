@@ -26,7 +26,7 @@ const SettingsContainer = ({ location }) => {
             <AppsSidebar
                 items={[
                     <StorageSpaceStatus key="storage">
-                        <Href url="/settings/subscription" className="pm-button pm-button--primary">
+                        <Href url="/settings/subscription" target="_self" className="pm-button pm-button--primary">
                             {c('Action').t`Upgrade`}
                         </Href>
                     </StorageSpaceStatus>
