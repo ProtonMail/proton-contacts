@@ -42,7 +42,11 @@ const PrivateHeader = ({ search, onSearch, location, expanded, onToggleExpand })
                 {isMobile ? (
                     <SearchDropdown
                         content={
-                            <Icon name="search" className="topnav-icon mr0-5 flex-item-centered-vert fill-white" />
+                            <Icon
+                                name="search"
+                                size="25"
+                                className="topnav-icon mr0-5 flex-item-centered-vert fill-white"
+                            />
                         }
                         search={search}
                         onSearch={onSearch}
