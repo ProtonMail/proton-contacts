@@ -65,6 +65,7 @@ const ContactsContainer = ({ location, history }) => {
     useEffect(() => {
         // clean checked contacts if navigating to a contact group
         setCheckedContacts(Object.create(null));
+        setCheckAll(false);
     }, [contactGroupID]);
 
     const filteredContacts = useMemo(() => {
