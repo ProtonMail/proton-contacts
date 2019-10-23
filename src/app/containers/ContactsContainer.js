@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
-import { Route, Switch, withRouter } from 'react-router-dom';
 import {
     Alert,
     Loader,
@@ -13,6 +12,7 @@ import {
     useNotifications,
     useEventManager,
     useContactGroups,
+    useActiveBreakpoint,
     useModals,
     ConfirmModal,
     ErrorButton,
@@ -49,6 +49,9 @@ const ContactsContainer = ({ location, history }) => {
     const [checkedContacts, setCheckedContacts] = useState(Object.create(null));
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
+
+    const { isDesktop, isNarrow } = useActiveBreakpoint();
+    const noHeader = isNarrow ? '--noHeader' : '';
 
     const contactGroupID = useMemo(() => {
         const params = new URLSearchParams(location.search);
@@ -115,21 +118,20 @@ const ContactsContainer = ({ location, history }) => {
         }, []);
     }, [checkedContacts]);
 
-    const getCurrentContactID = () => {
+    const contactID = useMemo(() => {
         const [, contactID] = location.pathname.split('/contacts/');
         return contactID;
-    };
+    }, [location]);
 
     const activeIDs = useMemo(() => {
         if (checkedContactIDs && checkedContactIDs.length) {
             return checkedContactIDs;
         }
-        const currentContactID = getCurrentContactID();
-        if (currentContactID) {
-            return [currentContactID];
+        if (contactID) {
+            return [contactID];
         }
         return [];
-    }, [checkedContactIDs, location.pathname]);
+    }, [checkedContactIDs, contactID]);
 
     const handleDelete = async () => {
         const confirm = <ErrorButton type="submit">{c('Action').t`Delete`}</ErrorButton>;
@@ -179,11 +181,10 @@ const ContactsContainer = ({ location, history }) => {
     };
 
     const handleMerge = () => {
-        const currentContactID = getCurrentContactID();
         createModal(
             <MergeModal
                 contacts={mergeableContacts}
-                contactID={currentContactID}
+                contactID={contactID}
                 userKeysList={userKeysList}
                 hasPaidMail={!!hasPaidMail}
             />
@@ -194,34 +195,75 @@ const ContactsContainer = ({ location, history }) => {
         createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
     const handleGroups = () => history.push('/contacts/settings/groups');
 
-    const isLoading = loadingContactEmails || loadingContacts || loadingUserKeys || loadingContactGroups;
+    const isLoading = loadingContactEmails || loadingContacts || loadingContactGroups || loadingUserKeys;
     const contactsLength = contacts ? contacts.length : 0;
+
+    const contactComponent = contactID && contactsLength && !hasChecked && (
+        <Contact
+            contactID={contactID}
+            contactEmails={contactEmailsMap[contactID]}
+            contactGroupsMap={contactGroupsMap}
+            userKeysList={userKeysList}
+        />
+    );
+
+    const contactsListComponent = (isDesktop || !contactComponent) && (
+        <ContactsList
+            emptyAddressBook={!contactsLength}
+            contactID={contactID}
+            totalContacts={contactsLength}
+            contacts={formattedContacts}
+            contactGroupsMap={contactGroupsMap}
+            user={user}
+            userKeysList={userKeysList}
+            loadingUserKeys={loadingUserKeys}
+            onCheck={handleCheck}
+            onClear={handleClearSearch}
+            isDesktop={isDesktop}
+        />
+    );
+
+    const contactPlaceHolderComponent = isDesktop && !contactComponent && (
+        <ContactPlaceholder
+            history={history}
+            user={user}
+            userKeysList={userKeysList}
+            loadingUserKeys={loadingUserKeys}
+            contactGroupID={contactGroupID}
+            totalContacts={contactsLength}
+            contacts={formattedContacts}
+            onUncheck={handleUncheckAll}
+            canMerge={canMerge}
+            onMerge={handleMerge}
+            onImport={handleImport}
+            onExport={handleExport}
+            onGroups={handleGroups}
+        />
+    );
 
     return (
         <PrivateLayout>
-            <PrivateHeader
-                title={c('Title').t`Contacts`}
-                expanded={expanded}
-                onToggleExpand={onToggleExpand}
-                search={search}
-                onSearch={updateSearch}
-            />
-            <div className="flex flex-nowrap">
-                <Route
-                    path="/:path"
-                    render={() => (
-                        <PrivateSidebar
-                            url="/contacts"
-                            history={history}
-                            user={user}
-                            expanded={expanded}
-                            onToggleExpand={onToggleExpand}
-                            totalContacts={contactsLength}
-                            contactGroups={contactGroups}
-                        />
-                    )}
+            {(!isNarrow || !contactID) && (
+                <PrivateHeader
+                    title={c('Title').t`Contacts`}
+                    expanded={expanded}
+                    onToggleExpand={onToggleExpand}
+                    search={search}
+                    onSearch={updateSearch}
+                    isNarrow={isNarrow}
                 />
-                <div className="main flex-item-fluid">
+            )}
+            <div className="flex flex-nowrap">
+                <PrivateSidebar
+                    url="/contacts"
+                    history={history}
+                    user={user}
+                    expanded={expanded}
+                    onToggleExpand={onToggleExpand}
+                    totalContacts={contactsLength}
+                    contactGroups={contactGroups}
+                />
+                <div className={`main flex-item-fluid`}>
                     <ContactToolbar
                         user={user}
                         contactEmailsMap={contactEmailsMap}
@@ -229,59 +271,18 @@ const ContactsContainer = ({ location, history }) => {
                         checked={checkAll}
                         onCheck={handleCheckAll}
                         onDelete={handleDelete}
+                        simplified={!!contactID && !isDesktop}
                     />
-                    <div className="main-area--withToolbar no-scroll flex flex-nowrap">
-                        <Switch>
-                            <Route
-                                path="/contacts/:contactID?"
-                                render={({ match }) => {
-                                    if (isLoading) {
-                                        return <Loader />;
-                                    }
-                                    const { contactID } = match.params;
-                                    return (
-                                        <>
-                                            <ContactsList
-                                                emptyAddressBook={!contactsLength}
-                                                contactID={contactID}
-                                                totalContacts={contactsLength}
-                                                contacts={formattedContacts}
-                                                contactGroupsMap={contactGroupsMap}
-                                                user={user}
-                                                userKeysList={userKeysList}
-                                                loadingUserKeys={loadingUserKeys}
-                                                onCheck={handleCheck}
-                                                onClear={handleClearSearch}
-                                            />
-                                            {contactsLength && contactID && !hasChecked ? (
-                                                <Contact
-                                                    contactID={contactID}
-                                                    contactEmails={contactEmailsMap[contactID]}
-                                                    contactGroupsMap={contactGroupsMap}
-                                                    userKeysList={userKeysList}
-                                                />
-                                            ) : (
-                                                <ContactPlaceholder
-                                                    history={history}
-                                                    user={user}
-                                                    userKeysList={userKeysList}
-                                                    loadingUserKeys={loadingUserKeys}
-                                                    contactGroupID={contactGroupID}
-                                                    totalContacts={contactsLength}
-                                                    contacts={formattedContacts}
-                                                    onUncheck={handleUncheckAll}
-                                                    canMerge={canMerge}
-                                                    onMerge={handleMerge}
-                                                    onImport={handleImport}
-                                                    onExport={handleExport}
-                                                    onGroups={handleGroups}
-                                                />
-                                            )}
-                                        </>
-                                    );
-                                }}
-                            />
-                        </Switch>
+                    <div className={`main-area--withToolbar${noHeader} no-scroll flex flex-nowrap`}>
+                        {isLoading ? (
+                            <Loader />
+                        ) : (
+                            <>
+                                {contactsListComponent}
+                                {contactComponent}
+                                {contactPlaceHolderComponent}
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
@@ -294,4 +295,4 @@ ContactsContainer.propTypes = {
     history: PropTypes.object.isRequired
 };
 
-export default withRouter(ContactsContainer);
+export default ContactsContainer;
