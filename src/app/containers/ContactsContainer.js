@@ -196,7 +196,7 @@ const ContactsContainer = ({ location, history }) => {
         createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
     const handleGroups = () => history.push('/contacts/settings/groups');
 
-    const isLoading = loadingContactEmails || loadingContacts || loadingUserKeys || loadingContactGroups;
+    const isLoading = loadingContactEmails || loadingContacts || loadingContactGroups;
     const contactsLength = contacts ? contacts.length : 0;
 
     if (isLoading) {
