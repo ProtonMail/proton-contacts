@@ -259,7 +259,7 @@ const ContactsContainer = ({ location, history }) => {
                                 userKeysList={userKeysList}
                             />
                         )}
-                        {isDesktop && (
+                        {isDesktop && !contactID && (
                             <ContactPlaceholder
                                 history={history}
                                 user={user}
