@@ -7,7 +7,6 @@ import {
     Searchbox,
     UpgradeButton,
     useUser,
-    useActiveBreakpoint,
     SearchDropdown,
     TopNavbar,
     TopNavbarLink,
@@ -19,11 +18,10 @@ import { withRouter } from 'react-router';
 
 import ContactModal from '../components/ContactModal';
 
-const PrivateHeader = ({ title, search, onSearch, location, expanded, onToggleExpand }) => {
+const PrivateHeader = ({ title, search, onSearch, location, expanded, onToggleExpand, isMobile = false }) => {
     const [{ hasPaidMail }] = useUser();
     const { createModal } = useModals();
     const inSettings = location.pathname.startsWith('/contacts/settings');
-    const { isMobile } = useActiveBreakpoint();
 
     return (
         <header className="header flex flex-nowrap reset4print">
@@ -81,7 +79,8 @@ PrivateHeader.propTypes = {
     expanded: PropTypes.bool,
     onToggleExpand: PropTypes.func,
     onSearch: PropTypes.func,
-    location: PropTypes.object
+    location: PropTypes.object,
+    isMobile: PropTypes.bool
 };
 
 export default withRouter(PrivateHeader);

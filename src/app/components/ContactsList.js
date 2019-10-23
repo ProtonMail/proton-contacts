@@ -24,7 +24,8 @@ const ContactsList = ({
     loadingUserKeys,
     history,
     contactID,
-    location
+    location,
+    isDesktop = true
 }) => {
     const listRef = useRef(null);
     const containerRef = useRef(null);
@@ -118,7 +119,7 @@ const ContactsList = ({
     }
 
     return (
-        <div ref={containerRef} className="items-column-list">
+        <div ref={containerRef} className={`items-column-list${isDesktop ? '' : '--mobile'}`}>
             <AutoSizer>
                 {({ height, width }) => (
                     <List
@@ -158,7 +159,8 @@ ContactsList.propTypes = {
     loadingUserKeys: PropTypes.bool.isRequired,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
-    contactID: PropTypes.string
+    contactID: PropTypes.string,
+    isDesktop: PropTypes.bool
 };
 
 export default withRouter(ContactsList);
