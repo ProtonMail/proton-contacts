@@ -119,7 +119,6 @@ const ContactsContainer = ({ location, history }) => {
     }, [checkedContacts]);
 
     const { contactID, inSettings } = useMemo(() => {
-        console.log(location.pathname);
         const [, contactID] = location.pathname.split('/contacts/');
         const inSettings = location.pathname.startsWith('/contacts/settings');
 

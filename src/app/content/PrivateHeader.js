@@ -18,7 +18,6 @@ import {
 import ContactModal from '../components/ContactModal';
 
 const PrivateHeader = ({ title, search, onSearch, expanded, onToggleExpand, inSettings = false, isNarrow = false }) => {
-    console.log({ inSettings });
     const [{ hasPaidMail }] = useUser();
     const { createModal } = useModals();
 
