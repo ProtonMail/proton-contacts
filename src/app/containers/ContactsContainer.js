@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
 import {
@@ -61,6 +61,12 @@ const ContactsContainer = ({ location, history }) => {
     const hasChecked = useMemo(() => {
         return Object.keys(checkedContacts).some((key) => checkedContacts[key]);
     }, [checkedContacts]);
+
+    useEffect(() => {
+        // clean checked contacts if navigating to a contact group
+        setCheckedContacts(Object.create(null));
+        setCheckAll(false);
+    }, [contactGroupID]);
 
     const filteredContacts = useMemo(() => {
         if (!Array.isArray(contacts)) {
