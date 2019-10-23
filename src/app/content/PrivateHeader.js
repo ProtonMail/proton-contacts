@@ -51,10 +51,11 @@ const PrivateHeader = ({ title, search, onSearch, location, expanded, onToggleEx
                         content={
                             <Icon
                                 name="search"
-                                size="25"
+                                size={25}
                                 className="topnav-icon mr0-5 flex-item-centered-vert fill-white"
                             />
                         }
+                        placeholder={c('Placeholder').t`Search contacts`}
                         search={search}
                         onSearch={onSearch}
                         hasCaret={false}
