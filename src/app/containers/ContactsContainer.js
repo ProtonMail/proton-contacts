@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
-import { Route, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import {
     Alert,
     Loader,
@@ -119,21 +119,20 @@ const ContactsContainer = ({ location, history }) => {
         }, []);
     }, [checkedContacts]);
 
-    const getCurrentContactID = () => {
+    const contactID = useMemo(() => {
         const [, contactID] = location.pathname.split('/contacts/');
         return contactID;
-    };
+    }, [location.pathname]);
 
     const activeIDs = useMemo(() => {
         if (checkedContactIDs && checkedContactIDs.length) {
             return checkedContactIDs;
         }
-        const currentContactID = getCurrentContactID();
-        if (currentContactID) {
-            return [currentContactID];
+        if (contactID) {
+            return [contactID];
         }
         return [];
-    }, [checkedContactIDs, location.pathname]);
+    }, [checkedContactIDs, contactID]);
 
     const handleDelete = async () => {
         const confirm = <ErrorButton type="submit">{c('Action').t`Delete`}</ErrorButton>;
@@ -183,11 +182,10 @@ const ContactsContainer = ({ location, history }) => {
     };
 
     const handleMerge = () => {
-        const currentContactID = getCurrentContactID();
         createModal(
             <MergeModal
                 contacts={mergeableContacts}
-                contactID={currentContactID}
+                contactID={contactID}
                 userKeysList={userKeysList}
                 hasPaidMail={!!hasPaidMail}
             />
@@ -201,95 +199,86 @@ const ContactsContainer = ({ location, history }) => {
     const isLoading = loadingContactEmails || loadingContacts || loadingUserKeys || loadingContactGroups;
     const contactsLength = contacts ? contacts.length : 0;
 
+    if (isLoading) {
+        return <Loader />;
+    }
+
     return (
         <PrivateLayout>
-            <Route
-                path="/contacts/:contactID?"
-                render={({ match }) => {
-                    if (isLoading) {
-                        return <Loader />;
-                    }
-                    const { contactID } = match.params;
-                    return (
-                        <>
-                            {(!isMobile || !contactID) && (
-                                <PrivateHeader
-                                    title={c('Title').t`Contacts`}
-                                    expanded={expanded}
-                                    onToggleExpand={onToggleExpand}
-                                    search={search}
-                                    onSearch={updateSearch}
-                                    isMobile={isMobile}
-                                />
-                            )}
-                            <div className="flex flex-nowrap">
-                                <PrivateSidebar
-                                    url="/contacts"
-                                    history={history}
-                                    user={user}
-                                    expanded={expanded}
-                                    onToggleExpand={onToggleExpand}
-                                    totalContacts={contactsLength}
-                                    contactGroups={contactGroups}
-                                />
-                                <div className={`main flex-item-fluid main-area${noHeader}`}>
-                                    <ContactToolbar
-                                        user={user}
-                                        contactEmailsMap={contactEmailsMap}
-                                        activeIDs={activeIDs}
-                                        checked={checkAll}
-                                        onCheck={handleCheckAll}
-                                        onDelete={handleDelete}
-                                        simplified={contactID && !isDesktop}
-                                    />
-                                    <div className={`main-area--withToolbar${noHeader} no-scroll flex flex-nowrap`}>
-                                        {(isDesktop || !contactID) && (
-                                            <ContactsList
-                                                emptyAddressBook={!contactsLength}
-                                                contactID={contactID}
-                                                totalContacts={contactsLength}
-                                                contacts={formattedContacts}
-                                                contactGroupsMap={contactGroupsMap}
-                                                user={user}
-                                                userKeysList={userKeysList}
-                                                loadingUserKeys={loadingUserKeys}
-                                                onCheck={handleCheck}
-                                                onClear={handleClearSearch}
-                                                isDesktop={isDesktop}
-                                            />
-                                        )}
-                                        {contactID &&
-                                            (contactsLength && !hasChecked ? (
-                                                <Contact
-                                                    contactID={contactID}
-                                                    contactEmails={contactEmailsMap[contactID]}
-                                                    contactGroupsMap={contactGroupsMap}
-                                                    userKeysList={userKeysList}
-                                                />
-                                            ) : (
-                                                <ContactPlaceholder
-                                                    history={history}
-                                                    user={user}
-                                                    userKeysList={userKeysList}
-                                                    loadingUserKeys={loadingUserKeys}
-                                                    contactGroupID={contactGroupID}
-                                                    totalContacts={contactsLength}
-                                                    contacts={formattedContacts}
-                                                    onUncheck={handleUncheckAll}
-                                                    canMerge={canMerge}
-                                                    onMerge={handleMerge}
-                                                    onImport={handleImport}
-                                                    onExport={handleExport}
-                                                    onGroups={handleGroups}
-                                                />
-                                            ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </>
-                    );
-                }}
-            />
+            {(!isMobile || !contactID) && (
+                <PrivateHeader
+                    title={c('Title').t`Contacts`}
+                    expanded={expanded}
+                    onToggleExpand={onToggleExpand}
+                    search={search}
+                    onSearch={updateSearch}
+                    isMobile={isMobile}
+                />
+            )}
+            <div className="flex flex-nowrap">
+                <PrivateSidebar
+                    url="/contacts"
+                    history={history}
+                    user={user}
+                    expanded={expanded}
+                    onToggleExpand={onToggleExpand}
+                    totalContacts={contactsLength}
+                    contactGroups={contactGroups}
+                />
+                <div className={`main flex-item-fluid main-area${noHeader}`}>
+                    <ContactToolbar
+                        user={user}
+                        contactEmailsMap={contactEmailsMap}
+                        activeIDs={activeIDs}
+                        checked={checkAll}
+                        onCheck={handleCheckAll}
+                        onDelete={handleDelete}
+                        simplified={!!contactID && !isDesktop}
+                    />
+                    <div className={`main-area--withToolbar${noHeader} no-scroll flex flex-nowrap`}>
+                        {(isDesktop || !contactID) && (
+                            <ContactsList
+                                emptyAddressBook={!contactsLength}
+                                contactID={contactID}
+                                totalContacts={contactsLength}
+                                contacts={formattedContacts}
+                                contactGroupsMap={contactGroupsMap}
+                                user={user}
+                                userKeysList={userKeysList}
+                                loadingUserKeys={loadingUserKeys}
+                                onCheck={handleCheck}
+                                onClear={handleClearSearch}
+                                isDesktop={isDesktop}
+                            />
+                        )}
+                        {contactID && contactsLength && !hasChecked && (
+                            <Contact
+                                contactID={contactID}
+                                contactEmails={contactEmailsMap[contactID]}
+                                contactGroupsMap={contactGroupsMap}
+                                userKeysList={userKeysList}
+                            />
+                        )}
+                        {isDesktop && (
+                            <ContactPlaceholder
+                                history={history}
+                                user={user}
+                                userKeysList={userKeysList}
+                                loadingUserKeys={loadingUserKeys}
+                                contactGroupID={contactGroupID}
+                                totalContacts={contactsLength}
+                                contacts={formattedContacts}
+                                onUncheck={handleUncheckAll}
+                                canMerge={canMerge}
+                                onMerge={handleMerge}
+                                onImport={handleImport}
+                                onExport={handleExport}
+                                onGroups={handleGroups}
+                            />
+                        )}
+                    </div>
+                </div>
+            </div>
         </PrivateLayout>
     );
 };

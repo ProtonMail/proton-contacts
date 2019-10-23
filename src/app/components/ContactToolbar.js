@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Checkbox, Link } from 'react-components';
+import { Icon, Checkbox } from 'react-components';
+import { Link } from 'react-router-dom';
 import { c } from 'ttag';
 import ContactGroupDropdown from './ContactGroupDropdown';
 
