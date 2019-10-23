@@ -160,7 +160,7 @@ const ContactPlaceholder = ({
     }
 
     if (contactGroupID) {
-        const { Name } = contactGroups.find(({ ID }) => ID === contactGroupID);
+        const { Name = '' } = contactGroups.find(({ ID }) => ID === contactGroupID) || {};
         const total = contacts.filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID)).length;
         const totalContactsText = (
             <b key="total-contacts">{total === 1 ? c('Info').t`1 contact` : c('Info').t`${total} contacts`}</b>
