@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
-import { withRouter } from 'react-router-dom';
 import {
     Alert,
     Loader,
@@ -296,4 +295,4 @@ ContactsContainer.propTypes = {
     history: PropTypes.object.isRequired
 };
 
-export default withRouter(ContactsContainer);
+export default ContactsContainer;
