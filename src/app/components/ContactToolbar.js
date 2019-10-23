@@ -4,7 +4,7 @@ import { Icon, Checkbox } from 'react-components';
 import { c } from 'ttag';
 import ContactGroupDropdown from './ContactGroupDropdown';
 
-const ContactToolbar = ({ user, onCheck, onDelete, checked = false, activeIDs, contactEmailsMap }) => {
+const ContactToolbar = ({ user, onCheck, onDelete, checked = false, activeIDs = [], contactEmailsMap = {} }) => {
     const handleCheck = ({ target }) => onCheck(target.checked);
 
     const contactEmailsSelected = useMemo(() => {

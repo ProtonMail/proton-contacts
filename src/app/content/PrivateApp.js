@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ErrorBoundary, StandardPrivateApp } from 'react-components';
-import { Route, Switch } from 'react-router';
+import { Redirect, Route, Switch } from 'react-router';
 import {
     UserModel,
     ContactsModel,
@@ -41,7 +41,13 @@ const PrivateApp = ({ onLogout }) => {
                             path="/contacts/settings"
                             render={({ location }) => <SettingsContainer location={location} />}
                         />
-                        <Route path="/contacts" component={ContactsContainer} />
+                        <Route
+                            path="/contacts"
+                            render={({ location, history }) => (
+                                <ContactsContainer location={location} history={history} />
+                            )}
+                        />
+                        <Redirect to="/contacts" />
                     </Switch>
                 </ErrorBoundary>
             </ContactsProvider>
