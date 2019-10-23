@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { c, msgid } from 'ttag';
+import { c } from 'ttag';
 import { PrimaryButton, Button, Icon, useModals, useContactGroups } from 'react-components';
 
 import { redirectTo } from 'proton-shared/lib/helpers/browser';
@@ -152,7 +152,9 @@ const ContactPlaceholder = ({
                         <img src={contactGroupCard} alt="contact-group-card" />
                     </div>
                     <div className="mb2">
-                        <Button className="mr1" onClick={onUncheck}>{c('Action').t`Deselect`}</Button>
+                        <Button className="mr1" onClick={onUncheck}>
+                            {countSelectedContacts === 1 ? c('Action').t`Deselect` : c('Action').t`Deselect all`}
+                        </Button>
                         {/* <Button disabled={loadingUserKeys}>{c('Action').t`Export`}</Button> */}
                     </div>
                 </div>
