@@ -22,7 +22,6 @@ import {
 import { clearContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { toMap } from 'proton-shared/lib/helpers/object';
-import { isMobile as isItMobile, isDesktop as isItDesktop } from 'proton-shared/lib/helpers/responsive';
 import { extractMergeable } from '../helpers/merge';
 
 import ContactsList from '../components/ContactsList';
@@ -52,9 +51,7 @@ const ContactsContainer = ({ location, history }) => {
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
 
-    const breakpoint = useActiveBreakpoint();
-    const isMobile = isItMobile(breakpoint);
-    const isDesktop = isItDesktop(breakpoint);
+    const { isMobile, isDesktop } = useActiveBreakpoint();
     const noHeader = isMobile ? '--noHeader' : '';
 
     const contactGroupID = useMemo(() => {
