@@ -57,7 +57,7 @@ const PrivateHeader = ({ title, search, onSearch, expanded, onToggleExpand, inSe
                 ) : null}
                 {isNarrow && inSettings ? null : (
                     <TopNavbarLink
-                        to="/contacts/settings"
+                        to="/contacts/settings/general"
                         icon="settings-master"
                         text={c('Title').t`Settings`}
                         aria-current={inSettings}
