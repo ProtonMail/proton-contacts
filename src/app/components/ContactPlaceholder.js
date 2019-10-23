@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { c } from 'ttag';
+import { c, msgid } from 'ttag';
 import { PrimaryButton, Button, Icon, useModals, useContactGroups } from 'react-components';
 
 import { redirectTo } from 'proton-shared/lib/helpers/browser';
@@ -140,7 +140,7 @@ const ContactPlaceholder = ({
     if (countSelectedContacts) {
         const totalContactsText = (
             <b key="total-contacts">
-                {countSelectedContacts === 1 ? c('Info').t`1 contact` : c('Info').t`${countSelectedContacts} contacts`}
+                {c('Info').ngettext(msgid`1 contact`, `${countSelectedContacts} contacts`, countSelectedContacts)}
             </b>
         );
 
@@ -153,7 +153,7 @@ const ContactPlaceholder = ({
                     </div>
                     <div className="mb2">
                         <Button className="mr1" onClick={onUncheck}>
-                            {countSelectedContacts === 1 ? c('Action').t`Deselect` : c('Action').t`Deselect all`}
+                            {c('Action').ngettext(msgid`Deselect`, `Deselect all`, countSelectedContacts)}
                         </Button>
                         {/* <Button disabled={loadingUserKeys}>{c('Action').t`Export`}</Button> */}
                     </div>
