@@ -196,12 +196,51 @@ const ContactsContainer = ({ location, history }) => {
         createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
     const handleGroups = () => history.push('/contacts/settings/groups');
 
-    const isLoading = loadingContactEmails || loadingContacts || loadingContactGroups;
+    const isLoading = loadingContactEmails || loadingContacts || loadingContactGroups || loadingUserKeys;
     const contactsLength = contacts ? contacts.length : 0;
 
-    if (isLoading) {
-        return <Loader />;
-    }
+    const contactComponent = contactID && contactsLength && !hasChecked && (
+        <Contact
+            contactID={contactID}
+            contactEmails={contactEmailsMap[contactID]}
+            contactGroupsMap={contactGroupsMap}
+            userKeysList={userKeysList}
+        />
+    );
+
+    const contactsListComponent = (isDesktop || !contactComponent) && (
+        <ContactsList
+            emptyAddressBook={!contactsLength}
+            contactID={contactID}
+            totalContacts={contactsLength}
+            contacts={formattedContacts}
+            contactGroupsMap={contactGroupsMap}
+            user={user}
+            userKeysList={userKeysList}
+            loadingUserKeys={loadingUserKeys}
+            onCheck={handleCheck}
+            onClear={handleClearSearch}
+            isDesktop={isDesktop}
+        />
+    );
+
+    const contactPlaceHolderComponent = isDesktop && !contactComponent && (
+        <ContactPlaceholder
+            history={history}
+            user={user}
+            userKeysList={userKeysList}
+            loadingUserKeys={loadingUserKeys}
+            contactGroupID={contactGroupID}
+            totalContacts={contactsLength}
+            contacts={formattedContacts}
+            onUncheck={handleUncheckAll}
+            canMerge={canMerge}
+            onMerge={handleMerge}
+            onImport={handleImport}
+            onExport={handleExport}
+            onGroups={handleGroups}
+        />
+    );
 
     return (
         <PrivateLayout>
@@ -236,45 +275,14 @@ const ContactsContainer = ({ location, history }) => {
                         simplified={!!contactID && !isDesktop}
                     />
                     <div className={`main-area--withToolbar${noHeader} no-scroll flex flex-nowrap`}>
-                        {(isDesktop || !contactID) && (
-                            <ContactsList
-                                emptyAddressBook={!contactsLength}
-                                contactID={contactID}
-                                totalContacts={contactsLength}
-                                contacts={formattedContacts}
-                                contactGroupsMap={contactGroupsMap}
-                                user={user}
-                                userKeysList={userKeysList}
-                                loadingUserKeys={loadingUserKeys}
-                                onCheck={handleCheck}
-                                onClear={handleClearSearch}
-                                isDesktop={isDesktop}
-                            />
-                        )}
-                        {contactID && contactsLength && !hasChecked && (
-                            <Contact
-                                contactID={contactID}
-                                contactEmails={contactEmailsMap[contactID]}
-                                contactGroupsMap={contactGroupsMap}
-                                userKeysList={userKeysList}
-                            />
-                        )}
-                        {isDesktop && !contactID && (
-                            <ContactPlaceholder
-                                history={history}
-                                user={user}
-                                userKeysList={userKeysList}
-                                loadingUserKeys={loadingUserKeys}
-                                contactGroupID={contactGroupID}
-                                totalContacts={contactsLength}
-                                contacts={formattedContacts}
-                                onUncheck={handleUncheckAll}
-                                canMerge={canMerge}
-                                onMerge={handleMerge}
-                                onImport={handleImport}
-                                onExport={handleExport}
-                                onGroups={handleGroups}
-                            />
+                        {isLoading ? (
+                            <Loader />
+                        ) : (
+                            <>
+                                {contactsListComponent}
+                                {contactComponent}
+                                {contactPlaceHolderComponent}
+                            </>
                         )}
                     </div>
                 </div>
