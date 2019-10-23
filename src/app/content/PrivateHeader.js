@@ -68,7 +68,7 @@ const PrivateHeader = ({ title, search, onSearch, location, expanded, onToggleEx
                     />
                 )}
             </TopNavbar>
-            {isMobile ? <FloatingButton onClick={() => createModal(<ContactModal />)} icon="add" /> : null}
+            {isMobile ? <FloatingButton onClick={() => createModal(<ContactModal />)} icon="plus" /> : null}
         </header>
     );
 };
