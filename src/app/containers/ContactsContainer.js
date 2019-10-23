@@ -50,8 +50,8 @@ const ContactsContainer = ({ location, history }) => {
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
 
-    const { isMobile, isDesktop } = useActiveBreakpoint();
-    const noHeader = isMobile ? '--noHeader' : '';
+    const { isDesktop, isNarrow } = useActiveBreakpoint();
+    const noHeader = isNarrow ? '--noHeader' : '';
 
     const contactGroupID = useMemo(() => {
         const params = new URLSearchParams(location.search);
@@ -243,14 +243,14 @@ const ContactsContainer = ({ location, history }) => {
 
     return (
         <PrivateLayout>
-            {(!isMobile || !contactID) && (
+            {(!isNarrow || !contactID) && (
                 <PrivateHeader
                     title={c('Title').t`Contacts`}
                     expanded={expanded}
                     onToggleExpand={onToggleExpand}
                     search={search}
                     onSearch={updateSearch}
-                    isMobile={isMobile}
+                    isNarrow={isNarrow}
                 />
             )}
             <div className="flex flex-nowrap">

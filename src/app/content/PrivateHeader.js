@@ -18,7 +18,7 @@ import { withRouter } from 'react-router';
 
 import ContactModal from '../components/ContactModal';
 
-const PrivateHeader = ({ title, search, onSearch, location, expanded, onToggleExpand, isMobile = false }) => {
+const PrivateHeader = ({ title, search, onSearch, location, expanded, onToggleExpand, isNarrow = false }) => {
     const [{ hasPaidMail }] = useUser();
     const { createModal } = useModals();
     const inSettings = location.pathname.startsWith('/contacts/settings');
@@ -27,13 +27,13 @@ const PrivateHeader = ({ title, search, onSearch, location, expanded, onToggleEx
         <header className="header flex flex-nowrap reset4print">
             <MainLogo url="/contacts" className="nomobile" />
             <Hamburger expanded={expanded} onToggle={onToggleExpand} />
-            {title && isMobile ? <span className="big ellipsis">{title}</span> : null}
-            {inSettings || isMobile ? null : (
+            {title && isNarrow ? <span className="big ellipsis">{title}</span> : null}
+            {inSettings || isNarrow ? null : (
                 <Searchbox placeholder={c('Placeholder').t`Search`} value={search} onChange={onSearch} />
             )}
             <TopNavbar>
-                {hasPaidMail || isMobile ? null : <UpgradeButton external={true} />}
-                {isMobile && !inSettings ? null : (
+                {hasPaidMail || isNarrow ? null : <UpgradeButton external={true} />}
+                {isNarrow && !inSettings ? null : (
                     <TopNavbarLink
                         className="nomobile"
                         to="/contacts"
@@ -42,7 +42,7 @@ const PrivateHeader = ({ title, search, onSearch, location, expanded, onToggleEx
                         aria-current={!inSettings}
                     />
                 )}
-                {!inSettings && isMobile ? (
+                {!inSettings && isNarrow ? (
                     <SearchDropdown
                         content={
                             <Icon
@@ -57,7 +57,7 @@ const PrivateHeader = ({ title, search, onSearch, location, expanded, onToggleEx
                         hasCaret={false}
                     />
                 ) : null}
-                {isMobile && inSettings ? null : (
+                {isNarrow && inSettings ? null : (
                     <TopNavbarLink
                         to="/contacts/settings"
                         icon="settings-master"
@@ -66,7 +66,7 @@ const PrivateHeader = ({ title, search, onSearch, location, expanded, onToggleEx
                     />
                 )}
             </TopNavbar>
-            {isMobile && !inSettings ? (
+            {isNarrow && !inSettings ? (
                 <FloatingButton onClick={() => createModal(<ContactModal />)} icon="plus" />
             ) : null}
         </header>
@@ -80,7 +80,7 @@ PrivateHeader.propTypes = {
     onToggleExpand: PropTypes.func,
     onSearch: PropTypes.func,
     location: PropTypes.object,
-    isMobile: PropTypes.bool
+    isNarrow: PropTypes.bool
 };
 
 export default withRouter(PrivateHeader);
