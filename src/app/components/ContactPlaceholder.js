@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { c, msgid } from 'ttag';
+import { c } from 'ttag';
 import { PrimaryButton, Button, Icon, useModals, useContactGroups } from 'react-components';
 
 import { redirectTo } from 'proton-shared/lib/helpers/browser';
@@ -136,25 +136,28 @@ const ContactPlaceholder = ({
     const countSelectedContacts = selectedContacts.length;
     const [contactGroups] = useContactGroups();
     const { createModal } = useModals();
-    const boldTotalContacts =
-        totalContacts === 1 ? (
-            <b key="boldface">{c('Info').t`one contact`}</b>
-        ) : (
-            <b key="boldface">{c('Info').t`${totalContacts} contacts`}</b>
-        );
-    const navigateTo = <b key="boldface-2">{c('Info').t`Settings > General > Contacts`}</b>;
 
     if (countSelectedContacts) {
+        const totalContactsText = (
+            <b key="total-contacts">
+                {countSelectedContacts === 1 ? c('Info').t`1 contact` : c('Info').t`${countSelectedContacts} contacts`}
+            </b>
+        );
+
         return (
-            <div className="p2 view-column-detail flex-item-fluid aligncenter">
-                <h1>
-                    {c('Info').ngettext(
-                        msgid`${countSelectedContacts} contact selected`,
-                        `${countSelectedContacts} contacts selected`,
-                        countSelectedContacts
-                    )}
-                </h1>
-                <Button onClick={onUncheck}>{c('Action').t`Deselect all`}</Button>
+            <div className="p2 view-column-detail flex-item-fluid scroll-if-needed">
+                <div className="aligncenter">
+                    <div className="mb2">{c('Info').jt`You selected ${totalContactsText} from your address book.`}</div>
+                    <div className="aligncenter mb2">
+                        <img src={contactGroupCard} alt="contact-group-card" />
+                    </div>
+                    <div className="mb2">
+                        <Button className="mr1" onClick={onUncheck}>
+                            {countSelectedContacts === 1 ? c('Action').t`Deselect` : c('Action').t`Deselect all`}
+                        </Button>
+                        {/* <Button disabled={loadingUserKeys}>{c('Action').t`Export`}</Button> */}
+                    </div>
+                </div>
             </div>
         );
     }
@@ -186,6 +189,14 @@ const ContactPlaceholder = ({
             </div>
         );
     }
+
+    const boldTotalContacts =
+        totalContacts === 1 ? (
+            <b key="boldface">{c('Info').t`one contact`}</b>
+        ) : (
+            <b key="boldface">{c('Info').t`${totalContacts} contacts`}</b>
+        );
+    const navigateTo = <b key="boldface-2">{c('Info').t`Settings > General > Contacts`}</b>;
 
     return (
         <div className="p2 view-column-detail flex-item-fluid scroll-if-needed">

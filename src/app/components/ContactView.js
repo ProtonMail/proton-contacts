@@ -2,11 +2,10 @@ import React from 'react';
 import { c } from 'ttag';
 import PropTypes from 'prop-types';
 import { useModals, PrimaryButton, Button, useUser } from 'react-components';
-import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 
 import ContactModal from './ContactModal';
 import ContactViewErrors from './ContactViewErrors';
-import { toICAL } from '../helpers/vcard';
+import { singleExport } from '../helpers/export';
 import ContactSummary from './ContactSummary';
 import ContactViewProperties from './ContactViewProperties';
 import UpsellFree from './UpsellFree';
@@ -19,15 +18,7 @@ const ContactView = ({ properties = [], contactID, contactEmails, contactGroupsM
         createModal(<ContactModal properties={properties} contactID={contactID} />);
     };
 
-    const handleExport = () => {
-        const filename = properties
-            .filter(({ field }) => ['fn', 'email'].includes(field))
-            .map(({ value }) => (Array.isArray(value) ? value[0] : value))[0];
-        const vcard = toICAL(properties);
-        const blob = new Blob([vcard.toString()], { type: 'data:text/plain;charset=utf-8;' });
-
-        downloadFile(blob, `${filename}.vcf`);
-    };
+    const handleExport = () => singleExport(properties);
 
     return (
         <div className="view-column-detail flex-item-fluid scroll-if-needed">
