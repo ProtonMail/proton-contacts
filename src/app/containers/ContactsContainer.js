@@ -118,10 +118,13 @@ const ContactsContainer = ({ location, history }) => {
         }, []);
     }, [checkedContacts]);
 
-    const contactID = useMemo(() => {
+    const { contactID, inSettings } = useMemo(() => {
+        console.log(location.pathname);
         const [, contactID] = location.pathname.split('/contacts/');
-        return contactID;
-    }, [location.pathname]);
+        const inSettings = location.pathname.startsWith('/contacts/settings');
+
+        return { contactID, inSettings };
+    }, [location]);
 
     const activeIDs = useMemo(() => {
         if (checkedContactIDs && checkedContactIDs.length) {
@@ -250,6 +253,7 @@ const ContactsContainer = ({ location, history }) => {
                     onToggleExpand={onToggleExpand}
                     search={search}
                     onSearch={updateSearch}
+                    inSettings={inSettings}
                     isNarrow={isNarrow}
                 />
             )}

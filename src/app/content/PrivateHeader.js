@@ -14,14 +14,13 @@ import {
     FloatingButton,
     useModals
 } from 'react-components';
-import { withRouter } from 'react-router';
 
 import ContactModal from '../components/ContactModal';
 
-const PrivateHeader = ({ title, search, onSearch, location, expanded, onToggleExpand, isNarrow = false }) => {
+const PrivateHeader = ({ title, search, onSearch, expanded, onToggleExpand, inSettings = false, isNarrow = false }) => {
+    console.log({ inSettings });
     const [{ hasPaidMail }] = useUser();
     const { createModal } = useModals();
-    const inSettings = location.pathname.startsWith('/contacts/settings');
 
     return (
         <header className="header flex flex-nowrap reset4print">
@@ -79,8 +78,8 @@ PrivateHeader.propTypes = {
     expanded: PropTypes.bool,
     onToggleExpand: PropTypes.func,
     onSearch: PropTypes.func,
-    location: PropTypes.object,
+    inSettings: PropTypes.bool,
     isNarrow: PropTypes.bool
 };
 
-export default withRouter(PrivateHeader);
+export default PrivateHeader;
