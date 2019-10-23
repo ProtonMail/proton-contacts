@@ -15,7 +15,6 @@ import {
     FloatingButton,
     useModals
 } from 'react-components';
-import { isMobile as isItMobile } from 'proton-shared/lib/helpers/responsive';
 import { withRouter } from 'react-router';
 
 import ContactModal from '../components/ContactModal';
@@ -24,8 +23,7 @@ const PrivateHeader = ({ title, search, onSearch, location, expanded, onToggleEx
     const [{ hasPaidMail }] = useUser();
     const { createModal } = useModals();
     const inSettings = location.pathname.startsWith('/contacts/settings');
-    const activeBreakpoint = useActiveBreakpoint();
-    const isMobile = isItMobile(activeBreakpoint);
+    const { isMobile } = useActiveBreakpoint();
 
     return (
         <header className="header flex flex-nowrap reset4print">
