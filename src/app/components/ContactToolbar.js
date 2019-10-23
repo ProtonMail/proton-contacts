@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Checkbox } from 'react-components';
+import { Icon, Checkbox, ToolbarSeparator } from 'react-components';
 import { Link } from 'react-router-dom';
 import { c } from 'ttag';
 import ContactGroupDropdown from './ContactGroupDropdown';
@@ -37,7 +37,8 @@ const ContactToolbar = ({
 
     return (
         <div className="toolbar flex noprint">
-            <Checkbox className="flex pl1 pr1" checked={checked} onChange={handleCheck} />
+            <Checkbox className="flex pm-select-all ml0-75 pl1 pr1" checked={checked} onChange={handleCheck} />
+            <ToolbarSeparator />
             <button
                 type="button"
                 title={c('Tooltip').t`Delete`}
