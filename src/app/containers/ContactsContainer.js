@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import {
-    AppsSidebar,
     Alert,
     Loader,
     useContactEmails,
@@ -16,9 +15,8 @@ import {
     useContactGroups,
     useModals,
     ConfirmModal,
-    StorageSpaceStatus,
-    Href,
-    ErrorButton
+    ErrorButton,
+    useToggle
 } from 'react-components';
 import { clearContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 import { normalize } from 'proton-shared/lib/helpers/string';
@@ -34,8 +32,10 @@ import PrivateSidebar from '../content/PrivateSidebar';
 import MergeModal from '../components/merge/MergeModal';
 import ImportModal from '../components/import/ImportModal';
 import ExportModal from '../components/ExportModal';
+import PrivateLayout from '../content/PrivateLayout';
 
 const ContactsContainer = ({ location, history }) => {
+    const { state: expanded, toggle: onToggleExpand } = useToggle();
     const { createModal } = useModals();
     const [search, updateSearch] = useState('');
     const normalizedSearch = normalize(search);
@@ -189,123 +189,121 @@ const ContactsContainer = ({ location, history }) => {
     const handleGroups = () => history.push('/contacts/settings');
 
     return (
-        <div className="flex flex-nowrap no-scroll">
-            <AppsSidebar
-                items={[
-                    <StorageSpaceStatus key="storage">
-                        <Href url="/settings/subscription" target="_self" className="pm-button pm-button--primary">
-                            {c('Action').t`Upgrade`}
-                        </Href>
-                    </StorageSpaceStatus>
-                ]}
+        <PrivateLayout>
+            <PrivateHeader
+                title={c('Title').t`Contacts`}
+                expanded={expanded}
+                onToggleExpand={onToggleExpand}
+                search={search}
+                onSearch={updateSearch}
             />
-            <div className="content flex-item-fluid reset4print">
-                <PrivateHeader search={search} onSearch={updateSearch} />
-                <div className="flex flex-nowrap">
-                    <Route
-                        path="/:path"
-                        render={() => (
-                            <PrivateSidebar
-                                history={history}
-                                user={user}
-                                totalContacts={contacts.length}
-                                contactGroups={contactGroups}
-                            />
-                        )}
-                    />
-                    <div className="main flex-item-fluid main-area">
-                        <ContactToolbar
+            <div className="flex flex-nowrap">
+                <Route
+                    path="/:path"
+                    render={() => (
+                        <PrivateSidebar
+                            url="/contacts"
+                            history={history}
                             user={user}
-                            contactEmailsMap={contactEmailsMap}
-                            activeIDs={activeIDs}
-                            checked={checkAll}
-                            onCheck={handleCheckAll}
-                            onDelete={handleDelete}
+                            expanded={expanded}
+                            onToggleExpand={onToggleExpand}
+                            totalContacts={contacts.length}
+                            contactGroups={contactGroups}
                         />
-                        <div className="main-area--withToolbar no-scroll flex flex-nowrap">
-                            <Switch>
-                                <Route
-                                    path="/contacts/:contactID"
-                                    render={({ match }) => {
-                                        const { contactID } = match.params;
-                                        return (
-                                            <>
-                                                <ContactsList
-                                                    emptyAddressBook={!contacts.length}
+                    )}
+                />
+                <div className="main flex-item-fluid main-area">
+                    <ContactToolbar
+                        user={user}
+                        contactEmailsMap={contactEmailsMap}
+                        activeIDs={activeIDs}
+                        checked={checkAll}
+                        onCheck={handleCheckAll}
+                        onDelete={handleDelete}
+                    />
+                    <div className="main-area--withToolbar no-scroll flex flex-nowrap">
+                        <Switch>
+                            <Route
+                                path="/contacts/:contactID"
+                                render={({ match }) => {
+                                    const { contactID } = match.params;
+                                    return (
+                                        <>
+                                            <ContactsList
+                                                emptyAddressBook={!contacts.length}
+                                                contactID={contactID}
+                                                totalContacts={contacts.length}
+                                                contacts={formattedContacts}
+                                                contactGroupsMap={contactGroupsMap}
+                                                user={user}
+                                                userKeysList={userKeysList}
+                                                loadingUserKeys={loadingUserKeys}
+                                                onCheck={handleCheck}
+                                                onClear={handleClearSearch}
+                                            />
+                                            {!!contacts.length && hasChecked ? (
+                                                <ContactPlaceholder
+                                                    history={history}
+                                                    user={user}
+                                                    userKeysList={userKeysList}
+                                                    loadingUserKeys={loadingUserKeys}
+                                                    contactGroupID={contactGroupID}
+                                                    contacts={formattedContacts}
+                                                    totalContacts={contacts.length}
+                                                    onUncheck={handleUncheckAll}
+                                                />
+                                            ) : (
+                                                <Contact
                                                     contactID={contactID}
-                                                    totalContacts={contacts.length}
-                                                    contacts={formattedContacts}
+                                                    contactEmails={contactEmailsMap[contactID]}
                                                     contactGroupsMap={contactGroupsMap}
+                                                    userKeysList={userKeysList}
+                                                />
+                                            )}
+                                        </>
+                                    );
+                                }}
+                            />
+                            <Route
+                                render={() => {
+                                    return (
+                                        <>
+                                            <ContactsList
+                                                totalContacts={contacts.length}
+                                                contacts={formattedContacts}
+                                                contactGroupsMap={contactGroupsMap}
+                                                user={user}
+                                                userKeysList={userKeysList}
+                                                loadingUserKeys={loadingUserKeys}
+                                                onCheck={handleCheck}
+                                                onClear={handleClearSearch}
+                                            />
+                                            {!!contacts.length && (
+                                                <ContactPlaceholder
+                                                    history={history}
                                                     user={user}
                                                     userKeysList={userKeysList}
                                                     loadingUserKeys={loadingUserKeys}
-                                                    onCheck={handleCheck}
-                                                    onClear={handleClearSearch}
-                                                />
-                                                {!!contacts.length && hasChecked ? (
-                                                    <ContactPlaceholder
-                                                        history={history}
-                                                        user={user}
-                                                        userKeysList={userKeysList}
-                                                        loadingUserKeys={loadingUserKeys}
-                                                        contactGroupID={contactGroupID}
-                                                        contacts={formattedContacts}
-                                                        totalContacts={contacts.length}
-                                                        onUncheck={handleUncheckAll}
-                                                    />
-                                                ) : (
-                                                    <Contact
-                                                        contactID={contactID}
-                                                        contactEmails={contactEmailsMap[contactID]}
-                                                        contactGroupsMap={contactGroupsMap}
-                                                        userKeysList={userKeysList}
-                                                    />
-                                                )}
-                                            </>
-                                        );
-                                    }}
-                                />
-                                <Route
-                                    render={() => {
-                                        return (
-                                            <>
-                                                <ContactsList
+                                                    contactGroupID={contactGroupID}
                                                     totalContacts={contacts.length}
                                                     contacts={formattedContacts}
-                                                    contactGroupsMap={contactGroupsMap}
-                                                    user={user}
-                                                    userKeysList={userKeysList}
-                                                    loadingUserKeys={loadingUserKeys}
-                                                    onCheck={handleCheck}
-                                                    onClear={handleClearSearch}
+                                                    onUncheck={handleUncheckAll}
+                                                    canMerge={canMerge}
+                                                    onMerge={handleMerge}
+                                                    onImport={handleImport}
+                                                    onExport={handleExport}
+                                                    onGroups={handleGroups}
                                                 />
-                                                {!!contacts.length && (
-                                                    <ContactPlaceholder
-                                                        history={history}
-                                                        user={user}
-                                                        userKeysList={userKeysList}
-                                                        loadingUserKeys={loadingUserKeys}
-                                                        contactGroupID={contactGroupID}
-                                                        totalContacts={contacts.length}
-                                                        contacts={formattedContacts}
-                                                        onUncheck={handleUncheckAll}
-                                                        canMerge={canMerge}
-                                                        onMerge={handleMerge}
-                                                        onImport={handleImport}
-                                                        onExport={handleExport}
-                                                        onGroups={handleGroups}
-                                                    />
-                                                )}
-                                            </>
-                                        );
-                                    }}
-                                />
-                            </Switch>
-                        </div>
+                                            )}
+                                        </>
+                                    );
+                                }}
+                            />
+                        </Switch>
                     </div>
                 </div>
             </div>
-        </div>
+        </PrivateLayout>
     );
 };
 

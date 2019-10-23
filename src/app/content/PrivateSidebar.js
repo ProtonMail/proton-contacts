@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavMenu, useModals, PrimaryButton, useUserKeys } from 'react-components';
+import { useModals, PrimaryButton, useUserKeys, Sidebar } from 'react-components';
 import { c } from 'ttag';
 import PropTypes from 'prop-types';
 
@@ -8,7 +8,7 @@ import ImportModal from '../components/import/ImportModal';
 import ExportModal from '../components/ExportModal';
 import UpgradeModal from '../components/UpgradeModal';
 
-const PrivateSidebar = ({ user, totalContacts, contactGroups, history }) => {
+const PrivateSidebar = ({ url, onToggleExpand, user, totalContacts, contactGroups, expanded, history }) => {
     const { hasPaidMail } = user;
     const { createModal } = useModals();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
@@ -75,26 +75,37 @@ const PrivateSidebar = ({ user, totalContacts, contactGroups, history }) => {
         );
     }
 
+    const mobileLinks = [
+        { to: '/inbox', icon: 'protonmail', external: true, current: false },
+        { to: '/contacts', icon: 'protoncontacts', external: false, current: true }
+    ];
+
     return (
-        <div className="sidebar flex flex-column noprint">
-            <div className="pl1 pr1">
+        <Sidebar
+            expanded={expanded}
+            onToggleExpand={onToggleExpand}
+            url={url}
+            list={list.filter(Boolean)}
+            mobileLinks={mobileLinks}
+        >
+            <div className="pl1 pr1 nomobile">
                 <PrimaryButton
                     className="pm-button--large bold mt0-25 w100"
                     onClick={() => createModal(<ContactModal />)}
                 >{c('Action').t`Add contact`}</PrimaryButton>
             </div>
-            <nav className="navigation mw100 flex-item-fluid scroll-if-needed mb1">
-                <NavMenu list={list.filter(Boolean)} />
-            </nav>
-        </div>
+        </Sidebar>
     );
 };
 
 PrivateSidebar.propTypes = {
+    url: PropTypes.string,
     user: PropTypes.object,
     totalContacts: PropTypes.number,
     contactGroups: PropTypes.array,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
+    expanded: PropTypes.bool,
+    onToggleExpand: PropTypes.func
 };
 
 export default PrivateSidebar;
