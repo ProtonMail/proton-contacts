@@ -218,6 +218,7 @@ const ContactsContainer = ({ location, history }) => {
         <ContactsList
             emptyAddressBook={!contactsLength}
             contactID={contactID}
+            contactGroupID={contactGroupID}
             totalContacts={contactsLength}
             contacts={formattedContacts}
             contactGroupsMap={contactGroupsMap}
@@ -230,7 +231,7 @@ const ContactsContainer = ({ location, history }) => {
         />
     );
 
-    const contactPlaceHolderComponent = isDesktop && !contactComponent && !!contactsLength && (
+    const contactPlaceHolderComponent = isDesktop && !contactComponent && !!formattedContacts.length && (
         <ContactPlaceholder
             history={history}
             user={user}
