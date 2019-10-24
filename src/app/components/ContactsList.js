@@ -11,6 +11,7 @@ import noResultsImg from 'design-system/assets/img/shared/no-results-found.svg';
 
 import ImportModal from './import/ImportModal';
 import ContactModal from './ContactModal';
+import ContactGroupModal from './ContactGroupModal';
 import ContactRow from './ContactRow';
 
 const ContactsList = ({
@@ -24,6 +25,7 @@ const ContactsList = ({
     loadingUserKeys,
     history,
     contactID,
+    contactGroupID,
     location,
     isDesktop = true
 }) => {
@@ -37,6 +39,9 @@ const ContactsList = ({
     };
     const handleAddContact = () => {
         createModal(<ContactModal />);
+    };
+    const handleEditGroup = () => {
+        createModal(<ContactGroupModal />);
     };
 
     const handleCheck = (event) => {
@@ -93,7 +98,7 @@ const ContactsList = ({
             <div className="p2 aligncenter w100">
                 <IllustrationPlaceholder title={c('Info message').t`Your address book is empty`} url={noContactsImg}>
                     <div className="flex flex-items-center">
-                        {c('Actions message').jt`You can either ${addContact} or ${importContact} from a file`}
+                        {c('Actions message').jt`You can either ${addContact} or ${importContact} from a file.`}
                     </div>
                 </IllustrationPlaceholder>
             </div>
@@ -101,6 +106,32 @@ const ContactsList = ({
     }
 
     if (!contacts.length) {
+        if (contactGroupID) {
+            const editGroup = (
+                <button
+                    key="add"
+                    type="button"
+                    className="color-primary ml0-5 mr0-5 underline"
+                    onClick={handleEditGroup}
+                >
+                    {c('Action').t`Edit your group`}
+                </button>
+            );
+
+            return (
+                <div className="p2 aligncenter w100">
+                    <IllustrationPlaceholder
+                        title={c('Info message').t`Your contact group is empty`}
+                        url={noContactsImg}
+                    >
+                        <div className="flex flex-items-center">
+                            {c('Actions message').jt`You can ${editGroup} to add a contact.`}
+                        </div>
+                    </IllustrationPlaceholder>
+                </div>
+            );
+        }
+
         const clearSearch = (
             <button key="add" type="button" className="color-primary underline ml0-5 mr0-5" onClick={onClear}>
                 {c('Action').t`Clear it`}
@@ -111,7 +142,7 @@ const ContactsList = ({
             <div className="p2 aligncenter w100">
                 <IllustrationPlaceholder title={c('Info message').t`No results found`} url={noResultsImg}>
                     <div className="flex flex-items-center">
-                        {c('Actions message').jt`You can either update your query search or ${clearSearch}`}
+                        {c('Actions message').jt`You can either update your query search or ${clearSearch}.`}
                     </div>
                 </IllustrationPlaceholder>
             </div>
@@ -160,6 +191,7 @@ ContactsList.propTypes = {
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     contactID: PropTypes.string,
+    contactGroupID: PropTypes.string,
     isDesktop: PropTypes.bool
 };
 

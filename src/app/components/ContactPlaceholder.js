@@ -174,8 +174,8 @@ const ContactPlaceholder = ({
             createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
 
         return (
-            <div className="p2 view-column-detail flex-item-fluid scroll-if-needed">
-                <div className="aligncenter">
+            <div className="p2 view-column-detail flex flex-item-fluid scroll-if-needed">
+                <div className="aligncenter center mbauto mtauto">
                     <h1 className="ellipsis lh-standard">{Name}</h1>
                     <div className="mb2">{c('Info').jt`You have ${totalContactsText} in this group.`}</div>
                     <div className="aligncenter mb2">
