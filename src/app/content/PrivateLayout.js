@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { AppsSidebar, StorageSpaceStatus, Href } from 'react-components';
 import { c } from 'ttag';
 
-const PrivateLayout = ({ children }) => {
+const PrivateLayout = ({ children, title }) => {
+    useEffect(() => {
+        document.title = title;
+    }, [title]);
+
     return (
         <div className="flex flex-nowrap no-scroll">
             <AppsSidebar
@@ -21,7 +25,8 @@ const PrivateLayout = ({ children }) => {
 };
 
 PrivateLayout.propTypes = {
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
+    title: PropTypes.string
 };
 
 export default PrivateLayout;
