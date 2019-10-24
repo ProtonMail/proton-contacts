@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Sidebar, MainAreaContext, useUser, useToggle } from 'react-components';
+import { Sidebar, MainAreaContext, useUser, useToggle, useActiveBreakpoint } from 'react-components';
 import { Route, Switch, Redirect } from 'react-router';
 import { c } from 'ttag';
 
@@ -13,6 +13,7 @@ const SettingsContainer = ({ location }) => {
     const mainAreaRef = useRef();
     const [{ hasPaidMail }] = useUser();
     const { state: expanded, toggle: onToggleExpand } = useToggle();
+    const { isNarrow } = useActiveBreakpoint();
 
     useEffect(() => {
         mainAreaRef.current.scrollTop = 0;
@@ -35,6 +36,7 @@ const SettingsContainer = ({ location }) => {
                 title={c('Title').t`Settings`}
                 expanded={expanded}
                 onToggleExpand={onToggleExpand}
+                isNarrow={isNarrow}
             />
             <div className="flex flex-nowrap">
                 <Sidebar
