@@ -78,7 +78,7 @@ const ContactGroupModal = ({ contactGroupID, ...rest }) => {
     const contactEmailIDs = model.contactEmails.map(({ ID }) => ID);
     const options = contactEmails
         .filter(({ ID }) => !contactEmailIDs.includes(ID))
-        .map(({ ID, Email, Name }) => ({ text: `${Email} ${Name}`, value: ID }));
+        .map(({ ID, Email, Name }) => ({ text: Email === Name ? Email : `${Email} ${Name}`, value: ID }));
 
     const handleChangeName = ({ target }) => setModel({ ...model, name: target.value });
     const handleChangeColor = (color) => () => setModel({ ...model, color });
