@@ -8,7 +8,17 @@ import ImportModal from '../components/import/ImportModal';
 import ExportModal from '../components/ExportModal';
 import UpgradeModal from '../components/UpgradeModal';
 
-const PrivateSidebar = ({ url, onToggleExpand, expanded, user, userKeysList = [], loadingUserKeys, totalContacts, contactGroups = [], history }) => {
+const PrivateSidebar = ({
+    url,
+    onToggleExpand,
+    expanded,
+    user,
+    userKeysList = [],
+    loadingUserKeys,
+    totalContacts,
+    contactGroups = [],
+    history
+}) => {
     const { hasPaidMail } = user;
     const { createModal } = useModals();
 
@@ -63,7 +73,7 @@ const PrivateSidebar = ({ url, onToggleExpand, expanded, user, userKeysList = []
         list.push(
             ...contactGroups.map(({ Name: text, Color: color, ID: contactGroupID }) => ({
                 icon: 'contacts-groups',
-                isActive(match, location) {
+                isActive(_match, location) {
                     const params = new URLSearchParams(location.search);
                     return params.get('contactGroupID') === contactGroupID;
                 },

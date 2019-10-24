@@ -183,7 +183,11 @@ const ContactPlaceholder = ({
                     </div>
                     <div className="mb2">
                         <Button className="mr1" onClick={handleEdit}>{c('Action').t`Edit`}</Button>
-                        <Button onClick={handleExport} disabled={loadingUserKeys}>{c('Action').t`Export`}</Button>
+                        {!!total && (
+                            <Button onClick={handleExport} disabled={loadingUserKeys}>
+                                {c('Action').t`Export`}
+                            </Button>
+                        )}
                     </div>
                 </div>
             </div>
