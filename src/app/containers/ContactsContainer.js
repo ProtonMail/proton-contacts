@@ -270,7 +270,7 @@ const ContactsContainer = ({ location, history }) => {
                     contactGroups={contactGroups}
                     userKeysList={userKeysList}
                 />
-                <div className={`main flex-item-fluid`}>
+                <div className="main flex-item-fluid">
                     <ContactToolbar
                         user={user}
                         contactEmailsMap={contactEmailsMap}

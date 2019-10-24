@@ -15,7 +15,7 @@ const PrivateLayout = ({ children }) => {
                     </StorageSpaceStatus>
                 ]}
             />
-            <div className="content flex-item-fluid reset4print">{children}</div>
+            <div className="content flex-item-fluid h100v reset4print">{children}</div>
         </div>
     );
 };
