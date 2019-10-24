@@ -22,10 +22,10 @@ const PrivateHeader = ({ title, search, onSearch, expanded, onToggleExpand, inSe
     const { createModal } = useModals();
 
     return (
-        <header className="header flex flex-nowrap reset4print">
+        <header className="header flex flex-items-center flex-nowrap reset4print">
             <MainLogo url="/contacts" className="nomobile" />
             <Hamburger expanded={expanded} onToggle={onToggleExpand} />
-            {title && isNarrow ? <span className="big ellipsis">{title}</span> : null}
+            {title && isNarrow ? <span className="h3 mb0 ellipsis lh-standard">{title}</span> : null}
             {inSettings || isNarrow ? null : (
                 <Searchbox placeholder={c('Placeholder').t`Search`} value={search} onChange={onSearch} />
             )}
