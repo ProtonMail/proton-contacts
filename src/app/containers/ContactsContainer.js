@@ -268,6 +268,7 @@ const ContactsContainer = ({ location, history }) => {
                     onToggleExpand={onToggleExpand}
                     totalContacts={contactsLength}
                     contactGroups={contactGroups}
+                    userKeysList={userKeysList}
                 />
                 <div className={`main flex-item-fluid`}>
                     <ContactToolbar
