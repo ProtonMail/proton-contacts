@@ -12,10 +12,11 @@ import PrivateLayout from '../content/PrivateLayout';
 const SettingsContainer = ({ location }) => {
     const mainAreaRef = useRef();
     const [{ hasPaidMail }] = useUser();
-    const { state: expanded, toggle: onToggleExpand } = useToggle();
+    const { state: expanded, toggle: onToggleExpand, set: setExpand } = useToggle();
     const { isNarrow } = useActiveBreakpoint();
 
     useEffect(() => {
+        setExpand(false);
         mainAreaRef.current.scrollTop = 0;
     }, [location.pathname]);
 

@@ -35,7 +35,7 @@ import ExportModal from '../components/ExportModal';
 import PrivateLayout from '../content/PrivateLayout';
 
 const ContactsContainer = ({ location, history }) => {
-    const { state: expanded, toggle: onToggleExpand } = useToggle();
+    const { state: expanded, toggle: onToggleExpand, set: setExpand } = useToggle();
     const { createModal } = useModals();
     const [search, updateSearch] = useState('');
     const normalizedSearch = normalize(search);
@@ -66,6 +66,7 @@ const ContactsContainer = ({ location, history }) => {
         // clean checked contacts if navigating to a contact group
         setCheckedContacts(Object.create(null));
         setCheckAll(false);
+        setExpand(false);
     }, [contactGroupID]);
 
     const filteredContacts = useMemo(() => {
