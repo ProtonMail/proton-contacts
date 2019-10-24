@@ -108,7 +108,7 @@ const ContactsList = ({
         );
 
         return (
-            <div className="p2 aligncenter w50">
+            <div className="p2 aligncenter w100">
                 <IllustrationPlaceholder title={c('Info message').t`No results found`} url={noResultsImg}>
                     <div className="flex flex-items-center">
                         {c('Actions message').jt`You can either update your query search or ${clearSearch}`}
