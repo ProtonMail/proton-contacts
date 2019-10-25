@@ -145,8 +145,8 @@ const ContactPlaceholder = ({
         );
 
         return (
-            <div className="p2 view-column-detail flex-item-fluid scroll-if-needed">
-                <div className="aligncenter">
+            <div className="p2 view-column-detail flex flex-item-fluid scroll-if-needed">
+                <div className="aligncenter center mbauto mtauto">
                     <div className="mb2">{c('Info').jt`You selected ${totalContactsText} from your address book.`}</div>
                     <div className="aligncenter mb2">
                         <img src={contactGroupCard} alt="contact-group-card" />
@@ -204,7 +204,7 @@ const ContactPlaceholder = ({
 
     return (
         <div className="p2 view-column-detail flex-item-fluid scroll-if-needed">
-            <div className="aligncenter">
+            <div className="aligncenter mt2">
                 <h1>{c('Title').t`Contacts`}</h1>
                 <div className="mb2">{c('Info').jt`You have ${boldTotalContacts} in your address book`}</div>
                 <div className="mb1">

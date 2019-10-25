@@ -51,7 +51,6 @@ const ContactsContainer = ({ location, history }) => {
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
 
     const { isDesktop, isNarrow } = useActiveBreakpoint();
-    const noHeader = isNarrow ? '--noHeader' : '';
 
     const contactGroupID = useMemo(() => {
         const params = new URLSearchParams(location.search);
@@ -211,6 +210,7 @@ const ContactsContainer = ({ location, history }) => {
 
     const isLoading = loadingContactEmails || loadingContacts || loadingContactGroups || loadingUserKeys;
     const contactsLength = contacts ? contacts.length : 0;
+    const noHeader = isNarrow && contactID ? '--noHeader' : '';
 
     const contactComponent = contactID && contactsLength && !hasChecked && (
         <Contact

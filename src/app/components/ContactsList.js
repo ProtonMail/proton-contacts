@@ -95,8 +95,12 @@ const ContactsList = ({
         );
 
         return (
-            <div className="p2 aligncenter w100">
-                <IllustrationPlaceholder title={c('Info message').t`Your address book is empty`} url={noContactsImg}>
+            <div className="p2 flex w100">
+                <IllustrationPlaceholder
+                    title={c('Info message').t`Your address book is empty`}
+                    url={noContactsImg}
+                    className="mtauto mbauto"
+                >
                     <div className="flex flex-items-center">
                         {c('Actions message').jt`You can either ${addContact} or ${importContact} from a file.`}
                     </div>
