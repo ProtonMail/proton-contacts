@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { randomIntFromInterval } from 'proton-shared/lib/helpers/function';
-import { diff } from 'proton-shared/lib/helpers/array';
+import { diff, orderBy } from 'proton-shared/lib/helpers/array';
 import { LABEL_COLORS } from 'proton-shared/lib/constants';
 import { createContactGroup, updateLabel } from 'proton-shared/lib/api/labels';
 import { labelContactEmails, unLabelContactEmails } from 'proton-shared/lib/api/contacts';
@@ -76,7 +76,7 @@ const ContactGroupModal = ({ contactGroupID, ...rest }) => {
         contactEmails: contactGroupID ? existingContactEmails : []
     });
     const contactEmailIDs = model.contactEmails.map(({ ID }) => ID);
-    const options = contactEmails
+    const options = orderBy(contactEmails, 'Email')
         .filter(({ ID }) => !contactEmailIDs.includes(ID))
         .map(({ ID, Email, Name }) => ({ text: Email === Name ? Email : `${Email} ${Name}`, value: ID }));
 
