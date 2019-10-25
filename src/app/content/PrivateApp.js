@@ -8,7 +8,8 @@ import {
     ContactEmailsModel,
     ContactGroupsModel,
     UserSettingsModel,
-    SubscriptionModel
+    SubscriptionModel,
+    MailSettingsModel
 } from 'proton-shared/lib/models';
 
 import ContactsProvider from '../containers/ContactProvider';
@@ -18,6 +19,7 @@ import SettingsContainer from '../containers/SettingsContainer';
 const EVENT_MODELS = [
     UserModel,
     UserSettingsModel,
+    MailSettingsModel,
     ContactsModel,
     SubscriptionModel,
     ContactEmailsModel,
