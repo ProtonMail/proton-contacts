@@ -11,13 +11,14 @@ import { chunk } from 'proton-shared/lib/helpers/array';
 import { prepareContact as decrypt } from '../../helpers/decrypt';
 import { prepareContact as encrypt } from '../../helpers/encrypt';
 import { merge } from '../../helpers/merge';
+import { splitContacts } from '../../helpers/import';
 import { combineProgress } from '../../helpers/progress';
 import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE, API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
 
 import DynamicProgress from '../DynamicProgress';
 
 const { OVERWRITE_CONTACT } = OVERWRITE;
-const { IGNORE } = CATEGORIES;
+const { INCLUDE, IGNORE } = CATEGORIES;
 
 const MergingModalContent = ({
     contactID,
@@ -95,7 +96,7 @@ const MergingModalContent = ({
                     privateKey: privateKeys[0],
                     publicKey: publicKeys[0]
                 });
-                beSubmittedContacts.push(encryptedMergedContact);
+                beSubmittedContacts.push({ contact: encryptedMergedContact });
 
                 !signal.aborted &&
                     setModel((model) => ({ ...model, mergedAndEncrypted: [...model.mergedAndEncrypted, ...groupIDs] }));
@@ -125,7 +126,7 @@ const MergingModalContent = ({
                         privateKey: privateKeys[0],
                         publicKey: publicKeys[0]
                     });
-                    beSubmittedContacts.push(encryptedMergedContact);
+                    beSubmittedContacts.push({ contact: encryptedMergedContact });
                     !signal.aborted &&
                         setModel((model) => ({
                             ...model,
@@ -145,26 +146,27 @@ const MergingModalContent = ({
         /**
          * Submit a batch of merged contacts to the API
          */
-        const submitBatch = async (beSubmittedContacts, { signal }) => {
-            if (signal.aborted) {
+        const submitBatch = async ({ contacts = [], labels }, { signal }) => {
+            if (signal.aborted || !contacts.length) {
                 return;
             }
             const beDeletedBatchIDs = [];
-            const { Responses = [] } =
-                !!beSubmittedContacts.length &&
-                (await apiWithAbort(
-                    addContacts({
-                        Contacts: beSubmittedContacts,
-                        Overwrite: OVERWRITE_CONTACT,
-                        Labels: IGNORE
-                    })
-                ));
+            const responses = (await apiWithAbort(
+                addContacts({
+                    Contacts: contacts.map(({ contact }) => contact),
+                    Overwrite: OVERWRITE_CONTACT,
+                    Labels: labels
+                })
+            )).Responses.map(({ Response }) => Response);
+
+            if (signal.aborted) {
+                return;
+            }
+
             for (const {
-                Response: {
-                    Code,
-                    Contact: { ID }
-                }
-            } of Responses) {
+                Code,
+                Contact: { ID }
+            } of responses) {
                 const groupIDs = beMergedModel[ID];
                 const beDeletedAfterMergeIDs = groupIDs.slice(1);
                 if (Code === SUCCESS_IMPORT_CODE) {
@@ -186,17 +188,20 @@ const MergingModalContent = ({
         /**
          * Submit all merged contacts to the API
          */
-        const submitContacts = async (beSubmittedContacts, { signal }) => {
+        const submitContacts = async ({ contacts = [], labels }, { signal }) => {
             if (signal.aborted) {
                 return;
             }
-            // split contacts to be submitted and deleted in batches in case there are too many
-            const beSubmittedBatches = chunk(beSubmittedContacts, ADD_CONTACTS_MAX_SIZE);
-            const apiCalls = beSubmittedBatches.length;
+            // divide contacts and indexMap in batches
+            const contactBatches = chunk(contacts, ADD_CONTACTS_MAX_SIZE);
+            const apiCalls = contactBatches.length;
 
             for (let i = 0; i < apiCalls; i++) {
-                // avoid overloading API in the case submitBatch is too fast
-                await Promise.all([submitBatch(beSubmittedBatches[i], { signal }), wait(API_SAFE_INTERVAL)]);
+                // avoid overloading API in the unlikely case submitBatch is too fast
+                await Promise.all([
+                    submitBatch({ contacts: contactBatches[i], labels }, { signal }),
+                    wait(API_SAFE_INTERVAL)
+                ]);
             }
         };
 
@@ -224,7 +229,9 @@ const MergingModalContent = ({
             const beSubmittedContacts = !alreadyMerged
                 ? await mergeAndEncrypt({ signal })
                 : await encryptAlreadyMerged({ signal });
-            await submitContacts(beSubmittedContacts, { signal });
+            const { withCategories, withoutCategories } = splitContacts(beSubmittedContacts);
+            await submitContacts({ contacts: withCategories, labels: INCLUDE }, { signal });
+            await submitContacts({ contacts: withoutCategories, labels: IGNORE }, { signal });
             await deleteMarkedForDeletion({ signal });
             !signal.aborted && (await onFinish());
         };

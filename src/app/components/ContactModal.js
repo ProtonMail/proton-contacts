@@ -17,14 +17,20 @@ import ContactModalProperties from './ContactModalProperties';
 import { randomIntFromInterval } from 'proton-shared/lib/helpers/function';
 import { generateUID } from 'react-components/helpers/component';
 import { prepareContacts } from '../helpers/encrypt';
+import { hasCategories } from '../helpers/import';
 import { getEditableFields, getOtherInformationFields } from '../helpers/fields';
 import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE } from '../constants';
 
 import UpsellFree from './UpsellFree';
+import { CATEGORIES } from '../constants';
 
 const DEFAULT_MODEL = [{ field: 'fn', value: '' }, { field: 'email', value: '' }];
+<<<<<<< HEAD
 const { OVERWRITE_CONTACT, THROW_ERROR_IF_CONFLICT } = OVERWRITE;
 const { IGNORE } = CATEGORIES;
+=======
+const { INCLUDE, IGNORE } = CATEGORIES;
+>>>>>>> take care of categories when editing / merging contacts
 
 const editableFields = getEditableFields().map(({ value }) => value);
 const otherInformationFields = getOtherInformationFields().map(({ value }) => value);
@@ -68,13 +74,14 @@ const ContactModal = ({ contactID, properties: initialProperties = [], history, 
     const handleSubmit = async () => {
         const notEditableProperties = initialProperties.filter(({ field }) => !editableFields.includes(field));
         const Contacts = await prepareContacts([properties.concat(notEditableProperties)], userKeysList[0]);
+        const labels = hasCategories(notEditableProperties) ? INCLUDE : IGNORE;
         const {
             Responses: [{ Response: { Code, Contact: { ID } = {} } = {} }]
         } = await api(
             addContacts({
                 Contacts,
                 Overwrite: contactID ? OVERWRITE_CONTACT : THROW_ERROR_IF_CONFLICT,
-                Labels: IGNORE
+                Labels: labels
             })
         );
         if (Code !== SUCCESS_IMPORT_CODE) {

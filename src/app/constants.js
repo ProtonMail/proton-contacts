@@ -37,6 +37,7 @@ export const PGP_INLINE = 'pgp-inline';
 export const PGP_MIME = 'pgp-mime';
 export const PGP_INLINE_TEXT = 'PGP/Inline';
 export const PGP_MIME_TEXT = 'PGP/MIME';
+export const PGP_SIGN = 1;
 
 export const OVERWRITE = {
     // when UID conflict at contact import
