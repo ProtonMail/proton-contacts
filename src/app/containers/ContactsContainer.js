@@ -58,6 +58,10 @@ const ContactsContainer = ({ location, history }) => {
         return params.get('contactGroupID');
     }, [location.search]);
 
+    const contactGroup = useMemo(() => {
+        return contactGroups.find(({ ID }) => ID === contactGroupID);
+    }, [contactGroupID]);
+
     const hasChecked = useMemo(() => {
         return Object.keys(checkedContacts).some((key) => checkedContacts[key]);
     }, [checkedContacts]);
@@ -250,7 +254,7 @@ const ContactsContainer = ({ location, history }) => {
     );
 
     return (
-        <PrivateLayout>
+        <PrivateLayout title={contactGroup ? `${contactGroup.Name}` : c('Title').t`Contacts`}>
             {(!isNarrow || !contactID) && (
                 <PrivateHeader
                     title={c('Title').t`Contacts`}
