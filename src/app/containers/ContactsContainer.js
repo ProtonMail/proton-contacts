@@ -59,6 +59,9 @@ const ContactsContainer = ({ location, history }) => {
     }, [location.search]);
 
     const contactGroup = useMemo(() => {
+        if (!contactGroups || !contactGroupID) {
+            return;
+        }
         return contactGroups.find(({ ID }) => ID === contactGroupID);
     }, [contactGroupID]);
 
