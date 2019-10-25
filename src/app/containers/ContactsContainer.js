@@ -254,7 +254,7 @@ const ContactsContainer = ({ location, history }) => {
     );
 
     return (
-        <PrivateLayout title={contactGroup ? `${contactGroup.Name} - ProtonContacts` : `Contacts - ProtonContacts`}>
+        <PrivateLayout title={contactGroup ? `${contactGroup.Name}` : c('Title').t`Contacts`}>
             {(!isNarrow || !contactID) && (
                 <PrivateHeader
                     title={c('Title').t`Contacts`}

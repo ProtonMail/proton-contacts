@@ -5,7 +5,7 @@ import { c } from 'ttag';
 
 const PrivateLayout = ({ children, title }) => {
     useEffect(() => {
-        document.title = title;
+        document.title = `${title} - ProtonContacts`;
     }, [title]);
 
     return (

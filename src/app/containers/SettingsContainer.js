@@ -31,7 +31,7 @@ const SettingsContainer = ({ location }) => {
     ];
 
     return (
-        <PrivateLayout title={c('Title').t`Contact settings - ProtonContacts`}>
+        <PrivateLayout title={c('Title').t`Contact settings`}>
             <PrivateHeader
                 inSettings={true}
                 title={c('Title').t`Settings`}
