@@ -68,7 +68,7 @@ const MergeModalContent = ({
         <>
             <Alert>
                 {c('Description')
-                    .jt`Use Drag and Drop to rank merging priority between contacts. Uncheck the contacts you do <b key="boldface">not</b> want to merge`}
+                    .t`Use Drag and Drop to rank merging priority between contacts. Uncheck the contacts you do not want to merge.`}
             </Alert>
             <Alert type="warning">
                 {c('Description')
