@@ -233,7 +233,8 @@ const ContactsContainer = ({ location, history }) => {
             userKeysList={userKeysList}
             loadingUserKeys={loadingUserKeys}
             onCheck={handleCheck}
-            onClear={handleClearSearch}
+            onClearSearch={handleClearSearch}
+            onClearSelection={handleUncheckAll}
             isDesktop={isDesktop}
         />
     );
