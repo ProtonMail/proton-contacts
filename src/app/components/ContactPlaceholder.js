@@ -35,8 +35,7 @@ const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
                 <div className="flex-item-fluid">
                     <img src={exportSvg} alt="contact-export" className="mb1" />
                     <div className="bold">{c('Title').t`Export contacts`}</div>
-                    <p>{c('Info')
-                        .t`Create an backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
+                    <p>{c('Info').t`Create a backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
                 </div>
                 <div className="flex-item-noshrink p1">
                     <PrimaryButton className="bold" onClick={onExport} disabled={loadingUserKeys}>{c('Action')
@@ -86,8 +85,7 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
                 <div className="flex-item-fluid">
                     <img src={exportSvg} alt="contact-export" className="mb1" />
                     <div className="bold">{c('Title').t`Export contacts`}</div>
-                    <p>{c('Info')
-                        .t`Create an backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
+                    <p>{c('Info').t`Create a backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
                 </div>
                 <div className="flex-item-noshrink p1">
                     <PrimaryButton className="bold" onClick={onExport} disabled={loadingUserKeys}>{c('Action')
