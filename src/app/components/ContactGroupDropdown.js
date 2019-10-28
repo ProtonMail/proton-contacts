@@ -87,7 +87,10 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled, fo
     const [model, setModel] = useState(Object.create(null));
     const [uid] = useState(generateUID('contactGroupDropdown'));
 
-    const handleAdd = () => createModal(<ContactGroupModal />);
+    const handleAdd = () => {
+        createModal(<ContactGroupModal />);
+        close();
+    };
     const handleCheck = (contactGroupID) => ({ target }) => setModel({ ...model, [contactGroupID]: +target.checked });
 
     const handleApply = async () => {
@@ -230,7 +233,8 @@ ContactGroupDropdown.propTypes = {
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
     disabled: PropTypes.bool,
-    contactEmails: PropTypes.arrayOf(PropTypes.object)
+    contactEmails: PropTypes.arrayOf(PropTypes.object),
+    forToolbar: PropTypes.bool
 };
 
 export default ContactGroupDropdown;
