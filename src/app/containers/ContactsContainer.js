@@ -186,7 +186,7 @@ const ContactsContainer = ({ location, history }) => {
         if (!Array.isArray(contacts)) {
             return;
         }
-        handleCheck(contacts.map(({ ID }) => ID), checked);
+        handleCheck(filteredContacts.map(({ ID }) => ID), checked);
     };
 
     const handleUncheckAll = () => {
