@@ -19,7 +19,8 @@ const ContactsList = ({
     contacts,
     contactGroupsMap,
     onCheck,
-    onClear,
+    onClearSearch,
+    onClearSelection,
     user,
     userKeysList,
     loadingUserKeys,
@@ -61,7 +62,10 @@ const ContactsList = ({
         onCheck(contactIDs, target.checked);
     };
 
-    const handleClick = (ID) => history.push({ ...location, pathname: `/contacts/${ID}` });
+    const handleClick = (ID) => {
+        onClearSelection();
+        history.push({ ...location, pathname: `/contacts/${ID}` });
+    };
 
     useEffect(() => {
         const timeoutID = setTimeout(() => {
@@ -137,7 +141,7 @@ const ContactsList = ({
         }
 
         const clearSearch = (
-            <button key="add" type="button" className="color-primary underline ml0-5 mr0-5" onClick={onClear}>
+            <button key="add" type="button" className="color-primary underline ml0-5 mr0-5" onClick={onClearSearch}>
                 {c('Action').t`Clear it`}
             </button>
         );
@@ -188,7 +192,8 @@ ContactsList.propTypes = {
     contacts: PropTypes.array,
     contactGroupsMap: PropTypes.object,
     onCheck: PropTypes.func,
-    onClear: PropTypes.func,
+    onClearSearch: PropTypes.func,
+    onClearSelection: PropTypes.func,
     user: PropTypes.object,
     userKeysList: PropTypes.array,
     loadingUserKeys: PropTypes.bool.isRequired,
