@@ -41,8 +41,8 @@ const ContactsList = ({
     const handleAddContact = () => {
         createModal(<ContactModal />);
     };
-    const handleEditGroup = () => {
-        createModal(<ContactGroupModal />);
+    const handleEditGroup = (contactGroupID) => {
+        createModal(<ContactGroupModal contactGroupID={contactGroupID} />);
     };
 
     const handleCheck = (event) => {
@@ -120,7 +120,7 @@ const ContactsList = ({
                     key="add"
                     type="button"
                     className="color-primary ml0-5 mr0-5 underline"
-                    onClick={handleEditGroup}
+                    onClick={() => handleEditGroup(contactGroupID)}
                 >
                     {c('Action').t`Edit your group`}
                 </button>
