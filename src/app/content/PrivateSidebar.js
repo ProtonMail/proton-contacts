@@ -17,7 +17,8 @@ const PrivateSidebar = ({
     loadingUserKeys,
     totalContacts,
     contactGroups = [],
-    history
+    history,
+    location
 }) => {
     const { hasPaidMail } = user;
     const { createModal } = useModals();
@@ -100,7 +101,7 @@ const PrivateSidebar = ({
             <div className="pl1 pr1 nomobile">
                 <PrimaryButton
                     className="pm-button--large bold mt0-25 w100"
-                    onClick={() => createModal(<ContactModal />)}
+                    onClick={() => createModal(<ContactModal history={history} location={location} />)}
                 >{c('Action').t`Add contact`}</PrimaryButton>
             </div>
         </Sidebar>
@@ -116,7 +117,8 @@ PrivateSidebar.propTypes = {
     onToggleExpand: PropTypes.func,
     userKeysList: PropTypes.array,
     loadingUserKeys: PropTypes.bool,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired
 };
 
 export default PrivateSidebar;

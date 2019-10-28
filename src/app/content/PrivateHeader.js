@@ -17,7 +17,17 @@ import {
 
 import ContactModal from '../components/ContactModal';
 
-const PrivateHeader = ({ title, search, onSearch, expanded, onToggleExpand, inSettings = false, isNarrow = false }) => {
+const PrivateHeader = ({
+    title,
+    search,
+    onSearch,
+    expanded,
+    onToggleExpand,
+    inSettings = false,
+    isNarrow = false,
+    history,
+    location
+}) => {
     const [{ hasPaidMail }] = useUser();
     const { createModal } = useModals();
 
@@ -65,7 +75,10 @@ const PrivateHeader = ({ title, search, onSearch, expanded, onToggleExpand, inSe
                 )}
             </TopNavbar>
             {isNarrow && !inSettings ? (
-                <FloatingButton onClick={() => createModal(<ContactModal />)} icon="plus" />
+                <FloatingButton
+                    onClick={() => createModal(<ContactModal history={history} location={location} />)}
+                    icon="plus"
+                />
             ) : null}
         </header>
     );
@@ -78,7 +91,9 @@ PrivateHeader.propTypes = {
     onToggleExpand: PropTypes.func,
     onSearch: PropTypes.func,
     inSettings: PropTypes.bool,
-    isNarrow: PropTypes.bool
+    isNarrow: PropTypes.bool,
+    history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired
 };
 
 export default PrivateHeader;

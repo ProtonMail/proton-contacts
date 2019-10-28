@@ -267,12 +267,15 @@ const ContactsContainer = ({ location, history }) => {
                     search={search}
                     onSearch={updateSearch}
                     isNarrow={isNarrow}
+                    history={history}
+                    location={location}
                 />
             )}
             <div className="flex flex-nowrap">
                 <PrivateSidebar
                     url="/contacts"
                     history={history}
+                    location={location}
                     user={user}
                     expanded={expanded}
                     onToggleExpand={onToggleExpand}

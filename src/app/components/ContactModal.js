@@ -18,9 +18,13 @@ import { randomIntFromInterval } from 'proton-shared/lib/helpers/function';
 import { generateUID } from 'react-components/helpers/component';
 import { prepareContacts } from '../helpers/encrypt';
 import { getEditableFields, getOtherInformationFields } from '../helpers/fields';
+import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE } from '../constants';
+
 import UpsellFree from './UpsellFree';
 
 const DEFAULT_MODEL = [{ field: 'fn', value: '' }, { field: 'email', value: '' }];
+const { OVERWRITE_CONTACT, THROW_ERROR_IF_CONFLICT } = OVERWRITE;
+const { IGNORE } = CATEGORIES;
 
 const editableFields = getEditableFields().map(({ value }) => value);
 const otherInformationFields = getOtherInformationFields().map(({ value }) => value);
@@ -35,7 +39,7 @@ const formatModel = (properties = []) => {
         .map((property) => ({ ...property, uid: generateUID(UID_PREFIX) })); // Add UID to localize the property easily
 };
 
-const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => {
+const ContactModal = ({ contactID, properties: initialProperties = [], history, location, ...rest }) => {
     const api = useApi();
     const { createNotification } = useNotifications();
     const [loading, withLoading] = useLoading();
@@ -64,8 +68,21 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
     const handleSubmit = async () => {
         const notEditableProperties = initialProperties.filter(({ field }) => !editableFields.includes(field));
         const Contacts = await prepareContacts([properties.concat(notEditableProperties)], userKeysList[0]);
-        await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: 0 }));
+        const {
+            Responses: [{ Response: { Code, Contact: { ID } = {} } = {} }]
+        } = await api(
+            addContacts({
+                Contacts,
+                Overwrite: contactID ? OVERWRITE_CONTACT : THROW_ERROR_IF_CONFLICT,
+                Labels: IGNORE
+            })
+        );
+        if (Code !== SUCCESS_IMPORT_CODE) {
+            rest.onClose();
+            return createNotification({ text: c('Error').t`Contact could not be saved`, type: 'error' });
+        }
         await call();
+        history.push({ ...location, pathname: `/contacts/${ID}` });
         rest.onClose();
         createNotification({ text: c('Success').t`Contact saved` });
     };
@@ -152,11 +169,8 @@ const ContactModal = ({ contactID, properties: initialProperties, ...rest }) => 
 ContactModal.propTypes = {
     contactID: PropTypes.string,
     properties: PropTypes.array,
-    onClose: PropTypes.func
-};
-
-ContactModal.defaultProps = {
-    properties: []
+    history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired
 };
 
 export default ContactModal;
