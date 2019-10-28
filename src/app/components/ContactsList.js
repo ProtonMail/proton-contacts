@@ -39,7 +39,7 @@ const ContactsList = ({
         createModal(<ImportModal userKeysList={userKeysList} />);
     };
     const handleAddContact = () => {
-        createModal(<ContactModal history={history} location={location} />);
+        createModal(<ContactModal history={history} />);
     };
     const handleEditGroup = () => {
         createModal(<ContactGroupModal />);

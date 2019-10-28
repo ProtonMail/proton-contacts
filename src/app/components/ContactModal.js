@@ -39,7 +39,7 @@ const formatModel = (properties = []) => {
         .map((property) => ({ ...property, uid: generateUID(UID_PREFIX) })); // Add UID to localize the property easily
 };
 
-const ContactModal = ({ contactID, properties: initialProperties = [], history, location, ...rest }) => {
+const ContactModal = ({ contactID, properties: initialProperties = [], history, ...rest }) => {
     const api = useApi();
     const { createNotification } = useNotifications();
     const [loading, withLoading] = useLoading();
@@ -82,7 +82,9 @@ const ContactModal = ({ contactID, properties: initialProperties = [], history, 
             return createNotification({ text: c('Error').t`Contact could not be saved`, type: 'error' });
         }
         await call();
-        history.push({ ...location, pathname: `/contacts/${ID}` });
+        if (!contactID) {
+            history.push(`/contacts/${ID}`);
+        }
         rest.onClose();
         createNotification({ text: c('Success').t`Contact saved` });
     };
@@ -169,8 +171,7 @@ const ContactModal = ({ contactID, properties: initialProperties = [], history, 
 ContactModal.propTypes = {
     contactID: PropTypes.string,
     properties: PropTypes.array,
-    history: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired
+    history: PropTypes.object
 };
 
 export default ContactModal;

@@ -25,8 +25,7 @@ const PrivateHeader = ({
     onToggleExpand,
     inSettings = false,
     isNarrow = false,
-    history,
-    location
+    history
 }) => {
     const [{ hasPaidMail }] = useUser();
     const { createModal } = useModals();
@@ -75,10 +74,7 @@ const PrivateHeader = ({
                 )}
             </TopNavbar>
             {isNarrow && !inSettings ? (
-                <FloatingButton
-                    onClick={() => createModal(<ContactModal history={history} location={location} />)}
-                    icon="plus"
-                />
+                <FloatingButton onClick={() => createModal(<ContactModal history={history} />)} icon="plus" />
             ) : null}
         </header>
     );
@@ -92,8 +88,7 @@ PrivateHeader.propTypes = {
     onSearch: PropTypes.func,
     inSettings: PropTypes.bool,
     isNarrow: PropTypes.bool,
-    history: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired
 };
 
 export default PrivateHeader;
