@@ -30,7 +30,7 @@ const ContactViewProperties = ({
     };
     const title = field ? TITLES[field] : TITLES.other;
     const iconName = field ? ICONS[field] : ICONS.other;
-    const toExclude = ['photo', 'org', 'logo'];
+    const toExclude = ['photo', 'org'];
     const fields = field ? [field] : OTHER_INFORMATION_FIELDS.filter((field) => !toExclude.includes(field));
 
     const properties = allProperties.filter(({ field }) => fields.includes(field));
