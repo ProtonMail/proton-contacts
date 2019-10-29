@@ -75,21 +75,6 @@ const ContactsContainer = ({ location, history }) => {
         setExpand(false);
     }, [contactGroupID]);
 
-    const filteredContacts = useMemo(() => {
-        if (!Array.isArray(contacts)) {
-            return [];
-        }
-        return contacts.filter(({ Name, Email, LabelIDs }) => {
-            const searchFilter = normalizedSearch.length
-                ? normalize(`${Name} ${Email}`).includes(normalizedSearch)
-                : true;
-
-            const groupFilter = contactGroupID ? LabelIDs.includes(contactGroupID) : true;
-
-            return searchFilter && groupFilter;
-        });
-    }, [contacts, contactGroupID, normalizedSearch]);
-
     const contactEmailsMap = useMemo(() => {
         if (!Array.isArray(contactEmails)) {
             return {};
@@ -103,6 +88,22 @@ const ContactsContainer = ({ location, history }) => {
             return acc;
         }, Object.create(null));
     }, [contactEmails]);
+
+    const filteredContacts = useMemo(() => {
+        if (!Array.isArray(contacts)) {
+            return [];
+        }
+        return contacts.filter(({ Name, ID, LabelIDs }) => {
+            const emails = contactEmailsMap[ID] ? contactEmailsMap[ID].map(({ Email }) => Email).join(' ') : '';
+            const searchFilter = normalizedSearch.length
+                ? normalize(`${Name} ${emails}`).includes(normalizedSearch)
+                : true;
+
+            const groupFilter = contactGroupID ? LabelIDs.includes(contactGroupID) : true;
+
+            return searchFilter && groupFilter;
+        });
+    }, [contacts, contactGroupID, normalizedSearch, contactEmailsMap]);
 
     const contactGroupsMap = useMemo(() => toMap(contactGroups && contactGroups.filter(Boolean)), [contactGroups]);
 
