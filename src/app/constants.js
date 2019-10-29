@@ -40,7 +40,7 @@ export const PGP_MIME_TEXT = 'PGP/MIME';
 
 export const OVERWRITE = {
     // when UID conflict at contact import
-    THROW_ERROR: 0,
+    THROW_ERROR_IF_CONFLICT: 0,
     OVERWRITE_CONTACT: 1
 };
 

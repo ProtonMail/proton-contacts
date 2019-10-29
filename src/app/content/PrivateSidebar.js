@@ -100,7 +100,7 @@ const PrivateSidebar = ({
             <div className="pl1 pr1 nomobile">
                 <PrimaryButton
                     className="pm-button--large bold mt0-25 w100"
-                    onClick={() => createModal(<ContactModal />)}
+                    onClick={() => createModal(<ContactModal history={history} />)}
                 >{c('Action').t`Add contact`}</PrimaryButton>
             </div>
         </Sidebar>
