@@ -22,15 +22,10 @@ import { getEditableFields, getOtherInformationFields } from '../helpers/fields'
 import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE } from '../constants';
 
 import UpsellFree from './UpsellFree';
-import { CATEGORIES } from '../constants';
 
 const DEFAULT_MODEL = [{ field: 'fn', value: '' }, { field: 'email', value: '' }];
-<<<<<<< HEAD
 const { OVERWRITE_CONTACT, THROW_ERROR_IF_CONFLICT } = OVERWRITE;
-const { IGNORE } = CATEGORIES;
-=======
 const { INCLUDE, IGNORE } = CATEGORIES;
->>>>>>> take care of categories when editing / merging contacts
 
 const editableFields = getEditableFields().map(({ value }) => value);
 const otherInformationFields = getOtherInformationFields().map(({ value }) => value);
