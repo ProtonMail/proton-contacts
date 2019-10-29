@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, RemoteImage, useUser } from 'react-components';
-import { getInitial } from 'proton-shared/lib/helpers/string';
+import { Icon, useUser } from 'react-components';
 
 import { getFirstValue } from '../helpers/properties';
 import { formatAdr } from '../helpers/property';
 
+import ContactImageSummary from './ContactImageSummary';
 import './ContactSummary.scss';
 
 const ContactSummary = ({ properties }) => {
@@ -35,15 +35,7 @@ const ContactSummary = ({ properties }) => {
     return (
         <div className="bg-global-light flex flex-nowrap p1 mb1 border-bottom">
             <div className="aligncenter contactsummary-photo-container">
-                {photo ? (
-                    <RemoteImage src={photo} className="rounded50" />
-                ) : (
-                    <div className="rounded50 bordered bg-white ratio-container-square mb0">
-                        <span className="inner-ratio-container flex">
-                            <span className="mauto color-global-border h1">{getInitial(name)}</span>
-                        </span>
-                    </div>
-                )}
+                <ContactImageSummary src={photo} name={name} />
             </div>
             <div className="pl1">
                 <h2 className="mb0-5 ellipsis">{name}</h2>

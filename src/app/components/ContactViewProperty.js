@@ -1,7 +1,18 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Row, Group, ButtonGroup, Copy, Icon, useModals, useUser, classnames, Tooltip } from 'react-components';
+import {
+    Row,
+    Group,
+    ButtonGroup,
+    Copy,
+    Icon,
+    useModals,
+    useUser,
+    classnames,
+    Tooltip,
+    RemoteImage
+} from 'react-components';
 import { c } from 'ttag';
 
 import { clearType, getType, formatAdr } from '../helpers/property';
@@ -48,7 +59,7 @@ const ContactViewProperty = ({ property, properties, contactID, contactEmail, co
             return value;
         }
         if (field === 'logo') {
-            return <img src={value} alt={field} />;
+            return <RemoteImage src={value} />;
         }
         if (field === 'adr') {
             return formatAdr(value);

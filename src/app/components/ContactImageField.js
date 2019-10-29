@@ -1,12 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, RemoteImage } from 'react-components';
+import { c } from 'ttag';
+import { Button, img } from 'react-components';
 
-const ContactImageField = ({ value }) => {
-    return <div className="mb1">{value ? <RemoteImage src={value} /> : <Icon name="contact" size={40} />}</div>;
+const ContactImageField = ({ value, onChange }) => {
+    return (
+        <div className="mb1">
+            {value ? <img src={value} /> : <Button onClick={onChange}>{c('Action').t`Upload picture`}</Button>}
+        </div>
+    );
 };
 
 ContactImageField.propTypes = {
+    show: PropTypes.bool,
     value: PropTypes.string,
     onChange: PropTypes.func
 };

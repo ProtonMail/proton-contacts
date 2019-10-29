@@ -7,7 +7,7 @@ import ContactImageField from './ContactImageField';
 import ContactAdrField from './ContactAdrField';
 import { getAllFieldLabels } from '../helpers/fields';
 
-const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
+const ContactFieldProperty = ({ field, value, uid, onChange, onChangeImage, ...rest }) => {
     const handleChange = ({ target }) => onChange({ value: target.value, uid });
     const labels = getAllFieldLabels();
 
@@ -46,7 +46,7 @@ const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
     }
 
     if (field === 'photo' || field === 'logo') {
-        const handleChangeImage = (url) => onChange({ value: url, uid });
+        const handleChangeImage = (url) => onChangeImage({ value: url, uid });
         return <ContactImageField value={value} onChange={handleChangeImage} {...rest} />;
     }
     return <Input value={value} placeholder={labels[field]} onChange={handleChange} {...rest} />;
@@ -56,7 +56,8 @@ ContactFieldProperty.propTypes = {
     field: PropTypes.string.isRequired,
     uid: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string), PropTypes.object]),
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    onChangeImage: PropTypes.func
 };
 
 export default ContactFieldProperty;

@@ -10,18 +10,21 @@ import ContactImageModal from './ContactImageModal';
 
 const ContactModalRow = ({ property, onChange, onRemove, isOrderable = false }) => {
     const { createModal } = useModals();
-    const { field, uid } = property;
+    const { field, uid, value } = property;
     const type = clearType(getType(property.type));
     const canDelete = !['fn'].includes(field);
     const canClear = ['photo', 'logo'].includes(field) && property.value;
-    const canEdit = ['photo', 'logo'].includes(field);
+    const canEdit = ['photo', 'logo'].includes(field) && !!value;
+
+    const handleChangeImage = () => {
+        const handleSubmit = (value) => onChange({ uid, value });
+        createModal(<ContactImageModal url={property.value} onSubmit={handleSubmit} />);
+    };
 
     const list = [
-        canDelete && {
-            text: c('Action').t`Delete`,
-            onClick() {
-                onRemove(property.uid);
-            }
+        canEdit && {
+            text: c('Action').t`Edit`,
+            onClick: handleChangeImage
         },
         canClear && {
             text: c('Action').t`Clear`,
@@ -29,11 +32,10 @@ const ContactModalRow = ({ property, onChange, onRemove, isOrderable = false }) 
                 onChange({ uid, value: '' });
             }
         },
-        canEdit && {
-            text: c('Action').t`Edit`,
+        canDelete && {
+            text: c('Action').t`Delete`,
             onClick() {
-                const handleSubmit = (value) => onChange({ uid, value });
-                createModal(<ContactImageModal url={property.value} onSubmit={handleSubmit} />);
+                onRemove(property.uid);
             }
         }
     ].filter(Boolean);
@@ -62,6 +64,7 @@ const ContactModalRow = ({ property, onChange, onRemove, isOrderable = false }) 
                             value={property.value}
                             uid={property.uid}
                             onChange={onChange}
+                            onChangeImage={handleChangeImage}
                         />
                     </Field>
                 </span>
