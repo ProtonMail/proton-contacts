@@ -22,6 +22,7 @@ import { clearContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { toMap } from 'proton-shared/lib/helpers/object';
 import { extractMergeable } from '../helpers/merge';
+import { SUCCESS_API_CODE } from '../constants';
 
 import ContactsList from '../components/ContactsList';
 import Contact from '../components/Contact';
@@ -162,11 +163,18 @@ const ContactsContainer = ({ location, history }) => {
                 </ConfirmModal>
             );
         });
-        await api(checkAll && !contactGroupID ? clearContacts() : deleteContacts(activeIDs));
-        history.replace('/contacts');
+        if (checkAll && !contactGroupID) {
+            await api(clearContacts());
+            return createNotification({ text: c('Success').t`Contacts deleted` });
+        }
+        const { Responses } = await api(deleteContacts(activeIDs));
+        history.push({ ...location, pathname: '/contacts' });
         await call();
         setCheckedContacts(Object.create(null));
         setCheckAll(false);
+        if (Responses.some(({ Response: { Code } }) => Code !== SUCCESS_API_CODE)) {
+            return createNotification({ text: c('Error').t`Some contacts could not be deleted`, type: 'error' });
+        }
         createNotification({ text: c('Success').t`Contacts deleted` });
     };
 

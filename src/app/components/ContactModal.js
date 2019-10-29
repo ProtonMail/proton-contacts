@@ -19,7 +19,7 @@ import { generateUID } from 'react-components/helpers/component';
 import { prepareContacts } from '../helpers/encrypt';
 import { hasCategories } from '../helpers/import';
 import { getEditableFields, getOtherInformationFields } from '../helpers/fields';
-import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE } from '../constants';
+import { OVERWRITE, CATEGORIES, SUCCESS_API_CODE } from '../constants';
 
 import UpsellFree from './UpsellFree';
 
@@ -79,7 +79,7 @@ const ContactModal = ({ contactID, properties: initialProperties = [], history, 
                 Labels: labels
             })
         );
-        if (Code !== SUCCESS_IMPORT_CODE) {
+        if (Code !== SUCCESS_API_CODE) {
             rest.onClose();
             return createNotification({ text: c('Error').t`Contact could not be saved`, type: 'error' });
         }

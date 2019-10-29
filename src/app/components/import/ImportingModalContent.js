@@ -13,7 +13,7 @@ import { extractVcards, parse as parseVcard } from '../../helpers/vcard';
 import { prepareContact } from '../../helpers/encrypt';
 import { splitContacts } from '../../helpers/import';
 import { combineProgress } from '../../helpers/progress';
-import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE, API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
+import { OVERWRITE, CATEGORIES, SUCCESS_API_CODE, API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
 
 const { OVERWRITE_CONTACT } = OVERWRITE;
 const { IGNORE, INCLUDE } = CATEGORIES;
@@ -131,7 +131,7 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
             const { submittedBatch, failedOnSubmitBatch } = responses.reduce(
                 (acc, { Code, Error, Contact: { ID } = {} }, i) => {
                     const index = indexMap[i];
-                    if (Code === SUCCESS_IMPORT_CODE) {
+                    if (Code === SUCCESS_API_CODE) {
                         acc.submittedBatch.push(ID);
                     } else {
                         acc.failedOnSubmitBatch.push({ index, message: createSubmitErrorMessage(index + 1, Error) });

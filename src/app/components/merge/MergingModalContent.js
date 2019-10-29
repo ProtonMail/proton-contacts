@@ -13,7 +13,7 @@ import { prepareContact as encrypt } from '../../helpers/encrypt';
 import { merge } from '../../helpers/merge';
 import { splitContacts } from '../../helpers/import';
 import { combineProgress } from '../../helpers/progress';
-import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE, API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
+import { OVERWRITE, CATEGORIES, SUCCESS_API_CODE, API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
 
 import DynamicProgress from '../DynamicProgress';
 
@@ -169,7 +169,7 @@ const MergingModalContent = ({
             } of responses) {
                 const groupIDs = beMergedModel[ID];
                 const beDeletedAfterMergeIDs = groupIDs.slice(1);
-                if (Code === SUCCESS_IMPORT_CODE) {
+                if (Code === SUCCESS_API_CODE) {
                     !signal.aborted &&
                         setModel((model) => ({ ...model, submitted: [...model.submitted, ...groupIDs] }));
                     beDeletedBatchIDs.push(...beDeletedAfterMergeIDs);
