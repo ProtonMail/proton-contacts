@@ -191,21 +191,28 @@ export const merge = (contacts = []) => {
                         mergedProperties[field].push(value);
                         mergedPropertiesPrefs[field].push(+pref);
                     }
-                    group && mergedGroups.push(group);
+                    // email and groups are in one-to-one correspondence
+                    if (field === 'email') {
+                        mergedGroups[value] = group;
+                    }
                 }
             } else {
                 // for the other contacts, keep only non-merged properties
 
                 // but first prepare to change repeated groups
-                const groups = contact.map(({ group }) => group).filter(Boolean);
-                // establish groups that must be changed
-                const changeGroup = groups.reduce((acc, group) => {
-                    if (!mergedGroups.includes(group)) {
-                        return acc;
+                // extract groups in contact to be merged
+                const groups = contact
+                    .filter(({ field }) => field === 'email')
+                    .map(({ value, group }) => ({ email: value, group }));
+                // establish how groups should be changed
+                const changeGroup = groups.reduce((acc, { email, group }) => {
+                    if (Object.values(mergedGroups).includes(group)) {
+                        acc[group] = mergedGroups[email] || generateNewGroupName(Object.values(mergedGroups));
+                    } else {
+                        acc[group] = group;
                     }
-                    acc[group] = generateNewGroupName(mergedGroups);
                     return acc;
-                }, {});
+                }, Object.create(null));
 
                 for (const property of contact) {
                     const { pref, field, group, value } = property;
@@ -215,7 +222,9 @@ export const merge = (contacts = []) => {
                         mergedContact.push({ ...property, pref: +pref, group: newGroup });
                         mergedProperties[field] = [value];
                         mergedPropertiesPrefs[field] = [+pref];
-                        newGroup && mergedGroups.push(newGroup);
+                        if (newGroup && field === 'email') {
+                            mergedGroups[value] = newGroup;
+                        }
                     } else {
                         // for properties already seen,
                         // check if there is a new value for it
@@ -232,7 +241,9 @@ export const merge = (contacts = []) => {
                             mergedContact.push({ ...property, pref: newPref, value: newValue, group: newGroup });
                             mergedProperties[field].push(newValue);
                             mergedPropertiesPrefs[field] = [newPref];
-                            newGroup && mergedGroups.push(newGroup);
+                            if (newGroup && field === 'email') {
+                                mergedGroups[value] = newGroup;
+                            }
                         }
                     }
                 }
@@ -243,7 +254,7 @@ export const merge = (contacts = []) => {
             mergedContact: [],
             mergedProperties: Object.create(null),
             mergedPropertiesPrefs: Object.create(null),
-            mergedGroups: []
+            mergedGroups: Object.create(null)
         }
     );
 

@@ -16,23 +16,25 @@ import {
 } from 'react-components';
 import { getKeys, binaryStringToArray, arrayToBinaryString, encodeBase64, decodeBase64 } from 'pmcrypto';
 import { c } from 'ttag';
-import { RECIPIENT_TYPE, PACKAGE_TYPE } from 'proton-shared/lib/constants';
-import { API_CUSTOM_ERROR_CODES } from 'proton-shared/lib/errors';
+
+import { prepareContacts } from '../helpers/encrypt';
+import { hasCategories } from '../helpers/import';
+import { isInternalUser, isDisabledUser, getRawInternalKeys, allKeysExpired, hasNoPrimary } from '../helpers/pgp';
 import { getPublicKeys } from 'proton-shared/lib/api/keys';
 import { noop } from 'proton-shared/lib/helpers/function';
+import { addContacts } from 'proton-shared/lib/api/contacts';
+import { VCARD_KEY_FIELDS, PGP_INLINE, PGP_MIME, PGP_SIGN, CATEGORIES } from '../constants';
+import { RECIPIENT_TYPE, PACKAGE_TYPE } from 'proton-shared/lib/constants';
+import { API_CUSTOM_ERROR_CODES } from 'proton-shared/lib/errors';
 
 import ContactMIMETypeSelect from './ContactMIMETypeSelect';
-import { isInternalUser, isDisabledUser, getRawInternalKeys, allKeysExpired, hasNoPrimary } from '../helpers/pgp';
-import { VCARD_KEY_FIELDS, PGP_INLINE, PGP_MIME } from '../constants';
 import ContactPgpSettings from './ContactPgpSettings';
-import { prepareContacts } from '../helpers/encrypt';
-import { addContacts } from 'proton-shared/lib/api/contacts';
 
 const { SEND_PGP_INLINE, SEND_PGP_MIME } = PACKAGE_TYPE;
 const { TYPE_NO_RECEIVE } = RECIPIENT_TYPE;
 const { KEY_GET_ADDRESS_MISSING, KEY_GET_DOMAIN_MISSING_MX, KEY_GET_INPUT_INVALID } = API_CUSTOM_ERROR_CODES;
 const EMAIL_ERRORS = [KEY_GET_ADDRESS_MISSING, KEY_GET_DOMAIN_MISSING_MX, KEY_GET_INPUT_INVALID];
-const SIGN = 1;
+const { INCLUDE, IGNORE } = CATEGORIES;
 
 const PGP_MAP = {
     [SEND_PGP_INLINE]: PGP_INLINE,
@@ -132,7 +134,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
 
                     return acc;
                 },
-                { contactKeyPromises: [], mimeType: '', encrypt: false, scheme: '', sign: Sign === SIGN } // Default values
+                { contactKeyPromises: [], mimeType: '', encrypt: false, scheme: '', sign: Sign === PGP_SIGN } // Default values
             );
         const contactKeys = (await Promise.all(contactKeyPromises)).filter(Boolean);
         const config = await getKeysFromApi(Email);
@@ -209,8 +211,10 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             model.isPGPExternal && model.scheme && { field: 'x-pm-scheme', value: model.scheme, group: emailGroup },
             ...getKeysProperties(emailGroup) // [{ field: 'key' }, ]
         ].filter(Boolean);
-        const Contacts = await prepareContacts([otherProperties.concat(emailProperties)], userKeysList[0]);
-        await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: 0 }));
+        const allProperties = otherProperties.concat(emailProperties);
+        const Contacts = await prepareContacts([allProperties], userKeysList[0]);
+        const labels = hasCategories(allProperties) ? INCLUDE : IGNORE;
+        await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: labels }));
         await call();
         rest.onClose();
         createNotification({ text: c('Success').t`Preferences saved` });
@@ -272,6 +276,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
 };
 
 ContactEmailSettingsModal.propTypes = {
+    userKeysList: PropTypes.array,
     contactID: PropTypes.string,
     properties: PropTypes.array,
     emailProperty: PropTypes.object.isRequired

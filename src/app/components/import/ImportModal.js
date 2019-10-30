@@ -18,7 +18,7 @@ import ImportingModalContent from './ImportingModalContent';
 import ImportGroupsModalContent from './ImportGroupsModalContent';
 
 // temporarily disabled
-// import { hasCategories } from '../../helpers/import';
+// import { haveCategories } from '../../helpers/import';
 import { readCsv } from '../../helpers/csv';
 import { readVcf } from '../../helpers/vcard';
 import { BASE_SIZE } from 'proton-shared/lib/constants';
@@ -156,7 +156,7 @@ const ImportModal = ({ userKeysList, ...rest }) => {
 
             const handleFinish = async () => {
                 // temporarily disabled
-                // if (hasCategories(vcardContacts)) {
+                // if (haveCategories(vcardContacts)) {
                 //     return setStep(IMPORT_GROUPS);
                 // }
                 await call();
