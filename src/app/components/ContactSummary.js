@@ -35,7 +35,7 @@ const ContactSummary = ({ properties }) => {
     return (
         <div className="bg-global-light flex flex-nowrap p1 mb1 border-bottom">
             <div className="aligncenter contactsummary-photo-container">
-                <ContactImageSummary src={photo} name={name} />
+                <ContactImageSummary photo={photo} name={name} />
             </div>
             <div className="pl1">
                 <h2 className="mb0-5 ellipsis">{name}</h2>

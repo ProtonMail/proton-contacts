@@ -1,4 +1,4 @@
-export const CONTACT_IMG_SIZE = 128;
+export const CONTACT_IMG_SIZE = 180;
 export const POST_BOX = 0;
 export const EXTENDED = 1;
 export const STREET = 2;
