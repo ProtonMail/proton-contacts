@@ -4,25 +4,32 @@ import PropTypes from 'prop-types';
 import { useMailSettings, useLoading, Loader, Button } from 'react-components';
 import { getInitial } from 'proton-shared/lib/helpers/string';
 import { isURL } from 'proton-shared/lib/helpers/validators';
+import { resizeImage, toImage } from 'proton-shared/lib/helpers/image';
 import { SHOW_IMAGES } from 'proton-shared/lib/constants';
-import { resizeImage } from 'proton-shared/lib/helpers/image';
+import { CONTACT_IMG_SIZE } from '../constants';
 
 const ContactImageSummary = ({ photo, name }) => {
     const [showAnyways, setShowAnyways] = useState(!isURL(photo));
-    const [src, setSrc] = useState(photo);
+    const [image, setImage] = useState({ src: photo });
     const [{ ShowImages }, loadingMailSettings] = useMailSettings();
     const [loadingResize, withLoadingResize] = useLoading();
     const loading = loadingMailSettings && loadingResize;
 
     useEffect(() => {
         const resize = async () => {
-            const resizedImage = await resizeImage({
+            const { width, height } = await toImage(photo);
+            setImage((image) => ({ ...image, width, height }));
+
+            if (width < CONTACT_IMG_SIZE && height < CONTACT_IMG_SIZE) {
+                return setImage((image) => ({ ...image, isSmall: true }));
+            }
+            const resized = await resizeImage({
                 original: photo,
-                maxWidth: 180,
-                maxHeight: 180,
-                smallResize: true
+                maxWidth: CONTACT_IMG_SIZE,
+                maxHeight: CONTACT_IMG_SIZE,
+                bigResize: true
             });
-            setSrc(resizedImage);
+            setImage((image) => ({ ...image, src: resized }));
         };
         withLoadingResize(resize());
     }, [photo]);
@@ -45,14 +52,28 @@ const ContactImageSummary = ({ photo, name }) => {
         }
 
         const style = {
-            backgroundImage: `url(${src})`,
+            backgroundImage: `url(${image.src})`,
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
         };
 
+        if (!image.isSmall) {
+            return (
+                <div className="rounded50 ratio-container-square" style={style}>
+                    <span className="inner-ratio-container" />
+                </div>
+            );
+        }
+
         return (
-            <div className="rounded50 ratio-container-square" style={style}>
-                <span className="inner-ratio-container"></span>
+            <div className="rounded50 ratio-container-square mb0">
+                <span className="inner-ratio-container flex">
+                    <div className="mbauto mtauto center" style={{ width: `${image.width}px` }}>
+                        <div className="rounded50 ratio-container-square" style={style}>
+                            <span className="inner-ratio-container" />
+                        </div>
+                    </div>
+                </span>
             </div>
         );
     }
