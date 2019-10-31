@@ -1,7 +1,18 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Row, Group, ButtonGroup, Icon, useModals, useUser, classnames, Tooltip, RemoteImage } from 'react-components';
+import {
+    Row,
+    Group,
+    ButtonGroup,
+    Icon,
+    Copy,
+    useModals,
+    useUser,
+    classnames,
+    Tooltip,
+    RemoteImage
+} from 'react-components';
 import { c } from 'ttag';
 
 import { clearType, getType, formatAdr } from '../helpers/property';
@@ -9,7 +20,6 @@ import ContactGroupIcon from './ContactGroupIcon';
 import ContactGroupDropdown from './ContactGroupDropdown';
 import ContactLabelProperty from './ContactLabelProperty';
 import ContactEmailSettingsModal from './ContactEmailSettingsModal';
-import TooltipCopy from './TooltipCopy';
 
 const ContactViewProperty = ({
     property,
@@ -101,14 +111,14 @@ const ContactViewProperty = ({
                                 <Icon name="settings-singular" />
                             </Tooltip>
                         </ButtonGroup>
-                        <TooltipCopy className="pm-button--small" value={value} inGroup={true} />
+                        <Copy className="pm-button--small pm-group-button" value={value} />
                     </Group>
                 );
             }
             case 'tel':
-                return <TooltipCopy className="pm-button--small" value={value} />;
+                return <Copy className="pm-button--small" value={value} />;
             case 'adr':
-                return <TooltipCopy className="pm-button--small" value={formatAdr(value)} />;
+                return <Copy className="pm-button--small" value={formatAdr(value)} />;
             default:
                 return null;
         }
