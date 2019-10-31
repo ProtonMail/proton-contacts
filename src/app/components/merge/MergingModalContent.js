@@ -13,12 +13,14 @@ import { prepareContact as encrypt } from '../../helpers/encrypt';
 import { merge } from '../../helpers/merge';
 import { splitContacts } from '../../helpers/import';
 import { combineProgress } from '../../helpers/progress';
-import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE, API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
+import { OVERWRITE, CATEGORIES, API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
+import { API_CODES } from 'proton-shared/lib/constants';
 
 import DynamicProgress from '../DynamicProgress';
 
 const { OVERWRITE_CONTACT } = OVERWRITE;
 const { INCLUDE, IGNORE } = CATEGORIES;
+const { ARRAY_ELEMENT_SUCCESS } = API_CODES;
 
 const MergingModalContent = ({
     contactID,
@@ -169,7 +171,7 @@ const MergingModalContent = ({
             } of responses) {
                 const groupIDs = beMergedModel[ID];
                 const beDeletedAfterMergeIDs = groupIDs.slice(1);
-                if (Code === SUCCESS_IMPORT_CODE) {
+                if (Code === ARRAY_ELEMENT_SUCCESS) {
                     !signal.aborted &&
                         setModel((model) => ({ ...model, submitted: [...model.submitted, ...groupIDs] }));
                     beDeletedBatchIDs.push(...beDeletedAfterMergeIDs);

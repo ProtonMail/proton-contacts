@@ -19,13 +19,15 @@ import { generateUID } from 'react-components/helpers/component';
 import { prepareContacts } from '../helpers/encrypt';
 import { hasCategories } from '../helpers/import';
 import { getEditableFields, getOtherInformationFields } from '../helpers/fields';
-import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE } from '../constants';
+import { OVERWRITE, CATEGORIES } from '../constants';
+import { API_CODES } from 'proton-shared/lib/constants';
 
 import UpsellFree from './UpsellFree';
 
 const DEFAULT_MODEL = [{ field: 'fn', value: '' }, { field: 'email', value: '' }];
 const { OVERWRITE_CONTACT, THROW_ERROR_IF_CONFLICT } = OVERWRITE;
 const { INCLUDE, IGNORE } = CATEGORIES;
+const { ARRAY_ELEMENT_SUCCESS } = API_CODES;
 
 const editableFields = getEditableFields().map(({ value }) => value);
 const otherInformationFields = getOtherInformationFields().map(({ value }) => value);
@@ -79,7 +81,7 @@ const ContactModal = ({ contactID, properties: initialProperties = [], history, 
                 Labels: labels
             })
         );
-        if (Code !== SUCCESS_IMPORT_CODE) {
+        if (Code !== ARRAY_ELEMENT_SUCCESS) {
             rest.onClose();
             return createNotification({ text: c('Error').t`Contact could not be saved`, type: 'error' });
         }

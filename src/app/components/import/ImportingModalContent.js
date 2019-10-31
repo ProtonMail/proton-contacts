@@ -13,10 +13,12 @@ import { extractVcards, parse as parseVcard } from '../../helpers/vcard';
 import { prepareContact } from '../../helpers/encrypt';
 import { splitContacts } from '../../helpers/import';
 import { combineProgress } from '../../helpers/progress';
-import { OVERWRITE, CATEGORIES, SUCCESS_IMPORT_CODE, API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
+import { OVERWRITE, CATEGORIES, API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
+import { API_CODES } from 'proton-shared/lib/constants';
 
 const { OVERWRITE_CONTACT } = OVERWRITE;
 const { IGNORE, INCLUDE } = CATEGORIES;
+const { ARRAY_ELEMENT_SUCCESS } = API_CODES;
 
 const createParseErrorMessage = (index, message) =>
     c('Info on errors importing contacts').t`Contact ${index} from your list could not be parsed. ${message}`;
@@ -131,7 +133,7 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
             const { submittedBatch, failedOnSubmitBatch } = responses.reduce(
                 (acc, { Code, Error, Contact: { ID } = {} }, i) => {
                     const index = indexMap[i];
-                    if (Code === SUCCESS_IMPORT_CODE) {
+                    if (Code === ARRAY_ELEMENT_SUCCESS) {
                         acc.submittedBatch.push(ID);
                     } else {
                         acc.failedOnSubmitBatch.push({ index, message: createSubmitErrorMessage(index + 1, Error) });
