@@ -5,8 +5,8 @@ import {
     Row,
     Group,
     ButtonGroup,
-    Copy,
     Icon,
+    Copy,
     useModals,
     useUser,
     classnames,
@@ -21,7 +21,16 @@ import ContactGroupDropdown from './ContactGroupDropdown';
 import ContactLabelProperty from './ContactLabelProperty';
 import ContactEmailSettingsModal from './ContactEmailSettingsModal';
 
-const ContactViewProperty = ({ property, properties, contactID, contactEmail, contactGroups = [], userKeysList }) => {
+const ContactViewProperty = ({
+    property,
+    properties,
+    contactID,
+    contactEmail,
+    contactGroups = [],
+    userKeysList,
+    leftBlockWidth = 'w30',
+    rightBlockWidth = 'w70'
+}) => {
     const { field, first } = property;
     const [{ hasPaidMail }] = useUser();
     const { createModal } = useModals();
@@ -89,7 +98,7 @@ const ContactViewProperty = ({ property, properties, contactID, contactEmail, co
                     <Group>
                         {hasPaidMail ? (
                             <ContactGroupDropdown
-                                className="pm-button pm-button--small pm-group-button"
+                                className="pm-button pm-button--for-icon pm-group-button"
                                 contactEmails={[contactEmail]}
                             >
                                 <Tooltip title={c('Title').t`Contact group`}>
@@ -97,19 +106,19 @@ const ContactViewProperty = ({ property, properties, contactID, contactEmail, co
                                 </Tooltip>
                             </ContactGroupDropdown>
                         ) : null}
-                        <ButtonGroup onClick={handleSettings} className="pm-button--small">
+                        <ButtonGroup onClick={handleSettings} className="pm-button--for-icon">
                             <Tooltip title={c('Title').t`Email settings`}>
                                 <Icon name="settings-singular" />
                             </Tooltip>
                         </ButtonGroup>
-                        <Copy className="pm-button--small pm-group-button" value={value} />
+                        <Copy className="pm-button--for-icon pm-group-button" value={value} />
                     </Group>
                 );
             }
             case 'tel':
-                return <Copy className="pm-button--small" value={value} />;
+                return <Copy className="pm-button--for-icon" value={value} />;
             case 'adr':
-                return <Copy className="pm-button--small" value={formatAdr(value)} />;
+                return <Copy className="pm-button--for-icon" value={formatAdr(value)} />;
             default:
                 return null;
         }
@@ -117,8 +126,10 @@ const ContactViewProperty = ({ property, properties, contactID, contactEmail, co
 
     return (
         <Row>
-            <ContactLabelProperty field={field} type={type} first={first} />
-            <div className="flex flex-nowrap flex-items-center w100">
+            <div className={classnames(['flex flex-items-center', leftBlockWidth])}>
+                <ContactLabelProperty field={field} type={type} first={first} />
+            </div>
+            <div className={classnames(['flex flex-nowrap flex-items-center pl1', rightBlockWidth])}>
                 <span className={classnames(['mr0-5 flex-item-fluid', !['note'].includes(field) && 'ellipsis'])}>
                     {getContent()}
                 </span>
@@ -134,7 +145,9 @@ ContactViewProperty.propTypes = {
     contactID: PropTypes.string.isRequired,
     contactEmail: PropTypes.object,
     contactGroups: PropTypes.arrayOf(PropTypes.object),
-    userKeysList: PropTypes.array
+    userKeysList: PropTypes.array,
+    leftBlockWidth: PropTypes.string,
+    rightBlockWidth: PropTypes.string
 };
 
 export default ContactViewProperty;
