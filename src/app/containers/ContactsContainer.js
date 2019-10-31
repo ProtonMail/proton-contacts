@@ -283,6 +283,7 @@ const ContactsContainer = ({ location, history }) => {
                     totalContacts={contactsLength}
                     contactGroups={contactGroups}
                     userKeysList={userKeysList}
+                    onClearSearch={handleClearSearch}
                 />
                 <div className="main flex-item-fluid">
                     <ContactToolbar
