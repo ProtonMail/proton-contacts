@@ -101,7 +101,7 @@ const ContactViewProperty = ({
                                 <Icon name="settings-singular" />
                             </Tooltip>
                         </ButtonGroup>
-                        <TooltipCopy className="pm-button--small" value={value} />
+                        <TooltipCopy className="pm-button--small" value={value} inGroup={true} />
                     </Group>
                 );
             }
