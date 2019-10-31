@@ -98,7 +98,7 @@ const ContactViewProperty = ({
                     <Group>
                         {hasPaidMail ? (
                             <ContactGroupDropdown
-                                className="pm-button pm-button--small pm-group-button"
+                                className="pm-button pm-button--for-icon pm-group-button"
                                 contactEmails={[contactEmail]}
                             >
                                 <Tooltip title={c('Title').t`Contact group`}>
@@ -106,19 +106,19 @@ const ContactViewProperty = ({
                                 </Tooltip>
                             </ContactGroupDropdown>
                         ) : null}
-                        <ButtonGroup onClick={handleSettings} className="pm-button--small">
+                        <ButtonGroup onClick={handleSettings} className="pm-button--for-icon">
                             <Tooltip title={c('Title').t`Email settings`}>
                                 <Icon name="settings-singular" />
                             </Tooltip>
                         </ButtonGroup>
-                        <Copy className="pm-button--small pm-group-button" value={value} />
+                        <Copy className="pm-button--for-icon pm-group-button" value={value} />
                     </Group>
                 );
             }
             case 'tel':
-                return <Copy className="pm-button--small" value={value} />;
+                return <Copy className="pm-button--for-icon" value={value} />;
             case 'adr':
-                return <Copy className="pm-button--small" value={formatAdr(value)} />;
+                return <Copy className="pm-button--for-icon" value={formatAdr(value)} />;
             default:
                 return null;
         }
