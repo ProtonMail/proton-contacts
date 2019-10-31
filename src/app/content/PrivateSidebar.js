@@ -127,7 +127,8 @@ PrivateSidebar.propTypes = {
     onToggleExpand: PropTypes.func,
     userKeysList: PropTypes.array,
     loadingUserKeys: PropTypes.bool,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
+    onClearSearch: PropTypes.func
 };
 
 export default PrivateSidebar;
