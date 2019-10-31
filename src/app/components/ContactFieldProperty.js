@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Input, TextArea, EmailInput, DateInput, TelInput } from 'react-components';
+import { useModals, Input, TextArea, EmailInput, DateInput, TelInput } from 'react-components';
+import { getAllFieldLabels } from '../helpers/fields';
 
 import ContactImageField from './ContactImageField';
 import ContactAdrField from './ContactAdrField';
-import { getAllFieldLabels } from '../helpers/fields';
+import ContactImageModal from './ContactImageModal';
 
 const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
-    const handleChange = ({ target }) => onChange({ value: target.value, uid });
+    const { createModal } = useModals();
     const labels = getAllFieldLabels();
+
+    const handleChange = ({ target }) => onChange({ value: target.value, uid });
 
     if (field === 'email') {
         return <EmailInput value={value} placeholder={labels.email} onChange={handleChange} {...rest} />;
@@ -46,7 +49,10 @@ const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
     }
 
     if (field === 'photo' || field === 'logo') {
-        const handleChangeImage = (url) => onChange({ value: url, uid });
+        const handleChangeImage = () => {
+            const handleSubmit = (value) => onChange({ uid, value });
+            createModal(<ContactImageModal url={value} onSubmit={handleSubmit} />);
+        };
         return <ContactImageField value={value} onChange={handleChangeImage} {...rest} />;
     }
     return <Input value={value} placeholder={labels[field]} onChange={handleChange} {...rest} />;

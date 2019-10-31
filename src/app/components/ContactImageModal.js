@@ -22,7 +22,14 @@ const ContactImageModal = ({ url: initialUrl, onSubmit, onClose, ...rest }) => {
 
         reader.onloadend = async () => {
             try {
-                const base64str = await resizeImage(reader.result, CONTACT_IMG_SIZE, 'image/jpeg', 0.7);
+                const base64str = await resizeImage({
+                    original: reader.result,
+                    maxWidth: CONTACT_IMG_SIZE,
+                    maxHeight: CONTACT_IMG_SIZE,
+                    finalMimeType: 'image/jpeg',
+                    encoderOptions: 1,
+                    bigResize: true
+                });
                 onSubmit(base64str);
                 onClose();
             } catch (error) {

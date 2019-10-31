@@ -1,4 +1,4 @@
-export const CONTACT_IMG_SIZE = 128;
+export const CONTACT_IMG_SIZE = 180; // size in px that we display in desktop view
 export const POST_BOX = 0;
 export const EXTENDED = 1;
 export const STREET = 2;
