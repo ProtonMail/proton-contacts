@@ -20,7 +20,7 @@ const PrivateSidebar = ({
     history,
     onClearSearch
 }) => {
-    const { hasPaidMail } = user;
+    const { hasPaidMail, isPaid } = user;
     const { createModal } = useModals();
 
     const list = [
@@ -97,8 +97,9 @@ const PrivateSidebar = ({
 
     const mobileLinks = [
         { to: '/inbox', icon: 'protonmail', external: true, current: false },
+        isPaid && { to: '/calendar', icon: 'protoncalendar', external: true, current: false },
         { to: '/contacts', icon: 'protoncontacts', external: false, current: true }
-    ];
+    ].filter(Boolean);
 
     return (
         <Sidebar
