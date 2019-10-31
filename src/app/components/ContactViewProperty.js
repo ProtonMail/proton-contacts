@@ -1,17 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import {
-    Row,
-    Group,
-    ButtonGroup,
-    Icon,
-    useModals,
-    useUser,
-    classnames,
-    Tooltip,
-    RemoteImage
-} from 'react-components';
+import { Row, Group, ButtonGroup, Icon, useModals, useUser, classnames, Tooltip, RemoteImage } from 'react-components';
 import { c } from 'ttag';
 
 import { clearType, getType, formatAdr } from '../helpers/property';
@@ -19,7 +9,7 @@ import ContactGroupIcon from './ContactGroupIcon';
 import ContactGroupDropdown from './ContactGroupDropdown';
 import ContactLabelProperty from './ContactLabelProperty';
 import ContactEmailSettingsModal from './ContactEmailSettingsModal';
-import TooltipCopy from '../components/TootipCopy';
+import TooltipCopy from './TooltipCopy';
 
 const ContactViewProperty = ({
     property,
