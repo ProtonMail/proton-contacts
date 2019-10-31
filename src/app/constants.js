@@ -52,7 +52,6 @@ export const CATEGORIES = {
 
 // BACK-END DATA
 export const API_SAFE_INTERVAL = 100; // API request limit: 100 requests / 10 seconds, so 1 request every 100 ms is safe
-export const SUCCESS_API_CODE = 1000; // in POST API route /contacts
 export const QUERY_EXPORT_MAX_PAGESIZE = 50; // in GET API route /contacts/export
 // Manual limit on number of imported contacts to be sent to the API,
 // so that the response does not take too long (there's a 30s limit)
