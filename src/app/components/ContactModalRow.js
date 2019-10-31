@@ -64,7 +64,6 @@ const ContactModalRow = ({ property, onChange, onRemove, isOrderable = false }) 
                             value={property.value}
                             uid={property.uid}
                             onChange={onChange}
-                            onChangeImage={handleChangeImage}
                         />
                     </Field>
                 </span>

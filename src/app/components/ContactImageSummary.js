@@ -20,7 +20,7 @@ const ContactImageSummary = ({ photo, name }) => {
             const { width, height } = await toImage(photo);
             setImage((image) => ({ ...image, width, height }));
 
-            if (width < CONTACT_IMG_SIZE && height < CONTACT_IMG_SIZE) {
+            if (width <= CONTACT_IMG_SIZE && height <= CONTACT_IMG_SIZE) {
                 return setImage((image) => ({ ...image, isSmall: true }));
             }
             const resized = await resizeImage({
