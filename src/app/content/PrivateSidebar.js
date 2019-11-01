@@ -17,16 +17,13 @@ const PrivateSidebar = ({
     loadingUserKeys,
     totalContacts,
     contactGroups = [],
-    history,
-    onClearSearch
+    history
 }) => {
     const { hasPaidMail } = user;
     const { createModal } = useModals();
 
     const list = [
         {
-            type: 'button',
-            className: 'alignleft',
             icon: 'contacts',
             isActive(match, location) {
                 if (!match) {
@@ -37,10 +34,7 @@ const PrivateSidebar = ({
                 return !contactGroupID;
             },
             text: c('Link').t`Contacts`,
-            onClick() {
-                onClearSearch();
-                history.push(`/contacts`);
-            }
+            link: '/contacts'
         },
         !loadingUserKeys && {
             type: 'button',
@@ -78,8 +72,6 @@ const PrivateSidebar = ({
     if (hasPaidMail) {
         list.push(
             ...contactGroups.map(({ Name: text, Color: color, ID: contactGroupID }) => ({
-                type: 'button',
-                className: 'alignleft',
                 icon: 'contacts-groups',
                 isActive(_match, location) {
                     const params = new URLSearchParams(location.search);
@@ -87,10 +79,7 @@ const PrivateSidebar = ({
                 },
                 color,
                 text,
-                onClick() {
-                    onClearSearch();
-                    history.push(`/contacts?contactGroupID=${contactGroupID}`);
-                }
+                link: `/contacts?contactGroupID=${contactGroupID}`
             }))
         );
     }

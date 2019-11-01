@@ -74,6 +74,8 @@ const ContactsContainer = ({ location, history }) => {
         setCheckedContacts(Object.create(null));
         setCheckAll(false);
         setExpand(false);
+        // clean also the search
+        updateSearch('');
     }, [contactGroupID]);
 
     const contactEmailsMap = useMemo(() => {
@@ -291,7 +293,6 @@ const ContactsContainer = ({ location, history }) => {
                     totalContacts={contactsLength}
                     contactGroups={contactGroups}
                     userKeysList={userKeysList}
-                    onClearSearch={handleClearSearch}
                 />
                 <div className="main flex-item-fluid">
                     <ContactToolbar
