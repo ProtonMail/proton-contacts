@@ -8,6 +8,11 @@ stages:
     - i18n-upgrade-app
     - i18n-to-crowdin
 
+cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+
 variables:
     NODE_OPTIONS: --max-old-space-size=4096
 
@@ -33,9 +38,8 @@ setup:
     script:
         - ./ci-scripts/prepare-ci.sh install-app --remote "$APP_GIT"
     artifacts:
-        expire_in: 777777777777777777777777777777777777777777777777777777777 days
+        expire_in: 7 days
         paths:
-            - node_modules/
             - src/app/config.ts
             - .env
             - .gitconfig
