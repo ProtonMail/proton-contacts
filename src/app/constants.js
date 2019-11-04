@@ -55,4 +55,4 @@ export const API_SAFE_INTERVAL = 100; // API request limit: 100 requests / 10 se
 export const QUERY_EXPORT_MAX_PAGESIZE = 50; // in GET API route /contacts/export
 // Manual limit on number of imported contacts to be sent to the API,
 // so that the response does not take too long (there's a 30s limit)
-export const ADD_CONTACTS_MAX_SIZE = 100;
+export const ADD_CONTACTS_MAX_SIZE = 50;
