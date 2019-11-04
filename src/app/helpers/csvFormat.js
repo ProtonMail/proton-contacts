@@ -18,6 +18,31 @@ const beIgnoredCsvProperties = [
 ];
 
 /**
+ * For a list of headers and csv contacts extracted from a csv,
+ * check if a given header index has the empty value for all contacts
+ * @param {Number} index
+ * @param {Array<Array<String>>} contacts
+ *
+ * @return {Boolean}
+ */
+const isEmptyHeaderIndex = (index, contacts) => !contacts.some((values) => values[index] !== '');
+
+// /**
+//  * Extract (only) non-empty csv properties and contacts values from a read csv file
+//  * @param {Array<String>} headers
+//  * @param {Array<Array<String>>} contacts
+//  *
+//  * @return {Object}         { headers: Array<String>, contacts: Array<Array<String>> }
+//  */
+// const getNonEmptyCsvData = ({ headers, contacts }) => {
+//     const indicesToKeep = headers.map((_header, i) => !isEmptyHeaderIndex(i, contacts));
+//     return {
+//         headers: headers.filter((_header, i) => indicesToKeep[i]),
+//         contacts: contacts.map((values) => values.filter((_value, j) => indicesToKeep[j]))
+//     };
+// };
+
+/**
  * Standarize a custom vcard type coming from a csv property
  * @param {String} csvType
  *
@@ -81,6 +106,9 @@ export const standarize = ({ headers, contacts }) => {
             const headerLowerCase = header.toLowerCase();
             const { beRemoved, beChanged } = acc;
             const value = contacts[0][i];
+            if (isEmptyHeaderIndex(i, contacts)) {
+                beRemoved[i] = true;
+            }
             if (
                 beIgnoredCsvProperties.includes(headerLowerCase) ||
                 headerLowerCase.startsWith('im') ||
@@ -111,7 +139,6 @@ export const standarize = ({ headers, contacts }) => {
                 * address n - extended address
                 we have to drop the first two headers and change the rest accordingly
             */
-
             if (/^address\s?(\d+)? - type$/.test(headerLowerCase)) {
                 const [, pref] = headerLowerCase.match(/^address\s?\d+? - type$/);
                 const n = pref ? pref : '';
@@ -122,7 +149,7 @@ export const standarize = ({ headers, contacts }) => {
                 beChanged[i + 4] = (capitalize(toVcardType(value)) + ` PO Box ${n}`).trim();
                 beChanged[i + 5] = (capitalize(toVcardType(value)) + ` State ${n}`).trim();
                 beChanged[i + 6] = (capitalize(toVcardType(value)) + ` Postal Code ${n}`).trim();
-                beChanged[i + 7] = (capitalize(toVcardType(value)) + ` Country ${n}`).trim();
+                beChanged[i + 7] = (capitalize(toVcardType(value)) + ` Country/Region ${n}`).trim();
                 beChanged[i + 8] = (capitalize(toVcardType(value)) + ` Extended Address ${n}`).trim();
                 return acc;
             }
@@ -339,7 +366,7 @@ export const toPreVcard = (header) => {
         const [, type, pref] = property.match(/^(\w*)\s?postal code\s?(\d*)$/);
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 5 });
     }
-    if (/^(\w*)\s?country\/region\s?(\d*)$/.test(property)) {
+    if (/^(\w*)\s?country|region\s?(\d*)$/.test(property)) {
         const [, type, pref] = property.match(/^(\w*)\s?country\/region\s?(\d*)$/);
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 6 });
     }
@@ -432,6 +459,22 @@ export const toPreVcard = (header) => {
             value,
             checked: true,
             field: 'url'
+        });
+    }
+    if (property === 'photo') {
+        return (value) => ({
+            header,
+            value,
+            checked: true,
+            field: 'photo'
+        });
+    }
+    if (property === 'logo') {
+        return (value) => ({
+            header,
+            value,
+            checked: true,
+            field: 'logo'
         });
     }
     if (property === 'location') {
