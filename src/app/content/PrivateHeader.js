@@ -88,7 +88,7 @@ PrivateHeader.propTypes = {
     onSearch: PropTypes.func,
     inSettings: PropTypes.bool,
     isNarrow: PropTypes.bool,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object
 };
 
 export default PrivateHeader;

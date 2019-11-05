@@ -37,6 +37,9 @@ const ContactRow = ({ style, contactID, hasPaidMail, contactGroupsMap, contact, 
                         {hasPaidMail && LabelIDs.length ? (
                             <div>
                                 {LabelIDs.map((labelID) => {
+                                    if (!contactGroupsMap[labelID]) {
+                                        return null;
+                                    }
                                     const { Color, Name } = contactGroupsMap[labelID];
                                     return (
                                         <ContactGroupIcon

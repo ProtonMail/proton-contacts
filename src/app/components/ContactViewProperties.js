@@ -50,7 +50,8 @@ const ContactViewProperties = ({
             </h3>
             {properties.map((property, index) => {
                 const contactEmail = contactEmails && contactEmails[index];
-                const contactGroups = contactEmail && contactEmail.LabelIDs.map((ID) => contactGroupsMap[ID]);
+                const contactGroups =
+                    contactEmail && contactEmail.LabelIDs.map((ID) => contactGroupsMap[ID]).filter(Boolean);
 
                 return (
                     // here we are hiddenly using the fact that the emails in
