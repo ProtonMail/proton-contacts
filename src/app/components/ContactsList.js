@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { useModals, IllustrationPlaceholder } from 'react-components';
+import { useModals, IllustrationPlaceholder, LinkButton } from 'react-components';
 import { withRouter } from 'react-router';
 import List from 'react-virtualized/dist/commonjs/List';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
@@ -141,9 +141,9 @@ const ContactsList = ({
         }
 
         const clearSearch = (
-            <button key="add" type="button" className="color-primary underline ml0-5 mr0-5" onClick={onClearSearch}>
-                {c('Action').t`Clear it`}
-            </button>
+            <LinkButton key="add" onClick={onClearSearch}>
+                {c('Action').t`clear it`}
+            </LinkButton>
         );
 
         return (
