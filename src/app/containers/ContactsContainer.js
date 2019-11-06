@@ -277,6 +277,7 @@ const ContactsContainer = ({ location, history }) => {
                     onToggleExpand={onToggleExpand}
                     search={search}
                     onSearch={updateSearch}
+                    onClearSearch={handleClearSearch}
                     isNarrow={isNarrow}
                     history={history}
                     location={location}
@@ -290,6 +291,7 @@ const ContactsContainer = ({ location, history }) => {
                     user={user}
                     expanded={expanded}
                     onToggleExpand={onToggleExpand}
+                    onClearSearch={handleClearSearch}
                     totalContacts={contactsLength}
                     contactGroups={contactGroups}
                     userKeysList={userKeysList}

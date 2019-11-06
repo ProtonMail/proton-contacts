@@ -21,6 +21,7 @@ const PrivateHeader = ({
     title,
     search,
     onSearch,
+    onClearSearch,
     expanded,
     onToggleExpand,
     inSettings = false,
@@ -74,7 +75,10 @@ const PrivateHeader = ({
                 )}
             </TopNavbar>
             {isNarrow && !inSettings ? (
-                <FloatingButton onClick={() => createModal(<ContactModal history={history} />)} icon="plus" />
+                <FloatingButton
+                    onClick={() => createModal(<ContactModal history={history} onAdd={onClearSearch} />)}
+                    icon="plus"
+                />
             ) : null}
         </header>
     );
@@ -86,6 +90,7 @@ PrivateHeader.propTypes = {
     expanded: PropTypes.bool,
     onToggleExpand: PropTypes.func,
     onSearch: PropTypes.func,
+    onClearSeach: PropTypes.func,
     inSettings: PropTypes.bool,
     isNarrow: PropTypes.bool,
     history: PropTypes.object

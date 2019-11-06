@@ -10,13 +10,14 @@ import UpgradeModal from '../components/UpgradeModal';
 
 const PrivateSidebar = ({
     url,
-    onToggleExpand,
-    expanded,
     user,
     userKeysList = [],
     loadingUserKeys,
     totalContacts,
     contactGroups = [],
+    expanded,
+    onToggleExpand,
+    onClearSearch,
     history
 }) => {
     const { hasPaidMail } = user;
@@ -100,7 +101,7 @@ const PrivateSidebar = ({
             <div className="pl1 pr1 nomobile">
                 <PrimaryButton
                     className="pm-button--large bold mt0-25 w100"
-                    onClick={() => createModal(<ContactModal history={history} />)}
+                    onClick={() => createModal(<ContactModal history={history} onAdd={onClearSearch} />)}
                 >{c('Action').t`Add contact`}</PrimaryButton>
             </div>
         </Sidebar>
@@ -114,6 +115,7 @@ PrivateSidebar.propTypes = {
     contactGroups: PropTypes.array,
     expanded: PropTypes.bool,
     onToggleExpand: PropTypes.func,
+    onClearSearch: PropTypes.func,
     userKeysList: PropTypes.array,
     loadingUserKeys: PropTypes.bool,
     history: PropTypes.object.isRequired
