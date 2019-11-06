@@ -27,7 +27,7 @@ import UpsellFree from './UpsellFree';
 const DEFAULT_MODEL = [{ field: 'fn', value: '' }, { field: 'email', value: '' }];
 const { OVERWRITE_CONTACT, THROW_ERROR_IF_CONFLICT } = OVERWRITE;
 const { INCLUDE, IGNORE } = CATEGORIES;
-const { ARRAY_ELEMENT_SUCCESS } = API_CODES;
+const { SINGLE_SUCCESS } = API_CODES;
 
 const editableFields = getEditableFields().map(({ value }) => value);
 const otherInformationFields = getOtherInformationFields().map(({ value }) => value);
@@ -81,7 +81,7 @@ const ContactModal = ({ contactID, properties: initialProperties = [], history, 
                 Labels: labels
             })
         );
-        if (Code !== ARRAY_ELEMENT_SUCCESS) {
+        if (Code !== SINGLE_SUCCESS) {
             rest.onClose();
             return createNotification({ text: c('Error').t`Contact could not be saved`, type: 'error' });
         }

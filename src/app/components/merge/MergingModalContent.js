@@ -20,7 +20,7 @@ import DynamicProgress from '../DynamicProgress';
 
 const { OVERWRITE_CONTACT } = OVERWRITE;
 const { INCLUDE, IGNORE } = CATEGORIES;
-const { ARRAY_ELEMENT_SUCCESS } = API_CODES;
+const { SINGLE_SUCCESS } = API_CODES;
 
 const MergingModalContent = ({
     contactID,
@@ -171,7 +171,7 @@ const MergingModalContent = ({
             } of responses) {
                 const groupIDs = beMergedModel[ID];
                 const beDeletedAfterMergeIDs = groupIDs.slice(1);
-                if (Code === ARRAY_ELEMENT_SUCCESS) {
+                if (Code === SINGLE_SUCCESS) {
                     !signal.aborted &&
                         setModel((model) => ({ ...model, submitted: [...model.submitted, ...groupIDs] }));
                     beDeletedBatchIDs.push(...beDeletedAfterMergeIDs);
