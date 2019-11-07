@@ -32,19 +32,10 @@ const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
     }
 
     if (field === 'bday' || field === 'anniversary') {
-        const m = moment(value);
+        const m = moment(value || Date.now());
         if (value === '' || m.isValid()) {
             const handleSelectDate = (date) => onChange({ value: date.toISOString(), uid });
-            return (
-                <DateInput
-                    setDefaultDate
-                    placeholder={labels[field]}
-                    defaultDate={m.toDate()}
-                    onSelect={handleSelectDate}
-                    format={moment.localeData().longDateFormat('L')}
-                    {...rest}
-                />
-            );
+            return <DateInput placeholder={labels[field]} value={m.toDate()} onChange={handleSelectDate} {...rest} />;
         }
     }
 
