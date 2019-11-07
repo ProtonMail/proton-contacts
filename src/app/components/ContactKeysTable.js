@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { isValid, format } from 'date-fns';
 
-import { move } from 'proton-shared/lib/helpers/array';
+import { move, uniqueBy } from 'proton-shared/lib/helpers/array';
 import { dateLocale } from 'proton-shared/lib/i18n';
 import { serverTime } from 'pmcrypto/lib/serverTime';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
@@ -26,8 +26,11 @@ const ContactKeysTable = ({ model, setModel }) => {
      * Extract keys info from model.keys to define table body
      */
     const parse = async () => {
+        // for external users, we allow "double counting" of WKD keys re-uploaded by the user
+        const allKeys = uniqueBy([...model.keys.pinned, ...model.keys.api], (publicKey) => publicKey.getFingerprint());
+
         const parsedKeys = await Promise.all(
-            model.keys.map(async (publicKey, index) => {
+            allKeys.map(async (publicKey, index) => {
                 try {
                     const date = +serverTime();
                     const creationTime = publicKey.getCreationTime();
@@ -37,8 +40,9 @@ const ContactKeysTable = ({ model, setModel }) => {
                     const algoInfo = publicKey.getAlgorithmInfo();
                     const algo = describe(algoInfo);
                     const fingerprint = publicKey.getFingerprint();
-                    const isPrimary = !index && !isExpired && model.isPGPExternal;
-                    const isTrusted = model.isPGPInternal && model.trustedFingerprints.includes(fingerprint);
+                    const isWKD = model.isPGPExternal && index >= model.keys.pinned.length;
+                    const isPrimary = !index && !isExpired;
+                    const isTrusted = model.trustedFingerprints.includes(fingerprint);
                     return {
                         publicKey,
                         fingerprint,
@@ -47,7 +51,8 @@ const ContactKeysTable = ({ model, setModel }) => {
                         isPrimary,
                         isExpired,
                         isRevoked,
-                        isTrusted
+                        isTrusted,
+                        isWKD
                     };
                 } catch (error) {
                     return false;
@@ -67,7 +72,17 @@ const ContactKeysTable = ({ model, setModel }) => {
             <TableBody>
                 {keys.map(
                     (
-                        { fingerprint, algo, creationTime, isPrimary, publicKey, isExpired, isRevoked, isTrusted },
+                        {
+                            fingerprint,
+                            algo,
+                            creationTime,
+                            isPrimary,
+                            publicKey,
+                            isExpired,
+                            isRevoked,
+                            isTrusted,
+                            isWKD
+                        },
                         index
                     ) => {
                         const creation = new Date(creationTime);
@@ -87,13 +102,16 @@ const ContactKeysTable = ({ model, setModel }) => {
                             },
                             index > 0 &&
                                 !isExpired &&
-                                model.isPGPInternal && {
+                                isTrusted && {
                                     text: c('Action').t`Make primary`,
                                     onClick() {
-                                        setModel({ ...model, keys: move(model.keys, index, 0) });
+                                        setModel({
+                                            ...model,
+                                            keys: { ...model.keys, pinned: move(model.keys.pinned, index, 0) }
+                                        });
                                     }
                                 },
-                            model.isPGPInternal &&
+                            (model.isPGPInternal || model.isPGPExternalWithWKDKeys) &&
                                 !isTrusted && {
                                     text: c('Action').t`Trust`,
                                     onClick() {
@@ -103,7 +121,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                                         });
                                     }
                                 },
-                            model.isPGPInternal &&
+                            (model.isPGPInternal || model.isPGPExternalWithWKDKeys) &&
                                 isTrusted && {
                                     text: c('Action').t`Untrust`,
                                     onClick() {
@@ -115,14 +133,15 @@ const ContactKeysTable = ({ model, setModel }) => {
                                         });
                                     }
                                 },
-                            model.isPGPExternal && {
-                                text: c('Action').t`Remove`,
-                                onClick() {
-                                    const copy = [...model.keys];
-                                    copy.splice(index, 1);
-                                    setModel({ ...model, keys: copy });
+                            model.isPGPExternal &&
+                                !isWKD && {
+                                    text: c('Action').t`Remove`,
+                                    onClick() {
+                                        const copy = [...model.keys.pinned];
+                                        copy.splice(index, 1);
+                                        setModel({ ...model, keys: { ...model.keys, pinned: copy } });
+                                    }
                                 }
-                            }
                         ].filter(Boolean);
                         const cells = [
                             <div key={fingerprint} title={fingerprint} className="flex flex-nowrap">
@@ -138,8 +157,9 @@ const ContactKeysTable = ({ model, setModel }) => {
                             isValid(creation) ? format(creation, 'PP', { locale: dateLocale }) : '-',
                             algo,
                             <React.Fragment key={fingerprint}>
-                                {isPrimary ? <Badge>{c('Key badge').t`Primary`}</Badge> : null}
-                                {isTrusted ? <Badge>{c('Key badge').t`Trusted`}</Badge> : null}
+                                {isPrimary && <Badge>{c('Key badge').t`Primary`}</Badge>}
+                                {isTrusted && <Badge>{c('Key badge').t`Trusted`}</Badge>}
+                                {isWKD && <Badge>{c('Key badge').t`WKD`}</Badge>}
                             </React.Fragment>,
                             <DropdownActions key={fingerprint} className="pm-button--small" list={list} />
                         ];

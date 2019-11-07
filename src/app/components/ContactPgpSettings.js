@@ -9,6 +9,10 @@ import ContactKeysTable from './ContactKeysTable';
 const ContactPgpSettings = ({ model, setModel }) => {
     const { createNotification } = useNotifications();
 
+    const hasKeys = !!model.keys.pinned.length || !!model.keys.api.length;
+    // API keys can never be all expired
+    const hasAllKeysExpired = !model.keys.api.length && model.keysExpired;
+
     /**
      * Add / update keys to model
      * @param {Array<PublicKey>} files
@@ -23,7 +27,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
 
         // Update existing keys by looking on the fingerprint
         // And add new one
-        const existingFingerprints = model.keys.map((publicKey) => publicKey.getFingerprint());
+        const existingFingerprints = model.keys.pinned.map((publicKey) => publicKey.getFingerprint());
         const { toAdd, toUpdate } = files.reduce(
             (acc, publicKey) => {
                 const fingerprint = publicKey.getFingerprint();
@@ -39,7 +43,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
             { toAdd: [], toUpdate: [] }
         );
 
-        const keys = model.keys
+        const pinned = model.keys.pinned
             .map((publicKey) => {
                 const fingerprint = publicKey.getFingerprint();
                 const found = toUpdate.find((publicKey) => publicKey.getFingerprint() === fingerprint);
@@ -47,43 +51,47 @@ const ContactPgpSettings = ({ model, setModel }) => {
             })
             .concat(toAdd);
 
-        setModel({ ...model, keys });
+        setModel({
+            ...model,
+            keys: { ...model.keys, pinned },
+            trustedFingerprints: [...model.trustedFingerprints, ...toAdd.map((publicKey) => publicKey.getFingerprint())]
+        });
     };
 
     return (
         <>
             <Alert learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
                 .t`Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service.`}</Alert>
-            {model.isPGPInline ? (
+            {model.isPGPInline && (
                 <Alert>{c('Info')
                     .t`PGP/Inline is only compatible with Plain Text format. Please note that ProtonMail always signs PGP/Inline messages.`}</Alert>
-            ) : null}
-            {model.isPGPMime ? (
+            )}
+            {model.isPGPMime && (
                 <Alert>{c('Info')
                     .t`PGP/MIME automatically sends the message using the current composer mode. Please note that ProtonMail always signs PGP/MIME messages.`}</Alert>
-            ) : null}
-            {model.keys.length && model.noPrimary ? (
+            )}
+            {!!model.keys.pinned.length && model.noPrimary && (
                 <Alert type="warning">{c('Info')
                     .t`Address Verification with Trusted Keys is enabled for this address. To be able to send to this address, first trust public keys that can be used for sending.`}</Alert>
-            ) : null}
-            {model.pgpAddressDisabled ? (
+            )}
+            {model.pgpAddressDisabled && (
                 <Alert type="warning">{c('Info')
                     .t`This address is disabled. To be able to send to this address, the owner must first enable the address.`}</Alert>
-            ) : null}
-            {model.isPGPInternal ? (
+            )}
+            {!!model.keys.api.length && (
                 <Alert learnMore="https://protonmail.com/support/knowledge-base/address-verification/">{c('Info')
                     .t`To use Address Verification, you must trust one or more available public keys, including the primary key for this address. This prevents the encrypted keys from being faked.`}</Alert>
-            ) : null}
-            {model.isPGPExternal && !model.sign ? (
+            )}
+            {model.isPGPExternal && !model.sign && (
                 <Alert learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
                     .t`Only change these settings if you are using PGP with non-ProtonMail recipients.`}</Alert>
-            ) : null}
-            {model.keysExpired ? (
+            )}
+            {!model.keys.api.length && model.keysExpired && (
                 <Alert type="warning" learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c(
                     'Info'
                 ).t`All uploaded keys are expired or revoked! Encryption is automatically disabled.`}</Alert>
-            ) : null}
-            {model.isPGPExternal ? (
+            )}
+            {model.isPGPExternal && (
                 <Row>
                     <Label htmlFor="encrypt-toggle">
                         {c('Label').t`Encrypt emails`}
@@ -97,7 +105,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         <Toggle
                             id="encrypt-toggle"
                             checked={model.encrypt}
-                            disabled={!model.keys.length || model.keysExpired}
+                            disabled={!hasKeys || hasAllKeysExpired}
                             onChange={({ target }) =>
                                 setModel({
                                     ...model,
@@ -109,8 +117,8 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         />
                     </Field>
                 </Row>
-            ) : null}
-            {model.isPGPExternal ? (
+            )}
+            {model.isPGPExternal && (
                 <Row>
                     <Label htmlFor="sign-toggle">
                         {c('Label').t`Sign emails`}
@@ -135,7 +143,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         />
                     </Field>
                 </Row>
-            ) : null}
+            )}
             <Row>
                 <Label>
                     {c('Label').t`Public keys`}
@@ -149,7 +157,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                     {model.isPGPExternal ? <SelectKeyFiles onFiles={handleUploadKeys} multiple={true} /> : null}
                 </Field>
             </Row>
-            {model.keys.length ? <ContactKeysTable model={model} setModel={setModel} /> : null}
+            {hasKeys && <ContactKeysTable model={model} setModel={setModel} />}
             {model.isPGPExternal ? (
                 <Row>
                     <Label>

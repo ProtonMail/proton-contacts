@@ -47,7 +47,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     const { createNotification } = useNotifications();
     const api = useApi();
     const { call } = useEventManager();
-    const [model, setModel] = useState({ keys: [] });
+    const [model, setModel] = useState({ keys: { api: [], pinned: [] } });
     const [showPgpSettings, setShowPgpSettings] = useState(false);
     const [{ PGPScheme, Sign }, loadingMailSettings] = useMailSettings(); // NOTE MailSettings model needs to be loaded
 
@@ -152,16 +152,17 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             allKeysExpired(contactKeys)
         ]);
 
-        const trustedFingerprints = internalUser ? contactKeys.map((publicKey) => publicKey.getFingerprint()) : [];
+        const trustedFingerprints = contactKeys.map((publicKey) => publicKey.getFingerprint());
         setModel({
             mimeType,
             encrypt,
             scheme,
             sign,
             email: Email,
-            keys: internalUser && !contactKeys.length ? apiKeys : contactKeys,
+            keys: { api: apiKeys, pinned: contactKeys },
             trustedFingerprints,
             isPGPExternal: externalUser,
+            isPGPExternalWithWKDKeys: externalUser && !!apiKeys.length,
             isPGPInternal: internalUser,
             pgpAddressDisabled: isDisabledUser(config),
             noPrimary: hasNoPrimary(unarmoredKeys, contactKeys),
@@ -185,12 +186,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             group,
             pref: `${index + 1}`
         });
-
-        if (model.isPGPExternal) {
-            return model.keys.map(toKeyProperty);
-        }
-
-        return model.keys
+        return [...model.keys.pinned, ...model.keys.api]
             .filter((publicKey) => model.trustedFingerprints.includes(publicKey.getFingerprint()))
             .map(toKeyProperty);
     };
