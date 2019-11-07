@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { move } from 'proton-shared/lib/helpers/array';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
+import { toDate, isValid, format } from 'date-fns';
 import { serverTime } from 'pmcrypto/lib/serverTime';
-import moment from 'moment';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 import { describe } from 'proton-shared/lib/keys/keysAlgorithm';
 import { Table, TableHeader, TableBody, TableRow, Badge, DropdownActions } from 'react-components';
@@ -68,7 +68,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                         { fingerprint, algo, creationTime, isPrimary, publicKey, isExpired, isRevoked, isTrusted },
                         index
                     ) => {
-                        const creation = moment(creationTime);
+                        const creation = toDate(creationTime);
                         const list = [
                             {
                                 text: c('Action').t`Download`,
@@ -133,7 +133,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                                 />
                                 <span className="flex-item-fluid ellipsis">{fingerprint}</span>
                             </div>,
-                            creation.isValid() ? creation.format('ll') : '-',
+                            isValid(creation) ? format(creation, 'PP') : '-',
                             algo,
                             <React.Fragment key={fingerprint}>
                                 {isPrimary ? <Badge>{c('Key badge').t`Primary`}</Badge> : null}

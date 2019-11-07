@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import {
     Row,
@@ -14,6 +13,7 @@ import {
     RemoteImage
 } from 'react-components';
 import { c } from 'ttag';
+import { parseISO, toDate, isValid, format } from 'date-fns';
 
 import { clearType, getType, formatAdr } from '../helpers/property';
 import ContactGroupIcon from './ContactGroupIcon';
@@ -61,9 +61,9 @@ const ContactViewProperty = ({
             return <a href={`tel:${value}`}>{value}</a>;
         }
         if (['bday', 'anniversary'].includes(field)) {
-            const date = moment(value);
-            if (date.isValid()) {
-                return date.format('LL');
+            const [date] = [parseISO(value), toDate(value)].filter(isValid);
+            if (date) {
+                return format(date, 'PP');
             }
             return value;
         }
