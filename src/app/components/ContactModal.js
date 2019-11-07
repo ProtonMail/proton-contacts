@@ -42,7 +42,7 @@ const formatModel = (properties = []) => {
         .map((property) => ({ ...property, uid: generateUID(UID_PREFIX) })); // Add UID to localize the property easily
 };
 
-const ContactModal = ({ contactID, properties: initialProperties = [], history, ...rest }) => {
+const ContactModal = ({ contactID, properties: initialProperties = [], onAdd, history, ...rest }) => {
     const api = useApi();
     const { createNotification } = useNotifications();
     const [loading, withLoading] = useLoading();
@@ -87,6 +87,7 @@ const ContactModal = ({ contactID, properties: initialProperties = [], history, 
         }
         await call();
         if (!contactID) {
+            onAdd();
             history.push(`/contacts/${ID}`);
         }
         rest.onClose();
@@ -175,6 +176,7 @@ const ContactModal = ({ contactID, properties: initialProperties = [], history, 
 ContactModal.propTypes = {
     contactID: PropTypes.string,
     properties: PropTypes.array,
+    onAdd: PropTypes.func,
     history: PropTypes.object
 };
 
