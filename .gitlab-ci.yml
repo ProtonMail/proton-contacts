@@ -51,12 +51,6 @@ lint:
         - dind
     script:
         - npm run lint
-
-i18n:
-    stage: test
-    tags:
-        - dind
-    script:
         - npm run i18n:validate
         - npm run i18n:validate:context
 
