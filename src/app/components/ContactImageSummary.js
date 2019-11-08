@@ -16,6 +16,9 @@ const ContactImageSummary = ({ photo, name }) => {
     const loading = loadingMailSettings && loadingResize;
 
     useEffect(() => {
+        if (!photo) {
+            return;
+        }
         const resize = async () => {
             const { width, height } = await toImage(photo);
             setImage((image) => ({ ...image, width, height }));
