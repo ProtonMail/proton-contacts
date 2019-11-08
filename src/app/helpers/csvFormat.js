@@ -27,21 +27,6 @@ const beIgnoredCsvProperties = [
  */
 const isEmptyHeaderIndex = (index, contacts) => !contacts.some((values) => values[index] !== '');
 
-// /**
-//  * Extract (only) non-empty csv properties and contacts values from a read csv file
-//  * @param {Array<String>} headers
-//  * @param {Array<Array<String>>} contacts
-//  *
-//  * @return {Object}         { headers: Array<String>, contacts: Array<Array<String>> }
-//  */
-// const getNonEmptyCsvData = ({ headers, contacts }) => {
-//     const indicesToKeep = headers.map((_header, i) => !isEmptyHeaderIndex(i, contacts));
-//     return {
-//         headers: headers.filter((_header, i) => indicesToKeep[i]),
-//         contacts: contacts.map((values) => values.filter((_value, j) => indicesToKeep[j]))
-//     };
-// };
-
 /**
  * Standarize a custom vcard type coming from a csv property
  * @param {String} csvType
