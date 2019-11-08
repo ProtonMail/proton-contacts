@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { move } from 'proton-shared/lib/helpers/array';
+import { Table, TableHeader, TableBody, TableRow, Badge, DropdownActions } from 'react-components';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { toDate, isValid, format } from 'date-fns';
+
+import { move } from 'proton-shared/lib/helpers/array';
+import { dateLocale } from 'proton-shared/lib/i18n';
 import { serverTime } from 'pmcrypto/lib/serverTime';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 import { describe } from 'proton-shared/lib/keys/keysAlgorithm';
-import { Table, TableHeader, TableBody, TableRow, Badge, DropdownActions } from 'react-components';
 
 import KeyWarningIcon from './KeyWarningIcon';
 
@@ -133,7 +135,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                                 />
                                 <span className="flex-item-fluid ellipsis">{fingerprint}</span>
                             </div>,
-                            isValid(creation) ? format(creation, 'PP') : '-',
+                            isValid(creation) ? format(creation, 'PP', { locale: dateLocale }) : '-',
                             algo,
                             <React.Fragment key={fingerprint}>
                                 {isPrimary ? <Badge>{c('Key badge').t`Primary`}</Badge> : null}

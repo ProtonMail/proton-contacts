@@ -15,7 +15,9 @@ import {
 import { c } from 'ttag';
 import { parseISO, toDate, isValid, format } from 'date-fns';
 
+import { dateLocale } from 'proton-shared/lib/i18n';
 import { clearType, getType, formatAdr } from '../helpers/property';
+
 import ContactGroupIcon from './ContactGroupIcon';
 import ContactGroupDropdown from './ContactGroupDropdown';
 import ContactLabelProperty from './ContactLabelProperty';
@@ -63,7 +65,7 @@ const ContactViewProperty = ({
         if (['bday', 'anniversary'].includes(field)) {
             const [date] = [parseISO(value), toDate(value)].filter(isValid);
             if (date) {
-                return format(date, 'PP');
+                return format(date, 'PP', { locale: dateLocale });
             }
             return value;
         }
