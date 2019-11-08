@@ -126,30 +126,44 @@ const ContactsContainer = ({ location, history }) => {
     const canMerge = mergeableContacts.length > 0;
     const { hasPaidMail } = user;
 
-    const checkedContactIDs = useMemo(() => {
-        return Object.entries(checkedContacts).reduce((acc, [contactID, isChecked]) => {
-            if (!isChecked) {
-                return acc;
-            }
-            acc.push(contactID);
-            return acc;
-        }, []);
-    }, [checkedContacts]);
-
     const contactID = useMemo(() => {
         const [, contactID] = location.pathname.split('/contacts/');
         return contactID;
     }, [location]);
 
-    const activeIDs = useMemo(() => {
-        if (checkedContactIDs && checkedContactIDs.length) {
-            return checkedContactIDs;
+    const filteredCheckedIDs = useMemo(() => {
+        if (formattedContacts && formattedContacts.length) {
+            return formattedContacts.filter(({ isChecked }) => isChecked).map(({ ID }) => ID);
         }
         if (contactID) {
             return [contactID];
         }
         return [];
-    }, [checkedContactIDs, contactID]);
+    }, [formattedContacts, contactID]);
+
+    const handleCheck = (contactIDs = [], checked = false) => {
+        const update = contactIDs.reduce((acc, contactID) => {
+            acc[contactID] = checked;
+            return acc;
+        }, Object.create(null));
+        setCheckedContacts({ ...checkedContacts, ...update });
+        setCheckAll(checked && contactIDs.length === formattedContacts.length);
+    };
+
+    const handleClearSearch = () => {
+        updateSearch('');
+    };
+
+    const handleCheckAll = (checked = false) => {
+        if (!Array.isArray(contacts)) {
+            return;
+        }
+        handleCheck(filteredContacts.map(({ ID }) => ID), checked);
+    };
+
+    const handleUncheckAll = () => {
+        handleCheckAll(false);
+    };
 
     const handleDelete = async () => {
         const confirm = <ErrorButton type="submit">{c('Action').t`Delete`}</ErrorButton>;
@@ -160,7 +174,7 @@ const ContactsContainer = ({ location, history }) => {
                         {c('Warning').ngettext(
                             msgid`This action will permanently delete the selected contact. Are you sure you want to delete this contact?`,
                             `This action will permanently delete selected contacts. Are you sure you want to delete these contacts?`,
-                            activeIDs.length
+                            filteredCheckedIDs.length
                         )}
                     </Alert>
                 </ConfirmModal>
@@ -177,40 +191,19 @@ const ContactsContainer = ({ location, history }) => {
             clearChecked();
             return createNotification({ text: c('Success').t`Contacts deleted` });
         }
-        const apiResponse = await api(deleteContacts(activeIDs));
-        if (contactID && checkedContacts[contactID]) {
+        const apiSuccess = allSucceded(await api(deleteContacts(filteredCheckedIDs)));
+        const navigateAway =
+            (contactID && checkedContacts[contactID]) ||
+            (apiSuccess && filteredCheckedIDs.length === filteredContacts.length);
+        if (navigateAway) {
+            handleClearSearch();
             history.push({ ...location, pathname: '/contacts' });
         }
         await call();
-        clearChecked();
-        if (!allSucceded(apiResponse)) {
+        if (!apiSuccess) {
             return createNotification({ text: c('Error').t`Some contacts could not be deleted`, type: 'warning' });
         }
         createNotification({ text: c('Success').t`Contacts deleted` });
-    };
-
-    const handleCheck = (contactIDs = [], checked = false) => {
-        const update = contactIDs.reduce((acc, contactID) => {
-            acc[contactID] = checked;
-            return acc;
-        }, Object.create(null));
-        setCheckedContacts({ ...checkedContacts, ...update });
-        setCheckAll(checked && contactIDs.length === contacts.length);
-    };
-
-    const handleClearSearch = () => {
-        updateSearch('');
-    };
-
-    const handleCheckAll = (checked = false) => {
-        if (!Array.isArray(contacts)) {
-            return;
-        }
-        handleCheck(filteredContacts.map(({ ID }) => ID), checked);
-    };
-
-    const handleUncheckAll = () => {
-        handleCheckAll(false);
     };
 
     const handleMerge = () => {
@@ -311,7 +304,7 @@ const ContactsContainer = ({ location, history }) => {
                     <ContactToolbar
                         user={user}
                         contactEmailsMap={contactEmailsMap}
-                        activeIDs={activeIDs}
+                        filteredCheckedIDs={filteredCheckedIDs}
                         checked={checkAll}
                         onCheck={handleCheckAll}
                         onDelete={handleDelete}

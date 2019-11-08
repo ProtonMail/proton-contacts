@@ -10,20 +10,20 @@ const ContactToolbar = ({
     onCheck,
     onDelete,
     checked = false,
-    activeIDs = [],
+    filteredCheckedIDs = [],
     contactEmailsMap = {},
     simplified = false
 }) => {
     const handleCheck = ({ target }) => onCheck(target.checked);
 
     const contactEmailsSelected = useMemo(() => {
-        return activeIDs.reduce((acc, ID) => {
+        return filteredCheckedIDs.reduce((acc, ID) => {
             if (!contactEmailsMap[ID]) {
                 return acc;
             }
             return acc.concat(contactEmailsMap[ID]);
         }, []);
-    }, [activeIDs, contactEmailsMap]);
+    }, [filteredCheckedIDs, contactEmailsMap]);
 
     if (simplified) {
         return (
@@ -44,7 +44,7 @@ const ContactToolbar = ({
                 title={c('Tooltip').t`Delete`}
                 className="toolbar-button"
                 onClick={onDelete}
-                disabled={!activeIDs.length}
+                disabled={!filteredCheckedIDs.length}
             >
                 <Icon name="delete" className="toolbar-icon mauto" />
             </button>
@@ -67,7 +67,7 @@ ContactToolbar.propTypes = {
     user: PropTypes.object,
     onCheck: PropTypes.func,
     onDelete: PropTypes.func,
-    activeIDs: PropTypes.array,
+    filteredCheckedIDs: PropTypes.array,
     contactEmailsMap: PropTypes.object,
     simplified: PropTypes.bool
 };
