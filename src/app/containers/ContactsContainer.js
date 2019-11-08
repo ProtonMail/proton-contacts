@@ -16,7 +16,8 @@ import {
     useModals,
     ConfirmModal,
     ErrorButton,
-    useToggle
+    useToggle,
+    ErrorBoundary
 } from 'react-components';
 import { clearContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 import { normalize } from 'proton-shared/lib/helpers/string';
@@ -224,12 +225,14 @@ const ContactsContainer = ({ location, history }) => {
     const noHeader = isNarrow && contactID ? '--noHeader' : '';
 
     const contactComponent = contactID && contactsLength && !hasChecked && (
-        <Contact
-            contactID={contactID}
-            contactEmails={contactEmailsMap[contactID]}
-            contactGroupsMap={contactGroupsMap}
-            userKeysList={userKeysList}
-        />
+        <ErrorBoundary key={contactID}>
+            <Contact
+                contactID={contactID}
+                contactEmails={contactEmailsMap[contactID]}
+                contactGroupsMap={contactGroupsMap}
+                userKeysList={userKeysList}
+            />
+        </ErrorBoundary>
     );
 
     const contactsListComponent = (isDesktop || !contactComponent) && (
