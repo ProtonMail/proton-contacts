@@ -13,7 +13,7 @@ import {
     RemoteImage
 } from 'react-components';
 import { c } from 'ttag';
-import { parseISO, toDate, isValid, format } from 'date-fns';
+import { parseISO, isValid, format } from 'date-fns';
 
 import { dateLocale } from 'proton-shared/lib/i18n';
 import { clearType, getType, formatAdr } from '../helpers/property';
@@ -63,7 +63,7 @@ const ContactViewProperty = ({
             return <a href={`tel:${value}`}>{value}</a>;
         }
         if (['bday', 'anniversary'].includes(field)) {
-            const [date] = [parseISO(value), toDate(value)].filter(isValid);
+            const [date] = [parseISO(value), new Date(value)].filter(isValid);
             if (date) {
                 return format(date, 'PP', { locale: dateLocale });
             }

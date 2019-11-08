@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, TableHeader, TableBody, TableRow, Badge, DropdownActions } from 'react-components';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { toDate, isValid, format } from 'date-fns';
+import { isValid, format } from 'date-fns';
 
 import { move } from 'proton-shared/lib/helpers/array';
 import { dateLocale } from 'proton-shared/lib/i18n';
@@ -70,7 +70,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                         { fingerprint, algo, creationTime, isPrimary, publicKey, isExpired, isRevoked, isTrusted },
                         index
                     ) => {
-                        const creation = toDate(creationTime);
+                        const creation = new Date(creationTime);
                         const list = [
                             {
                                 text: c('Action').t`Download`,
