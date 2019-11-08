@@ -13,12 +13,19 @@ import { extractVcards, parse as parseVcard } from '../../helpers/vcard';
 import { prepareContact } from '../../helpers/encrypt';
 import { splitContacts } from '../../helpers/import';
 import { combineProgress } from '../../helpers/progress';
-import { OVERWRITE, CATEGORIES, API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
+import {
+    OVERWRITE,
+    CATEGORIES,
+    API_SAFE_INTERVAL,
+    ADD_CONTACTS_MAX_SIZE,
+    MAX_SIMULTANEOUS_CONTACTS_ENCRYPT
+} from '../../constants';
 import { API_CODES } from 'proton-shared/lib/constants';
 
 const { OVERWRITE_CONTACT } = OVERWRITE;
 const { IGNORE, INCLUDE } = CATEGORIES;
 const { SINGLE_SUCCESS } = API_CODES;
+const ONE_HOUR = 1000 * 60 * 60;
 
 const createParseErrorMessage = (index, message) =>
     c('Info on errors importing contacts').t`Contact ${index} from your list could not be parsed. ${message}`;
@@ -77,33 +84,48 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
                   }, []);
         };
 
+        const encryptContact = async ({ contact, index }, publicKey, { signal }) => {
+            try {
+                const contactEncrypted = await prepareContact(contact, { privateKey, publicKey });
+                !signal.aborted &&
+                    setModel((model) => ({ ...model, encrypted: [...model.encrypted, contactEncrypted] }));
+                return { index, contact: contactEncrypted };
+            } catch (error) {
+                !signal.aborted &&
+                    setModel((model) => ({
+                        ...model,
+                        failedOnEncrypt: [
+                            ...model.failedOnEncrypt,
+                            { index, message: createEncryptErrorMessage(index + 1) }
+                        ]
+                    }));
+                return { index, contact: { error: true } }; // must keep for a proper counting when displaying errors
+            }
+        };
+
+        const encryptBatch = async (contacts = [], publicKey, { signal }) => {
+            if (signal.aborted) {
+                return [];
+            }
+            return Promise.all(contacts.map((contact) => encryptContact(contact, publicKey, { signal })));
+        };
+
         /**
          * Encrypt vCard contacts. Return succesfully encrypted contacts
          */
         const encryptContacts = async (contacts = [], { signal }) => {
             const publicKey = privateKey.toPublic();
 
+            // encrypt several contacts at a time to speed up the process without burning the user's machine
+            const contactBatches = chunk(contacts, MAX_SIMULTANEOUS_CONTACTS_ENCRYPT);
+
             const encryptedContacts = [];
-            for (const { index, contact } of contacts) {
+            for (const batch of contactBatches) {
                 if (signal.aborted) {
                     return [];
                 }
-                try {
-                    const contactEncrypted = await prepareContact(contact, { privateKey, publicKey });
-                    !signal.aborted &&
-                        setModel((model) => ({ ...model, encrypted: [...model.encrypted, contactEncrypted] }));
-                    encryptedContacts.push({ index, contact: contactEncrypted });
-                } catch (error) {
-                    !signal.aborted &&
-                        setModel((model) => ({
-                            ...model,
-                            failedOnEncrypt: [
-                                ...model.failedOnEncrypt,
-                                { index, message: createEncryptErrorMessage(index + 1) }
-                            ]
-                        }));
-                    encryptedContacts.push({ index, contact: { error: true } }); // must keep for a proper counting when displaying errors
-                }
+                const encryptedBatch = await encryptBatch(batch, publicKey, { signal });
+                encryptedContacts.push(...encryptedBatch);
             }
 
             return encryptedContacts;
@@ -123,7 +145,10 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
                 addContacts({
                     Contacts: contacts.map(({ contact }) => contact),
                     Overwrite: OVERWRITE_CONTACT,
-                    Labels: labels
+                    Labels: labels,
+                    // we need to increase the standard timeout limit for this route since it may be slow sometimes
+                    // 1 hour to wait for an API response is essentially infinite time
+                    timeout: ONE_HOUR
                 })
             )).Responses.map(({ Response }) => Response);
 

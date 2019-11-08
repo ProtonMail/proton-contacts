@@ -69,7 +69,7 @@ const ContactsList = ({
 
     useEffect(() => {
         const timeoutID = setTimeout(() => {
-            if (contactID) {
+            if (contactID && totalContacts) {
                 const index = contacts.findIndex(({ ID }) => contactID === ID);
                 listRef.current.scrollToRow(index);
             }

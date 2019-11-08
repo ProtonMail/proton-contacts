@@ -18,6 +18,16 @@ const beIgnoredCsvProperties = [
 ];
 
 /**
+ * For a list of headers and csv contacts extracted from a csv,
+ * check if a given header index has the empty value for all contacts
+ * @param {Number} index
+ * @param {Array<Array<String>>} contacts
+ *
+ * @return {Boolean}
+ */
+const isEmptyHeaderIndex = (index, contacts) => !contacts.some((values) => values[index] !== '');
+
+/**
  * Standarize a custom vcard type coming from a csv property
  * @param {String} csvType
  *
@@ -69,14 +79,21 @@ export const standarize = ({ headers, contacts }) => {
     if (!contacts.length) {
         return { headers, contacts };
     }
+
+    // do a first simple formatting of headers
+    const formattedHeaders = headers.map((header) => header.replace('_', ' '));
+
     // change name of certain headers into outlook equivalents
     // remove headers we are not interested in
     // merge headers 'xxx - type' and 'xxx - value' into one header
-    const { beRemoved, beChanged } = headers.reduce(
+    const { beRemoved, beChanged } = formattedHeaders.reduce(
         (acc, header, i) => {
             const headerLowerCase = header.toLowerCase();
             const { beRemoved, beChanged } = acc;
             const value = contacts[0][i];
+            if (isEmptyHeaderIndex(i, contacts)) {
+                beRemoved[i] = true;
+            }
             if (
                 beIgnoredCsvProperties.includes(headerLowerCase) ||
                 headerLowerCase.startsWith('im') ||
@@ -84,6 +101,15 @@ export const standarize = ({ headers, contacts }) => {
             ) {
                 beRemoved[i] = true;
                 return acc;
+            }
+            if (header === 'address') {
+                beChanged[i] = 'street';
+            }
+            if (header === 'zip') {
+                beChanged[i] = 'postal code';
+            }
+            if (header === 'county') {
+                beChanged[i] = 'state';
             }
             /*
                 consecutive headers for address n property are (n is an integer)
@@ -98,7 +124,6 @@ export const standarize = ({ headers, contacts }) => {
                 * address n - extended address
                 we have to drop the first two headers and change the rest accordingly
             */
-
             if (/^address\s?(\d+)? - type$/.test(headerLowerCase)) {
                 const [, pref] = headerLowerCase.match(/^address\s?\d+? - type$/);
                 const n = pref ? pref : '';
@@ -109,7 +134,7 @@ export const standarize = ({ headers, contacts }) => {
                 beChanged[i + 4] = (capitalize(toVcardType(value)) + ` PO Box ${n}`).trim();
                 beChanged[i + 5] = (capitalize(toVcardType(value)) + ` State ${n}`).trim();
                 beChanged[i + 6] = (capitalize(toVcardType(value)) + ` Postal Code ${n}`).trim();
-                beChanged[i + 7] = (capitalize(toVcardType(value)) + ` Country ${n}`).trim();
+                beChanged[i + 7] = (capitalize(toVcardType(value)) + ` Country/Region ${n}`).trim();
                 beChanged[i + 8] = (capitalize(toVcardType(value)) + ` Extended Address ${n}`).trim();
                 return acc;
             }
@@ -158,7 +183,7 @@ export const standarize = ({ headers, contacts }) => {
         { beRemoved: Object.create(null), beChanged: Object.create(null) }
     );
 
-    const standardHeaders = headers
+    const standardHeaders = formattedHeaders
         .map((header, index) => (beChanged[index] ? beChanged[index] : header))
         .filter((_header, index) => !beRemoved[index]);
 
@@ -282,8 +307,8 @@ export const toPreVcard = (header) => {
         const [, pref] = property.match(/^department\s?(\d*)/);
         return (value) => templates['org']({ pref, header, value, index: 1 });
     }
-    if (/^(\w+)?\s?e-mail\s?(\d*)/.test(property)) {
-        const [, type, pref] = property.match(/^(\w+)?\s?e-mail\s?(\d*)/);
+    if (/^(\w+)?\s?e-?mail\s?(\d*)/.test(property)) {
+        const [, type, pref] = property.match(/^(\w+)?\s?e-?mail\s?(\d*)/);
         return (value) => templates['email']({ pref, header, value, type: type ? toVcardType(type) : '' });
     }
     if (/^(\w+\s*\w+)?\s?phone\s?(\d*)$/.test(property)) {
@@ -302,32 +327,32 @@ export const toPreVcard = (header) => {
         const [, pref] = property.match(/^callback|telex\s?(\d*)$/);
         return (value) => templates['tel']({ pref, header, value, type: 'other' });
     }
-    if (/^(\w+) po box\s?(\d*)$/.test(property)) {
-        const [, type, pref] = property.match(/^(\w+) po box\s?(\d*)$/);
+    if (/^(\w*)\s?po box\s?(\d*)$/.test(property)) {
+        const [, type, pref] = property.match(/^(\w*)\s?po box\s?(\d*)$/);
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 0 });
     }
-    if (/^(\w+) extended address\s?(\d*)$/.test(property)) {
-        const [, type, pref] = property.match(/^(\w+) extended address\s?(\d*)$/);
+    if (/^(\w*)\s?extended address\s?(\d*)$/.test(property)) {
+        const [, type, pref] = property.match(/^(\w*)\s?extended address\s?(\d*)$/);
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 1 });
     }
-    if (/^(\w+) street\s?(\d*)$/.test(property)) {
-        const [, type, pref] = property.match(/^(\w+) street\s?(\d*)$/);
+    if (/^(\w*)\s?street\s?(\d*)$/.test(property)) {
+        const [, type, pref] = property.match(/^(\w*)\s?street\s?(\d*)$/);
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 2 });
     }
-    if (/^(\w+) city\s?(\d*)$/.test(property)) {
-        const [, type, pref] = property.match(/^(\w+) city\s?(\d*)$/);
+    if (/^(\w*)\s?city\s?(\d*)$/.test(property)) {
+        const [, type, pref] = property.match(/^(\w*)\s?city\s?(\d*)$/);
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 3 });
     }
-    if (/^(\w+) state\s?(\d*)$/.test(property)) {
-        const [, type, pref] = property.match(/^(\w+) state\s?(\d*)$/);
+    if (/^(\w*)\s?state\s?(\d*)$/.test(property)) {
+        const [, type, pref] = property.match(/^(\w*)\s?state\s?(\d*)$/);
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 4 });
     }
-    if (/^(\w+) postal code\s?(\d*)$/.test(property)) {
-        const [, type, pref] = property.match(/^(\w+) postal code\s?(\d*)$/);
+    if (/^(\w*)\s?postal code\s?(\d*)$/.test(property)) {
+        const [, type, pref] = property.match(/^(\w*)\s?postal code\s?(\d*)$/);
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 5 });
     }
-    if (/^(\w+) country\/region\s?(\d*)$/.test(property)) {
-        const [, type, pref] = property.match(/^(\w+) country\/region\s?(\d*)$/);
+    if (/^(\w*)\s?country|region\s?(\d*)$/.test(property)) {
+        const [, type, pref] = property.match(/^(\w*)\s?country\/region\s?(\d*)$/);
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 6 });
     }
     if (property === 'nickname') {
@@ -413,12 +438,28 @@ export const toPreVcard = (header) => {
             field: 'anniversary'
         });
     }
-    if (property === 'personal web page' || property.includes('website')) {
+    if (property.includes('web')) {
         return (value) => ({
             header,
             value,
             checked: true,
             field: 'url'
+        });
+    }
+    if (property === 'photo') {
+        return (value) => ({
+            header,
+            value,
+            checked: true,
+            field: 'photo'
+        });
+    }
+    if (property === 'logo') {
+        return (value) => ({
+            header,
+            value,
+            checked: true,
+            field: 'logo'
         });
     }
     if (property === 'location') {

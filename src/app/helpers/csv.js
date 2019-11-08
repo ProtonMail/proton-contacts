@@ -80,31 +80,6 @@ export const readCsv = async (file) => {
 };
 
 /**
- * For a list of headers and csv contacts extracted from a csv,
- * check if a given header index has the empty value for all contacts
- * @param {Number} index
- * @param {Array<Array<String>>} contacts
- *
- * @return {Boolean}
- */
-const isEmptyHeaderIndex = (index, contacts) => !contacts.some((values) => values[index] !== '');
-
-/**
- * Extract (only) non-empty csv properties and contacts values from a read csv file
- * @param {Array<String>} headers
- * @param {Array<Array<String>>} contacts
- *
- * @return {Object}         { headers: Array<String>, contacts: Array<Array<String>> }
- */
-const getNonEmptyCsvData = ({ headers, contacts }) => {
-    const indicesToKeep = headers.map((_header, i) => !isEmptyHeaderIndex(i, contacts));
-    return {
-        headers: headers.filter((_header, i) => indicesToKeep[i]),
-        contacts: contacts.map((values) => values.filter((_value, j) => indicesToKeep[j]))
-    };
-};
-
-/**
  * Transform csv properties and csv contacts into pre-vCard contacts.
  * @param {Object} csvData
  * @param {Array<String>} csvData.headers           Array of csv properties
@@ -119,9 +94,7 @@ const parse = ({ headers = [], contacts = [] }) => {
     if (!contacts.length) {
         return [];
     }
-    const { headers: standardHeaders, contacts: standardContacts } = standarize(
-        getNonEmptyCsvData({ headers, contacts })
-    );
+    const { headers: standardHeaders, contacts: standardContacts } = standarize({ headers, contacts });
 
     const translator = standardHeaders.map(toPreVcard);
 

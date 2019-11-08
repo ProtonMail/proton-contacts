@@ -166,15 +166,23 @@ const ContactsContainer = ({ location, history }) => {
                 </ConfirmModal>
             );
         });
+        const clearChecked = () => {
+            setCheckedContacts(Object.create(null));
+            setCheckAll(false);
+        };
         if (checkAll && !contactGroupID) {
             await api(clearContacts());
+            history.push({ ...location, pathname: '/contacts' });
+            await call();
+            clearChecked();
             return createNotification({ text: c('Success').t`Contacts deleted` });
         }
         const apiResponse = await api(deleteContacts(activeIDs));
-        history.push({ ...location, pathname: '/contacts' });
+        if (contactID && checkedContacts[contactID]) {
+            history.push({ ...location, pathname: '/contacts' });
+        }
         await call();
-        setCheckedContacts(Object.create(null));
-        setCheckAll(false);
+        clearChecked();
         if (!allSucceded(apiResponse)) {
             return createNotification({ text: c('Error').t`Some contacts could not be deleted`, type: 'warning' });
         }
@@ -224,7 +232,7 @@ const ContactsContainer = ({ location, history }) => {
     const contactsLength = contacts ? contacts.length : 0;
     const noHeader = isNarrow && contactID ? '--noHeader' : '';
 
-    const contactComponent = contactID && contactsLength && !hasChecked && (
+    const contactComponent = contactID && !!contactsLength && !hasChecked && (
         <ErrorBoundary key={contactID}>
             <Contact
                 contactID={contactID}
