@@ -5,6 +5,7 @@ import { useMailSettings, useLoading, Loader, Button } from 'react-components';
 import { getInitial } from 'proton-shared/lib/helpers/string';
 import { isURL } from 'proton-shared/lib/helpers/validators';
 import { resizeImage, toImage } from 'proton-shared/lib/helpers/image';
+import { noop } from 'proton-shared/lib/helpers/function';
 import { SHOW_IMAGES } from 'proton-shared/lib/constants';
 import { CONTACT_IMG_SIZE } from '../constants';
 
@@ -14,9 +15,10 @@ const ContactImageSummary = ({ photo, name }) => {
     const [{ ShowImages }, loadingMailSettings] = useMailSettings();
     const [loadingResize, withLoadingResize] = useLoading();
     const loading = loadingMailSettings && loadingResize;
+    const showPhoto = ShowImages & SHOW_IMAGES.REMOTE || showAnyways;
 
     useEffect(() => {
-        if (!photo) {
+        if (!photo || !showPhoto) {
             return;
         }
         const resize = async () => {
@@ -34,8 +36,8 @@ const ContactImageSummary = ({ photo, name }) => {
             });
             setImage((image) => ({ ...image, src: resized }));
         };
-        withLoadingResize(resize());
-    }, [photo]);
+        withLoadingResize(resize().catch(noop));
+    }, [photo, showPhoto]);
 
     if (!photo) {
         return (
@@ -49,7 +51,7 @@ const ContactImageSummary = ({ photo, name }) => {
 
     const handleClick = () => setShowAnyways(true);
 
-    if (ShowImages & SHOW_IMAGES.REMOTE || showAnyways) {
+    if (showPhoto) {
         if (loading) {
             return <Loader />;
         }
