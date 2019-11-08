@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Loader, GenericError } from 'react-components';
+import { Loader } from 'react-components';
 import { splitKeys } from 'proton-shared/lib/keys/keys';
 
 import useContact from '../hooks/useContact';
@@ -10,7 +10,7 @@ import ContactView from './ContactView';
 const Contact = ({ contactID, contactEmails, contactGroupsMap, userKeysList }) => {
     const [model, setModel] = useState({ ID: contactID });
     const ref = useRef(contactID);
-    const [contact, contactLoading, contactFetchError] = useContact(contactID);
+    const [contact, contactLoading] = useContact(contactID);
 
     useEffect(() => {
         if (contact && Array.isArray(userKeysList)) {
@@ -25,10 +25,6 @@ const Contact = ({ contactID, contactEmails, contactGroupsMap, userKeysList }) =
             });
         }
     }, [contact, userKeysList]);
-
-    if (contactFetchError) {
-        return <GenericError />;
-    }
 
     const { properties, errors, ID } = model;
 
