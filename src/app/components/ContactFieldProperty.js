@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { useModals, Input, TextArea, EmailInput, DateInput, TelInput } from 'react-components';
+import { parseISO, isValid } from 'date-fns';
 import { getAllFieldLabels } from '../helpers/fields';
 
 import ContactImageField from './ContactImageField';
@@ -32,19 +32,10 @@ const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
     }
 
     if (field === 'bday' || field === 'anniversary') {
-        const m = moment(value);
-        if (value === '' || m.isValid()) {
+        const date = value === '' ? new Date() : parseISO(value);
+        if (isValid(date)) {
             const handleSelectDate = (date) => onChange({ value: date.toISOString(), uid });
-            return (
-                <DateInput
-                    setDefaultDate
-                    placeholder={labels[field]}
-                    defaultDate={m.toDate()}
-                    onSelect={handleSelectDate}
-                    format={moment.localeData().longDateFormat('L')}
-                    {...rest}
-                />
-            );
+            return <DateInput placeholder={labels[field]} value={date} onChange={handleSelectDate} {...rest} />;
         }
     }
 

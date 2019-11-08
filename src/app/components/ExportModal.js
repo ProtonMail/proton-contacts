@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import moment from 'moment';
+import { format } from 'date-fns';
 import { useContacts, useApi, FormModal, ResetButton, PrimaryButton, Alert } from 'react-components';
 import { queryContactExport } from 'proton-shared/lib/api/contacts';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
@@ -47,7 +47,7 @@ const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...
     const handleSave = (vcards) => {
         const allVcards = vcards.join('\n');
         const blob = new Blob([allVcards], { type: 'data:text/plain;charset=utf-8;' });
-        downloadFile(blob, `${DOWNLOAD_FILENAME}-${moment().format('YYYY-MM-DD')}.vcf`);
+        downloadFile(blob, `${DOWNLOAD_FILENAME}-${format(Date.now(), 'yyyy-MM-dd')}.vcf`);
         onSave();
         rest.onClose();
     };

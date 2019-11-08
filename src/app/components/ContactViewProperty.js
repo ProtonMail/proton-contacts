@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import {
     Row,
@@ -14,8 +13,11 @@ import {
     RemoteImage
 } from 'react-components';
 import { c } from 'ttag';
+import { parseISO, isValid, format } from 'date-fns';
 
+import { dateLocale } from 'proton-shared/lib/i18n';
 import { clearType, getType, formatAdr } from '../helpers/property';
+
 import ContactGroupIcon from './ContactGroupIcon';
 import ContactGroupDropdown from './ContactGroupDropdown';
 import ContactLabelProperty from './ContactLabelProperty';
@@ -61,9 +63,9 @@ const ContactViewProperty = ({
             return <a href={`tel:${value}`}>{value}</a>;
         }
         if (['bday', 'anniversary'].includes(field)) {
-            const date = moment(value);
-            if (date.isValid()) {
-                return date.format('LL');
+            const [date] = [parseISO(value), new Date(value)].filter(isValid);
+            if (date) {
+                return format(date, 'PP', { locale: dateLocale });
             }
             return value;
         }
