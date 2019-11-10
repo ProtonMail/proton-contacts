@@ -44,7 +44,6 @@ const ContactsContainer = ({ location, history }) => {
     const api = useApi();
     const { createNotification } = useNotifications();
     const { call } = useEventManager();
-    const [checkAll, setCheckAll] = useState(false);
     const [contactEmails, loadingContactEmails] = useContactEmails();
     const [contacts, loadingContacts] = useContacts();
     const [contactGroups, loadingContactGroups] = useContactGroups();
@@ -73,7 +72,6 @@ const ContactsContainer = ({ location, history }) => {
     useEffect(() => {
         // clean checked contacts if navigating to a contact group
         setCheckedContacts(Object.create(null));
-        setCheckAll(false);
         setExpand(false);
         // clean also the search
         updateSearch('');
@@ -141,13 +139,17 @@ const ContactsContainer = ({ location, history }) => {
         return [];
     }, [formattedContacts, contactID]);
 
+    const checkAll = useMemo(() => {
+        const filteredContactsLength = filteredContacts.length;
+        return !!filteredContactsLength && filteredCheckedIDs.length === filteredContactsLength;
+    }, [filteredContacts, filteredCheckedIDs]);
+
     const handleCheck = (contactIDs = [], checked = false) => {
         const update = contactIDs.reduce((acc, contactID) => {
             acc[contactID] = checked;
             return acc;
         }, Object.create(null));
         setCheckedContacts({ ...checkedContacts, ...update });
-        setCheckAll(checked && contactIDs.length === formattedContacts.length);
     };
 
     const handleClearSearch = () => {
@@ -182,9 +184,8 @@ const ContactsContainer = ({ location, history }) => {
         });
         const clearChecked = () => {
             setCheckedContacts(Object.create(null));
-            setCheckAll(false);
         };
-        if (checkAll && !contactGroupID) {
+        if (checkedContacts.length === contacts.length) {
             await api(clearContacts());
             history.push({ ...location, pathname: '/contacts' });
             await call();
@@ -192,13 +193,13 @@ const ContactsContainer = ({ location, history }) => {
             return createNotification({ text: c('Success').t`Contacts deleted` });
         }
         const apiSuccess = allSucceded(await api(deleteContacts(filteredCheckedIDs)));
-        const navigateAway =
-            (contactID && checkedContacts[contactID]) ||
-            (apiSuccess && filteredCheckedIDs.length === filteredContacts.length);
-        if (navigateAway) {
+        if (filteredCheckedIDs.length === filteredContacts.length) {
             handleClearSearch();
+        }
+        if (contactID && checkedContacts[contactID]) {
             history.push({ ...location, pathname: '/contacts' });
         }
+        handleCheck(filteredCheckedIDs, false);
         await call();
         if (!apiSuccess) {
             return createNotification({ text: c('Error').t`Some contacts could not be deleted`, type: 'warning' });
