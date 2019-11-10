@@ -37,7 +37,7 @@ import { standarize, combine, display, toPreVcard } from './csvFormat';
  *                       The key "combineInto" will be the same for different csv properties that will
  *                       assemble into a single vCard property. For this assembly we need to order
  *                       the properties, which will be indicated by the key "combineIndex".
- *                       The key "custom" is a boolean that indicates whether the header couldn't be matched
+ *                       The key "custom" is a Boolean that indicates whether the header couldn't be matched
  *                       with a standard vCard property.
  *
  * "pre-vCard contact": An array made of pre-vCard properties
@@ -65,7 +65,7 @@ export const readCsv = async (file) => {
                 and each row of data will be an object of values keyed by field name instead of a simple array.
                 Rows with a different number of fields from the header row will produce an error.
             */
-            dynamicTyping: false, // If true, numeric and boolean data will be converted to their type instead of remaining strings.
+            dynamicTyping: false, // If true, numeric and Boolean data will be converted to their type instead of remaining strings.
             complete: onComplete,
             error: reject,
             skipEmptyLines: true // If true, lines that are completely empty will be skipped. An empty line is defined to be one which evaluates to empty string.
@@ -94,14 +94,15 @@ const parse = ({ headers = [], contacts = [] }) => {
     if (!contacts.length) {
         return [];
     }
-    const { headers: standardHeaders, contacts: standardContacts } = standarize({ headers, contacts });
+    const { headers: enrichedHeaders, contacts: standardContacts } = standarize({ headers, contacts });
+    console.log({ enrichedHeaders });
 
-    const translator = standardHeaders.map(toPreVcard);
+    const translator = enrichedHeaders.map(toPreVcard);
 
     return standardContacts
         .map((contact) =>
             contact
-                .map((header, i) => translator[i](header))
+                .map((value, i) => translator[i](value))
                 // some headers can be mapped to several properties, so we need to flatten
                 .flat()
         )
