@@ -73,7 +73,8 @@ const toVcardType = (csvType) => {
  * @param {Array<String>} csvData.headers           Array of csv properties
  * @param {Array<Array<String>>} csvData.contacts   Array of csv contacts
  *
- * @return {Object}                                 standarized { headers, contacts }
+ * @return {Object.headers}                         Object with the standarized headers and the corresponding original header: { standard, original }
+ * @return {Object.contacts}                        Standarized csv contacts
  */
 export const standarize = ({ headers, contacts }) => {
     if (!contacts.length) {
@@ -81,24 +82,19 @@ export const standarize = ({ headers, contacts }) => {
     }
 
     // do a first simple formatting of headers
-    const formattedHeaders = headers.map((header) => header.replace('_', ' '));
+    const formattedHeaders = headers.map((header) => header.replace('_', ' ').toLowerCase());
 
     // change name of certain headers into outlook equivalents
     // remove headers we are not interested in
     // merge headers 'xxx - type' and 'xxx - value' into one header
     const { beRemoved, beChanged } = formattedHeaders.reduce(
         (acc, header, i) => {
-            const headerLowerCase = header.toLowerCase();
             const { beRemoved, beChanged } = acc;
             const value = contacts[0][i];
             if (isEmptyHeaderIndex(i, contacts)) {
                 beRemoved[i] = true;
             }
-            if (
-                beIgnoredCsvProperties.includes(headerLowerCase) ||
-                headerLowerCase.startsWith('im') ||
-                headerLowerCase.includes('event')
-            ) {
+            if (beIgnoredCsvProperties.includes(header) || header.startsWith('im') || header.includes('event')) {
                 beRemoved[i] = true;
                 return acc;
             }
@@ -124,8 +120,8 @@ export const standarize = ({ headers, contacts }) => {
                 * address n - extended address
                 we have to drop the first two headers and change the rest accordingly
             */
-            if (/^address\s?(\d+)? - type$/.test(headerLowerCase)) {
-                const [, pref] = headerLowerCase.match(/^address\s?\d+? - type$/);
+            if (/^address\s?(\d+)? - type$/.test(header)) {
+                const [, pref] = header.match(/^address\s?\d+? - type$/);
                 const n = pref ? pref : '';
                 beRemoved[i] = true;
                 beRemoved[i + 1] = true;
@@ -150,8 +146,8 @@ export const standarize = ({ headers, contacts }) => {
                 * organization n - job description
                 we can simply keep the name, title and department changing the corresponding header
             */
-            if (/^organization\s?\d+? - (\w+)$/.test(headerLowerCase)) {
-                const [, str] = headerLowerCase.match(/^organization\s?\d+? - (\w+)$/);
+            if (/^organization\s?\d+? - (\w+)$/.test(header)) {
+                const [, str] = header.match(/^organization\s?\d+? - (\w+)$/);
                 if (str === 'name') {
                     beChanged[i] = 'Company';
                 } else if (str === 'title') {
@@ -183,13 +179,16 @@ export const standarize = ({ headers, contacts }) => {
         { beRemoved: Object.create(null), beChanged: Object.create(null) }
     );
 
-    const standardHeaders = formattedHeaders
-        .map((header, index) => (beChanged[index] ? beChanged[index] : header))
+    const enrichedHeaders = formattedHeaders
+        .map((header, index) => {
+            const original = headers[index];
+            return { original, standard: beChanged[index] ? beChanged[index] : header };
+        })
         .filter((_header, index) => !beRemoved[index]);
 
     const standardContacts = contacts.map((values) => values.filter((_value, j) => !beRemoved[j]));
 
-    return { headers: standardHeaders, contacts: standardContacts };
+    return { headers: enrichedHeaders, contacts: standardContacts };
 };
 
 const templates = {
@@ -267,14 +266,17 @@ const templates = {
 };
 
 /**
- * Given a csv property name (header), return a function that transforms
- * a value for that property into one or several pre-vCard properties
- * @param {String} CsvProperty
+ * Given an object with a csv property name (header) in both original and standard form,
+ * return a function that transforms a value for that property into one or several pre-vCard properties
+ * @param {String} enrichedHeader.original
+ * @param {String} enrichedHeader.standard
+ *
  *
  * @return {Function}
  */
-export const toPreVcard = (header) => {
-    const property = header.toLowerCase();
+export const toPreVcard = ({ original, standard }) => {
+    const property = standard.toLowerCase();
+    const header = original;
     if (['title', 'name prefix'].includes(property)) {
         return (value) => [templates['fn']({ header, value, index: 0 }), templates['n']({ header, value, index: 3 })];
     }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { useNotifications, Table, Alert, Block } from 'react-components';
+import { useNotifications, useLoading, Table, Alert, Block } from 'react-components';
 
 import ImportCsvTableHeader from './ImportCsvTableHeader';
 import ImportCsvTableBody from './ImportCsvTableBody';
@@ -12,7 +12,7 @@ import { modifyContactField, modifyContactType, toggleContactChecked } from '../
 const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
     const { createNotification } = useNotifications();
 
-    const [isParsingFile, setIsParsingFile] = useState(true);
+    const [isParsingFile, withParsing] = useLoading(true);
     const [contactIndex, setContactIndex] = useState(0);
     const [preVcardsContacts, setPreVcardsContacts] = useState([]);
 
@@ -47,10 +47,9 @@ const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
         const parseFile = async () => {
             const preVcardsContacts = prepare(file);
             setPreVcardsContacts(preVcardsContacts);
-            setIsParsingFile(false);
         };
 
-        parseFile();
+        withParsing(parseFile());
     }, []);
 
     useEffect(() => {
@@ -93,10 +92,7 @@ const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
 
 ImportCsvModalContent.propTypes = {
     file: PropTypes.shape({ headers: PropTypes.array, contacts: PropTypes.array }).isRequired,
-    parsedContacts: PropTypes.arrayOf(
-        PropTypes.arrayOf(PropTypes.shape({ field: PropTypes.string, type: PropTypes.string }))
-    ),
-    onSetParsedContacts: PropTypes.func
+    onSetVcardContacts: PropTypes.func
 };
 
 export default ImportCsvModalContent;
