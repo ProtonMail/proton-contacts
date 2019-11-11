@@ -53,6 +53,11 @@ const ContactsContainer = ({ location, history }) => {
 
     const { isDesktop, isNarrow } = useActiveBreakpoint();
 
+    const contactID = useMemo(() => {
+        const [, contactID] = location.pathname.split('/contacts/');
+        return contactID;
+    }, [location]);
+
     const contactGroupID = useMemo(() => {
         const params = new URLSearchParams(location.search);
         return params.get('contactGroupID');
@@ -95,6 +100,8 @@ const ContactsContainer = ({ location, history }) => {
         }, Object.create(null));
     }, [contactEmails]);
 
+    const contactGroupsMap = useMemo(() => toMap(contactGroups && contactGroups.filter(Boolean)), [contactGroups]);
+
     const filteredContacts = useMemo(() => {
         if (!Array.isArray(contacts)) {
             return [];
@@ -111,8 +118,6 @@ const ContactsContainer = ({ location, history }) => {
         });
     }, [contacts, contactGroupID, normalizedSearch, contactEmailsMap]);
 
-    const contactGroupsMap = useMemo(() => toMap(contactGroups && contactGroups.filter(Boolean)), [contactGroups]);
-
     const formattedContacts = useMemo(() => {
         return filteredContacts.map((contact) => {
             const { ID } = contact;
@@ -128,11 +133,6 @@ const ContactsContainer = ({ location, history }) => {
     const canMerge = mergeableContacts.length > 0;
     const { hasPaidMail } = user;
 
-    const contactID = useMemo(() => {
-        const [, contactID] = location.pathname.split('/contacts/');
-        return contactID;
-    }, [location]);
-
     const filteredCheckedIDs = useMemo(() => {
         if (formattedContacts && formattedContacts.length) {
             return formattedContacts.filter(({ isChecked }) => isChecked).map(({ ID }) => ID);
@@ -143,7 +143,7 @@ const ContactsContainer = ({ location, history }) => {
         return [];
     }, [formattedContacts, contactID]);
 
-    const checkAll = useMemo(() => {
+    const hasCheckedAllFiltered = useMemo(() => {
         const filteredContactsLength = filteredContacts.length;
         return !!filteredContactsLength && filteredCheckedIDs.length === filteredContactsLength;
     }, [filteredContacts, filteredCheckedIDs]);
@@ -160,15 +160,12 @@ const ContactsContainer = ({ location, history }) => {
         updateSearch('');
     };
 
-    const handleCheckAll = (checked = false) => {
-        if (!Array.isArray(contacts)) {
-            return;
-        }
+    const handleCheckAllFiltered = (checked = false) => {
         handleCheck(filteredContacts.map(({ ID }) => ID), checked);
     };
 
     const handleUncheckAll = () => {
-        handleCheckAll(false);
+        handleCheckAllFiltered(false);
     };
 
     const handleDelete = async () => {
@@ -186,14 +183,11 @@ const ContactsContainer = ({ location, history }) => {
                 </ConfirmModal>
             );
         });
-        const clearChecked = () => {
-            setCheckedContacts(Object.create(null));
-        };
-        if (checkedContacts.length === contacts.length) {
+        if (filteredCheckedIDs.length === contacts.length) {
             await api(clearContacts());
-            history.push({ ...location, pathname: '/contacts' });
+            history.replace({ ...location, pathname: '/contacts' });
             await call();
-            clearChecked();
+            setCheckedContacts(Object.create(null));
             return createNotification({ text: c('Success').t`Contacts deleted` });
         }
         const apiSuccess = allSucceded(await api(deleteContacts(filteredCheckedIDs)));
@@ -201,8 +195,8 @@ const ContactsContainer = ({ location, history }) => {
         if (filteredCheckedIDs.length === filteredContacts.length) {
             handleClearSearch();
         }
-        if (contactID && checkedContacts[contactID]) {
-            history.push({ ...location, pathname: '/contacts' });
+        if (contactID && filteredCheckedIDs.includes(contactID)) {
+            history.replace({ ...location, pathname: '/contacts' });
         }
         handleCheck(filteredCheckedIDs, false);
         if (!apiSuccess) {
@@ -224,7 +218,7 @@ const ContactsContainer = ({ location, history }) => {
     const handleImport = () => createModal(<ImportModal userKeysList={userKeysList} />);
     const handleExport = (contactGroupID) =>
         createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
-    const handleGroups = () => history.push('/contacts/settings/groups');
+    const handleGroups = () => history.replace('/contacts/settings/groups');
 
     const isLoading = loadingContactEmails || loadingContacts || loadingContactGroups || loadingUserKeys;
     const contactsLength = contacts ? contacts.length : 0;
@@ -311,9 +305,9 @@ const ContactsContainer = ({ location, history }) => {
                     <ContactToolbar
                         user={user}
                         contactEmailsMap={contactEmailsMap}
-                        filteredCheckedIDs={filteredCheckedIDs}
-                        checked={checkAll}
-                        onCheck={handleCheckAll}
+                        checkedIDs={filteredCheckedIDs}
+                        checked={hasCheckedAllFiltered}
+                        onCheck={handleCheckAllFiltered}
                         onDelete={handleDelete}
                         simplified={!!contactID && !isDesktop}
                     />
