@@ -142,8 +142,8 @@ const ContactsList = ({
         }
 
         const clearSearch = (
-            <LinkButton key="add" onClick={onClearSearch} className="ml0-25">
-                {c('Action').t`clear it`}
+            <LinkButton key="add" onClick={onClearSearch} className="ml0-25 bold">
+                {c('Action').t`Clear it`}
             </LinkButton>
         );
 
