@@ -58,12 +58,16 @@ const ContactsContainer = ({ location, history }) => {
         return params.get('contactGroupID');
     }, [location.search]);
 
-    const contactGroup = useMemo(() => {
+    const { contactGroupName, totalContactsInGroup } = useMemo(() => {
         if (!contactGroups || !contactGroupID) {
-            return;
+            return Object.create(null);
         }
-        return contactGroups.find(({ ID }) => ID === contactGroupID);
-    }, [contactGroupID]);
+        const contactGroup = contactGroups.find(({ ID }) => ID === contactGroupID);
+        return {
+            contactGroupName: contactGroup.Name,
+            totalContactsInGroup: contacts.filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID)).length
+        };
+    }, [contacts, contactGroupID]);
 
     const hasChecked = useMemo(() => {
         return Object.keys(checkedContacts).some((key) => checkedContacts[key]);
@@ -193,6 +197,7 @@ const ContactsContainer = ({ location, history }) => {
             return createNotification({ text: c('Success').t`Contacts deleted` });
         }
         const apiSuccess = allSucceded(await api(deleteContacts(filteredCheckedIDs)));
+        await call();
         if (filteredCheckedIDs.length === filteredContacts.length) {
             handleClearSearch();
         }
@@ -200,7 +205,6 @@ const ContactsContainer = ({ location, history }) => {
             history.push({ ...location, pathname: '/contacts' });
         }
         handleCheck(filteredCheckedIDs, false);
-        await call();
         if (!apiSuccess) {
             return createNotification({ text: c('Error').t`Some contacts could not be deleted`, type: 'warning' });
         }
@@ -261,9 +265,11 @@ const ContactsContainer = ({ location, history }) => {
             user={user}
             userKeysList={userKeysList}
             loadingUserKeys={loadingUserKeys}
-            contactGroupID={contactGroupID}
             totalContacts={contactsLength}
-            contacts={formattedContacts}
+            totalContactsInGroup={totalContactsInGroup}
+            selectedContacts={filteredCheckedIDs.length}
+            contactGroupID={contactGroupID}
+            contactGroupName={contactGroupName}
             onUncheck={handleUncheckAll}
             canMerge={canMerge}
             onMerge={handleMerge}
@@ -274,7 +280,7 @@ const ContactsContainer = ({ location, history }) => {
     );
 
     return (
-        <PrivateLayout title={contactGroup ? `${contactGroup.Name}` : c('Title').t`Contacts`}>
+        <PrivateLayout title={contactGroupName || c('Title').t`Contacts`}>
             {(!isNarrow || !contactID) && (
                 <PrivateHeader
                     title={c('Title').t`Contacts`}
