@@ -22,8 +22,8 @@ import { hasCategories } from '../helpers/import';
 import { isInternalUser, isDisabledUser, getRawInternalKeys, allKeysExpired, hasNoPrimary } from '../helpers/pgp';
 import { getPublicKeys } from 'proton-shared/lib/api/keys';
 import { noop } from 'proton-shared/lib/helpers/function';
-import { addContacts } from 'proton-shared/lib/api/contacts';
-import { VCARD_KEY_FIELDS, PGP_INLINE, PGP_MIME, PGP_SIGN, CATEGORIES } from '../constants';
+import { addContacts, getContact } from 'proton-shared/lib/api/contacts';
+import { VCARD_KEY_FIELDS, PGP_INLINE, PGP_MIME, PGP_SIGN, CATEGORIES, UNIX_TIME_WKD_ON } from '../constants';
 import { RECIPIENT_TYPE, PACKAGE_TYPE } from 'proton-shared/lib/constants';
 import { API_CUSTOM_ERROR_CODES } from 'proton-shared/lib/errors';
 
@@ -94,6 +94,9 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
      * @returns {Promise}
      */
     const prepare = async () => {
+        const {
+            Contact: { ModifyTime }
+        } = await api(getContact(contactID));
         const { contactKeyPromises, mimeType, encrypt, scheme, sign } = properties
             .filter(({ field, group }) => VCARD_KEY_FIELDS.includes(field) && group === emailGroup)
             .reduce(
@@ -155,7 +158,8 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
         const trustedFingerprints = contactKeys.map((publicKey) => publicKey.getFingerprint());
         setModel({
             mimeType,
-            encrypt,
+            // For external users with WKD keys, override x-pm-encrypt if modification time is earlier than UNIX_TIME_WKD_ON
+            encrypt: externalUser && apiKeys.length && ModifyTime < UNIX_TIME_WKD_ON ? true : encrypt,
             scheme,
             sign,
             email: Email,
@@ -171,6 +175,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             isPGPMime: externalUser && hasScheme('pgp-mime')
         });
     };
+    console.log(model);
 
     /**
      * Collect keys from the model to save
@@ -225,7 +230,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     useEffect(() => {
         const updateEncryptToggle = async (keys) => {
             const expired = await allKeysExpired(keys);
-            if (expired || !keys.length) {
+            if (expired || (!keys.api.length && !keys.pinned.length)) {
                 setModel((model) => ({ ...model, encrypt: false, keysExpired: expired }));
             }
         };
