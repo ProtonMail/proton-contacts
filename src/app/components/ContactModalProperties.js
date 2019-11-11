@@ -76,7 +76,7 @@ const ContactModalProperties = ({ properties: allProperties, field, onChange, on
                     </div>
                 </OrderableContainer>
             ) : (
-                rows
+                <div>{rows}</div>
             )}
             {canAdd && (
                 <div className="flex flex-nowrap flex-item-noshrink">

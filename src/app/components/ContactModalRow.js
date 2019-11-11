@@ -53,7 +53,7 @@ const ContactModalRow = ({ property, onChange, onRemove, isOrderable = false }) 
                     <Icon name="text-justify nonvisible" />
                 </div>
             )}
-            <div className="flex flex-nowrap onmobile-flex-column w95">
+            <div className="flex flex-nowrap flex-items-center onmobile-flex-column w95">
                 <span className="w30 flex flex-nowrap mr1 mb1">
                     <ContactModalLabel field={field} type={type} uid={property.uid} onChange={onChange} />
                 </span>
