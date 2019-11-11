@@ -16,6 +16,7 @@ import ContactRow from './ContactRow';
 
 const ContactsList = ({
     totalContacts,
+    totalContactsInGroup,
     contacts,
     contactGroupsMap,
     onCheck,
@@ -114,7 +115,7 @@ const ContactsList = ({
     }
 
     if (!contacts.length) {
-        if (contactGroupID) {
+        if (contactGroupID && !totalContactsInGroup) {
             const editGroup = (
                 <button
                     key="add"
@@ -141,7 +142,7 @@ const ContactsList = ({
         }
 
         const clearSearch = (
-            <LinkButton key="add" onClick={onClearSearch}>
+            <LinkButton key="add" onClick={onClearSearch} className="ml0-25">
                 {c('Action').t`clear it`}
             </LinkButton>
         );

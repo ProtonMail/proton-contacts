@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
-import { PrimaryButton, Button, Icon, useModals, useContactGroups } from 'react-components';
+import { useModals, PrimaryButton, Button, Icon } from 'react-components';
 
 import { redirectTo } from 'proton-shared/lib/helpers/browser';
 import importSvg from 'design-system/assets/img/pm-images/contact-import.svg';
@@ -117,8 +117,10 @@ FreeCards.propTypes = {
 
 const ContactPlaceholder = ({
     totalContacts = 0,
-    contacts = [],
+    selectedContacts = 0,
+    totalContactsInGroup = 0,
     contactGroupID,
+    contactGroupName,
     user,
     userKeysList,
     loadingUserKeys,
@@ -130,15 +132,12 @@ const ContactPlaceholder = ({
     onGroups
 }) => {
     const { hasPaidMail } = user;
-    const selectedContacts = contacts.filter(({ isChecked }) => isChecked);
-    const countSelectedContacts = selectedContacts.length;
-    const [contactGroups] = useContactGroups();
     const { createModal } = useModals();
 
-    if (countSelectedContacts) {
+    if (selectedContacts) {
         const totalContactsText = (
             <b key="total-contacts">
-                {c('Info').ngettext(msgid`1 contact`, `${countSelectedContacts} contacts`, countSelectedContacts)}
+                {c('Info').ngettext(msgid`1 contact`, `${selectedContacts} contacts`, selectedContacts)}
             </b>
         );
 
@@ -151,7 +150,7 @@ const ContactPlaceholder = ({
                     </div>
                     <div className="mb2">
                         <Button className="mr1" onClick={onUncheck}>
-                            {c('Action').ngettext(msgid`Deselect`, `Deselect all`, countSelectedContacts)}
+                            {c('Action').ngettext(msgid`Deselect`, `Deselect all`, selectedContacts)}
                         </Button>
                         {/* <Button disabled={loadingUserKeys}>{c('Action').t`Export`}</Button> */}
                     </div>
@@ -161,10 +160,10 @@ const ContactPlaceholder = ({
     }
 
     if (contactGroupID) {
-        const { Name = '' } = contactGroups.find(({ ID }) => ID === contactGroupID) || {};
-        const total = contacts.filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID)).length;
         const totalContactsText = (
-            <b key="total-contacts">{total === 1 ? c('Info').t`1 contact` : c('Info').t`${total} contacts`}</b>
+            <b key="total-contacts">
+                {totalContactsInGroup === 1 ? c('Info').t`1 contact` : c('Info').t`${totalContactsInGroup} contacts`}
+            </b>
         );
 
         const handleEdit = () => createModal(<ContactGroupModal contactGroupID={contactGroupID} />);
@@ -174,14 +173,14 @@ const ContactPlaceholder = ({
         return (
             <div className="p2 view-column-detail flex flex-item-fluid scroll-if-needed">
                 <div className="aligncenter center mbauto mtauto">
-                    <h1 className="ellipsis lh-standard">{Name}</h1>
+                    <h1 className="ellipsis lh-standard">{contactGroupName}</h1>
                     <div className="mb2">{c('Info').jt`You have ${totalContactsText} in this group.`}</div>
                     <div className="aligncenter mb2">
                         <img src={contactGroupCard} alt="contact-group-card" />
                     </div>
                     <div className="mb2">
                         <Button className="mr1" onClick={handleEdit}>{c('Action').t`Edit`}</Button>
-                        {!!total && (
+                        {!!totalContactsInGroup && (
                             <Button onClick={handleExport} disabled={loadingUserKeys}>
                                 {c('Action').t`Export`}
                             </Button>
@@ -239,8 +238,10 @@ const ContactPlaceholder = ({
 
 ContactPlaceholder.propTypes = {
     totalContacts: PropTypes.number,
-    contacts: PropTypes.array,
+    totalContactsInGroup: PropTypes.number,
+    selectedContacts: PropTypes.number,
     contactGroupID: PropTypes.string,
+    contactGroupName: PropTypes.string,
     user: PropTypes.object.isRequired,
     userKeysList: PropTypes.array,
     loadingUserKeys: PropTypes.bool,
