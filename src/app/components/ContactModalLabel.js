@@ -17,7 +17,7 @@ const ContactModalLabel = ({ field, uid, type, onChange }) => {
 
     if (otherInformationFields.map(({ value: f }) => f).includes(field)) {
         return (
-            <Label className="pt0">
+            <Label className="pt0 mr1">
                 <Select value={field} options={otherInformationFields} onChange={handleChangeField} />
             </Label>
         );
@@ -28,7 +28,7 @@ const ContactModalLabel = ({ field, uid, type, onChange }) => {
     }
 
     return (
-        <Label className="pt0">
+        <Label className="pt0 mr1">
             <Select value={type} options={types[field]} onChange={handleChangeType} />
         </Label>
     );

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { OrderableHandle, Icon, Field, DropdownActions, useModals } from 'react-components';
+import { OrderableHandle, Icon, DropdownActions, useModals } from 'react-components';
 import { c } from 'ttag';
 
 import { clearType, getType } from '../helpers/property';
@@ -54,18 +54,18 @@ const ContactModalRow = ({ property, onChange, onRemove, isOrderable = false }) 
                 </div>
             )}
             <div className="flex flex-nowrap flex-items-center onmobile-flex-column w95">
-                <span className="w30 flex flex-nowrap mr1 mb1">
+                <span className="w30 flex flex-nowrap mb1">
                     <ContactModalLabel field={field} type={type} uid={property.uid} onChange={onChange} />
                 </span>
-                <span className="w50 mr1 mb1">
-                    <Field>
+                <span className="w50 mb1">
+                    <div className="mr1">
                         <ContactFieldProperty
                             field={field}
                             value={property.value}
                             uid={property.uid}
                             onChange={onChange}
                         />
-                    </Field>
+                    </div>
                 </span>
                 <span className="w20 mb1">
                     {list.length > 0 && (

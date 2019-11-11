@@ -83,7 +83,7 @@ const ContactModalProperties = ({ properties: allProperties, field, onChange, on
                     <div className="mr0-5 flex flex-items-center flex-item-noshrink">
                         <Icon name="text-justify nonvisible" />
                     </div>
-                    <div className="flex flex-nowrap onmobile-flex-column w95">
+                    <div className="flex flex-nowrap w95">
                         <PrimaryButton className="mb1" onClick={onAdd}>{c('Action').t`Add`}</PrimaryButton>
                     </div>
                 </div>
