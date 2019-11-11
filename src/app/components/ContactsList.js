@@ -16,6 +16,7 @@ import ContactRow from './ContactRow';
 
 const ContactsList = ({
     totalContacts,
+    totalContactsInGroup,
     contacts,
     contactGroupsMap,
     onCheck,
@@ -114,7 +115,7 @@ const ContactsList = ({
     }
 
     if (!contacts.length) {
-        if (contactGroupID) {
+        if (contactGroupID && !totalContactsInGroup) {
             const editGroup = (
                 <button
                     key="add"

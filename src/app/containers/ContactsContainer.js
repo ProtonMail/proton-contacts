@@ -100,7 +100,7 @@ const ContactsContainer = ({ location, history }) => {
         }, Object.create(null));
     }, [contactEmails]);
 
-    const contactGroupsMap = useMemo(() => toMap(contactGroups && contactGroups.filter(Boolean)), [contactGroups]);
+    const contactGroupsMap = useMemo(() => toMap(contactGroups), [contactGroups]);
 
     const filteredContacts = useMemo(() => {
         if (!Array.isArray(contacts)) {
@@ -241,6 +241,7 @@ const ContactsContainer = ({ location, history }) => {
             contactID={contactID}
             contactGroupID={contactGroupID}
             totalContacts={contactsLength}
+            totalContactsInGroup={totalContactsInGroup}
             contacts={formattedContacts}
             contactGroupsMap={contactGroupsMap}
             user={user}
