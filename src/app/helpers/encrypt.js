@@ -5,7 +5,7 @@ import { c } from 'ttag';
 import { generateUID } from './contact';
 import { CLEAR_FIELDS, SIGNED_FIELDS } from '../constants';
 import { toICAL } from './vcard';
-import { sanitizeProperties, addPref, addGroup } from './properties';
+import { sanitizeProperties, addPref, addGroup, addWKD } from './properties';
 
 const { CLEAR_TEXT, ENCRYPTED_AND_SIGNED, SIGNED } = CONTACT_CARD_TYPE;
 
@@ -112,7 +112,8 @@ export const prepareContact = async (properties, { privateKey, publicKey }) => {
     const sanitized = sanitizeProperties(properties);
     const withPref = addPref(sanitized);
     const withGroup = addGroup(withPref);
-    const Cards = await prepareCards(withGroup, [privateKey], [publicKey]);
+    const withWKD = addWKD(withGroup);
+    const Cards = await prepareCards(withWKD, [privateKey], [publicKey]);
     return { Cards };
 };
 

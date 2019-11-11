@@ -10,12 +10,20 @@ import ContactSummary from './ContactSummary';
 import ContactViewProperties from './ContactViewProperties';
 import UpsellFree from './UpsellFree';
 
-const ContactView = ({ properties = [], contactID, contactEmails, contactGroupsMap, userKeysList, errors }) => {
+const ContactView = ({
+    properties = [],
+    contactID,
+    modifyTime,
+    contactEmails,
+    contactGroupsMap,
+    userKeysList,
+    errors
+}) => {
     const { createModal } = useModals();
     const [user] = useUser();
 
     const openContactModal = () => {
-        createModal(<ContactModal properties={properties} contactID={contactID} />);
+        createModal(<ContactModal properties={properties} contactID={contactID} modifyTime={modifyTime} />);
     };
 
     const handleExport = () => singleExport(properties);
@@ -65,6 +73,7 @@ const ContactPropertyPropTypes = PropTypes.shape({
 
 ContactView.propTypes = {
     contactID: PropTypes.string.isRequired,
+    modifyTime: PropTypes.number,
     contactEmails: PropTypes.arrayOf(PropTypes.object),
     contactGroupsMap: PropTypes.object,
     properties: PropTypes.arrayOf(ContactPropertyPropTypes),

@@ -95,6 +95,26 @@ export const addGroup = (properties = []) => {
 };
 
 /**
+ * Add 'x-pm-encrypt: true' for email properties that have the 'hasWKDKeys' flag.
+ * @param {Array} properties
+ * @returns {Array}
+ */
+export const addWKD = (properties = []) => {
+    return properties.reduce((acc, property) => {
+        if (property.field === 'email' && property.withWKD) {
+            acc.push(
+                property,
+                { field: 'x-pm-encrypt', value: true, group: property.group },
+                { field: 'x-pm-sign', value: true, group: property.group }
+            );
+            return acc;
+        }
+        acc.push(property);
+        return acc;
+    }, []);
+};
+
+/**
  * Given an array of vCard properties (see notation in the file './csv.js'),
  * get the value for a certain field the first time it appears in the array
  * @param {Array<Object>}   properties

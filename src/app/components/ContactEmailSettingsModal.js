@@ -156,12 +156,13 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
         ]);
 
         const trustedFingerprints = contactKeys.map((publicKey) => publicKey.getFingerprint());
+        const hasUntouchedWKDKeys = externalUser && apiKeys.length && ModifyTime < UNIX_TIME_WKD_ON;
         setModel({
             mimeType,
-            // For external users with WKD keys, override x-pm-encrypt if modification time is earlier than UNIX_TIME_WKD_ON
-            encrypt: externalUser && apiKeys.length && ModifyTime < UNIX_TIME_WKD_ON ? true : encrypt,
+            // For external users with WKD keys, override x-pm-encrypt and x-pm-sign if modification time is earlier than UNIX_TIME_WKD_ON
+            encrypt: hasUntouchedWKDKeys ? true : encrypt,
+            sign: hasUntouchedWKDKeys ? true : sign,
             scheme,
-            sign,
             email: Email,
             keys: { api: apiKeys, pinned: contactKeys },
             trustedFingerprints,
@@ -175,7 +176,6 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             isPGPMime: externalUser && hasScheme('pgp-mime')
         });
     };
-    console.log(model);
 
     /**
      * Collect keys from the model to save
