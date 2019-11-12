@@ -17,6 +17,7 @@ import { parseISO, isValid, format } from 'date-fns';
 
 import { dateLocale } from 'proton-shared/lib/i18n';
 import { clearType, getType, formatAdr } from '../helpers/property';
+import { getTypeLabels } from '../helpers/types';
 
 import ContactGroupIcon from './ContactGroupIcon';
 import ContactGroupDropdown from './ContactGroupDropdown';
@@ -33,10 +34,13 @@ const ContactViewProperty = ({
     leftBlockWidth = 'w30',
     rightBlockWidth = 'w70'
 }) => {
-    const { field, first } = property;
     const [{ hasPaidMail }] = useUser();
     const { createModal } = useModals();
-    const type = clearType(getType(property.type));
+    const types = getTypeLabels();
+
+    const { field, first } = property;
+    const cleanType = clearType(getType(property.type));
+    const type = types[cleanType] || cleanType;
     const value = property.value;
 
     const getContent = () => {
