@@ -5,9 +5,7 @@ import { Button, img } from 'react-components';
 
 const ContactImageField = ({ value, onChange }) => {
     return (
-        <div className="mb1">
-            {value ? <img src={value} /> : <Button onClick={onChange}>{c('Action').t`Upload picture`}</Button>}
-        </div>
+        <div>{value ? <img src={value} /> : <Button onClick={onChange}>{c('Action').t`Upload picture`}</Button>}</div>
     );
 };
 
