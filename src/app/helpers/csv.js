@@ -95,7 +95,6 @@ const parse = ({ headers = [], contacts = [] }) => {
         return [];
     }
     const { headers: enrichedHeaders, contacts: standardContacts } = standarize({ headers, contacts });
-    console.log({ enrichedHeaders });
 
     const translator = enrichedHeaders.map(toPreVcard);
 
