@@ -13,8 +13,8 @@ const ContactImageSummary = ({ photo, name }) => {
     const [showAnyways, setShowAnyways] = useState(!isURL(photo));
     const [image, setImage] = useState({ src: photo });
     const [{ ShowImages }, loadingMailSettings] = useMailSettings();
-    const [loadingResize, withLoadingResize] = useLoading();
-    const loading = loadingMailSettings && loadingResize;
+    const [loadingResize, withLoadingResize] = useLoading(true);
+    const loading = loadingMailSettings || loadingResize;
     const showPhoto = ShowImages & SHOW_IMAGES.REMOTE || showAnyways;
 
     useEffect(() => {
@@ -22,11 +22,10 @@ const ContactImageSummary = ({ photo, name }) => {
             return;
         }
         const resize = async () => {
-            const { width, height } = await toImage(photo);
-            setImage((image) => ({ ...image, width, height }));
+            const { src, width, height } = await toImage(photo);
 
             if (width <= CONTACT_IMG_SIZE && height <= CONTACT_IMG_SIZE) {
-                return setImage((image) => ({ ...image, isSmall: true }));
+                return setImage({ src, width, height, isSmall: true });
             }
             const resized = await resizeImage({
                 original: photo,
@@ -34,7 +33,7 @@ const ContactImageSummary = ({ photo, name }) => {
                 maxHeight: CONTACT_IMG_SIZE,
                 bigResize: true
             });
-            setImage((image) => ({ ...image, src: resized }));
+            setImage({ src: resized });
         };
         withLoadingResize(resize().catch(noop));
     }, [photo, showPhoto]);
