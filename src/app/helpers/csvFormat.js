@@ -275,7 +275,7 @@ const templates = {
  * @return {Function}
  */
 export const toPreVcard = ({ original, standard }) => {
-    const property = standard.toLowerCase();
+    const property = standard.toLowerCase().trim();
     const header = original;
     if (['title', 'name prefix'].includes(property)) {
         return (value) => [templates['fn']({ header, value, index: 0 }), templates['n']({ header, value, index: 3 })];

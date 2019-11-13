@@ -76,7 +76,13 @@ export const readCsv = async (file) => {
         throw new Error('Error when reading csv file');
     }
 
-    return { headers, contacts };
+    // we have to manually correct Papa.parse which can return headers and contacts of different length
+    const headersLength = headers.length;
+    const filteredContacts = contacts
+        .map((contact) => contact.slice(0, headersLength))
+        .filter((contact) => contact.length === headersLength);
+
+    return { headers, contacts: filteredContacts };
 };
 
 /**
