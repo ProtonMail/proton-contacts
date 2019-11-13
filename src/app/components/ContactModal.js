@@ -66,8 +66,7 @@ const ContactModal = ({ contactID, modifyTime, properties: initialProperties = [
                           property.field === 'email' ? { ...property, checkForWKDKeys: true } : property
                       )
                     : [...formattedProperties];
-            const propertiesWithWKDFlags = await addWKDFlags(propertiesWithWKDChecks);
-            setProperties(propertiesWithWKDFlags);
+            setProperties(propertiesWithWKDChecks);
         };
 
         withLoadingWKDKeys(formatModel(initialProperties, modifyTime));

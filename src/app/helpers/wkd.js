@@ -27,7 +27,8 @@ export const hasWKDKeys = async (email, api) => {
  */
 export const addWKDFlags = async (properties, api) => {
     const propertiesWithWKDFlags = [];
-    for (const property of addGroup(properties)) {
+    const withGroup = addGroup(properties);
+    for (const property of withGroup) {
         if (property.field !== 'email') {
             propertiesWithWKDFlags.push(property);
         } else if (property.checkForWKDKeys && (await hasWKDKeys(property.value, api))) {
