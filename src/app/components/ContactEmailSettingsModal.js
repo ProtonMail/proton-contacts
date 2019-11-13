@@ -265,7 +265,10 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
                 </Field>
             </Row>
             <div className="mb1">
-                <LinkButton onClick={() => setShowPgpSettings(!showPgpSettings)}>
+                <LinkButton
+                    onClick={() => setShowPgpSettings(!showPgpSettings)}
+                    disabled={loading || loadingMailSettings}
+                >
                     {showPgpSettings
                         ? c('Action').t`Hide advanced PGP settings`
                         : c('Action').t`Show advanced PGP settings`}
