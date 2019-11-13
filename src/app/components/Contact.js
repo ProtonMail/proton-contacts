@@ -21,12 +21,12 @@ const Contact = ({ contactID, contactEmails, contactGroupsMap, userKeysList = []
                 if (ref.current !== contact.ID) {
                     return;
                 }
-                setModel({ ID: contact.ID, properties, error });
+                setModel({ ID: contact.ID, modifyTime: contact.ModifyTime, properties, error });
             });
         }
     }, [contact, userKeysList]);
 
-    const { properties, errors, ID } = model;
+    const { properties, errors, ID, modifyTime } = model;
 
     if (contactLoading || !properties || ID !== contactID) {
         return <Loader />;
@@ -36,6 +36,7 @@ const Contact = ({ contactID, contactEmails, contactGroupsMap, userKeysList = []
         <ContactView
             properties={properties}
             contactID={contactID}
+            modifyTime={modifyTime}
             contactEmails={contactEmails}
             contactGroupsMap={contactGroupsMap}
             userKeysList={userKeysList}
