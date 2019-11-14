@@ -198,7 +198,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
         if (hasPGPInline) {
             setModel((model) => ({ ...model, mimeType: PLAINTEXT }));
         }
-    }, [isMimeTypeFixed, model.scheme]);
+    }, [isMimeTypeFixed, hasPGPInline]);
 
     return (
         <FormModal
