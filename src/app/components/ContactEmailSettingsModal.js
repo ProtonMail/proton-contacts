@@ -50,6 +50,8 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     const [model, setModel] = useState({ keys: [] });
     const isMimeTypeFixed = model.isPGPExternal && model.sign;
 
+    const hasPGPInline = () => (model.scheme || PGP_MAP[PGPScheme]) === PGP_INLINE;
+
     /**
      * Initialize the model for the modal
      * @returns {Promise}
@@ -200,7 +202,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             return;
         }
         // PGP/Inline should force the email format to plaintext
-        if ((model.scheme || PGP_MAP[PGPScheme]) === PGP_INLINE) {
+        if (hasPGPInline()) {
             setModel((model) => ({ ...model, mimeType: PLAINTEXT }));
         }
     }, [isMimeTypeFixed, model.scheme]);
@@ -213,8 +215,22 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             title={c('Title').t`Email settings (${Email})`}
             {...rest}
         >
-            <Alert>{c('Info')
-                .t`Select the email format you want to be used by default when sending an email to this email address.`}</Alert>
+            {!isMimeTypeFixed ? (
+                <Alert>
+                    {c('Info')
+                        .t`Select the email format you want to be used by default when sending an email to this email address.`}
+                </Alert>
+            ) : hasPGPInline() ? (
+                <Alert>
+                    {c('Info')
+                        .t`PGP/Inline is only compatible with Plain Text format. Please note that ProtonMail always signs PGP/Inline messages.`}
+                </Alert>
+            ) : (
+                <Alert>
+                    {c('Info')
+                        .t`PGP/MIME automatically sends the message using the current composer mode. Please note that ProtonMail always signs PGP/MIME messages.`}
+                </Alert>
+            )}
             <Row>
                 <Label>
                     {c('Label').t`Email format`}
