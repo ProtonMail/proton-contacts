@@ -102,8 +102,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                                 setModel({
                                     ...model,
                                     encrypt: target.checked,
-                                    sign: target.checked ? true : model.sign,
-                                    mimeType: ''
+                                    sign: target.checked ? true : model.sign
                                 })
                             }
                         />

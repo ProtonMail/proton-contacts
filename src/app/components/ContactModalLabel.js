@@ -7,7 +7,7 @@ import { getAllTypes } from '../helpers/types';
 
 import ContactLabelProperty from './ContactLabelProperty';
 
-const ContactModalLabel = ({ field, uid, type, onChange }) => {
+const ContactModalLabel = ({ field, uid, type = '', onChange }) => {
     const types = getAllTypes();
 
     const otherInformationFields = getOtherInformationFields();
@@ -39,10 +39,6 @@ ContactModalLabel.propTypes = {
     uid: PropTypes.string.isRequired,
     type: PropTypes.string,
     onChange: PropTypes.func.isRequired
-};
-
-ContactModalLabel.defaultProps = {
-    type: ''
 };
 
 export default ContactModalLabel;

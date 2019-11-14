@@ -20,21 +20,18 @@ import { c } from 'ttag';
 import { prepareContacts } from '../helpers/encrypt';
 import { hasCategories } from '../helpers/import';
 import { isInternalUser, isDisabledUser, getRawInternalKeys, allKeysExpired, hasNoPrimary } from '../helpers/pgp';
-import { getPublicKeys } from 'proton-shared/lib/api/keys';
+import { getKeysFromApi } from '../helpers/keys';
 import { noop } from 'proton-shared/lib/helpers/function';
 import { addContacts } from 'proton-shared/lib/api/contacts';
 import { VCARD_KEY_FIELDS, PGP_INLINE, PGP_MIME, PGP_SIGN, CATEGORIES } from '../constants';
-import { RECIPIENT_TYPE, PACKAGE_TYPE } from 'proton-shared/lib/constants';
-import { API_CUSTOM_ERROR_CODES } from 'proton-shared/lib/errors';
+import { PACKAGE_TYPE, MIME_TYPES } from 'proton-shared/lib/constants';
 
 import ContactMIMETypeSelect from './ContactMIMETypeSelect';
 import ContactPgpSettings from './ContactPgpSettings';
 
 const { SEND_PGP_INLINE, SEND_PGP_MIME } = PACKAGE_TYPE;
-const { TYPE_NO_RECEIVE } = RECIPIENT_TYPE;
-const { KEY_GET_ADDRESS_MISSING, KEY_GET_DOMAIN_MISSING_MX, KEY_GET_INPUT_INVALID } = API_CUSTOM_ERROR_CODES;
-const EMAIL_ERRORS = [KEY_GET_ADDRESS_MISSING, KEY_GET_DOMAIN_MISSING_MX, KEY_GET_INPUT_INVALID];
 const { INCLUDE, IGNORE } = CATEGORIES;
+const { PLAINTEXT } = MIME_TYPES;
 
 const PGP_MAP = {
     [SEND_PGP_INLINE]: PGP_INLINE,
@@ -42,52 +39,16 @@ const PGP_MAP = {
 };
 
 const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailProperty, ...rest }) => {
-    const { value: Email, group: emailGroup } = emailProperty;
-    const [loading, withLoading] = useLoading();
-    const { createNotification } = useNotifications();
     const api = useApi();
     const { call } = useEventManager();
-    const [model, setModel] = useState({ keys: [] });
-    const [showPgpSettings, setShowPgpSettings] = useState(false);
+    const [loading, withLoading] = useLoading();
+    const { createNotification } = useNotifications();
     const [{ PGPScheme, Sign }, loadingMailSettings] = useMailSettings(); // NOTE MailSettings model needs to be loaded
+    const [showPgpSettings, setShowPgpSettings] = useState(false);
 
-    /**
-     * Detect current scheme
-     * @param {String} scheme
-     * @returns {Boolean}
-     */
-    const hasScheme = (scheme) => {
-        if (!model.scheme) {
-            return PGP_MAP[PGPScheme] === scheme;
-        }
-
-        return model.scheme === scheme;
-    };
-
-    /**
-     * Get the keys for an email address from the API.
-     * @param {String} Email
-     * @returns {Promise<{RecipientType, MIMEType, Keys}>}
-     */
-    const getKeysFromApi = async (Email) => {
-        try {
-            // eslint-disable-next-line no-unused-vars
-            const { Code, ...data } = await api(getPublicKeys({ Email }));
-            return data;
-        } catch (error) {
-            const { data = {} } = error;
-
-            if (EMAIL_ERRORS.includes(data.Code)) {
-                return {
-                    RecipientType: TYPE_NO_RECEIVE,
-                    MIMEType: null,
-                    Keys: []
-                };
-            }
-
-            throw error;
-        }
-    };
+    const { value: Email, group: emailGroup } = emailProperty;
+    const [model, setModel] = useState({ keys: [] });
+    const isMimeTypeFixed = model.isPGPExternal && (model.sign || model.encrypt);
 
     /**
      * Initialize the model for the modal
@@ -137,7 +98,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
                 { contactKeyPromises: [], mimeType: '', encrypt: false, scheme: '', sign: Sign === PGP_SIGN } // Default values
             );
         const contactKeys = (await Promise.all(contactKeyPromises)).filter(Boolean);
-        const config = await getKeysFromApi(Email);
+        const config = await getKeysFromApi(Email, api);
         const internalUser = isInternalUser(config);
         const externalUser = !internalUser;
         const apiKeys = (await Promise.all(
@@ -157,7 +118,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             mimeType,
             encrypt,
             scheme,
-            sign,
+            sign: encrypt ? true : sign,
             email: Email,
             keys: internalUser && !contactKeys.length ? apiKeys : contactKeys,
             trustedFingerprints,
@@ -165,9 +126,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             isPGPInternal: internalUser,
             pgpAddressDisabled: isDisabledUser(config),
             noPrimary: hasNoPrimary(unarmoredKeys, contactKeys),
-            keysExpired,
-            isPGPInline: externalUser && hasScheme('pgp-inline'),
-            isPGPMime: externalUser && hasScheme('pgp-mime')
+            keysExpired
         });
     };
 
@@ -236,6 +195,16 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
         updateEncryptToggle(model.keys);
     }, [model.keys]);
 
+    useEffect(() => {
+        if (!isMimeTypeFixed) {
+            return;
+        }
+        // PGP/Inline should force the email format to plaintext
+        if ((model.scheme || PGP_MAP[PGPScheme]) === PGP_INLINE) {
+            setModel((model) => ({ ...model, mimeType: PLAINTEXT }));
+        }
+    }, [isMimeTypeFixed, model.scheme]);
+
     return (
         <FormModal
             loading={loading || loadingMailSettings}
@@ -257,14 +226,17 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
                 </Label>
                 <Field>
                     <ContactMIMETypeSelect
-                        disabled={model.isPGPExternal && (model.encrypt || model.sign)}
+                        disabled={isMimeTypeFixed}
                         value={model.mimeType}
                         onChange={(mimeType) => setModel({ ...model, mimeType })}
                     />
                 </Field>
             </Row>
             <div className="mb1">
-                <LinkButton onClick={() => setShowPgpSettings(!showPgpSettings)}>
+                <LinkButton
+                    onClick={() => setShowPgpSettings(!showPgpSettings)}
+                    disabled={loading || loadingMailSettings}
+                >
                     {showPgpSettings
                         ? c('Action').t`Hide advanced PGP settings`
                         : c('Action').t`Show advanced PGP settings`}
