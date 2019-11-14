@@ -48,7 +48,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
 
     const { value: Email, group: emailGroup } = emailProperty;
     const [model, setModel] = useState({ keys: [] });
-    const isMimeTypeFixed = model.isPGPExternal && (model.sign || model.encrypt);
+    const isMimeTypeFixed = model.isPGPExternal && model.sign;
 
     /**
      * Initialize the model for the modal
