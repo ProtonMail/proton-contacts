@@ -20,9 +20,9 @@ import { c } from 'ttag';
 import { prepareContacts } from '../helpers/encrypt';
 import { hasCategories } from '../helpers/import';
 import { isInternalUser, isDisabledUser, getRawInternalKeys, allKeysExpired, hasNoPrimary } from '../helpers/pgp';
-import { getKeysFromApi } from '../helpers/keys';
 import { noop } from 'proton-shared/lib/helpers/function';
 import { addContacts } from 'proton-shared/lib/api/contacts';
+import { getPublicKeysEmailHelper } from 'proton-shared/lib/api/helpers/publicKeys';
 import { VCARD_KEY_FIELDS, PGP_INLINE, PGP_MIME, PGP_SIGN, CATEGORIES } from '../constants';
 import { PACKAGE_TYPE, MIME_TYPES } from 'proton-shared/lib/constants';
 
@@ -100,16 +100,10 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
                 { contactKeyPromises: [], mimeType: '', encrypt: false, scheme: '', sign: Sign === PGP_SIGN } // Default values
             );
         const contactKeys = (await Promise.all(contactKeyPromises)).filter(Boolean);
-        const config = await getKeysFromApi(Email, api);
+        const config = await getPublicKeysEmailHelper(api, Email);
         const internalUser = isInternalUser(config);
         const externalUser = !internalUser;
-        const apiKeys = (await Promise.all(
-            config.Keys.map(({ PublicKey }) =>
-                getKeys(PublicKey)
-                    .then(([publicKey]) => publicKey)
-                    .catch(noop)
-            )
-        )).filter(Boolean);
+        const apiKeys = config.publicKeys;
         const [unarmoredKeys, keysExpired] = await Promise.all([
             getRawInternalKeys(config),
             allKeysExpired(contactKeys)
