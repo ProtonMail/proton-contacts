@@ -7,13 +7,13 @@ import useContact from '../hooks/useContact';
 import { prepareContact } from '../helpers/decrypt';
 import ContactView from './ContactView';
 
-const Contact = ({ contactID, contactEmails, contactGroupsMap, userKeysList }) => {
+const Contact = ({ contactID, contactEmails, contactGroupsMap, userKeysList = [] }) => {
     const [model, setModel] = useState({ ID: contactID });
     const ref = useRef(contactID);
     const [contact, contactLoading] = useContact(contactID);
 
     useEffect(() => {
-        if (contact && Array.isArray(userKeysList)) {
+        if (contact && userKeysList.length) {
             ref.current = contact.ID;
             const { publicKeys, privateKeys } = splitKeys(userKeysList);
 
