@@ -31,7 +31,6 @@ import ContactPgpSettings from './ContactPgpSettings';
 
 const { SEND_PGP_INLINE, SEND_PGP_MIME } = PACKAGE_TYPE;
 const { INCLUDE, IGNORE } = CATEGORIES;
-const { PLAINTEXT } = MIME_TYPES;
 
 const PGP_MAP = {
     [SEND_PGP_INLINE]: PGP_INLINE,
@@ -196,8 +195,10 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
         }
         // PGP/Inline should force the email format to plaintext
         if (hasPGPInline) {
-            setModel((model) => ({ ...model, mimeType: PLAINTEXT }));
+            return setModel((model) => ({ ...model, mimeType: MIME_TYPES.PLAINTEXT }));
         }
+        // If PGP/Inline is not selected, go back to automatic
+        setModel((model) => ({ ...model, mimeType: '' }));
     }, [isMimeTypeFixed, hasPGPInline]);
 
     return (
