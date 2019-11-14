@@ -49,8 +49,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     const { value: Email, group: emailGroup } = emailProperty;
     const [model, setModel] = useState({ keys: [] });
     const isMimeTypeFixed = model.isPGPExternal && model.sign;
-
-    const hasPGPInline = () => (model.scheme || PGP_MAP[PGPScheme]) === PGP_INLINE;
+    const hasPGPInline = (model.scheme || PGP_MAP[PGPScheme]) === PGP_INLINE;
 
     /**
      * Initialize the model for the modal
@@ -196,7 +195,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             return;
         }
         // PGP/Inline should force the email format to plaintext
-        if (hasPGPInline()) {
+        if (hasPGPInline) {
             setModel((model) => ({ ...model, mimeType: PLAINTEXT }));
         }
     }, [isMimeTypeFixed, model.scheme]);
@@ -214,7 +213,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
                     {c('Info')
                         .t`Select the email format you want to be used by default when sending an email to this email address.`}
                 </Alert>
-            ) : hasPGPInline() ? (
+            ) : hasPGPInline ? (
                 <Alert>
                     {c('Info')
                         .t`PGP/Inline is only compatible with Plain Text format. Please note that ProtonMail always signs PGP/Inline messages.`}
