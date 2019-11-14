@@ -54,14 +54,6 @@ const ContactPgpSettings = ({ model, setModel }) => {
         <>
             <Alert learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
                 .t`Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service.`}</Alert>
-            {model.isPGPInline ? (
-                <Alert>{c('Info')
-                    .t`PGP/Inline is only compatible with Plain Text format. Please note that ProtonMail always signs PGP/Inline messages.`}</Alert>
-            ) : null}
-            {model.isPGPMime ? (
-                <Alert>{c('Info')
-                    .t`PGP/MIME automatically sends the message using the current composer mode. Please note that ProtonMail always signs PGP/MIME messages.`}</Alert>
-            ) : null}
             {model.keys.length && model.noPrimary ? (
                 <Alert type="warning">{c('Info')
                     .t`Address Verification with Trusted Keys is enabled for this address. To be able to send to this address, first trust public keys that can be used for sending.`}</Alert>
