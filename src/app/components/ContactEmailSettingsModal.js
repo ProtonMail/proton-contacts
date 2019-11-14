@@ -120,7 +120,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             mimeType,
             encrypt,
             scheme,
-            sign: encrypt ? true : sign,
+            sign,
             email: Email,
             keys: internalUser && !contactKeys.length ? apiKeys : contactKeys,
             trustedFingerprints,
