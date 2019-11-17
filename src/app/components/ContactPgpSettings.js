@@ -8,6 +8,8 @@ import ContactKeysTable from './ContactKeysTable';
 
 const ContactPgpSettings = ({ model, setModel }) => {
     const { createNotification } = useNotifications();
+    const hasApiKeys = !!model.keys.api.length;
+    const hasPinnedKeys = !!model.keys.pinned.length;
 
     /**
      * Add / update keys to model
@@ -23,7 +25,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
 
         // Update existing keys by looking on the fingerprint
         // And add new one
-        const existingFingerprints = model.keys.map((publicKey) => publicKey.getFingerprint());
+        const existingFingerprints = model.keys.pinned.map((publicKey) => publicKey.getFingerprint());
         const { toAdd, toUpdate } = files.reduce(
             (acc, publicKey) => {
                 const fingerprint = publicKey.getFingerprint();
@@ -39,7 +41,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
             { toAdd: [], toUpdate: [] }
         );
 
-        const keys = model.keys
+        const pinned = model.keys.pinned
             .map((publicKey) => {
                 const fingerprint = publicKey.getFingerprint();
                 const found = toUpdate.find((publicKey) => publicKey.getFingerprint() === fingerprint);
@@ -47,35 +49,43 @@ const ContactPgpSettings = ({ model, setModel }) => {
             })
             .concat(toAdd);
 
-        setModel({ ...model, keys });
+        setModel({
+            ...model,
+            keys: { ...model.keys, pinned },
+            trustedFingerprints: [...model.trustedFingerprints, ...toAdd.map((publicKey) => publicKey.getFingerprint())]
+        });
     };
 
     return (
         <>
-            <Alert learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
-                .t`Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service.`}</Alert>
-            {model.keys.length && model.noPrimary ? (
+            {!hasApiKeys && (
+                <Alert learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">
+                    {c('Info')
+                        .t`Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service.`}
+                </Alert>
+            )}
+            {!!model.keys.length && model.noPrimary && (
                 <Alert type="warning">{c('Info')
                     .t`Address Verification with Trusted Keys is enabled for this address. To be able to send to this address, first trust public keys that can be used for sending.`}</Alert>
-            ) : null}
-            {model.pgpAddressDisabled ? (
+            )}
+            {model.pgpAddressDisabled && (
                 <Alert type="warning">{c('Info')
                     .t`This address is disabled. To be able to send to this address, the owner must first enable the address.`}</Alert>
-            ) : null}
-            {model.isPGPInternal ? (
+            )}
+            {hasApiKeys && (
                 <Alert learnMore="https://protonmail.com/support/knowledge-base/address-verification/">{c('Info')
                     .t`To use Address Verification, you must trust one or more available public keys, including the primary key for this address. This prevents the encrypted keys from being faked.`}</Alert>
-            ) : null}
-            {model.isPGPExternal && !model.sign ? (
+            )}
+            {!hasApiKeys && !model.sign && (
                 <Alert learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
                     .t`Only change these settings if you are using PGP with non-ProtonMail recipients.`}</Alert>
-            ) : null}
-            {model.keysExpired ? (
+            )}
+            {model.keysExpired && (
                 <Alert type="warning" learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c(
                     'Info'
                 ).t`All uploaded keys are expired or revoked! Encryption is automatically disabled.`}</Alert>
-            ) : null}
-            {model.isPGPExternal ? (
+            )}
+            {!hasApiKeys && (
                 <Row>
                     <Label htmlFor="encrypt-toggle">
                         {c('Label').t`Encrypt emails`}
@@ -100,8 +110,8 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         />
                     </Field>
                 </Row>
-            ) : null}
-            {model.isPGPExternal ? (
+            )}
+            {!hasApiKeys && (
                 <Row>
                     <Label htmlFor="sign-toggle">
                         {c('Label').t`Sign emails`}
@@ -126,7 +136,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         />
                     </Field>
                 </Row>
-            ) : null}
+            )}
             <Row>
                 <Label>
                     {c('Label').t`Public keys`}
@@ -136,12 +146,10 @@ const ContactPgpSettings = ({ model, setModel }) => {
                             .t`Upload a public key to enable sending end-to-end encrypted emails to this email`}
                     />
                 </Label>
-                <Field>
-                    {model.isPGPExternal ? <SelectKeyFiles onFiles={handleUploadKeys} multiple={true} /> : null}
-                </Field>
+                <Field>{model.isPGPExternal && <SelectKeyFiles onFiles={handleUploadKeys} multiple={true} />}</Field>
             </Row>
-            {model.keys.length ? <ContactKeysTable model={model} setModel={setModel} /> : null}
-            {model.isPGPExternal ? (
+            {(hasApiKeys || hasPinnedKeys) && <ContactKeysTable model={model} setModel={setModel} />}
+            {!hasApiKeys && (
                 <Row>
                     <Label>
                         {c('Label').t`Cryptographic scheme`}
@@ -158,7 +166,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         />
                     </Field>
                 </Row>
-            ) : null}
+            )}
         </>
     );
 };

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { isValid, format } from 'date-fns';
 
-import { move } from 'proton-shared/lib/helpers/array';
+import { move, uniqueBy } from 'proton-shared/lib/helpers/array';
 import { dateLocale } from 'proton-shared/lib/i18n';
 import { serverTime } from 'pmcrypto/lib/serverTime';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
@@ -21,13 +21,15 @@ const ContactKeysTable = ({ model, setModel }) => {
         c('Table header').t`Status`,
         c('Table header').t`Actions`
     ];
+    const totalApiKeys = model.keys.api.length;
 
     /**
      * Extract keys info from model.keys to define table body
      */
     const parse = async () => {
+        const allKeys = uniqueBy([...model.keys.api, ...model.keys.pinned], (publicKey) => publicKey.getFingerprint());
         const parsedKeys = await Promise.all(
-            model.keys.map(async (publicKey, index) => {
+            allKeys.map(async (publicKey, index) => {
                 try {
                     const date = +serverTime();
                     const creationTime = publicKey.getCreationTime();
@@ -38,7 +40,8 @@ const ContactKeysTable = ({ model, setModel }) => {
                     const algo = describe(algoInfo);
                     const fingerprint = publicKey.getFingerprint();
                     const isPrimary = !index && !isExpired && model.isPGPExternal;
-                    const isTrusted = model.isPGPInternal && model.trustedFingerprints.includes(fingerprint);
+                    const isTrusted = index < totalApiKeys ? model.trustedFingerprints.includes(fingerprint) : true;
+                    const isUploaded = index >= totalApiKeys;
                     return {
                         publicKey,
                         fingerprint,
@@ -47,7 +50,8 @@ const ContactKeysTable = ({ model, setModel }) => {
                         isPrimary,
                         isExpired,
                         isRevoked,
-                        isTrusted
+                        isTrusted,
+                        isUploaded
                     };
                 } catch (error) {
                     return false;
@@ -67,7 +71,17 @@ const ContactKeysTable = ({ model, setModel }) => {
             <TableBody>
                 {keys.map(
                     (
-                        { fingerprint, algo, creationTime, isPrimary, publicKey, isExpired, isRevoked, isTrusted },
+                        {
+                            fingerprint,
+                            algo,
+                            creationTime,
+                            isPrimary,
+                            publicKey,
+                            isExpired,
+                            isRevoked,
+                            isTrusted,
+                            isUploaded
+                        },
                         index
                     ) => {
                         const creation = new Date(creationTime);
@@ -86,15 +100,14 @@ const ContactKeysTable = ({ model, setModel }) => {
                                 }
                             },
                             index > 0 &&
-                                !isExpired &&
-                                model.isPGPInternal && {
+                                !isExpired && {
                                     text: c('Action').t`Make primary`,
                                     onClick() {
                                         setModel({ ...model, keys: move(model.keys, index, 0) });
                                     }
                                 },
-                            model.isPGPInternal &&
-                                !isTrusted && {
+                            !isTrusted &&
+                                !isUploaded && {
                                     text: c('Action').t`Trust`,
                                     onClick() {
                                         setModel({
@@ -103,8 +116,8 @@ const ContactKeysTable = ({ model, setModel }) => {
                                         });
                                     }
                                 },
-                            model.isPGPInternal &&
-                                isTrusted && {
+                            isTrusted &&
+                                !isUploaded && {
                                     text: c('Action').t`Untrust`,
                                     onClick() {
                                         setModel({
@@ -115,12 +128,18 @@ const ContactKeysTable = ({ model, setModel }) => {
                                         });
                                     }
                                 },
-                            model.isPGPExternal && {
+                            isUploaded && {
                                 text: c('Action').t`Remove`,
                                 onClick() {
-                                    const copy = [...model.keys];
-                                    copy.splice(index, 1);
-                                    setModel({ ...model, keys: copy });
+                                    setModel({
+                                        ...model,
+                                        keys: {
+                                            ...model.keys,
+                                            pinned: model.keys.pinned.filter(
+                                                (publicKey) => publicKey.getFingerprint() !== fingerprint
+                                            )
+                                        }
+                                    });
                                 }
                             }
                         ].filter(Boolean);

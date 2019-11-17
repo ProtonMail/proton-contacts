@@ -230,7 +230,7 @@ const ContactsContainer = ({ location, history }) => {
     );
 
     const contactPlaceHolderComponent = isDesktop && !contactComponent && !!formattedContacts.length && (
-        <ContactPlacepaholder
+        <ContactPlaceholder
             history={history}
             user={user}
             userKeysList={userKeysList}

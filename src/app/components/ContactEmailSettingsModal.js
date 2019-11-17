@@ -46,7 +46,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     const [showPgpSettings, setShowPgpSettings] = useState(false);
 
     const { value: Email, group: emailGroup } = emailProperty;
-    const [model, setModel] = useState({ keys: [] });
+    const [model, setModel] = useState({ keys: { api: [], pinned: [] } });
     const isMimeTypeFixed = model.isPGPExternal && model.sign;
     const hasPGPInline = (model.scheme || PGP_MAP[PGPScheme]) === PGP_INLINE;
 
@@ -107,14 +107,14 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             allKeysExpired(contactKeys)
         ]);
 
-        const trustedFingerprints = internalUser ? contactKeys.map((publicKey) => publicKey.getFingerprint()) : [];
+        const trustedFingerprints = apiKeys.length ? contactKeys.map((publicKey) => publicKey.getFingerprint()) : [];
         setModel({
             mimeType,
             encrypt,
             scheme,
             sign,
             email: Email,
-            keys: internalUser && !contactKeys.length ? apiKeys : contactKeys,
+            keys: { api: apiKeys, pinned: contactKeys },
             trustedFingerprints,
             isPGPExternal: externalUser,
             isPGPInternal: internalUser,
@@ -139,13 +139,10 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             pref: `${index + 1}`
         });
 
-        if (model.isPGPExternal) {
-            return model.keys.map(toKeyProperty);
-        }
-
-        return model.keys
-            .filter((publicKey) => model.trustedFingerprints.includes(publicKey.getFingerprint()))
-            .map(toKeyProperty);
+        return [
+            ...model.keys.api.filter((publicKey) => model.trustedFingerprints.includes(publicKey.getFingerprint())),
+            ...model.keys.pinned
+        ].map(toKeyProperty);
     };
 
     /**
@@ -159,11 +156,12 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
         const emailProperties = [
             emailProperty,
             model.mimeType && { field: 'x-pm-mimetype', value: model.mimeType, group: emailGroup },
-            model.isPGPExternal &&
+            model.isPGPExternalWithoutWKDKeys &&
                 model.encrypt !== undefined && { field: 'x-pm-encrypt', value: '' + model.encrypt, group: emailGroup },
-            model.isPGPExternal &&
+            model.isPGPExternalWithoutWKDKeys &&
                 model.sign !== undefined && { field: 'x-pm-sign', value: '' + model.sign, group: emailGroup },
-            model.isPGPExternal && model.scheme && { field: 'x-pm-scheme', value: model.scheme, group: emailGroup },
+            model.isPGPExternalWithoutWKDKeys &&
+                model.scheme && { field: 'x-pm-scheme', value: model.scheme, group: emailGroup },
             ...getKeysProperties(emailGroup) // [{ field: 'key' }, ]
         ].filter(Boolean);
         const allProperties = otherProperties.concat(emailProperties);
@@ -183,8 +181,8 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
 
     useEffect(() => {
         const updateEncryptToggle = async (keys) => {
-            const expired = await allKeysExpired(keys);
-            if (expired || !keys.length) {
+            const expired = await allKeysExpired(keys.pinned);
+            if (expired || !keys.pinned.length) {
                 setModel((model) => ({ ...model, encrypt: false, keysExpired: expired }));
             }
         };
