@@ -1,4 +1,4 @@
-import { capitalize } from 'proton-shared/lib/helpers/string';
+import { capitalize, normalize } from 'proton-shared/lib/helpers/string';
 
 // See './csv.js' for the definition of pre-vCard and pre-vCards contact
 
@@ -275,7 +275,7 @@ const templates = {
  * @return {Function}
  */
 export const toPreVcard = ({ original, standard }) => {
-    const property = standard.toLowerCase().trim();
+    const property = normalize(standard);
     const header = original;
     if (['title', 'name prefix'].includes(property)) {
         return (value) => [templates['fn']({ header, value, index: 0 }), templates['n']({ header, value, index: 3 })];
