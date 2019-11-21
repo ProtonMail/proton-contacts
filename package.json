@@ -20,6 +20,7 @@
         "i18n:getlatest": "proton-i18n upgrade",
         "deploy": "proton-bundler",
         "deploy:prod": "proton-bundler --remote --branch=deploy-prod",
+        "bundle:ci": "cross-env NODE_ENV_DIST=ci proton-bundler",
         "check-types": "tsc"
     },
     "repository": {
