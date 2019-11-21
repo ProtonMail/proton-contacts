@@ -134,19 +134,19 @@ const ContactsContainer = ({ location, history }) => {
     const { hasPaidMail } = user;
 
     const filteredCheckedIDs = useMemo(() => {
-        if (formattedContacts && formattedContacts.length) {
-            return formattedContacts.filter(({ isChecked }) => isChecked).map(({ ID }) => ID);
-        }
-        if (contactID) {
-            return [contactID];
-        }
-        return [];
+        return formattedContacts.filter(({ isChecked }) => isChecked).map(({ ID }) => ID);
     }, [formattedContacts, contactID]);
 
     const hasCheckedAllFiltered = useMemo(() => {
         const filteredContactsLength = filteredContacts.length;
         return !!filteredContactsLength && filteredCheckedIDs.length === filteredContactsLength;
     }, [filteredContacts, filteredCheckedIDs]);
+
+    const activeIDs = useMemo(() => {
+        {
+            return !filteredCheckedIDs.length && contactID ? [contactID] : filteredCheckedIDs;
+        }
+    }, [filteredCheckedIDs, contactID]);
 
     const handleCheck = (contactIDs = [], checked = false) => {
         const update = contactIDs.reduce((acc, contactID) => {
@@ -161,7 +161,10 @@ const ContactsContainer = ({ location, history }) => {
     };
 
     const handleCheckAllFiltered = (checked = false) => {
-        handleCheck(filteredContacts.map(({ ID }) => ID), checked);
+        handleCheck(
+            filteredContacts.map(({ ID }) => ID),
+            checked
+        );
     };
 
     const handleUncheckAll = () => {
@@ -177,32 +180,34 @@ const ContactsContainer = ({ location, history }) => {
                         {c('Warning').ngettext(
                             msgid`This action will permanently delete the selected contact. Are you sure you want to delete this contact?`,
                             `This action will permanently delete selected contacts. Are you sure you want to delete these contacts?`,
-                            filteredCheckedIDs.length
+                            activeIDs.length
                         )}
                     </Alert>
                 </ConfirmModal>
             );
         });
-        if (filteredCheckedIDs.length === contacts.length) {
+        if (activeIDs.length === contacts.length) {
             await api(clearContacts());
             history.replace({ ...location, pathname: '/contacts' });
             await call();
             setCheckedContacts(Object.create(null));
             return createNotification({ text: c('Success').t`Contacts deleted` });
         }
-        const apiSuccess = allSucceded(await api(deleteContacts(filteredCheckedIDs)));
-        await call();
-        if (filteredCheckedIDs.length === filteredContacts.length) {
+        const apiSuccess = allSucceded(await api(deleteContacts(activeIDs)));
+        if (activeIDs.length === filteredContacts.length) {
             handleClearSearch();
         }
-        if (contactID && filteredCheckedIDs.includes(contactID)) {
+        if (contactID && activeIDs.includes(contactID)) {
             history.replace({ ...location, pathname: '/contacts' });
         }
+        await call();
         handleCheck(filteredCheckedIDs, false);
         if (!apiSuccess) {
             return createNotification({ text: c('Error').t`Some contacts could not be deleted`, type: 'warning' });
         }
-        createNotification({ text: c('Success').t`Contacts deleted` });
+        createNotification({
+            text: c('Success').ngettext(msgid`Contact deleted`, `Contacts deleted`, activeIDs.length)
+        });
     };
 
     const handleMerge = () => {
@@ -306,7 +311,7 @@ const ContactsContainer = ({ location, history }) => {
                     <ContactToolbar
                         user={user}
                         contactEmailsMap={contactEmailsMap}
-                        checkedIDs={filteredCheckedIDs}
+                        activeIDs={activeIDs}
                         checked={hasCheckedAllFiltered}
                         onCheck={handleCheckAllFiltered}
                         onDelete={handleDelete}
