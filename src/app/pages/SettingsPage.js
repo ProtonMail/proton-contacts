@@ -4,7 +4,7 @@ import { SettingsTitle } from 'react-components';
 
 const SettingsPage = ({ title, children }) => {
     return (
-        <main className="main-area-content bg-white relative flex-item-fluid">
+        <main className="main-area-content relative flex-item-fluid">
             <SettingsTitle>{title}</SettingsTitle>
             <div className="container-section-sticky">{children}</div>
         </main>
