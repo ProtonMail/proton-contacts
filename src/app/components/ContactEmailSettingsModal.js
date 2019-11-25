@@ -37,6 +37,21 @@ const PGP_MAP = {
     [SEND_PGP_MIME]: PGP_MIME
 };
 
+const keyComparator = (originalKeys = [], trustedFingerprints = []) => (firstKey, secondKey) => {
+    const firstKeyFingerprint = firstKey.getFingerprint();
+    const secondKeyFingerprint = secondKey.getFingerprint();
+    const firstKeyOriginalIndex = originalKeys.findIndex((key) => key.getFingerprint() === firstKeyFingerprint);
+    const secondKeyOriginalIndex = originalKeys.findIndex((key) => key.getFingerprint() === secondKeyFingerprint);
+    const isFirstKeyTrusted = trustedFingerprints.includes(firstKeyFingerprint);
+    const isSecondKeyTrusted = trustedFingerprints.includes(secondKeyFingerprint);
+    if (isFirstKeyTrusted ^ isSecondKeyTrusted) {
+        // the trusted key takes preference
+        return isFirstKeyTrusted ? -1 : +1;
+    }
+    // if both or none are trusted, preserve API order
+    return firstKeyOriginalIndex < secondKeyOriginalIndex;
+};
+
 const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailProperty, ...rest }) => {
     const api = useApi();
     const { call } = useEventManager();
@@ -106,8 +121,8 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             getRawInternalKeys(config),
             allKeysExpired(contactKeys)
         ]);
-
         const trustedFingerprints = apiKeys.length ? contactKeys.map((publicKey) => publicKey.getFingerprint()) : [];
+
         setModel({
             mimeType,
             encrypt,
@@ -180,14 +195,29 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     }, [loadingMailSettings]);
 
     useEffect(() => {
-        const updateEncryptToggle = async (keys) => {
+        // when the list of pinned keys change, update the encrypt toggle (off if all keys are expired or no keys are pinned)
+        // and re-check if these keys are all expired
+        const update = async (keys) => {
             const expired = await allKeysExpired(keys.pinned);
-            if (expired || !keys.pinned.length) {
-                setModel((model) => ({ ...model, encrypt: false, keysExpired: expired }));
-            }
+            setModel((model) => ({
+                ...model,
+                keysExpired: expired,
+                encrypt: expired || !keys.pinned.length ? false : model.encrypt
+            }));
         };
-        updateEncryptToggle(model.keys);
-    }, [model.keys]);
+        update(model.keys);
+    }, [model.keys.pinned]);
+
+    useEffect(() => {
+        // for changes in the list of trusted keys, re-order the api keys (trusted take preference)
+        setModel((model) => ({
+            ...model,
+            keys: {
+                ...model.keys,
+                api: [...model.keys.api].sort(keyComparator(model.keys.api, model.trustedFingerprints))
+            }
+        }));
+    }, [model.trustedFingerprints]);
 
     useEffect(() => {
         if (!isMimeTypeFixed) {

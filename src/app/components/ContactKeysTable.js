@@ -39,19 +39,28 @@ const ContactKeysTable = ({ model, setModel }) => {
                     const algoInfo = publicKey.getAlgorithmInfo();
                     const algo = describe(algoInfo);
                     const fingerprint = publicKey.getFingerprint();
-                    const isPrimary = !index && !isExpired && model.isPGPExternal;
+                    const isPrimary = !index && !isExpired && !(model.isPGPExternal && !model.encrypt);
+                    const isWKD = model.isPGPExternal && index < totalApiKeys;
                     const isTrusted = index < totalApiKeys ? model.trustedFingerprints.includes(fingerprint) : true;
                     const isUploaded = index >= totalApiKeys;
+                    const canBePrimary =
+                        !!index && !isExpired && (index < totalApiKeys ? isTrusted : !totalApiKeys && model.encrypt);
+                    const canBeTrusted = !isTrusted && !isUploaded;
+                    const canBeUntrusted = isTrusted && !isUploaded;
                     return {
                         publicKey,
                         fingerprint,
                         algo,
                         creationTime,
                         isPrimary,
+                        isWKD,
                         isExpired,
                         isRevoked,
                         isTrusted,
-                        isUploaded
+                        isUploaded,
+                        canBePrimary,
+                        canBeTrusted,
+                        canBeUntrusted
                     };
                 } catch (error) {
                     return false;
@@ -63,27 +72,28 @@ const ContactKeysTable = ({ model, setModel }) => {
 
     useEffect(() => {
         parse();
-    }, [model.keys, model.trustedFingerprints]);
+    }, [model.keys, model.trustedFingerprints, model.encrypt]);
 
     return (
         <Table>
             <TableHeader cells={header} />
             <TableBody>
                 {keys.map(
-                    (
-                        {
-                            fingerprint,
-                            algo,
-                            creationTime,
-                            isPrimary,
-                            publicKey,
-                            isExpired,
-                            isRevoked,
-                            isTrusted,
-                            isUploaded
-                        },
-                        index
-                    ) => {
+                    ({
+                        fingerprint,
+                        algo,
+                        creationTime,
+                        isPrimary,
+                        isWKD,
+                        publicKey,
+                        isExpired,
+                        isRevoked,
+                        isTrusted,
+                        isUploaded,
+                        canBePrimary,
+                        canBeTrusted,
+                        canBeUntrusted
+                    }) => {
                         const creation = new Date(creationTime);
                         const list = [
                             {
@@ -99,35 +109,45 @@ const ContactKeysTable = ({ model, setModel }) => {
                                     downloadFile(blob, filename);
                                 }
                             },
-                            index > 0 &&
-                                !isExpired && {
-                                    text: c('Action').t`Make primary`,
-                                    onClick() {
-                                        setModel({ ...model, keys: move(model.keys, index, 0) });
-                                    }
-                                },
-                            !isTrusted &&
-                                !isUploaded && {
-                                    text: c('Action').t`Trust`,
-                                    onClick() {
-                                        setModel({
-                                            ...model,
-                                            trustedFingerprints: [...model.trustedFingerprints, fingerprint]
-                                        });
-                                    }
-                                },
-                            isTrusted &&
-                                !isUploaded && {
-                                    text: c('Action').t`Untrust`,
-                                    onClick() {
-                                        setModel({
-                                            ...model,
-                                            trustedFingerprints: model.trustedFingerprints.filter(
-                                                (f) => f !== fingerprint
-                                            )
-                                        });
-                                    }
-                                },
+                            canBePrimary && {
+                                text: c('Action').t`Make primary`,
+                                onClick() {
+                                    const apiIndex = model.keys.api.findIndex(
+                                        (key) => key.getFingerprint() === fingerprint
+                                    );
+                                    const pinnedIndex = model.keys.pinned.findIndex(
+                                        (key) => key.getFingerprint() === fingerprint
+                                    );
+                                    const reOrderedApiKeys =
+                                        apiIndex !== -1 ? move(model.keys.api, apiIndex, 0) : model.keys.api;
+                                    const reOrderedPinnedKeys =
+                                        pinnedIndex !== -1
+                                            ? move(model.keys.pinned, pinnedIndex, 0)
+                                            : model.keys.pinned;
+                                    setModel({
+                                        ...model,
+                                        keys: { api: reOrderedApiKeys, pinned: reOrderedPinnedKeys }
+                                    });
+                                }
+                            },
+                            canBeTrusted && {
+                                text: c('Action').t`Trust`,
+                                onClick() {
+                                    setModel({
+                                        ...model,
+                                        trustedFingerprints: [...model.trustedFingerprints, fingerprint]
+                                    });
+                                }
+                            },
+                            canBeUntrusted && {
+                                text: c('Action').t`Untrust`,
+                                onClick() {
+                                    setModel({
+                                        ...model,
+                                        trustedFingerprints: model.trustedFingerprints.filter((f) => f !== fingerprint)
+                                    });
+                                }
+                            },
                             isUploaded && {
                                 text: c('Action').t`Remove`,
                                 onClick() {
@@ -158,6 +178,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                             algo,
                             <React.Fragment key={fingerprint}>
                                 {isPrimary ? <Badge>{c('Key badge').t`Primary`}</Badge> : null}
+                                {isWKD ? <Badge>{c('Key badge').t`WKD`}</Badge> : null}
                                 {isTrusted ? <Badge>{c('Key badge').t`Trusted`}</Badge> : null}
                             </React.Fragment>,
                             <DropdownActions key={fingerprint} className="pm-button--small" list={list} />
