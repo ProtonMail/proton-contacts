@@ -2,7 +2,9 @@
 const FIELDS_WITH_PREF = ['fn', 'email', 'tel', 'adr'];
 
 /**
- *
+ * Given a Vcard field, return true if we take into consideration its PREF parameters
+ * @param {String} field
+ * @returns {Boolean}
  */
 export const hasPref = (field) => FIELDS_WITH_PREF.includes(field);
 
@@ -62,7 +64,7 @@ export const addPref = (properties = []) => {
 /**
  * Function that sorts properties by preference
  */
-export const sortByPref = (firstEl, secondEl) => firstEl.pref <= secondEl.pref;
+export const sortByPref = (firstEl, secondEl) => +firstEl.pref <= +secondEl.pref;
 
 /**
  * Generate new group name that doesn't exist
