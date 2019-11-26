@@ -1,29 +1,21 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { c, msgid } from 'ttag';
+import { c } from 'ttag';
 import {
-    Alert,
     Loader,
     useContactEmails,
     useContacts,
     useUser,
     useUserKeys,
-    useApi,
-    useNotifications,
-    useEventManager,
     useContactGroups,
     useActiveBreakpoint,
     useModals,
-    ConfirmModal,
-    ErrorButton,
     useToggle,
     ErrorBoundary
 } from 'react-components';
-import { clearContacts, deleteContacts } from 'proton-shared/lib/api/contacts';
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { toMap } from 'proton-shared/lib/helpers/object';
 import { extractMergeable } from '../helpers/merge';
-import { allSucceded } from 'proton-shared/lib/api/helpers/response';
 
 import ContactsList from '../components/ContactsList';
 import Contact from '../components/Contact';
@@ -34,6 +26,7 @@ import PrivateSidebar from '../content/PrivateSidebar';
 import MergeModal from '../components/merge/MergeModal';
 import ImportModal from '../components/import/ImportModal';
 import ExportModal from '../components/ExportModal';
+import DeleteModal from '../components/delete/DeleteModal';
 import PrivateLayout from '../content/PrivateLayout';
 
 const ContactsContainer = ({ location, history }) => {
@@ -41,9 +34,6 @@ const ContactsContainer = ({ location, history }) => {
     const { createModal } = useModals();
     const [search, updateSearch] = useState('');
     const normalizedSearch = normalize(search);
-    const api = useApi();
-    const { createNotification } = useNotifications();
-    const { call } = useEventManager();
     const [contactEmails, loadingContactEmails] = useContactEmails();
     const [contacts, loadingContacts] = useContacts();
     const [contactGroups, loadingContactGroups] = useContactGroups();
@@ -171,43 +161,21 @@ const ContactsContainer = ({ location, history }) => {
         handleCheckAllFiltered(false);
     };
 
-    const handleDelete = async () => {
-        const confirm = <ErrorButton type="submit">{c('Action').t`Delete`}</ErrorButton>;
-        await new Promise((resolve, reject) => {
-            createModal(
-                <ConfirmModal title={c('Title').t`Delete`} onConfirm={resolve} confirm={confirm} onClose={reject}>
-                    <Alert type="warning">
-                        {c('Warning').ngettext(
-                            msgid`This action will permanently delete the selected contact. Are you sure you want to delete this contact?`,
-                            `This action will permanently delete selected contacts. Are you sure you want to delete these contacts?`,
-                            activeIDs.length
-                        )}
-                    </Alert>
-                </ConfirmModal>
-            );
-        });
-        if (activeIDs.length === contacts.length) {
-            await api(clearContacts());
-            history.replace({ ...location, pathname: '/contacts' });
-            await call();
-            setCheckedContacts(Object.create(null));
-            return createNotification({ text: c('Success').t`Contacts deleted` });
-        }
-        const apiSuccess = allSucceded(await api(deleteContacts(activeIDs)));
-        if (activeIDs.length === filteredContacts.length) {
-            handleClearSearch();
-        }
-        if (contactID && activeIDs.includes(contactID)) {
-            history.replace({ ...location, pathname: '/contacts' });
-        }
-        await call();
-        handleCheck(filteredCheckedIDs, false);
-        if (!apiSuccess) {
-            return createNotification({ text: c('Error').t`Some contacts could not be deleted`, type: 'warning' });
-        }
-        createNotification({
-            text: c('Success').ngettext(msgid`Contact deleted`, `Contacts deleted`, activeIDs.length)
-        });
+    const handleDelete = () => {
+        createModal(
+            <DeleteModal
+                activeIDs={activeIDs}
+                contactID={contactID}
+                contacts={contacts}
+                filteredContacts={filteredContacts}
+                filteredCheckedIDs={filteredCheckedIDs}
+                onCheck={handleCheck}
+                onClearSearch={handleClearSearch}
+                onUpdateChecked={setCheckedContacts}
+                history={history}
+                location={location}
+            />
+        );
     };
 
     const handleMerge = () => {
@@ -291,14 +259,12 @@ const ContactsContainer = ({ location, history }) => {
                     onClearSearch={handleClearSearch}
                     isNarrow={isNarrow}
                     history={history}
-                    location={location}
                 />
             )}
             <div className="flex flex-nowrap">
                 <PrivateSidebar
                     url="/contacts"
                     history={history}
-                    location={location}
                     user={user}
                     expanded={expanded}
                     onToggleExpand={onToggleExpand}
