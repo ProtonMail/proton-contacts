@@ -32,6 +32,7 @@ const DeleteModal = ({
             history.replace({ ...location, pathname: '/contacts' });
             await call();
             onUpdateChecked(Object.create(null));
+            rest.onClose();
             return createNotification({ text: c('Success').t`Contacts deleted` });
         }
         const apiSuccess = allSucceded(await api(deleteContacts(activeIDs)));
