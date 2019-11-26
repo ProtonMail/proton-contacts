@@ -1,8 +1,8 @@
 import { normalize } from 'proton-shared/lib/helpers/string';
 
-import { ONE_OR_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT, PROPERTIES, isCustomField } from './vcard';
-import { generateNewGroupName } from './properties';
+import { hasPref, generateNewGroupName } from './properties';
 import { unique } from 'proton-shared/lib/helpers/array';
+import { ONE_OR_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT, PROPERTIES, isCustomField } from './vcard';
 
 /**
  * Given an array of keys and an object storing an index for each key,
@@ -186,10 +186,14 @@ export const merge = (contacts = []) => {
                 for (const { pref, field, value, group } of contact) {
                     if (!mergedProperties[field]) {
                         mergedProperties[field] = [value];
-                        mergedPropertiesPrefs[field] = [pref];
+                        if (hasPref(field)) {
+                            mergedPropertiesPrefs[field] = [pref];
+                        }
                     } else {
                         mergedProperties[field].push(value);
-                        mergedPropertiesPrefs[field].push(+pref);
+                        if (hasPref(field)) {
+                            mergedPropertiesPrefs[field].push(pref);
+                        }
                     }
                     // email and groups are in one-to-one correspondence
                     if (field === 'email') {
@@ -219,9 +223,11 @@ export const merge = (contacts = []) => {
                     const newGroup = group ? changeGroup[group] : group;
                     if (!mergedProperties[field]) {
                         // an unseen property is directly merged
-                        mergedContact.push({ ...property, pref: +pref, group: newGroup });
+                        mergedContact.push({ ...property, pref: pref, group: newGroup });
                         mergedProperties[field] = [value];
-                        mergedPropertiesPrefs[field] = [+pref];
+                        if (hasPref(field)) {
+                            mergedPropertiesPrefs[field] = [pref];
+                        }
                         if (newGroup && field === 'email') {
                             mergedGroups[value] = newGroup;
                         }
@@ -229,7 +235,7 @@ export const merge = (contacts = []) => {
                         // for properties already seen,
                         // check if there is a new value for it
                         const newValue = extractNewValue(value, field, mergedProperties[field]);
-                        const newPref = Math.max(...mergedPropertiesPrefs[field]) + 1;
+                        const newPref = hasPref(field) ? Math.max(...mergedPropertiesPrefs[field]) + 1 : undefined;
                         // check if the new value can be added
                         const canAdd =
                             isCustomField(field) ||
@@ -240,7 +246,9 @@ export const merge = (contacts = []) => {
                         if (!!newValue && canAdd) {
                             mergedContact.push({ ...property, pref: newPref, value: newValue, group: newGroup });
                             mergedProperties[field].push(newValue);
-                            mergedPropertiesPrefs[field] = [newPref];
+                            if (hasPref(field)) {
+                                mergedPropertiesPrefs[field] = [newPref];
+                            }
                             if (newGroup && field === 'email') {
                                 mergedGroups[value] = newGroup;
                             }

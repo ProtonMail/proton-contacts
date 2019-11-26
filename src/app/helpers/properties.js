@@ -1,3 +1,11 @@
+// Vcard fields for which we keep track of PREF parameter
+const FIELDS_WITH_PREF = ['fn', 'email', 'tel', 'adr'];
+
+/**
+ *
+ */
+export const hasPref = (field) => FIELDS_WITH_PREF.includes(field);
+
 /**
  * Make sure we keep only valid properties
  * In case adr property is badly formatted, re-format
@@ -32,9 +40,13 @@ export const sanitizeProperties = (properties = []) => {
  * @param {Array}
  */
 export const addPref = (properties = []) => {
-    const prefs = { email: 0, tel: 0, adr: 0 };
+    const prefs = FIELDS_WITH_PREF.reduce((acc, field) => {
+        acc[field] = 0;
+        return acc;
+    }, Object.create(null));
+
     return properties.map((property) => {
-        if (!['email', 'adr', 'tel'].includes(property.field)) {
+        if (!FIELDS_WITH_PREF.includes(property.field)) {
             return property;
         }
 
