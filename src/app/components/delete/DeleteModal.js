@@ -29,7 +29,7 @@ const DeleteModal = ({
     const handleDelete = async () => {
         if (activeIDs.length === contacts.length) {
             await api(clearContacts());
-            history.replace({ ...location, pathname: '/contacts' });
+            history.replace({ ...location, state: { ignoreClose: true }, pathname: '/contacts' });
             await call();
             onUpdateChecked(Object.create(null));
             rest.onClose();
@@ -40,7 +40,7 @@ const DeleteModal = ({
             onClearSearch();
         }
         if (contactID && activeIDs.includes(contactID)) {
-            history.replace({ ...location, pathname: '/contacts' });
+            history.replace({ ...location, state: { ignoreClose: true }, pathname: '/contacts' });
         }
         await call();
         onCheck(filteredCheckedIDs, false);
