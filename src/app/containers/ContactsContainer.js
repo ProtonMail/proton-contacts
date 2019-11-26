@@ -176,7 +176,7 @@ const ContactsContainer = ({ location, history }) => {
             }
             handleCheck(filteredCheckedIDs, false);
         };
-        createModal(<DeleteModal beDeletedIDs={activeIDs} deleteAll={deleteAll} onDelete={onDelete} />);
+        createModal(<DeleteModal contactIDs={activeIDs} deleteAll={deleteAll} onDelete={onDelete} />);
     };
 
     const handleMerge = () => {
