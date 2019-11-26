@@ -162,20 +162,21 @@ const ContactsContainer = ({ location, history }) => {
     };
 
     const handleDelete = () => {
-        createModal(
-            <DeleteModal
-                activeIDs={activeIDs}
-                contactID={contactID}
-                contacts={contacts}
-                filteredContacts={filteredContacts}
-                filteredCheckedIDs={filteredCheckedIDs}
-                onCheck={handleCheck}
-                onClearSearch={handleClearSearch}
-                onUpdateChecked={setCheckedContacts}
-                history={history}
-                location={location}
-            />
-        );
+        const deleteAll = activeIDs.length === contacts.length;
+        const onDelete = () => {
+            if (deleteAll) {
+                history.replace({ ...location, state: { ignoreClose: true }, pathname: '/contacts' });
+                return setCheckedContacts(Object.create(null));
+            }
+            if (activeIDs.length === filteredContacts.length) {
+                handleClearSearch();
+            }
+            if (contactID && activeIDs.includes(contactID)) {
+                history.replace({ ...location, state: { ignoreClose: true }, pathname: '/contacts' });
+            }
+            handleCheck(filteredCheckedIDs, false);
+        };
+        createModal(<DeleteModal beDeletedIDs={activeIDs} deleteAll={deleteAll} onDelete={onDelete} />);
     };
 
     const handleMerge = () => {
