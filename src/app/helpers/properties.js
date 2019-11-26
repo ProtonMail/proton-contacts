@@ -1,5 +1,5 @@
 // Vcard fields for which we keep track of PREF parameter
-const FIELDS_WITH_PREF = ['fn', 'email', 'tel', 'adr'];
+const FIELDS_WITH_PREF = ['fn', 'email', 'tel', 'adr', 'key'];
 
 /**
  * Given a Vcard field, return true if we take into consideration its PREF parameters

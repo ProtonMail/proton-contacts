@@ -19,6 +19,7 @@ import { c } from 'ttag';
 
 import { prepareContacts } from '../helpers/encrypt';
 import { hasCategories } from '../helpers/import';
+import { sortByPref } from '../helpers/properties';
 import { isInternalUser, isDisabledUser, getRawInternalKeys, allKeysExpired, hasNoPrimary } from '../helpers/pgp';
 import { noop } from 'proton-shared/lib/helpers/function';
 import { addContacts } from 'proton-shared/lib/api/contacts';
@@ -40,16 +41,26 @@ const PGP_MAP = {
 const keyComparator = (originalKeys = [], trustedFingerprints = []) => (firstKey, secondKey) => {
     const firstKeyFingerprint = firstKey.getFingerprint();
     const secondKeyFingerprint = secondKey.getFingerprint();
-    const firstKeyOriginalIndex = originalKeys.findIndex((key) => key.getFingerprint() === firstKeyFingerprint);
-    const secondKeyOriginalIndex = originalKeys.findIndex((key) => key.getFingerprint() === secondKeyFingerprint);
     const isFirstKeyTrusted = trustedFingerprints.includes(firstKeyFingerprint);
     const isSecondKeyTrusted = trustedFingerprints.includes(secondKeyFingerprint);
     if (isFirstKeyTrusted ^ isSecondKeyTrusted) {
         // the trusted key takes preference
         return isFirstKeyTrusted ? -1 : +1;
     }
-    // if both or none are trusted, preserve API order
-    return firstKeyOriginalIndex < secondKeyOriginalIndex;
+    if (isFirstKeyTrusted && isSecondKeyTrusted) {
+        // preserve order in trustedFingerprints
+        const firstKeyTrustedIndex = trustedFingerprints.findIndex(
+            (fingerprint) => fingerprint === firstKeyFingerprint
+        );
+        const secondKeyTrustedIndex = trustedFingerprints.findIndex(
+            (fingerprint) => fingerprint === secondKeyFingerprint
+        );
+        return firstKeyTrustedIndex - secondKeyTrustedIndex;
+    }
+    // if none are trusted, preserve API order
+    const firstKeyOriginalIndex = originalKeys.findIndex((key) => key.getFingerprint() === firstKeyFingerprint);
+    const secondKeyOriginalIndex = originalKeys.findIndex((key) => key.getFingerprint() === secondKeyFingerprint);
+    return firstKeyOriginalIndex - secondKeyOriginalIndex;
 };
 
 const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailProperty, ...rest }) => {
@@ -73,14 +84,14 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
         const { contactKeyPromises, mimeType, encrypt, scheme, sign } = properties
             .filter(({ field, group }) => VCARD_KEY_FIELDS.includes(field) && group === emailGroup)
             .reduce(
-                (acc, { field, value }) => {
+                (acc, { field, value, pref }) => {
                     if (field === 'key' && value) {
                         const [, base64 = ''] = value.split(',');
                         const key = binaryStringToArray(decodeBase64(base64));
 
                         if (key.length) {
                             const promise = getKeys(key)
-                                .then(([publicKey]) => publicKey)
+                                .then(([publicKey]) => ({ publicKey, pref }))
                                 .catch(noop);
                             acc.contactKeyPromises.push(promise);
                         }
@@ -112,7 +123,10 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
                 },
                 { contactKeyPromises: [], mimeType: '', encrypt: false, scheme: '', sign: Sign === PGP_SIGN } // Default values
             );
-        const contactKeys = (await Promise.all(contactKeyPromises)).filter(Boolean);
+        const contactKeys = (await Promise.all(contactKeyPromises))
+            .filter(Boolean)
+            .sort(sortByPref)
+            .map(({ publicKey }) => publicKey);
         const config = await getPublicKeysEmailHelper(api, Email);
         const internalUser = isInternalUser(config);
         const externalUser = !internalUser;
