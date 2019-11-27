@@ -27,9 +27,10 @@ const ContactKeysTable = ({ model, setModel }) => {
      * Extract keys info from model.keys to define table body
      */
     const parse = async () => {
-        const allKeys = uniqueBy([...model.keys.api, ...model.keys.pinned], (publicKey) => publicKey.getFingerprint());
+        const allKeys = model.isPGPInternal ? [...model.keys.api] : [...model.keys.api, ...model.keys.pinned];
+        const uniqueKeys = uniqueBy(allKeys, (publicKey) => publicKey.getFingerprint());
         const parsedKeys = await Promise.all(
-            allKeys.map(async (publicKey, index) => {
+            uniqueKeys.map(async (publicKey, index) => {
                 try {
                     const date = +serverTime();
                     const creationTime = publicKey.getCreationTime();
