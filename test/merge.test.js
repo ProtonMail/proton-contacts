@@ -3,7 +3,10 @@ import { linkConnections, extractMergeable, extractNewValue, merge } from '../sr
 describe('merge', () => {
     describe('linkConnections', () => {
         it('should return same if no connections should be linked', () => {
-            const connections = [[1, 2], [3, 4]];
+            const connections = [
+                [1, 2],
+                [3, 4]
+            ];
             expect(linkConnections(connections)).toEqual(connections);
         });
         it('should return same if there is only one connection', () => {
@@ -16,15 +19,40 @@ describe('merge', () => {
         });
         it('should work as expected for a few cases', () => {
             const cases = [
-                [[1, 8, 2], [9, 10, 5], [2, 4], [3, 5]],
-                [[1, 8, 2], [9, 10, 5], [2, 4], [3, 5], [4, 9]],
-                [[1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [1, 8], [7, 9]]
+                [
+                    [1, 8, 2],
+                    [9, 10, 5],
+                    [2, 4],
+                    [3, 5]
+                ],
+                [
+                    [1, 8, 2],
+                    [9, 10, 5],
+                    [2, 4],
+                    [3, 5],
+                    [4, 9]
+                ],
+                [
+                    [1, 2],
+                    [2, 3],
+                    [3, 4],
+                    [4, 5],
+                    [5, 6],
+                    [1, 8],
+                    [7, 9]
+                ]
             ];
             const resultsSorted = cases.map((cs) => linkConnections(cs).map((c) => c.sort((a, b) => a - b)));
             const expectedSorted = [
-                [[1, 2, 4, 8], [3, 5, 9, 10]],
+                [
+                    [1, 2, 4, 8],
+                    [3, 5, 9, 10]
+                ],
                 [[1, 2, 3, 4, 5, 8, 9, 10]],
-                [[1, 2, 3, 4, 5, 6, 8], [7, 9]]
+                [
+                    [1, 2, 3, 4, 5, 6, 8],
+                    [7, 9]
+                ]
             ];
             expect(resultsSorted).toEqual(expectedSorted);
         });
@@ -43,7 +71,10 @@ describe('merge', () => {
             const contacts = [alice1, alice2, alicia1, bob1, alice3, bob2, carol1];
             const mergeable = extractMergeable(contacts);
 
-            expect(mergeable).toEqual([[alice1, alice2, alice3], [bob1, bob2]]);
+            expect(mergeable).toEqual([
+                [alice1, alice2, alice3],
+                [bob1, bob2]
+            ]);
         });
         it('should capture together contacts with the same email', () => {
             const alice1 = { Name: 'Alice', emails: ['alice@domain.com'] };
@@ -58,7 +89,11 @@ describe('merge', () => {
             const contacts = [alice1, alice2, alicia1, bob1, alice3, bob2, carol1, mallory];
             const mergeable = extractMergeable(contacts);
 
-            expect(mergeable).toEqual([[bob1, bob2], [alice1, alicia1, mallory], [alice2, alice3]]);
+            expect(mergeable).toEqual([
+                [bob1, bob2],
+                [alice1, alicia1, mallory],
+                [alice2, alice3]
+            ]);
         });
         it('should capture together contacts with the same email or the same name', () => {
             const onlyOne1 = { Name: 'name1', emails: ['email1@domain.com'] };
@@ -108,28 +143,31 @@ describe('merge', () => {
     describe('merge', () => {
         it('should merge fn properties in proper order', () => {
             const beMerged = [
-                [{ pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name1' }],
-                [{ pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name2' }],
-                [{ pref: 2, field: 'fn', group: undefined, type: undefined, value: 'name3' }]
+                [{ pref: 1, field: 'fn', value: 'name1' }],
+                [
+                    { pref: 1, field: 'fn', value: 'name2' },
+                    { pref: 2, field: 'fn', value: 'name3' }
+                ],
+                [{ pref: 1, field: 'fn', value: 'name4' }]
             ];
 
             const mergedPrefs = merge(beMerged).map(({ pref }) => pref);
-            expect(mergedPrefs).toEqual([1, 2, 3]);
+            expect(mergedPrefs).toEqual([1, 2, 3, 4]);
         });
         it('should only merge properties with different value', () => {
             const beMerged = [
                 [
-                    { pref: 1, field: 'version', group: undefined, type: undefined, value: '4.0' },
+                    { field: 'version', group: undefined, type: undefined, value: '4.0' },
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name1' },
                     { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email1@domain.org' }
                 ],
                 [
-                    { pref: 1, field: 'version', group: undefined, type: undefined, value: '4.0' },
+                    { field: 'version', group: undefined, type: undefined, value: '4.0' },
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name2' },
                     { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email1@domain.org' }
                 ],
                 [
-                    { pref: 1, field: 'version', group: undefined, type: undefined, value: '4.0' },
+                    { field: 'version', group: undefined, type: undefined, value: '4.0' },
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name2' },
                     { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email2@domain.org' }
                 ]
@@ -140,23 +178,23 @@ describe('merge', () => {
         it('should change email groups when merging', () => {
             const beMerged = [
                 [
-                    { pref: 1, field: 'version', group: undefined, type: undefined, value: '4.0' },
+                    { field: 'version', group: undefined, type: undefined, value: '4.0' },
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name1' },
                     { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email1@domain.org' },
-                    { pref: 1, field: 'email', group: 'item2', type: 'email', value: 'email2@domain.org' }
+                    { pref: 2, field: 'email', group: 'item2', type: 'email', value: 'email2@domain.org' }
                 ],
                 [
-                    { pref: 1, field: 'version', group: undefined, type: undefined, value: '4.0' },
+                    { field: 'version', group: undefined, type: undefined, value: '4.0' },
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name2' },
                     { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email1@domain.org' }
                 ],
                 [
-                    { pref: 1, field: 'version', group: undefined, type: undefined, value: '4.0' },
+                    { field: 'version', group: undefined, type: undefined, value: '4.0' },
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name2' },
                     { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email2@domain.org' }
                 ],
                 [
-                    { pref: 1, field: 'version', group: undefined, type: undefined, value: '4.0' },
+                    { field: 'version', group: undefined, type: undefined, value: '4.0' },
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name2' },
                     { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email3@domain.org' }
                 ]
@@ -166,6 +204,71 @@ describe('merge', () => {
                 .filter(Boolean);
 
             expect(emailGroups).toEqual(['item1', 'item2', 'item3']);
+        });
+        it('should merge contacts with several properties properly', () => {
+            const beMerged = [
+                [
+                    { pref: 1, field: 'fn', value: 'name1' },
+                    { pref: 1, field: 'email', value: 'email1@domain.org' },
+                    { pref: 2, field: 'email', value: 'email2@domain.org' },
+                    { pref: 3, field: 'email', value: 'email3@domain.org' },
+                    { pref: 1, field: 'tel', value: '123-123-123' },
+                    { field: 'org', value: 'ACME' },
+                    { field: 'photo', value: 'base64' },
+                    {
+                        pref: 1,
+                        field: 'adr',
+                        value: ['PObox1', 'extAdr1', 'street1', 'city1', 'region1', 'postalCode1', 'country1']
+                    },
+                    {
+                        pref: 2,
+                        field: 'adr',
+                        value: ['PObox2', 'extAdr2', 'street2', 'city2', 'region2', 'postalCode2', 'country2']
+                    }
+                ],
+                [
+                    { pref: 1, field: 'fn', value: 'name2' },
+                    { pref: 1, field: 'email', value: 'email1@domain.org' },
+                    { pref: 1, field: 'tel', value: '1234-1234' },
+                    {
+                        pref: 1,
+                        field: 'adr',
+                        value: ['PObox2', 'extAdr2', 'street2', 'city2', 'region2', 'postalCode2', 'country2']
+                    },
+                    { field: 'org', value: 'ACME SA' }
+                ],
+                [
+                    { pref: 1, field: 'fn', value: 'name1' },
+                    { pref: 1, field: 'tel', value: '12345-12345' },
+                    { pref: 2, field: 'tel', value: '1234-1234' },
+                    {
+                        pref: 1,
+                        field: 'adr',
+                        value: ['PObox3', 'extAdr3', 'street3', 'city3', 'region3', 'postalCode3', 'country3']
+                    }
+                ]
+            ];
+            const merged = merge(beMerged);
+            const mergedFNPrefs = merged.filter(({ field }) => field === 'fn').map(({ pref }) => pref);
+            const mergedFNValues = merged.filter(({ field }) => field === 'fn').map(({ value }) => value);
+            const mergedEMAILPrefs = merged.filter(({ field }) => field === 'email').map(({ pref }) => pref);
+            const mergedEMAILValues = merged.filter(({ field }) => field === 'email').map(({ value }) => value);
+            const mergedTELPrefs = merged.filter(({ field }) => field === 'tel').map(({ pref }) => pref);
+            const mergedTELValues = merged.filter(({ field }) => field === 'tel').map(({ value }) => value);
+            const mergedADRPrefs = merged.filter(({ field }) => field === 'adr').map(({ pref }) => pref);
+            const mergedADRValues = merged.filter(({ field }) => field === 'adr').map(({ value }) => value);
+            expect(mergedFNPrefs).toEqual([1, 2]);
+            expect(mergedFNValues).toEqual(['name1', 'name2']);
+            expect(mergedEMAILPrefs).toEqual([1, 2, 3]);
+            expect(mergedEMAILValues).toEqual(['email1@domain.org', 'email2@domain.org', 'email3@domain.org']);
+            expect(mergedTELPrefs).toEqual([1, 2, 3]);
+            expect(mergedTELValues).toEqual(['123-123-123', '1234-1234', '12345-12345']);
+            expect(mergedADRPrefs).toEqual([1, 2, 3]);
+            expect(mergedADRValues).toEqual([
+                ['PObox1', 'extAdr1', 'street1', 'city1', 'region1', 'postalCode1', 'country1'],
+                ['PObox2', 'extAdr2', 'street2', 'city2', 'region2', 'postalCode2', 'country2'],
+                ['PObox3', 'extAdr3', 'street3', 'city3', 'region3', 'postalCode3', 'country3']
+            ]);
         });
     });
 });
