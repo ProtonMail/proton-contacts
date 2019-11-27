@@ -4,7 +4,6 @@ import { sanitizeProperties } from './properties';
 
 import { CONTACT_CARD_TYPE } from 'proton-shared/lib/constants';
 import { SIGNATURE_NOT_VERIFIED, FAIL_TO_READ, FAIL_TO_DECRYPT } from '../constants';
-import { splitKeys } from 'proton-shared/lib/keys/keys';
 
 const { CLEAR_TEXT, ENCRYPTED_AND_SIGNED, ENCRYPTED, SIGNED } = CONTACT_CARD_TYPE;
 
@@ -105,12 +104,4 @@ export const prepareContact = async (contact, { publicKeys, privateKeys }) => {
     );
 
     return { properties: sanitizeProperties(merge(vcards.map(parse))), errors };
-};
-
-export const decryptContactCards = async (contactCards, contactID, keys) => {
-    const { properties, errors } = await prepareContact({ Cards: contactCards }, splitKeys(keys));
-    if (errors.length !== 0) {
-        throw new Error('Error decrypting contact with contactID ', contactID);
-    }
-    return properties;
 };

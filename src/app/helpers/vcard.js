@@ -1,6 +1,6 @@
 import ICAL from 'ical.js';
 import { readFileAsString } from 'proton-shared/lib/helpers/file';
-import { sortByPref } from './properties';
+import { hasPref, sortByPref } from './properties';
 import { getValue } from './property';
 
 export const ONE_OR_MORE_MUST_BE_PRESENT = '1*';
@@ -58,11 +58,11 @@ export const parse = (vcard = '') => {
 
     return properties
         .reduce((acc, property) => {
+            const splitProperty = property.name.split('.');
+            const field = splitProperty[1] ? splitProperty[1] : splitProperty[0];
             const type = property.getParameter('type');
             const prefValue = property.getParameter('pref');
-            const pref = typeof prefValue === 'string' ? +prefValue : 1;
-            const splitted = property.name.split('.');
-            const field = splitted[1] ? splitted[1] : splitted[0];
+            const pref = typeof prefValue === 'string' && hasPref(field) ? +prefValue : undefined;
 
             // Ignore invalid field
             if (!field) {
@@ -76,7 +76,7 @@ export const parse = (vcard = '') => {
                 return acc;
             }
 
-            const group = splitted[1] ? splitted[0] : undefined;
+            const group = splitProperty[1] ? splitProperty[0] : undefined;
             const prop = { pref, field, group, type, value: getValue(property) };
 
             acc.push(prop);
@@ -98,11 +98,12 @@ export const toICAL = (properties = []) => {
         versionProperty.setValue('4.0');
         comp.addProperty(versionProperty);
     }
-    return properties.reduce((component, { field, type, value, group }) => {
+    return properties.reduce((component, { field, type, pref, value, group }) => {
         const fieldWithGroup = [group, field].filter(Boolean).join('.');
         const property = new ICAL.Property(fieldWithGroup);
         property.setValue(value);
         type && property.setParameter('type', type);
+        pref && property.setParameter('pref', '' + pref);
         component.addProperty(property);
         return component;
     }, comp);
