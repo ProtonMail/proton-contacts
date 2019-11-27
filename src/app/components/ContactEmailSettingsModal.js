@@ -130,7 +130,17 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
         const config = await getPublicKeysEmailHelper(api, Email);
         const internalUser = isInternalUser(config);
         const externalUser = !internalUser;
-        const apiKeys = config.publicKeys;
+        const { apiKeys, apiKeysFlags } = config.Keys.reduce(
+            (acc, { Flags }, index) => {
+                const publicKey = config.publicKeys[index];
+                if (publicKey) {
+                    acc.apiKeys.push(publicKey);
+                    acc.apiKeysFlags[publicKey.getFingerprint()] = Flags;
+                }
+                return acc;
+            },
+            { apiKeys: [], apiKeysFlags: Object.create(null) }
+        );
         const [unarmoredKeys, keysExpired] = await Promise.all([
             getRawInternalKeys(config),
             allKeysExpired(contactKeys)
@@ -144,6 +154,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             sign,
             email: Email,
             keys: { api: apiKeys, pinned: contactKeys },
+            apiKeysFlags,
             trustedFingerprints,
             isPGPExternal: externalUser,
             isPGPInternal: internalUser,

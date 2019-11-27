@@ -12,6 +12,8 @@ import { describe } from 'proton-shared/lib/keys/keysAlgorithm';
 
 import KeyWarningIcon from './KeyWarningIcon';
 
+import { KEY_FLAGS } from 'proton-shared/lib/constants';
+
 const ContactKeysTable = ({ model, setModel }) => {
     const [keys, setKeys] = useState([]);
     const header = [
@@ -43,9 +45,14 @@ const ContactKeysTable = ({ model, setModel }) => {
                     const isActive = !index && !isExpired && (totalApiKeys ? true : model.encrypt);
                     const isWKD = model.isPGPExternal && index < totalApiKeys;
                     const isTrusted = index < totalApiKeys ? model.trustedFingerprints.includes(fingerprint) : true;
+                    const isVerificationOnly =
+                        index < totalApiKeys && !(model.apiKeysFlags[fingerprint] & KEY_FLAGS.ENABLE_ENCRYPTION);
                     const isUploaded = index >= totalApiKeys;
                     const canBeActive =
-                        !!index && !isExpired && (index < totalApiKeys ? isTrusted : !totalApiKeys && model.encrypt);
+                        !!index &&
+                        !isExpired &&
+                        !isVerificationOnly &&
+                        (index < totalApiKeys ? isTrusted : !totalApiKeys && model.encrypt);
                     const canBeTrusted = !isTrusted && !isUploaded;
                     const canBeUntrusted = isTrusted && !isUploaded;
                     return {
@@ -58,6 +65,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                         isExpired,
                         isRevoked,
                         isTrusted,
+                        isVerificationOnly,
                         isUploaded,
                         canBeActive,
                         canBeTrusted,
@@ -90,6 +98,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                         isExpired,
                         isRevoked,
                         isTrusted,
+                        isVerificationOnly,
                         isUploaded,
                         canBeActive,
                         canBeTrusted,
@@ -179,6 +188,9 @@ const ContactKeysTable = ({ model, setModel }) => {
                             algo,
                             <React.Fragment key={fingerprint}>
                                 {isActive ? <Badge>{c('Key badge').t`Active`}</Badge> : null}
+                                {isVerificationOnly ? (
+                                    <Badge type="warning">{c('Key badge').t`Verification only`}</Badge>
+                                ) : null}
                                 {isWKD ? <Badge>{c('Key badge').t`WKD`}</Badge> : null}
                                 {isTrusted ? <Badge>{c('Key badge').t`Trusted`}</Badge> : null}
                             </React.Fragment>,
