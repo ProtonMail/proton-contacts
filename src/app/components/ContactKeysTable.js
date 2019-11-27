@@ -40,11 +40,11 @@ const ContactKeysTable = ({ model, setModel }) => {
                     const algoInfo = publicKey.getAlgorithmInfo();
                     const algo = describe(algoInfo);
                     const fingerprint = publicKey.getFingerprint();
-                    const isPrimary = !index && !isExpired && !(model.isPGPExternal && !model.encrypt);
+                    const isActive = !index && !isExpired && (totalApiKeys ? true : model.encrypt);
                     const isWKD = model.isPGPExternal && index < totalApiKeys;
                     const isTrusted = index < totalApiKeys ? model.trustedFingerprints.includes(fingerprint) : true;
                     const isUploaded = index >= totalApiKeys;
-                    const canBePrimary =
+                    const canBeActive =
                         !!index && !isExpired && (index < totalApiKeys ? isTrusted : !totalApiKeys && model.encrypt);
                     const canBeTrusted = !isTrusted && !isUploaded;
                     const canBeUntrusted = isTrusted && !isUploaded;
@@ -53,13 +53,13 @@ const ContactKeysTable = ({ model, setModel }) => {
                         fingerprint,
                         algo,
                         creationTime,
-                        isPrimary,
+                        isActive,
                         isWKD,
                         isExpired,
                         isRevoked,
                         isTrusted,
                         isUploaded,
-                        canBePrimary,
+                        canBeActive,
                         canBeTrusted,
                         canBeUntrusted
                     };
@@ -84,14 +84,14 @@ const ContactKeysTable = ({ model, setModel }) => {
                         fingerprint,
                         algo,
                         creationTime,
-                        isPrimary,
+                        isActive,
                         isWKD,
                         publicKey,
                         isExpired,
                         isRevoked,
                         isTrusted,
                         isUploaded,
-                        canBePrimary,
+                        canBeActive,
                         canBeTrusted,
                         canBeUntrusted
                     }) => {
@@ -110,8 +110,8 @@ const ContactKeysTable = ({ model, setModel }) => {
                                     downloadFile(blob, filename);
                                 }
                             },
-                            canBePrimary && {
-                                text: c('Action').t`Make primary`,
+                            canBeActive && {
+                                text: c('Action').t`Use for encryption`,
                                 onClick() {
                                     const apiIndex = model.keys.api.findIndex(
                                         (key) => key.getFingerprint() === fingerprint
@@ -178,7 +178,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                             isValid(creation) ? format(creation, 'PP', { locale: dateLocale }) : '-',
                             algo,
                             <React.Fragment key={fingerprint}>
-                                {isPrimary ? <Badge>{c('Key badge').t`Primary`}</Badge> : null}
+                                {isActive ? <Badge>{c('Key badge').t`Active`}</Badge> : null}
                                 {isWKD ? <Badge>{c('Key badge').t`WKD`}</Badge> : null}
                                 {isTrusted ? <Badge>{c('Key badge').t`Trusted`}</Badge> : null}
                             </React.Fragment>,
