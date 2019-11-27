@@ -33,7 +33,7 @@ const ContactSummary = ({ properties, leftBlockWidth = 'w30' }) => {
     ].filter(Boolean);
 
     return (
-        <div className="bg-global-light flex flex-nowrap p1 mb1 border-bottom">
+        <div className="contactsummary-container flex flex-nowrap p1 mb1 border-bottom">
             <div className={classnames(['aligncenter contactsummary-photo-container', leftBlockWidth])}>
                 <ContactImageSummary photo={photo} name={name} />
             </div>

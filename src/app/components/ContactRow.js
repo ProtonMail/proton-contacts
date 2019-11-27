@@ -16,7 +16,7 @@ const ContactRow = ({ style, contactID, hasPaidMail, contactGroupsMap, contact, 
             key={ID}
             onClick={() => onClick(ID)}
             className={classnames([
-                'item-container cursor-pointer bg-global-white',
+                'item-container item-contact cursor-pointer bg-global-white',
                 contactID === ID && 'item-is-selected'
             ])}
         >
