@@ -120,7 +120,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                                 }
                             },
                             canBeActive && {
-                                text: c('Action').t`Use for encryption`,
+                                text: c('Action').t`Use for sending`,
                                 onClick() {
                                     const apiIndex = model.keys.api.findIndex(
                                         (key) => key.getFingerprint() === fingerprint
