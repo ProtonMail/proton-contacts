@@ -52,7 +52,7 @@
         "prettier": "^1.16.4",
         "proton-bundler": "github:ProtonMail/proton-bundler#semver:^1.0.0",
         "proton-i18n": "github:ProtonMail/proton-i18n#semver:^1.4.0",
-        "proton-pack": "github:ProtonMail/proton-pack#semver:^2.0.0",
+        "proton-pack": "github:ProtonMail/proton-pack#semver:^3.0.0",
         "typescript": "^3.6.3"
     },
     "dependencies": {
@@ -61,7 +61,6 @@
         "design-system": "github:ProtonMail/design-system#master",
         "ical.js": "^1.3.0",
         "papaparse": "^5.0.0",
-        "pmcrypto": "github:ProtonMail/pmcrypto#semver:^6.0.0",
         "proton-shared": "github:ProtonMail/proton-shared#master",
         "react": "^16.8.1",
         "react-components": "github:ProtonMail/react-components#master",
