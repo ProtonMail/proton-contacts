@@ -8,7 +8,7 @@
     },
     "scripts": {
         "start": "proton-pack dev-server $npm_package_config_publicPathFlag --appMode=standalone",
-	"build:standalone": "cross-env NODE_ENV=production proton-pack compile --appMode=standalone",
+        "build:standalone": "cross-env NODE_ENV=production proton-pack compile --appMode=standalone",
         "lint": "eslint src --ext .js,.ts,.tsx --quiet --cache",
         "pretty": "prettier --write  $(find src/app -type f -name '*.js' -o -name '*.ts' -o -name '*.tsx')",
         "test": "jest",
@@ -21,7 +21,7 @@
         "i18n:getlatest": "proton-i18n upgrade",
         "deploy": "proton-bundler",
         "deploy:prod": "proton-bundler --remote --branch=deploy-prod",
-	"deploy:standalone": "proton-bundler --appMode standalone",
+        "deploy:standalone": "proton-bundler --appMode standalone",
         "bundle": "proton-pack config",
         "postbundle": "cross-env NODE_ENV_DIST=bundle-only proton-bundler",
         "check-types": "tsc"
