@@ -248,11 +248,13 @@ const ContactsContainer = ({ location, history }) => {
         />
     );
 
+    const title = search === '' ? c('Title').t`Contacts` : c('Title').t`Search`;
+
     return (
         <PrivateLayout title={contactGroupName || c('Title').t`Contacts`}>
             {(!isNarrow || !contactID) && (
                 <PrivateHeader
-                    title={c('Title').t`Contacts`}
+                    title={title}
                     expanded={expanded}
                     onToggleExpand={onToggleExpand}
                     search={search}
