@@ -11,7 +11,7 @@ import { ONE_OR_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT, PROPERTIES, is
  * @param {Array} keys
  * @param {Object} obj
  *
- * @return {Number}
+ * @returns {Number}
  */
 const findKeyIndex = (keys, obj) => {
     for (const key of keys) {
@@ -28,7 +28,7 @@ const findKeyIndex = (keys, obj) => {
  * E.g.: [[1, 2, 3], [3, 5], [4, 6]] ->  [[1, 2, 3, 5], [4, 6]]
  * @param {Array} connections
  *
- * @return {Array}
+ * @returns {Array}
  */
 export const linkConnections = (connections) => {
     let didModify = false;
@@ -120,12 +120,13 @@ export const extractMergeable = (contacts = []) => {
 
 /**
  * Given the value and field of a contact property, and a list of merged properties,
- * return '' if the value has been merged, or the new value to be merged otherwise
+ * return and object with a Boolean that tells if the value has been merged or is a new value.
+ * In the latter case, return the new value in the object
  * @param {String|Array} value
  * @param {String} field
  * @param {Array<String|Array>} mergedValues
- *
- * @return {String}
+ * @returns {Object} { isNewValue: {Boolean}, newValue: {String|Array} }
+ * @dev  Normalize strings in all fields but EMAIL
  */
 export const extractNewValue = (value, field, mergedValues = []) => {
     //  the field adr has to be treated separately since it has an array value
@@ -134,35 +135,43 @@ export const extractNewValue = (value, field, mergedValues = []) => {
         // value = [ PObox, extAdr, street, city, region, postalCode, country ]
         // each of the elements inside value can be a string or an array of strings
 
-        // compare with merged addresses
-        const isNotNewAdr = mergedValues
+        // compare with merged addresses. Normalize all strings
+        const isNotRepeatedAdr = mergedValues
             .map((mergedAdr) => {
                 // check adr element by adr element to see if there are new values
-                const isNewComponent = mergedAdr
+                const newComponents = mergedAdr
                     .map((component, index) => {
                         // each of the components inside adr may be an array itself
                         const componentIsArray = Array.isArray(component);
                         const valueIsArray = Array.isArray(value[index]);
                         if (componentIsArray && valueIsArray) {
-                            return value[index].some((str) => !component.includes(str));
+                            return value[index].some((str) => !component.map(normalize).includes(normalize(str)));
                         }
                         if (!componentIsArray && !valueIsArray) {
-                            return component !== value[index];
+                            return normalize(component) !== normalize(value[index]);
                         }
                         return true;
                     })
                     .filter(Boolean);
 
-                return !isNewComponent.length;
+                return !newComponents.length;
             })
             // keep track of only repeated addresses
             .filter(Boolean);
 
-        // if some address is repeated, it is not new
-        return !isNotNewAdr.length ? value : '';
+        // if the be-new address is repeated, it is not new
+        const isNew = !isNotRepeatedAdr.length;
+        return { isNewValue: isNew, newValue: isNew ? value : undefined };
     }
     // for the other fields, value is a string, and mergedValues an array of strings
-    return !mergedValues.includes(value) ? value : '';
+    // for EMAIL field, do not normalize, only trim
+    if (field === 'email') {
+        const isNew = !mergedValues.map((value) => value.trim()).includes(value.trim());
+        return { isNewValue: isNew, newValue: isNew ? value : undefined };
+    }
+    // for the other fields, value is a string, and mergedValues an array of strings
+    const isNew = !mergedValues.map((value) => value.trim()).includes(value.trim());
+    return { isNewValue: isNew, newValue: isNew ? value : undefined };
 };
 
 /**
@@ -234,7 +243,7 @@ export const merge = (contacts = []) => {
                     } else {
                         // for properties already seen,
                         // check if there is a new value for it
-                        const newValue = extractNewValue(value, field, mergedProperties[field]);
+                        const { isNewValue, newValue } = extractNewValue(value, field, mergedProperties[field]);
                         const newPref = hasPref(field) ? Math.max(...mergedPropertiesPrefs[field]) + 1 : undefined;
                         // check if the new value can be added
                         const canAdd =
@@ -243,7 +252,7 @@ export const merge = (contacts = []) => {
                                 PROPERTIES[field].cardinality
                             );
 
-                        if (!!newValue && canAdd) {
+                        if (isNewValue && canAdd) {
                             mergedContact.push({ ...property, pref: newPref, value: newValue, group: newGroup });
                             mergedProperties[field].push(newValue);
                             if (hasPref(field)) {

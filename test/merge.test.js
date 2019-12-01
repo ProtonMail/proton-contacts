@@ -112,14 +112,16 @@ describe('merge', () => {
     describe('extractNewValue', () => {
         it('should return the value if there are no merged values', () => {
             const value = 'new';
-            const newValue = extractNewValue(value, 'name', []);
+            const { newValue } = extractNewValue(value, 'name', []);
             expect(newValue).toEqual(value);
         });
         it('should capture only new values for fields different from adr', () => {
             const mergedValues = ['old', 'older'];
             const values = ['old', 'new'];
-            const expectedNewValues = ['', 'new'];
-            const newValues = values.map((value) => extractNewValue(value, 'name', mergedValues));
+            const expectedNewValues = ['new'];
+            const newValues = values
+                .map((value) => extractNewValue(value, 'name', mergedValues).newValue)
+                .filter(Boolean);
             expect(newValues).toEqual(expectedNewValues);
         });
         it('should capture only new values for adr field', () => {
@@ -132,10 +134,11 @@ describe('merge', () => {
                 ['', '', 'older street', 'new city', 'older region', 'older postal code', 'older country']
             ];
             const expectedNewValues = [
-                '',
                 ['', '', 'older street', 'new city', 'older region', 'older postal code', 'older country']
             ];
-            const newValues = values.map((value) => extractNewValue(value, 'adr', mergedValues));
+            const newValues = values
+                .map((value) => extractNewValue(value, 'adr', mergedValues).newValue)
+                .filter(Boolean);
             expect(newValues).toEqual(expectedNewValues);
         });
     });
