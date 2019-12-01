@@ -26,7 +26,7 @@ const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
                     <p>{c('Info')
                         .t`Add contacts to your ProtonMail account by importing them from a CSV or vCard file.`}</p>
                 </div>
-                <div className="flex-item-noshrink p1">
+                <div className="flex-item-noshrink mt2">
                     <PrimaryButton className="bold" onClick={onImport} disabled={loadingUserKeys}>{c('Action')
                         .t`Import`}</PrimaryButton>
                 </div>
@@ -37,7 +37,7 @@ const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
                     <div className="bold">{c('Title').t`Export contacts`}</div>
                     <p>{c('Info').t`Create a backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
                 </div>
-                <div className="flex-item-noshrink p1">
+                <div className="flex-item-noshrink mt2">
                     <PrimaryButton className="bold" onClick={onExport} disabled={loadingUserKeys}>{c('Action')
                         .t`Export`}</PrimaryButton>
                 </div>
@@ -49,7 +49,7 @@ const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
                     <p>{c('Info')
                         .t`Use groups to send email to a list of addresses you regularly communicate with.`}</p>
                 </div>
-                <div className="flex-item-noshrink p1">
+                <div className="flex-item-noshrink mt2">
                     <PrimaryButton className="bold" onClick={onGroups}>{c('Action').t`Groups`}</PrimaryButton>
                 </div>
             </div>
@@ -76,7 +76,7 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
                     <p>{c('Info')
                         .t`Add contacts to your ProtonMail account by importing them from a CSV or vCard file.`}</p>
                 </div>
-                <div className="flex-item-noshrink p1">
+                <div className="flex-item-noshrink mt2">
                     <PrimaryButton className="bold" onClick={onImport} disabled={loadingUserKeys}>{c('Action')
                         .t`Import`}</PrimaryButton>
                 </div>
@@ -87,7 +87,7 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
                     <div className="bold">{c('Title').t`Export contacts`}</div>
                     <p>{c('Info').t`Create a backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
                 </div>
-                <div className="flex-item-noshrink p1">
+                <div className="flex-item-noshrink mt2">
                     <PrimaryButton className="bold" onClick={onExport} disabled={loadingUserKeys}>{c('Action')
                         .t`Export`}</PrimaryButton>
                 </div>
@@ -99,7 +99,7 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
                     <p>{c('Info')
                         .t`Upgrade to a paid plan to enable encrypted contact details and manage contact groups.`}</p>
                 </div>
-                <div className="flex-item-noshrink p1">
+                <div className="flex-item-noshrink mt2">
                     <PrimaryButton className="bold" onClick={handleUpgrade}>
                         {c('Action').t`Upgrade`}
                     </PrimaryButton>
