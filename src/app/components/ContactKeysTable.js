@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableHeader, TableBody, TableRow, Badge, DropdownActions } from 'react-components';
+import { Table, TableBody, TableRow, Badge, DropdownActions, useActiveBreakpoint } from 'react-components';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { isValid, format } from 'date-fns';
@@ -16,13 +16,8 @@ import { KEY_FLAGS } from 'proton-shared/lib/constants';
 
 const ContactKeysTable = ({ model, setModel }) => {
     const [keys, setKeys] = useState([]);
-    const header = [
-        c('Table header').t`Fingerprint`,
-        c('Table header').t`Created`,
-        c('Table header').t`Type`,
-        c('Table header').t`Status`,
-        c('Table header').t`Actions`
-    ];
+    const { isNarrow } = useActiveBreakpoint();
+
     const totalApiKeys = model.keys.api.length;
 
     /**
@@ -60,6 +55,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                         fingerprint,
                         algo,
                         creationTime,
+                        expirationTime,
                         isActive,
                         isWKD,
                         isExpired,
@@ -84,14 +80,24 @@ const ContactKeysTable = ({ model, setModel }) => {
     }, [model.keys, model.trustedFingerprints, model.encrypt]);
 
     return (
-        <Table>
-            <TableHeader cells={header} />
+        <Table className="pm-simple-table--has-actions">
+            <thead>
+                <tr>
+                    <th scope="col" className="ellipsis">{c('Table header').t`Fingerprint`}</th>
+                    {!isNarrow && <th scope="col" className="ellipsis">{c('Table header').t`Created`}</th>}
+                    <th scope="col" className="ellipsis">{c('Table header').t`Expires`}</th>
+                    {!isNarrow && <th scope="col" className="ellipsis">{c('Table header').t`Type`}</th>}
+                    <th scope="col" className="ellipsis">{c('Table header').t`Status`}</th>
+                    <th scope="col" className="ellipsis">{c('Table header').t`Actions`}</th>
+                </tr>
+            </thead>
             <TableBody>
                 {keys.map(
                     ({
                         fingerprint,
                         algo,
                         creationTime,
+                        expirationTime,
                         isActive,
                         isWKD,
                         publicKey,
@@ -105,6 +111,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                         canBeUntrusted
                     }) => {
                         const creation = new Date(creationTime);
+                        const expiration = new Date(expirationTime);
                         const list = [
                             {
                                 text: c('Action').t`Download`,
@@ -184,8 +191,9 @@ const ContactKeysTable = ({ model, setModel }) => {
                                 />
                                 <span className="flex-item-fluid ellipsis">{fingerprint}</span>
                             </div>,
-                            isValid(creation) ? format(creation, 'PP', { locale: dateLocale }) : '-',
-                            algo,
+                            !isNarrow && (isValid(creation) ? format(creation, 'PP', { locale: dateLocale }) : '-'),
+                            isValid(expiration) ? format(expiration, 'PP', { locale: dateLocale }) : '-',
+                            !isNarrow && algo,
                             <React.Fragment key={fingerprint}>
                                 {isActive ? <Badge>{c('Key badge').t`Active`}</Badge> : null}
                                 {isVerificationOnly ? (
@@ -195,7 +203,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                                 {isTrusted ? <Badge>{c('Key badge').t`Trusted`}</Badge> : null}
                             </React.Fragment>,
                             <DropdownActions key={fingerprint} className="pm-button--small" list={list} />
-                        ];
+                        ].filter(Boolean);
                         return <TableRow key={fingerprint} cells={cells} />;
                     }
                 )}
