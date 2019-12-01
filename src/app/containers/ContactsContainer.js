@@ -11,7 +11,8 @@ import {
     useActiveBreakpoint,
     useModals,
     useToggle,
-    ErrorBoundary
+    ErrorBoundary,
+    GenericError
 } from 'react-components';
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { toMap } from 'proton-shared/lib/helpers/object';
@@ -199,7 +200,7 @@ const ContactsContainer = ({ location, history }) => {
     const noHeader = isNarrow && contactID ? '--noHeader' : '';
 
     const contactComponent = contactID && !!contactsLength && !hasChecked && (
-        <ErrorBoundary key={contactID}>
+        <ErrorBoundary key={contactID} component={<GenericError className="pt2 view-column-detail flex-item-fluid" />}>
             <Contact
                 contactID={contactID}
                 contactEmails={contactEmailsMap[contactID]}
