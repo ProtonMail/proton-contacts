@@ -169,8 +169,8 @@ export const extractNewValue = (value, field, mergedValues = []) => {
         const isNew = !mergedValues.map((value) => value.trim()).includes(value.trim());
         return { isNewValue: isNew, newValue: isNew ? value : undefined };
     }
-    // for the other fields, value is a string, and mergedValues an array of strings
-    const isNew = !mergedValues.map((value) => value.trim()).includes(value.trim());
+    // for the rest of the fields, normalize strings
+    const isNew = !mergedValues.map(normalize).includes(normalize(value));
     return { isNewValue: isNew, newValue: isNew ? value : undefined };
 };
 
