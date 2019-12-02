@@ -90,7 +90,7 @@ PrivateHeader.propTypes = {
     expanded: PropTypes.bool,
     onToggleExpand: PropTypes.func,
     onSearch: PropTypes.func,
-    onClearSeach: PropTypes.func,
+    onClearSearch: PropTypes.func,
     inSettings: PropTypes.bool,
     isNarrow: PropTypes.bool,
     history: PropTypes.object
