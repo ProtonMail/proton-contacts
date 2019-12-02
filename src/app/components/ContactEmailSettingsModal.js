@@ -19,11 +19,12 @@ import { c } from 'ttag';
 
 import { prepareContacts } from '../helpers/encrypt';
 import { hasCategories } from '../helpers/import';
-import { sortByPref } from '../helpers/properties';
+import { sortByPref, reOrderByPref } from '../helpers/properties';
 import { isInternalUser, isDisabledUser, getRawInternalKeys, allKeysExpired, hasNoPrimary } from '../helpers/pgp';
 import { noop } from 'proton-shared/lib/helpers/function';
 import { addContacts } from 'proton-shared/lib/api/contacts';
 import { getPublicKeysEmailHelper } from 'proton-shared/lib/api/helpers/publicKeys';
+import { uniqueBy } from 'proton-shared/lib/helpers/array';
 import { VCARD_KEY_FIELDS, PGP_INLINE, PGP_MIME, PGP_SIGN, CATEGORIES } from '../constants';
 import { PACKAGE_TYPE, MIME_TYPES } from 'proton-shared/lib/constants';
 
@@ -179,10 +180,13 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             pref: `${index + 1}`
         });
 
-        return [
-            ...model.keys.api.filter((publicKey) => model.trustedFingerprints.includes(publicKey.getFingerprint())),
-            ...model.keys.pinned
-        ].map(toKeyProperty);
+        const allKeys = model.isPGPInternal ? [...model.keys.api] : [...model.keys.api, ...model.keys.pinned];
+        const trustedKeys = allKeys.filter((publicKey) =>
+            model.trustedFingerprints.includes(publicKey.getFingerprint())
+        );
+        const uniqueTrustedKeys = uniqueBy(trustedKeys, (publicKey) => publicKey.getFingerprint());
+
+        return uniqueTrustedKeys.map(toKeyProperty);
     };
 
     /**
@@ -204,7 +208,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
                 model.scheme && { field: 'x-pm-scheme', value: model.scheme, group: emailGroup },
             ...getKeysProperties(emailGroup) // [{ field: 'key' }, ]
         ].filter(Boolean);
-        const allProperties = otherProperties.concat(emailProperties);
+        const allProperties = reOrderByPref(otherProperties.concat(emailProperties));
         const Contacts = await prepareContacts([allProperties], userKeysList[0]);
         const labels = hasCategories(allProperties) ? INCLUDE : IGNORE;
         await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: labels }));
