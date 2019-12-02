@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableRow, Badge, DropdownActions, useActiveBreakpoint } from 'react-components';
+import { Table, TableBody, TableRow, Badge, DropdownActions, useActiveBreakpoint, classnames } from 'react-components';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { isValid, format } from 'date-fns';
@@ -16,7 +16,7 @@ import { KEY_FLAGS } from 'proton-shared/lib/constants';
 
 const ContactKeysTable = ({ model, setModel }) => {
     const [keys, setKeys] = useState([]);
-    const { isNarrow } = useActiveBreakpoint();
+    const { isNarrow, isTinyMobile } = useActiveBreakpoint();
 
     const totalApiKeys = model.keys.api.length;
 
@@ -85,10 +85,11 @@ const ContactKeysTable = ({ model, setModel }) => {
                 <tr>
                     <th scope="col" className="ellipsis">{c('Table header').t`Fingerprint`}</th>
                     {!isNarrow && <th scope="col" className="ellipsis">{c('Table header').t`Created`}</th>}
-                    <th scope="col" className="ellipsis">{c('Table header').t`Expires`}</th>
+                    {!isTinyMobile && <th scope="col" className="ellipsis">{c('Table header').t`Expires`}</th>}
                     {!isNarrow && <th scope="col" className="ellipsis">{c('Table header').t`Type`}</th>}
                     <th scope="col" className="ellipsis">{c('Table header').t`Status`}</th>
-                    <th scope="col" className="ellipsis">{c('Table header').t`Actions`}</th>
+                    <th scope="col" className={classnames(['ellipsis', isNarrow && 'w40'])}>{c('Table header')
+                        .t`Actions`}</th>
                 </tr>
             </thead>
             <TableBody>
@@ -192,7 +193,8 @@ const ContactKeysTable = ({ model, setModel }) => {
                                 <span className="flex-item-fluid ellipsis">{fingerprint}</span>
                             </div>,
                             !isNarrow && (isValid(creation) ? format(creation, 'PP', { locale: dateLocale }) : '-'),
-                            isValid(expiration) ? format(expiration, 'PP', { locale: dateLocale }) : '-',
+                            !isTinyMobile &&
+                                (isValid(expiration) ? format(expiration, 'PP', { locale: dateLocale }) : '-'),
                             !isNarrow && algo,
                             <React.Fragment key={fingerprint}>
                                 {isActive ? <Badge>{c('Key badge').t`Active`}</Badge> : null}
