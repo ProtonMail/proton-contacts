@@ -112,30 +112,42 @@ describe('merge', () => {
     describe('extractNewValue', () => {
         it('should return the value if there are no merged values', () => {
             const value = 'new';
-            const newValue = extractNewValue(value, 'name', []);
+            const { newValue } = extractNewValue(value, 'name', []);
             expect(newValue).toEqual(value);
         });
-        it('should capture only new values for fields different from adr', () => {
-            const mergedValues = ['old', 'older'];
-            const values = ['old', 'new'];
-            const expectedNewValues = ['', 'new'];
-            const newValues = values.map((value) => extractNewValue(value, 'name', mergedValues));
+        it('should capture only new values for fields different (up to normalization) from adr', () => {
+            const mergedValues = ['Old', 'older'];
+            const values = [' old ', 'new'];
+            const expectedNewValues = ['new'];
+            const newValues = values
+                .map((value) => extractNewValue(value, 'name', mergedValues).newValue)
+                .filter(Boolean);
             expect(newValues).toEqual(expectedNewValues);
         });
-        it('should capture only new values for adr field', () => {
+        it('should capture only new values (up to trimming) of email properties', () => {
+            const mergedValues = ['john.doe@microsoft.com'];
+            const values = ['John.Doe@microsoft.com', 'john.doe@microsoft.com  '];
+            const expectedNewValues = ['John.Doe@microsoft.com'];
+            const newValues = values
+                .map((value) => extractNewValue(value, 'email', mergedValues).newValue)
+                .filter(Boolean);
+            expect(newValues).toEqual(expectedNewValues);
+        });
+        it('should capture only new values (up to normalization) for adr field', () => {
             const mergedValues = [
-                ['', '', 'old street', 'old city', 'old region', 'old postal code', 'old country'],
+                ['', '', 'Old Street', 'old city', 'old region', 'old postal code', 'old country'],
                 ['', '', 'older street', 'older city', 'older region', 'older postal code', 'older country']
             ];
             const values = [
-                ['', '', 'old street', 'old city', 'old region', 'old postal code', 'old country'],
-                ['', '', 'older street', 'new city', 'older region', 'older postal code', 'older country']
+                ['', '', 'old street', ' Old City  ', 'old region', 'old postal code', 'old COUNTRY'],
+                ['', '', 'older street', 'New city', 'older region', 'older postal code', 'older country']
             ];
             const expectedNewValues = [
-                '',
-                ['', '', 'older street', 'new city', 'older region', 'older postal code', 'older country']
+                ['', '', 'older street', 'New city', 'older region', 'older postal code', 'older country']
             ];
-            const newValues = values.map((value) => extractNewValue(value, 'adr', mergedValues));
+            const newValues = values
+                .map((value) => extractNewValue(value, 'adr', mergedValues).newValue)
+                .filter(Boolean);
             expect(newValues).toEqual(expectedNewValues);
         });
     });
