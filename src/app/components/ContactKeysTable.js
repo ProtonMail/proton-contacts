@@ -186,8 +186,6 @@ const ContactKeysTable = ({ model, setModel }) => {
                                 <KeyWarningIcon
                                     className="mr0-5 flex-item-noshrink"
                                     publicKey={publicKey}
-                                    isExpired={isExpired}
-                                    isRevoked={isRevoked}
                                     email={model.email}
                                 />
                                 <span className="flex-item-fluid ellipsis">{fingerprint}</span>
@@ -203,6 +201,8 @@ const ContactKeysTable = ({ model, setModel }) => {
                                 ) : null}
                                 {isWKD ? <Badge>{c('Key badge').t`WKD`}</Badge> : null}
                                 {isTrusted ? <Badge>{c('Key badge').t`Trusted`}</Badge> : null}
+                                {isRevoked ? <Badge type="error">{c('Key badge').t`Revoked`}</Badge> : null}
+                                {isExpired ? <Badge type="error">{c('Key badge').t`Expired`}</Badge> : null}
                             </React.Fragment>,
                             <DropdownActions key={fingerprint} className="pm-button--small" list={list} />
                         ].filter(Boolean);

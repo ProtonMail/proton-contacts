@@ -80,10 +80,9 @@ const ContactPgpSettings = ({ model, setModel }) => {
                 <Alert learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
                     .t`Only change these settings if you are using PGP with non-ProtonMail recipients.`}</Alert>
             )}
-            {model.keysExpired && (
-                <Alert type="warning" learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c(
-                    'Info'
-                ).t`All uploaded keys are expired or revoked! Encryption is automatically disabled.`}</Alert>
+            {model.isPGPExternalWithoutWKDKeys && model.keysExpired && (
+                <Alert type="error" learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
+                    .t`All uploaded keys are expired or revoked! Encryption is automatically disabled.`}</Alert>
             )}
             {!hasApiKeys && (
                 <Row>
@@ -118,7 +117,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         <Info
                             className="ml0-5"
                             title={c('Tooltip')
-                                .t`Digitally signing emails helps authentify that messages are sent by you`}
+                                .t`Digitally signing emails helps authenticating that messages are sent by you`}
                         />
                     </Label>
                     <Field>

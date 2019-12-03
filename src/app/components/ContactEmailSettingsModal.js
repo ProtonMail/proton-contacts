@@ -46,7 +46,7 @@ const keyComparator = (originalKeys = [], trustedFingerprints = []) => (firstKey
     const isSecondKeyTrusted = trustedFingerprints.includes(secondKeyFingerprint);
     if (isFirstKeyTrusted ^ isSecondKeyTrusted) {
         // the trusted key takes preference
-        return isFirstKeyTrusted ? -1 : +1;
+        return isFirstKeyTrusted ? -1 : 1;
     }
     if (isFirstKeyTrusted && isSecondKeyTrusted) {
         // preserve order in trustedFingerprints
@@ -58,7 +58,7 @@ const keyComparator = (originalKeys = [], trustedFingerprints = []) => (firstKey
         );
         return firstKeyTrustedIndex - secondKeyTrustedIndex;
     }
-    // if none are trusted, preserve API order
+    // if none is trusted, preserve API order
     const firstKeyOriginalIndex = originalKeys.findIndex((key) => key.getFingerprint() === firstKeyFingerprint);
     const secondKeyOriginalIndex = originalKeys.findIndex((key) => key.getFingerprint() === secondKeyFingerprint);
     return firstKeyOriginalIndex - secondKeyOriginalIndex;
@@ -159,6 +159,8 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             trustedFingerprints,
             isPGPExternal: externalUser,
             isPGPInternal: internalUser,
+            isPGPExternalWithWKDKeys: externalUser && !!apiKeys.length,
+            isPGPExternalWithoutWKDKeys: externalUser && !apiKeys.length,
             pgpAddressDisabled: isDisabledUser(config),
             noPrimary: hasNoPrimary(unarmoredKeys, contactKeys),
             keysExpired
