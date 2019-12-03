@@ -145,7 +145,9 @@ const ContactPgpSettings = ({ model, setModel }) => {
                             .t`Upload a public key to enable sending end-to-end encrypted emails to this email`}
                     />
                 </Label>
-                <Field>{model.isPGPExternal && <SelectKeyFiles onFiles={handleUploadKeys} multiple={true} />}</Field>
+                <Field className="onmobile-mt0-5">
+                    {model.isPGPExternal && <SelectKeyFiles onFiles={handleUploadKeys} multiple={true} />}
+                </Field>
             </Row>
             {(hasApiKeys || hasPinnedKeys) && <ContactKeysTable model={model} setModel={setModel} />}
             {!hasApiKeys && (
