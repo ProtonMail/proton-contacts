@@ -6,7 +6,6 @@ import { isValid, format } from 'date-fns';
 
 import { move, uniqueBy } from 'proton-shared/lib/helpers/array';
 import { dateLocale } from 'proton-shared/lib/i18n';
-import { serverTime } from 'pmcrypto/lib/serverTime';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 import { describe } from 'proton-shared/lib/keys/keysAlgorithm';
 
@@ -29,17 +28,16 @@ const ContactKeysTable = ({ model, setModel }) => {
         const parsedKeys = await Promise.all(
             uniqueKeys.map(async (publicKey, index) => {
                 try {
-                    const date = +serverTime();
+                    const fingerprint = publicKey.getFingerprint();
                     const creationTime = publicKey.getCreationTime();
                     const expirationTime = await publicKey.getExpirationTime('encrypt');
-                    const isExpired = !(creationTime <= date && date <= expirationTime);
-                    const isRevoked = await publicKey.isRevoked();
                     const algoInfo = publicKey.getAlgorithmInfo();
                     const algo = describe(algoInfo);
-                    const fingerprint = publicKey.getFingerprint();
+                    const isTrusted = model.trustedFingerprints.has(fingerprint);
+                    const isExpired = model.expiredFingerprints.has(fingerprint);
+                    const isRevoked = model.revokedFingerprints.has(fingerprint);
                     const isActive = !index && !isExpired && (totalApiKeys ? true : model.encrypt);
                     const isWKD = model.isPGPExternal && index < totalApiKeys;
-                    const isTrusted = index < totalApiKeys ? model.trustedFingerprints.includes(fingerprint) : true;
                     const isVerificationOnly =
                         index < totalApiKeys && !(model.apiKeysFlags[fingerprint] & KEY_FLAGS.ENABLE_ENCRYPTION);
                     const isUploaded = index >= totalApiKeys;
@@ -151,26 +149,33 @@ const ContactKeysTable = ({ model, setModel }) => {
                             canBeTrusted && {
                                 text: c('Action').t`Trust`,
                                 onClick() {
-                                    setModel({
-                                        ...model,
-                                        trustedFingerprints: [...model.trustedFingerprints, fingerprint]
-                                    });
+                                    const trustedFingerprints = new Set([...model.trustedFingerprints]);
+                                    trustedFingerprints.add(fingerprint);
+                                    setModel({ ...model, trustedFingerprints });
                                 }
                             },
                             canBeUntrusted && {
                                 text: c('Action').t`Untrust`,
                                 onClick() {
-                                    setModel({
-                                        ...model,
-                                        trustedFingerprints: model.trustedFingerprints.filter((f) => f !== fingerprint)
-                                    });
+                                    const trustedFingerprints = new Set([...model.trustedFingerprints]);
+                                    trustedFingerprints.delete(fingerprint);
+                                    setModel({ ...model, trustedFingerprints });
                                 }
                             },
                             isUploaded && {
                                 text: c('Action').t`Remove`,
                                 onClick() {
+                                    const trustedFingerprints = new Set([...model.trustedFingerprints]);
+                                    const expiredFingerprints = new Set([...model.expiredFingerprints]);
+                                    const revokedFingerprints = new Set([...model.revokedFingerprints]);
+                                    trustedFingerprints.delete(fingerprint);
+                                    expiredFingerprints.delete(fingerprint);
+                                    revokedFingerprints.delete(fingerprint);
                                     setModel({
                                         ...model,
+                                        trustedFingerprints,
+                                        expiredFingerprints,
+                                        revokedFingerprints,
                                         keys: {
                                             ...model.keys,
                                             pinned: model.keys.pinned.filter(

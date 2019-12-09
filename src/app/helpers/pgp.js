@@ -1,5 +1,6 @@
 import { RECIPIENT_TYPE, KEY_FLAGS } from 'proton-shared/lib/constants';
-import { arrayToBinaryString, encodeBase64, isExpiredKey, stripArmor } from 'pmcrypto';
+import { arrayToBinaryString, encodeBase64, stripArmor } from 'pmcrypto';
+import { serverTime } from 'pmcrypto/lib/serverTime';
 
 const { TYPE_INTERNAL } = RECIPIENT_TYPE;
 const { ENABLE_ENCRYPTION } = KEY_FLAGS;
@@ -26,23 +27,6 @@ export const getRawInternalKeys = ({ Keys = [] }) => {
             return encodeBase64(arrayToBinaryString(stripped));
         })
     );
-};
-
-/**
- *
- * @param {Array} keys from vCard
- * @returns {Promise<Boolean>}
- */
-export const allKeysExpired = async (keys = []) => {
-    // We do not want to show any warnings if we don't have any keys
-    if (!keys.length) {
-        return false;
-    }
-
-    const keyObjects = keys.map((publicKey) => isExpiredKey(publicKey));
-    const isExpired = await Promise.all(keyObjects);
-
-    return !isExpired.some((keyExpired) => !keyExpired);
 };
 
 /**
@@ -76,4 +60,68 @@ export const hasNoPrimary = (unarmoredKeys = [], contactKeys = []) => {
     }
     const keys = contactKeys.map((value) => encodeBase64(arrayToBinaryString(value)));
     return !unarmoredKeys.some((k) => keys.includes(k));
+};
+
+/**
+ * Sort list of keys retrieved from the API. Trusted keys take preference
+ * @param {Array} keys
+ * @param {Set} trustedFingerprints        { fingerprint: Boolean }
+ * @returns {Array}
+ */
+export const sortApiKeys = (keys = [], trustedFingerprints) => {
+    const { trustedKeys, otherKeys } = keys.reduce(
+        (acc, key) => {
+            const fingerprint = key.getFingerprint();
+            if (trustedFingerprints.has(fingerprint)) {
+                acc.trustedKeys.push(key);
+            } else {
+                acc.otherKeys.push(key);
+            }
+            return acc;
+        },
+        { trustedKeys: [], otherKeys: [] }
+    );
+
+    return trustedKeys.concat(otherKeys);
+};
+
+/**
+ * Sort list of pinned keys retrieved from the API. Keys that can be used for sending take preference
+ * @param {Array} keys
+ * @param {Set} expiredFingerprints
+ * @param {Set} revokedFingerprints
+ * @returns {Array}
+ */
+export const sortPinnedKeys = (keys = [], expiredFingerprints, revokedFingerprints) => {
+    const { canSendKeys, cannotSendKeys } = keys.reduce(
+        (acc, key) => {
+            const fingerprint = key.getFingerprint();
+            const canSend = !expiredFingerprints.has(fingerprint) && !revokedFingerprints.has(fingerprint);
+            if (canSend) {
+                acc.canSendKeys.push(key);
+            } else {
+                acc.cannotSendKeys.push(key);
+            }
+            return acc;
+        },
+        { canSendKeys: [], cannotSendKeys: [] }
+    );
+
+    return canSendKeys.concat(cannotSendKeys);
+};
+
+/**
+ * Given a key, return its expiration and revoke status
+ * @param publicKey
+ * @param date          Unix timestamp
+ * @returns {Promise<{expired: boolean, revoked: boolean}>}
+ */
+export const getKeyEncryptStatus = async (publicKey) => {
+    const date = +serverTime();
+    const creationTime = publicKey.getCreationTime();
+    // notice there are different expiration times depending on the use of the key.
+    const expirationTime = await publicKey.getExpirationTime('encrypt');
+    const isExpired = !(creationTime <= date && date <= expirationTime);
+    const isRevoked = await publicKey.isRevoked();
+    return { isExpired, isRevoked };
 };

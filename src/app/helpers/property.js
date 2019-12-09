@@ -1,3 +1,8 @@
+import { getKeys, arrayToBinaryString, binaryStringToArray, decodeBase64, encodeBase64 } from 'pmcrypto';
+import { VCARD_KEY_FIELDS } from '../constants';
+import { noop } from 'proton-shared/lib/helpers/function';
+import { sortByPref } from './properties';
+
 /**
  * ICAL library can crash if the value saved in the vCard is improperly formatted
  * If it crash we get the raw value from jCal key
@@ -75,3 +80,68 @@ export const formatAdr = (adr = []) => {
         .map((value) => value.trim())
         .join(', ');
 };
+
+export const getKeysFromProperties = async (properties, emailGroup) => {
+    const { pinnedKeyPromises, mimeType, encrypt, scheme } = properties
+        .filter(({ field, group }) => VCARD_KEY_FIELDS.includes(field) && group === emailGroup)
+        .reduce(
+            (acc, { field, value, pref }) => {
+                if (field === 'key' && value) {
+                    const [, base64 = ''] = value.split(',');
+                    const key = binaryStringToArray(decodeBase64(base64));
+
+                    if (key.length) {
+                        const promise = getKeys(key)
+                            .then(([publicKey]) => ({ publicKey, pref }))
+                            .catch(noop);
+                        acc.pinnedKeyPromises.push(promise);
+                    }
+
+                    return acc;
+                }
+
+                if (field === 'x-pm-encrypt' && value) {
+                    acc.encrypt = value === 'true';
+                    return acc;
+                }
+
+                if (field === 'x-pm-sign' && value) {
+                    acc.sign = value === 'true';
+                    return acc;
+                }
+
+                if (field === 'x-pm-scheme' && value) {
+                    acc.scheme = value;
+                    return acc;
+                }
+
+                if (field === 'x-pm-mimetype' && value) {
+                    acc.mimeType = value;
+                    return acc;
+                }
+
+                return acc;
+            },
+            { pinnedKeyPromises: [], mimeType: '', encrypt: false, scheme: '' } // Default values
+        );
+    const pinnedKeys = (await Promise.all(pinnedKeyPromises))
+        .filter(Boolean)
+        .sort(sortByPref)
+        .map(({ publicKey }) => publicKey);
+
+    return { pinnedKeys, mimeType, encrypt, scheme };
+};
+
+/**
+ * Transform a key into a vCard property
+ * @param {} publicKey      A PGP key
+ * @param {String} group
+ * @param {Number} index
+ * @returns { field, pref, value, group }
+ */
+export const toKeyProperty = ({ publicKey, group, index }) => ({
+    field: 'key',
+    value: `data:application/pgp-keys;base64,${encodeBase64(arrayToBinaryString(publicKey.toPacketlist().write()))}`,
+    group,
+    pref: `${index + 1}` // order is important
+});

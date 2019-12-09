@@ -14,17 +14,25 @@ import {
     useNotifications,
     useLoading
 } from 'react-components';
-import { getKeys, binaryStringToArray, arrayToBinaryString, encodeBase64, decodeBase64 } from 'pmcrypto';
 import { c } from 'ttag';
 
 import { prepareContacts } from '../helpers/encrypt';
 import { hasCategories } from '../helpers/import';
-import { sortByPref, reOrderByPref } from '../helpers/properties';
-import { isInternalUser, isDisabledUser, getRawInternalKeys, allKeysExpired, hasNoPrimary } from '../helpers/pgp';
-import { noop } from 'proton-shared/lib/helpers/function';
+import { reOrderByPref } from '../helpers/properties';
+import { getKeysFromProperties, toKeyProperty } from '../helpers/property';
+import {
+    isInternalUser,
+    isDisabledUser,
+    getRawInternalKeys,
+    getKeyEncryptStatus,
+    hasNoPrimary,
+    sortPinnedKeys,
+    sortApiKeys
+} from '../helpers/pgp';
 import { addContacts } from 'proton-shared/lib/api/contacts';
 import { getPublicKeysEmailHelper } from 'proton-shared/lib/api/helpers/publicKeys';
 import { uniqueBy } from 'proton-shared/lib/helpers/array';
+
 import { VCARD_KEY_FIELDS, PGP_INLINE, PGP_MIME, PGP_SIGN, CATEGORIES } from '../constants';
 import { PACKAGE_TYPE, MIME_TYPES } from 'proton-shared/lib/constants';
 
@@ -39,41 +47,16 @@ const PGP_MAP = {
     [SEND_PGP_MIME]: PGP_MIME
 };
 
-const keyComparator = (originalKeys = [], trustedFingerprints = []) => (firstKey, secondKey) => {
-    const firstKeyFingerprint = firstKey.getFingerprint();
-    const secondKeyFingerprint = secondKey.getFingerprint();
-    const isFirstKeyTrusted = trustedFingerprints.includes(firstKeyFingerprint);
-    const isSecondKeyTrusted = trustedFingerprints.includes(secondKeyFingerprint);
-    if (isFirstKeyTrusted ^ isSecondKeyTrusted) {
-        // the trusted key takes preference
-        return isFirstKeyTrusted ? -1 : 1;
-    }
-    if (isFirstKeyTrusted && isSecondKeyTrusted) {
-        // preserve order in trustedFingerprints
-        const firstKeyTrustedIndex = trustedFingerprints.findIndex(
-            (fingerprint) => fingerprint === firstKeyFingerprint
-        );
-        const secondKeyTrustedIndex = trustedFingerprints.findIndex(
-            (fingerprint) => fingerprint === secondKeyFingerprint
-        );
-        return firstKeyTrustedIndex - secondKeyTrustedIndex;
-    }
-    // if none is trusted, preserve API order
-    const firstKeyOriginalIndex = originalKeys.findIndex((key) => key.getFingerprint() === firstKeyFingerprint);
-    const secondKeyOriginalIndex = originalKeys.findIndex((key) => key.getFingerprint() === secondKeyFingerprint);
-    return firstKeyOriginalIndex - secondKeyOriginalIndex;
-};
-
 const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailProperty, ...rest }) => {
     const api = useApi();
     const { call } = useEventManager();
+    const [model, setModel] = useState({ keys: { api: [], pinned: [] } });
+    const [showPgpSettings, setShowPgpSettings] = useState(false);
     const [loading, withLoading] = useLoading();
     const { createNotification } = useNotifications();
-    const [{ PGPScheme, Sign }, loadingMailSettings] = useMailSettings(); // NOTE MailSettings model needs to be loaded
-    const [showPgpSettings, setShowPgpSettings] = useState(false);
+    const [{ PGPScheme, Sign }, loadingMailSettings] = useMailSettings();
 
     const { value: Email, group: emailGroup } = emailProperty;
-    const [model, setModel] = useState({ keys: { api: [], pinned: [] } });
     const isMimeTypeFixed = model.isPGPExternal && model.sign;
     const hasPGPInline = (model.scheme || PGP_MAP[PGPScheme]) === PGP_INLINE;
 
@@ -82,58 +65,28 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
      * @returns {Promise}
      */
     const prepare = async () => {
-        const { contactKeyPromises, mimeType, encrypt, scheme, sign } = properties
-            .filter(({ field, group }) => VCARD_KEY_FIELDS.includes(field) && group === emailGroup)
-            .reduce(
-                (acc, { field, value, pref }) => {
-                    if (field === 'key' && value) {
-                        const [, base64 = ''] = value.split(',');
-                        const key = binaryStringToArray(decodeBase64(base64));
+        // prepare keys stored in the vCard
+        const { pinnedKeys, mimeType, encrypt, scheme } = await getKeysFromProperties(properties, emailGroup);
+        const trustedFingerprints = new Set();
+        const expiredFingerprints = new Set();
+        const revokedFingerprints = new Set();
+        const noPinnedKeyCanSend = pinnedKeys.reduce(async (acc, publicKey, index) => {
+            const fingerprint = publicKey.getFingerprint();
+            const { isExpired, isRevoked } = await getKeyEncryptStatus(publicKey);
+            trustedFingerprints.add(fingerprint);
+            isExpired && expiredFingerprints.add(fingerprint);
+            isRevoked && revokedFingerprints.add(fingerprint);
+            const cannotSend = isExpired || isRevoked;
+            return index ? cannotSend : acc && cannotSend;
+        }, undefined);
 
-                        if (key.length) {
-                            const promise = getKeys(key)
-                                .then(([publicKey]) => ({ publicKey, pref }))
-                                .catch(noop);
-                            acc.contactKeyPromises.push(promise);
-                        }
-
-                        return acc;
-                    }
-
-                    if (field === 'x-pm-encrypt' && value) {
-                        acc.encrypt = value === 'true';
-                        return acc;
-                    }
-
-                    if (field === 'x-pm-sign' && value) {
-                        acc.sign = value === 'true';
-                        return acc;
-                    }
-
-                    if (field === 'x-pm-scheme' && value) {
-                        acc.scheme = value;
-                        return acc;
-                    }
-
-                    if (field === 'x-pm-mimetype' && value) {
-                        acc.mimeType = value;
-                        return acc;
-                    }
-
-                    return acc;
-                },
-                { contactKeyPromises: [], mimeType: '', encrypt: false, scheme: '', sign: Sign === PGP_SIGN } // Default values
-            );
-        const contactKeys = (await Promise.all(contactKeyPromises))
-            .filter(Boolean)
-            .sort(sortByPref)
-            .map(({ publicKey }) => publicKey);
-        const config = await getPublicKeysEmailHelper(api, Email);
-        const internalUser = isInternalUser(config);
+        // prepare keys retrieved from the API
+        const apiKeysConfig = await getPublicKeysEmailHelper(api, Email);
+        const internalUser = isInternalUser(apiKeysConfig);
         const externalUser = !internalUser;
-        const { apiKeys, apiKeysFlags } = config.Keys.reduce(
+        const { apiKeys, apiKeysFlags } = apiKeysConfig.Keys.reduce(
             (acc, { Flags }, index) => {
-                const publicKey = config.publicKeys[index];
+                const publicKey = apiKeysConfig.publicKeys[index];
                 if (publicKey) {
                     acc.apiKeys.push(publicKey);
                     acc.apiKeysFlags[publicKey.getFingerprint()] = Flags;
@@ -142,28 +95,26 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             },
             { apiKeys: [], apiKeysFlags: Object.create(null) }
         );
-        const [unarmoredKeys, keysExpired] = await Promise.all([
-            getRawInternalKeys(config),
-            allKeysExpired(contactKeys)
-        ]);
-        const trustedFingerprints = apiKeys.length ? contactKeys.map((publicKey) => publicKey.getFingerprint()) : [];
+        const unarmoredApiKeys = await getRawInternalKeys(apiKeysConfig);
 
         setModel({
             mimeType,
             encrypt,
             scheme,
-            sign,
+            sign: Sign === PGP_SIGN,
             email: Email,
-            keys: { api: apiKeys, pinned: contactKeys },
+            keys: { api: apiKeys, pinned: pinnedKeys },
             apiKeysFlags,
             trustedFingerprints,
+            expiredFingerprints,
+            revokedFingerprints,
             isPGPExternal: externalUser,
             isPGPInternal: internalUser,
             isPGPExternalWithWKDKeys: externalUser && !!apiKeys.length,
             isPGPExternalWithoutWKDKeys: externalUser && !apiKeys.length,
-            pgpAddressDisabled: isDisabledUser(config),
-            noPrimary: hasNoPrimary(unarmoredKeys, contactKeys),
-            keysExpired
+            pgpAddressDisabled: isDisabledUser(apiKeysConfig),
+            noPrimary: hasNoPrimary(unarmoredApiKeys, pinnedKeys),
+            noPinnedKeyCanSend
         });
     };
 
@@ -173,22 +124,11 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
      * @returns {Array} key properties to save in the vCard
      */
     const getKeysProperties = (group) => {
-        const toKeyProperty = (publicKey, index) => ({
-            field: 'key',
-            value: `data:application/pgp-keys;base64,${encodeBase64(
-                arrayToBinaryString(publicKey.toPacketlist().write())
-            )}`,
-            group,
-            pref: `${index + 1}`
-        });
-
         const allKeys = model.isPGPInternal ? [...model.keys.api] : [...model.keys.api, ...model.keys.pinned];
-        const trustedKeys = allKeys.filter((publicKey) =>
-            model.trustedFingerprints.includes(publicKey.getFingerprint())
-        );
+        const trustedKeys = allKeys.filter((publicKey) => model.trustedFingerprints.has(publicKey.getFingerprint()));
         const uniqueTrustedKeys = uniqueBy(trustedKeys, (publicKey) => publicKey.getFingerprint());
 
-        return uniqueTrustedKeys.map(toKeyProperty);
+        return uniqueTrustedKeys.map((publicKey, index) => toKeyProperty({ publicKey, group, index }));
     };
 
     /**
@@ -220,37 +160,41 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     };
 
     useEffect(() => {
+        // prepare the model once mail settings have been loaded
         if (!loadingMailSettings) {
             withLoading(prepare());
         }
     }, [loadingMailSettings]);
 
     useEffect(() => {
-        // when the list of pinned keys change, update the encrypt toggle (off if all keys are expired or no keys are pinned)
-        // and re-check if these keys are all expired
-        const update = async (keys) => {
-            const expired = await allKeysExpired(keys.pinned);
-            setModel((model) => ({
-                ...model,
-                keysExpired: expired,
-                encrypt: expired || !keys.pinned.length ? false : model.encrypt
-            }));
-        };
-        update(model.keys);
-    }, [model.keys.pinned]);
-
-    useEffect(() => {
-        // for changes in the list of trusted keys, re-order the api keys (trusted take preference)
+        /**
+         * When the list of trusted, expired or revoked keys change,
+         * * update the encrypt toggle (off if all keys are expired or no keys are pinned)
+         * * re-check if these keys are all expired
+         * * re-order api keys (trusted take preference)
+         * * move expired keys to the bottom of the list
+         */
+        const noPinnedKeyCanSend = !model.keys.pinned
+            .map((publicKey) => {
+                const fingerprint = publicKey.getFingerprint();
+                const canSend =
+                    !model.expiredFingerprints.has(fingerprint) && !model.revokedFingerprints.has(fingerprint);
+                return canSend;
+            })
+            .filter(Boolean).length;
         setModel((model) => ({
             ...model,
+            noPinnedKeyCanSend,
+            encrypt: !noPinnedKeyCanSend && !!model.keys.pinned.length && model.encrypt,
             keys: {
-                ...model.keys,
-                api: [...model.keys.api].sort(keyComparator(model.keys.api, model.trustedFingerprints))
+                api: sortApiKeys(model.keys.api, model.trustedFingerprints),
+                pinned: sortPinnedKeys(model.keys.pinned, model.expiredFingerprints, model.revokedFingerprints)
             }
         }));
-    }, [model.trustedFingerprints]);
+    }, [model.trustedFingerprints, model.expiredFingerprints, model.revokedFingerprints]);
 
     useEffect(() => {
+        // take into account rules relating email format and cryptographic scheme
         if (!isMimeTypeFixed) {
             return;
         }

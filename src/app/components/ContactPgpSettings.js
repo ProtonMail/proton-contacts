@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { Alert, Row, Label, Field, Info, Toggle, SelectKeyFiles, useNotifications } from 'react-components';
+import { getKeyEncryptStatus } from '../helpers/pgp';
 
 import ContactSchemeSelect from './ContactSchemeSelect';
 import ContactKeysTable from './ContactKeysTable';
@@ -15,44 +16,39 @@ const ContactPgpSettings = ({ model, setModel }) => {
      * Add / update keys to model
      * @param {Array<PublicKey>} files
      */
-    const handleUploadKeys = (files) => {
+    const handleUploadKeys = async (files) => {
         if (!files.length) {
             return createNotification({
                 type: 'error',
                 text: c('Error').t`Invalid public key file`
             });
         }
+        const pinned = [...model.keys.pinned];
+        const trustedFingerprints = new Set([...model.trustedFingerprints]);
+        const revokedFingerprints = new Set([...model.revokedFingerprints]);
+        const expiredFingerprints = new Set([...model.expiredFingerprints]);
 
-        // Update existing keys by looking on the fingerprint
-        // And add new one
-        const existingFingerprints = model.keys.pinned.map((publicKey) => publicKey.getFingerprint());
-        const { toAdd, toUpdate } = files.reduce(
-            (acc, publicKey) => {
+        await Promise.all(
+            files.map(async (publicKey) => {
                 const fingerprint = publicKey.getFingerprint();
-
-                if (existingFingerprints.includes(fingerprint)) {
-                    acc.toUpdate.push(publicKey);
-                    return acc;
+                const { isExpired, isRevoked } = await getKeyEncryptStatus(publicKey);
+                isExpired && expiredFingerprints.add(fingerprint);
+                isRevoked && revokedFingerprints.add(fingerprint);
+                if (!trustedFingerprints.has(fingerprint)) {
+                    trustedFingerprints.add(fingerprint);
+                    return pinned.push(publicKey);
                 }
-
-                acc.toAdd.push(publicKey);
-                return acc;
-            },
-            { toAdd: [], toUpdate: [] }
-        );
-
-        const pinned = model.keys.pinned
-            .map((publicKey) => {
-                const fingerprint = publicKey.getFingerprint();
-                const found = toUpdate.find((publicKey) => publicKey.getFingerprint() === fingerprint);
-                return found ? found : publicKey;
+                const indexFound = pinned.findIndex((publicKey) => publicKey.getFingerprint() === fingerprint);
+                return pinned.splice(indexFound, 1, publicKey);
             })
-            .concat(toAdd);
+        );
 
         setModel({
             ...model,
             keys: { ...model.keys, pinned },
-            trustedFingerprints: [...model.trustedFingerprints, ...toAdd.map((publicKey) => publicKey.getFingerprint())]
+            trustedFingerprints,
+            expiredFingerprints,
+            revokedFingerprints
         });
     };
 
@@ -80,7 +76,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                 <Alert learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
                     .t`Only change these settings if you are using PGP with non-ProtonMail recipients.`}</Alert>
             )}
-            {model.isPGPExternalWithoutWKDKeys && model.keysExpired && (
+            {model.isPGPExternalWithoutWKDKeys && model.noPinnedKeyCanSend && (
                 <Alert type="error" learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
                     .t`All uploaded keys are expired or revoked! Encryption is automatically disabled.`}</Alert>
             )}
@@ -98,7 +94,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         <Toggle
                             id="encrypt-toggle"
                             checked={model.encrypt}
-                            disabled={!model.keys.pinned.length || model.keysExpired}
+                            disabled={!model.keys.pinned.length || model.noPinnedKeyCanSend}
                             onChange={({ target }) =>
                                 setModel({
                                     ...model,
