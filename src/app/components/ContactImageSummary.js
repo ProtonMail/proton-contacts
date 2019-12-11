@@ -40,7 +40,7 @@ const ContactImageSummary = ({ photo, name }) => {
 
     if (!photo) {
         return (
-            <div className="rounded50 bordered bg-white ratio-container-square mb0">
+            <div className="rounded50 bordered bg-white-dm ratio-container-square mb0">
                 <span className="inner-ratio-container flex">
                     <span className="mauto color-global-border h1">{getInitial(name)}</span>
                 </span>
@@ -83,7 +83,7 @@ const ContactImageSummary = ({ photo, name }) => {
     }
 
     return (
-        <div className="rounded50 bordered bg-white ratio-container-square mb0">
+        <div className="rounded50 bordered bg-white-dm ratio-container-square mb0">
             <span className="inner-ratio-container flex">
                 <span className="mauto color-global-border">
                     <Button onClick={handleClick}>{c('Action').t`Load photo`}</Button>
