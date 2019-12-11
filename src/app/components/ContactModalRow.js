@@ -44,8 +44,8 @@ const ContactModalRow = ({ property, onChange, onRemove, isOrderable = false }) 
         <div className="flex flex-nowrap flex-item-noshrink">
             {isOrderable ? (
                 <OrderableHandle key="icon">
-                    <div className="cursor-row-resize mr0-5 flex flex-item-noshrink mt1r">
-                        <Icon name="text-justify" />
+                    <div className="cursor-row-resize mr0-5 flex flex-item-noshrink mb1">
+                        <Icon name="text-justify" className="mtauto mbauto" />
                     </div>
                 </OrderableHandle>
             ) : (

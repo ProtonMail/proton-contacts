@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Input } from 'react-components';
+import { classnames, Input } from 'react-components';
 import { c } from 'ttag';
 
 import { POST_BOX, EXTENDED, STREET, LOCALITY, REGION, POSTAL_CODE, COUNTRY } from '../constants';
@@ -55,7 +55,7 @@ const ContactAdrField = ({ value, onChange }) => {
                     onChange={handleChange(POSTAL_CODE)}
                 />
             </div>
-            <div className="mb1">
+            <div className={classnames([(address[POST_BOX] || address[EXTENDED]) && 'mb1'])}>
                 <Input
                     id="country"
                     value={address[COUNTRY]}
@@ -64,7 +64,7 @@ const ContactAdrField = ({ value, onChange }) => {
                 />
             </div>
             {address[POST_BOX] ? (
-                <div className="mb1">
+                <div className={classnames([address[EXTENDED] && 'mb1'])}>
                     <Input
                         id="postBox"
                         value={address[POST_BOX]}
@@ -74,7 +74,7 @@ const ContactAdrField = ({ value, onChange }) => {
                 </div>
             ) : null}
             {address[EXTENDED] ? (
-                <div className="mb1">
+                <div>
                     <Input
                         id="extended"
                         value={address[EXTENDED]}
