@@ -8,7 +8,6 @@ import ContactSchemeSelect from './ContactSchemeSelect';
 import ContactKeysTable from './ContactKeysTable';
 
 const ContactPgpSettings = ({ model, setModel }) => {
-    console.log(model.noTrustedApiKeyCanSend);
     const { createNotification } = useNotifications();
     const hasApiKeys = !!model.keys.api.length;
     const hasPinnedKeys = !!model.keys.pinned.length;

@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-    FormModal,
+    useApi,
+    useMailSettings,
+    useEventManager,
+    useNotifications,
+    useLoading,
     Alert,
     Row,
     Label,
     Field,
     Info,
     LinkButton,
-    useApi,
-    useMailSettings,
-    useEventManager,
-    useNotifications,
-    useLoading
+    ContentModal,
+    InnerModal,
+    DialogModal,
+    ResetButton,
+    FooterModal,
+    PrimaryButton,
+    Icon
 } from 'react-components';
 import { c } from 'ttag';
 
@@ -48,6 +54,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     const { createNotification } = useNotifications();
     const [{ PGPScheme, Sign }, loadingMailSettings] = useMailSettings();
 
+    const isLoading = loading || loadingMailSettings;
     const { value: Email, group: emailGroup } = emailProperty;
     const isMimeTypeFixed = model.isPGPExternal && model.sign;
     const hasPGPInline = (model.scheme || PGP_MAP[PGPScheme]) === PGP_INLINE;
@@ -125,7 +132,6 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
         const allKeys = model.isPGPInternal ? [...model.keys.api] : [...model.keys.api, ...model.keys.pinned];
         const trustedKeys = allKeys.filter((publicKey) => model.trustedFingerprints.has(publicKey.getFingerprint()));
         const uniqueTrustedKeys = uniqueBy(trustedKeys, (publicKey) => publicKey.getFingerprint());
-
         return uniqueTrustedKeys.map((publicKey, index) => toKeyProperty({ publicKey, group, index }));
     };
 
@@ -172,14 +178,16 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
          * * re-order api keys (trusted take preference)
          * * move expired keys to the bottom of the list
          */
-        const noPinnedKeyCanSend = !model.keys.pinned
-            .map((publicKey) => {
-                const fingerprint = publicKey.getFingerprint();
-                const canSend =
-                    !model.expiredFingerprints.has(fingerprint) && !model.revokedFingerprints.has(fingerprint);
-                return canSend;
-            })
-            .filter(Boolean).length;
+        const noPinnedKeyCanSend = !model.keys.pinned.length
+            ? false
+            : !model.keys.pinned
+                  .map((publicKey) => {
+                      const fingerprint = publicKey.getFingerprint();
+                      const canSend =
+                          !model.expiredFingerprints.has(fingerprint) && !model.revokedFingerprints.has(fingerprint);
+                      return canSend;
+                  })
+                  .filter(Boolean).length;
         const trustedApiKeys = model.keys.api.filter((key) => model.trustedFingerprints.has(key.getFingerprint()));
         const noTrustedApiKeyCanSend = !trustedApiKeys.length
             ? false
@@ -211,58 +219,76 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     }, [isMimeTypeFixed, hasPGPInline]);
 
     return (
-        <FormModal
-            loading={loading || loadingMailSettings}
-            submit={c('Action').t`Save`}
-            onSubmit={() => withLoading(handleSubmit())}
-            title={c('Title').t`Email settings (${Email})`}
-            {...rest}
-        >
-            {!isMimeTypeFixed ? (
-                <Alert>
-                    {c('Info')
-                        .t`Select the email format you want to be used by default when sending an email to this email address.`}
-                </Alert>
-            ) : hasPGPInline ? (
-                <Alert>
-                    {c('Info')
-                        .t`PGP/Inline is only compatible with Plain Text format. Please note that ProtonMail always signs PGP/Inline messages.`}
-                </Alert>
-            ) : (
-                <Alert>
-                    {c('Info')
-                        .t`PGP/MIME automatically sends the message using the current composer mode. Please note that ProtonMail always signs PGP/MIME messages.`}
-                </Alert>
-            )}
-            <Row>
-                <Label>
-                    {c('Label').t`Email format`}
-                    <Info
-                        className="ml0-5"
-                        title={c('Tooltip')
-                            .t`Automatic indicates that the format in the composer is used to send to this user. Plain text indicates that the message will always be converted to plain text on send.`}
-                    />
-                </Label>
-                <Field>
-                    <ContactMIMETypeSelect
-                        disabled={isMimeTypeFixed}
-                        value={model.mimeType}
-                        onChange={(mimeType) => setModel({ ...model, mimeType })}
-                    />
-                </Field>
-            </Row>
-            <div className="mb1">
-                <LinkButton
-                    onClick={() => setShowPgpSettings(!showPgpSettings)}
-                    disabled={loading || loadingMailSettings}
+        <DialogModal modalTitleID="modalTitle" loading={isLoading} {...rest}>
+            <header className="pm-modalHeader">
+                <button
+                    type="button"
+                    className="pm-modalClose"
+                    title={c('Action').t`Close modal`}
+                    onClick={rest.onClose}
                 >
-                    {showPgpSettings
-                        ? c('Action').t`Hide advanced PGP settings`
-                        : c('Action').t`Show advanced PGP settings`}
-                </LinkButton>
-            </div>
-            {showPgpSettings ? <ContactPgpSettings model={model} setModel={setModel} /> : null}
-        </FormModal>
+                    <Icon className="pm-modalClose-icon" name="close" />
+                    <span className="sr-only">{c('Action').t`Close modal`}</span>
+                </button>
+                <h1 id="modalTitle" className="pm-modalTitle ellipsis">
+                    {c('Title').t`Email settings (${Email})`}
+                </h1>
+            </header>
+            <ContentModal onSubmit={() => withLoading(handleSubmit())} onReset={rest.onClose} noValidate={false}>
+                <InnerModal>
+                    {!isMimeTypeFixed ? (
+                        <Alert>
+                            {c('Info')
+                                .t`Select the email format you want to be used by default when sending an email to this email address.`}
+                        </Alert>
+                    ) : hasPGPInline ? (
+                        <Alert>
+                            {c('Info')
+                                .t`PGP/Inline is only compatible with Plain Text format. Please note that ProtonMail always signs PGP/Inline messages.`}
+                        </Alert>
+                    ) : (
+                        <Alert>
+                            {c('Info')
+                                .t`PGP/MIME automatically sends the message using the current composer mode. Please note that ProtonMail always signs PGP/MIME messages.`}
+                        </Alert>
+                    )}
+                    <Row>
+                        <Label>
+                            {c('Label').t`Email format`}
+                            <Info
+                                className="ml0-5"
+                                title={c('Tooltip')
+                                    .t`Automatic indicates that the format in the composer is used to send to this user. Plain text indicates that the message will always be converted to plain text on send.`}
+                            />
+                        </Label>
+                        <Field>
+                            <ContactMIMETypeSelect
+                                disabled={isMimeTypeFixed}
+                                value={model.mimeType}
+                                onChange={(mimeType) => setModel({ ...model, mimeType })}
+                            />
+                        </Field>
+                    </Row>
+                    <div className="mb1">
+                        <LinkButton
+                            onClick={() => setShowPgpSettings(!showPgpSettings)}
+                            disabled={loading || loadingMailSettings}
+                        >
+                            {showPgpSettings
+                                ? c('Action').t`Hide advanced PGP settings`
+                                : c('Action').t`Show advanced PGP settings`}
+                        </LinkButton>
+                    </div>
+                    {showPgpSettings ? <ContactPgpSettings model={model} setModel={setModel} /> : null}
+                </InnerModal>
+                <FooterModal>
+                    <ResetButton disabled={isLoading}>{c('Action').t`Cancel`}</ResetButton>
+                    <PrimaryButton loading={isLoading} disabled={!showPgpSettings} type="submit">
+                        {c('Action').t`Save`}
+                    </PrimaryButton>
+                </FooterModal>
+            </ContentModal>
+        </DialogModal>
     );
 };
 
