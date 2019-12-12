@@ -81,6 +81,13 @@ export const formatAdr = (adr = []) => {
         .join(', ');
 };
 
+/**
+ * Given an array of vCard properties, extract the keys and key-related fields
+ * relevant for an email address
+ * @param {Array} properties
+ * @param {String} emailGroup       Group that characterizes the email address
+ * @returns {Promise<{scheme: String, encrypt: Boolean, mimeType: String, pinnedKeys: Array}>}
+ */
 export const getKeysFromProperties = async (properties, emailGroup) => {
     const { pinnedKeyPromises, mimeType, encrypt, scheme } = properties
         .filter(({ field, group }) => VCARD_KEY_FIELDS.includes(field) && group === emailGroup)

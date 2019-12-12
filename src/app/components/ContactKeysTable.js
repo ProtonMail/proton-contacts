@@ -11,8 +11,6 @@ import { describe } from 'proton-shared/lib/keys/keysAlgorithm';
 
 import KeyWarningIcon from './KeyWarningIcon';
 
-import { KEY_FLAGS } from 'proton-shared/lib/constants';
-
 const ContactKeysTable = ({ model, setModel }) => {
     const [keys, setKeys] = useState([]);
     const { isNarrow, isTinyMobile } = useActiveBreakpoint();
@@ -36,14 +34,19 @@ const ContactKeysTable = ({ model, setModel }) => {
                     const isTrusted = model.trustedFingerprints.has(fingerprint);
                     const isExpired = model.expiredFingerprints.has(fingerprint);
                     const isRevoked = model.revokedFingerprints.has(fingerprint);
-                    const isActive = !index && !isExpired && (totalApiKeys ? true : model.encrypt);
+                    const isVerificationOnly = model.verifyOnlyFingerprints.has(fingerprint);
+                    const isActive =
+                        !index &&
+                        !isExpired &&
+                        !isRevoked &&
+                        !isVerificationOnly &&
+                        (totalApiKeys ? true : model.encrypt);
                     const isWKD = model.isPGPExternal && index < totalApiKeys;
-                    const isVerificationOnly =
-                        index < totalApiKeys && !(model.apiKeysFlags[fingerprint] & KEY_FLAGS.ENABLE_ENCRYPTION);
                     const isUploaded = index >= totalApiKeys;
                     const canBeActive =
                         !!index &&
                         !isExpired &&
+                        !isRevoked &&
                         !isVerificationOnly &&
                         (index < totalApiKeys ? isTrusted : !totalApiKeys && model.encrypt);
                     const canBeTrusted = !isTrusted && !isUploaded;

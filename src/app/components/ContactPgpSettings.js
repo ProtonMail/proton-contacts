@@ -60,7 +60,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         .t`Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service.`}
                 </Alert>
             )}
-            {!!model.keys.pinned.length && model.noPrimary && (
+            {!!model.keys.pinned.length && model.noTrustedApiKeyCanSend && (
                 <Alert type="warning">{c('Info')
                     .t`Address Verification with Trusted Keys is enabled for this address. To be able to send to this address, first trust public keys that can be used for sending.`}</Alert>
             )}

@@ -1,6 +1,7 @@
 import { RECIPIENT_TYPE, KEY_FLAGS } from 'proton-shared/lib/constants';
-import { arrayToBinaryString, encodeBase64, stripArmor } from 'pmcrypto';
+import { arrayToBinaryString, encodeBase64 } from 'pmcrypto';
 import { serverTime } from 'pmcrypto/lib/serverTime';
+import { toBitMap } from 'proton-shared/lib/helpers/object';
 
 const { TYPE_INTERNAL } = RECIPIENT_TYPE;
 const { ENABLE_ENCRYPTION } = KEY_FLAGS;
@@ -19,15 +20,6 @@ export const isInternalUser = ({ RecipientType }) => RecipientType === TYPE_INTE
  */
 export const isDisabledUser = (config) =>
     isInternalUser(config) && !config.Keys.some(({ Flags }) => Flags & ENABLE_ENCRYPTION);
-
-export const getRawInternalKeys = ({ Keys = [] }) => {
-    return Promise.all(
-        Keys.filter(({ Flags }) => Flags & ENABLE_ENCRYPTION).map(async ({ PublicKey }) => {
-            const stripped = await stripArmor(PublicKey);
-            return encodeBase64(arrayToBinaryString(stripped));
-        })
-    );
-};
 
 /**
  * Check if current email mismatch with email define in key data
@@ -63,27 +55,29 @@ export const hasNoPrimary = (unarmoredKeys = [], contactKeys = []) => {
 };
 
 /**
- * Sort list of keys retrieved from the API. Trusted keys take preference
+ * Sort list of keys retrieved from the API. Trusted keys take preference.
+ * For two keys, both trusted or not, non-verify-only keys take preference
  * @param {Array} keys
- * @param {Set} trustedFingerprints        { fingerprint: Boolean }
+ * @param {Set} trustedFingerprints
+ * @param {Set} verifyOnlyFingerprints
  * @returns {Array}
  */
-export const sortApiKeys = (keys = [], trustedFingerprints) => {
-    const { trustedKeys, otherKeys } = keys.reduce(
-        (acc, key) => {
-            const fingerprint = key.getFingerprint();
-            if (trustedFingerprints.has(fingerprint)) {
-                acc.trustedKeys.push(key);
-            } else {
-                acc.otherKeys.push(key);
-            }
-            return acc;
-        },
-        { trustedKeys: [], otherKeys: [] }
-    );
-
-    return trustedKeys.concat(otherKeys);
-};
+export const sortApiKeys = (keys = [], trustedFingerprints, verifyOnlyFingerprints) =>
+    keys
+        .reduce(
+            (acc, key) => {
+                const fingerprint = key.getFingerprint();
+                // calculate order through a bitmap
+                const index = toBitMap({
+                    isVerificationOnly: verifyOnlyFingerprints.has(fingerprint),
+                    isNotTrusted: !trustedFingerprints.has(fingerprint)
+                });
+                acc[index].push(key);
+                return acc;
+            },
+            Array.from({ length: 4 }).map(() => [])
+        )
+        .flat();
 
 /**
  * Sort list of pinned keys retrieved from the API. Keys that can be used for sending take preference
@@ -92,23 +86,21 @@ export const sortApiKeys = (keys = [], trustedFingerprints) => {
  * @param {Set} revokedFingerprints
  * @returns {Array}
  */
-export const sortPinnedKeys = (keys = [], expiredFingerprints, revokedFingerprints) => {
-    const { canSendKeys, cannotSendKeys } = keys.reduce(
-        (acc, key) => {
-            const fingerprint = key.getFingerprint();
-            const canSend = !expiredFingerprints.has(fingerprint) && !revokedFingerprints.has(fingerprint);
-            if (canSend) {
-                acc.canSendKeys.push(key);
-            } else {
-                acc.cannotSendKeys.push(key);
-            }
-            return acc;
-        },
-        { canSendKeys: [], cannotSendKeys: [] }
-    );
-
-    return canSendKeys.concat(cannotSendKeys);
-};
+export const sortPinnedKeys = (keys = [], expiredFingerprints, revokedFingerprints) =>
+    keys
+        .reduce(
+            (acc, key) => {
+                const fingerprint = key.getFingerprint();
+                // calculate order through a bitmap
+                const index = toBitMap({
+                    cannotSend: expiredFingerprints.has(fingerprint) || revokedFingerprints.has(fingerprint)
+                });
+                acc[index].push(key);
+                return acc;
+            },
+            Array.from({ length: 2 }).map(() => [])
+        )
+        .flat();
 
 /**
  * Given a key, return its expiration and revoke status

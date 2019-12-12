@@ -20,21 +20,13 @@ import { prepareContacts } from '../helpers/encrypt';
 import { hasCategories } from '../helpers/import';
 import { reOrderByPref } from '../helpers/properties';
 import { getKeysFromProperties, toKeyProperty } from '../helpers/property';
-import {
-    isInternalUser,
-    isDisabledUser,
-    getRawInternalKeys,
-    getKeyEncryptStatus,
-    hasNoPrimary,
-    sortPinnedKeys,
-    sortApiKeys
-} from '../helpers/pgp';
+import { isInternalUser, isDisabledUser, getKeyEncryptStatus, sortPinnedKeys, sortApiKeys } from '../helpers/pgp';
 import { addContacts } from 'proton-shared/lib/api/contacts';
 import { getPublicKeysEmailHelper } from 'proton-shared/lib/api/helpers/publicKeys';
 import { uniqueBy } from 'proton-shared/lib/helpers/array';
 
 import { VCARD_KEY_FIELDS, PGP_INLINE, PGP_MIME, PGP_SIGN, CATEGORIES } from '../constants';
-import { PACKAGE_TYPE, MIME_TYPES } from 'proton-shared/lib/constants';
+import { PACKAGE_TYPE, MIME_TYPES, KEY_FLAGS } from 'proton-shared/lib/constants';
 
 import ContactMIMETypeSelect from './ContactMIMETypeSelect';
 import ContactPgpSettings from './ContactPgpSettings';
@@ -84,18 +76,24 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
         const apiKeysConfig = await getPublicKeysEmailHelper(api, Email);
         const internalUser = isInternalUser(apiKeysConfig);
         const externalUser = !internalUser;
-        const { apiKeys, apiKeysFlags } = apiKeysConfig.Keys.reduce(
+        const verifyOnlyFingerprints = new Set();
+        const { apiKeys } = apiKeysConfig.Keys.reduce(
             (acc, { Flags }, index) => {
                 const publicKey = apiKeysConfig.publicKeys[index];
                 if (publicKey) {
                     acc.apiKeys.push(publicKey);
-                    acc.apiKeysFlags[publicKey.getFingerprint()] = Flags;
+                    const isVerificationOnly = !(Flags & KEY_FLAGS.ENABLE_ENCRYPTION);
+                    isVerificationOnly && verifyOnlyFingerprints.add(publicKey.getFingerprint());
                 }
                 return acc;
             },
-            { apiKeys: [], apiKeysFlags: Object.create(null) }
+            { apiKeys: [] }
         );
-        const unarmoredApiKeys = await getRawInternalKeys(apiKeysConfig);
+        const orderedApiKeys = sortApiKeys(apiKeys, trustedFingerprints, verifyOnlyFingerprints);
+        const noTrustedApiKeyCanSend = !orderedApiKeys
+            .filter((key) => trustedFingerprints.has(key.getFingerprint()))
+            .map((key) => !verifyOnlyFingerprints.has(key.getFingerprint()))
+            .filter(Boolean).length;
 
         setModel({
             mimeType,
@@ -103,17 +101,17 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             scheme,
             sign: Sign === PGP_SIGN,
             email: Email,
-            keys: { api: apiKeys, pinned: pinnedKeys },
-            apiKeysFlags,
+            keys: { api: orderedApiKeys, pinned: pinnedKeys },
             trustedFingerprints,
             expiredFingerprints,
             revokedFingerprints,
+            verifyOnlyFingerprints,
             isPGPExternal: externalUser,
             isPGPInternal: internalUser,
             isPGPExternalWithWKDKeys: externalUser && !!apiKeys.length,
             isPGPExternalWithoutWKDKeys: externalUser && !apiKeys.length,
             pgpAddressDisabled: isDisabledUser(apiKeysConfig),
-            noPrimary: hasNoPrimary(unarmoredApiKeys, pinnedKeys),
+            noTrustedApiKeyCanSend,
             noPinnedKeyCanSend
         });
     };
@@ -170,7 +168,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
         /**
          * When the list of trusted, expired or revoked keys change,
          * * update the encrypt toggle (off if all keys are expired or no keys are pinned)
-         * * re-check if these keys are all expired
+         * * re-check if the new keys can send
          * * re-order api keys (trusted take preference)
          * * move expired keys to the bottom of the list
          */
@@ -182,16 +180,21 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
                 return canSend;
             })
             .filter(Boolean).length;
+        const noTrustedApiKeyCanSend = !model.keys.api
+            .filter((key) => model.trustedFingerprints.has(key.getFingerprint()))
+            .map((key) => !model.verifyOnlyFingerprints.has(key.getFingerprint()))
+            .filter(Boolean).length;
         setModel((model) => ({
             ...model,
             noPinnedKeyCanSend,
+            noTrustedApiKeyCanSend,
             encrypt: !noPinnedKeyCanSend && !!model.keys.pinned.length && model.encrypt,
             keys: {
-                api: sortApiKeys(model.keys.api, model.trustedFingerprints),
+                api: sortApiKeys(model.keys.api, model.trustedFingerprints, model.verifyOnlyFingerprints),
                 pinned: sortPinnedKeys(model.keys.pinned, model.expiredFingerprints, model.revokedFingerprints)
             }
         }));
-    }, [model.trustedFingerprints, model.expiredFingerprints, model.revokedFingerprints]);
+    }, [model.trustedFingerprints, model.expiredFingerprints, model.revokedFingerprints, model.verifyOnlyFingerprints]);
 
     useEffect(() => {
         // take into account rules relating email format and cryptographic scheme
