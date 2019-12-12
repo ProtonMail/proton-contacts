@@ -90,10 +90,10 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             { apiKeys: [] }
         );
         const orderedApiKeys = sortApiKeys(apiKeys, trustedFingerprints, verifyOnlyFingerprints);
-        const noTrustedApiKeyCanSend = !orderedApiKeys
-            .filter((key) => trustedFingerprints.has(key.getFingerprint()))
-            .map((key) => !verifyOnlyFingerprints.has(key.getFingerprint()))
-            .filter(Boolean).length;
+        const trustedApiKeys = orderedApiKeys.filter((key) => trustedFingerprints.has(key.getFingerprint()));
+        const noTrustedApiKeyCanSend = !trustedApiKeys.length
+            ? false
+            : !trustedApiKeys.map((key) => !verifyOnlyFingerprints.has(key.getFingerprint())).filter(Boolean).length;
 
         setModel({
             mimeType,
@@ -180,10 +180,11 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
                 return canSend;
             })
             .filter(Boolean).length;
-        const noTrustedApiKeyCanSend = !model.keys.api
-            .filter((key) => model.trustedFingerprints.has(key.getFingerprint()))
-            .map((key) => !model.verifyOnlyFingerprints.has(key.getFingerprint()))
-            .filter(Boolean).length;
+        const trustedApiKeys = model.keys.api.filter((key) => model.trustedFingerprints.has(key.getFingerprint()));
+        const noTrustedApiKeyCanSend = !trustedApiKeys.length
+            ? false
+            : !trustedApiKeys.map((key) => !model.verifyOnlyFingerprints.has(key.getFingerprint())).filter(Boolean)
+                  .length;
         setModel((model) => ({
             ...model,
             noPinnedKeyCanSend,
