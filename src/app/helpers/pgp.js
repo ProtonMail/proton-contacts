@@ -1,5 +1,4 @@
 import { RECIPIENT_TYPE, KEY_FLAGS } from 'proton-shared/lib/constants';
-import { arrayToBinaryString, encodeBase64 } from 'pmcrypto';
 import { serverTime } from 'pmcrypto/lib/serverTime';
 import { toBitMap } from 'proton-shared/lib/helpers/object';
 
@@ -46,17 +45,9 @@ export const emailMismatch = ({ users = [] }, currentEmail) => {
     return keyEmails;
 };
 
-export const hasNoPrimary = (unarmoredKeys = [], contactKeys = []) => {
-    if (!unarmoredKeys.length) {
-        return false;
-    }
-    const keys = contactKeys.map((value) => encodeBase64(arrayToBinaryString(value)));
-    return !unarmoredKeys.some((k) => keys.includes(k));
-};
-
 /**
  * Sort list of keys retrieved from the API. Trusted keys take preference.
- * For two keys, both trusted or not, non-verify-only keys take preference
+ * For two keys such that both are either trusted or not, non-verify-only keys take preference
  * @param {Array} keys
  * @param {Set} trustedFingerprints
  * @param {Set} verifyOnlyFingerprints
@@ -105,8 +96,7 @@ export const sortPinnedKeys = (keys = [], expiredFingerprints, revokedFingerprin
 /**
  * Given a key, return its expiration and revoke status
  * @param publicKey
- * @param date          Unix timestamp
- * @returns {Promise<{expired: boolean, revoked: boolean}>}
+ * @returns {Promise<{ isExpired: boolean, isRevoked: boolean}>}
  */
 export const getKeyEncryptStatus = async (publicKey) => {
     const date = +serverTime();
