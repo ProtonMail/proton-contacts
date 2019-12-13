@@ -9,8 +9,20 @@ import ContactKeysTable from './ContactKeysTable';
 
 const ContactPgpSettings = ({ model, setModel }) => {
     const { createNotification } = useNotifications();
+    const trustedApiKeys = model.keys.api.filter((key) => model.trustedFingerprints.has(key.getFingerprint()));
     const hasApiKeys = !!model.keys.api.length;
     const hasPinnedKeys = !!model.keys.pinned.length;
+    const hasTrustedApiKeys = !!trustedApiKeys.length;
+
+    const noPinnedKeyCanSend =
+        hasPinnedKeys &&
+        !model.keys.pinned.some((publicKey) => {
+            const fingerprint = publicKey.getFingerprint();
+            const canSend = !model.expiredFingerprints.has(fingerprint) && !model.revokedFingerprints.has(fingerprint);
+            return canSend;
+        });
+    const noTrustedApiKeyCanSend =
+        hasTrustedApiKeys && !trustedApiKeys.some((key) => !model.verifyOnlyFingerprints.has(key.getFingerprint()));
 
     /**
      * Add / update keys to model
@@ -24,9 +36,9 @@ const ContactPgpSettings = ({ model, setModel }) => {
             });
         }
         const pinned = [...model.keys.pinned];
-        const trustedFingerprints = new Set([...model.trustedFingerprints]);
-        const revokedFingerprints = new Set([...model.revokedFingerprints]);
-        const expiredFingerprints = new Set([...model.expiredFingerprints]);
+        const trustedFingerprints = new Set(model.trustedFingerprints);
+        const revokedFingerprints = new Set(model.revokedFingerprints);
+        const expiredFingerprints = new Set(model.expiredFingerprints);
 
         await Promise.all(
             files.map(async (publicKey) => {
@@ -60,7 +72,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         .t`Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service.`}
                 </Alert>
             )}
-            {!!model.keys.pinned.length && model.noTrustedApiKeyCanSend && (
+            {!!model.keys.pinned.length && noTrustedApiKeyCanSend && (
                 <Alert type="warning">{c('Info')
                     .t`Address Verification with Trusted Keys is enabled for this address. To be able to send to this address, first trust public keys that can be used for sending.`}</Alert>
             )}
@@ -76,7 +88,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                 <Alert learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
                     .t`Only change these settings if you are using PGP with non-ProtonMail recipients.`}</Alert>
             )}
-            {model.isPGPExternalWithoutWKDKeys && model.noPinnedKeyCanSend && (
+            {model.isPGPExternalWithoutWKDKeys && noPinnedKeyCanSend && (
                 <Alert type="error" learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
                     .t`All uploaded keys are expired or revoked! Encryption is automatically disabled.`}</Alert>
             )}

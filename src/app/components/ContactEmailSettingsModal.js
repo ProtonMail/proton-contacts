@@ -69,15 +69,15 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
         const trustedFingerprints = new Set();
         const expiredFingerprints = new Set();
         const revokedFingerprints = new Set();
-        const noPinnedKeyCanSend = pinnedKeys.reduce(async (acc, publicKey, index) => {
-            const fingerprint = publicKey.getFingerprint();
-            const { isExpired, isRevoked } = await getKeyEncryptStatus(publicKey);
-            trustedFingerprints.add(fingerprint);
-            isExpired && expiredFingerprints.add(fingerprint);
-            isRevoked && revokedFingerprints.add(fingerprint);
-            const cannotSend = isExpired || isRevoked;
-            return index ? cannotSend : acc && cannotSend;
-        }, undefined);
+        await Promise.all(
+            pinnedKeys.map(async (publicKey) => {
+                const fingerprint = publicKey.getFingerprint();
+                const { isExpired, isRevoked } = await getKeyEncryptStatus(publicKey);
+                trustedFingerprints.add(fingerprint);
+                isExpired && expiredFingerprints.add(fingerprint);
+                isRevoked && revokedFingerprints.add(fingerprint);
+            })
+        );
 
         // prepare keys retrieved from the API
         const apiKeysConfig = await getPublicKeysEmailHelper(api, Email);
@@ -97,10 +97,6 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             { apiKeys: [] }
         );
         const orderedApiKeys = sortApiKeys(apiKeys, trustedFingerprints, verifyOnlyFingerprints);
-        const trustedApiKeys = orderedApiKeys.filter((key) => trustedFingerprints.has(key.getFingerprint()));
-        const noTrustedApiKeyCanSend = !trustedApiKeys.length
-            ? false
-            : !trustedApiKeys.map((key) => !verifyOnlyFingerprints.has(key.getFingerprint())).filter(Boolean).length;
 
         setModel({
             mimeType,
@@ -117,15 +113,15 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             isPGPInternal: internalUser,
             isPGPExternalWithWKDKeys: externalUser && !!apiKeys.length,
             isPGPExternalWithoutWKDKeys: externalUser && !apiKeys.length,
-            pgpAddressDisabled: isDisabledUser(apiKeysConfig),
-            noTrustedApiKeyCanSend,
-            noPinnedKeyCanSend
+            pgpAddressDisabled: isDisabledUser(apiKeysConfig)
         });
     };
 
     /**
      * Collect keys from the model to save
-     * @param {String} group attach to the current email address
+     * @param {String} group a
+        // prepare keys retrieved from the API
+        const apiKeysConfig =ttach to the current email address
      * @returns {Array} key properties to save in the vCard
      */
     const getKeysProperties = (group) => {
@@ -178,25 +174,16 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
          * * re-order api keys (trusted take preference)
          * * move expired keys to the bottom of the list
          */
-        const noPinnedKeyCanSend = !model.keys.pinned.length
-            ? false
-            : !model.keys.pinned
-                  .map((publicKey) => {
-                      const fingerprint = publicKey.getFingerprint();
-                      const canSend =
-                          !model.expiredFingerprints.has(fingerprint) && !model.revokedFingerprints.has(fingerprint);
-                      return canSend;
-                  })
-                  .filter(Boolean).length;
-        const trustedApiKeys = model.keys.api.filter((key) => model.trustedFingerprints.has(key.getFingerprint()));
-        const noTrustedApiKeyCanSend = !trustedApiKeys.length
-            ? false
-            : !trustedApiKeys.map((key) => !model.verifyOnlyFingerprints.has(key.getFingerprint())).filter(Boolean)
-                  .length;
+        const noPinnedKeyCanSend =
+            !!model.keys.pinned.length &&
+            !model.keys.pinned.some((publicKey) => {
+                const fingerprint = publicKey.getFingerprint();
+                const canSend =
+                    !model.expiredFingerprints.has(fingerprint) && !model.revokedFingerprints.has(fingerprint);
+                return canSend;
+            });
         setModel((model) => ({
             ...model,
-            noPinnedKeyCanSend,
-            noTrustedApiKeyCanSend,
             encrypt: !noPinnedKeyCanSend && !!model.keys.pinned.length && model.encrypt,
             keys: {
                 api: sortApiKeys(model.keys.api, model.trustedFingerprints, model.verifyOnlyFingerprints),
@@ -219,7 +206,8 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     }, [isMimeTypeFixed, hasPGPInline]);
 
     return (
-        <DialogModal modalTitleID="modalTitle" loading={isLoading} {...rest}>
+        // we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+        <DialogModal modalTitleID="modalTitle" {...rest}>
             <header className="pm-modalHeader">
                 <button
                     type="button"

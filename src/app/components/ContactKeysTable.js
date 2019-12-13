@@ -152,7 +152,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                             canBeTrusted && {
                                 text: c('Action').t`Trust`,
                                 onClick() {
-                                    const trustedFingerprints = new Set([...model.trustedFingerprints]);
+                                    const trustedFingerprints = new Set(model.trustedFingerprints);
                                     trustedFingerprints.add(fingerprint);
                                     setModel({ ...model, trustedFingerprints });
                                 }
@@ -160,7 +160,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                             canBeUntrusted && {
                                 text: c('Action').t`Untrust`,
                                 onClick() {
-                                    const trustedFingerprints = new Set([...model.trustedFingerprints]);
+                                    const trustedFingerprints = new Set(model.trustedFingerprints);
                                     trustedFingerprints.delete(fingerprint);
                                     setModel({ ...model, trustedFingerprints });
                                 }
@@ -168,9 +168,9 @@ const ContactKeysTable = ({ model, setModel }) => {
                             isUploaded && {
                                 text: c('Action').t`Remove`,
                                 onClick() {
-                                    const trustedFingerprints = new Set([...model.trustedFingerprints]);
-                                    const expiredFingerprints = new Set([...model.expiredFingerprints]);
-                                    const revokedFingerprints = new Set([...model.revokedFingerprints]);
+                                    const trustedFingerprints = new Set(model.trustedFingerprints);
+                                    const expiredFingerprints = new Set(model.expiredFingerprints);
+                                    const revokedFingerprints = new Set(model.revokedFingerprints);
                                     trustedFingerprints.delete(fingerprint);
                                     expiredFingerprints.delete(fingerprint);
                                     revokedFingerprints.delete(fingerprint);
