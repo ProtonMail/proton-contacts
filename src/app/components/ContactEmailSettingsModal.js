@@ -119,9 +119,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
 
     /**
      * Collect keys from the model to save
-     * @param {String} group a
-        // prepare keys retrieved from the API
-        const apiKeysConfig =ttach to the current email address
+     * @param {String} group attached to the current email address
      * @returns {Array} key properties to save in the vCard
      */
     const getKeysProperties = (group) => {
@@ -132,7 +130,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     };
 
     /**
-     * Save send preferences
+     * Save relevant key properties in the vCard
      * @returns {Promise}
      */
     const handleSubmit = async () => {
