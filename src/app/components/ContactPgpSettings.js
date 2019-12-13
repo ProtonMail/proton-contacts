@@ -106,7 +106,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         <Toggle
                             id="encrypt-toggle"
                             checked={model.encrypt}
-                            disabled={!model.keys.pinned.length || model.noPinnedKeyCanSend}
+                            disabled={!model.keys.pinned.length || noPinnedKeyCanSend}
                             onChange={({ target }) =>
                                 setModel({
                                     ...model,
