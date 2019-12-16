@@ -154,7 +154,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                     />
                 </Label>
                 <Field className="onmobile-mt0-5">
-                    {model.isPGPExternal && <SelectKeyFiles onFiles={handleUploadKeys} multiple={true} />}
+                    {model.isPGPExternalWithoutWKDKeys && <SelectKeyFiles onFiles={handleUploadKeys} multiple={true} />}
                 </Field>
             </Row>
             {(hasApiKeys || hasPinnedKeys) && <ContactKeysTable model={model} setModel={setModel} />}
