@@ -31,7 +31,7 @@ import { addContacts } from 'proton-shared/lib/api/contacts';
 import { getPublicKeysEmailHelper } from 'proton-shared/lib/api/helpers/publicKeys';
 import { uniqueBy } from 'proton-shared/lib/helpers/array';
 
-import { VCARD_KEY_FIELDS, PGP_INLINE, PGP_MIME, PGP_SIGN, CATEGORIES } from '../constants';
+import { VCARD_KEY_FIELDS, PGP_INLINE, PGP_MIME, CATEGORIES } from '../constants';
 import { PACKAGE_TYPE, MIME_TYPES, KEY_FLAGS } from 'proton-shared/lib/constants';
 
 import ContactMIMETypeSelect from './ContactMIMETypeSelect';
@@ -65,7 +65,11 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
      */
     const prepare = async (api) => {
         // prepare keys stored in the vCard
-        const { pinnedKeys, mimeType, encrypt, scheme } = await getKeysFromProperties(properties, emailGroup);
+        const { pinnedKeys, mimeType, encrypt, scheme, sign } = await getKeysFromProperties(
+            properties,
+            emailGroup,
+            Sign
+        );
         const trustedFingerprints = new Set();
         const expiredFingerprints = new Set();
         const revokedFingerprints = new Set();
@@ -102,7 +106,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             mimeType,
             encrypt,
             scheme,
-            sign: Sign === PGP_SIGN,
+            sign,
             email: Email,
             keys: { api: orderedApiKeys, pinned: pinnedKeys },
             trustedFingerprints,
