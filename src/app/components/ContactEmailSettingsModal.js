@@ -63,7 +63,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
      * Initialize the model for the modal
      * @returns {Promise}
      */
-    const prepare = async () => {
+    const prepare = async (api) => {
         // prepare keys stored in the vCard
         const { pinnedKeys, mimeType, encrypt, scheme } = await getKeysFromProperties(properties, emailGroup);
         const trustedFingerprints = new Set();
@@ -158,10 +158,15 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     };
 
     useEffect(() => {
+        const abortController = new AbortController();
+        const apiWithAbort = (config) => api({ ...config, signal: abortController.signal });
         // prepare the model once mail settings have been loaded
         if (!loadingMailSettings) {
-            withLoading(prepare());
+            withLoading(prepare(apiWithAbort));
         }
+        return () => {
+            abortController.abort();
+        };
     }, [loadingMailSettings]);
 
     useEffect(() => {
@@ -268,7 +273,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
                     {showPgpSettings ? <ContactPgpSettings model={model} setModel={setModel} /> : null}
                 </InnerModal>
                 <FooterModal>
-                    <ResetButton disabled={isLoading}>{c('Action').t`Cancel`}</ResetButton>
+                    <ResetButton>{c('Action').t`Cancel`}</ResetButton>
                     <PrimaryButton loading={isLoading} disabled={!showPgpSettings} type="submit">
                         {c('Action').t`Save`}
                     </PrimaryButton>
