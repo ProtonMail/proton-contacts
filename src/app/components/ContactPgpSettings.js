@@ -2,80 +2,97 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { Alert, Row, Label, Field, Info, Toggle, SelectKeyFiles, useNotifications } from 'react-components';
+import { getKeyEncryptStatus } from '../helpers/pgp';
 
 import ContactSchemeSelect from './ContactSchemeSelect';
 import ContactKeysTable from './ContactKeysTable';
 
 const ContactPgpSettings = ({ model, setModel }) => {
     const { createNotification } = useNotifications();
+    const trustedApiKeys = model.keys.api.filter((key) => model.trustedFingerprints.has(key.getFingerprint()));
+    const hasApiKeys = !!model.keys.api.length;
+    const hasPinnedKeys = !!model.keys.pinned.length;
+    const hasTrustedApiKeys = !!trustedApiKeys.length;
+
+    const noPinnedKeyCanSend =
+        hasPinnedKeys &&
+        !model.keys.pinned.some((publicKey) => {
+            const fingerprint = publicKey.getFingerprint();
+            const canSend = !model.expiredFingerprints.has(fingerprint) && !model.revokedFingerprints.has(fingerprint);
+            return canSend;
+        });
+    const noTrustedApiKeyCanSend =
+        hasTrustedApiKeys && !trustedApiKeys.some((key) => !model.verifyOnlyFingerprints.has(key.getFingerprint()));
 
     /**
      * Add / update keys to model
      * @param {Array<PublicKey>} files
      */
-    const handleUploadKeys = (files) => {
+    const handleUploadKeys = async (files) => {
         if (!files.length) {
             return createNotification({
                 type: 'error',
                 text: c('Error').t`Invalid public key file`
             });
         }
+        const pinned = [...model.keys.pinned];
+        const trustedFingerprints = new Set(model.trustedFingerprints);
+        const revokedFingerprints = new Set(model.revokedFingerprints);
+        const expiredFingerprints = new Set(model.expiredFingerprints);
 
-        // Update existing keys by looking on the fingerprint
-        // And add new one
-        const existingFingerprints = model.keys.map((publicKey) => publicKey.getFingerprint());
-        const { toAdd, toUpdate } = files.reduce(
-            (acc, publicKey) => {
+        await Promise.all(
+            files.map(async (publicKey) => {
                 const fingerprint = publicKey.getFingerprint();
-
-                if (existingFingerprints.includes(fingerprint)) {
-                    acc.toUpdate.push(publicKey);
-                    return acc;
+                const { isExpired, isRevoked } = await getKeyEncryptStatus(publicKey);
+                isExpired && expiredFingerprints.add(fingerprint);
+                isRevoked && revokedFingerprints.add(fingerprint);
+                if (!trustedFingerprints.has(fingerprint)) {
+                    trustedFingerprints.add(fingerprint);
+                    return pinned.push(publicKey);
                 }
-
-                acc.toAdd.push(publicKey);
-                return acc;
-            },
-            { toAdd: [], toUpdate: [] }
+                const indexFound = pinned.findIndex((publicKey) => publicKey.getFingerprint() === fingerprint);
+                return pinned.splice(indexFound, 1, publicKey);
+            })
         );
 
-        const keys = model.keys
-            .map((publicKey) => {
-                const fingerprint = publicKey.getFingerprint();
-                const found = toUpdate.find((publicKey) => publicKey.getFingerprint() === fingerprint);
-                return found ? found : publicKey;
-            })
-            .concat(toAdd);
-
-        setModel({ ...model, keys });
+        setModel({
+            ...model,
+            keys: { ...model.keys, pinned },
+            trustedFingerprints,
+            expiredFingerprints,
+            revokedFingerprints
+        });
     };
 
     return (
         <>
-            <Alert learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
-                .t`Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service.`}</Alert>
-            {model.keys.length && model.noPrimary ? (
+            {!hasApiKeys && (
+                <Alert learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">
+                    {c('Info')
+                        .t`Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service.`}
+                </Alert>
+            )}
+            {!!model.keys.pinned.length && noTrustedApiKeyCanSend && (
                 <Alert type="warning">{c('Info')
                     .t`Address Verification with Trusted Keys is enabled for this address. To be able to send to this address, first trust public keys that can be used for sending.`}</Alert>
-            ) : null}
-            {model.pgpAddressDisabled ? (
+            )}
+            {model.pgpAddressDisabled && (
                 <Alert type="warning">{c('Info')
                     .t`This address is disabled. To be able to send to this address, the owner must first enable the address.`}</Alert>
-            ) : null}
-            {model.isPGPInternal ? (
+            )}
+            {hasApiKeys && (
                 <Alert learnMore="https://protonmail.com/support/knowledge-base/address-verification/">{c('Info')
-                    .t`To use Address Verification, you must trust one or more available public keys, including the primary key for this address. This prevents the encrypted keys from being faked.`}</Alert>
-            ) : null}
-            {model.isPGPExternal && !model.sign ? (
+                    .t`To use Address Verification, you must trust one or more available public keys, including the one you want to use for sending. This prevents the encrypted keys from being faked.`}</Alert>
+            )}
+            {!hasApiKeys && !model.sign && (
                 <Alert learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
                     .t`Only change these settings if you are using PGP with non-ProtonMail recipients.`}</Alert>
-            ) : null}
-            {model.keysExpired ? (
-                <Alert type="warning" learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c(
-                    'Info'
-                ).t`All uploaded keys are expired or revoked! Encryption is automatically disabled.`}</Alert>
-            ) : null}
-            {model.isPGPExternal ? (
+            )}
+            {model.isPGPExternalWithoutWKDKeys && noPinnedKeyCanSend && (
+                <Alert type="error" learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
+                    .t`All uploaded keys are expired or revoked! Encryption is automatically disabled.`}</Alert>
+            )}
+            {!hasApiKeys && (
                 <Row>
                     <Label htmlFor="encrypt-toggle">
                         {c('Label').t`Encrypt emails`}
@@ -89,7 +106,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         <Toggle
                             id="encrypt-toggle"
                             checked={model.encrypt}
-                            disabled={!model.keys.length || model.keysExpired}
+                            disabled={!model.keys.pinned.length || noPinnedKeyCanSend}
                             onChange={({ target }) =>
                                 setModel({
                                     ...model,
@@ -100,15 +117,15 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         />
                     </Field>
                 </Row>
-            ) : null}
-            {model.isPGPExternal ? (
+            )}
+            {!hasApiKeys && (
                 <Row>
                     <Label htmlFor="sign-toggle">
                         {c('Label').t`Sign emails`}
                         <Info
                             className="ml0-5"
                             title={c('Tooltip')
-                                .t`Digitally signing emails helps authentify that messages are sent by you`}
+                                .t`Digitally signing emails helps authenticating that messages are sent by you`}
                         />
                     </Label>
                     <Field>
@@ -126,7 +143,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         />
                     </Field>
                 </Row>
-            ) : null}
+            )}
             <Row>
                 <Label>
                     {c('Label').t`Public keys`}
@@ -136,12 +153,12 @@ const ContactPgpSettings = ({ model, setModel }) => {
                             .t`Upload a public key to enable sending end-to-end encrypted emails to this email`}
                     />
                 </Label>
-                <Field>
-                    {model.isPGPExternal ? <SelectKeyFiles onFiles={handleUploadKeys} multiple={true} /> : null}
+                <Field className="onmobile-mt0-5">
+                    {model.isPGPExternalWithoutWKDKeys && <SelectKeyFiles onFiles={handleUploadKeys} multiple={true} />}
                 </Field>
             </Row>
-            {model.keys.length ? <ContactKeysTable model={model} setModel={setModel} /> : null}
-            {model.isPGPExternal ? (
+            {(hasApiKeys || hasPinnedKeys) && <ContactKeysTable model={model} setModel={setModel} />}
+            {!hasApiKeys && (
                 <Row>
                     <Label>
                         {c('Label').t`Cryptographic scheme`}
@@ -158,7 +175,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         />
                     </Field>
                 </Row>
-            ) : null}
+            )}
         </>
     );
 };

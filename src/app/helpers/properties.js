@@ -1,5 +1,5 @@
 // Vcard fields for which we keep track of PREF parameter
-const FIELDS_WITH_PREF = ['fn', 'email', 'tel', 'adr'];
+const FIELDS_WITH_PREF = ['fn', 'email', 'tel', 'adr', 'key'];
 
 /**
  * Given a Vcard field, return true if we take into consideration its PREF parameters
@@ -64,7 +64,28 @@ export const addPref = (properties = []) => {
 /**
  * Function that sorts properties by preference
  */
-export const sortByPref = (firstEl, secondEl) => +firstEl.pref <= +secondEl.pref;
+export const sortByPref = (firstEl, secondEl) => firstEl.pref - secondEl.pref;
+
+/**
+ * Given a list of properties with preference, reorder them according to the preference
+ * @param {Array} properties
+ * @returns {Array}
+ */
+export const reOrderByPref = (properties) => {
+    const { withPref, withoutPref } = properties.reduce(
+        (acc, property) => {
+            if (FIELDS_WITH_PREF.includes(property.field)) {
+                acc.withPref.push(property);
+            } else {
+                acc.withoutPref.push(property);
+            }
+            return acc;
+        },
+        { withPref: [], withoutPref: [] }
+    );
+
+    return withPref.sort(sortByPref).concat(withoutPref);
+};
 
 /**
  * Generate new group name that doesn't exist

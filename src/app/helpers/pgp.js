@@ -1,5 +1,6 @@
 import { RECIPIENT_TYPE, KEY_FLAGS } from 'proton-shared/lib/constants';
-import { arrayToBinaryString, encodeBase64, isExpiredKey, stripArmor } from 'pmcrypto';
+import { serverTime } from 'pmcrypto/lib/serverTime';
+import { toBitMap } from 'proton-shared/lib/helpers/object';
 
 const { TYPE_INTERNAL } = RECIPIENT_TYPE;
 const { ENABLE_ENCRYPTION } = KEY_FLAGS;
@@ -18,32 +19,6 @@ export const isInternalUser = ({ RecipientType }) => RecipientType === TYPE_INTE
  */
 export const isDisabledUser = (config) =>
     isInternalUser(config) && !config.Keys.some(({ Flags }) => Flags & ENABLE_ENCRYPTION);
-
-export const getRawInternalKeys = ({ Keys = [] }) => {
-    return Promise.all(
-        Keys.filter(({ Flags }) => Flags & ENABLE_ENCRYPTION).map(async ({ PublicKey }) => {
-            const stripped = await stripArmor(PublicKey);
-            return encodeBase64(arrayToBinaryString(stripped));
-        })
-    );
-};
-
-/**
- *
- * @param {Array} keys from vCard
- * @returns {Promise<Boolean>}
- */
-export const allKeysExpired = async (keys = []) => {
-    // We do not want to show any warnings if we don't have any keys
-    if (!keys.length) {
-        return false;
-    }
-
-    const keyObjects = keys.map((publicKey) => isExpiredKey(publicKey));
-    const isExpired = await Promise.all(keyObjects);
-
-    return !isExpired.some((keyExpired) => !keyExpired);
-};
 
 /**
  * Check if current email mismatch with email define in key data
@@ -70,10 +45,65 @@ export const emailMismatch = ({ users = [] }, currentEmail) => {
     return keyEmails;
 };
 
-export const hasNoPrimary = (unarmoredKeys = [], contactKeys = []) => {
-    if (!unarmoredKeys.length) {
-        return false;
-    }
-    const keys = contactKeys.map((value) => encodeBase64(arrayToBinaryString(value)));
-    return !unarmoredKeys.some((k) => keys.includes(k));
+/**
+ * Sort list of keys retrieved from the API. Trusted keys take preference.
+ * For two keys such that both are either trusted or not, non-verify-only keys take preference
+ * @param {Array} keys
+ * @param {Set} trustedFingerprints
+ * @param {Set} verifyOnlyFingerprints
+ * @returns {Array}
+ */
+export const sortApiKeys = (keys = [], trustedFingerprints, verifyOnlyFingerprints) =>
+    keys
+        .reduce(
+            (acc, key) => {
+                const fingerprint = key.getFingerprint();
+                // calculate order through a bitmap
+                const index = toBitMap({
+                    isVerificationOnly: verifyOnlyFingerprints.has(fingerprint),
+                    isNotTrusted: !trustedFingerprints.has(fingerprint)
+                });
+                acc[index].push(key);
+                return acc;
+            },
+            Array.from({ length: 4 }).map(() => [])
+        )
+        .flat();
+
+/**
+ * Sort list of pinned keys retrieved from the API. Keys that can be used for sending take preference
+ * @param {Array} keys
+ * @param {Set} expiredFingerprints
+ * @param {Set} revokedFingerprints
+ * @returns {Array}
+ */
+export const sortPinnedKeys = (keys = [], expiredFingerprints, revokedFingerprints) =>
+    keys
+        .reduce(
+            (acc, key) => {
+                const fingerprint = key.getFingerprint();
+                // calculate order through a bitmap
+                const index = toBitMap({
+                    cannotSend: expiredFingerprints.has(fingerprint) || revokedFingerprints.has(fingerprint)
+                });
+                acc[index].push(key);
+                return acc;
+            },
+            Array.from({ length: 2 }).map(() => [])
+        )
+        .flat();
+
+/**
+ * Given a key, return its expiration and revoke status
+ * @param publicKey
+ * @returns {Promise<{ isExpired: boolean, isRevoked: boolean}>}
+ */
+export const getKeyEncryptStatus = async (publicKey) => {
+    const date = +serverTime();
+    const creationTime = publicKey.getCreationTime();
+    // notice there are different expiration times depending on the use of the key.
+    const expirationTime = await publicKey.getExpirationTime('encrypt');
+    const isExpired = !(creationTime <= date && date <= expirationTime);
+    const isRevoked = await publicKey.isRevoked();
+    return { isExpired, isRevoked };
 };

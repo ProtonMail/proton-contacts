@@ -1,30 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-    FormModal,
+    useApi,
+    useMailSettings,
+    useEventManager,
+    useNotifications,
+    useLoading,
     Alert,
     Row,
     Label,
     Field,
     Info,
     LinkButton,
-    useApi,
-    useMailSettings,
-    useEventManager,
-    useNotifications,
-    useLoading
+    ContentModal,
+    InnerModal,
+    DialogModal,
+    ResetButton,
+    FooterModal,
+    PrimaryButton,
+    Icon
 } from 'react-components';
-import { getKeys, binaryStringToArray, arrayToBinaryString, encodeBase64, decodeBase64 } from 'pmcrypto';
 import { c } from 'ttag';
 
 import { prepareContacts } from '../helpers/encrypt';
 import { hasCategories } from '../helpers/import';
-import { isInternalUser, isDisabledUser, getRawInternalKeys, allKeysExpired, hasNoPrimary } from '../helpers/pgp';
-import { noop } from 'proton-shared/lib/helpers/function';
+import { reOrderByPref } from '../helpers/properties';
+import { getKeysFromProperties, toKeyProperty } from '../helpers/property';
+import { isInternalUser, isDisabledUser, getKeyEncryptStatus, sortPinnedKeys, sortApiKeys } from '../helpers/pgp';
 import { addContacts } from 'proton-shared/lib/api/contacts';
 import { getPublicKeysEmailHelper } from 'proton-shared/lib/api/helpers/publicKeys';
-import { VCARD_KEY_FIELDS, PGP_INLINE, PGP_MIME, PGP_SIGN, CATEGORIES } from '../constants';
-import { PACKAGE_TYPE, MIME_TYPES } from 'proton-shared/lib/constants';
+import { uniqueBy } from 'proton-shared/lib/helpers/array';
+
+import { VCARD_KEY_FIELDS, PGP_INLINE, PGP_MIME, CATEGORIES } from '../constants';
+import { PACKAGE_TYPE, MIME_TYPES, KEY_FLAGS } from 'proton-shared/lib/constants';
 
 import ContactMIMETypeSelect from './ContactMIMETypeSelect';
 import ContactPgpSettings from './ContactPgpSettings';
@@ -40,13 +48,14 @@ const PGP_MAP = {
 const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailProperty, ...rest }) => {
     const api = useApi();
     const { call } = useEventManager();
+    const [model, setModel] = useState({ keys: { api: [], pinned: [] } });
+    const [showPgpSettings, setShowPgpSettings] = useState(false);
     const [loading, withLoading] = useLoading();
     const { createNotification } = useNotifications();
-    const [{ PGPScheme, Sign }, loadingMailSettings] = useMailSettings(); // NOTE MailSettings model needs to be loaded
-    const [showPgpSettings, setShowPgpSettings] = useState(false);
+    const [{ PGPScheme, Sign }, loadingMailSettings] = useMailSettings();
 
+    const isLoading = loading || loadingMailSettings;
     const { value: Email, group: emailGroup } = emailProperty;
-    const [model, setModel] = useState({ keys: [] });
     const isMimeTypeFixed = model.isPGPExternal && model.sign;
     const hasPGPInline = (model.scheme || PGP_MAP[PGPScheme]) === PGP_INLINE;
 
@@ -54,102 +63,78 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
      * Initialize the model for the modal
      * @returns {Promise}
      */
-    const prepare = async () => {
-        const { contactKeyPromises, mimeType, encrypt, scheme, sign } = properties
-            .filter(({ field, group }) => VCARD_KEY_FIELDS.includes(field) && group === emailGroup)
-            .reduce(
-                (acc, { field, value }) => {
-                    if (field === 'key' && value) {
-                        const [, base64 = ''] = value.split(',');
-                        const key = binaryStringToArray(decodeBase64(base64));
+    const prepare = async (api) => {
+        // prepare keys stored in the vCard
+        const { pinnedKeys, mimeType, encrypt, scheme, sign } = await getKeysFromProperties(
+            properties,
+            emailGroup,
+            Sign
+        );
+        const trustedFingerprints = new Set();
+        const expiredFingerprints = new Set();
+        const revokedFingerprints = new Set();
+        await Promise.all(
+            pinnedKeys.map(async (publicKey) => {
+                const fingerprint = publicKey.getFingerprint();
+                const { isExpired, isRevoked } = await getKeyEncryptStatus(publicKey);
+                trustedFingerprints.add(fingerprint);
+                isExpired && expiredFingerprints.add(fingerprint);
+                isRevoked && revokedFingerprints.add(fingerprint);
+            })
+        );
 
-                        if (key.length) {
-                            const promise = getKeys(key)
-                                .then(([publicKey]) => publicKey)
-                                .catch(noop);
-                            acc.contactKeyPromises.push(promise);
-                        }
-
-                        return acc;
-                    }
-
-                    if (field === 'x-pm-encrypt' && value) {
-                        acc.encrypt = value === 'true';
-                        return acc;
-                    }
-
-                    if (field === 'x-pm-sign' && value) {
-                        acc.sign = value === 'true';
-                        return acc;
-                    }
-
-                    if (field === 'x-pm-scheme' && value) {
-                        acc.scheme = value;
-                        return acc;
-                    }
-
-                    if (field === 'x-pm-mimetype' && value) {
-                        acc.mimeType = value;
-                        return acc;
-                    }
-
-                    return acc;
-                },
-                { contactKeyPromises: [], mimeType: '', encrypt: false, scheme: '', sign: Sign === PGP_SIGN } // Default values
-            );
-        const contactKeys = (await Promise.all(contactKeyPromises)).filter(Boolean);
-        const config = await getPublicKeysEmailHelper(api, Email);
-        const internalUser = isInternalUser(config);
+        // prepare keys retrieved from the API
+        const apiKeysConfig = await getPublicKeysEmailHelper(api, Email);
+        const internalUser = isInternalUser(apiKeysConfig);
         const externalUser = !internalUser;
-        const apiKeys = config.publicKeys;
-        const [unarmoredKeys, keysExpired] = await Promise.all([
-            getRawInternalKeys(config),
-            allKeysExpired(contactKeys)
-        ]);
+        const verifyOnlyFingerprints = new Set();
+        const { apiKeys } = apiKeysConfig.Keys.reduce(
+            (acc, { Flags }, index) => {
+                const publicKey = apiKeysConfig.publicKeys[index];
+                if (publicKey) {
+                    acc.apiKeys.push(publicKey);
+                    const isVerificationOnly = !(Flags & KEY_FLAGS.ENABLE_ENCRYPTION);
+                    isVerificationOnly && verifyOnlyFingerprints.add(publicKey.getFingerprint());
+                }
+                return acc;
+            },
+            { apiKeys: [] }
+        );
+        const orderedApiKeys = sortApiKeys(apiKeys, trustedFingerprints, verifyOnlyFingerprints);
 
-        const trustedFingerprints = internalUser ? contactKeys.map((publicKey) => publicKey.getFingerprint()) : [];
         setModel({
             mimeType,
             encrypt,
             scheme,
             sign,
             email: Email,
-            keys: internalUser && !contactKeys.length ? apiKeys : contactKeys,
+            keys: { api: orderedApiKeys, pinned: pinnedKeys },
             trustedFingerprints,
+            expiredFingerprints,
+            revokedFingerprints,
+            verifyOnlyFingerprints,
             isPGPExternal: externalUser,
             isPGPInternal: internalUser,
-            pgpAddressDisabled: isDisabledUser(config),
-            noPrimary: hasNoPrimary(unarmoredKeys, contactKeys),
-            keysExpired
+            isPGPExternalWithWKDKeys: externalUser && !!apiKeys.length,
+            isPGPExternalWithoutWKDKeys: externalUser && !apiKeys.length,
+            pgpAddressDisabled: isDisabledUser(apiKeysConfig)
         });
     };
 
     /**
      * Collect keys from the model to save
-     * @param {String} group attach to the current email address
+     * @param {String} group attached to the current email address
      * @returns {Array} key properties to save in the vCard
      */
     const getKeysProperties = (group) => {
-        const toKeyProperty = (publicKey, index) => ({
-            field: 'key',
-            value: `data:application/pgp-keys;base64,${encodeBase64(
-                arrayToBinaryString(publicKey.toPacketlist().write())
-            )}`,
-            group,
-            pref: `${index + 1}`
-        });
-
-        if (model.isPGPExternal) {
-            return model.keys.map(toKeyProperty);
-        }
-
-        return model.keys
-            .filter((publicKey) => model.trustedFingerprints.includes(publicKey.getFingerprint()))
-            .map(toKeyProperty);
+        const allKeys = model.isPGPInternal ? [...model.keys.api] : [...model.keys.api, ...model.keys.pinned];
+        const trustedKeys = allKeys.filter((publicKey) => model.trustedFingerprints.has(publicKey.getFingerprint()));
+        const uniqueTrustedKeys = uniqueBy(trustedKeys, (publicKey) => publicKey.getFingerprint());
+        return uniqueTrustedKeys.map((publicKey, index) => toKeyProperty({ publicKey, group, index }));
     };
 
     /**
-     * Save send preferences
+     * Save relevant key properties in the vCard
      * @returns {Promise}
      */
     const handleSubmit = async () => {
@@ -159,14 +144,15 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
         const emailProperties = [
             emailProperty,
             model.mimeType && { field: 'x-pm-mimetype', value: model.mimeType, group: emailGroup },
-            model.isPGPExternal &&
+            model.isPGPExternalWithoutWKDKeys &&
                 model.encrypt !== undefined && { field: 'x-pm-encrypt', value: '' + model.encrypt, group: emailGroup },
-            model.isPGPExternal &&
+            model.isPGPExternalWithoutWKDKeys &&
                 model.sign !== undefined && { field: 'x-pm-sign', value: '' + model.sign, group: emailGroup },
-            model.isPGPExternal && model.scheme && { field: 'x-pm-scheme', value: model.scheme, group: emailGroup },
+            model.isPGPExternalWithoutWKDKeys &&
+                model.scheme && { field: 'x-pm-scheme', value: model.scheme, group: emailGroup },
             ...getKeysProperties(emailGroup) // [{ field: 'key' }, ]
         ].filter(Boolean);
-        const allProperties = otherProperties.concat(emailProperties);
+        const allProperties = reOrderByPref(otherProperties.concat(emailProperties));
         const Contacts = await prepareContacts([allProperties], userKeysList[0]);
         const labels = hasCategories(allProperties) ? INCLUDE : IGNORE;
         await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: labels }));
@@ -176,22 +162,45 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     };
 
     useEffect(() => {
+        const abortController = new AbortController();
+        const apiWithAbort = (config) => api({ ...config, signal: abortController.signal });
+        // prepare the model once mail settings have been loaded
         if (!loadingMailSettings) {
-            withLoading(prepare());
+            withLoading(prepare(apiWithAbort));
         }
+        return () => {
+            abortController.abort();
+        };
     }, [loadingMailSettings]);
 
     useEffect(() => {
-        const updateEncryptToggle = async (keys) => {
-            const expired = await allKeysExpired(keys);
-            if (expired || !keys.length) {
-                setModel((model) => ({ ...model, encrypt: false, keysExpired: expired }));
+        /**
+         * When the list of trusted, expired or revoked keys change,
+         * * update the encrypt toggle (off if all keys are expired or no keys are pinned)
+         * * re-check if the new keys can send
+         * * re-order api keys (trusted take preference)
+         * * move expired keys to the bottom of the list
+         */
+        const noPinnedKeyCanSend =
+            !!model.keys.pinned.length &&
+            !model.keys.pinned.some((publicKey) => {
+                const fingerprint = publicKey.getFingerprint();
+                const canSend =
+                    !model.expiredFingerprints.has(fingerprint) && !model.revokedFingerprints.has(fingerprint);
+                return canSend;
+            });
+        setModel((model) => ({
+            ...model,
+            encrypt: !noPinnedKeyCanSend && !!model.keys.pinned.length && model.encrypt,
+            keys: {
+                api: sortApiKeys(model.keys.api, model.trustedFingerprints, model.verifyOnlyFingerprints),
+                pinned: sortPinnedKeys(model.keys.pinned, model.expiredFingerprints, model.revokedFingerprints)
             }
-        };
-        updateEncryptToggle(model.keys);
-    }, [model.keys]);
+        }));
+    }, [model.trustedFingerprints, model.expiredFingerprints, model.revokedFingerprints, model.verifyOnlyFingerprints]);
 
     useEffect(() => {
+        // take into account rules relating email format and cryptographic scheme
         if (!isMimeTypeFixed) {
             return;
         }
@@ -204,58 +213,77 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     }, [isMimeTypeFixed, hasPGPInline]);
 
     return (
-        <FormModal
-            loading={loading || loadingMailSettings}
-            submit={c('Action').t`Save`}
-            onSubmit={() => withLoading(handleSubmit())}
-            title={c('Title').t`Email settings (${Email})`}
-            {...rest}
-        >
-            {!isMimeTypeFixed ? (
-                <Alert>
-                    {c('Info')
-                        .t`Select the email format you want to be used by default when sending an email to this email address.`}
-                </Alert>
-            ) : hasPGPInline ? (
-                <Alert>
-                    {c('Info')
-                        .t`PGP/Inline is only compatible with Plain Text format. Please note that ProtonMail always signs PGP/Inline messages.`}
-                </Alert>
-            ) : (
-                <Alert>
-                    {c('Info')
-                        .t`PGP/MIME automatically sends the message using the current composer mode. Please note that ProtonMail always signs PGP/MIME messages.`}
-                </Alert>
-            )}
-            <Row>
-                <Label>
-                    {c('Label').t`Email format`}
-                    <Info
-                        className="ml0-5"
-                        title={c('Tooltip')
-                            .t`Automatic indicates that the format in the composer is used to send to this user. Plain text indicates that the message will always be converted to plain text on send.`}
-                    />
-                </Label>
-                <Field>
-                    <ContactMIMETypeSelect
-                        disabled={isMimeTypeFixed}
-                        value={model.mimeType}
-                        onChange={(mimeType) => setModel({ ...model, mimeType })}
-                    />
-                </Field>
-            </Row>
-            <div className="mb1">
-                <LinkButton
-                    onClick={() => setShowPgpSettings(!showPgpSettings)}
-                    disabled={loading || loadingMailSettings}
+        // we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+        <DialogModal modalTitleID="modalTitle" {...rest}>
+            <header className="pm-modalHeader">
+                <button
+                    type="button"
+                    className="pm-modalClose"
+                    title={c('Action').t`Close modal`}
+                    onClick={rest.onClose}
                 >
-                    {showPgpSettings
-                        ? c('Action').t`Hide advanced PGP settings`
-                        : c('Action').t`Show advanced PGP settings`}
-                </LinkButton>
-            </div>
-            {showPgpSettings ? <ContactPgpSettings model={model} setModel={setModel} /> : null}
-        </FormModal>
+                    <Icon className="pm-modalClose-icon" name="close" />
+                    <span className="sr-only">{c('Action').t`Close modal`}</span>
+                </button>
+                <h1 id="modalTitle" className="pm-modalTitle ellipsis">
+                    {c('Title').t`Email settings (${Email})`}
+                </h1>
+            </header>
+            <ContentModal onSubmit={() => withLoading(handleSubmit())} onReset={rest.onClose} noValidate={false}>
+                <InnerModal>
+                    {!isMimeTypeFixed ? (
+                        <Alert>
+                            {c('Info')
+                                .t`Select the email format you want to be used by default when sending an email to this email address.`}
+                        </Alert>
+                    ) : hasPGPInline ? (
+                        <Alert>
+                            {c('Info')
+                                .t`PGP/Inline is only compatible with Plain Text format. Please note that ProtonMail always signs PGP/Inline messages.`}
+                        </Alert>
+                    ) : (
+                        <Alert>
+                            {c('Info')
+                                .t`PGP/MIME automatically sends the message using the current composer mode. Please note that ProtonMail always signs PGP/MIME messages.`}
+                        </Alert>
+                    )}
+                    <Row>
+                        <Label>
+                            {c('Label').t`Email format`}
+                            <Info
+                                className="ml0-5"
+                                title={c('Tooltip')
+                                    .t`Automatic indicates that the format in the composer is used to send to this user. Plain text indicates that the message will always be converted to plain text on send.`}
+                            />
+                        </Label>
+                        <Field>
+                            <ContactMIMETypeSelect
+                                disabled={isMimeTypeFixed}
+                                value={model.mimeType}
+                                onChange={(mimeType) => setModel({ ...model, mimeType })}
+                            />
+                        </Field>
+                    </Row>
+                    <div className="mb1">
+                        <LinkButton
+                            onClick={() => setShowPgpSettings(!showPgpSettings)}
+                            disabled={loading || loadingMailSettings}
+                        >
+                            {showPgpSettings
+                                ? c('Action').t`Hide advanced PGP settings`
+                                : c('Action').t`Show advanced PGP settings`}
+                        </LinkButton>
+                    </div>
+                    {showPgpSettings ? <ContactPgpSettings model={model} setModel={setModel} /> : null}
+                </InnerModal>
+                <FooterModal>
+                    <ResetButton>{c('Action').t`Cancel`}</ResetButton>
+                    <PrimaryButton loading={isLoading} disabled={!showPgpSettings} type="submit">
+                        {c('Action').t`Save`}
+                    </PrimaryButton>
+                </FooterModal>
+            </ContentModal>
+        </DialogModal>
     );
 };
 
