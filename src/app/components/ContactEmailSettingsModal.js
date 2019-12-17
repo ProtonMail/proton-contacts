@@ -159,8 +159,10 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
         const emailProperties = [
             emailProperty,
             model.mimeType && { field: 'x-pm-mimetype', value: model.mimeType, group: emailGroup },
-            model.isPGPExternal && model.encrypt && { field: 'x-pm-encrypt', value: 'true', group: emailGroup },
-            model.isPGPExternal && model.sign && { field: 'x-pm-sign', value: 'true', group: emailGroup },
+            model.isPGPExternal &&
+                model.encrypt !== undefined && { field: 'x-pm-encrypt', value: '' + model.encrypt, group: emailGroup },
+            model.isPGPExternal &&
+                model.sign !== undefined && { field: 'x-pm-sign', value: '' + model.sign, group: emailGroup },
             model.isPGPExternal && model.scheme && { field: 'x-pm-scheme', value: model.scheme, group: emailGroup },
             ...getKeysProperties(emailGroup) // [{ field: 'key' }, ]
         ].filter(Boolean);
