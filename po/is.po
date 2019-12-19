@@ -1,0 +1,2601 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: protonmail\n"
+"X-Crowdin-Language: is\n"
+"X-Crowdin-File: ProtonMail Contact Application.pot\n"
+"Project-Id-Version: protonmail\n"
+"Language-Team: Icelandic\n"
+"Language: is_IS\n"
+"PO-Revision-Date: 2019-12-19 11:23\n"
+
+#: node_modules/proton-shared/lib/helpers/humanSize.js:13
+msgctxt "file size format"
+msgid "KB"
+msgstr ""
+
+#: node_modules/proton-shared/lib/helpers/humanSize.js:14
+msgctxt "file size format"
+msgid "MB"
+msgstr ""
+
+#: node_modules/proton-shared/lib/helpers/humanSize.js:15
+msgctxt "file size format"
+msgid "GB"
+msgstr ""
+
+#: node_modules/proton-shared/lib/keys/keys.js:102
+msgctxt "Error"
+msgid "Signature verification failed"
+msgstr ""
+
+#: node_modules/proton-shared/lib/keys/keys.js:122
+msgctxt "Error"
+msgid "Incorrect decryption password"
+msgstr "Rangt lykilorð fyrir afkóðun"
+
+#: node_modules/react-components/containers/api/ApiProvider.js:38
+msgctxt "Error"
+msgid "Could not connect to server."
+msgstr "Gat ekki tengst við þjón."
+
+#: node_modules/react-components/containers/api/ApiProvider.js:39
+msgctxt "Error"
+msgid "No internet connection found"
+msgstr "Engin internettenging fannst"
+
+#: node_modules/react-components/containers/api/ApiProvider.js:45
+msgctxt "Error"
+msgid "Request timed out."
+msgstr "Beiðni rann út á tíma."
+
+#: node_modules/react-components/containers/payments/paymentTokenHelper.js:32
+#: node_modules/react-components/containers/payments/paymentTokenHelper.js:128
+msgctxt "Error"
+msgid "Process aborted"
+msgstr "Hætt var við ferlið"
+
+#: node_modules/react-components/containers/payments/paymentTokenHelper.js:36
+msgctxt "Error"
+msgid "Payment process cancelled"
+msgstr "Hætt við greiðsluferli"
+
+#: node_modules/react-components/containers/payments/paymentTokenHelper.js:42
+msgctxt "Error"
+msgid "Payment process failed"
+msgstr "Greiðsluferli mistókst"
+
+#: node_modules/react-components/containers/payments/paymentTokenHelper.js:46
+msgctxt "Error"
+msgid "Payment process consumed"
+msgstr "Greiðsluferli lokið"
+
+#: node_modules/react-components/containers/payments/paymentTokenHelper.js:50
+msgctxt "Error"
+msgid "Payment process not supported"
+msgstr "Greiðsluferli ekki stutt"
+
+#: node_modules/react-components/containers/payments/paymentTokenHelper.js:62
+msgctxt "Error"
+msgid "Unknown payment token status"
+msgstr "Óþekkt staða á greiðsluteikni"
+
+#: node_modules/react-components/containers/payments/paymentTokenHelper.js:95
+msgctxt "Error"
+msgid "Tab closed"
+msgstr "Flipa lokað"
+
+#: node_modules/react-components/containers/payments/PayPal.js:85
+msgctxt "Error"
+msgid "Amount below minimum."
+msgstr "Upphæð undir lágmarki."
+
+#: node_modules/react-components/containers/payments/PayPal.js:91
+msgctxt "Error"
+msgid "Amount above the maximum."
+msgstr "Upphæð yfir hámarki."
+
+#: node_modules/react-components/containers/payments/Bitcoin.js:51
+msgctxt "Error"
+msgid "Error connecting to the Bitcoin API."
+msgstr "Villa í tengingu við Bitcoin API."
+
+#: node_modules/react-components/containers/payments/Payment.js:50
+#, javascript-format
+msgctxt "Error"
+msgid "The minimum amount that can be donated is ${ price }"
+msgstr "Lágmarksupphæð sem hægt er að styrkja með er ${ price }"
+
+#: node_modules/react-components/containers/payments/Payment.js:59
+#, javascript-format
+msgctxt "Error"
+msgid "The minimum amount of credit that can be added is ${ _price }"
+msgstr "Lágmarksupphæð inneignar sem hægt er að bæta við er ${ _price }"
+
+#: node_modules/react-components/containers/payments/Payment.js:68
+#, javascript-format
+msgctxt "Error"
+msgid "The minimum payment we accept is ${ _price2 }"
+msgstr "Lágmarksgreiðsla sem við samþykkjum er ${ _price2 }"
+
+#: node_modules/react-components/containers/payments/cardValidator.js:16
+msgctxt "Error"
+msgid "Name on card required"
+msgstr "Nafnið á greiðslukortinu er nuðsynlegt"
+
+#: node_modules/react-components/containers/payments/cardValidator.js:22
+msgctxt "Error"
+msgid "Invalid expiration date"
+msgstr "Ógildur gildistími"
+
+#: node_modules/react-components/containers/payments/cardValidator.js:27
+msgctxt "Error"
+msgid "Invalid card number"
+msgstr "Ógilt kreditkortanúmer"
+
+#: node_modules/react-components/containers/payments/cardValidator.js:36
+#, javascript-format
+msgctxt "Error"
+msgid "Invalid ${ name } code"
+msgstr "Ógildur ${ name } kóði"
+
+#: node_modules/react-components/containers/payments/cardValidator.js:43
+msgctxt "Error"
+msgid "Invalid postal code"
+msgstr "Ógilt póstnúmer"
+
+#: node_modules/react-components/components/alert/DoNotWindowOpenAlertError.js:7
+msgctxt "Error"
+msgid "The browser you are using does not allow the payment to be fully authorized. Please use a different browser or log in via a computer."
+msgstr ""
+
+#: node_modules/react-components/components/input/Input.js:32
+msgctxt "Error"
+msgid "This field is required"
+msgstr "Það er nauðsynlegt að fylla þennan reit út."
+
+#: node_modules/react-components/components/input/EmailInput.js:9
+msgctxt "Error"
+msgid "Email address invalid"
+msgstr "Tölvupóstfang er ógilt"
+
+#: src/app/components/ContactImageModal.js:36
+msgctxt "Error"
+msgid "Image upload failed"
+msgstr "Innsending myndar mistókst"
+
+#: src/app/components/ContactModal.js:86
+msgctxt "Error"
+msgid "Contact could not be saved"
+msgstr "Ekki var hægt að vista tengilið"
+
+#: src/app/components/ContactPgpSettings.js:35
+msgctxt "Error"
+msgid "Invalid public key file"
+msgstr "Ógild dreifilykilsskrá"
+
+#: src/app/components/delete/DeleteModal.js:30
+msgctxt "Error"
+msgid "Some contacts could not be deleted"
+msgstr "Ekki var hægt að eyða sumum tengiliðum"
+
+#: node_modules/proton-shared/lib/themes/themes.js:13
+msgctxt "Theme"
+msgid "Default theme"
+msgstr ""
+
+#: node_modules/proton-shared/lib/themes/themes.js:23
+msgctxt "Theme"
+msgid "Custom theme"
+msgstr "Sérsniðið þema"
+
+#: node_modules/proton-shared/lib/themes/themes.js:33
+msgctxt "Theme"
+msgid "Light"
+msgstr "Ljóst"
+
+#: node_modules/proton-shared/lib/themes/themes.js:42
+msgctxt "Theme"
+msgid "Blue"
+msgstr "Blátt"
+
+#: node_modules/proton-shared/lib/themes/themes.js:51
+msgctxt "Theme"
+msgid "Dark theme"
+msgstr ""
+
+#: node_modules/react-components/containers/search/SearchDropdown.js:60
+#: node_modules/react-components/containers/search/Searchbox.js:48
+msgctxt "Action"
+msgid "Search"
+msgstr "Leita"
+
+#.  Clear button is hidden when using advanced mode because the buttons use the same spots
+#.  If there is the need of having both, a positioning solution will have to be found
+#: node_modules/react-components/containers/search/SearchDropdown.js:59
+#: node_modules/react-components/containers/search/Searchbox.js:55
+#: node_modules/react-components/containers/support/AttachScreenshot.js:46
+#: src/app/components/ContactModalRow.js:30
+msgctxt "Action"
+msgid "Clear"
+msgstr "Hreinsa"
+
+#: node_modules/react-components/containers/login/AbuseModal.js:21
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:155
+#: src/app/components/import/ImportModal.js:153
+#: src/app/components/merge/ContactDetails.js:38
+#: src/app/components/merge/MergeContactPreview.js:107
+#: src/app/components/merge/MergeModal.js:93
+msgctxt "Action"
+msgid "Close"
+msgstr "Loka"
+
+#: node_modules/react-components/containers/login/LoginForm.js:207
+msgctxt "Action"
+msgid "Log in"
+msgstr "Skrá inn"
+
+#: node_modules/react-components/components/modal/Confirm.js:11
+#: node_modules/react-components/components/modal/FormModal.js:19
+#: node_modules/react-components/containers/login/LoginForm.js:216
+#: node_modules/react-components/containers/payments/PayPal.js:137
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:101
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:143
+#: src/app/components/ContactEmailSettingsModal.js:280
+#: src/app/components/ExportModal.js:23
+#: src/app/components/import/ImportModal.js:150
+#: src/app/components/merge/MergeContactPreview.js:104
+#: src/app/components/merge/MergeModal.js:90
+msgctxt "Action"
+msgid "Cancel"
+msgstr "Hætta við"
+
+#: node_modules/react-components/components/modal/FormModal.js:20
+#: node_modules/react-components/containers/login/LoginForm.js:239
+#: node_modules/react-components/containers/login/LoginForm.js:267
+#: node_modules/react-components/containers/support/BugModal.js:126
+msgctxt "Action"
+msgid "Submit"
+msgstr "Senda inn"
+
+#: node_modules/react-components/containers/support/AttachScreenshot.js:53
+msgctxt "Action"
+msgid "Add screenshot(s)"
+msgstr "Bæta við skjámynd(um)"
+
+#: node_modules/react-components/containers/support/BugModal.js:194
+msgctxt "Action"
+msgid "Hide info"
+msgstr "Fela upplýsingar"
+
+#: node_modules/react-components/containers/support/BugModal.js:194
+msgctxt "Action"
+msgid "Show info"
+msgstr "Sýna upplýsingar"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:102
+msgctxt "Action"
+msgid "Verify"
+msgstr "Sannreyna"
+
+#: node_modules/react-components/containers/payments/Bitcoin.js:52
+#: node_modules/react-components/containers/payments/PayPal.js:105
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:165
+msgctxt "Action"
+msgid "Try again"
+msgstr "Reyndu aftur"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:171
+msgctxt "Action"
+msgid "Use a different card"
+msgstr "Nota annað kort"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:172
+msgctxt "Action"
+msgid "Use a different payment method"
+msgstr "Nota annan greiðslumáta"
+
+#: node_modules/react-components/containers/payments/PayPal.js:149
+#: node_modules/react-components/containers/payments/PayPal.js:178
+msgctxt "Action"
+msgid "Check out with PayPal"
+msgstr "Greiða með PayPal"
+
+#: node_modules/react-components/containers/payments/PayPal.js:164
+msgctxt "Action"
+msgid "Add PayPal payment method"
+msgstr "Bæta við PayPal-greiðslumáta"
+
+#: node_modules/react-components/containers/payments/DonateModal.js:43
+msgctxt "Action"
+msgid "Donate"
+msgstr "Styrkja"
+
+#: node_modules/react-components/containers/heading/UserDropdown.js:84
+#: node_modules/react-components/containers/heading/UserDropdown.js:92
+msgctxt "Action"
+msgid "Settings"
+msgstr "Stillingar"
+
+#: node_modules/react-components/containers/heading/UserDropdown.js:109
+msgctxt "Action"
+msgid "I have a question"
+msgstr "Ég er með spurningu"
+
+#: node_modules/react-components/containers/heading/UserDropdown.js:119
+msgctxt "Action"
+msgid "Report bug"
+msgstr "Tilkynna galla"
+
+#: node_modules/react-components/containers/heading/UserDropdown.js:130
+msgctxt "Action"
+msgid "Proton shop"
+msgstr "Proton-verslun"
+
+#: node_modules/react-components/containers/heading/UserDropdown.js:140
+msgctxt "Action"
+msgid "Support us"
+msgstr "Sýndu okkur stuðning"
+
+#: node_modules/react-components/containers/heading/UserDropdown.js:149
+msgctxt "Action"
+msgid "Logout"
+msgstr "Útskráning"
+
+#: node_modules/react-components/components/modal/Confirm.js:10
+#: node_modules/react-components/components/modal/Confirm.js:12
+msgctxt "Action"
+msgid "Confirm"
+msgstr "Staðfesta"
+
+#: node_modules/react-components/components/modal/Header.js:11
+#: node_modules/react-components/components/modal/Header.js:13
+#: src/app/components/ContactEmailSettingsModal.js:222
+#: src/app/components/ContactEmailSettingsModal.js:226
+msgctxt "Action"
+msgid "Close modal"
+msgstr "Loka glugga"
+
+#: node_modules/react-components/components/image/RemoteImage.js:9
+msgctxt "Action"
+msgid "Load image"
+msgstr "Hlaða inn mynd"
+
+#: node_modules/react-components/components/miniCalendar/LocalizedMiniCalendar.js:31
+msgctxt "Action"
+msgid "Next month"
+msgstr "Næsti mánuður"
+
+#: node_modules/react-components/components/miniCalendar/LocalizedMiniCalendar.js:32
+msgctxt "Action"
+msgid "Prev month"
+msgstr "Fyrri mánuður"
+
+#: src/app/components/ContactGroupModal.js:44
+#: src/app/components/ContactGroupsTable.js:78
+#: src/app/components/ContactModalRow.js:36
+#: src/app/components/delete/DeleteModal.js:15
+#: src/app/components/import/AttachedFile.js:9
+msgctxt "Action"
+msgid "Delete"
+msgstr "Eyða"
+
+#: src/app/components/import/AttachingModalContent.js:21
+msgctxt "Action"
+msgid "Select file from computer"
+msgstr "Veldu skrá í tölvunni þinni"
+
+#: src/app/components/ContactPlaceholder.js:30
+#: src/app/components/ContactPlaceholder.js:80
+#: src/app/components/import/ImportModal.js:54
+#: src/app/components/import/ImportModal.js:130
+msgctxt "Action"
+msgid "Import"
+msgstr "Flytja inn"
+
+#: src/app/components/import/ImportModal.js:78
+msgctxt "Action"
+msgid "Go back"
+msgstr "Fara til baka"
+
+#: src/app/components/import/ImportModal.js:188
+msgctxt "Action"
+msgid "Create"
+msgstr "Búa til"
+
+#: src/app/components/ContactImageField.js:8
+#: src/app/components/ContactImageModal.js:60
+msgctxt "Action"
+msgid "Upload picture"
+msgstr "Senda inn mynd"
+
+#: src/app/components/ContactEmailSettingsModal.js:282
+#: src/app/components/ContactGroupModal.js:149
+#: src/app/components/ContactImageModal.js:45
+#: src/app/components/ContactModal.js:125
+#: src/app/components/ExportModal.js:25
+msgctxt "Action"
+msgid "Save"
+msgstr "Vista"
+
+#: src/app/components/ContactGroupsTable.js:72
+#: src/app/components/ContactModalRow.js:26
+#: src/app/components/ContactPlaceholder.js:182
+#: src/app/components/ContactView.js:30
+msgctxt "Action"
+msgid "Edit"
+msgstr "Breyta"
+
+#: src/app/components/ContactGroupModal.js:182
+#: src/app/components/ContactModalProperties.js:87
+msgctxt "Action"
+msgid "Add"
+msgstr "Bæta við"
+
+#: src/app/components/UpsellFree.js:19
+msgctxt "Action"
+msgid "Upgrade ProtonMail"
+msgstr "Uppfæra ProtonMail"
+
+#: src/app/components/ContactsList.js:87
+msgctxt "Action"
+msgid "Add a contact"
+msgstr "Bæta við tengilið"
+
+#: src/app/components/ContactsList.js:98
+msgctxt "Action"
+msgid "Import contact"
+msgstr "Flytja inn tengilið"
+
+#: src/app/components/ContactsList.js:126
+msgctxt "Action"
+msgid "Edit your group"
+msgstr "Breyttu hópnum þínum"
+
+#: src/app/components/ContactsList.js:146
+msgctxt "Action"
+msgid "Clear it"
+msgstr ""
+
+#: src/app/components/ContactImageSummary.js:89
+msgctxt "Action"
+msgid "Load photo"
+msgstr "Hlaða inn ljósmynd"
+
+#: src/app/components/ContactGroupDropdown.js:225
+#: src/app/components/SelectEmailsModal.js:47
+msgctxt "Action"
+msgid "Apply"
+msgstr "Virkja"
+
+#: src/app/components/ContactKeysTable.js:119
+msgctxt "Action"
+msgid "Download"
+msgstr "Sækja"
+
+#: src/app/components/ContactKeysTable.js:132
+msgctxt "Action"
+msgid "Use for sending"
+msgstr ""
+
+#: src/app/components/ContactKeysTable.js:153
+msgctxt "Action"
+msgid "Trust"
+msgstr "Traust"
+
+#: src/app/components/ContactKeysTable.js:161
+msgctxt "Action"
+msgid "Untrust"
+msgstr "Ekki treysta"
+
+#: src/app/components/ContactKeysTable.js:169
+msgctxt "Action"
+msgid "Remove"
+msgstr "Fjarlægja"
+
+#.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+#: src/app/components/ContactEmailSettingsModal.js:273
+msgctxt "Action"
+msgid "Hide advanced PGP settings"
+msgstr "Fela ítarlegar PGP-stillingar"
+
+#.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+#: src/app/components/ContactEmailSettingsModal.js:274
+msgctxt "Action"
+msgid "Show advanced PGP settings"
+msgstr "Birta ítarlegar PGP-stillingar"
+
+#: src/app/components/ContactPlaceholder.js:41
+#: src/app/components/ContactPlaceholder.js:91
+#: src/app/components/ContactPlaceholder.js:185
+#: src/app/components/ContactView.js:31
+msgctxt "Action"
+msgid "Export"
+msgstr "Flytja út"
+
+#: src/app/components/MergeRow.js:21
+#: src/app/components/merge/MergeContactPreview.js:73
+#: src/app/components/merge/MergeModal.js:65
+msgctxt "Action"
+msgid "Merge"
+msgstr "Sameina"
+
+#: src/app/components/ContactPlaceholder.js:53
+msgctxt "Action"
+msgid "Groups"
+msgstr "Hópar"
+
+#: src/app/components/ContactPlaceholder.js:104
+#: src/app/components/UpgradeModal.js:16
+#: src/app/content/PrivateLayout.js:19
+msgctxt "Action"
+msgid "Upgrade"
+msgstr "Uppfæra"
+
+#: src/app/components/ContactPlaceholder.js:153
+msgctxt "Action"
+msgid "Deselect"
+msgid_plural "Deselect all"
+msgstr[0] "Afvelja"
+msgstr[1] "Afvelja allt"
+
+#: src/app/components/merge/MergeTableBody.js:25
+msgctxt "Action"
+msgid "Contact details"
+msgstr "Nánar um tengilið"
+
+#: src/app/components/merge/MergeTableBody.js:31
+msgctxt "Action"
+msgid "Unmark for deletion"
+msgstr "Afmerkja til eyðingar"
+
+#: src/app/components/merge/MergeTableBody.js:31
+msgctxt "Action"
+msgid "Mark for deletion"
+msgstr "Merkja til eyðingar"
+
+#: src/app/components/merge/MergeTable.js:58
+msgctxt "Action"
+msgid "Preview contact"
+msgstr "Forskoða tengilið"
+
+#: src/app/components/ContactGroupsSection.js:17
+msgctxt "Action"
+msgid "Add group"
+msgstr "Bæta við hópi"
+
+#: src/app/content/PrivateSidebar.js:105
+msgctxt "Action"
+msgid "Add contact"
+msgstr "Bæta við tengilið"
+
+#: node_modules/react-components/containers/search/SearchDropdown.js:19
+#: src/app/content/PrivateHeader.js:40
+msgctxt "Placeholder"
+msgid "Search"
+msgstr "Leita"
+
+#: node_modules/react-components/containers/login/PasswordForm.js:22
+msgctxt "Placeholder"
+msgid "Username or email"
+msgstr "Notandanafn eða tölvupóstfang"
+
+#: node_modules/react-components/containers/login/PasswordForm.js:37
+msgctxt "Placeholder"
+msgid "Password"
+msgstr "Lykilorð"
+
+#: node_modules/react-components/containers/login/TOTPForm.js:20
+msgctxt "Placeholder"
+msgid "Two-factor code"
+msgstr "Tveggja-þátta kóði"
+
+#: node_modules/react-components/containers/login/UnlockForm.js:20
+msgctxt "Placeholder"
+msgid "Mailbox password"
+msgstr "Lykilorð á pósthólfi"
+
+#: node_modules/react-components/containers/support/BugModal.js:141
+msgctxt "Placeholder"
+msgid "Proton username"
+msgstr "Notandanafn í Proton"
+
+#: node_modules/react-components/containers/support/BugModal.js:153
+msgctxt "Placeholder"
+msgid "A way to contact you"
+msgstr "Leið til að hafa samband við þig"
+
+#: node_modules/react-components/containers/support/BugModal.js:177
+msgctxt "Placeholder"
+msgid "Please describe the problem and include any error messages"
+msgstr "Lýstu vandamálinu og gefðu upp öll villuskilaboð"
+
+#: node_modules/react-components/containers/support/BugModal.js:206
+msgctxt "Placeholder"
+msgid "OS name"
+msgstr "Nafn stýrikerfis"
+
+#: node_modules/react-components/containers/support/BugModal.js:217
+msgctxt "Placeholder"
+msgid "OS version"
+msgstr "Útgáfa stýrkierfis"
+
+#: node_modules/react-components/containers/support/BugModal.js:228
+msgctxt "Placeholder"
+msgid "Browser name"
+msgstr "Heiti vafra"
+
+#: node_modules/react-components/containers/support/BugModal.js:239
+msgctxt "Placeholder"
+msgid "Browser version"
+msgstr "Útgáfa vafra"
+
+#: node_modules/react-components/containers/payments/PaymentSelector.js:30
+msgctxt "Placeholder"
+msgid "Other"
+msgstr "Annað"
+
+#: node_modules/react-components/containers/payments/CardNumberInput.js:48
+msgctxt "Placeholder"
+msgid "Card number"
+msgstr "Númer greiðslukorts"
+
+#: node_modules/react-components/containers/payments/Card.js:22
+msgctxt "Placeholder"
+msgid "Full name"
+msgstr "Fullt nafn"
+
+#: node_modules/react-components/containers/payments/Card.js:79
+msgctxt "Placeholder"
+msgid "ZIP"
+msgstr "Póstnúmer"
+
+#: node_modules/react-components/containers/payments/Card.js:79
+msgctxt "Placeholder"
+msgid "Postal code"
+msgstr "Póstnúmer"
+
+#: src/app/components/ContactImageModal.js:53
+msgctxt "Placeholder"
+msgid "Image URL"
+msgstr "Vefslóð á mynd"
+
+#: src/app/components/ContactGroupDropdown.js:186
+msgctxt "Placeholder"
+msgid "Filter groups"
+msgstr "Sía hópa"
+
+#: src/app/content/PrivateHeader.js:62
+msgctxt "Placeholder"
+msgid "Search contacts"
+msgstr "Leita að tengiliðum"
+
+#: node_modules/react-components/containers/error/GenericError.js:13
+msgctxt "Error message"
+msgid "Aaah! Something went wrong"
+msgstr "Úbbs! Eitthvað fór úrskeiðis"
+
+#: node_modules/react-components/containers/error/GenericError.js:16
+msgctxt "Error message"
+msgid "Brace yourself till we get the error fixed."
+msgstr "Taktu því með ró þangað til við höfum lagað vandamálið."
+
+#: node_modules/react-components/containers/error/GenericError.js:17
+msgctxt "Error message"
+msgid "You may also refresh the page or try again later."
+msgstr "Þú gætir látið endurlesa síðuna eða reynt aftur síðar."
+
+#: node_modules/react-components/containers/sidebar/StorageSpaceStatus.js:77
+msgctxt "Title"
+msgid "Storage"
+msgstr "Geymslurými"
+
+#: node_modules/react-components/containers/api/HumanVerificationModal.js:9
+msgctxt "Title"
+msgid "Human verification"
+msgstr "Mennskupróf"
+
+#: node_modules/react-components/containers/login/UnlockModal.js:33
+msgctxt "Title"
+msgid "Sign in again to continue"
+msgstr "Skráðu þig inn aftur til að halda áfram"
+
+#: node_modules/react-components/containers/login/AbuseModal.js:6
+msgctxt "Title"
+msgid "Account disabled"
+msgstr "Notandaaðgangur óvirkur"
+
+#: node_modules/react-components/containers/support/BugModal.js:127
+msgctxt "Title"
+msgid "Report bug"
+msgstr "Tilkynna galla"
+
+#: node_modules/react-components/containers/payments/Card.js:80
+msgctxt "Title"
+msgid "ZIP / postal code"
+msgstr "Póstnúmer"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:44
+msgctxt "Title"
+msgid "Unsupported browser"
+msgstr ""
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:45
+msgctxt "Title"
+msgid "Card verification"
+msgstr "Sannvottun greiðslukorts"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:45
+msgctxt "Title"
+msgid "Payment verification"
+msgstr "Sannvottun greiðslu"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:46
+msgctxt "Title"
+msgid "Processing..."
+msgstr "Í vinnslu..."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:48
+msgctxt "Title"
+msgid "Card verification in progress"
+msgstr "Sannvottun greiðslukorts í gangi"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:49
+msgctxt "Title"
+msgid "Payment verification in progress"
+msgstr "Sannvottun greiðslu í gangi"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:50
+msgctxt "Title"
+msgid "3-D Secure verification failed"
+msgstr "3-D Secure sannvottun mistókst"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:162
+msgctxt "Title"
+msgid "Error"
+msgstr "Villa"
+
+#: node_modules/react-components/containers/payments/DonateModal.js:42
+msgctxt "Title"
+msgid "Make a donation"
+msgstr "Styrkja verkefnið"
+
+#: node_modules/react-components/components/dropdown/DropdownActions.js:48
+msgctxt "Title"
+msgid "Open actions dropdown"
+msgstr "Opna aðgerðafellilista"
+
+#: src/app/components/ContactPlaceholder.js:205
+#: src/app/components/ContactsSection.js:9
+#: src/app/containers/ContactsContainer.js:252
+#: src/app/containers/ContactsContainer.js:255
+#: src/app/content/PrivateHeader.js:49
+msgctxt "Title"
+msgid "Contacts"
+msgstr "Tengiliðir"
+
+#: src/app/containers/ContactsContainer.js:252
+msgctxt "Title"
+msgid "Search"
+msgstr ""
+
+#: src/app/containers/SettingsContainer.js:34
+msgctxt "Title"
+msgid "Contact settings"
+msgstr "Stillingar tengiliðar"
+
+#: src/app/components/ContactPlaceholder.js:214
+#: src/app/containers/SettingsContainer.js:37
+#: src/app/content/PrivateHeader.js:72
+msgctxt "Title"
+msgid "Settings"
+msgstr "Stillingar"
+
+#: src/app/components/ContactPlaceholder.js:25
+#: src/app/components/ContactPlaceholder.js:75
+#: src/app/components/import/ImportModal.js:31
+#: src/app/components/import/ImportModal.js:32
+msgctxt "Title"
+msgid "Import contacts"
+msgstr "Flytja inn tengiliði"
+
+#: src/app/components/import/ImportModal.js:33
+msgctxt "Title"
+msgid "Import CSV file"
+msgstr "Flytja inn CSV-skrá"
+
+#: src/app/components/import/ImportModal.js:34
+msgctxt "Title"
+msgid "Importing contacts"
+msgstr "Flyt inn tengiliði"
+
+#: src/app/components/import/ImportModal.js:80
+msgctxt "Title"
+msgid "File is too big!"
+msgstr "Skráin er of stór!"
+
+#: src/app/components/ContactImageModal.js:10
+msgctxt "Title"
+msgid "Edit image"
+msgstr "Breyta mynd"
+
+#: src/app/components/ContactModalProperties.js:21
+msgctxt "Title"
+msgid "Display name"
+msgstr "Birtingarnafn"
+
+#: src/app/components/ContactModalProperties.js:22
+#: src/app/components/ContactViewProperties.js:28
+msgctxt "Title"
+msgid "Email addresses"
+msgstr "Tölvupóstföng"
+
+#: src/app/components/ContactModalProperties.js:23
+#: src/app/components/ContactViewProperties.js:29
+msgctxt "Title"
+msgid "Phone numbers"
+msgstr "Símanúmer"
+
+#: src/app/components/ContactModalProperties.js:24
+#: src/app/components/ContactViewProperties.js:30
+msgctxt "Title"
+msgid "Addresses"
+msgstr "Vistföng"
+
+#: src/app/components/ContactModalProperties.js:25
+#: src/app/components/ContactViewProperties.js:31
+msgctxt "Title"
+msgid "Other information"
+msgstr "Aðrar upplýsingar"
+
+#: src/app/components/UpsellFree.js:8
+msgctxt "Title"
+msgid "Upgrade to a paid plan"
+msgstr "Uppfærðu í greidda áskrift"
+
+#: src/app/components/ContactModal.js:53
+msgctxt "Title"
+msgid "Edit contact details"
+msgstr "Breyta nánari upplýsingum um tengilið"
+
+#: src/app/components/ContactModal.js:53
+msgctxt "Title"
+msgid "Add new contact"
+msgstr "Bæta við nýjum tengilið"
+
+#: src/app/components/ContactGroupModal.js:71
+msgctxt "Title"
+msgid "Edit contact group"
+msgstr "Breyta tengiliðahópi"
+
+#: src/app/components/ContactGroupModal.js:71
+msgctxt "Title"
+msgid "Create new group"
+msgstr "Búa til nýjan hóp"
+
+#: src/app/components/SelectEmailsModal.js:47
+msgctxt "Title"
+msgid "Add to group"
+msgstr "Bæta í hóp"
+
+#.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+#: src/app/components/ContactEmailSettingsModal.js:229
+#, javascript-format
+msgctxt "Title"
+msgid "Email settings (${ Email })"
+msgstr "Tölvupóststillingar (${ Email })"
+
+#: src/app/components/ContactViewProperty.js:110
+msgctxt "Title"
+msgid "Contact group"
+msgstr "Tengiliðahópur"
+
+#: src/app/components/ContactViewProperty.js:116
+msgctxt "Title"
+msgid "Email settings"
+msgstr "Stillingar tölvupósts"
+
+#: src/app/components/ContactView.js:27
+msgctxt "Title"
+msgid "Contact details"
+msgstr "Nánar um tengilið"
+
+#: src/app/components/ExportModal.js:112
+msgctxt "Title"
+msgid "Exporting contacts"
+msgstr "Flyt út tengiliði"
+
+#: src/app/components/ContactPlaceholder.js:37
+#: src/app/components/ContactPlaceholder.js:87
+msgctxt "Title"
+msgid "Export contacts"
+msgstr "Flytja út tengiliði"
+
+#: src/app/components/ContactPlaceholder.js:48
+msgctxt "Title"
+msgid "Manage groups"
+msgstr "Sýsla með hópa"
+
+#: src/app/components/ContactPlaceholder.js:98
+msgctxt "Title"
+msgid "Unlock features"
+msgstr "Aflæsa eiginleikum"
+
+#: src/app/components/UpgradeModal.js:10
+msgctxt "Title"
+msgid "Upgrade required"
+msgstr "Uppfærsla er nauðsynleg"
+
+#: src/app/components/merge/ContactDetails.js:36
+#: src/app/components/merge/MergeContactPreview.js:96
+msgctxt "Title"
+msgid "Contact Details"
+msgstr "Nánar um tengilið"
+
+#: src/app/components/merge/MergeContactPreview.js:118
+#: src/app/components/merge/MergeModal.js:103
+msgctxt "Title"
+msgid "Merging contacts"
+msgstr "Sameina tengiliði"
+
+#: src/app/components/merge/MergeModal.js:71
+msgctxt "Title"
+msgid "Merge contacts"
+msgstr "Sameina tengiliði"
+
+#: src/app/components/delete/DeleteModal.js:38
+msgctxt "Title"
+msgid "Delete"
+msgstr "Eyða"
+
+#: src/app/components/ContactGroupsTable.js:83
+msgctxt "Title"
+msgid "Delete contact group"
+msgstr "Eyða tengiliðahópi"
+
+#: src/app/components/ContactGroupsSection.js:13
+#: src/app/pages/ContactGroupsPage.js:9
+msgctxt "Title"
+msgid "Contact groups"
+msgstr "Hópar tengiliða"
+
+#: src/app/pages/GeneralPage.js:9
+msgctxt "Title"
+msgid "General"
+msgstr "Almennt"
+
+#: node_modules/react-components/containers/sidebar/StorageSpaceStatus.js:78
+#, javascript-format
+msgctxt "Info"
+msgid "${ usedSpaceFormatted } of ${ maxSpaceFormatted } used"
+msgstr "${ usedSpaceFormatted } af ${ maxSpaceFormatted } notað"
+
+#: node_modules/react-components/containers/sidebar/StorageSpaceStatus.js:81
+msgctxt "Info"
+msgid "Your storage space is shared across all Proton products."
+msgstr "Geymslurýmið þitt er samnýtt í öllum þínum Proton-kerfum."
+
+#: node_modules/react-components/containers/api/HumanVerificationModal.js:19
+msgctxt "Info"
+msgid "For security reasons, please verify that you are not a robot."
+msgstr "Af öryggisástæðum þarftu að sanna að þú sért ekki vélmenni."
+
+#: node_modules/react-components/containers/app/LoaderPage.js:15
+#, javascript-format
+msgctxt "Info"
+msgid "Loading ${ appName }"
+msgstr "Hleð inn ${ appName }"
+
+#: node_modules/react-components/containers/login/AbuseModal.js:10
+msgctxt "Info"
+msgid "abuse or fraud"
+msgstr "misnotkunar eða svik"
+
+#: node_modules/react-components/containers/login/AbuseModal.js:16
+msgctxt "Info"
+msgid "here"
+msgstr "hér"
+
+#: node_modules/react-components/containers/login/AbuseModal.js:23
+#, javascript-format
+msgctxt "Info"
+msgid "Account disabled due to ${ abuseOrFraudLink }."
+msgstr "Notandaaðgangur hefur verið gerður óvirkur vegna ${ abuseOrFraudLink }."
+
+#: node_modules/react-components/containers/login/AbuseModal.js:24
+#, javascript-format
+msgctxt "Info"
+msgid "You can find more information and contact us ${ contactLink }."
+msgstr "Þú getur fundið meiri upplýsingar og haft samband við okkur ${ contactLink }."
+
+#: node_modules/react-components/containers/support/AttachScreenshot.js:45
+msgctxt "Info"
+msgid "Screenshot(s) attached"
+msgstr "Skjámynd(ir) viðhengd(ar)"
+
+#: node_modules/react-components/containers/support/BugModal.js:130
+#, javascript-format
+msgctxt "Info"
+msgid "Refreshing the page or ${ link } will automatically resolve most issues."
+msgstr " Að endurlesa síðuna eða ${ link } leysir sjálfkrafa mörg vandamál."
+
+#: node_modules/react-components/containers/support/BugModal.js:245
+#, javascript-format
+msgctxt "Info"
+msgid "Contact us at ${ criticalEmail } for critical security issues."
+msgstr "Hafðu samband við okkur á ${ criticalEmail } vegna alvarlegra öryggisvandamála."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:112
+msgctxt "Info"
+msgid "Your bank requires 3-D Secure verification for security purposes."
+msgstr "Bankinn þinn krefst 3-D Secure sannvottunar í öryggisskyni."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:119
+msgctxt "Info"
+msgid "Verification will open a new tab, please disable any popup blockers. You will not be charged. Any amount used to verify the card will be refunded immediately."
+msgstr "Sannvottun mun opna nýjan flipa, gerðu allar sprettgluggavarnir óvirkar. Þú verður ekki krafin(n) um greiðslu. Upphæðir sem notaðar eru til að sannvotta greiðslukort eru endurgreiddar samstundis."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:121
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:130
+msgctxt "Info"
+msgid "Verification will open a new tab, please disable any popup blockers."
+msgstr "Sannvottun mun opna nýjan flipa, gerðu allar sprettgluggavarnir óvirkar."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:127
+msgctxt "Info"
+msgid "You will be soon redirected to your bank to verify your payment."
+msgstr "Þér verður bráðlega endurbeint til bankans þíns til að sannreyna greiðsluna."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:138
+msgctxt "Info"
+msgid "Please verify the card in the new tab which was opened."
+msgstr "Yfirfarðu greiðslukortaupplýsingarnar í nýja flipanum sem opnaðist."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:139
+msgctxt "Info"
+msgid "Please verify payment at the new tab which was opened."
+msgstr "Yfirfarðu upplýsingar um greiðsluna í nýja flipanum sem opnaðist."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:147
+msgctxt "Info"
+msgid "Verification can take a few minutes."
+msgstr "Sannvottun getur tekið nokkrar mínútur."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:148
+msgctxt "Info"
+msgid "Payment can take a few minutes to fully verify."
+msgstr "Það getur tekið nokkrar mínútur að sannvotta greiðslur að fullu."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:160
+msgctxt "Info"
+msgid "Please try again, use a different payment method, or call your bank for assistance."
+msgstr "Endilega prófaðu aftur, notaðu annan greiðslumáta, eða hafðu samband við bankann þinn til að fá aðstoð."
+
+#: node_modules/react-components/containers/payments/PayPal.js:135
+msgctxt "Info"
+msgid "Please verify the payment in the new tab."
+msgstr "Sannreyna greiðsluna í nýjum flipa."
+
+#: node_modules/react-components/containers/payments/PayPal.js:145
+#: node_modules/react-components/containers/payments/PayPal.js:175
+msgctxt "Info"
+msgid "We will redirect you to PayPal in a new browser tab to complete this transaction. If you use any pop-up blockers, please disable them to continue."
+msgstr "Þér verður endurbeint til PayPal í nýjum flipa til að ljúka þessari millifærslu. Ef þú notar hugbúnað til að loka á sprettglugga (pop-up blocker), skaltu endilega gera hann óvirkan áður en haldið er áfram."
+
+#: node_modules/react-components/containers/payments/PayPal.js:153
+#, javascript-format
+msgctxt "Info"
+msgid "You must have a credit card or bank account linked with your PayPal account. If your PayPal account doesn't have that, please ${ clickHere }."
+msgstr "Þú verður að tengja greiðslukort eða bankareikning við PayPal-reikninginn þinn. Ef PayPal-reikningurnn er ekki með slíkt skaltu ${ clickHere }."
+
+#: node_modules/react-components/containers/payments/PayPal.js:160
+msgctxt "Info"
+msgid "This will enable PayPal to be used to pay for your Proton subscription. We will redirect you to PayPal in a new browser tab. If you use any pop-up blockers, please disable them to continue."
+msgstr "Þett mun gera kleift að nota PayPal til að greiða Proton-áskriftina þína. Þér verður endurbeint til PayPal í nýjum flipa. Ef þú notar hugbúnað til að loka á sprettglugga (pop-up blocker), skaltu endilega gera hann óvirkan áður en haldið er áfram."
+
+#: node_modules/react-components/containers/payments/PayPal.js:168
+msgctxt "Info"
+msgid "You must have a credit card or bank account linked with your PayPal account in order to add it as a payment method."
+msgstr "Þú verður að tengja greiðslukort eða bankareikning við PayPal-reikninginn þinn til að geta bætt honum við sem greiðslumáta."
+
+#: node_modules/react-components/containers/payments/Bitcoin.js:40
+#, javascript-format
+msgctxt "Info"
+msgid "Amount below minimum. (${ amount })"
+msgstr "Upphæð undir lágmarki. (${ amount })"
+
+#: node_modules/react-components/containers/payments/Bitcoin.js:64
+msgctxt "Info"
+msgid "Bitcoin transactions can take some time to be confirmed (up to 24 hours). Once confirmed, we will add credits to your account. After transaction confirmation, you can pay your invoice with the credits."
+msgstr "Bitcoin-millifærslur geta tekið nokkurn tíma áður en þær eru staðfestar (allt að 24 klst.). Þegar staðfesting fæst, verður inneign færð á notandaaðganginn þinn. Eftir að sú millifærsla er staðfest, geturðu greitt reikninginn þinn með inneigninni."
+
+#: node_modules/react-components/containers/payments/Bitcoin.js:73
+msgctxt "Info"
+msgid "After making your Bitcoin payment, please follow the instructions below to upgrade."
+msgstr "Eftir að hafa framkvæmt greiðslu með Bitcoin, skaltu fara eftir leiðbeiningunum hér til að uppfæra."
+
+#: node_modules/react-components/containers/payments/DonateModal.js:46
+msgctxt "Info"
+msgid "Your payment details are protected with TLS encryption and Swiss privacy laws."
+msgstr "Greiðsluupplýsingarnar þínar eru varðar með TLS-dulritun og svissneskum persónuverndarlögum."
+
+#: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:43
+msgctxt "Info"
+msgid "Expired"
+msgstr "Útrunnið"
+
+#: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:44
+msgctxt "Info"
+msgid "default"
+msgstr "sjálfgefið"
+
+#: node_modules/react-components/components/miniCalendar/WeekNumbers.js:36
+msgctxt "Info"
+msgid "Week"
+msgstr ""
+
+#: src/app/components/import/ImportCsvModalContent.js:87
+msgctxt "Info"
+msgid "No contacts to be imported"
+msgstr "Engir tengiliðir til að flytja inn"
+
+#: src/app/components/UpsellFree.js:15
+msgctxt "Info"
+msgid "Unlock access to encrypted contact details such as phone numbers and addresses with ProtonMail Plus."
+msgstr "Aflæstu aðgangi að dulrituðum nánari upplýsingum um tengilið, eins og t.d. símanúmer og tölvupóstföng, með ProtonMail Plus-áskrift."
+
+#: src/app/components/ContactModal.js:128
+msgctxt "Info"
+msgid "Email address, phone number and address at the top of their respective list are automatically set as the default information and will be displayed in the contact information's summary section."
+msgstr "Tölvupóstfang, símanúmer og heimilisfang sem eru efst í samsvarandi lista eru sjálfkrafa sett sem sjálfgefnar upplýsingar og verður birt í yfirliti um tengiliðinn."
+
+#: src/app/components/ContactGroupModal.js:178
+msgctxt "Info"
+msgid "No contacts added yet"
+msgstr "Engum tengiliðum hefur enn verið bætt við"
+
+#: src/app/components/SelectEmailsModal.js:48
+msgctxt "Info"
+msgid "Please select which email address or addresses to add to this group."
+msgstr "Veldu hvaða tölvupóstföngum eða vistföngum eigi að bæta í þennan hóp."
+
+#: src/app/components/ContactGroupDropdown.js:134
+msgctxt "Info"
+msgid "Contact group apply"
+msgid_plural "Contact groups apply"
+msgstr[0] "Beita á tengiliðahóp"
+msgstr[1] "Beita á tengiliðahópa"
+
+#: src/app/components/ContactGroupDropdown.js:175
+msgctxt "Info"
+msgid "Create a new contact group"
+msgstr "Búa til nýjan tengiliðahóp"
+
+#: src/app/components/ContactPgpSettings.js:71
+msgctxt "Info"
+msgid "Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service."
+msgstr "Uppsetning á PGP gerir þér kleift að senda enda-í-enda dulritaðan tölvupóst til notenda sem ekki nota-Protonmail en sem eru með PGP-samhæfða póstþjónustu."
+
+#: src/app/components/ContactPgpSettings.js:76
+msgctxt "Info"
+msgid "Address Verification with Trusted Keys is enabled for this address. To be able to send to this address, first trust public keys that can be used for sending."
+msgstr "Sannvottun vistfangs með treystum dulritunarlyklum er virkuð fyrir þetta póstfang. Svo hægt sé að senda á þetta póstfang, þarf fyrst að treysta aðallyklinum."
+
+#: src/app/components/ContactPgpSettings.js:80
+msgctxt "Info"
+msgid "This address is disabled. To be able to send to this address, the owner must first enable the address."
+msgstr "Þetta netfang er óvirkt. Til að geta sent á þetta tölvupóstfang, þarf eigandinn að virkja það."
+
+#: src/app/components/ContactPgpSettings.js:84
+msgctxt "Info"
+msgid "To use Address Verification, you must trust one or more available public keys, including the one you want to use for sending. This prevents the encrypted keys from being faked."
+msgstr ""
+
+#: src/app/components/ContactPgpSettings.js:88
+msgctxt "Info"
+msgid "Only change these settings if you are using PGP with non-ProtonMail recipients."
+msgstr "Ekki breyta þessum stillingum nema að þú sért að nota PGP með ekki-ProtonMail viðtakendum."
+
+#: src/app/components/ContactPgpSettings.js:92
+msgctxt "Info"
+msgid "All uploaded keys are expired or revoked! Encryption is automatically disabled."
+msgstr "Allir innsendir dulritunarlyklar eru útrunnir eða afturkallaðir. Dulritun er því sjálfvirkt óvirk."
+
+#.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+#: src/app/components/ContactEmailSettingsModal.js:236
+msgctxt "Info"
+msgid "Select the email format you want to be used by default when sending an email to this email address."
+msgstr "Veldu snið á tölvupósti sem þú vilt að sé sjálfgefið nota þegar póstur er sendur á þetta tölvupóstfang."
+
+#.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+#: src/app/components/ContactEmailSettingsModal.js:241
+msgctxt "Info"
+msgid "PGP/Inline is only compatible with Plain Text format. Please note that ProtonMail always signs PGP/Inline messages."
+msgstr "PGP/Innfellt er aðeins samhæft við hreinan ósniðinn texta (plain text). Athugaðu að ProtonMail undirritar ævinlega PGP/Innfellt-skilaboð."
+
+#.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+#: src/app/components/ContactEmailSettingsModal.js:246
+msgctxt "Info"
+msgid "PGP/MIME automatically sends the message using the current composer mode. Please note that ProtonMail always signs PGP/MIME messages."
+msgstr "PGP/MIME sendir skilaboðin sjálfvirkt með því að nota fyrirliggjandi ritunarham. Athugaðu að ProtonMail undirritar ævinlega PGP/MIME-skilaboð."
+
+#: src/app/components/MergeRow.js:7
+msgctxt "Info"
+msgid "Two or more contacts appear to be identical."
+msgstr "Tveir eða fleiri tengiliðir virðast vera eins."
+
+#: src/app/components/MergeRow.js:15
+#, javascript-format
+msgctxt "Info"
+msgid "${ boldText } Do you want to merge these contacts now?"
+msgstr "${ boldText } Viltu sameina þessa tengiliði núna?"
+
+#: src/app/components/ContactPlaceholder.js:26
+#: src/app/components/ContactPlaceholder.js:76
+msgctxt "Info"
+msgid "Add contacts to your ProtonMail account by importing them from a CSV or vCard file."
+msgstr "Bættu tengiliðum inn í ProtonMail-notandaaðganginn þinn með því að flytja þá inn úr CSV- eða vCard-skrá."
+
+#: src/app/components/ContactPlaceholder.js:38
+#: src/app/components/ContactPlaceholder.js:88
+msgctxt "Info"
+msgid "Create a backup of your ProtonMail contacts by exporting them to a vCard file."
+msgstr "Taktu öryggisafrit af tengiliðunum þínum í ProtonMail með því að flytja þá út í vCard-skrá."
+
+#: src/app/components/ContactPlaceholder.js:49
+msgctxt "Info"
+msgid "Use groups to send email to a list of addresses you regularly communicate with."
+msgstr "Notaðu hópa til að senda póst á lista af tölvupóstföngum sem þú átt reglulega samskipti við."
+
+#: src/app/components/ContactPlaceholder.js:99
+msgctxt "Info"
+msgid "Upgrade to a paid plan to enable encrypted contact details and manage contact groups."
+msgstr "Uppfærðu í greidda áskrift til að virkja dulritaðar nánari upplýsingar um tengilið og til að sýsla með hópa af tengiliðum."
+
+#: src/app/components/ContactPlaceholder.js:140
+#: src/app/components/ContactPlaceholder.js:165
+msgctxt "Info"
+msgid "1 contact"
+msgid_plural "${ selectedContacts } contacts"
+msgstr[0] "1 tengiliður"
+msgstr[1] "${ countSelectedContacts } tengiliðir"
+
+#: src/app/components/ContactPlaceholder.js:147
+#, javascript-format
+msgctxt "Info"
+msgid "You selected ${ totalContactsText } from your address book."
+msgstr "Þú valdir ${ totalContactsText } úr nafnaskránni þinni."
+
+#: src/app/components/ContactPlaceholder.js:165
+#, javascript-format
+msgctxt "Info"
+msgid "${ totalContactsInGroup } contacts"
+msgstr ""
+
+#: src/app/components/ContactPlaceholder.js:177
+msgctxt "Info"
+msgid "You have ${ _totalContactsText } in this group."
+msgstr "Þú ert með ${ _totalContactsText } í þessum hópi."
+
+#: src/app/components/ContactPlaceholder.js:196
+msgctxt "Info"
+msgid "one contact"
+msgstr "einn tengiliður"
+
+#: src/app/components/ContactPlaceholder.js:198
+#, javascript-format
+msgctxt "Info"
+msgid "${ totalContacts } contacts"
+msgstr "${ totalContacts } tengiliðir"
+
+#: src/app/components/ContactPlaceholder.js:200
+msgctxt "Info"
+msgid "Settings > General > Contacts"
+msgstr "Stillingar > Almennt > Tengiliðir"
+
+#: src/app/components/ContactPlaceholder.js:206
+#, javascript-format
+msgctxt "Info"
+msgid "You have ${ boldTotalContacts } in your address book"
+msgstr "Þú ert með ${ boldTotalContacts } í nafnaskránni þinni"
+
+#: src/app/components/ContactPlaceholder.js:208
+#, javascript-format
+msgctxt "Info"
+msgid "You can decide whether or not contacts are automatically added to your address book by navigating to ${ navigateTo }"
+msgstr "Þú getur ákveðið hvort tengiliðum sé sjálfkrafa bætt í nafnaskrána þína með því að fara á ${ navigateTo }"
+
+#: src/app/components/ContactGroupsTable.js:86
+msgctxt "Info"
+msgid "Are you sure you want to delete this contact group?"
+msgstr "Ertu viss um að þú viljir eyða þessum tengiliðahópi?"
+
+#: src/app/components/ContactGroupsTable.js:87
+msgctxt "Info"
+msgid "Contacts in the group aren't deleted if the contact group is deleted."
+msgstr "Tengiliðum í þessum hópi er ekki eytt þótt sjálfum hópnum sé eytt."
+
+#: src/app/components/ContactGroupsTable.js:101
+#, javascript-format
+msgctxt "Info"
+msgid "${ countEmailAddresses } email address"
+msgid_plural "${ countEmailAddresses } email addresses"
+msgstr[0] "${ countEmailAddresses } tölvupóstfang"
+msgstr[1] "${ countEmailAddresses } tölvupóstföng"
+
+#: src/app/components/ContactGroupsSection.js:14
+msgctxt "Info"
+msgid "A group can contain multiple email addresses from the same contact. Please note that a sending limit may apply and prevent you from sending emails to excessively large groups."
+msgstr "Hópur getur innihaldið mörg tölvupóstföng frá sama tengiliðnum. Athugaðu að takmörk geta verið á sendingum og komið í veg fyrir að þú getir sent póst á mjög stóra hópa."
+
+#: node_modules/react-components/containers/api/HumanVerificationModal.js:22
+msgctxt "Label"
+msgid "Captcha"
+msgstr "CAPTCHA-mennskupróf"
+
+#: node_modules/react-components/containers/login/UnlockModal.js:34
+msgctxt "Label"
+msgid "Cancel"
+msgstr "Hætta við"
+
+#: node_modules/react-components/containers/login/UnlockModal.js:35
+msgctxt "Label"
+msgid "Submit"
+msgstr "Senda inn"
+
+#: node_modules/react-components/containers/login/PasswordForm.js:28
+#: node_modules/react-components/containers/login/UnlockModal.js:41
+msgctxt "Label"
+msgid "Password"
+msgstr "Lykilorð"
+
+#: node_modules/react-components/containers/login/PasswordForm.js:10
+msgctxt "Label"
+msgid "Username"
+msgstr "Notandanafn"
+
+#: node_modules/react-components/containers/login/TOTPForm.js:9
+msgctxt "Label"
+msgid "Two-factor code"
+msgstr "Tveggja-þátta kóði"
+
+#: node_modules/react-components/containers/login/UnlockForm.js:9
+msgctxt "Label"
+msgid "Mailbox password"
+msgstr "Lykilorð á pósthólfi"
+
+#: node_modules/react-components/containers/support/BugModal.js:135
+msgctxt "Label"
+msgid "Proton username"
+msgstr "Notandanafn í Proton"
+
+#: node_modules/react-components/containers/support/BugModal.js:147
+msgctxt "Label"
+msgid "Email address"
+msgstr "Tölvupóstfang"
+
+#: node_modules/react-components/containers/support/BugModal.js:159
+msgctxt "Label"
+msgid "Category"
+msgstr "Flokkur"
+
+#: node_modules/react-components/containers/support/BugModal.js:171
+msgctxt "Label"
+msgid "What happened?"
+msgstr "Hvað gerðist?"
+
+#: node_modules/react-components/containers/support/BugModal.js:192
+msgctxt "Label"
+msgid "System information"
+msgstr "Kerfisupplýsingar"
+
+#: node_modules/react-components/containers/support/BugModal.js:200
+msgctxt "Label"
+msgid "Operating system"
+msgstr "Stýrikerfi"
+
+#: node_modules/react-components/containers/support/BugModal.js:211
+msgctxt "Label"
+msgid "Operating system version"
+msgstr "útgáfa stýrikerfis"
+
+#: node_modules/react-components/containers/support/BugModal.js:222
+msgctxt "Label"
+msgid "Browser"
+msgstr "Vafri"
+
+#: node_modules/react-components/containers/support/BugModal.js:233
+msgctxt "Label"
+msgid "Browser version"
+msgstr "Útgáfa vafra"
+
+#: node_modules/react-components/containers/payments/BitcoinDetails.js:10
+msgctxt "Label"
+msgid "Amount BTC"
+msgstr "Upphæð í BTC"
+
+#: node_modules/react-components/containers/payments/BitcoinDetails.js:16
+msgctxt "Label"
+msgid "BTC address"
+msgstr "BTC vistfang"
+
+#: node_modules/react-components/containers/payments/Payment.js:74
+msgctxt "Label"
+msgid "Payment method"
+msgstr "Greiðslumáti"
+
+#: node_modules/react-components/containers/payments/DonateModal.js:48
+msgctxt "Label"
+msgid "Amount"
+msgstr "Magn"
+
+#: node_modules/react-components/containers/paymentMethods/PaymentMethodDetails.js:17
+msgctxt "Label"
+msgid "Cardholder name"
+msgstr "Nafn korthafa"
+
+#: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:68
+msgctxt "Label"
+msgid "Pay with cash"
+msgstr "Greiða með reiðufé"
+
+#: node_modules/react-components/components/button/Copy.js:20
+msgctxt "Label"
+msgid "Copied"
+msgstr "Afritað"
+
+#: node_modules/react-components/components/button/Copy.js:20
+msgctxt "Label"
+msgid "Copy"
+msgstr "Afrita"
+
+#: node_modules/react-components/components/input/PasswordInput.js:21
+msgctxt "Label"
+msgid "Reveal password"
+msgstr "Birta lykilorð"
+
+#: node_modules/react-components/components/input/PasswordInput.js:21
+msgctxt "Label"
+msgid "Hide password"
+msgstr "Fela lykilorð"
+
+#: src/app/components/ContactAdrField.js:29
+msgctxt "Label"
+msgid "Street address"
+msgstr "Heimilisfang"
+
+#: src/app/components/ContactAdrField.js:37
+msgctxt "Label"
+msgid "City"
+msgstr "Borg/Sveitarfélag"
+
+#: src/app/components/ContactAdrField.js:46
+msgctxt "Label"
+msgid "Region"
+msgstr "Hérað/Svæði"
+
+#: src/app/components/ContactAdrField.js:54
+msgctxt "Label"
+msgid "Postal code"
+msgstr "Póstnúmer"
+
+#: src/app/components/ContactAdrField.js:62
+msgctxt "Label"
+msgid "Country"
+msgstr "Land"
+
+#: src/app/components/ContactAdrField.js:71
+msgctxt "Label"
+msgid "Post office box"
+msgstr "Pósthólf"
+
+#: src/app/components/ContactAdrField.js:81
+msgctxt "Label"
+msgid "Extended address"
+msgstr "Nákvæmara heimilisfang"
+
+#: src/app/components/ContactImageModal.js:47
+msgctxt "Label"
+msgid "Add image URL"
+msgstr "Bæta við slóð á mynd"
+
+#: src/app/components/ContactImageModal.js:58
+msgctxt "Label"
+msgid "Upload picture"
+msgstr "Senda inn mynd"
+
+#: src/app/components/ContactGroupModal.js:169
+msgctxt "Label"
+msgid "Add email address"
+msgstr "Bæta við tölvupóstfangi"
+
+#: src/app/components/ContactGroupDropdown.js:174
+msgctxt "Label"
+msgid "Add to group"
+msgstr "Bæta í hóp"
+
+#: src/app/components/ContactPgpSettings.js:98
+msgctxt "Label"
+msgid "Encrypt emails"
+msgstr "Dulrita tölvupósta"
+
+#: src/app/components/ContactPgpSettings.js:124
+msgctxt "Label"
+msgid "Sign emails"
+msgstr "Undirrita tölvupósta"
+
+#: src/app/components/ContactPgpSettings.js:149
+msgctxt "Label"
+msgid "Public keys"
+msgstr "Dreifilyklar"
+
+#: src/app/components/ContactPgpSettings.js:164
+msgctxt "Label"
+msgid "Cryptographic scheme"
+msgstr "Dulritunarskema"
+
+#.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+#: src/app/components/ContactEmailSettingsModal.js:252
+msgctxt "Label"
+msgid "Email format"
+msgstr "Snið tölvupósts"
+
+#: src/app/components/ContactsSection.js:12
+msgctxt "Label"
+msgid "Automatically save contacts"
+msgstr "Vista tengiliði sjálfvirkt"
+
+#: node_modules/react-components/containers/keys/shared/SelectKeyFiles.js:35
+msgctxt "Select files"
+msgid "Upload"
+msgstr "Senda inn"
+
+#: node_modules/react-components/containers/support/AttachScreenshot.js:23
+msgctxt "Error notification in the bug report modal when the user upload file"
+msgid "No image selected"
+msgstr "Engin mynd valin"
+
+#: node_modules/react-components/containers/support/BugModal.js:35
+#: node_modules/react-components/containers/support/BugModal.js:49
+msgctxt "Bug category"
+msgid "Login problem"
+msgstr "Vandamál við innskráningu"
+
+#: node_modules/react-components/containers/support/BugModal.js:36
+msgctxt "Bug category"
+msgid "Sign up problem"
+msgstr "Vandamál við nýskráningu"
+
+#: node_modules/react-components/containers/support/BugModal.js:37
+msgctxt "Bug category"
+msgid "Bridge problem"
+msgstr "Vandamál með brú"
+
+#: node_modules/react-components/containers/support/BugModal.js:38
+msgctxt "Bug category"
+msgid "Import / export problem"
+msgstr "Vandamál við inn-/útflutning"
+
+#: node_modules/react-components/containers/support/BugModal.js:39
+msgctxt "Bug category"
+msgid "Custom domains problem"
+msgstr "Vandamál við sérsniðin lén"
+
+#: node_modules/react-components/containers/support/BugModal.js:40
+#: node_modules/react-components/containers/support/BugModal.js:51
+msgctxt "Bug category"
+msgid "Payments problem"
+msgstr "Vandamál við greiðslur"
+
+#: node_modules/react-components/containers/support/BugModal.js:41
+#: node_modules/react-components/containers/support/BugModal.js:55
+msgctxt "Bug category"
+msgid "Connection problem"
+msgstr "Vandamál með tengingu"
+
+#: node_modules/react-components/containers/support/BugModal.js:42
+msgctxt "Bug category"
+msgid "Slow speed problem"
+msgstr "Vandamál vegna lítils hraða"
+
+#: node_modules/react-components/containers/support/BugModal.js:43
+msgctxt "Bug category"
+msgid "VPN problem"
+msgstr "VPN-vandamál"
+
+#: node_modules/react-components/containers/support/BugModal.js:44
+#: node_modules/react-components/containers/support/BugModal.js:60
+msgctxt "Bug category"
+msgid "Feature request"
+msgstr "Beiðni um nýja eiginleika"
+
+#: node_modules/react-components/containers/support/BugModal.js:45
+msgctxt "Bug category"
+msgid "Other"
+msgstr "Annað"
+
+#: node_modules/react-components/containers/support/BugModal.js:50
+msgctxt "Bug category"
+msgid "Signup problem"
+msgstr "Vandamál við nýskráningu"
+
+#: node_modules/react-components/containers/support/BugModal.js:52
+msgctxt "Bug category"
+msgid "Installation problem"
+msgstr "Vandamál við uppsetningu"
+
+#: node_modules/react-components/containers/support/BugModal.js:53
+msgctxt "Bug category"
+msgid "Update problem"
+msgstr "Vandamál við uppfærslu"
+
+#: node_modules/react-components/containers/support/BugModal.js:54
+msgctxt "Bug category"
+msgid "Application problem"
+msgstr "Vandamál við forrit"
+
+#: node_modules/react-components/containers/support/BugModal.js:56
+msgctxt "Bug category"
+msgid "Speed problem"
+msgstr "Vandamál vegna hraða"
+
+#: node_modules/react-components/containers/support/BugModal.js:57
+msgctxt "Bug category"
+msgid "Manual setup problem"
+msgstr "Vandamál við handvirka uppsetningu"
+
+#: node_modules/react-components/containers/support/BugModal.js:58
+msgctxt "Bug category"
+msgid "Website access problem"
+msgstr "Vandamál við aðgang að vefsvæði"
+
+#: node_modules/react-components/containers/support/BugModal.js:59
+msgctxt "Bug category"
+msgid "Streaming problem"
+msgstr "Vandamál við streymi"
+
+#: node_modules/react-components/containers/support/BugModal.js:80
+msgctxt "Action to select a title for the bug report modal"
+msgid "Select"
+msgstr "Velja"
+
+#: node_modules/react-components/containers/support/BugModal.js:95
+msgctxt "Link"
+msgid "clearing your browser cache"
+msgstr "hreinsa skyndiminni vafrans"
+
+#: node_modules/react-components/containers/payments/PayPal.js:125
+msgctxt "Link"
+msgid "click here"
+msgstr "smelltu hér"
+
+#: node_modules/react-components/containers/heading/UpgradeButton.js:13
+#: node_modules/react-components/containers/heading/UpgradeButton.js:21
+msgctxt "Link"
+msgid "Upgrade"
+msgstr "Uppfæra"
+
+#: node_modules/react-components/components/link/LearnMore.js:7
+#: src/app/components/ContactViewErrors.js:14
+#: src/app/components/ContactViewErrors.js:26
+#: src/app/components/ContactViewErrors.js:38
+msgctxt "Link"
+msgid "Learn more"
+msgstr "Kanna nánar"
+
+#: src/app/containers/SettingsContainer.js:24
+msgctxt "Link"
+msgid "General"
+msgstr "Almennt"
+
+#: src/app/containers/SettingsContainer.js:25
+msgctxt "Link"
+msgid "Contact groups"
+msgstr "Hópar tengiliða"
+
+#: src/app/content/PrivateSidebar.js:37
+msgctxt "Link"
+msgid "Contacts"
+msgstr "Tengiliðir"
+
+#: src/app/content/PrivateSidebar.js:44
+msgctxt "Link"
+msgid "Import"
+msgstr "Flytja inn"
+
+#: src/app/content/PrivateSidebar.js:54
+msgctxt "Link"
+msgid "Export all"
+msgstr "Flytja allt út"
+
+#: src/app/content/PrivateSidebar.js:63
+msgctxt "Link"
+msgid "Groups"
+msgstr "Hópar"
+
+#: node_modules/react-components/containers/support/BugModal.js:111
+msgctxt "Success"
+msgid "Bug reported"
+msgstr "Galli tilkynntur"
+
+#: node_modules/react-components/containers/payments/DonateModal.js:33
+msgctxt "Success"
+msgid "Your support is essential to keeping Proton running. Thank you for supporting internet privacy!"
+msgstr "Stuðningur þinn er undirstaða þess að halda ProtonMail gangandi. Þakka þér kærlega fyrir að styðja gagnaleynd á netinu!"
+
+#: node_modules/react-components/containers/general/AutoSaveContactsToggle.js:16
+msgctxt "Success"
+msgid "Preference saved"
+msgstr "Kjörstilling vistuð"
+
+#: src/app/components/ContactModal.js:94
+msgctxt "Success"
+msgid "Contact saved"
+msgstr "Tengiliður vistaður"
+
+#: src/app/components/ContactEmailSettingsModal.js:161
+msgctxt "Success"
+msgid "Preferences saved"
+msgstr "Kjörstillingar vistaðar"
+
+#: src/app/components/delete/DeleteModal.js:23
+msgctxt "Success"
+msgid "Contacts deleted"
+msgstr "Tengiliðum eytt"
+
+#: src/app/components/delete/DeleteModal.js:33
+msgctxt "Success"
+msgid "Contact deleted"
+msgid_plural "Contacts deleted"
+msgstr[0] ""
+msgstr[1] ""
+
+#: node_modules/react-components/containers/support/BugModal.js:131
+msgctxt "Warning"
+msgid "Bug reports are not end-to-end encrypted, please do not send any sensitive information."
+msgstr "Villuskýrslur eru ekki dulritaðar enda-í-enda, endilega ekki vera að miðla neinum viðkvæmum upplýsingum í þeim."
+
+#: src/app/components/ContactViewErrors.js:12
+msgctxt "Warning"
+msgid "Warning: the verification of this contact's signature failed."
+msgstr "Sannvottun á undirritun þessa tengiliðar brást."
+
+#: src/app/components/ContactViewErrors.js:24
+#: src/app/components/ContactViewErrors.js:36
+msgctxt "Warning"
+msgid "Error: the encrypted content failed decryption and cannot be read."
+msgstr "Villa: ekki tókst að afkóða dulritaða efnið og því er ekki hægt að lesa það."
+
+#: src/app/components/UpgradeModal.js:19
+msgctxt "Warning"
+msgid "This feature requires a paid Proton account"
+msgstr "Þessi eiginleiki krefst greiddrar Proton áskriftar"
+
+#: src/app/components/merge/MergeContactPreview.js:82
+msgctxt "Warning"
+msgid "Some of the contacts to be merged display errors. Please review them individually"
+msgstr "Sumir tengiliðirnir sem átti að sameina innihéldu villur. Yfirfarðu þá hvern fyrir sig"
+
+#: src/app/components/merge/MergeContactPreview.js:84
+msgctxt "Warning"
+msgid "Contacts could not be merged"
+msgstr "Ekki var hægt að sameina tengiliði"
+
+#: src/app/components/delete/DeleteModal.js:45
+msgctxt "Warning"
+msgid "This action will permanently delete the selected contact. Are you sure you want to delete this contact?"
+msgid_plural "This action will permanently delete selected contacts. Are you sure you want to delete these contacts?"
+msgstr[0] "Aðgerðin mun eyða valda tengiliðnum endanlega Ertu viss um að þú viljir eyða þessum tengilið?"
+msgstr[1] "Aðgerðin mun eyða völdu tengiliðunum endanlega Ertu viss um að þú viljir eyða þessum tengiliðum?"
+
+#: node_modules/react-components/containers/support/BugModal.js:184
+msgctxt "Label, make it short please"
+msgid "Attach screenshot(s)"
+msgstr "Hengja við skjámynd(ir)"
+
+#: node_modules/react-components/containers/payments/Card.js:57
+msgctxt "Placeholder, make it short"
+msgid "Security code"
+msgstr "Öryggiskóði"
+
+#: node_modules/react-components/containers/payments/Cash.js:13
+#, javascript-format
+msgctxt "Info for cash payment method"
+msgid "To pay via Cash, please email us at ${ email } for instructions."
+msgstr "Til að borga í beinhörðum peningum, sendu okkur tölvupóst á ${ email } til að fá nánari leiðbeiningar."
+
+#: node_modules/react-components/containers/paymentMethods/PaymentMethodDetails.js:21
+msgctxt "Label for credit card"
+msgid "Expiration"
+msgstr "Rennur út"
+
+#: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:34
+msgctxt "Payment method option"
+msgid "Pay with credit/debit card"
+msgstr "Greiða með kredit-/debitkorti"
+
+#: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:56
+msgctxt "Payment method option"
+msgid "Pay with PayPal"
+msgstr "Greiða með PayPal"
+
+#: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:63
+msgctxt "Payment method option"
+msgid "Pay with Bitcoin"
+msgstr "Greiða með Bitcoin"
+
+#: node_modules/react-components/components/toggle/Toggle.js:10
+msgctxt "Toggle button"
+msgid "On"
+msgstr "Kveikt"
+
+#: node_modules/react-components/components/toggle/Toggle.js:11
+msgctxt "Toggle button"
+msgid "Off"
+msgstr "Slökkt"
+
+#: src/app/helpers/fields.js:4
+#: src/app/helpers/fields.js:31
+#: src/app/helpers/fields.js:68
+msgctxt "Contact field label"
+msgid "Name"
+msgstr "Heiti"
+
+#: src/app/helpers/fields.js:5
+#: src/app/helpers/fields.js:69
+msgctxt "Contact field label"
+msgid "Compact name"
+msgstr "Nafn fyrirtækis"
+
+#: src/app/helpers/fields.js:6
+#: src/app/helpers/fields.js:70
+msgctxt "Contact field label"
+msgid "Nickname"
+msgstr "Gælunafn"
+
+#: src/app/helpers/fields.js:7
+#: src/app/helpers/fields.js:32
+#: src/app/helpers/fields.js:71
+msgctxt "Contact field label"
+msgid "Email"
+msgstr "Tölvupóstur"
+
+#: src/app/helpers/fields.js:8
+#: src/app/helpers/fields.js:33
+#: src/app/helpers/fields.js:72
+msgctxt "Contact field label"
+msgid "Phone"
+msgstr "Sími"
+
+#: src/app/helpers/fields.js:9
+#: src/app/helpers/fields.js:34
+#: src/app/helpers/fields.js:73
+msgctxt "Contact field label"
+msgid "Address"
+msgstr "Heimilisfang"
+
+#: src/app/helpers/fields.js:10
+#: src/app/helpers/fields.js:35
+#: src/app/helpers/fields.js:51
+#: src/app/helpers/fields.js:74
+msgctxt "Contact field label"
+msgid "Photo"
+msgstr "Ljósmynd"
+
+#: src/app/helpers/fields.js:11
+#: src/app/helpers/fields.js:36
+#: src/app/helpers/fields.js:52
+#: src/app/helpers/fields.js:75
+msgctxt "Contact field label"
+msgid "Organization"
+msgstr "Stofnun"
+
+#: src/app/helpers/fields.js:12
+#: src/app/helpers/fields.js:37
+#: src/app/helpers/fields.js:53
+#: src/app/helpers/fields.js:76
+msgctxt "Contact field label"
+msgid "Birthday"
+msgstr "Fæðingardagur"
+
+#: src/app/helpers/fields.js:13
+#: src/app/helpers/fields.js:38
+#: src/app/helpers/fields.js:54
+#: src/app/helpers/fields.js:77
+msgctxt "Contact field label"
+msgid "Anniversary"
+msgstr "Afmæli"
+
+#: src/app/helpers/fields.js:14
+#: src/app/helpers/fields.js:39
+#: src/app/helpers/fields.js:55
+#: src/app/helpers/fields.js:78
+msgctxt "Contact field label"
+msgid "Title"
+msgstr "Titill"
+
+#: src/app/helpers/fields.js:15
+#: src/app/helpers/fields.js:40
+#: src/app/helpers/fields.js:56
+#: src/app/helpers/fields.js:79
+msgctxt "Contact field label"
+msgid "Role"
+msgstr "Hlutverk"
+
+#: src/app/helpers/fields.js:16
+#: src/app/helpers/fields.js:42
+#: src/app/helpers/fields.js:58
+#: src/app/helpers/fields.js:80
+msgctxt "Contact field label"
+msgid "Note"
+msgstr "Minnispunktur"
+
+#: src/app/helpers/fields.js:17
+#: src/app/helpers/fields.js:43
+#: src/app/helpers/fields.js:59
+#: src/app/helpers/fields.js:81
+msgctxt "Contact field label"
+msgid "URL"
+msgstr "Slóð"
+
+#: src/app/helpers/fields.js:18
+#: src/app/helpers/fields.js:44
+#: src/app/helpers/fields.js:60
+#: src/app/helpers/fields.js:82
+msgctxt "Contact field label"
+msgid "Gender"
+msgstr "Kyn"
+
+#: src/app/helpers/fields.js:19
+#: src/app/helpers/fields.js:45
+#: src/app/helpers/fields.js:61
+#: src/app/helpers/fields.js:83
+msgctxt "Contact field label"
+msgid "Language"
+msgstr "Tungumál"
+
+#: src/app/helpers/fields.js:20
+#: src/app/helpers/fields.js:46
+#: src/app/helpers/fields.js:62
+#: src/app/helpers/fields.js:84
+msgctxt "Contact field label"
+msgid "Timezone"
+msgstr "Tímabelti"
+
+#: src/app/helpers/fields.js:21
+#: src/app/helpers/fields.js:47
+#: src/app/helpers/fields.js:63
+#: src/app/helpers/fields.js:85
+msgctxt "Contact field label"
+msgid "Geo"
+msgstr "Hnattstaðsetningu"
+
+#: src/app/helpers/fields.js:22
+#: src/app/helpers/fields.js:48
+#: src/app/helpers/fields.js:64
+#: src/app/helpers/fields.js:86
+msgctxt "Contact field label"
+msgid "Logo"
+msgstr "Táknmerki"
+
+#: src/app/helpers/fields.js:23
+#: src/app/helpers/fields.js:41
+#: src/app/helpers/fields.js:57
+#: src/app/helpers/fields.js:87
+msgctxt "Contact field label"
+msgid "Member"
+msgstr "Meðlimur"
+
+#: src/app/helpers/fields.js:24
+#: src/app/helpers/fields.js:88
+msgctxt "Contact field label"
+msgid "IMPP"
+msgstr ""
+
+#: src/app/helpers/fields.js:25
+#: src/app/helpers/fields.js:89
+msgctxt "Contact field label"
+msgid "Related"
+msgstr "Tengt"
+
+#: src/app/helpers/fields.js:26
+#: src/app/helpers/fields.js:90
+msgctxt "Contact field label"
+msgid "Categories"
+msgstr "Flokkar"
+
+#: src/app/helpers/fields.js:27
+#: src/app/helpers/fields.js:91
+msgctxt "Contact field label"
+msgid "Sound"
+msgstr "Hljóð"
+
+#: src/app/helpers/types.js:4
+msgctxt "Contact type label"
+msgid "Work"
+msgstr "Vinna"
+
+#: src/app/helpers/types.js:5
+msgctxt "Contact type label"
+msgid "Personal"
+msgstr "Persónulegt"
+
+#: src/app/helpers/types.js:6
+msgctxt "Contact type label"
+msgid "Mobile"
+msgstr "Farsími"
+
+#: src/app/helpers/types.js:7
+msgctxt "Contact type label"
+msgid "Main"
+msgstr "Aðal"
+
+#: src/app/helpers/types.js:8
+msgctxt "Contact type label"
+msgid "Yomi"
+msgstr "Yomi"
+
+#: src/app/helpers/types.js:9
+msgctxt "Contact type label"
+msgid "Other"
+msgstr "Annað"
+
+#: src/app/helpers/types.js:10
+msgctxt "Contact type label"
+msgid "Fax"
+msgstr "Fax"
+
+#: src/app/helpers/types.js:11
+msgctxt "Contact type label"
+msgid "Pager"
+msgstr "Símboði"
+
+#: src/app/helpers/types.js:15
+msgctxt "Property type"
+msgid "Name"
+msgstr "Nafn"
+
+#: src/app/helpers/types.js:15
+msgctxt "Property type"
+msgid "Yomi"
+msgstr "Yomi"
+
+#: src/app/helpers/types.js:19
+msgctxt "Property type"
+msgid "Email"
+msgstr "Tölvupóstur"
+
+#: src/app/helpers/types.js:20
+#: src/app/helpers/types.js:26
+#: src/app/helpers/types.js:36
+msgctxt "Property type"
+msgid "Home"
+msgstr "Heima"
+
+#: src/app/helpers/types.js:21
+#: src/app/helpers/types.js:27
+#: src/app/helpers/types.js:37
+msgctxt "Property type"
+msgid "Work"
+msgstr "Vinna"
+
+#: src/app/helpers/types.js:22
+#: src/app/helpers/types.js:28
+#: src/app/helpers/types.js:38
+msgctxt "Property type"
+msgid "Other"
+msgstr "Annað"
+
+#: src/app/helpers/types.js:25
+msgctxt "Property type"
+msgid "Phone"
+msgstr "Sími"
+
+#: src/app/helpers/types.js:29
+msgctxt "Property type"
+msgid "Mobile"
+msgstr "Farsími"
+
+#: src/app/helpers/types.js:30
+msgctxt "Property type"
+msgid "Main"
+msgstr "Aðal"
+
+#: src/app/helpers/types.js:31
+msgctxt "Property type"
+msgid "Fax"
+msgstr "Bréfsími"
+
+#: src/app/helpers/types.js:32
+msgctxt "Property type"
+msgid "Pager"
+msgstr "Símboði"
+
+#: src/app/helpers/types.js:35
+msgctxt "Property type"
+msgid "Address"
+msgstr "Heimilisfang"
+
+#: src/app/helpers/types.js:52
+msgctxt "Property type"
+msgid "Contact"
+msgstr "Tengiliður"
+
+#: src/app/helpers/types.js:53
+msgctxt "Property type"
+msgid "Acquaintance"
+msgstr "Kunningi"
+
+#: src/app/helpers/types.js:54
+msgctxt "Property type"
+msgid "Friend"
+msgstr "Vinur"
+
+#: src/app/helpers/types.js:55
+msgctxt "Property type"
+msgid "Met"
+msgstr "Hitti"
+
+#: src/app/helpers/types.js:56
+msgctxt "Property type"
+msgid "Co-worker"
+msgstr "Samstarfsmaður"
+
+#: src/app/helpers/types.js:57
+msgctxt "Property type"
+msgid "Colleague"
+msgstr "Starfsbróðir"
+
+#: src/app/helpers/types.js:58
+msgctxt "Property type"
+msgid "Co-resident"
+msgstr "Sambýlingur"
+
+#: src/app/helpers/types.js:59
+msgctxt "Property type"
+msgid "Neighbor"
+msgstr "Nágranni"
+
+#: src/app/helpers/types.js:60
+msgctxt "Property type"
+msgid "Child"
+msgstr "Barn"
+
+#: src/app/helpers/types.js:61
+msgctxt "Property type"
+msgid "Parent"
+msgstr "Foreldri"
+
+#: src/app/helpers/types.js:62
+#: src/app/helpers/types.js:63
+msgctxt "Property type"
+msgid "Sibling"
+msgstr "Systkini"
+
+#: src/app/helpers/types.js:64
+msgctxt "Property type"
+msgid "Kin"
+msgstr "Skyldmenni"
+
+#: src/app/helpers/types.js:65
+msgctxt "Property type"
+msgid "Muse"
+msgstr "Goð/Gyðja"
+
+#: src/app/helpers/types.js:66
+msgctxt "Property type"
+msgid "Crush"
+msgstr "Skot"
+
+#: src/app/helpers/types.js:67
+msgctxt "Property type"
+msgid "Date"
+msgstr "Dagsetning"
+
+#: src/app/helpers/types.js:68
+msgctxt "Property type"
+msgid "Sweetheart"
+msgstr "Kærasti/kærasta"
+
+#: src/app/helpers/types.js:69
+msgctxt "Property type"
+msgid "Me"
+msgstr "Ég"
+
+#: src/app/helpers/types.js:70
+msgctxt "Property type"
+msgid "Agent"
+msgstr "Umboðsmaður"
+
+#: src/app/helpers/types.js:71
+msgctxt "Property type"
+msgid "Emergency"
+msgstr "Neyðartilfelli"
+
+#: src/app/helpers/encrypt.js:74
+msgctxt "Default display name vcard"
+msgid "Unknown"
+msgstr "Óþekkt"
+
+#: src/app/components/import/AttachingModalContent.js:12
+msgctxt "Description"
+msgid "We support importing CSV files from Outlook, Outlook Express, Yahoo! Mail, Hotmail, Eudora and some other apps. We also support importing vCard 4.0. (UTF-8 encoding)."
+msgstr "Við styðjum innflutning á CSV-skrám úr Outlook, Outlook Express, Yahoo! Mail, Hotmail, Eudora og nokkrum öðrum forritum. Við styðjum einnig innflutning á vCard 4.0. (UTF-8 kóðun)."
+
+#: src/app/components/import/ImportingModalContent.js:246
+msgctxt "Description"
+msgid "Encrypting and importing contacts... This may take a few minutes. When the process is completed, you can close this modal."
+msgstr "Dulrita og flyt inn tengiliði... þetta getur tekið nokkrar mínútur. Þegar ferlinu er lokið geturðu lokað þessum glugga."
+
+#: src/app/components/import/ImportGroupsModalContent.js:10
+msgctxt "Description"
+msgid "We picked up at least one group/organization from the list of contacts you are importing. Take the time to review how we should import these groups."
+msgstr "Við fundum að minnsta kosti einn hóp/stofnun í tengiliðalistanum sem þú ert að flytja inn. Taktu þér tíma til að yfirfara hvernig ætti að flytja þessa hópa inn."
+
+#: src/app/components/ExportModal.js:119
+msgctxt "Description"
+msgid "Decrypting contacts... This may take a few minutes. When the process is completed, you will be able to download the file with all your contacts exported."
+msgstr "Afkóða tengiliði... þetta getur tekið nokkrar mínútur. Þegar ferlinu er lokið geturðu náð í skrána sem allir tengiliðirnir þínir voru fluttir út í."
+
+#: src/app/components/merge/MergingModalContent.js:267
+msgctxt "Description"
+msgid "Merging contacts... This may take a few minutes. When the process is completed, you can close this modal."
+msgstr "Sameina tengiliði... þetta getur tekið nokkrar mínútur. Þegar ferlinu er lokið geturðu lokað þessum glugga."
+
+#: src/app/components/merge/MergeModalContent.js:70
+msgctxt "Description"
+msgid "Use Drag and Drop to rank merging priority between contacts. Uncheck the contacts you do not want to merge."
+msgstr "Dragðu og slepptu tengiliðum til þess að breyta forgangi við sameiningu þeirra. Afmerktu þá tengiliði sem þú vilt ekki sameina."
+
+#: src/app/components/merge/MergeModalContent.js:74
+msgctxt "Description"
+msgid "You can mark for deletion the contacts that you do not want neither to merge nor to keep.\n"
+"Deletion will only take place after the merge button is clicked"
+msgstr "Þú getur merkt til eyðingar þá tengiliði sem þú vilt hvorki sameina né halda uppá.\n"
+"Eyðing fer aðeins fram eftir að ýtt er á hnappinn fyrir sameiningu"
+
+#: src/app/components/import/ImportCsvTableHeader.js:11
+msgctxt "TableHeader"
+msgid "IMPORT"
+msgstr "FLYTJA INN"
+
+#: src/app/components/import/ImportCsvTableHeader.js:13
+msgctxt "TableHeader"
+msgid "CSV FIELD"
+msgstr "CSV-GAGNASVIÐ"
+
+#: src/app/components/import/ImportCsvTableHeader.js:14
+msgctxt "TableHeader"
+msgid "VCARD FIELD"
+msgstr "VCARD-GAGNASVIÐ"
+
+#: src/app/components/import/ImportCsvTableHeader.js:17
+msgctxt "TableHeader"
+msgid "VALUES"
+msgstr "GILDI"
+
+#: src/app/components/merge/MergeTable.js:13
+msgctxt "TableHeader"
+msgid "NAME"
+msgstr "NAFN"
+
+#: src/app/components/merge/MergeTable.js:14
+msgctxt "TableHeader"
+msgid "ADDRESS"
+msgstr "VISTFANG"
+
+#: src/app/components/merge/MergeTable.js:15
+msgctxt "TableHeader"
+msgid "ACTIONS"
+msgstr "AÐGERÐIR"
+
+#: src/app/components/import/ImportCsvModalContent.js:33
+msgctxt "Error notification"
+msgid "First name and last name cannot be unchecked at the same time"
+msgstr "Ekki er hægt að afmerkja kenninafn og eftirnafn á sama tíma"
+
+#: src/app/components/import/ImportModal.js:70
+msgctxt "Error notification"
+msgid "No .csv or .vcf file selected"
+msgstr "Engin .csv eða .vcf skrá valin"
+
+#: src/app/components/import/ImportModal.js:106
+msgctxt "Error notification"
+msgid "File selected appears to be corrupted"
+msgstr "Valda skráin virðist vera skemmd"
+
+#: src/app/components/import/ImportCsvModalContent.js:62
+msgctxt "Description of the purpose of the import CSV modal"
+msgid "We have detected the following fields in the CSV file you uploaded. Check the ones you want to import."
+msgstr "Eftirfarandi gagnasvið fundust í CSV-skránni sem þú sendir inn. Veldu þau svið sem þú vilt flytja inn."
+
+#: src/app/components/import/ImportCsvModalContent.js:66
+msgctxt "Description of the purpose of the import CSV modal"
+msgid "Also, we have automatically matched CSV fields with vCard fields. You can review and change this matching manually."
+msgstr "Einnig höfum við parað sjálfvirkt CSV-gagnasvið við vCard-gagnasvið. Þú getur yfirfarið og breytt þessum samsvörunum handvirkt."
+
+#: src/app/components/import/ErrorDetails.js:6
+msgctxt "Info on errors"
+msgid "Click for details"
+msgstr "Smelltu fyrir nánari upplýsingar"
+
+#: src/app/components/import/ImportingModalContent.js:31
+#, javascript-format
+msgctxt "Info on errors importing contacts"
+msgid "Contact ${ index } from your list could not be parsed. ${ message }"
+msgstr "Ekki var hægt að þátta tengiliðinn ${ index } úr listanum þínum. ${ message }"
+
+#: src/app/components/import/ImportingModalContent.js:33
+msgctxt "Info on errors importing contacts"
+msgid "Contact ${ index } from your list could not be encrypted."
+msgstr "Ekki var hægt að dulrita tengiliðinn ${ index } úr listanum þínum."
+
+#: src/app/components/import/ImportingModalContent.js:35
+#, javascript-format
+msgctxt "Info on errors importing contacts"
+msgid "Contact ${ index } from your list could not be imported. ${ message }"
+msgstr "Ekki var hægt að flytja inn tengiliðinn ${ index } úr listanum þínum. ${ message }"
+
+#: src/app/components/import/ImportingModalContent.js:265
+msgctxt "Info on errors importing contacts"
+msgid "Some contacts could not be imported. Click for details"
+msgstr "Suma tengiliði var ekki hægt að flytja inn. Smelltu fyrir nánari upplýsingar"
+
+#: src/app/components/import/ImportingModalContent.js:253
+#, javascript-format
+msgctxt "Progress bar description"
+msgid "${ model.submitted.length } out of ${ model.total } contact successfully imported."
+msgid_plural "${ model.submitted.length } out of ${ model.total } contacts successfully imported."
+msgstr[0] "Innflutningur tókst á ${ model.submitted.length } af ${ model.total } tengilið."
+msgstr[1] "Innflutningur tókst á ${ model.submitted.length } af ${ model.total } tengiliðum."
+
+#: src/app/components/import/ImportingModalContent.js:258
+msgctxt "Progress bar description"
+msgid "No contacts imported"
+msgstr "Engir tengiliðir fluttir inn"
+
+#: src/app/components/DynamicProgress.js:9
+msgctxt "Progress bar description"
+msgid "Progress"
+msgstr "Framvinda"
+
+#: src/app/components/DynamicProgress.js:10
+msgctxt "Progress bar description"
+msgid "Completed"
+msgstr "Lokið"
+
+#: src/app/components/DynamicProgress.js:11
+msgctxt "Progress bar description"
+msgid "Failed"
+msgstr "Mistókst"
+
+#: src/app/components/ExportModal.js:127
+#, javascript-format
+msgctxt "Progress bar description"
+msgid "${ contactsExported.length } out of ${ countContacts } contacts successfully exported."
+msgstr "Útflutningur tókst á ${ contactsExported.length } af ${ countContacts } tengiliðum."
+
+#: src/app/components/ExportModal.js:129
+msgctxt "Progress bar description"
+msgid "No contacts exported."
+msgstr "Engir tengiliðir fluttir út."
+
+#: src/app/components/merge/MergingModalContent.js:275
+#, javascript-format
+msgctxt "Progress bar description"
+msgid "${ model.submitted.length } out of ${ totalBeMerged } contacts successfully merged."
+msgstr "Sameining tókst á ${ model.submitted.length } af ${ totalBeMerged } tengiliðum."
+
+#: src/app/components/merge/MergingModalContent.js:277
+msgctxt "Progress bar description"
+msgid "No contacts merged."
+msgstr "Engir tengiliðir sameinaðir."
+
+#: src/app/components/import/ImportModal.js:82
+msgctxt "Error info"
+msgid "We only support importing files smaller than 10 MB. Please split your contacts into several smaller files."
+msgstr "Einungis er stuðningur við skrár minni en 10 MB. Skiptu tengiliðaskránum þínum upp í fleiri smærri skrár."
+
+#: src/app/components/EncryptedIcon.js:7
+msgctxt "Tooltip"
+msgid "Encrypted data with verified digital signature"
+msgstr "Dulrituð gögn með sannvottaðri stafrænni undirritun"
+
+#: src/app/components/ContactPgpSettings.js:101
+msgctxt "Tooltip"
+msgid "Email encryption forces email signature to help authenticate your sent messages"
+msgstr "Dulritun tölvupósts krefst undirritunar til að hjálpa til við auðkenningu á sendum tölvupósti frá þér"
+
+#: src/app/components/ContactPgpSettings.js:127
+msgctxt "Tooltip"
+msgid "Digitally signing emails helps authenticating that messages are sent by you"
+msgstr ""
+
+#: src/app/components/ContactPgpSettings.js:152
+msgctxt "Tooltip"
+msgid "Upload a public key to enable sending end-to-end encrypted emails to this email"
+msgstr "Sendu inn dreifilykil til að virkja sendingu enda-í-enda dulritaðra tölvupósta á þetta netfang"
+
+#: src/app/components/ContactPgpSettings.js:167
+msgctxt "Tooltip"
+msgid "Select the PGP scheme to be used when signing or encrypting to a user. Note that PGP/Inline forces plain text messages"
+msgstr "Veldu hvaða PGP-skema á að nota við undirritun eða dulritun til notanda. Athugaðu að PGP/Innfellt þvingar fram skilaboð í ósniðnum texta."
+
+#.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+#: src/app/components/ContactEmailSettingsModal.js:255
+msgctxt "Tooltip"
+msgid "Automatic indicates that the format in the composer is used to send to this user. Plain text indicates that the message will always be converted to plain text on send."
+msgstr "Sjálfvirkt þýðir að sniðið sem birtist í ritlinum er notað til að senda póst til þessa notanda. Ósniðinn texti þýðir að skilaboðunum verður ávalt umbreytt í hreinan ósniðinn texta þegar þau eru send."
+
+#: src/app/components/ContactToolbar.js:44
+msgctxt "Tooltip"
+msgid "Delete"
+msgstr "Eyða"
+
+#: src/app/components/ContactGroupModal.js:31
+#: src/app/components/ContactGroupsTable.js:60
+msgctxt "Table header"
+msgid "Name"
+msgstr "Nafn"
+
+#: src/app/components/ContactGroupModal.js:31
+msgctxt "Table header"
+msgid "Address"
+msgstr "Vistfang"
+
+#: src/app/components/ContactGroupModal.js:31
+msgctxt "Table header"
+msgid "Action"
+msgstr "Aðgerð"
+
+#: src/app/components/ContactKeysTable.js:87
+msgctxt "Table header"
+msgid "Fingerprint"
+msgstr "Fingrafar"
+
+#: src/app/components/ContactKeysTable.js:88
+msgctxt "Table header"
+msgid "Created"
+msgstr "Búið til"
+
+#: src/app/components/ContactKeysTable.js:89
+msgctxt "Table header"
+msgid "Expires"
+msgstr ""
+
+#: src/app/components/ContactKeysTable.js:90
+msgctxt "Table header"
+msgid "Type"
+msgstr "Tegund"
+
+#: src/app/components/ContactKeysTable.js:91
+msgctxt "Table header"
+msgid "Status"
+msgstr "Staða"
+
+#: src/app/components/ContactGroupsTable.js:60
+#: src/app/components/ContactKeysTable.js:92
+msgctxt "Table header"
+msgid "Actions"
+msgstr "Aðgerðir"
+
+#: src/app/components/ContactGroupsTable.js:60
+msgctxt "Table header"
+msgid "Group size"
+msgstr "Stærð hóps"
+
+#: src/app/components/ContactGroupModal.js:130
+msgctxt "Notification"
+msgid "Contact group updated"
+msgstr "Tengiliðahópur uppfærður"
+
+#: src/app/components/ContactGroupModal.js:131
+msgctxt "Notification"
+msgid "Contact group created"
+msgstr "Hópur tengiliða búinn til"
+
+#: src/app/components/ContactGroupModal.js:151
+msgctxt "Label for contact group name"
+msgid "Name"
+msgstr "Nafn"
+
+#: src/app/components/ContactGroupModal.js:155
+msgctxt "Placeholder for contact group name"
+msgid "Name"
+msgstr "Nafn"
+
+#: src/app/components/ContactGroupModal.js:162
+msgctxt "Label for contact group color"
+msgid "Color"
+msgstr "Litur"
+
+#: src/app/components/ContactsList.js:105
+msgctxt "Info message"
+msgid "Your address book is empty"
+msgstr "Nafnaskráin þín er tóm"
+
+#: src/app/components/ContactsList.js:133
+msgctxt "Info message"
+msgid "Your contact group is empty"
+msgstr "Tengiliðahópurinn þinn er er tómur"
+
+#: src/app/components/ContactsList.js:152
+msgctxt "Info message"
+msgid "No results found"
+msgstr "Engar niðurstöður fundust"
+
+#: src/app/components/ContactsList.js:110
+#, javascript-format
+msgctxt "Actions message"
+msgid "You can either ${ addContact } or ${ importContact } from a file."
+msgstr "Þú getur annað hvort valið ${ addContact } eða ${ importContact } úr skrá."
+
+#: src/app/components/ContactsList.js:137
+#, javascript-format
+msgctxt "Actions message"
+msgid "You can ${ editGroup } to add a contact."
+msgstr "Þú getur valið ${ editGroup } til að bæta við nýjum tengilið."
+
+#: src/app/components/ContactsList.js:154
+#, javascript-format
+msgctxt "Actions message"
+msgid "You can either update your search query or ${ clearSearch }."
+msgstr "Þú getur annað hvort breytt leitarskilyrðunum þínum eða valið ${ clearSearch }."
+
+#: src/app/components/ContactMIMETypeSelect.js:9
+msgctxt "MIME type"
+msgid "Automatic"
+msgstr "Sjálfvirkt"
+
+#: src/app/components/ContactMIMETypeSelect.js:10
+msgctxt "MIME type"
+msgid "Plain text"
+msgstr "Ósniðinn texti"
+
+#: src/app/components/ContactSchemeSelect.js:13
+#, javascript-format
+msgctxt "Default encryption scheme"
+msgid "Use global default (${ defaultValue })"
+msgstr "Nota sjálfgefnar almennar stillingar (${ defaultValue })"
+
+#: src/app/components/KeyWarningIcon.js:14
+msgctxt "PGP key warning"
+msgid "This key is assigned to ${ emails }"
+msgstr "Þessum dulritunarlykli er úthlutað til ${ emails}"
+
+#: src/app/components/ContactKeysTable.js:206
+msgctxt "Key badge"
+msgid "Active"
+msgstr ""
+
+#: src/app/components/ContactKeysTable.js:208
+msgctxt "Key badge"
+msgid "Verification only"
+msgstr ""
+
+#: src/app/components/ContactKeysTable.js:210
+msgctxt "Key badge"
+msgid "WKD"
+msgstr ""
+
+#: src/app/components/ContactKeysTable.js:211
+msgctxt "Key badge"
+msgid "Trusted"
+msgstr "Treyst"
+
+#: src/app/components/ContactKeysTable.js:212
+msgctxt "Key badge"
+msgid "Revoked"
+msgstr ""
+
+#: src/app/components/ContactKeysTable.js:213
+msgctxt "Key badge"
+msgid "Expired"
+msgstr ""
+
+#: src/app/components/ContactGroupsTable.js:42
+msgctxt "Contact group notification"
+msgid "Contact group removed"
+msgstr "Tengiliðahópur fjarlægður"
+

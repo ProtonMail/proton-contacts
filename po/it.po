@@ -1,0 +1,2601 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: protonmail\n"
+"X-Crowdin-Language: it\n"
+"X-Crowdin-File: ProtonMail Contact Application.pot\n"
+"Project-Id-Version: protonmail\n"
+"Language-Team: Italian\n"
+"Language: it_IT\n"
+"PO-Revision-Date: 2019-12-19 13:20\n"
+
+#: node_modules/proton-shared/lib/helpers/humanSize.js:13
+msgctxt "file size format"
+msgid "KB"
+msgstr ""
+
+#: node_modules/proton-shared/lib/helpers/humanSize.js:14
+msgctxt "file size format"
+msgid "MB"
+msgstr ""
+
+#: node_modules/proton-shared/lib/helpers/humanSize.js:15
+msgctxt "file size format"
+msgid "GB"
+msgstr ""
+
+#: node_modules/proton-shared/lib/keys/keys.js:102
+msgctxt "Error"
+msgid "Signature verification failed"
+msgstr "Verifica della firma fallita"
+
+#: node_modules/proton-shared/lib/keys/keys.js:122
+msgctxt "Error"
+msgid "Incorrect decryption password"
+msgstr "Password di decifratura errata"
+
+#: node_modules/react-components/containers/api/ApiProvider.js:38
+msgctxt "Error"
+msgid "Could not connect to server."
+msgstr "Impossibile connettersi al server."
+
+#: node_modules/react-components/containers/api/ApiProvider.js:39
+msgctxt "Error"
+msgid "No internet connection found"
+msgstr "Nessuna connessione a internet trovata"
+
+#: node_modules/react-components/containers/api/ApiProvider.js:45
+msgctxt "Error"
+msgid "Request timed out."
+msgstr "Timeout della richiesta."
+
+#: node_modules/react-components/containers/payments/paymentTokenHelper.js:32
+#: node_modules/react-components/containers/payments/paymentTokenHelper.js:128
+msgctxt "Error"
+msgid "Process aborted"
+msgstr "Processo interrotto"
+
+#: node_modules/react-components/containers/payments/paymentTokenHelper.js:36
+msgctxt "Error"
+msgid "Payment process cancelled"
+msgstr "Processo di pagamento annullato"
+
+#: node_modules/react-components/containers/payments/paymentTokenHelper.js:42
+msgctxt "Error"
+msgid "Payment process failed"
+msgstr "Processo di pagamento fallito"
+
+#: node_modules/react-components/containers/payments/paymentTokenHelper.js:46
+msgctxt "Error"
+msgid "Payment process consumed"
+msgstr "Processo di pagamento completato"
+
+#: node_modules/react-components/containers/payments/paymentTokenHelper.js:50
+msgctxt "Error"
+msgid "Payment process not supported"
+msgstr "Processo di pagamento non supportato"
+
+#: node_modules/react-components/containers/payments/paymentTokenHelper.js:62
+msgctxt "Error"
+msgid "Unknown payment token status"
+msgstr "Stato del token di pagamento sconosciuto"
+
+#: node_modules/react-components/containers/payments/paymentTokenHelper.js:95
+msgctxt "Error"
+msgid "Tab closed"
+msgstr "Scheda chiusa"
+
+#: node_modules/react-components/containers/payments/PayPal.js:85
+msgctxt "Error"
+msgid "Amount below minimum."
+msgstr "Importo inferiore al minimo."
+
+#: node_modules/react-components/containers/payments/PayPal.js:91
+msgctxt "Error"
+msgid "Amount above the maximum."
+msgstr "Importo superiore al massimo."
+
+#: node_modules/react-components/containers/payments/Bitcoin.js:51
+msgctxt "Error"
+msgid "Error connecting to the Bitcoin API."
+msgstr "Errore di connessione alle API di Bitcoin."
+
+#: node_modules/react-components/containers/payments/Payment.js:50
+#, javascript-format
+msgctxt "Error"
+msgid "The minimum amount that can be donated is ${ price }"
+msgstr "L'importo minimo che può essere donato è di ${ price }"
+
+#: node_modules/react-components/containers/payments/Payment.js:59
+#, javascript-format
+msgctxt "Error"
+msgid "The minimum amount of credit that can be added is ${ _price }"
+msgstr "L'importo minimo di credito che può essere aggiunto è di ${ _price }"
+
+#: node_modules/react-components/containers/payments/Payment.js:68
+#, javascript-format
+msgctxt "Error"
+msgid "The minimum payment we accept is ${ _price2 }"
+msgstr "Il pagamento minimo che accettiamo è di ${ _price2 }"
+
+#: node_modules/react-components/containers/payments/cardValidator.js:16
+msgctxt "Error"
+msgid "Name on card required"
+msgstr "Nome sulla carta richiesto"
+
+#: node_modules/react-components/containers/payments/cardValidator.js:22
+msgctxt "Error"
+msgid "Invalid expiration date"
+msgstr "Data di scadenza non valida"
+
+#: node_modules/react-components/containers/payments/cardValidator.js:27
+msgctxt "Error"
+msgid "Invalid card number"
+msgstr "Numero carta non valido"
+
+#: node_modules/react-components/containers/payments/cardValidator.js:36
+#, javascript-format
+msgctxt "Error"
+msgid "Invalid ${ name } code"
+msgstr "Codice ${ name } non valido"
+
+#: node_modules/react-components/containers/payments/cardValidator.js:43
+msgctxt "Error"
+msgid "Invalid postal code"
+msgstr "Codice postale non valido"
+
+#: node_modules/react-components/components/alert/DoNotWindowOpenAlertError.js:7
+msgctxt "Error"
+msgid "The browser you are using does not allow the payment to be fully authorized. Please use a different browser or log in via a computer."
+msgstr "Il browser che stai utilizzando non consente di autorizzare completamente il pagamento. Per favore usa un altro browser o effettua il login tramite un computer."
+
+#: node_modules/react-components/components/input/Input.js:32
+msgctxt "Error"
+msgid "This field is required"
+msgstr "Questo campo è obbligatorio"
+
+#: node_modules/react-components/components/input/EmailInput.js:9
+msgctxt "Error"
+msgid "Email address invalid"
+msgstr "Indirizzo email non valido"
+
+#: src/app/components/ContactImageModal.js:36
+msgctxt "Error"
+msgid "Image upload failed"
+msgstr "Caricamento dell'immagine fallito"
+
+#: src/app/components/ContactModal.js:86
+msgctxt "Error"
+msgid "Contact could not be saved"
+msgstr "Il contatto non può essere salvato"
+
+#: src/app/components/ContactPgpSettings.js:35
+msgctxt "Error"
+msgid "Invalid public key file"
+msgstr "File chiave pubblica non valido"
+
+#: src/app/components/delete/DeleteModal.js:30
+msgctxt "Error"
+msgid "Some contacts could not be deleted"
+msgstr "Alcuni contatti non possono essere eliminati"
+
+#: node_modules/proton-shared/lib/themes/themes.js:13
+msgctxt "Theme"
+msgid "Default theme"
+msgstr "Tema predefinito"
+
+#: node_modules/proton-shared/lib/themes/themes.js:23
+msgctxt "Theme"
+msgid "Custom theme"
+msgstr "Tema personalizzato"
+
+#: node_modules/proton-shared/lib/themes/themes.js:33
+msgctxt "Theme"
+msgid "Light"
+msgstr "Chiaro"
+
+#: node_modules/proton-shared/lib/themes/themes.js:42
+msgctxt "Theme"
+msgid "Blue"
+msgstr "Blu"
+
+#: node_modules/proton-shared/lib/themes/themes.js:51
+msgctxt "Theme"
+msgid "Dark theme"
+msgstr "Tema Scuro"
+
+#: node_modules/react-components/containers/search/SearchDropdown.js:60
+#: node_modules/react-components/containers/search/Searchbox.js:48
+msgctxt "Action"
+msgid "Search"
+msgstr "Ricerca"
+
+#.  Clear button is hidden when using advanced mode because the buttons use the same spots
+#.  If there is the need of having both, a positioning solution will have to be found
+#: node_modules/react-components/containers/search/SearchDropdown.js:59
+#: node_modules/react-components/containers/search/Searchbox.js:55
+#: node_modules/react-components/containers/support/AttachScreenshot.js:46
+#: src/app/components/ContactModalRow.js:30
+msgctxt "Action"
+msgid "Clear"
+msgstr "Elimina"
+
+#: node_modules/react-components/containers/login/AbuseModal.js:21
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:155
+#: src/app/components/import/ImportModal.js:153
+#: src/app/components/merge/ContactDetails.js:38
+#: src/app/components/merge/MergeContactPreview.js:107
+#: src/app/components/merge/MergeModal.js:93
+msgctxt "Action"
+msgid "Close"
+msgstr "Chiudi"
+
+#: node_modules/react-components/containers/login/LoginForm.js:207
+msgctxt "Action"
+msgid "Log in"
+msgstr "Accedi"
+
+#: node_modules/react-components/components/modal/Confirm.js:11
+#: node_modules/react-components/components/modal/FormModal.js:19
+#: node_modules/react-components/containers/login/LoginForm.js:216
+#: node_modules/react-components/containers/payments/PayPal.js:137
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:101
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:143
+#: src/app/components/ContactEmailSettingsModal.js:280
+#: src/app/components/ExportModal.js:23
+#: src/app/components/import/ImportModal.js:150
+#: src/app/components/merge/MergeContactPreview.js:104
+#: src/app/components/merge/MergeModal.js:90
+msgctxt "Action"
+msgid "Cancel"
+msgstr "Annulla"
+
+#: node_modules/react-components/components/modal/FormModal.js:20
+#: node_modules/react-components/containers/login/LoginForm.js:239
+#: node_modules/react-components/containers/login/LoginForm.js:267
+#: node_modules/react-components/containers/support/BugModal.js:126
+msgctxt "Action"
+msgid "Submit"
+msgstr "Invia"
+
+#: node_modules/react-components/containers/support/AttachScreenshot.js:53
+msgctxt "Action"
+msgid "Add screenshot(s)"
+msgstr "Aggiungi screenshot"
+
+#: node_modules/react-components/containers/support/BugModal.js:194
+msgctxt "Action"
+msgid "Hide info"
+msgstr "Nascondi info"
+
+#: node_modules/react-components/containers/support/BugModal.js:194
+msgctxt "Action"
+msgid "Show info"
+msgstr "Mostra info"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:102
+msgctxt "Action"
+msgid "Verify"
+msgstr "Verifica"
+
+#: node_modules/react-components/containers/payments/Bitcoin.js:52
+#: node_modules/react-components/containers/payments/PayPal.js:105
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:165
+msgctxt "Action"
+msgid "Try again"
+msgstr "Riprova"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:171
+msgctxt "Action"
+msgid "Use a different card"
+msgstr "Utilizza una carta diversa"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:172
+msgctxt "Action"
+msgid "Use a different payment method"
+msgstr "Usa un metodo di pagamento differente"
+
+#: node_modules/react-components/containers/payments/PayPal.js:149
+#: node_modules/react-components/containers/payments/PayPal.js:178
+msgctxt "Action"
+msgid "Check out with PayPal"
+msgstr "Paga con PayPal"
+
+#: node_modules/react-components/containers/payments/PayPal.js:164
+msgctxt "Action"
+msgid "Add PayPal payment method"
+msgstr "Aggiungi il metodo di pagamento PayPal"
+
+#: node_modules/react-components/containers/payments/DonateModal.js:43
+msgctxt "Action"
+msgid "Donate"
+msgstr "Dona"
+
+#: node_modules/react-components/containers/heading/UserDropdown.js:84
+#: node_modules/react-components/containers/heading/UserDropdown.js:92
+msgctxt "Action"
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: node_modules/react-components/containers/heading/UserDropdown.js:109
+msgctxt "Action"
+msgid "I have a question"
+msgstr "Ho una domanda"
+
+#: node_modules/react-components/containers/heading/UserDropdown.js:119
+msgctxt "Action"
+msgid "Report bug"
+msgstr "Segnala un bug"
+
+#: node_modules/react-components/containers/heading/UserDropdown.js:130
+msgctxt "Action"
+msgid "Proton shop"
+msgstr "Proton shop"
+
+#: node_modules/react-components/containers/heading/UserDropdown.js:140
+msgctxt "Action"
+msgid "Support us"
+msgstr "Sostienici"
+
+#: node_modules/react-components/containers/heading/UserDropdown.js:149
+msgctxt "Action"
+msgid "Logout"
+msgstr "Esci"
+
+#: node_modules/react-components/components/modal/Confirm.js:10
+#: node_modules/react-components/components/modal/Confirm.js:12
+msgctxt "Action"
+msgid "Confirm"
+msgstr "Conferma"
+
+#: node_modules/react-components/components/modal/Header.js:11
+#: node_modules/react-components/components/modal/Header.js:13
+#: src/app/components/ContactEmailSettingsModal.js:222
+#: src/app/components/ContactEmailSettingsModal.js:226
+msgctxt "Action"
+msgid "Close modal"
+msgstr "Chiudi finestra"
+
+#: node_modules/react-components/components/image/RemoteImage.js:9
+msgctxt "Action"
+msgid "Load image"
+msgstr "Carica immagine"
+
+#: node_modules/react-components/components/miniCalendar/LocalizedMiniCalendar.js:31
+msgctxt "Action"
+msgid "Next month"
+msgstr "Mese successivo"
+
+#: node_modules/react-components/components/miniCalendar/LocalizedMiniCalendar.js:32
+msgctxt "Action"
+msgid "Prev month"
+msgstr "Mese precedente"
+
+#: src/app/components/ContactGroupModal.js:44
+#: src/app/components/ContactGroupsTable.js:78
+#: src/app/components/ContactModalRow.js:36
+#: src/app/components/delete/DeleteModal.js:15
+#: src/app/components/import/AttachedFile.js:9
+msgctxt "Action"
+msgid "Delete"
+msgstr "Elimina"
+
+#: src/app/components/import/AttachingModalContent.js:21
+msgctxt "Action"
+msgid "Select file from computer"
+msgstr "Seleziona file dal computer"
+
+#: src/app/components/ContactPlaceholder.js:30
+#: src/app/components/ContactPlaceholder.js:80
+#: src/app/components/import/ImportModal.js:54
+#: src/app/components/import/ImportModal.js:130
+msgctxt "Action"
+msgid "Import"
+msgstr "Importa"
+
+#: src/app/components/import/ImportModal.js:78
+msgctxt "Action"
+msgid "Go back"
+msgstr "Indietro"
+
+#: src/app/components/import/ImportModal.js:188
+msgctxt "Action"
+msgid "Create"
+msgstr "Crea"
+
+#: src/app/components/ContactImageField.js:8
+#: src/app/components/ContactImageModal.js:60
+msgctxt "Action"
+msgid "Upload picture"
+msgstr "Carica immagine"
+
+#: src/app/components/ContactEmailSettingsModal.js:282
+#: src/app/components/ContactGroupModal.js:149
+#: src/app/components/ContactImageModal.js:45
+#: src/app/components/ContactModal.js:125
+#: src/app/components/ExportModal.js:25
+msgctxt "Action"
+msgid "Save"
+msgstr "Salva"
+
+#: src/app/components/ContactGroupsTable.js:72
+#: src/app/components/ContactModalRow.js:26
+#: src/app/components/ContactPlaceholder.js:182
+#: src/app/components/ContactView.js:30
+msgctxt "Action"
+msgid "Edit"
+msgstr "Modifica"
+
+#: src/app/components/ContactGroupModal.js:182
+#: src/app/components/ContactModalProperties.js:87
+msgctxt "Action"
+msgid "Add"
+msgstr "Aggiungi"
+
+#: src/app/components/UpsellFree.js:19
+msgctxt "Action"
+msgid "Upgrade ProtonMail"
+msgstr "Effettua l'upgrade di ProtonMail"
+
+#: src/app/components/ContactsList.js:87
+msgctxt "Action"
+msgid "Add a contact"
+msgstr "Aggiungi un contatto"
+
+#: src/app/components/ContactsList.js:98
+msgctxt "Action"
+msgid "Import contact"
+msgstr "Importa contatto"
+
+#: src/app/components/ContactsList.js:126
+msgctxt "Action"
+msgid "Edit your group"
+msgstr "Modifica il tuo gruppo"
+
+#: src/app/components/ContactsList.js:146
+msgctxt "Action"
+msgid "Clear it"
+msgstr "Cancella"
+
+#: src/app/components/ContactImageSummary.js:89
+msgctxt "Action"
+msgid "Load photo"
+msgstr "Carica foto"
+
+#: src/app/components/ContactGroupDropdown.js:225
+#: src/app/components/SelectEmailsModal.js:47
+msgctxt "Action"
+msgid "Apply"
+msgstr "Applica"
+
+#: src/app/components/ContactKeysTable.js:119
+msgctxt "Action"
+msgid "Download"
+msgstr "Scarica"
+
+#: src/app/components/ContactKeysTable.js:132
+msgctxt "Action"
+msgid "Use for sending"
+msgstr "Usa per inviare"
+
+#: src/app/components/ContactKeysTable.js:153
+msgctxt "Action"
+msgid "Trust"
+msgstr "Attendibile"
+
+#: src/app/components/ContactKeysTable.js:161
+msgctxt "Action"
+msgid "Untrust"
+msgstr "Non ritenere attendibile"
+
+#: src/app/components/ContactKeysTable.js:169
+msgctxt "Action"
+msgid "Remove"
+msgstr "Rimuovi"
+
+#.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+#: src/app/components/ContactEmailSettingsModal.js:273
+msgctxt "Action"
+msgid "Hide advanced PGP settings"
+msgstr "Nascondi impostazioni PGP avanzate"
+
+#.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+#: src/app/components/ContactEmailSettingsModal.js:274
+msgctxt "Action"
+msgid "Show advanced PGP settings"
+msgstr "Mostra impostazioni PGP avanzate"
+
+#: src/app/components/ContactPlaceholder.js:41
+#: src/app/components/ContactPlaceholder.js:91
+#: src/app/components/ContactPlaceholder.js:185
+#: src/app/components/ContactView.js:31
+msgctxt "Action"
+msgid "Export"
+msgstr "Esporta"
+
+#: src/app/components/MergeRow.js:21
+#: src/app/components/merge/MergeContactPreview.js:73
+#: src/app/components/merge/MergeModal.js:65
+msgctxt "Action"
+msgid "Merge"
+msgstr "Unisci"
+
+#: src/app/components/ContactPlaceholder.js:53
+msgctxt "Action"
+msgid "Groups"
+msgstr "Gruppi"
+
+#: src/app/components/ContactPlaceholder.js:104
+#: src/app/components/UpgradeModal.js:16
+#: src/app/content/PrivateLayout.js:19
+msgctxt "Action"
+msgid "Upgrade"
+msgstr "Effettua l'upgrade"
+
+#: src/app/components/ContactPlaceholder.js:153
+msgctxt "Action"
+msgid "Deselect"
+msgid_plural "Deselect all"
+msgstr[0] "Deseleziona"
+msgstr[1] "Deseleziona tutto"
+
+#: src/app/components/merge/MergeTableBody.js:25
+msgctxt "Action"
+msgid "Contact details"
+msgstr "Dettagli contatto"
+
+#: src/app/components/merge/MergeTableBody.js:31
+msgctxt "Action"
+msgid "Unmark for deletion"
+msgstr "Deseleziona per la cancellazione"
+
+#: src/app/components/merge/MergeTableBody.js:31
+msgctxt "Action"
+msgid "Mark for deletion"
+msgstr "Seleziona per la cancellazione"
+
+#: src/app/components/merge/MergeTable.js:58
+msgctxt "Action"
+msgid "Preview contact"
+msgstr "Anteprima contatto"
+
+#: src/app/components/ContactGroupsSection.js:17
+msgctxt "Action"
+msgid "Add group"
+msgstr "Aggiungi gruppo"
+
+#: src/app/content/PrivateSidebar.js:105
+msgctxt "Action"
+msgid "Add contact"
+msgstr "Aggiungi contatto"
+
+#: node_modules/react-components/containers/search/SearchDropdown.js:19
+#: src/app/content/PrivateHeader.js:40
+msgctxt "Placeholder"
+msgid "Search"
+msgstr "Ricerca"
+
+#: node_modules/react-components/containers/login/PasswordForm.js:22
+msgctxt "Placeholder"
+msgid "Username or email"
+msgstr "Nome utente o email"
+
+#: node_modules/react-components/containers/login/PasswordForm.js:37
+msgctxt "Placeholder"
+msgid "Password"
+msgstr "Password"
+
+#: node_modules/react-components/containers/login/TOTPForm.js:20
+msgctxt "Placeholder"
+msgid "Two-factor code"
+msgstr "Codice a due fattori"
+
+#: node_modules/react-components/containers/login/UnlockForm.js:20
+msgctxt "Placeholder"
+msgid "Mailbox password"
+msgstr "Password della casella email"
+
+#: node_modules/react-components/containers/support/BugModal.js:141
+msgctxt "Placeholder"
+msgid "Proton username"
+msgstr "Nome utente di Proton"
+
+#: node_modules/react-components/containers/support/BugModal.js:153
+msgctxt "Placeholder"
+msgid "A way to contact you"
+msgstr "Un modo per contattarti"
+
+#: node_modules/react-components/containers/support/BugModal.js:177
+msgctxt "Placeholder"
+msgid "Please describe the problem and include any error messages"
+msgstr "Per favore descrivi il problema e includi eventuali messaggi di errore"
+
+#: node_modules/react-components/containers/support/BugModal.js:206
+msgctxt "Placeholder"
+msgid "OS name"
+msgstr "Nome del sistema operativo"
+
+#: node_modules/react-components/containers/support/BugModal.js:217
+msgctxt "Placeholder"
+msgid "OS version"
+msgstr "Versione del sistema operativo"
+
+#: node_modules/react-components/containers/support/BugModal.js:228
+msgctxt "Placeholder"
+msgid "Browser name"
+msgstr "Nome del browser"
+
+#: node_modules/react-components/containers/support/BugModal.js:239
+msgctxt "Placeholder"
+msgid "Browser version"
+msgstr "Versione del browser"
+
+#: node_modules/react-components/containers/payments/PaymentSelector.js:30
+msgctxt "Placeholder"
+msgid "Other"
+msgstr "Altro"
+
+#: node_modules/react-components/containers/payments/CardNumberInput.js:48
+msgctxt "Placeholder"
+msgid "Card number"
+msgstr "Numero carta"
+
+#: node_modules/react-components/containers/payments/Card.js:22
+msgctxt "Placeholder"
+msgid "Full name"
+msgstr "Nome completo"
+
+#: node_modules/react-components/containers/payments/Card.js:79
+msgctxt "Placeholder"
+msgid "ZIP"
+msgstr "CAP"
+
+#: node_modules/react-components/containers/payments/Card.js:79
+msgctxt "Placeholder"
+msgid "Postal code"
+msgstr "Codice postale"
+
+#: src/app/components/ContactImageModal.js:53
+msgctxt "Placeholder"
+msgid "Image URL"
+msgstr "URL dell'immagine"
+
+#: src/app/components/ContactGroupDropdown.js:186
+msgctxt "Placeholder"
+msgid "Filter groups"
+msgstr "Filtra gruppi"
+
+#: src/app/content/PrivateHeader.js:62
+msgctxt "Placeholder"
+msgid "Search contacts"
+msgstr "Ricerca contatti"
+
+#: node_modules/react-components/containers/error/GenericError.js:13
+msgctxt "Error message"
+msgid "Aaah! Something went wrong"
+msgstr "Ops! Qualcosa è andato storto"
+
+#: node_modules/react-components/containers/error/GenericError.js:16
+msgctxt "Error message"
+msgid "Brace yourself till we get the error fixed."
+msgstr "Tieniti forte finché non risolviamo l'errore."
+
+#: node_modules/react-components/containers/error/GenericError.js:17
+msgctxt "Error message"
+msgid "You may also refresh the page or try again later."
+msgstr "Puoi anche aggiornare la pagina o riprovare più tardi."
+
+#: node_modules/react-components/containers/sidebar/StorageSpaceStatus.js:77
+msgctxt "Title"
+msgid "Storage"
+msgstr "Archiviazione"
+
+#: node_modules/react-components/containers/api/HumanVerificationModal.js:9
+msgctxt "Title"
+msgid "Human verification"
+msgstr "Verifica umana"
+
+#: node_modules/react-components/containers/login/UnlockModal.js:33
+msgctxt "Title"
+msgid "Sign in again to continue"
+msgstr "Accedi di nuovo per continuare"
+
+#: node_modules/react-components/containers/login/AbuseModal.js:6
+msgctxt "Title"
+msgid "Account disabled"
+msgstr "Account disabilitato"
+
+#: node_modules/react-components/containers/support/BugModal.js:127
+msgctxt "Title"
+msgid "Report bug"
+msgstr "Segnala un bug"
+
+#: node_modules/react-components/containers/payments/Card.js:80
+msgctxt "Title"
+msgid "ZIP / postal code"
+msgstr "CAP / codice postale"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:44
+msgctxt "Title"
+msgid "Unsupported browser"
+msgstr "Browser non supportato"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:45
+msgctxt "Title"
+msgid "Card verification"
+msgstr "Verifica della carta"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:45
+msgctxt "Title"
+msgid "Payment verification"
+msgstr "Verifica pagamento"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:46
+msgctxt "Title"
+msgid "Processing..."
+msgstr "Elaborazione..."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:48
+msgctxt "Title"
+msgid "Card verification in progress"
+msgstr "Verifica della carta in corso"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:49
+msgctxt "Title"
+msgid "Payment verification in progress"
+msgstr "Verifica pagamento in corso"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:50
+msgctxt "Title"
+msgid "3-D Secure verification failed"
+msgstr "Verifica 3-D Secure fallita"
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:162
+msgctxt "Title"
+msgid "Error"
+msgstr "Errore"
+
+#: node_modules/react-components/containers/payments/DonateModal.js:42
+msgctxt "Title"
+msgid "Make a donation"
+msgstr "Fai una donazione"
+
+#: node_modules/react-components/components/dropdown/DropdownActions.js:48
+msgctxt "Title"
+msgid "Open actions dropdown"
+msgstr "Apri menu a discesa delle azioni"
+
+#: src/app/components/ContactPlaceholder.js:205
+#: src/app/components/ContactsSection.js:9
+#: src/app/containers/ContactsContainer.js:252
+#: src/app/containers/ContactsContainer.js:255
+#: src/app/content/PrivateHeader.js:49
+msgctxt "Title"
+msgid "Contacts"
+msgstr "Contatti"
+
+#: src/app/containers/ContactsContainer.js:252
+msgctxt "Title"
+msgid "Search"
+msgstr "Ricerca"
+
+#: src/app/containers/SettingsContainer.js:34
+msgctxt "Title"
+msgid "Contact settings"
+msgstr "Impostazioni contatto"
+
+#: src/app/components/ContactPlaceholder.js:214
+#: src/app/containers/SettingsContainer.js:37
+#: src/app/content/PrivateHeader.js:72
+msgctxt "Title"
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: src/app/components/ContactPlaceholder.js:25
+#: src/app/components/ContactPlaceholder.js:75
+#: src/app/components/import/ImportModal.js:31
+#: src/app/components/import/ImportModal.js:32
+msgctxt "Title"
+msgid "Import contacts"
+msgstr "Importa contatti"
+
+#: src/app/components/import/ImportModal.js:33
+msgctxt "Title"
+msgid "Import CSV file"
+msgstr "Importa file CSV"
+
+#: src/app/components/import/ImportModal.js:34
+msgctxt "Title"
+msgid "Importing contacts"
+msgstr "Importazione contatti"
+
+#: src/app/components/import/ImportModal.js:80
+msgctxt "Title"
+msgid "File is too big!"
+msgstr "Il file è troppo grande!"
+
+#: src/app/components/ContactImageModal.js:10
+msgctxt "Title"
+msgid "Edit image"
+msgstr "Modifica immagine"
+
+#: src/app/components/ContactModalProperties.js:21
+msgctxt "Title"
+msgid "Display name"
+msgstr "Nome visualizzato"
+
+#: src/app/components/ContactModalProperties.js:22
+#: src/app/components/ContactViewProperties.js:28
+msgctxt "Title"
+msgid "Email addresses"
+msgstr "Indirizzi email"
+
+#: src/app/components/ContactModalProperties.js:23
+#: src/app/components/ContactViewProperties.js:29
+msgctxt "Title"
+msgid "Phone numbers"
+msgstr "Numeri di telefono"
+
+#: src/app/components/ContactModalProperties.js:24
+#: src/app/components/ContactViewProperties.js:30
+msgctxt "Title"
+msgid "Addresses"
+msgstr "Indirizzi"
+
+#: src/app/components/ContactModalProperties.js:25
+#: src/app/components/ContactViewProperties.js:31
+msgctxt "Title"
+msgid "Other information"
+msgstr "Altre informazioni"
+
+#: src/app/components/UpsellFree.js:8
+msgctxt "Title"
+msgid "Upgrade to a paid plan"
+msgstr "Effettua l'upgrade ad un piano a pagamento"
+
+#: src/app/components/ContactModal.js:53
+msgctxt "Title"
+msgid "Edit contact details"
+msgstr "Modifica dettagli del contatto"
+
+#: src/app/components/ContactModal.js:53
+msgctxt "Title"
+msgid "Add new contact"
+msgstr "Aggiungi nuovo contatto"
+
+#: src/app/components/ContactGroupModal.js:71
+msgctxt "Title"
+msgid "Edit contact group"
+msgstr "Modifica gruppo di contatti"
+
+#: src/app/components/ContactGroupModal.js:71
+msgctxt "Title"
+msgid "Create new group"
+msgstr "Crea nuovo gruppo"
+
+#: src/app/components/SelectEmailsModal.js:47
+msgctxt "Title"
+msgid "Add to group"
+msgstr "Aggiungi al gruppo"
+
+#.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+#: src/app/components/ContactEmailSettingsModal.js:229
+#, javascript-format
+msgctxt "Title"
+msgid "Email settings (${ Email })"
+msgstr "Impostazioni email (${ Email })"
+
+#: src/app/components/ContactViewProperty.js:110
+msgctxt "Title"
+msgid "Contact group"
+msgstr "Gruppo di contatto"
+
+#: src/app/components/ContactViewProperty.js:116
+msgctxt "Title"
+msgid "Email settings"
+msgstr "Impostazioni dell'email"
+
+#: src/app/components/ContactView.js:27
+msgctxt "Title"
+msgid "Contact details"
+msgstr "Dettagli contatto"
+
+#: src/app/components/ExportModal.js:112
+msgctxt "Title"
+msgid "Exporting contacts"
+msgstr "Esportazione contatti"
+
+#: src/app/components/ContactPlaceholder.js:37
+#: src/app/components/ContactPlaceholder.js:87
+msgctxt "Title"
+msgid "Export contacts"
+msgstr "Esporta contatti"
+
+#: src/app/components/ContactPlaceholder.js:48
+msgctxt "Title"
+msgid "Manage groups"
+msgstr "Gestione gruppi"
+
+#: src/app/components/ContactPlaceholder.js:98
+msgctxt "Title"
+msgid "Unlock features"
+msgstr "Sblocca altre funzionalità"
+
+#: src/app/components/UpgradeModal.js:10
+msgctxt "Title"
+msgid "Upgrade required"
+msgstr "Aggiornamento richiesto"
+
+#: src/app/components/merge/ContactDetails.js:36
+#: src/app/components/merge/MergeContactPreview.js:96
+msgctxt "Title"
+msgid "Contact Details"
+msgstr "Dettagli contatto"
+
+#: src/app/components/merge/MergeContactPreview.js:118
+#: src/app/components/merge/MergeModal.js:103
+msgctxt "Title"
+msgid "Merging contacts"
+msgstr "Unendo i contatti"
+
+#: src/app/components/merge/MergeModal.js:71
+msgctxt "Title"
+msgid "Merge contacts"
+msgstr "Unisci contatti"
+
+#: src/app/components/delete/DeleteModal.js:38
+msgctxt "Title"
+msgid "Delete"
+msgstr "Elimina"
+
+#: src/app/components/ContactGroupsTable.js:83
+msgctxt "Title"
+msgid "Delete contact group"
+msgstr "Elimina gruppo di contatti"
+
+#: src/app/components/ContactGroupsSection.js:13
+#: src/app/pages/ContactGroupsPage.js:9
+msgctxt "Title"
+msgid "Contact groups"
+msgstr "Gruppi di contatti"
+
+#: src/app/pages/GeneralPage.js:9
+msgctxt "Title"
+msgid "General"
+msgstr "Generale"
+
+#: node_modules/react-components/containers/sidebar/StorageSpaceStatus.js:78
+#, javascript-format
+msgctxt "Info"
+msgid "${ usedSpaceFormatted } of ${ maxSpaceFormatted } used"
+msgstr "${ usedSpaceFormatted } di ${ maxSpaceFormatted } utilizzato"
+
+#: node_modules/react-components/containers/sidebar/StorageSpaceStatus.js:81
+msgctxt "Info"
+msgid "Your storage space is shared across all Proton products."
+msgstr "Il tuo spazio di archiviazione è condiviso tra tutti i prodotti Proton."
+
+#: node_modules/react-components/containers/api/HumanVerificationModal.js:19
+msgctxt "Info"
+msgid "For security reasons, please verify that you are not a robot."
+msgstr "Per motivi di sicurezza, si prega di verificare di non essere un robot."
+
+#: node_modules/react-components/containers/app/LoaderPage.js:15
+#, javascript-format
+msgctxt "Info"
+msgid "Loading ${ appName }"
+msgstr "Caricamento di ${ appName }"
+
+#: node_modules/react-components/containers/login/AbuseModal.js:10
+msgctxt "Info"
+msgid "abuse or fraud"
+msgstr "abuso o frode"
+
+#: node_modules/react-components/containers/login/AbuseModal.js:16
+msgctxt "Info"
+msgid "here"
+msgstr "qui"
+
+#: node_modules/react-components/containers/login/AbuseModal.js:23
+#, javascript-format
+msgctxt "Info"
+msgid "Account disabled due to ${ abuseOrFraudLink }."
+msgstr "Account disabilitato a causa di ${ abuseOrFraudLink }."
+
+#: node_modules/react-components/containers/login/AbuseModal.js:24
+#, javascript-format
+msgctxt "Info"
+msgid "You can find more information and contact us ${ contactLink }."
+msgstr "Puoi trovare ulteriori informazioni e contattarci ${ contactLink }."
+
+#: node_modules/react-components/containers/support/AttachScreenshot.js:45
+msgctxt "Info"
+msgid "Screenshot(s) attached"
+msgstr "Screenshot allegato/i"
+
+#: node_modules/react-components/containers/support/BugModal.js:130
+#, javascript-format
+msgctxt "Info"
+msgid "Refreshing the page or ${ link } will automatically resolve most issues."
+msgstr "Aggiornando la pagina o ${ link } si risolveranno automaticamente la maggior parte dei problemi."
+
+#: node_modules/react-components/containers/support/BugModal.js:245
+#, javascript-format
+msgctxt "Info"
+msgid "Contact us at ${ criticalEmail } for critical security issues."
+msgstr "Contattaci a ${ criticalEmail } per problemi di sicurezza critici."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:112
+msgctxt "Info"
+msgid "Your bank requires 3-D Secure verification for security purposes."
+msgstr "La tua banca richiede una verifica 3-D Secure per scopi di sicurezza."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:119
+msgctxt "Info"
+msgid "Verification will open a new tab, please disable any popup blockers. You will not be charged. Any amount used to verify the card will be refunded immediately."
+msgstr "La verifica aprirà una nuova scheda, per favore disabilita qualsiasi blocco popup. Non avrai addebiti. Qualsiasi importo utilizzato per verificare la tua carta sarà immediatamente rimborsato."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:121
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:130
+msgctxt "Info"
+msgid "Verification will open a new tab, please disable any popup blockers."
+msgstr "La verifica aprirà una nuova scheda, per favore disabilita qualsiasi blocco popup."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:127
+msgctxt "Info"
+msgid "You will be soon redirected to your bank to verify your payment."
+msgstr "Sarai presto reindirizzato alla tua banca per verificare il pagamento."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:138
+msgctxt "Info"
+msgid "Please verify the card in the new tab which was opened."
+msgstr "Per favore verifica la carta nella nuova scheda che è stata aperta."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:139
+msgctxt "Info"
+msgid "Please verify payment at the new tab which was opened."
+msgstr "Per favore verifica il pagamento nella nuova scheda che è stata aperta."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:147
+msgctxt "Info"
+msgid "Verification can take a few minutes."
+msgstr "La verifica può richiedere alcuni minuti."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:148
+msgctxt "Info"
+msgid "Payment can take a few minutes to fully verify."
+msgstr "Il pagamento può richiedere alcuni minuti per una verifica completa."
+
+#: node_modules/react-components/containers/payments/PaymentVerificationModal.js:160
+msgctxt "Info"
+msgid "Please try again, use a different payment method, or call your bank for assistance."
+msgstr "Per favore riprova, usa un altro metodo di pagamento o chiama la tua banca per assistenza."
+
+#: node_modules/react-components/containers/payments/PayPal.js:135
+msgctxt "Info"
+msgid "Please verify the payment in the new tab."
+msgstr "Per favore verifica il pagamento nella nuova scheda."
+
+#: node_modules/react-components/containers/payments/PayPal.js:145
+#: node_modules/react-components/containers/payments/PayPal.js:175
+msgctxt "Info"
+msgid "We will redirect you to PayPal in a new browser tab to complete this transaction. If you use any pop-up blockers, please disable them to continue."
+msgstr "Sarai reindirizzato su PayPal in una nuova scheda del browser per completare questa transazione. Se utilizzi un blocco pop-up, disattivalo per continuare."
+
+#: node_modules/react-components/containers/payments/PayPal.js:153
+#, javascript-format
+msgctxt "Info"
+msgid "You must have a credit card or bank account linked with your PayPal account. If your PayPal account doesn't have that, please ${ clickHere }."
+msgstr "Devi avere una carta di credito o un conto bancario collegato al tuo account PayPal. Se il tuo account PayPal non lo ha, per favore ${ clickHere }."
+
+#: node_modules/react-components/containers/payments/PayPal.js:160
+msgctxt "Info"
+msgid "This will enable PayPal to be used to pay for your Proton subscription. We will redirect you to PayPal in a new browser tab. If you use any pop-up blockers, please disable them to continue."
+msgstr "Questo ti consentirà di utilizzare PayPal per pagare il tuo abbonamento Proton. Ti reindirizzeremo su PayPal in una nuova scheda del browser. Se utilizzi un blocco pop-up, disattivalo per continuare."
+
+#: node_modules/react-components/containers/payments/PayPal.js:168
+msgctxt "Info"
+msgid "You must have a credit card or bank account linked with your PayPal account in order to add it as a payment method."
+msgstr "Devi avere una carta di credito o un conto bancario collegato al tuo account PayPal per aggiungerlo come metodo di pagamento."
+
+#: node_modules/react-components/containers/payments/Bitcoin.js:40
+#, javascript-format
+msgctxt "Info"
+msgid "Amount below minimum. (${ amount })"
+msgstr "Importo inferiore al minimo. (${ amount })"
+
+#: node_modules/react-components/containers/payments/Bitcoin.js:64
+msgctxt "Info"
+msgid "Bitcoin transactions can take some time to be confirmed (up to 24 hours). Once confirmed, we will add credits to your account. After transaction confirmation, you can pay your invoice with the credits."
+msgstr "Le transazioni in Bitcoin potrebbero richiedere un po' di tempo per essere confermate (fino a 24 ore). Una volta confermate, aggiungeremo il credito al tuo account. Dopo la conferma della transazione, potrai pagare la tua fattura con il credito."
+
+#: node_modules/react-components/containers/payments/Bitcoin.js:73
+msgctxt "Info"
+msgid "After making your Bitcoin payment, please follow the instructions below to upgrade."
+msgstr "Dopo aver effettuato il pagamento in Bitcoin, segui le istruzioni qui sotto per effettuare l'upgrade."
+
+#: node_modules/react-components/containers/payments/DonateModal.js:46
+msgctxt "Info"
+msgid "Your payment details are protected with TLS encryption and Swiss privacy laws."
+msgstr "I tuoi dati di pagamento sono protetti dalla crittografia TLS e dalle leggi svizzere sulla privacy."
+
+#: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:43
+msgctxt "Info"
+msgid "Expired"
+msgstr "Scaduto"
+
+#: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:44
+msgctxt "Info"
+msgid "default"
+msgstr "predefinito"
+
+#: node_modules/react-components/components/miniCalendar/WeekNumbers.js:36
+msgctxt "Info"
+msgid "Week"
+msgstr "Settimana"
+
+#: src/app/components/import/ImportCsvModalContent.js:87
+msgctxt "Info"
+msgid "No contacts to be imported"
+msgstr "Nessun contatto da importare"
+
+#: src/app/components/UpsellFree.js:15
+msgctxt "Info"
+msgid "Unlock access to encrypted contact details such as phone numbers and addresses with ProtonMail Plus."
+msgstr "Sblocca l'accesso a dati di contatto crittografati come numeri di telefono e indirizzi con ProtonMail Plus."
+
+#: src/app/components/ContactModal.js:128
+msgctxt "Info"
+msgid "Email address, phone number and address at the top of their respective list are automatically set as the default information and will be displayed in the contact information's summary section."
+msgstr "L'indirizzo email, il numero di telefono e l'indirizzo nella parte superiore del rispettivo elenco vengono automaticamente impostati come informazioni predefinite e verranno visualizzati nella sezione di riepilogo delle informazioni di contatto."
+
+#: src/app/components/ContactGroupModal.js:178
+msgctxt "Info"
+msgid "No contacts added yet"
+msgstr "Nessun contatto ancora aggiunto"
+
+#: src/app/components/SelectEmailsModal.js:48
+msgctxt "Info"
+msgid "Please select which email address or addresses to add to this group."
+msgstr "Per favore seleziona l'indirizzo o gli indirizzi email da aggiungere a questo gruppo."
+
+#: src/app/components/ContactGroupDropdown.js:134
+msgctxt "Info"
+msgid "Contact group apply"
+msgid_plural "Contact groups apply"
+msgstr[0] "Gruppo di contatto abilitato"
+msgstr[1] "Gruppi di contatto abilitati"
+
+#: src/app/components/ContactGroupDropdown.js:175
+msgctxt "Info"
+msgid "Create a new contact group"
+msgstr "Crea un nuovo gruppo di contatto"
+
+#: src/app/components/ContactPgpSettings.js:71
+msgctxt "Info"
+msgid "Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service."
+msgstr "L'impostazione di PGP consente di inviare email crittografate end-to-end con un utente non ProtonMail che utilizza un servizio compatibile PGP."
+
+#: src/app/components/ContactPgpSettings.js:76
+msgctxt "Info"
+msgid "Address Verification with Trusted Keys is enabled for this address. To be able to send to this address, first trust public keys that can be used for sending."
+msgstr "Per questo indirizzo è attivata la verifica dell'indirizzo tramite le chiavi affidabili. Per poter spedire a questo indirizzo prima rendi attendibili le chiavi pubbliche che possono essere usate per l'invio."
+
+#: src/app/components/ContactPgpSettings.js:80
+msgctxt "Info"
+msgid "This address is disabled. To be able to send to this address, the owner must first enable the address."
+msgstr "Questo indirizzo è disabilitato. Per essere in grado di inviare a questo indirizzo il proprietario deve prima attivarlo."
+
+#: src/app/components/ContactPgpSettings.js:84
+msgctxt "Info"
+msgid "To use Address Verification, you must trust one or more available public keys, including the one you want to use for sending. This prevents the encrypted keys from being faked."
+msgstr ""
+
+#: src/app/components/ContactPgpSettings.js:88
+msgctxt "Info"
+msgid "Only change these settings if you are using PGP with non-ProtonMail recipients."
+msgstr "Cambia queste impostazioni solo se stai usando PGP con destinatari non-ProtonMail."
+
+#: src/app/components/ContactPgpSettings.js:92
+msgctxt "Info"
+msgid "All uploaded keys are expired or revoked! Encryption is automatically disabled."
+msgstr "Tutte le chiavi caricate sono scadute oppure revocate! La crittografia è stata disattivata automaticamente."
+
+#.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+#: src/app/components/ContactEmailSettingsModal.js:236
+msgctxt "Info"
+msgid "Select the email format you want to be used by default when sending an email to this email address."
+msgstr "Seleziona il formato email che desideri utilizzare per impostazione predefinita quando invii un'email a questo indirizzo email."
+
+#.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+#: src/app/components/ContactEmailSettingsModal.js:241
+msgctxt "Info"
+msgid "PGP/Inline is only compatible with Plain Text format. Please note that ProtonMail always signs PGP/Inline messages."
+msgstr "PGP/Inline è compatibile solo nel formato Testo Semplice. Per favore nota che ProtonMail firma sempre i messaggi PGP/Inline."
+
+#.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+#: src/app/components/ContactEmailSettingsModal.js:246
+msgctxt "Info"
+msgid "PGP/MIME automatically sends the message using the current composer mode. Please note that ProtonMail always signs PGP/MIME messages."
+msgstr "PGP/MIME invia automaticamente il messaggio utilizzando la modalità corrente del compositore. Per favore nota che ProtonMail firma sempre i messaggi PGP/MIME."
+
+#: src/app/components/MergeRow.js:7
+msgctxt "Info"
+msgid "Two or more contacts appear to be identical."
+msgstr "Due o più contatti sembrano essere identici."
+
+#: src/app/components/MergeRow.js:15
+#, javascript-format
+msgctxt "Info"
+msgid "${ boldText } Do you want to merge these contacts now?"
+msgstr "${ boldText } Vuoi unire questi contatti adesso?"
+
+#: src/app/components/ContactPlaceholder.js:26
+#: src/app/components/ContactPlaceholder.js:76
+msgctxt "Info"
+msgid "Add contacts to your ProtonMail account by importing them from a CSV or vCard file."
+msgstr "Aggiungi contatti al tuo account ProtonMail importandoli da un file CSV o vCard."
+
+#: src/app/components/ContactPlaceholder.js:38
+#: src/app/components/ContactPlaceholder.js:88
+msgctxt "Info"
+msgid "Create a backup of your ProtonMail contacts by exporting them to a vCard file."
+msgstr "Crea un backup dei contatti di ProtonMail esportandoli in un file vCard."
+
+#: src/app/components/ContactPlaceholder.js:49
+msgctxt "Info"
+msgid "Use groups to send email to a list of addresses you regularly communicate with."
+msgstr "Utilizza i gruppi per inviare email ad un elenco di indirizzi con cui comunichi regolarmente."
+
+#: src/app/components/ContactPlaceholder.js:99
+msgctxt "Info"
+msgid "Upgrade to a paid plan to enable encrypted contact details and manage contact groups."
+msgstr "Esegui l'upgrade ad un piano a pagamento per abilitare i dettagli di contatto crittografati e gestire i gruppi di contatti."
+
+#: src/app/components/ContactPlaceholder.js:140
+#: src/app/components/ContactPlaceholder.js:165
+msgctxt "Info"
+msgid "1 contact"
+msgid_plural "${ selectedContacts } contacts"
+msgstr[0] "1 contatto"
+msgstr[1] "${ countSelectedContacts } contatti"
+
+#: src/app/components/ContactPlaceholder.js:147
+#, javascript-format
+msgctxt "Info"
+msgid "You selected ${ totalContactsText } from your address book."
+msgstr "Hai selezionato ${ totalContactsText } dalla tua rubrica."
+
+#: src/app/components/ContactPlaceholder.js:165
+#, javascript-format
+msgctxt "Info"
+msgid "${ totalContactsInGroup } contacts"
+msgstr ""
+
+#: src/app/components/ContactPlaceholder.js:177
+msgctxt "Info"
+msgid "You have ${ _totalContactsText } in this group."
+msgstr "Hai ${ _totalContactsText } in questo gruppo."
+
+#: src/app/components/ContactPlaceholder.js:196
+msgctxt "Info"
+msgid "one contact"
+msgstr "un contatto"
+
+#: src/app/components/ContactPlaceholder.js:198
+#, javascript-format
+msgctxt "Info"
+msgid "${ totalContacts } contacts"
+msgstr "${ totalContacts } contatti"
+
+#: src/app/components/ContactPlaceholder.js:200
+msgctxt "Info"
+msgid "Settings > General > Contacts"
+msgstr "Impostazioni > Generale > Contatti"
+
+#: src/app/components/ContactPlaceholder.js:206
+#, javascript-format
+msgctxt "Info"
+msgid "You have ${ boldTotalContacts } in your address book"
+msgstr "Hai ${ boldTotalContacts } nella tua rubrica"
+
+#: src/app/components/ContactPlaceholder.js:208
+#, javascript-format
+msgctxt "Info"
+msgid "You can decide whether or not contacts are automatically added to your address book by navigating to ${ navigateTo }"
+msgstr "Puoi decidere se aggiungere o meno automaticamente i contatti alla tua rubrica navigando su ${ navigateTo }"
+
+#: src/app/components/ContactGroupsTable.js:86
+msgctxt "Info"
+msgid "Are you sure you want to delete this contact group?"
+msgstr "Sei sicuro di voler eliminare questo gruppo di contatto?"
+
+#: src/app/components/ContactGroupsTable.js:87
+msgctxt "Info"
+msgid "Contacts in the group aren't deleted if the contact group is deleted."
+msgstr "I contatti nel gruppo non vengono eliminati se il gruppo di contatti viene eliminato."
+
+#: src/app/components/ContactGroupsTable.js:101
+#, javascript-format
+msgctxt "Info"
+msgid "${ countEmailAddresses } email address"
+msgid_plural "${ countEmailAddresses } email addresses"
+msgstr[0] "${ countEmailAddresses } indirizzo email"
+msgstr[1] "${ countEmailAddresses } indirizzi email"
+
+#: src/app/components/ContactGroupsSection.js:14
+msgctxt "Info"
+msgid "A group can contain multiple email addresses from the same contact. Please note that a sending limit may apply and prevent you from sending emails to excessively large groups."
+msgstr "Un gruppo può contenere più indirizzi email dallo stesso contatto. Tieni presente che potrebbe essere applicato un limite di invio che ti impedirà di inviare email a gruppi eccessivamente grandi."
+
+#: node_modules/react-components/containers/api/HumanVerificationModal.js:22
+msgctxt "Label"
+msgid "Captcha"
+msgstr "Captcha"
+
+#: node_modules/react-components/containers/login/UnlockModal.js:34
+msgctxt "Label"
+msgid "Cancel"
+msgstr "Annulla"
+
+#: node_modules/react-components/containers/login/UnlockModal.js:35
+msgctxt "Label"
+msgid "Submit"
+msgstr "Invia"
+
+#: node_modules/react-components/containers/login/PasswordForm.js:28
+#: node_modules/react-components/containers/login/UnlockModal.js:41
+msgctxt "Label"
+msgid "Password"
+msgstr "Password"
+
+#: node_modules/react-components/containers/login/PasswordForm.js:10
+msgctxt "Label"
+msgid "Username"
+msgstr "Nome utente"
+
+#: node_modules/react-components/containers/login/TOTPForm.js:9
+msgctxt "Label"
+msgid "Two-factor code"
+msgstr "Codice a due fattori"
+
+#: node_modules/react-components/containers/login/UnlockForm.js:9
+msgctxt "Label"
+msgid "Mailbox password"
+msgstr "Password della casella email"
+
+#: node_modules/react-components/containers/support/BugModal.js:135
+msgctxt "Label"
+msgid "Proton username"
+msgstr "Nome utente di Proton"
+
+#: node_modules/react-components/containers/support/BugModal.js:147
+msgctxt "Label"
+msgid "Email address"
+msgstr "Indirizzo email"
+
+#: node_modules/react-components/containers/support/BugModal.js:159
+msgctxt "Label"
+msgid "Category"
+msgstr "Categoria"
+
+#: node_modules/react-components/containers/support/BugModal.js:171
+msgctxt "Label"
+msgid "What happened?"
+msgstr "Cos'è accaduto?"
+
+#: node_modules/react-components/containers/support/BugModal.js:192
+msgctxt "Label"
+msgid "System information"
+msgstr "Informazioni sul sistema"
+
+#: node_modules/react-components/containers/support/BugModal.js:200
+msgctxt "Label"
+msgid "Operating system"
+msgstr "Sistema operativo"
+
+#: node_modules/react-components/containers/support/BugModal.js:211
+msgctxt "Label"
+msgid "Operating system version"
+msgstr "Versione del sistema operativo"
+
+#: node_modules/react-components/containers/support/BugModal.js:222
+msgctxt "Label"
+msgid "Browser"
+msgstr "Browser"
+
+#: node_modules/react-components/containers/support/BugModal.js:233
+msgctxt "Label"
+msgid "Browser version"
+msgstr "Versione del browser"
+
+#: node_modules/react-components/containers/payments/BitcoinDetails.js:10
+msgctxt "Label"
+msgid "Amount BTC"
+msgstr "Importo BTC"
+
+#: node_modules/react-components/containers/payments/BitcoinDetails.js:16
+msgctxt "Label"
+msgid "BTC address"
+msgstr "Indirizzo BTC"
+
+#: node_modules/react-components/containers/payments/Payment.js:74
+msgctxt "Label"
+msgid "Payment method"
+msgstr "Metodo di pagamento"
+
+#: node_modules/react-components/containers/payments/DonateModal.js:48
+msgctxt "Label"
+msgid "Amount"
+msgstr "Importo"
+
+#: node_modules/react-components/containers/paymentMethods/PaymentMethodDetails.js:17
+msgctxt "Label"
+msgid "Cardholder name"
+msgstr "Nome del titolare"
+
+#: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:68
+msgctxt "Label"
+msgid "Pay with cash"
+msgstr "Acquista in contanti"
+
+#: node_modules/react-components/components/button/Copy.js:20
+msgctxt "Label"
+msgid "Copied"
+msgstr "Copiato"
+
+#: node_modules/react-components/components/button/Copy.js:20
+msgctxt "Label"
+msgid "Copy"
+msgstr "Copia"
+
+#: node_modules/react-components/components/input/PasswordInput.js:21
+msgctxt "Label"
+msgid "Reveal password"
+msgstr "Rivela la password"
+
+#: node_modules/react-components/components/input/PasswordInput.js:21
+msgctxt "Label"
+msgid "Hide password"
+msgstr "Nascondi la password"
+
+#: src/app/components/ContactAdrField.js:29
+msgctxt "Label"
+msgid "Street address"
+msgstr "Indirizzo"
+
+#: src/app/components/ContactAdrField.js:37
+msgctxt "Label"
+msgid "City"
+msgstr "Città"
+
+#: src/app/components/ContactAdrField.js:46
+msgctxt "Label"
+msgid "Region"
+msgstr "Regione"
+
+#: src/app/components/ContactAdrField.js:54
+msgctxt "Label"
+msgid "Postal code"
+msgstr "Codice postale"
+
+#: src/app/components/ContactAdrField.js:62
+msgctxt "Label"
+msgid "Country"
+msgstr "Paese"
+
+#: src/app/components/ContactAdrField.js:71
+msgctxt "Label"
+msgid "Post office box"
+msgstr "Casella ufficio postale"
+
+#: src/app/components/ContactAdrField.js:81
+msgctxt "Label"
+msgid "Extended address"
+msgstr "Indirizzo completo"
+
+#: src/app/components/ContactImageModal.js:47
+msgctxt "Label"
+msgid "Add image URL"
+msgstr "Aggiungi URL immagine"
+
+#: src/app/components/ContactImageModal.js:58
+msgctxt "Label"
+msgid "Upload picture"
+msgstr "Carica immagine"
+
+#: src/app/components/ContactGroupModal.js:169
+msgctxt "Label"
+msgid "Add email address"
+msgstr "Aggiungi indirizzo email"
+
+#: src/app/components/ContactGroupDropdown.js:174
+msgctxt "Label"
+msgid "Add to group"
+msgstr "Aggiungi al gruppo"
+
+#: src/app/components/ContactPgpSettings.js:98
+msgctxt "Label"
+msgid "Encrypt emails"
+msgstr "Email criptate"
+
+#: src/app/components/ContactPgpSettings.js:124
+msgctxt "Label"
+msgid "Sign emails"
+msgstr "Firma email"
+
+#: src/app/components/ContactPgpSettings.js:149
+msgctxt "Label"
+msgid "Public keys"
+msgstr "Chiavi pubbliche"
+
+#: src/app/components/ContactPgpSettings.js:164
+msgctxt "Label"
+msgid "Cryptographic scheme"
+msgstr "Schema crittografico"
+
+#.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+#: src/app/components/ContactEmailSettingsModal.js:252
+msgctxt "Label"
+msgid "Email format"
+msgstr "Formato email"
+
+#: src/app/components/ContactsSection.js:12
+msgctxt "Label"
+msgid "Automatically save contacts"
+msgstr "Salvataggio automatico dei contatti"
+
+#: node_modules/react-components/containers/keys/shared/SelectKeyFiles.js:35
+msgctxt "Select files"
+msgid "Upload"
+msgstr "Carica"
+
+#: node_modules/react-components/containers/support/AttachScreenshot.js:23
+msgctxt "Error notification in the bug report modal when the user upload file"
+msgid "No image selected"
+msgstr "Nessuna immagine selezionata"
+
+#: node_modules/react-components/containers/support/BugModal.js:35
+#: node_modules/react-components/containers/support/BugModal.js:49
+msgctxt "Bug category"
+msgid "Login problem"
+msgstr "Problema di accesso"
+
+#: node_modules/react-components/containers/support/BugModal.js:36
+msgctxt "Bug category"
+msgid "Sign up problem"
+msgstr "Problema di iscrizione"
+
+#: node_modules/react-components/containers/support/BugModal.js:37
+msgctxt "Bug category"
+msgid "Bridge problem"
+msgstr "Problema con il Bridge"
+
+#: node_modules/react-components/containers/support/BugModal.js:38
+msgctxt "Bug category"
+msgid "Import / export problem"
+msgstr "Problema di importazione/esportazione"
+
+#: node_modules/react-components/containers/support/BugModal.js:39
+msgctxt "Bug category"
+msgid "Custom domains problem"
+msgstr "Problema dei domini personalizzati"
+
+#: node_modules/react-components/containers/support/BugModal.js:40
+#: node_modules/react-components/containers/support/BugModal.js:51
+msgctxt "Bug category"
+msgid "Payments problem"
+msgstr "Problemi con i pagamenti"
+
+#: node_modules/react-components/containers/support/BugModal.js:41
+#: node_modules/react-components/containers/support/BugModal.js:55
+msgctxt "Bug category"
+msgid "Connection problem"
+msgstr "Problema di connessione"
+
+#: node_modules/react-components/containers/support/BugModal.js:42
+msgctxt "Bug category"
+msgid "Slow speed problem"
+msgstr "Problema di bassa velocità"
+
+#: node_modules/react-components/containers/support/BugModal.js:43
+msgctxt "Bug category"
+msgid "VPN problem"
+msgstr "Problema della VPN"
+
+#: node_modules/react-components/containers/support/BugModal.js:44
+#: node_modules/react-components/containers/support/BugModal.js:60
+msgctxt "Bug category"
+msgid "Feature request"
+msgstr "Richiesta di una funzionalità"
+
+#: node_modules/react-components/containers/support/BugModal.js:45
+msgctxt "Bug category"
+msgid "Other"
+msgstr "Altro"
+
+#: node_modules/react-components/containers/support/BugModal.js:50
+msgctxt "Bug category"
+msgid "Signup problem"
+msgstr "Problema di iscrizione"
+
+#: node_modules/react-components/containers/support/BugModal.js:52
+msgctxt "Bug category"
+msgid "Installation problem"
+msgstr "Problema d'installazione"
+
+#: node_modules/react-components/containers/support/BugModal.js:53
+msgctxt "Bug category"
+msgid "Update problem"
+msgstr "Problema con l'aggiornamento"
+
+#: node_modules/react-components/containers/support/BugModal.js:54
+msgctxt "Bug category"
+msgid "Application problem"
+msgstr "Problema con l'applicazione"
+
+#: node_modules/react-components/containers/support/BugModal.js:56
+msgctxt "Bug category"
+msgid "Speed problem"
+msgstr "Problema di velocità"
+
+#: node_modules/react-components/containers/support/BugModal.js:57
+msgctxt "Bug category"
+msgid "Manual setup problem"
+msgstr "Problema di configurazione manuale"
+
+#: node_modules/react-components/containers/support/BugModal.js:58
+msgctxt "Bug category"
+msgid "Website access problem"
+msgstr "Problema di accesso al sito web"
+
+#: node_modules/react-components/containers/support/BugModal.js:59
+msgctxt "Bug category"
+msgid "Streaming problem"
+msgstr "Problema di streaming"
+
+#: node_modules/react-components/containers/support/BugModal.js:80
+msgctxt "Action to select a title for the bug report modal"
+msgid "Select"
+msgstr "Seleziona"
+
+#: node_modules/react-components/containers/support/BugModal.js:95
+msgctxt "Link"
+msgid "clearing your browser cache"
+msgstr "pulendo la cache del browser"
+
+#: node_modules/react-components/containers/payments/PayPal.js:125
+msgctxt "Link"
+msgid "click here"
+msgstr "clicca qui"
+
+#: node_modules/react-components/containers/heading/UpgradeButton.js:13
+#: node_modules/react-components/containers/heading/UpgradeButton.js:21
+msgctxt "Link"
+msgid "Upgrade"
+msgstr "Effettua l'upgrade"
+
+#: node_modules/react-components/components/link/LearnMore.js:7
+#: src/app/components/ContactViewErrors.js:14
+#: src/app/components/ContactViewErrors.js:26
+#: src/app/components/ContactViewErrors.js:38
+msgctxt "Link"
+msgid "Learn more"
+msgstr "Per saperne di più"
+
+#: src/app/containers/SettingsContainer.js:24
+msgctxt "Link"
+msgid "General"
+msgstr "Generale"
+
+#: src/app/containers/SettingsContainer.js:25
+msgctxt "Link"
+msgid "Contact groups"
+msgstr "Gruppi di contatti"
+
+#: src/app/content/PrivateSidebar.js:37
+msgctxt "Link"
+msgid "Contacts"
+msgstr "Contatti"
+
+#: src/app/content/PrivateSidebar.js:44
+msgctxt "Link"
+msgid "Import"
+msgstr "Importa"
+
+#: src/app/content/PrivateSidebar.js:54
+msgctxt "Link"
+msgid "Export all"
+msgstr "Esporta tutto"
+
+#: src/app/content/PrivateSidebar.js:63
+msgctxt "Link"
+msgid "Groups"
+msgstr "Gruppi"
+
+#: node_modules/react-components/containers/support/BugModal.js:111
+msgctxt "Success"
+msgid "Bug reported"
+msgstr "Bug segnalato"
+
+#: node_modules/react-components/containers/payments/DonateModal.js:33
+msgctxt "Success"
+msgid "Your support is essential to keeping Proton running. Thank you for supporting internet privacy!"
+msgstr "Il tuo sostegno è essenziale per mantenere Proton funzionante. Grazie per supportare la privacy su internet!"
+
+#: node_modules/react-components/containers/general/AutoSaveContactsToggle.js:16
+msgctxt "Success"
+msgid "Preference saved"
+msgstr "Preferenze salvate"
+
+#: src/app/components/ContactModal.js:94
+msgctxt "Success"
+msgid "Contact saved"
+msgstr "Contatto salvato"
+
+#: src/app/components/ContactEmailSettingsModal.js:161
+msgctxt "Success"
+msgid "Preferences saved"
+msgstr "Preferenze salvate"
+
+#: src/app/components/delete/DeleteModal.js:23
+msgctxt "Success"
+msgid "Contacts deleted"
+msgstr "Contatti eliminati"
+
+#: src/app/components/delete/DeleteModal.js:33
+msgctxt "Success"
+msgid "Contact deleted"
+msgid_plural "Contacts deleted"
+msgstr[0] "Contatto eliminato"
+msgstr[1] "Contatti eliminati"
+
+#: node_modules/react-components/containers/support/BugModal.js:131
+msgctxt "Warning"
+msgid "Bug reports are not end-to-end encrypted, please do not send any sensitive information."
+msgstr "Le segnalazioni di bug non sono crittografate end-to-end, per favore non invii alcuna informazione sensibile."
+
+#: src/app/components/ContactViewErrors.js:12
+msgctxt "Warning"
+msgid "Warning: the verification of this contact's signature failed."
+msgstr "Attenzione: la verifica della firma di questo contatto non è riuscita."
+
+#: src/app/components/ContactViewErrors.js:24
+#: src/app/components/ContactViewErrors.js:36
+msgctxt "Warning"
+msgid "Error: the encrypted content failed decryption and cannot be read."
+msgstr "Errore: la decriptazione del contenuto crittografato non è riuscita e non può essere letta."
+
+#: src/app/components/UpgradeModal.js:19
+msgctxt "Warning"
+msgid "This feature requires a paid Proton account"
+msgstr "Questa funzione richiede un account Proton a pagamento"
+
+#: src/app/components/merge/MergeContactPreview.js:82
+msgctxt "Warning"
+msgid "Some of the contacts to be merged display errors. Please review them individually"
+msgstr "Alcuni dei contatti da unire presentano errori. Si prega di rivederli singolarmente"
+
+#: src/app/components/merge/MergeContactPreview.js:84
+msgctxt "Warning"
+msgid "Contacts could not be merged"
+msgstr "I contatti non possono essere uniti"
+
+#: src/app/components/delete/DeleteModal.js:45
+msgctxt "Warning"
+msgid "This action will permanently delete the selected contact. Are you sure you want to delete this contact?"
+msgid_plural "This action will permanently delete selected contacts. Are you sure you want to delete these contacts?"
+msgstr[0] "Questa azione eliminerà definitivamente il contatto selezionato. Sei sicuro di voler eliminare questo contatto?"
+msgstr[1] "Questa azione eliminerà definitivamente i contatti selezionati. Sei sicuro di voler eliminare questi contatti?"
+
+#: node_modules/react-components/containers/support/BugModal.js:184
+msgctxt "Label, make it short please"
+msgid "Attach screenshot(s)"
+msgstr "Allega screenshot"
+
+#: node_modules/react-components/containers/payments/Card.js:57
+msgctxt "Placeholder, make it short"
+msgid "Security code"
+msgstr "Codice di sicurezza"
+
+#: node_modules/react-components/containers/payments/Cash.js:13
+#, javascript-format
+msgctxt "Info for cash payment method"
+msgid "To pay via Cash, please email us at ${ email } for instructions."
+msgstr "Per pagare in contanti, per favore contattaci a ${ email } per le istruzioni."
+
+#: node_modules/react-components/containers/paymentMethods/PaymentMethodDetails.js:21
+msgctxt "Label for credit card"
+msgid "Expiration"
+msgstr "Scadenza"
+
+#: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:34
+msgctxt "Payment method option"
+msgid "Pay with credit/debit card"
+msgstr "Paga con carta di credito/debito"
+
+#: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:56
+msgctxt "Payment method option"
+msgid "Pay with PayPal"
+msgstr "Paga con PayPal"
+
+#: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:63
+msgctxt "Payment method option"
+msgid "Pay with Bitcoin"
+msgstr "Paga con i Bitcoin"
+
+#: node_modules/react-components/components/toggle/Toggle.js:10
+msgctxt "Toggle button"
+msgid "On"
+msgstr "On"
+
+#: node_modules/react-components/components/toggle/Toggle.js:11
+msgctxt "Toggle button"
+msgid "Off"
+msgstr "Off"
+
+#: src/app/helpers/fields.js:4
+#: src/app/helpers/fields.js:31
+#: src/app/helpers/fields.js:68
+msgctxt "Contact field label"
+msgid "Name"
+msgstr "Nome"
+
+#: src/app/helpers/fields.js:5
+#: src/app/helpers/fields.js:69
+msgctxt "Contact field label"
+msgid "Compact name"
+msgstr "Nome compatto"
+
+#: src/app/helpers/fields.js:6
+#: src/app/helpers/fields.js:70
+msgctxt "Contact field label"
+msgid "Nickname"
+msgstr "Soprannome"
+
+#: src/app/helpers/fields.js:7
+#: src/app/helpers/fields.js:32
+#: src/app/helpers/fields.js:71
+msgctxt "Contact field label"
+msgid "Email"
+msgstr "Email"
+
+#: src/app/helpers/fields.js:8
+#: src/app/helpers/fields.js:33
+#: src/app/helpers/fields.js:72
+msgctxt "Contact field label"
+msgid "Phone"
+msgstr "Telefono"
+
+#: src/app/helpers/fields.js:9
+#: src/app/helpers/fields.js:34
+#: src/app/helpers/fields.js:73
+msgctxt "Contact field label"
+msgid "Address"
+msgstr "Indirizzo"
+
+#: src/app/helpers/fields.js:10
+#: src/app/helpers/fields.js:35
+#: src/app/helpers/fields.js:51
+#: src/app/helpers/fields.js:74
+msgctxt "Contact field label"
+msgid "Photo"
+msgstr "Foto"
+
+#: src/app/helpers/fields.js:11
+#: src/app/helpers/fields.js:36
+#: src/app/helpers/fields.js:52
+#: src/app/helpers/fields.js:75
+msgctxt "Contact field label"
+msgid "Organization"
+msgstr "Organizzazione"
+
+#: src/app/helpers/fields.js:12
+#: src/app/helpers/fields.js:37
+#: src/app/helpers/fields.js:53
+#: src/app/helpers/fields.js:76
+msgctxt "Contact field label"
+msgid "Birthday"
+msgstr "Compleanno"
+
+#: src/app/helpers/fields.js:13
+#: src/app/helpers/fields.js:38
+#: src/app/helpers/fields.js:54
+#: src/app/helpers/fields.js:77
+msgctxt "Contact field label"
+msgid "Anniversary"
+msgstr "Anniversario"
+
+#: src/app/helpers/fields.js:14
+#: src/app/helpers/fields.js:39
+#: src/app/helpers/fields.js:55
+#: src/app/helpers/fields.js:78
+msgctxt "Contact field label"
+msgid "Title"
+msgstr "Titolo"
+
+#: src/app/helpers/fields.js:15
+#: src/app/helpers/fields.js:40
+#: src/app/helpers/fields.js:56
+#: src/app/helpers/fields.js:79
+msgctxt "Contact field label"
+msgid "Role"
+msgstr "Ruolo"
+
+#: src/app/helpers/fields.js:16
+#: src/app/helpers/fields.js:42
+#: src/app/helpers/fields.js:58
+#: src/app/helpers/fields.js:80
+msgctxt "Contact field label"
+msgid "Note"
+msgstr "Nota"
+
+#: src/app/helpers/fields.js:17
+#: src/app/helpers/fields.js:43
+#: src/app/helpers/fields.js:59
+#: src/app/helpers/fields.js:81
+msgctxt "Contact field label"
+msgid "URL"
+msgstr "URL"
+
+#: src/app/helpers/fields.js:18
+#: src/app/helpers/fields.js:44
+#: src/app/helpers/fields.js:60
+#: src/app/helpers/fields.js:82
+msgctxt "Contact field label"
+msgid "Gender"
+msgstr "Genere"
+
+#: src/app/helpers/fields.js:19
+#: src/app/helpers/fields.js:45
+#: src/app/helpers/fields.js:61
+#: src/app/helpers/fields.js:83
+msgctxt "Contact field label"
+msgid "Language"
+msgstr "Lingua"
+
+#: src/app/helpers/fields.js:20
+#: src/app/helpers/fields.js:46
+#: src/app/helpers/fields.js:62
+#: src/app/helpers/fields.js:84
+msgctxt "Contact field label"
+msgid "Timezone"
+msgstr "Fuso orario"
+
+#: src/app/helpers/fields.js:21
+#: src/app/helpers/fields.js:47
+#: src/app/helpers/fields.js:63
+#: src/app/helpers/fields.js:85
+msgctxt "Contact field label"
+msgid "Geo"
+msgstr "Geo"
+
+#: src/app/helpers/fields.js:22
+#: src/app/helpers/fields.js:48
+#: src/app/helpers/fields.js:64
+#: src/app/helpers/fields.js:86
+msgctxt "Contact field label"
+msgid "Logo"
+msgstr "Logo"
+
+#: src/app/helpers/fields.js:23
+#: src/app/helpers/fields.js:41
+#: src/app/helpers/fields.js:57
+#: src/app/helpers/fields.js:87
+msgctxt "Contact field label"
+msgid "Member"
+msgstr "Membro"
+
+#: src/app/helpers/fields.js:24
+#: src/app/helpers/fields.js:88
+msgctxt "Contact field label"
+msgid "IMPP"
+msgstr ""
+
+#: src/app/helpers/fields.js:25
+#: src/app/helpers/fields.js:89
+msgctxt "Contact field label"
+msgid "Related"
+msgstr "Relazionato"
+
+#: src/app/helpers/fields.js:26
+#: src/app/helpers/fields.js:90
+msgctxt "Contact field label"
+msgid "Categories"
+msgstr "Categorie"
+
+#: src/app/helpers/fields.js:27
+#: src/app/helpers/fields.js:91
+msgctxt "Contact field label"
+msgid "Sound"
+msgstr "Suono"
+
+#: src/app/helpers/types.js:4
+msgctxt "Contact type label"
+msgid "Work"
+msgstr "Lavoro"
+
+#: src/app/helpers/types.js:5
+msgctxt "Contact type label"
+msgid "Personal"
+msgstr "Personale"
+
+#: src/app/helpers/types.js:6
+msgctxt "Contact type label"
+msgid "Mobile"
+msgstr "Mobile"
+
+#: src/app/helpers/types.js:7
+msgctxt "Contact type label"
+msgid "Main"
+msgstr "Principale"
+
+#: src/app/helpers/types.js:8
+msgctxt "Contact type label"
+msgid "Yomi"
+msgstr "Yomi"
+
+#: src/app/helpers/types.js:9
+msgctxt "Contact type label"
+msgid "Other"
+msgstr "Altro"
+
+#: src/app/helpers/types.js:10
+msgctxt "Contact type label"
+msgid "Fax"
+msgstr "Fax"
+
+#: src/app/helpers/types.js:11
+msgctxt "Contact type label"
+msgid "Pager"
+msgstr "Cercapersone"
+
+#: src/app/helpers/types.js:15
+msgctxt "Property type"
+msgid "Name"
+msgstr "Nome"
+
+#: src/app/helpers/types.js:15
+msgctxt "Property type"
+msgid "Yomi"
+msgstr "Yomi"
+
+#: src/app/helpers/types.js:19
+msgctxt "Property type"
+msgid "Email"
+msgstr "Email"
+
+#: src/app/helpers/types.js:20
+#: src/app/helpers/types.js:26
+#: src/app/helpers/types.js:36
+msgctxt "Property type"
+msgid "Home"
+msgstr "Casa"
+
+#: src/app/helpers/types.js:21
+#: src/app/helpers/types.js:27
+#: src/app/helpers/types.js:37
+msgctxt "Property type"
+msgid "Work"
+msgstr "Lavoro"
+
+#: src/app/helpers/types.js:22
+#: src/app/helpers/types.js:28
+#: src/app/helpers/types.js:38
+msgctxt "Property type"
+msgid "Other"
+msgstr "Altro"
+
+#: src/app/helpers/types.js:25
+msgctxt "Property type"
+msgid "Phone"
+msgstr "Telefono"
+
+#: src/app/helpers/types.js:29
+msgctxt "Property type"
+msgid "Mobile"
+msgstr "Mobile"
+
+#: src/app/helpers/types.js:30
+msgctxt "Property type"
+msgid "Main"
+msgstr "Principale"
+
+#: src/app/helpers/types.js:31
+msgctxt "Property type"
+msgid "Fax"
+msgstr "Fax"
+
+#: src/app/helpers/types.js:32
+msgctxt "Property type"
+msgid "Pager"
+msgstr "Cercapersone"
+
+#: src/app/helpers/types.js:35
+msgctxt "Property type"
+msgid "Address"
+msgstr "Indirizzo"
+
+#: src/app/helpers/types.js:52
+msgctxt "Property type"
+msgid "Contact"
+msgstr "Contatto"
+
+#: src/app/helpers/types.js:53
+msgctxt "Property type"
+msgid "Acquaintance"
+msgstr "Conoscente"
+
+#: src/app/helpers/types.js:54
+msgctxt "Property type"
+msgid "Friend"
+msgstr "Amico"
+
+#: src/app/helpers/types.js:55
+msgctxt "Property type"
+msgid "Met"
+msgstr "Incontrato"
+
+#: src/app/helpers/types.js:56
+msgctxt "Property type"
+msgid "Co-worker"
+msgstr "Collaboratore"
+
+#: src/app/helpers/types.js:57
+msgctxt "Property type"
+msgid "Colleague"
+msgstr "Collega"
+
+#: src/app/helpers/types.js:58
+msgctxt "Property type"
+msgid "Co-resident"
+msgstr "Coinquilino"
+
+#: src/app/helpers/types.js:59
+msgctxt "Property type"
+msgid "Neighbor"
+msgstr "Vicino"
+
+#: src/app/helpers/types.js:60
+msgctxt "Property type"
+msgid "Child"
+msgstr "Figlio"
+
+#: src/app/helpers/types.js:61
+msgctxt "Property type"
+msgid "Parent"
+msgstr "Genitore"
+
+#: src/app/helpers/types.js:62
+#: src/app/helpers/types.js:63
+msgctxt "Property type"
+msgid "Sibling"
+msgstr "Fratelli"
+
+#: src/app/helpers/types.js:64
+msgctxt "Property type"
+msgid "Kin"
+msgstr "Parenti"
+
+#: src/app/helpers/types.js:65
+msgctxt "Property type"
+msgid "Muse"
+msgstr "Musa"
+
+#: src/app/helpers/types.js:66
+msgctxt "Property type"
+msgid "Crush"
+msgstr "In cotta"
+
+#: src/app/helpers/types.js:67
+msgctxt "Property type"
+msgid "Date"
+msgstr "Data"
+
+#: src/app/helpers/types.js:68
+msgctxt "Property type"
+msgid "Sweetheart"
+msgstr "Tesoro"
+
+#: src/app/helpers/types.js:69
+msgctxt "Property type"
+msgid "Me"
+msgstr "Io"
+
+#: src/app/helpers/types.js:70
+msgctxt "Property type"
+msgid "Agent"
+msgstr "Agente"
+
+#: src/app/helpers/types.js:71
+msgctxt "Property type"
+msgid "Emergency"
+msgstr "Emergenza"
+
+#: src/app/helpers/encrypt.js:74
+msgctxt "Default display name vcard"
+msgid "Unknown"
+msgstr "Sconosciuto"
+
+#: src/app/components/import/AttachingModalContent.js:12
+msgctxt "Description"
+msgid "We support importing CSV files from Outlook, Outlook Express, Yahoo! Mail, Hotmail, Eudora and some other apps. We also support importing vCard 4.0. (UTF-8 encoding)."
+msgstr "Supportiamo l'importazione di file CSV da Outlook, Outlook Express, Yahoo! Mail, Hotmail, Eudora e alcune altre app. Supportiamo anche l'importazione di vCard 4.0. (Codifica UTF-8)."
+
+#: src/app/components/import/ImportingModalContent.js:246
+msgctxt "Description"
+msgid "Encrypting and importing contacts... This may take a few minutes. When the process is completed, you can close this modal."
+msgstr "Crittografia e importazione dei contatti... L'operazione potrebbe richiedere alcuni minuti. Quando il processo sarà completato, potrai chiudere questa finestra."
+
+#: src/app/components/import/ImportGroupsModalContent.js:10
+msgctxt "Description"
+msgid "We picked up at least one group/organization from the list of contacts you are importing. Take the time to review how we should import these groups."
+msgstr "Abbiamo preso almeno un gruppo/organizzazione dall'elenco dei contatti che stai importando. Prenditi il ​​tempo per esaminare come dovremmo importare questi gruppi."
+
+#: src/app/components/ExportModal.js:119
+msgctxt "Description"
+msgid "Decrypting contacts... This may take a few minutes. When the process is completed, you will be able to download the file with all your contacts exported."
+msgstr "Decodifica dei contatti... Questa operazione potrebbe richiedere alcuni minuti. Al termine del processo, sarai in grado di scaricare il file con tutti i tuoi contatti esportati."
+
+#: src/app/components/merge/MergingModalContent.js:267
+msgctxt "Description"
+msgid "Merging contacts... This may take a few minutes. When the process is completed, you can close this modal."
+msgstr "Unione dei contatti in corso... L'operazione potrebbe richiedere alcuni minuti. Quando il processo sarà completato, potrai chiudere questa finestra."
+
+#: src/app/components/merge/MergeModalContent.js:70
+msgctxt "Description"
+msgid "Use Drag and Drop to rank merging priority between contacts. Uncheck the contacts you do not want to merge."
+msgstr "Utilizza il Trascina e Rilascia per classificare la priorità di unione tra i contatti. Deseleziona i contatti che non vuoi unire."
+
+#: src/app/components/merge/MergeModalContent.js:74
+msgctxt "Description"
+msgid "You can mark for deletion the contacts that you do not want neither to merge nor to keep.\n"
+"Deletion will only take place after the merge button is clicked"
+msgstr "Puoi selezionare i contatti che non vuoi unire né mantenere per l'eliminazione.\n"
+"La cancellazione avverrà solo dopo aver fatto clic sul pulsante Unisci"
+
+#: src/app/components/import/ImportCsvTableHeader.js:11
+msgctxt "TableHeader"
+msgid "IMPORT"
+msgstr "IMPORTA"
+
+#: src/app/components/import/ImportCsvTableHeader.js:13
+msgctxt "TableHeader"
+msgid "CSV FIELD"
+msgstr "CAMPO CSV"
+
+#: src/app/components/import/ImportCsvTableHeader.js:14
+msgctxt "TableHeader"
+msgid "VCARD FIELD"
+msgstr "CAMPO VCARD"
+
+#: src/app/components/import/ImportCsvTableHeader.js:17
+msgctxt "TableHeader"
+msgid "VALUES"
+msgstr "VALORI"
+
+#: src/app/components/merge/MergeTable.js:13
+msgctxt "TableHeader"
+msgid "NAME"
+msgstr "NOME"
+
+#: src/app/components/merge/MergeTable.js:14
+msgctxt "TableHeader"
+msgid "ADDRESS"
+msgstr "INDIRIZZO"
+
+#: src/app/components/merge/MergeTable.js:15
+msgctxt "TableHeader"
+msgid "ACTIONS"
+msgstr "AZIONI"
+
+#: src/app/components/import/ImportCsvModalContent.js:33
+msgctxt "Error notification"
+msgid "First name and last name cannot be unchecked at the same time"
+msgstr "Nome e cognome non possono essere deselezionati contemporaneamente"
+
+#: src/app/components/import/ImportModal.js:70
+msgctxt "Error notification"
+msgid "No .csv or .vcf file selected"
+msgstr "Nessun file .csv o .vcf selezionato"
+
+#: src/app/components/import/ImportModal.js:106
+msgctxt "Error notification"
+msgid "File selected appears to be corrupted"
+msgstr "Il file selezionato sembra essere danneggiato"
+
+#: src/app/components/import/ImportCsvModalContent.js:62
+msgctxt "Description of the purpose of the import CSV modal"
+msgid "We have detected the following fields in the CSV file you uploaded. Check the ones you want to import."
+msgstr "Abbiamo rilevato i seguenti campi nel file CSV che hai caricato. Seleziona quelli che vuoi importare."
+
+#: src/app/components/import/ImportCsvModalContent.js:66
+msgctxt "Description of the purpose of the import CSV modal"
+msgid "Also, we have automatically matched CSV fields with vCard fields. You can review and change this matching manually."
+msgstr "Inoltre, abbiamo abbinato automaticamente i campi CSV con i campi vCard. Puoi rivedere e modificare questa corrispondenza manualmente."
+
+#: src/app/components/import/ErrorDetails.js:6
+msgctxt "Info on errors"
+msgid "Click for details"
+msgstr "Clicca per maggiori dettagli"
+
+#: src/app/components/import/ImportingModalContent.js:31
+#, javascript-format
+msgctxt "Info on errors importing contacts"
+msgid "Contact ${ index } from your list could not be parsed. ${ message }"
+msgstr "Il contatto ${ index } dalla tua lista non può essere analizzato. ${ message }"
+
+#: src/app/components/import/ImportingModalContent.js:33
+msgctxt "Info on errors importing contacts"
+msgid "Contact ${ index } from your list could not be encrypted."
+msgstr "Il contatto ${ index } dalla tua lista non può essere criptato."
+
+#: src/app/components/import/ImportingModalContent.js:35
+#, javascript-format
+msgctxt "Info on errors importing contacts"
+msgid "Contact ${ index } from your list could not be imported. ${ message }"
+msgstr "Il contatto ${ index } dalla tua lista non può essere importato. ${ message }"
+
+#: src/app/components/import/ImportingModalContent.js:265
+msgctxt "Info on errors importing contacts"
+msgid "Some contacts could not be imported. Click for details"
+msgstr "Alcuni contatti non possono essere importati. Clicca per vedere i dettagli"
+
+#: src/app/components/import/ImportingModalContent.js:253
+#, javascript-format
+msgctxt "Progress bar description"
+msgid "${ model.submitted.length } out of ${ model.total } contact successfully imported."
+msgid_plural "${ model.submitted.length } out of ${ model.total } contacts successfully imported."
+msgstr[0] "${ model.submitted.length } contatto su ${ model.total } importato con successo."
+msgstr[1] "${ model.submitted.length } contatti su ${ model.total } importati con successo."
+
+#: src/app/components/import/ImportingModalContent.js:258
+msgctxt "Progress bar description"
+msgid "No contacts imported"
+msgstr "Nessun contatto importato"
+
+#: src/app/components/DynamicProgress.js:9
+msgctxt "Progress bar description"
+msgid "Progress"
+msgstr "Progresso"
+
+#: src/app/components/DynamicProgress.js:10
+msgctxt "Progress bar description"
+msgid "Completed"
+msgstr "Completato"
+
+#: src/app/components/DynamicProgress.js:11
+msgctxt "Progress bar description"
+msgid "Failed"
+msgstr "Errore"
+
+#: src/app/components/ExportModal.js:127
+#, javascript-format
+msgctxt "Progress bar description"
+msgid "${ contactsExported.length } out of ${ countContacts } contacts successfully exported."
+msgstr "${ contactsExported.length } contatti su ${ countContacts } esportati con successo."
+
+#: src/app/components/ExportModal.js:129
+msgctxt "Progress bar description"
+msgid "No contacts exported."
+msgstr "Nessun contatto esportato."
+
+#: src/app/components/merge/MergingModalContent.js:275
+#, javascript-format
+msgctxt "Progress bar description"
+msgid "${ model.submitted.length } out of ${ totalBeMerged } contacts successfully merged."
+msgstr "${ model.submitted.length } contatti su ${ totalBeMerged } uniti con successo."
+
+#: src/app/components/merge/MergingModalContent.js:277
+msgctxt "Progress bar description"
+msgid "No contacts merged."
+msgstr "Nessun contatto unito."
+
+#: src/app/components/import/ImportModal.js:82
+msgctxt "Error info"
+msgid "We only support importing files smaller than 10 MB. Please split your contacts into several smaller files."
+msgstr "Supportiamo solo l'importazione di file di dimensioni inferiori a 10 MB. Si prega di dividere i contatti in più file più piccoli."
+
+#: src/app/components/EncryptedIcon.js:7
+msgctxt "Tooltip"
+msgid "Encrypted data with verified digital signature"
+msgstr "Dati crittografati con firma digitale verificata"
+
+#: src/app/components/ContactPgpSettings.js:101
+msgctxt "Tooltip"
+msgid "Email encryption forces email signature to help authenticate your sent messages"
+msgstr "La crittografia email impone la firma email per autenticare i messaggi inviati"
+
+#: src/app/components/ContactPgpSettings.js:127
+msgctxt "Tooltip"
+msgid "Digitally signing emails helps authenticating that messages are sent by you"
+msgstr ""
+
+#: src/app/components/ContactPgpSettings.js:152
+msgctxt "Tooltip"
+msgid "Upload a public key to enable sending end-to-end encrypted emails to this email"
+msgstr "Carica una chiave pubblica per abilitare l'invio di email crittografate end-to-end a questa email"
+
+#: src/app/components/ContactPgpSettings.js:167
+msgctxt "Tooltip"
+msgid "Select the PGP scheme to be used when signing or encrypting to a user. Note that PGP/Inline forces plain text messages"
+msgstr "Seleziona lo schema PGP da usare quando si firma o si crittografa per un utente. Nota che PGP/Inline forza i testi in messaggi semplici"
+
+#.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
+#: src/app/components/ContactEmailSettingsModal.js:255
+msgctxt "Tooltip"
+msgid "Automatic indicates that the format in the composer is used to send to this user. Plain text indicates that the message will always be converted to plain text on send."
+msgstr "Automatico indica che il formato nel compositore è usato per inviare a questo utente. Testo semplice indica che il messaggio sarà sempre convertito in testo semplice all'invio."
+
+#: src/app/components/ContactToolbar.js:44
+msgctxt "Tooltip"
+msgid "Delete"
+msgstr "Elimina"
+
+#: src/app/components/ContactGroupModal.js:31
+#: src/app/components/ContactGroupsTable.js:60
+msgctxt "Table header"
+msgid "Name"
+msgstr "Nome"
+
+#: src/app/components/ContactGroupModal.js:31
+msgctxt "Table header"
+msgid "Address"
+msgstr "Indirizzo"
+
+#: src/app/components/ContactGroupModal.js:31
+msgctxt "Table header"
+msgid "Action"
+msgstr "Azione"
+
+#: src/app/components/ContactKeysTable.js:87
+msgctxt "Table header"
+msgid "Fingerprint"
+msgstr "Impronta digitale"
+
+#: src/app/components/ContactKeysTable.js:88
+msgctxt "Table header"
+msgid "Created"
+msgstr "Creata"
+
+#: src/app/components/ContactKeysTable.js:89
+msgctxt "Table header"
+msgid "Expires"
+msgstr "Scade"
+
+#: src/app/components/ContactKeysTable.js:90
+msgctxt "Table header"
+msgid "Type"
+msgstr "Tipo"
+
+#: src/app/components/ContactKeysTable.js:91
+msgctxt "Table header"
+msgid "Status"
+msgstr "Stato"
+
+#: src/app/components/ContactGroupsTable.js:60
+#: src/app/components/ContactKeysTable.js:92
+msgctxt "Table header"
+msgid "Actions"
+msgstr "Azioni"
+
+#: src/app/components/ContactGroupsTable.js:60
+msgctxt "Table header"
+msgid "Group size"
+msgstr "Dimensione del gruppo"
+
+#: src/app/components/ContactGroupModal.js:130
+msgctxt "Notification"
+msgid "Contact group updated"
+msgstr "Gruppo di contatto aggiornato"
+
+#: src/app/components/ContactGroupModal.js:131
+msgctxt "Notification"
+msgid "Contact group created"
+msgstr "Gruppo di contatto creato"
+
+#: src/app/components/ContactGroupModal.js:151
+msgctxt "Label for contact group name"
+msgid "Name"
+msgstr "Nome"
+
+#: src/app/components/ContactGroupModal.js:155
+msgctxt "Placeholder for contact group name"
+msgid "Name"
+msgstr "Nome"
+
+#: src/app/components/ContactGroupModal.js:162
+msgctxt "Label for contact group color"
+msgid "Color"
+msgstr "Colore"
+
+#: src/app/components/ContactsList.js:105
+msgctxt "Info message"
+msgid "Your address book is empty"
+msgstr "La tua rubrica è vuota"
+
+#: src/app/components/ContactsList.js:133
+msgctxt "Info message"
+msgid "Your contact group is empty"
+msgstr "Il gruppo di contatto è vuoto"
+
+#: src/app/components/ContactsList.js:152
+msgctxt "Info message"
+msgid "No results found"
+msgstr "Nessun risultato trovato"
+
+#: src/app/components/ContactsList.js:110
+#, javascript-format
+msgctxt "Actions message"
+msgid "You can either ${ addContact } or ${ importContact } from a file."
+msgstr "Puoi ${ addContact } o ${ importContact } da un file."
+
+#: src/app/components/ContactsList.js:137
+#, javascript-format
+msgctxt "Actions message"
+msgid "You can ${ editGroup } to add a contact."
+msgstr "Puoi ${ editGroup } per aggiungere un contatto."
+
+#: src/app/components/ContactsList.js:154
+#, javascript-format
+msgctxt "Actions message"
+msgid "You can either update your search query or ${ clearSearch }."
+msgstr "Puoi aggiornare la query di ricerca o ${ clearSearch }."
+
+#: src/app/components/ContactMIMETypeSelect.js:9
+msgctxt "MIME type"
+msgid "Automatic"
+msgstr "Automatico"
+
+#: src/app/components/ContactMIMETypeSelect.js:10
+msgctxt "MIME type"
+msgid "Plain text"
+msgstr "Testo normale"
+
+#: src/app/components/ContactSchemeSelect.js:13
+#, javascript-format
+msgctxt "Default encryption scheme"
+msgid "Use global default (${ defaultValue })"
+msgstr "Usa impostazione predefinita globale (${ defaultValue })"
+
+#: src/app/components/KeyWarningIcon.js:14
+msgctxt "PGP key warning"
+msgid "This key is assigned to ${ emails }"
+msgstr "Questa chiave è assegnata a ${ emails }"
+
+#: src/app/components/ContactKeysTable.js:206
+msgctxt "Key badge"
+msgid "Active"
+msgstr "Attivo"
+
+#: src/app/components/ContactKeysTable.js:208
+msgctxt "Key badge"
+msgid "Verification only"
+msgstr "Solo verifica"
+
+#: src/app/components/ContactKeysTable.js:210
+msgctxt "Key badge"
+msgid "WKD"
+msgstr ""
+
+#: src/app/components/ContactKeysTable.js:211
+msgctxt "Key badge"
+msgid "Trusted"
+msgstr "Attendibile"
+
+#: src/app/components/ContactKeysTable.js:212
+msgctxt "Key badge"
+msgid "Revoked"
+msgstr "Revocato"
+
+#: src/app/components/ContactKeysTable.js:213
+msgctxt "Key badge"
+msgid "Expired"
+msgstr "Scaduto"
+
+#: src/app/components/ContactGroupsTable.js:42
+msgctxt "Contact group notification"
+msgid "Contact group removed"
+msgstr "Gruppo dei contatti rimosso"
+
