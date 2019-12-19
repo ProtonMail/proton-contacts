@@ -4,6 +4,12 @@
 
 Proton Contacts built with React.
 
+
+
+>**⚠ If you use Windows plz follow this document before anything else [how to prepare Windows](https://github.com/ProtonMail/proton-shared/wiki/setup-windows)**
+
+
+
 ## Basic installation
 
 To set up the project, follow the steps below:
