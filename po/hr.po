@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Croatian\n"
 "Language: hr_HR\n"
-"PO-Revision-Date: 2019-12-19 11:23\n"
+"PO-Revision-Date: 2019-12-21 07:23\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -28,24 +28,24 @@ msgstr ""
 #: node_modules/proton-shared/lib/keys/keys.js:102
 msgctxt "Error"
 msgid "Signature verification failed"
-msgstr ""
+msgstr "Potvrda potpisa je neuspješna"
 
 #: node_modules/proton-shared/lib/keys/keys.js:122
 msgctxt "Error"
 msgid "Incorrect decryption password"
 msgstr "Nevažeća lozinka za dešifriranje"
 
-#: node_modules/react-components/containers/api/ApiProvider.js:38
+#: node_modules/react-components/containers/api/ApiProvider.js:47
 msgctxt "Error"
 msgid "Could not connect to server."
 msgstr "Povezivanje na server nije moguće."
 
-#: node_modules/react-components/containers/api/ApiProvider.js:39
+#: node_modules/react-components/containers/api/ApiProvider.js:48
 msgctxt "Error"
 msgid "No internet connection found"
 msgstr "Nema internetske veze"
 
-#: node_modules/react-components/containers/api/ApiProvider.js:45
+#: node_modules/react-components/containers/api/ApiProvider.js:56
 msgctxt "Error"
 msgid "Request timed out."
 msgstr "Zahtjev je istekao."
@@ -148,7 +148,7 @@ msgstr "Netočan poštanski broj"
 #: node_modules/react-components/components/alert/DoNotWindowOpenAlertError.js:7
 msgctxt "Error"
 msgid "The browser you are using does not allow the payment to be fully authorized. Please use a different browser or log in via a computer."
-msgstr ""
+msgstr "Preglednik koji koristite ne dopušta potpuno odobrenje plaćanja. Molimo koristite drugi preglednik ili se prijavite putem računala."
 
 #: node_modules/react-components/components/input/Input.js:32
 msgctxt "Error"
@@ -183,7 +183,7 @@ msgstr "Nije bilo moguće brisanje nekih kontakata"
 #: node_modules/proton-shared/lib/themes/themes.js:13
 msgctxt "Theme"
 msgid "Default theme"
-msgstr ""
+msgstr "Zadana tema"
 
 #: node_modules/proton-shared/lib/themes/themes.js:23
 msgctxt "Theme"
@@ -203,7 +203,7 @@ msgstr "Plava"
 #: node_modules/proton-shared/lib/themes/themes.js:51
 msgctxt "Theme"
 msgid "Dark theme"
-msgstr ""
+msgstr "Tamna tema"
 
 #: node_modules/react-components/containers/search/SearchDropdown.js:60
 #: node_modules/react-components/containers/search/Searchbox.js:48
@@ -456,7 +456,7 @@ msgstr "Uredite svoju grupu"
 #: src/app/components/ContactsList.js:146
 msgctxt "Action"
 msgid "Clear it"
-msgstr ""
+msgstr "Očisti"
 
 #: src/app/components/ContactImageSummary.js:89
 msgctxt "Action"
@@ -477,7 +477,7 @@ msgstr "Preuzmi"
 #: src/app/components/ContactKeysTable.js:132
 msgctxt "Action"
 msgid "Use for sending"
-msgstr ""
+msgstr "Koristi za slanje"
 
 #: src/app/components/ContactKeysTable.js:153
 msgctxt "Action"
@@ -720,7 +720,7 @@ msgstr "Poštanski broj"
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:44
 msgctxt "Title"
 msgid "Unsupported browser"
-msgstr ""
+msgstr "Preglednik nije podržan"
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:45
 msgctxt "Title"
@@ -779,7 +779,7 @@ msgstr "Kontakti"
 #: src/app/containers/ContactsContainer.js:252
 msgctxt "Title"
 msgid "Search"
-msgstr ""
+msgstr "Pretraga"
 
 #: src/app/containers/SettingsContainer.js:34
 msgctxt "Title"
@@ -1134,7 +1134,7 @@ msgstr "zadano"
 #: node_modules/react-components/components/miniCalendar/WeekNumbers.js:36
 msgctxt "Info"
 msgid "Week"
-msgstr ""
+msgstr "Tjedan"
 
 #: src/app/components/import/ImportCsvModalContent.js:87
 msgctxt "Info"
@@ -1192,7 +1192,7 @@ msgstr "Ova adresa je onemogućena. Da biste mogli slati na ovu adresu, vlasnik 
 #: src/app/components/ContactPgpSettings.js:84
 msgctxt "Info"
 msgid "To use Address Verification, you must trust one or more available public keys, including the one you want to use for sending. This prevents the encrypted keys from being faked."
-msgstr ""
+msgstr "Da biste koristili Potvrdu adresa, morate se pouzdati u jedan ili više dostupnih javnih ključeva, uključujući ključ koji koristite za slanje. Time se sprječava lažiranje ključeva za šifriranje."
 
 #: src/app/components/ContactPgpSettings.js:88
 msgctxt "Info"
@@ -1274,7 +1274,7 @@ msgstr "Odabrali ste ${ totalContactsText } iz vaših Kontakata."
 #, javascript-format
 msgctxt "Info"
 msgid "${ totalContactsInGroup } contacts"
-msgstr ""
+msgstr "${ totalContactsInGroup } kontakata"
 
 #: src/app/components/ContactPlaceholder.js:177
 msgctxt "Info"
@@ -1752,9 +1752,9 @@ msgstr "Kontakti su uklonjeni"
 msgctxt "Success"
 msgid "Contact deleted"
 msgid_plural "Contacts deleted"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Kontakt je uklonjen"
+msgstr[1] "Kontakta su uklonjeni"
+msgstr[2] "Kontakti su uklonjeni"
 
 #: node_modules/react-components/containers/support/BugModal.js:131
 msgctxt "Warning"
@@ -2417,7 +2417,7 @@ msgstr "Šifriranje e-pošte automatski primjenjuje potpis e-pošte kako bi pomo
 #: src/app/components/ContactPgpSettings.js:127
 msgctxt "Tooltip"
 msgid "Digitally signing emails helps authenticating that messages are sent by you"
-msgstr ""
+msgstr "Digitalno potpisivanje e-poruka pomaže u potvrđivanju da su poslane poruke zapravo vaše"
 
 #: src/app/components/ContactPgpSettings.js:152
 msgctxt "Tooltip"
@@ -2469,7 +2469,7 @@ msgstr "Stvoreno"
 #: src/app/components/ContactKeysTable.js:89
 msgctxt "Table header"
 msgid "Expires"
-msgstr ""
+msgstr "Ističe"
 
 #: src/app/components/ContactKeysTable.js:90
 msgctxt "Table header"
@@ -2574,17 +2574,17 @@ msgstr "Taj je ključ dodijeljen ${ emails }"
 #: src/app/components/ContactKeysTable.js:206
 msgctxt "Key badge"
 msgid "Active"
-msgstr ""
+msgstr "Aktivno"
 
 #: src/app/components/ContactKeysTable.js:208
 msgctxt "Key badge"
 msgid "Verification only"
-msgstr ""
+msgstr "Samo za provjeru"
 
 #: src/app/components/ContactKeysTable.js:210
 msgctxt "Key badge"
 msgid "WKD"
-msgstr ""
+msgstr "WKD"
 
 #: src/app/components/ContactKeysTable.js:211
 msgctxt "Key badge"
@@ -2594,12 +2594,12 @@ msgstr "Pouzdan"
 #: src/app/components/ContactKeysTable.js:212
 msgctxt "Key badge"
 msgid "Revoked"
-msgstr ""
+msgstr "Opozvano"
 
 #: src/app/components/ContactKeysTable.js:213
 msgctxt "Key badge"
 msgid "Expired"
-msgstr ""
+msgstr "Isteklo"
 
 #: src/app/components/ContactGroupsTable.js:42
 msgctxt "Contact group notification"

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2019-12-19 13:21\n"
+"PO-Revision-Date: 2019-12-21 07:22\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -35,17 +35,17 @@ msgctxt "Error"
 msgid "Incorrect decryption password"
 msgstr "Hasło odszyfrowywania jest nieprawidłowe"
 
-#: node_modules/react-components/containers/api/ApiProvider.js:38
+#: node_modules/react-components/containers/api/ApiProvider.js:47
 msgctxt "Error"
 msgid "Could not connect to server."
 msgstr "Nie można połączyć się z serwerem."
 
-#: node_modules/react-components/containers/api/ApiProvider.js:39
+#: node_modules/react-components/containers/api/ApiProvider.js:48
 msgctxt "Error"
 msgid "No internet connection found"
 msgstr "Brak połączenia z Internetem"
 
-#: node_modules/react-components/containers/api/ApiProvider.js:45
+#: node_modules/react-components/containers/api/ApiProvider.js:56
 msgctxt "Error"
 msgid "Request timed out."
 msgstr "Upłynął limit czasu żądania."
@@ -1194,7 +1194,7 @@ msgstr "Ten adres jest wyłączony. Aby móc wysyłać wiadomości na ten adres,
 #: src/app/components/ContactPgpSettings.js:84
 msgctxt "Info"
 msgid "To use Address Verification, you must trust one or more available public keys, including the one you want to use for sending. This prevents the encrypted keys from being faked."
-msgstr ""
+msgstr "Aby używać weryfikacji adresu, musisz dodać do zaufanych jeden lub więcej dostępnych kluczy publicznych, w tym klucz, który chcesz używać do wysyłania wiadomości. Zapobiega to podrabianiu kluczy szyfrowania."
 
 #: src/app/components/ContactPgpSettings.js:88
 msgctxt "Info"
@@ -1730,7 +1730,7 @@ msgstr "Błąd został zgłoszony"
 #: node_modules/react-components/containers/payments/DonateModal.js:33
 msgctxt "Success"
 msgid "Your support is essential to keeping Proton running. Thank you for supporting internet privacy!"
-msgstr "Twoje wsparcie jest niezbędne do funkcjonowania usług Proton. Dziękujemy za wsparcie prywatności w Internecie!"
+msgstr "Twoja pomoc jest niezbędna do funkcjonowania usług Proton. Dziękujemy za wsparcie prywatności w Internecie!"
 
 #: node_modules/react-components/containers/general/AutoSaveContactsToggle.js:16
 msgctxt "Success"

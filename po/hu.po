@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
-"PO-Revision-Date: 2019-12-19 11:21\n"
+"PO-Revision-Date: 2019-12-22 22:20\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -35,17 +35,17 @@ msgctxt "Error"
 msgid "Incorrect decryption password"
 msgstr ""
 
-#: node_modules/react-components/containers/api/ApiProvider.js:38
+#: node_modules/react-components/containers/api/ApiProvider.js:47
 msgctxt "Error"
 msgid "Could not connect to server."
 msgstr ""
 
-#: node_modules/react-components/containers/api/ApiProvider.js:39
+#: node_modules/react-components/containers/api/ApiProvider.js:48
 msgctxt "Error"
 msgid "No internet connection found"
 msgstr ""
 
-#: node_modules/react-components/containers/api/ApiProvider.js:45
+#: node_modules/react-components/containers/api/ApiProvider.js:56
 msgctxt "Error"
 msgid "Request timed out."
 msgstr ""

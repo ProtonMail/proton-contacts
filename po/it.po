@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2019-12-19 13:20\n"
+"PO-Revision-Date: 2019-12-21 07:21\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -35,17 +35,17 @@ msgctxt "Error"
 msgid "Incorrect decryption password"
 msgstr "Password di decifratura errata"
 
-#: node_modules/react-components/containers/api/ApiProvider.js:38
+#: node_modules/react-components/containers/api/ApiProvider.js:47
 msgctxt "Error"
 msgid "Could not connect to server."
 msgstr "Impossibile connettersi al server."
 
-#: node_modules/react-components/containers/api/ApiProvider.js:39
+#: node_modules/react-components/containers/api/ApiProvider.js:48
 msgctxt "Error"
 msgid "No internet connection found"
 msgstr "Nessuna connessione a internet trovata"
 
-#: node_modules/react-components/containers/api/ApiProvider.js:45
+#: node_modules/react-components/containers/api/ApiProvider.js:56
 msgctxt "Error"
 msgid "Request timed out."
 msgstr "Timeout della richiesta."
@@ -203,7 +203,7 @@ msgstr "Blu"
 #: node_modules/proton-shared/lib/themes/themes.js:51
 msgctxt "Theme"
 msgid "Dark theme"
-msgstr "Tema Scuro"
+msgstr "Tema scuro"
 
 #: node_modules/react-components/containers/search/SearchDropdown.js:60
 #: node_modules/react-components/containers/search/Searchbox.js:48
@@ -1190,7 +1190,7 @@ msgstr "Questo indirizzo è disabilitato. Per essere in grado di inviare a quest
 #: src/app/components/ContactPgpSettings.js:84
 msgctxt "Info"
 msgid "To use Address Verification, you must trust one or more available public keys, including the one you want to use for sending. This prevents the encrypted keys from being faked."
-msgstr ""
+msgstr "Per utilizzare la verifica dell'indirizzo, devi fidarti di una o più chiavi pubbliche disponibili, compresa quella che vuoi utilizzare per l'invio. In questo modo si evita che le chiavi criptate vengano falsificate."
 
 #: src/app/components/ContactPgpSettings.js:88
 msgctxt "Info"
@@ -1271,7 +1271,7 @@ msgstr "Hai selezionato ${ totalContactsText } dalla tua rubrica."
 #, javascript-format
 msgctxt "Info"
 msgid "${ totalContactsInGroup } contacts"
-msgstr ""
+msgstr "${ totalContactsInGroup } contatti"
 
 #: src/app/components/ContactPlaceholder.js:177
 msgctxt "Info"
@@ -2410,7 +2410,7 @@ msgstr "La crittografia email impone la firma email per autenticare i messaggi i
 #: src/app/components/ContactPgpSettings.js:127
 msgctxt "Tooltip"
 msgid "Digitally signing emails helps authenticating that messages are sent by you"
-msgstr ""
+msgstr "La firma digitale delle email aiuta ad attestare che i messaggi vengono inviati da te"
 
 #: src/app/components/ContactPgpSettings.js:152
 msgctxt "Tooltip"
@@ -2577,7 +2577,7 @@ msgstr "Solo verifica"
 #: src/app/components/ContactKeysTable.js:210
 msgctxt "Key badge"
 msgid "WKD"
-msgstr ""
+msgstr "WKD"
 
 #: src/app/components/ContactKeysTable.js:211
 msgctxt "Key badge"

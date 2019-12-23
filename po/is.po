@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Icelandic\n"
 "Language: is_IS\n"
-"PO-Revision-Date: 2019-12-19 11:23\n"
+"PO-Revision-Date: 2019-12-21 07:22\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -28,24 +28,24 @@ msgstr ""
 #: node_modules/proton-shared/lib/keys/keys.js:102
 msgctxt "Error"
 msgid "Signature verification failed"
-msgstr ""
+msgstr "Sannvottun undirritunar mistókst"
 
 #: node_modules/proton-shared/lib/keys/keys.js:122
 msgctxt "Error"
 msgid "Incorrect decryption password"
 msgstr "Rangt lykilorð fyrir afkóðun"
 
-#: node_modules/react-components/containers/api/ApiProvider.js:38
+#: node_modules/react-components/containers/api/ApiProvider.js:47
 msgctxt "Error"
 msgid "Could not connect to server."
 msgstr "Gat ekki tengst við þjón."
 
-#: node_modules/react-components/containers/api/ApiProvider.js:39
+#: node_modules/react-components/containers/api/ApiProvider.js:48
 msgctxt "Error"
 msgid "No internet connection found"
 msgstr "Engin internettenging fannst"
 
-#: node_modules/react-components/containers/api/ApiProvider.js:45
+#: node_modules/react-components/containers/api/ApiProvider.js:56
 msgctxt "Error"
 msgid "Request timed out."
 msgstr "Beiðni rann út á tíma."
@@ -148,7 +148,7 @@ msgstr "Ógilt póstnúmer"
 #: node_modules/react-components/components/alert/DoNotWindowOpenAlertError.js:7
 msgctxt "Error"
 msgid "The browser you are using does not allow the payment to be fully authorized. Please use a different browser or log in via a computer."
-msgstr ""
+msgstr "Vafrinn sem þú ert að nota kemur í veg fyrir að greiðslan sé heimiluð. Notaðu einhvern annan vafra eða skráðu þig inn í gegnum alvöru tölvu."
 
 #: node_modules/react-components/components/input/Input.js:32
 msgctxt "Error"
@@ -183,7 +183,7 @@ msgstr "Ekki var hægt að eyða sumum tengiliðum"
 #: node_modules/proton-shared/lib/themes/themes.js:13
 msgctxt "Theme"
 msgid "Default theme"
-msgstr ""
+msgstr "Sjálfgefið þema"
 
 #: node_modules/proton-shared/lib/themes/themes.js:23
 msgctxt "Theme"
@@ -203,7 +203,7 @@ msgstr "Blátt"
 #: node_modules/proton-shared/lib/themes/themes.js:51
 msgctxt "Theme"
 msgid "Dark theme"
-msgstr ""
+msgstr "Dökkt þema"
 
 #: node_modules/react-components/containers/search/SearchDropdown.js:60
 #: node_modules/react-components/containers/search/Searchbox.js:48
@@ -456,7 +456,7 @@ msgstr "Breyttu hópnum þínum"
 #: src/app/components/ContactsList.js:146
 msgctxt "Action"
 msgid "Clear it"
-msgstr ""
+msgstr "Hreinsa það"
 
 #: src/app/components/ContactImageSummary.js:89
 msgctxt "Action"
@@ -477,7 +477,7 @@ msgstr "Sækja"
 #: src/app/components/ContactKeysTable.js:132
 msgctxt "Action"
 msgid "Use for sending"
-msgstr ""
+msgstr "Nota til sendinga"
 
 #: src/app/components/ContactKeysTable.js:153
 msgctxt "Action"
@@ -719,7 +719,7 @@ msgstr "Póstnúmer"
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:44
 msgctxt "Title"
 msgid "Unsupported browser"
-msgstr ""
+msgstr "Óstuddur vafri"
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:45
 msgctxt "Title"
@@ -778,7 +778,7 @@ msgstr "Tengiliðir"
 #: src/app/containers/ContactsContainer.js:252
 msgctxt "Title"
 msgid "Search"
-msgstr ""
+msgstr "Leita"
 
 #: src/app/containers/SettingsContainer.js:34
 msgctxt "Title"
@@ -1133,7 +1133,7 @@ msgstr "sjálfgefið"
 #: node_modules/react-components/components/miniCalendar/WeekNumbers.js:36
 msgctxt "Info"
 msgid "Week"
-msgstr ""
+msgstr "Vika"
 
 #: src/app/components/import/ImportCsvModalContent.js:87
 msgctxt "Info"
@@ -1271,7 +1271,7 @@ msgstr "Þú valdir ${ totalContactsText } úr nafnaskránni þinni."
 #, javascript-format
 msgctxt "Info"
 msgid "${ totalContactsInGroup } contacts"
-msgstr ""
+msgstr "${ totalContactsInGroup } tengiliðir"
 
 #: src/app/components/ContactPlaceholder.js:177
 msgctxt "Info"
@@ -1748,8 +1748,8 @@ msgstr "Tengiliðum eytt"
 msgctxt "Success"
 msgid "Contact deleted"
 msgid_plural "Contacts deleted"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Tengilið eytt"
+msgstr[1] "Tengiliðum eytt"
 
 #: node_modules/react-components/containers/support/BugModal.js:131
 msgctxt "Warning"
@@ -2410,7 +2410,7 @@ msgstr "Dulritun tölvupósts krefst undirritunar til að hjálpa til við auðk
 #: src/app/components/ContactPgpSettings.js:127
 msgctxt "Tooltip"
 msgid "Digitally signing emails helps authenticating that messages are sent by you"
-msgstr ""
+msgstr "Stafræn undirritun tölvupósts hjálpar við að sannvotta að skilaboð séu send af þér"
 
 #: src/app/components/ContactPgpSettings.js:152
 msgctxt "Tooltip"
@@ -2462,7 +2462,7 @@ msgstr "Búið til"
 #: src/app/components/ContactKeysTable.js:89
 msgctxt "Table header"
 msgid "Expires"
-msgstr ""
+msgstr "Rennur út"
 
 #: src/app/components/ContactKeysTable.js:90
 msgctxt "Table header"
@@ -2567,17 +2567,17 @@ msgstr "Þessum dulritunarlykli er úthlutað til ${ emails}"
 #: src/app/components/ContactKeysTable.js:206
 msgctxt "Key badge"
 msgid "Active"
-msgstr ""
+msgstr "Virkt"
 
 #: src/app/components/ContactKeysTable.js:208
 msgctxt "Key badge"
 msgid "Verification only"
-msgstr ""
+msgstr "Einungis sannvottun"
 
 #: src/app/components/ContactKeysTable.js:210
 msgctxt "Key badge"
 msgid "WKD"
-msgstr ""
+msgstr "VKD"
 
 #: src/app/components/ContactKeysTable.js:211
 msgctxt "Key badge"
@@ -2587,12 +2587,12 @@ msgstr "Treyst"
 #: src/app/components/ContactKeysTable.js:212
 msgctxt "Key badge"
 msgid "Revoked"
-msgstr ""
+msgstr "Afturkallað"
 
 #: src/app/components/ContactKeysTable.js:213
 msgctxt "Key badge"
 msgid "Expired"
-msgstr ""
+msgstr "Útrunnið"
 
 #: src/app/components/ContactGroupsTable.js:42
 msgctxt "Contact group notification"

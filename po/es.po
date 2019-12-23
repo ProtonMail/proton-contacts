@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-12-19 11:20\n"
+"PO-Revision-Date: 2019-12-21 12:20\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -28,24 +28,24 @@ msgstr "GB"
 #: node_modules/proton-shared/lib/keys/keys.js:102
 msgctxt "Error"
 msgid "Signature verification failed"
-msgstr ""
+msgstr "Falló la verificación de la firma"
 
 #: node_modules/proton-shared/lib/keys/keys.js:122
 msgctxt "Error"
 msgid "Incorrect decryption password"
 msgstr "Contraseña de descifrado incorrecta"
 
-#: node_modules/react-components/containers/api/ApiProvider.js:38
+#: node_modules/react-components/containers/api/ApiProvider.js:47
 msgctxt "Error"
 msgid "Could not connect to server."
 msgstr "No se pudo conectar al servidor."
 
-#: node_modules/react-components/containers/api/ApiProvider.js:39
+#: node_modules/react-components/containers/api/ApiProvider.js:48
 msgctxt "Error"
 msgid "No internet connection found"
 msgstr "No hay conexión a internet"
 
-#: node_modules/react-components/containers/api/ApiProvider.js:45
+#: node_modules/react-components/containers/api/ApiProvider.js:56
 msgctxt "Error"
 msgid "Request timed out."
 msgstr "Tiempo de espera agotado."
@@ -148,7 +148,7 @@ msgstr "Código postal inválido"
 #: node_modules/react-components/components/alert/DoNotWindowOpenAlertError.js:7
 msgctxt "Error"
 msgid "The browser you are using does not allow the payment to be fully authorized. Please use a different browser or log in via a computer."
-msgstr ""
+msgstr "El navegador que está utilizando no permite que el pago sea autorizado. Utilice un navegador diferente o inicie sesión a través de un ordenador."
 
 #: node_modules/react-components/components/input/Input.js:32
 msgctxt "Error"
@@ -183,7 +183,7 @@ msgstr "Algunos contactos no se pudieron eliminar"
 #: node_modules/proton-shared/lib/themes/themes.js:13
 msgctxt "Theme"
 msgid "Default theme"
-msgstr ""
+msgstr "Tema predeterminado"
 
 #: node_modules/proton-shared/lib/themes/themes.js:23
 msgctxt "Theme"
@@ -203,7 +203,7 @@ msgstr "Azul"
 #: node_modules/proton-shared/lib/themes/themes.js:51
 msgctxt "Theme"
 msgid "Dark theme"
-msgstr ""
+msgstr "Tema oscuro"
 
 #: node_modules/react-components/containers/search/SearchDropdown.js:60
 #: node_modules/react-components/containers/search/Searchbox.js:48
@@ -456,7 +456,7 @@ msgstr "Editar su grupo"
 #: src/app/components/ContactsList.js:146
 msgctxt "Action"
 msgid "Clear it"
-msgstr ""
+msgstr "Borrarlo"
 
 #: src/app/components/ContactImageSummary.js:89
 msgctxt "Action"
@@ -477,7 +477,7 @@ msgstr "Descargar"
 #: src/app/components/ContactKeysTable.js:132
 msgctxt "Action"
 msgid "Use for sending"
-msgstr ""
+msgstr "Usar para enviar"
 
 #: src/app/components/ContactKeysTable.js:153
 msgctxt "Action"
@@ -719,7 +719,7 @@ msgstr "ZIP / código postal"
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:44
 msgctxt "Title"
 msgid "Unsupported browser"
-msgstr ""
+msgstr "Navegador no soportado"
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:45
 msgctxt "Title"
@@ -778,7 +778,7 @@ msgstr "Contactos"
 #: src/app/containers/ContactsContainer.js:252
 msgctxt "Title"
 msgid "Search"
-msgstr ""
+msgstr "Buscar"
 
 #: src/app/containers/SettingsContainer.js:34
 msgctxt "Title"
@@ -1133,7 +1133,7 @@ msgstr "por defecto"
 #: node_modules/react-components/components/miniCalendar/WeekNumbers.js:36
 msgctxt "Info"
 msgid "Week"
-msgstr ""
+msgstr "Semana"
 
 #: src/app/components/import/ImportCsvModalContent.js:87
 msgctxt "Info"
@@ -1190,7 +1190,7 @@ msgstr "Esta dirección está deshabilitada. Para poder enviar a esta dirección
 #: src/app/components/ContactPgpSettings.js:84
 msgctxt "Info"
 msgid "To use Address Verification, you must trust one or more available public keys, including the one you want to use for sending. This prevents the encrypted keys from being faked."
-msgstr ""
+msgstr "Para usar la Verificación de dirección, debe confiar en una o más claves públicas disponibles, incluida la que desea usar para enviar. Esto evita que las claves encriptadas sean falsas."
 
 #: src/app/components/ContactPgpSettings.js:88
 msgctxt "Info"
@@ -1271,7 +1271,7 @@ msgstr "Seleccionó ${ totalContactsText } de su libreta de direcciones."
 #, javascript-format
 msgctxt "Info"
 msgid "${ totalContactsInGroup } contacts"
-msgstr ""
+msgstr "${ totalContactsInGroup } contactos"
 
 #: src/app/components/ContactPlaceholder.js:177
 msgctxt "Info"
@@ -1748,8 +1748,8 @@ msgstr "Contactos guardados"
 msgctxt "Success"
 msgid "Contact deleted"
 msgid_plural "Contacts deleted"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Contacto eliminado"
+msgstr[1] "Contactos eliminados"
 
 #: node_modules/react-components/containers/support/BugModal.js:131
 msgctxt "Warning"
@@ -2409,7 +2409,7 @@ msgstr "El cifrado de correo electrónico obliga a la firma de correo electróni
 #: src/app/components/ContactPgpSettings.js:127
 msgctxt "Tooltip"
 msgid "Digitally signing emails helps authenticating that messages are sent by you"
-msgstr ""
+msgstr "Firmar Digitalmente correos electrónicos ayuda a autentificar que los mensajes son enviados por ti"
 
 #: src/app/components/ContactPgpSettings.js:152
 msgctxt "Tooltip"
@@ -2461,7 +2461,7 @@ msgstr "Creada"
 #: src/app/components/ContactKeysTable.js:89
 msgctxt "Table header"
 msgid "Expires"
-msgstr ""
+msgstr "Expira"
 
 #: src/app/components/ContactKeysTable.js:90
 msgctxt "Table header"
@@ -2566,17 +2566,17 @@ msgstr "Esta clave está asignada a ${ emails }"
 #: src/app/components/ContactKeysTable.js:206
 msgctxt "Key badge"
 msgid "Active"
-msgstr ""
+msgstr "Activa"
 
 #: src/app/components/ContactKeysTable.js:208
 msgctxt "Key badge"
 msgid "Verification only"
-msgstr ""
+msgstr "Solo verificación"
 
 #: src/app/components/ContactKeysTable.js:210
 msgctxt "Key badge"
 msgid "WKD"
-msgstr ""
+msgstr "WKD"
 
 #: src/app/components/ContactKeysTable.js:211
 msgctxt "Key badge"
@@ -2586,12 +2586,12 @@ msgstr "De confianza"
 #: src/app/components/ContactKeysTable.js:212
 msgctxt "Key badge"
 msgid "Revoked"
-msgstr ""
+msgstr "Revocado"
 
 #: src/app/components/ContactKeysTable.js:213
 msgctxt "Key badge"
 msgid "Expired"
-msgstr ""
+msgstr "Expirado"
 
 #: src/app/components/ContactGroupsTable.js:42
 msgctxt "Contact group notification"
