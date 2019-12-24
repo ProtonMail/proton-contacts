@@ -82,7 +82,7 @@ const ContactGroupsTable = () => {
                                         onConfirm={handleConfirmDeletion(ID)}
                                         title={c('Title').t`Delete contact group`}
                                     >
-                                        <Alert type="warning">
+                                        <Alert type="error">
                                             <p>{c('Info').t`Are you sure you want to delete this contact group?`}</p>
                                             <p>{c('Info')
                                                 .t`Contacts in the group aren't deleted if the contact group is deleted.`}</p>

@@ -41,7 +41,7 @@ const DeleteModal = ({ contactIDs = [], deleteAll, onDelete, ...rest }) => {
             loading={loadingDelete}
             {...rest}
         >
-            <Alert type="warning">
+            <Alert type="error">
                 {c('Warning').ngettext(
                     msgid`This action will permanently delete the selected contact. Are you sure you want to delete this contact?`,
                     `This action will permanently delete selected contacts. Are you sure you want to delete these contacts?`,
