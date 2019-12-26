@@ -20,7 +20,7 @@ const PrivateSidebar = ({
     onClearSearch,
     history
 }) => {
-    const { hasPaidMail } = user;
+    const { hasPaidMail, isPaid } = user;
     const { createModal } = useModals();
 
     const list = [
@@ -85,10 +85,13 @@ const PrivateSidebar = ({
         );
     }
 
+    // eslint-disable-next-line no-undef
+    const hasCalendar = FEATURE_FLAGS.includes('calendar') && isPaid;
     const mobileLinks = [
         { to: '/inbox', icon: 'protonmail', external: true, current: false },
-        { to: '/contacts', icon: 'protoncontacts', external: false, current: true }
-    ];
+        { to: '/contacts', icon: 'protoncontacts', external: false, current: true },
+        hasCalendar && { to: '/calendar', icon: 'protoncalendar', external: false, current: false }
+    ].filter(Boolean);
 
     return (
         <Sidebar
