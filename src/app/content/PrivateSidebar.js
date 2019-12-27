@@ -88,7 +88,7 @@ const PrivateSidebar = ({
     const mobileLinks = [
         { to: '/inbox', icon: 'protonmail', external: true, current: false },
         { to: '/contacts', icon: 'protoncontacts', external: false, current: true },
-        isPaid && { to: '/calendar', icon: 'protoncalendar', external: false, current: false }
+        isPaid && { to: '/calendar', icon: 'protoncalendar', external: true, current: false }
     ].filter(Boolean);
 
     return (
