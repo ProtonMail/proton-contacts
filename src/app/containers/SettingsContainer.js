@@ -11,7 +11,7 @@ import PrivateLayout from '../content/PrivateLayout';
 
 const SettingsContainer = ({ location }) => {
     const mainAreaRef = useRef();
-    const [{ hasPaidMail, isPaid }] = useUser();
+    const [{ hasPaidMail }] = useUser();
     const { state: expanded, toggle: onToggleExpand, set: setExpand } = useToggle();
     const { isNarrow } = useActiveBreakpoint();
 
@@ -28,7 +28,7 @@ const SettingsContainer = ({ location }) => {
     const mobileLinks = [
         { to: '/inbox', icon: 'protonmail', external: true, current: false },
         { to: '/contacts', icon: 'protoncontacts', external: false, current: true },
-        isPaid && { to: '/calendar', icon: 'protoncalendar', external: true, current: false }
+        { to: '/calendar', icon: 'protoncalendar', external: true, current: false }
     ].filter(Boolean);
 
     return (
