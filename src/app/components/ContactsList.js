@@ -179,7 +179,7 @@ const ContactsList = ({
                         )}
                         rowCount={contacts.length}
                         height={height}
-                        width={width}
+                        width={width - 1}
                         rowHeight={55}
                     />
                 )}
