@@ -180,7 +180,7 @@ const ContactsList = ({
                         rowCount={contacts.length}
                         height={height}
                         width={width}
-                        rowHeight={60}
+                        rowHeight={55}
                     />
                 )}
             </AutoSizer>
