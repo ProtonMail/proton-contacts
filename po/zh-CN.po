@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2019-12-21 14:21\n"
+"PO-Revision-Date: 2019-12-30 04:20\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -28,12 +28,12 @@ msgstr ""
 #: node_modules/proton-shared/lib/keys/keys.js:102
 msgctxt "Error"
 msgid "Signature verification failed"
-msgstr ""
+msgstr "签名验证失败"
 
 #: node_modules/proton-shared/lib/keys/keys.js:122
 msgctxt "Error"
 msgid "Incorrect decryption password"
-msgstr ""
+msgstr "解密密码错误"
 
 #: node_modules/react-components/containers/api/ApiProvider.js:47
 msgctxt "Error"
@@ -59,42 +59,42 @@ msgstr "已取消"
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:36
 msgctxt "Error"
 msgid "Payment process cancelled"
-msgstr ""
+msgstr "支付已取消"
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:42
 msgctxt "Error"
 msgid "Payment process failed"
-msgstr ""
+msgstr "支付失败"
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:46
 msgctxt "Error"
 msgid "Payment process consumed"
-msgstr ""
+msgstr "已经支付过了"
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:50
 msgctxt "Error"
 msgid "Payment process not supported"
-msgstr ""
+msgstr "不支持此支付流程"
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:62
 msgctxt "Error"
 msgid "Unknown payment token status"
-msgstr ""
+msgstr "支付状态不明"
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:95
 msgctxt "Error"
 msgid "Tab closed"
-msgstr ""
+msgstr "标签页已关闭"
 
 #: node_modules/react-components/containers/payments/PayPal.js:85
 msgctxt "Error"
 msgid "Amount below minimum."
-msgstr ""
+msgstr "数额太小。"
 
 #: node_modules/react-components/containers/payments/PayPal.js:91
 msgctxt "Error"
 msgid "Amount above the maximum."
-msgstr ""
+msgstr "数额太大。"
 
 #: node_modules/react-components/containers/payments/Bitcoin.js:51
 msgctxt "Error"
@@ -111,13 +111,13 @@ msgstr "捐赠的最低金额为 ${ price }"
 #, javascript-format
 msgctxt "Error"
 msgid "The minimum amount of credit that can be added is ${ _price }"
-msgstr ""
+msgstr "充值金额不应低于 ${ _price }"
 
 #: node_modules/react-components/containers/payments/Payment.js:68
 #, javascript-format
 msgctxt "Error"
 msgid "The minimum payment we accept is ${ _price2 }"
-msgstr ""
+msgstr "支付金额不应低于 ${ _price2 }"
 
 #: node_modules/react-components/containers/payments/cardValidator.js:16
 msgctxt "Error"
@@ -127,28 +127,28 @@ msgstr "必须填写持卡人姓名"
 #: node_modules/react-components/containers/payments/cardValidator.js:22
 msgctxt "Error"
 msgid "Invalid expiration date"
-msgstr ""
+msgstr "有效期不正确"
 
 #: node_modules/react-components/containers/payments/cardValidator.js:27
 msgctxt "Error"
 msgid "Invalid card number"
-msgstr ""
+msgstr "卡号不正确"
 
 #: node_modules/react-components/containers/payments/cardValidator.js:36
 #, javascript-format
 msgctxt "Error"
 msgid "Invalid ${ name } code"
-msgstr ""
+msgstr "${ name } 码不正确"
 
 #: node_modules/react-components/containers/payments/cardValidator.js:43
 msgctxt "Error"
 msgid "Invalid postal code"
-msgstr ""
+msgstr "邮政编码不正确"
 
 #: node_modules/react-components/components/alert/DoNotWindowOpenAlertError.js:7
 msgctxt "Error"
 msgid "The browser you are using does not allow the payment to be fully authorized. Please use a different browser or log in via a computer."
-msgstr ""
+msgstr "您使用的浏览器无法完成支付验证，请使用其他浏览器或电脑支付。"
 
 #: node_modules/react-components/components/input/Input.js:32
 msgctxt "Error"
@@ -564,7 +564,7 @@ msgctxt "Action"
 msgid "Add group"
 msgstr ""
 
-#: src/app/content/PrivateSidebar.js:105
+#: src/app/content/PrivateSidebar.js:106
 msgctxt "Action"
 msgid "Add contact"
 msgstr "添加联系人"
@@ -779,13 +779,13 @@ msgctxt "Title"
 msgid "Search"
 msgstr ""
 
-#: src/app/containers/SettingsContainer.js:34
+#: src/app/containers/SettingsContainer.js:35
 msgctxt "Title"
 msgid "Contact settings"
 msgstr ""
 
 #: src/app/components/ContactPlaceholder.js:214
-#: src/app/containers/SettingsContainer.js:37
+#: src/app/containers/SettingsContainer.js:38
 #: src/app/content/PrivateHeader.js:72
 msgctxt "Title"
 msgid "Settings"
@@ -851,7 +851,7 @@ msgstr "其他信息"
 #: src/app/components/UpsellFree.js:8
 msgctxt "Title"
 msgid "Upgrade to a paid plan"
-msgstr "升级为付费账户"
+msgstr "开通付费账户"
 
 #: src/app/components/ContactModal.js:53
 msgctxt "Title"

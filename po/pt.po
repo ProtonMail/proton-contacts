@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
-"PO-Revision-Date: 2019-12-21 07:23\n"
+"PO-Revision-Date: 2019-12-27 13:23\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -565,7 +565,7 @@ msgctxt "Action"
 msgid "Add group"
 msgstr "Adicionar grupo"
 
-#: src/app/content/PrivateSidebar.js:105
+#: src/app/content/PrivateSidebar.js:106
 msgctxt "Action"
 msgid "Add contact"
 msgstr "Adicionar contato"
@@ -780,13 +780,13 @@ msgctxt "Title"
 msgid "Search"
 msgstr "Pesquisar"
 
-#: src/app/containers/SettingsContainer.js:34
+#: src/app/containers/SettingsContainer.js:35
 msgctxt "Title"
 msgid "Contact settings"
 msgstr "Configurações do contato"
 
 #: src/app/components/ContactPlaceholder.js:214
-#: src/app/containers/SettingsContainer.js:37
+#: src/app/containers/SettingsContainer.js:38
 #: src/app/content/PrivateHeader.js:72
 msgctxt "Title"
 msgid "Settings"

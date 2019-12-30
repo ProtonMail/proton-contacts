@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Icelandic\n"
 "Language: is_IS\n"
-"PO-Revision-Date: 2019-12-21 07:22\n"
+"PO-Revision-Date: 2019-12-27 13:23\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -565,7 +565,7 @@ msgctxt "Action"
 msgid "Add group"
 msgstr "Bæta við hópi"
 
-#: src/app/content/PrivateSidebar.js:105
+#: src/app/content/PrivateSidebar.js:106
 msgctxt "Action"
 msgid "Add contact"
 msgstr "Bæta við tengilið"
@@ -780,13 +780,13 @@ msgctxt "Title"
 msgid "Search"
 msgstr "Leita"
 
-#: src/app/containers/SettingsContainer.js:34
+#: src/app/containers/SettingsContainer.js:35
 msgctxt "Title"
 msgid "Contact settings"
 msgstr "Stillingar tengiliðar"
 
 #: src/app/components/ContactPlaceholder.js:214
-#: src/app/containers/SettingsContainer.js:37
+#: src/app/containers/SettingsContainer.js:38
 #: src/app/content/PrivateHeader.js:72
 msgctxt "Title"
 msgid "Settings"
@@ -1190,7 +1190,7 @@ msgstr "Þetta netfang er óvirkt. Til að geta sent á þetta tölvupóstfang, 
 #: src/app/components/ContactPgpSettings.js:84
 msgctxt "Info"
 msgid "To use Address Verification, you must trust one or more available public keys, including the one you want to use for sending. This prevents the encrypted keys from being faked."
-msgstr ""
+msgstr "Til að nota sannvottun vistfangs, þá verður þú að treysta einum eða fleiri tiltækum dreifilyklum, þar með töldum þeim sem þú notar til sendinga.. Þetta kemur í veg fyrir að hægt sé að falsa dulritunarlyklana."
 
 #: src/app/components/ContactPgpSettings.js:88
 msgctxt "Info"
