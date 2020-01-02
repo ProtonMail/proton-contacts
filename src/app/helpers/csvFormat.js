@@ -14,7 +14,8 @@ const beIgnoredCsvProperties = [
     'directory server',
     'sensitivity',
     'priority',
-    'subject'
+    'subject',
+    'categories'
 ];
 
 /**
@@ -277,6 +278,22 @@ const templates = {
 export const toPreVcard = ({ original, standard }) => {
     const property = normalize(standard);
     const header = original;
+
+    const companyRegex = /^company\s?(\d*)/;
+    const departmentRegex = /^department\s?(\d*)/;
+    const emailRegex = /^(\w+)?\s?e-?mail\s?(\d*)/;
+    const phoneRegex = /^(\w+\s*\w+)?\s?phone\s?(\d*)$/;
+    const faxRegex = /^(\w+)?\s?fax\s?(\d*)$/;
+    const pagerRegex = /^(\w+)?\s?pager\s?(\d*)$/;
+    const telexRegex = /^callback|telex\s?(\d*)$/;
+    const poBoxRegex = /^(\w*)\s?po box\s?(\d*)$/;
+    const extAddressRegex = /^(\w*)\s?extended address\s?(\d*)$/;
+    const streetRegex = /^(\w*)\s?street\s?(\d*)$/;
+    const cityRegex = /^(\w*)\s?city\s?(\d*)$/;
+    const stateRegex = /^(\w*)\s?state\s?(\d*)$/;
+    const postalCodeRegex = /^(\w*)\s?postal code\s?(\d*)$/;
+    const countryRegex = /^(\w*)\s?country\/region\s?(\d*)$/;
+
     if (['title', 'name prefix'].includes(property)) {
         return (value) => [templates['fn']({ header, value, index: 0 }), templates['n']({ header, value, index: 3 })];
     }
@@ -301,60 +318,60 @@ export const toPreVcard = ({ original, standard }) => {
     if (['surname yomi', 'family name yomi'].includes(property)) {
         return (value) => templates['fnYomi']({ header, value, index: 2 });
     }
-    if (/^company\s?(\d*)/.test(property)) {
-        const [, pref] = property.match(/^company\s?(\d*)/);
+    if (companyRegex.test(property)) {
+        const [, pref] = property.match(companyRegex);
         return (value) => templates['org']({ pref, header, value, index: 0 });
     }
-    if (/^department\s?(\d*)/.test(property)) {
-        const [, pref] = property.match(/^department\s?(\d*)/);
+    if (departmentRegex.test(property)) {
+        const [, pref] = property.match(departmentRegex);
         return (value) => templates['org']({ pref, header, value, index: 1 });
     }
-    if (/^(\w+)?\s?e-?mail\s?(\d*)/.test(property)) {
-        const [, type, pref] = property.match(/^(\w+)?\s?e-?mail\s?(\d*)/);
+    if (emailRegex.test(property)) {
+        const [, type, pref] = property.match(emailRegex);
         return (value) => templates['email']({ pref, header, value, type: type ? toVcardType(type) : '' });
     }
-    if (/^(\w+\s*\w+)?\s?phone\s?(\d*)$/.test(property)) {
-        const [, type, pref] = property.match(/^(\w+\s*\w+)?\s?phone\s?(\d*)$/);
+    if (phoneRegex.test(property)) {
+        const [, type, pref] = property.match(phoneRegex);
         return (value) => templates['tel']({ pref, header, value, type: type ? toVcardType(type) : '' });
     }
-    if (/^(\w+)?\s?fax\s?(\d*)$/.test(property)) {
-        const [, , pref] = property.match(/^(\w+)?\s?fax\s?(\d*)$/);
+    if (faxRegex.test(property)) {
+        const [, , pref] = property.match(faxRegex);
         return (value) => templates['tel']({ pref, header, value, type: 'fax' });
     }
-    if (/^(\w+)?\s?pager\s?(\d*)$/.test(property)) {
-        const [, , pref] = property.match(/^(\w+)?\s?pager\s?(\d*)$/);
+    if (pagerRegex.test(property)) {
+        const [, , pref] = property.match(pagerRegex);
         return (value) => templates['tel']({ pref, header, value, type: 'pager' });
     }
-    if (/^callback|telex\s?(\d*)$/.test(property)) {
-        const [, pref] = property.match(/^callback|telex\s?(\d*)$/);
+    if (telexRegex.test(property)) {
+        const [, pref] = property.match(telexRegex);
         return (value) => templates['tel']({ pref, header, value, type: 'other' });
     }
-    if (/^(\w*)\s?po box\s?(\d*)$/.test(property)) {
-        const [, type, pref] = property.match(/^(\w*)\s?po box\s?(\d*)$/);
+    if (poBoxRegex.test(property)) {
+        const [, type, pref] = property.match(poBoxRegex);
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 0 });
     }
-    if (/^(\w*)\s?extended address\s?(\d*)$/.test(property)) {
-        const [, type, pref] = property.match(/^(\w*)\s?extended address\s?(\d*)$/);
+    if (extAddressRegex.test(property)) {
+        const [, type, pref] = property.match(extAddressRegex);
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 1 });
     }
-    if (/^(\w*)\s?street\s?(\d*)$/.test(property)) {
-        const [, type, pref] = property.match(/^(\w*)\s?street\s?(\d*)$/);
+    if (streetRegex.test(property)) {
+        const [, type, pref] = property.match(streetRegex);
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 2 });
     }
-    if (/^(\w*)\s?city\s?(\d*)$/.test(property)) {
-        const [, type, pref] = property.match(/^(\w*)\s?city\s?(\d*)$/);
+    if (cityRegex.test(property)) {
+        const [, type, pref] = property.match(cityRegex);
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 3 });
     }
-    if (/^(\w*)\s?state\s?(\d*)$/.test(property)) {
-        const [, type, pref] = property.match(/^(\w*)\s?state\s?(\d*)$/);
+    if (stateRegex.test(property)) {
+        const [, type, pref] = property.match(stateRegex);
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 4 });
     }
-    if (/^(\w*)\s?postal code\s?(\d*)$/.test(property)) {
-        const [, type, pref] = property.match(/^(\w*)\s?postal code\s?(\d*)$/);
+    if (postalCodeRegex.test(property)) {
+        const [, type, pref] = property.match(postalCodeRegex);
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 5 });
     }
-    if (/^(\w*)\s?country|region\s?(\d*)$/.test(property)) {
-        const [, type, pref] = property.match(/^(\w*)\s?country\/region\s?(\d*)$/);
+    if (countryRegex.test(property)) {
+        const [, type, pref] = property.match(countryRegex);
         return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 6 });
     }
     if (property === 'nickname') {
