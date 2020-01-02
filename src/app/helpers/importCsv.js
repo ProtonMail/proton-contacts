@@ -66,9 +66,23 @@ export const modifyContactType = (preVcardsContact, index, newField) => {
  * @return {Array<Array<Object>>}       the pre-vCards contact with the modified pre-vCard
  */
 export const toggleContactChecked = (preVcardsContact, [groupIndex, index]) => {
-    return preVcardsContact.map((preVcards, i) =>
-        i !== groupIndex
-            ? preVcards
-            : preVcards.map((preVcard, j) => (j !== index ? preVcard : { ...preVcard, checked: !preVcard.checked }))
-    );
+    const toggleFN = preVcardsContact[groupIndex][index].combineInto === 'fn-main';
+    const groupIndexN = toggleFN ? preVcardsContact.findIndex((group) => group[0].combineInto === 'n') : -1;
+
+    return preVcardsContact.map((preVcards, i) => {
+        if (i === groupIndex) {
+            return preVcards.map((preVcard, j) =>
+                j !== index ? preVcard : { ...preVcard, checked: !preVcard.checked }
+            );
+        }
+        if (toggleFN && i === groupIndexN) {
+            // When FN components are toggled, we also toggle the corresponding N components
+            const headerFN = preVcardsContact[groupIndex][index].header;
+            const indexN = preVcardsContact[groupIndexN].findIndex(({ header }) => header === headerFN);
+            return preVcards.map((preVcard, j) =>
+                j !== indexN ? preVcard : { ...preVcard, checked: !preVcard.checked }
+            );
+        }
+        return preVcards;
+    });
 };

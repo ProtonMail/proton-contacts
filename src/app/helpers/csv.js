@@ -1,5 +1,7 @@
 import Papa from 'papaparse';
 import { standarize, combine, display, toPreVcard } from './csvFormat';
+import { sortByPref } from './properties';
+import { isEmptyValuedProperty } from './property';
 
 /** NOTATION
  *
@@ -198,7 +200,5 @@ export const toVcard = (preVcards) => {
  */
 export const toVcardContacts = (preVcardsContacts) =>
     preVcardsContacts
-        .map((preVcardsContact) => preVcardsContact.map(toVcard))
-        .sort((firstEl, secondEl) => {
-            return firstEl.pref <= secondEl.pref;
-        });
+        .map((preVcardsContact) => preVcardsContact.map(toVcard).filter((property) => !isEmptyValuedProperty(property)))
+        .sort(sortByPref);

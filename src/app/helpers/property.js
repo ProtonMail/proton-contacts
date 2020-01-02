@@ -44,6 +44,23 @@ export const getValue = (property) => {
 };
 
 /**
+ * Returns true if a property has an empty value
+ * @param {Object} property     { value, field, type, ... }
+ * @return {Boolean}
+ */
+export const isEmptyValuedProperty = (property) => {
+    const { value } = property;
+    // property values must be strings or array of strings
+    if (typeof value === 'string') {
+        return !value;
+    }
+    if (Array.isArray(value)) {
+        return !value.reduce((acc, str) => acc + str, '');
+    }
+    return true;
+};
+
+/**
  * Transform a custom type starting with 'x-' into normal type
  * @param {String} type
  *

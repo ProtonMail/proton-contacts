@@ -10,6 +10,11 @@ import { toVcard } from '../../helpers/csv';
 const ImportCsvTableRows = ({ preVcards, onToggle, onChangeField, onChangeType }) => {
     const { field, type, display } = toVcard(preVcards);
 
+    if (field === 'n') {
+        // Do not display N vcard field since it cannot be edited from the contact modal
+        return null;
+    }
+
     return preVcards.map(({ checked, header }, i) => (
         <tr key={i.toString()}>
             <td className="aligncenter">
