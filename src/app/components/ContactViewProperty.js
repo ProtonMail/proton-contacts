@@ -57,8 +57,10 @@ const ContactViewProperty = ({
             );
         }
         if (field === 'url') {
+            // use new root address when the url does not include the protocol (HTTP or HTTPS)
+            const href = value.startsWith('http') || value.startsWith('//') ? value : `//${value}`;
             return (
-                <a href={value} target="_blank" rel="noopener noreferrer">
+                <a href={href} target="_blank" rel="noopener noreferrer">
                     {value}
                 </a>
             );
