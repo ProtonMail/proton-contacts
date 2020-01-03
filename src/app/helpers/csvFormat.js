@@ -582,8 +582,8 @@ export const combine = {
     categories: getFirstValue,
     sound: getFirstValue,
     custom(preVcards) {
-        const { header, value } = preVcards[0];
-        return value ? `${header}: ${getFirstValue(preVcards)}` : '';
+        const { checked, header, value } = preVcards[0];
+        return checked && value ? `${header}: ${getFirstValue(preVcards)}` : '';
     }
 };
 
