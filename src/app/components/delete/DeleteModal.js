@@ -35,7 +35,7 @@ const DeleteModal = ({ contactIDs = [], deleteAll, onDelete, ...rest }) => {
     };
     return (
         <FormModal
-            title={c('Title').t`Delete`}
+            title={c('Title').ngettext(msgid`Delete contact`, `Delete contacts`, contactIDs.length)}
             onSubmit={() => withLoadingDelete(handleDelete())}
             submit={submit}
             loading={loadingDelete}
