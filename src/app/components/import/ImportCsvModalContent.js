@@ -21,6 +21,7 @@ const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
 
     const handleToggle = (groupIndex) => (index) => {
         if (preVcardsContacts[0][groupIndex][index].combineInto === 'fn-main') {
+            // do not allow to uncheck first name and last name simultaneously
             const preVcards = preVcardsContacts[0][groupIndex];
             const firstNameIndex = preVcards.findIndex(({ header }) => header.toLowerCase() === 'first name');
             const lastNameIndex = preVcards.findIndex(({ header }) => header.toLowerCase() === 'last name');
