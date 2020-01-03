@@ -48,9 +48,9 @@ export const getValue = (property) => {
  * @param {Object} property     { value, field, type, ... }
  * @return {Boolean}
  */
-export const isEmptyValuedProperty = (property) => {
+export const isEmptyValued = (property) => {
     const { value } = property;
-    // property values must be strings or array of strings
+    // property values must be strings or arrays of strings
     if (typeof value === 'string') {
         return !value;
     }
