@@ -55,7 +55,7 @@ export const isEmptyValued = (property) => {
         return !value;
     }
     if (Array.isArray(value)) {
-        return !value.reduce((acc, str) => acc + str, '');
+        return !value.some((str) => str);
     }
     return true;
 };
