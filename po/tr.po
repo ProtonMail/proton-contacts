@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
-"PO-Revision-Date: 2019-12-27 20:21\n"
+"PO-Revision-Date: 2020-01-03 18:20\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -254,7 +254,7 @@ msgstr "Iptal et"
 #: node_modules/react-components/components/modal/FormModal.js:20
 #: node_modules/react-components/containers/login/LoginForm.js:239
 #: node_modules/react-components/containers/login/LoginForm.js:267
-#: node_modules/react-components/containers/support/BugModal.js:126
+#: node_modules/react-components/containers/support/BugModal.js:135
 msgctxt "Action"
 msgid "Submit"
 msgstr "Gönder"
@@ -264,12 +264,12 @@ msgctxt "Action"
 msgid "Add screenshot(s)"
 msgstr "Ekran görüntüsü(leri) ekle"
 
-#: node_modules/react-components/containers/support/BugModal.js:194
+#: node_modules/react-components/containers/support/BugModal.js:203
 msgctxt "Action"
 msgid "Hide info"
 msgstr "Bilgiyi gizle"
 
-#: node_modules/react-components/containers/support/BugModal.js:194
+#: node_modules/react-components/containers/support/BugModal.js:203
 msgctxt "Action"
 msgid "Show info"
 msgstr "Bilgiyi göster"
@@ -596,37 +596,37 @@ msgctxt "Placeholder"
 msgid "Mailbox password"
 msgstr "Posta kutusu şifresi"
 
-#: node_modules/react-components/containers/support/BugModal.js:141
+#: node_modules/react-components/containers/support/BugModal.js:150
 msgctxt "Placeholder"
 msgid "Proton username"
 msgstr "Proton kullanıcı adı"
 
-#: node_modules/react-components/containers/support/BugModal.js:153
+#: node_modules/react-components/containers/support/BugModal.js:162
 msgctxt "Placeholder"
 msgid "A way to contact you"
 msgstr "Sizinle iletişim kurmak için bir yol"
 
-#: node_modules/react-components/containers/support/BugModal.js:177
+#: node_modules/react-components/containers/support/BugModal.js:186
 msgctxt "Placeholder"
 msgid "Please describe the problem and include any error messages"
 msgstr "Lütfen sorunu açıklayın ve varsa hata iletisini ekleyin"
 
-#: node_modules/react-components/containers/support/BugModal.js:206
+#: node_modules/react-components/containers/support/BugModal.js:215
 msgctxt "Placeholder"
 msgid "OS name"
 msgstr "İşletim sistemi adı"
 
-#: node_modules/react-components/containers/support/BugModal.js:217
+#: node_modules/react-components/containers/support/BugModal.js:226
 msgctxt "Placeholder"
 msgid "OS version"
 msgstr "İşletim sistemi sürümü"
 
-#: node_modules/react-components/containers/support/BugModal.js:228
+#: node_modules/react-components/containers/support/BugModal.js:237
 msgctxt "Placeholder"
 msgid "Browser name"
 msgstr "Tarayıcı adı"
 
-#: node_modules/react-components/containers/support/BugModal.js:239
+#: node_modules/react-components/containers/support/BugModal.js:248
 msgctxt "Placeholder"
 msgid "Browser version"
 msgstr "Tarayıcı sürümü"
@@ -706,7 +706,7 @@ msgctxt "Title"
 msgid "Account disabled"
 msgstr "Hesap devre dışı bırakıldı"
 
-#: node_modules/react-components/containers/support/BugModal.js:127
+#: node_modules/react-components/containers/support/BugModal.js:136
 msgctxt "Title"
 msgid "Report bug"
 msgstr "Hata bildir"
@@ -886,12 +886,12 @@ msgctxt "Title"
 msgid "Email settings (${ Email })"
 msgstr "E-posta ayarları (${ Email })"
 
-#: src/app/components/ContactViewProperty.js:110
+#: src/app/components/ContactViewProperty.js:112
 msgctxt "Title"
 msgid "Contact group"
 msgstr "Kişi grubu"
 
-#: src/app/components/ContactViewProperty.js:116
+#: src/app/components/ContactViewProperty.js:118
 msgctxt "Title"
 msgid "Email settings"
 msgstr "E-posta ayarları"
@@ -946,8 +946,10 @@ msgstr "Kişileri birleştir"
 
 #: src/app/components/delete/DeleteModal.js:38
 msgctxt "Title"
-msgid "Delete"
-msgstr "Sil"
+msgid "Delete contact"
+msgid_plural "Delete contacts"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/app/components/ContactGroupsTable.js:83
 msgctxt "Title"
@@ -1014,13 +1016,13 @@ msgctxt "Info"
 msgid "Screenshot(s) attached"
 msgstr "Ekran görüntüsü(leri) eklendi"
 
-#: node_modules/react-components/containers/support/BugModal.js:130
+#: node_modules/react-components/containers/support/BugModal.js:139
 #, javascript-format
 msgctxt "Info"
 msgid "Refreshing the page or ${ link } will automatically resolve most issues."
 msgstr "Sayfayı yenilemek ya da ${ link } çoğu sorunu kendiliğinden çözecektir."
 
-#: node_modules/react-components/containers/support/BugModal.js:245
+#: node_modules/react-components/containers/support/BugModal.js:254
 #, javascript-format
 msgctxt "Info"
 msgid "Contact us at ${ criticalEmail } for critical security issues."
@@ -1135,7 +1137,7 @@ msgctxt "Info"
 msgid "Week"
 msgstr ""
 
-#: src/app/components/import/ImportCsvModalContent.js:87
+#: src/app/components/import/ImportCsvModalContent.js:88
 msgctxt "Info"
 msgid "No contacts to be imported"
 msgstr "Içe aktarılacak kişi yok"
@@ -1365,47 +1367,47 @@ msgctxt "Label"
 msgid "Mailbox password"
 msgstr "Posta kutusu şifresi"
 
-#: node_modules/react-components/containers/support/BugModal.js:135
+#: node_modules/react-components/containers/support/BugModal.js:144
 msgctxt "Label"
 msgid "Proton username"
 msgstr "Proton kullanıcı adı"
 
-#: node_modules/react-components/containers/support/BugModal.js:147
+#: node_modules/react-components/containers/support/BugModal.js:156
 msgctxt "Label"
 msgid "Email address"
 msgstr "E-posta adresi"
 
-#: node_modules/react-components/containers/support/BugModal.js:159
+#: node_modules/react-components/containers/support/BugModal.js:168
 msgctxt "Label"
 msgid "Category"
 msgstr "Kategori"
 
-#: node_modules/react-components/containers/support/BugModal.js:171
+#: node_modules/react-components/containers/support/BugModal.js:180
 msgctxt "Label"
 msgid "What happened?"
 msgstr "Ne oldu?"
 
-#: node_modules/react-components/containers/support/BugModal.js:192
+#: node_modules/react-components/containers/support/BugModal.js:201
 msgctxt "Label"
 msgid "System information"
 msgstr "Sistem bilgisi"
 
-#: node_modules/react-components/containers/support/BugModal.js:200
+#: node_modules/react-components/containers/support/BugModal.js:209
 msgctxt "Label"
 msgid "Operating system"
 msgstr "İşletim sistemi"
 
-#: node_modules/react-components/containers/support/BugModal.js:211
+#: node_modules/react-components/containers/support/BugModal.js:220
 msgctxt "Label"
 msgid "Operating system version"
 msgstr "İşletim sistemi sürümü"
 
-#: node_modules/react-components/containers/support/BugModal.js:222
+#: node_modules/react-components/containers/support/BugModal.js:231
 msgctxt "Label"
 msgid "Browser"
 msgstr "Tarayıcı"
 
-#: node_modules/react-components/containers/support/BugModal.js:233
+#: node_modules/react-components/containers/support/BugModal.js:242
 msgctxt "Label"
 msgid "Browser version"
 msgstr "Tarayıcı sürümü"
@@ -1556,101 +1558,101 @@ msgctxt "Error notification in the bug report modal when the user upload file"
 msgid "No image selected"
 msgstr "Hiçbir görüntü seçilmedi"
 
-#: node_modules/react-components/containers/support/BugModal.js:35
-#: node_modules/react-components/containers/support/BugModal.js:49
+#: node_modules/react-components/containers/support/BugModal.js:38
+#: node_modules/react-components/containers/support/BugModal.js:52
 msgctxt "Bug category"
 msgid "Login problem"
 msgstr "Giriş sorunu"
 
-#: node_modules/react-components/containers/support/BugModal.js:36
+#: node_modules/react-components/containers/support/BugModal.js:39
 msgctxt "Bug category"
 msgid "Sign up problem"
 msgstr "Kayıt sorunu"
 
-#: node_modules/react-components/containers/support/BugModal.js:37
+#: node_modules/react-components/containers/support/BugModal.js:40
 msgctxt "Bug category"
 msgid "Bridge problem"
 msgstr "Bridge sorunu"
 
-#: node_modules/react-components/containers/support/BugModal.js:38
+#: node_modules/react-components/containers/support/BugModal.js:41
 msgctxt "Bug category"
 msgid "Import / export problem"
 msgstr "İçe / dışa aktarma sorunu"
 
-#: node_modules/react-components/containers/support/BugModal.js:39
+#: node_modules/react-components/containers/support/BugModal.js:42
 msgctxt "Bug category"
 msgid "Custom domains problem"
 msgstr "Özel etki alanı sorunu"
 
-#: node_modules/react-components/containers/support/BugModal.js:40
-#: node_modules/react-components/containers/support/BugModal.js:51
+#: node_modules/react-components/containers/support/BugModal.js:43
+#: node_modules/react-components/containers/support/BugModal.js:54
 msgctxt "Bug category"
 msgid "Payments problem"
 msgstr "Ödeme sorunu"
 
-#: node_modules/react-components/containers/support/BugModal.js:41
-#: node_modules/react-components/containers/support/BugModal.js:55
+#: node_modules/react-components/containers/support/BugModal.js:44
+#: node_modules/react-components/containers/support/BugModal.js:58
 msgctxt "Bug category"
 msgid "Connection problem"
 msgstr "Bağlantı sorunu"
 
-#: node_modules/react-components/containers/support/BugModal.js:42
+#: node_modules/react-components/containers/support/BugModal.js:45
 msgctxt "Bug category"
 msgid "Slow speed problem"
 msgstr "Yavaş hız sorunu"
 
-#: node_modules/react-components/containers/support/BugModal.js:43
+#: node_modules/react-components/containers/support/BugModal.js:46
 msgctxt "Bug category"
 msgid "VPN problem"
 msgstr "VPN sorunu"
 
-#: node_modules/react-components/containers/support/BugModal.js:44
-#: node_modules/react-components/containers/support/BugModal.js:60
+#: node_modules/react-components/containers/support/BugModal.js:47
+#: node_modules/react-components/containers/support/BugModal.js:63
 msgctxt "Bug category"
 msgid "Feature request"
 msgstr "Özellik isteği"
 
-#: node_modules/react-components/containers/support/BugModal.js:45
+#: node_modules/react-components/containers/support/BugModal.js:48
 msgctxt "Bug category"
 msgid "Other"
 msgstr "Diğer"
 
-#: node_modules/react-components/containers/support/BugModal.js:50
+#: node_modules/react-components/containers/support/BugModal.js:53
 msgctxt "Bug category"
 msgid "Signup problem"
 msgstr "Kayıt sorunu"
 
-#: node_modules/react-components/containers/support/BugModal.js:52
+#: node_modules/react-components/containers/support/BugModal.js:55
 msgctxt "Bug category"
 msgid "Installation problem"
 msgstr "Kurulum sorunu"
 
-#: node_modules/react-components/containers/support/BugModal.js:53
+#: node_modules/react-components/containers/support/BugModal.js:56
 msgctxt "Bug category"
 msgid "Update problem"
 msgstr "Yükseltme sorunu"
 
-#: node_modules/react-components/containers/support/BugModal.js:54
+#: node_modules/react-components/containers/support/BugModal.js:57
 msgctxt "Bug category"
 msgid "Application problem"
 msgstr "Uygulama sorunu"
 
-#: node_modules/react-components/containers/support/BugModal.js:56
+#: node_modules/react-components/containers/support/BugModal.js:59
 msgctxt "Bug category"
 msgid "Speed problem"
 msgstr "Hız sorunu"
 
-#: node_modules/react-components/containers/support/BugModal.js:57
+#: node_modules/react-components/containers/support/BugModal.js:60
 msgctxt "Bug category"
 msgid "Manual setup problem"
 msgstr "Elden kurulum sorunu"
 
-#: node_modules/react-components/containers/support/BugModal.js:58
+#: node_modules/react-components/containers/support/BugModal.js:61
 msgctxt "Bug category"
 msgid "Website access problem"
 msgstr "Genel ağ sayfası erişim sorunu"
 
-#: node_modules/react-components/containers/support/BugModal.js:59
+#: node_modules/react-components/containers/support/BugModal.js:62
 msgctxt "Bug category"
 msgid "Streaming problem"
 msgstr "Veri akışı sorunu"
@@ -1660,7 +1662,7 @@ msgctxt "Action to select a title for the bug report modal"
 msgid "Select"
 msgstr "Seç"
 
-#: node_modules/react-components/containers/support/BugModal.js:95
+#: node_modules/react-components/containers/support/BugModal.js:89
 msgctxt "Link"
 msgid "clearing your browser cache"
 msgstr "tarayıcı çerezleriniz temizleniyor"
@@ -1714,7 +1716,7 @@ msgctxt "Link"
 msgid "Groups"
 msgstr "Gruplar"
 
-#: node_modules/react-components/containers/support/BugModal.js:111
+#: node_modules/react-components/containers/support/BugModal.js:120
 msgctxt "Success"
 msgid "Bug reported"
 msgstr "Hata bildirildi"
@@ -1751,7 +1753,7 @@ msgid_plural "Contacts deleted"
 msgstr[0] ""
 msgstr[1] ""
 
-#: node_modules/react-components/containers/support/BugModal.js:131
+#: node_modules/react-components/containers/support/BugModal.js:140
 msgctxt "Warning"
 msgid "Bug reports are not end-to-end encrypted, please do not send any sensitive information."
 msgstr "Hata raporları uçtan uca şifreli değildir, lütfen herhangi bir hassas bilgi göndermeyin."
@@ -1789,7 +1791,7 @@ msgid_plural "This action will permanently delete selected contacts. Are you sur
 msgstr[0] "Bu işlem seçilen kişiyi kalıcı olarak siler. Bu kişiyi silmek istediğinize emin misiniz?"
 msgstr[1] "Bu işlem seçilen kişleri kalıcı olarak siler. Bu kişileri silmek istediğinize emin misiniz?"
 
-#: node_modules/react-components/containers/support/BugModal.js:184
+#: node_modules/react-components/containers/support/BugModal.js:193
 msgctxt "Label, make it short please"
 msgid "Attach screenshot(s)"
 msgstr "Ekran görüntüsü(leri) ekle"
@@ -2290,7 +2292,7 @@ msgctxt "TableHeader"
 msgid "ACTIONS"
 msgstr "EYLEMLER"
 
-#: src/app/components/import/ImportCsvModalContent.js:33
+#: src/app/components/import/ImportCsvModalContent.js:34
 msgctxt "Error notification"
 msgid "First name and last name cannot be unchecked at the same time"
 msgstr "Adınız ve soyadınız aynı anda seçilemez"
@@ -2305,12 +2307,12 @@ msgctxt "Error notification"
 msgid "File selected appears to be corrupted"
 msgstr "Seçilmiş dosyalar bozulmuş görünüyor"
 
-#: src/app/components/import/ImportCsvModalContent.js:62
+#: src/app/components/import/ImportCsvModalContent.js:63
 msgctxt "Description of the purpose of the import CSV modal"
 msgid "We have detected the following fields in the CSV file you uploaded. Check the ones you want to import."
 msgstr "Yüklediğiniz CSV dosyasında aşağıdaki alanları tespit ettik. Almak istediklerinizi kontrol edin."
 
-#: src/app/components/import/ImportCsvModalContent.js:66
+#: src/app/components/import/ImportCsvModalContent.js:67
 msgctxt "Description of the purpose of the import CSV modal"
 msgid "Also, we have automatically matched CSV fields with vCard fields. You can review and change this matching manually."
 msgstr "Ayrıca, CSV alanlarını kendiliğinden olarak vCard alanlarıyla eşleştirdik. Bu eşleşmeyi elden inceleyebilir ve değiştirebilirsiniz."
