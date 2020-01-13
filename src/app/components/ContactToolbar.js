@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Checkbox, ToolbarSeparator } from 'react-components';
+import { Icon, Checkbox, Toolbar, ToolbarButton, ToolbarSeparator } from 'react-components';
 import { Link } from 'react-router-dom';
 import { c } from 'ttag';
 import ContactGroupDropdown from './ContactGroupDropdown';
@@ -27,27 +27,25 @@ const ContactToolbar = ({
 
     if (simplified) {
         return (
-            <div className="toolbar flex noprint">
+            <Toolbar>
                 <Link to="/contacts" className="toolbar-button">
                     <Icon name="arrow-left" className="toolbar-icon mauto" />
                 </Link>
-            </div>
+            </Toolbar>
         );
     }
 
     return (
-        <div className="toolbar flex noprint">
+        <Toolbar>
             <Checkbox className="flex pm-select-all ml0-75 pl1 pr1" checked={checked} onChange={handleCheck} />
             <ToolbarSeparator />
-            <button
-                type="button"
+            <ToolbarButton
+                icon="delete"
                 title={c('Tooltip').t`Delete`}
                 className="toolbar-button"
                 onClick={onDelete}
                 disabled={!activeIDs.length}
-            >
-                <Icon name="delete" className="toolbar-icon mauto" />
-            </button>
+            />
             {user.hasPaidMail ? (
                 <ContactGroupDropdown
                     className="toolbar-button toolbar-button--dropdown"
@@ -58,7 +56,7 @@ const ContactToolbar = ({
                     <Icon name="contacts-groups" className="toolbar-icon mauto" />
                 </ContactGroupDropdown>
             ) : null}
-        </div>
+        </Toolbar>
     );
 };
 
