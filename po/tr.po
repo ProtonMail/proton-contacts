@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
-"PO-Revision-Date: 2020-01-03 18:20\n"
+"PO-Revision-Date: 2020-01-09 19:20\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -28,7 +28,7 @@ msgstr "GB"
 #: node_modules/proton-shared/lib/keys/keys.js:102
 msgctxt "Error"
 msgid "Signature verification failed"
-msgstr ""
+msgstr "İmza doğrulama başarısız"
 
 #: node_modules/proton-shared/lib/keys/keys.js:122
 msgctxt "Error"
@@ -148,7 +148,7 @@ msgstr "Geçersiz posta kodu"
 #: node_modules/react-components/components/alert/DoNotWindowOpenAlertError.js:7
 msgctxt "Error"
 msgid "The browser you are using does not allow the payment to be fully authorized. Please use a different browser or log in via a computer."
-msgstr ""
+msgstr "Kullanmakta olduğunuz tarayıcı ödemenin tam olarak onaylanmasına izin vermez. Lütfen değişik bir tarayıcı kullanın ya da bir bilgisayarla oturum açın."
 
 #: node_modules/react-components/components/input/Input.js:32
 msgctxt "Error"
@@ -183,7 +183,7 @@ msgstr "Bazı kişiler silinemedi"
 #: node_modules/proton-shared/lib/themes/themes.js:13
 msgctxt "Theme"
 msgid "Default theme"
-msgstr ""
+msgstr "Varsayılan tema"
 
 #: node_modules/proton-shared/lib/themes/themes.js:23
 msgctxt "Theme"
@@ -203,7 +203,7 @@ msgstr "Mavi"
 #: node_modules/proton-shared/lib/themes/themes.js:51
 msgctxt "Theme"
 msgid "Dark theme"
-msgstr ""
+msgstr "Koyu tema"
 
 #: node_modules/react-components/containers/search/SearchDropdown.js:60
 #: node_modules/react-components/containers/search/Searchbox.js:48
@@ -456,7 +456,7 @@ msgstr "Grubunuzu düzenleyin"
 #: src/app/components/ContactsList.js:146
 msgctxt "Action"
 msgid "Clear it"
-msgstr ""
+msgstr "Temizle"
 
 #: src/app/components/ContactImageSummary.js:89
 msgctxt "Action"
@@ -477,7 +477,7 @@ msgstr "İndir"
 #: src/app/components/ContactKeysTable.js:132
 msgctxt "Action"
 msgid "Use for sending"
-msgstr ""
+msgstr "Gönderme için kullan"
 
 #: src/app/components/ContactKeysTable.js:153
 msgctxt "Action"
@@ -719,7 +719,7 @@ msgstr "ZIP / posta kodu"
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:44
 msgctxt "Title"
 msgid "Unsupported browser"
-msgstr ""
+msgstr "Desteklenmeyen tarayıcı"
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:45
 msgctxt "Title"
@@ -778,7 +778,7 @@ msgstr "Kişiler"
 #: src/app/containers/ContactsContainer.js:252
 msgctxt "Title"
 msgid "Search"
-msgstr ""
+msgstr "Arama"
 
 #: src/app/containers/SettingsContainer.js:35
 msgctxt "Title"
@@ -948,8 +948,8 @@ msgstr "Kişileri birleştir"
 msgctxt "Title"
 msgid "Delete contact"
 msgid_plural "Delete contacts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kişiyi sil"
+msgstr[1] "Kişileri sil"
 
 #: src/app/components/ContactGroupsTable.js:83
 msgctxt "Title"
@@ -1135,7 +1135,7 @@ msgstr "varsayılan"
 #: node_modules/react-components/components/miniCalendar/WeekNumbers.js:36
 msgctxt "Info"
 msgid "Week"
-msgstr ""
+msgstr "Hafta"
 
 #: src/app/components/import/ImportCsvModalContent.js:88
 msgctxt "Info"
@@ -1192,7 +1192,7 @@ msgstr "Bu adres devre dışı. Bu adrese gönderebilmek için öncelikle adresi
 #: src/app/components/ContactPgpSettings.js:84
 msgctxt "Info"
 msgid "To use Address Verification, you must trust one or more available public keys, including the one you want to use for sending. This prevents the encrypted keys from being faked."
-msgstr ""
+msgstr "Adres Doğrulama'yı kullanmak için, gönderme için kullanmak istediğinizi de içermek üzere bir ya da daha çok kullanılabilir genel anahtara güvenmelisiniz. Bu şifreli anahtarların taklit edilmesini önler."
 
 #: src/app/components/ContactPgpSettings.js:88
 msgctxt "Info"
@@ -1273,7 +1273,7 @@ msgstr "Adres defterinizden ${ totalContactsText } kişi seçtiniz."
 #, javascript-format
 msgctxt "Info"
 msgid "${ totalContactsInGroup } contacts"
-msgstr ""
+msgstr "${ totalContactsInGroup } kişi"
 
 #: src/app/components/ContactPlaceholder.js:177
 msgctxt "Info"
@@ -1750,8 +1750,8 @@ msgstr "Kişiler silindi"
 msgctxt "Success"
 msgid "Contact deleted"
 msgid_plural "Contacts deleted"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kişi silindi"
+msgstr[1] "Kişiler silindi"
 
 #: node_modules/react-components/containers/support/BugModal.js:140
 msgctxt "Warning"
@@ -2412,7 +2412,7 @@ msgstr "E-posta şifreleme, gönderilen mesajlarınızın kimliğini doğrulamay
 #: src/app/components/ContactPgpSettings.js:127
 msgctxt "Tooltip"
 msgid "Digitally signing emails helps authenticating that messages are sent by you"
-msgstr ""
+msgstr "E-postaları dijital olarak imzalamak, iletilerin sizin tarafınızdan gönderildiğinin doğrulanmasına yardımcı olur"
 
 #: src/app/components/ContactPgpSettings.js:152
 msgctxt "Tooltip"
@@ -2464,7 +2464,7 @@ msgstr "Oluşturuldu"
 #: src/app/components/ContactKeysTable.js:89
 msgctxt "Table header"
 msgid "Expires"
-msgstr ""
+msgstr "Süre sonu"
 
 #: src/app/components/ContactKeysTable.js:90
 msgctxt "Table header"
@@ -2569,17 +2569,17 @@ msgstr "Bu anahtar ${ emails } adreslerine atanmıştır"
 #: src/app/components/ContactKeysTable.js:206
 msgctxt "Key badge"
 msgid "Active"
-msgstr ""
+msgstr "Etkin"
 
 #: src/app/components/ContactKeysTable.js:208
 msgctxt "Key badge"
 msgid "Verification only"
-msgstr ""
+msgstr "Yalnızca doğrulama"
 
 #: src/app/components/ContactKeysTable.js:210
 msgctxt "Key badge"
 msgid "WKD"
-msgstr ""
+msgstr "WKD"
 
 #: src/app/components/ContactKeysTable.js:211
 msgctxt "Key badge"
@@ -2589,12 +2589,12 @@ msgstr "Güvenilir"
 #: src/app/components/ContactKeysTable.js:212
 msgctxt "Key badge"
 msgid "Revoked"
-msgstr ""
+msgstr "İptal edildi"
 
 #: src/app/components/ContactKeysTable.js:213
 msgctxt "Key badge"
 msgid "Expired"
-msgstr ""
+msgstr "Süresi doldu"
 
 #: src/app/components/ContactGroupsTable.js:42
 msgctxt "Contact group notification"

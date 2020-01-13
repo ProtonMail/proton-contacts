@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2020-01-04 15:20\n"
+"PO-Revision-Date: 2020-01-08 07:20\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -948,8 +948,8 @@ msgstr "Combinar contactos"
 msgctxt "Title"
 msgid "Delete contact"
 msgid_plural "Delete contacts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Eliminar contacto"
+msgstr[1] "Eliminar contactos"
 
 #: src/app/components/ContactGroupsTable.js:83
 msgctxt "Title"

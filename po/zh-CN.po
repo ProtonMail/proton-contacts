@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2020-01-05 01:21\n"
+"PO-Revision-Date: 2020-01-12 16:20\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -183,12 +183,12 @@ msgstr "无法删除有些联系人"
 #: node_modules/proton-shared/lib/themes/themes.js:13
 msgctxt "Theme"
 msgid "Default theme"
-msgstr "默认主题"
+msgstr "预设样式"
 
 #: node_modules/proton-shared/lib/themes/themes.js:23
 msgctxt "Theme"
 msgid "Custom theme"
-msgstr "自定义主题"
+msgstr "自定义样式"
 
 #: node_modules/proton-shared/lib/themes/themes.js:33
 msgctxt "Theme"
@@ -698,7 +698,7 @@ msgstr "身份验证"
 #: node_modules/react-components/containers/login/UnlockModal.js:33
 msgctxt "Title"
 msgid "Sign in again to continue"
-msgstr "再次登录以继续"
+msgstr "此操作需要重新登录"
 
 #: node_modules/react-components/containers/login/AbuseModal.js:6
 msgctxt "Title"
