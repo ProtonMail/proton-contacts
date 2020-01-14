@@ -44,10 +44,11 @@ const ContactPgpSettings = ({ model, setModel }) => {
             files.map(async (publicKey) => {
                 if (!publicKey.isPublic()) {
                     // do not allow to upload private keys
-                    return createNotification({
+                    createNotification({
                         type: 'error',
                         text: c('Error').t`Invalid public key file`
                     });
+                    return Promise.resolve();
                 }
                 const fingerprint = publicKey.getFingerprint();
                 const { isExpired, isRevoked } = await getKeyEncryptStatus(publicKey);
@@ -55,11 +56,13 @@ const ContactPgpSettings = ({ model, setModel }) => {
                 isRevoked && revokedFingerprints.add(fingerprint);
                 if (!trustedFingerprints.has(fingerprint)) {
                     trustedFingerprints.add(fingerprint);
-                    return pinned.push(publicKey);
+                    pinned.push(publicKey);
+                    return;
                 }
                 const indexFound = pinned.findIndex((publicKey) => publicKey.getFingerprint() === fingerprint);
                 createNotification({ text: c('Info').t`Duplicate key updated`, type: 'warning' });
-                return pinned.splice(indexFound, 1, publicKey);
+                pinned.splice(indexFound, 1, publicKey);
+                return;
             })
         );
 
