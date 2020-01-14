@@ -203,12 +203,12 @@ const ContactKeysTable = ({ model, setModel }) => {
                                 (isValid(expiration) ? format(expiration, 'PP', { locale: dateLocale }) : '-'),
                             !isNarrow && algo,
                             <React.Fragment key={fingerprint}>
-                                {isActive ? <Badge>{c('Key badge').t`Active`}</Badge> : null}
+                                {isActive ? <Badge>{c('Key badge').t`Primary`}</Badge> : null}
                                 {isVerificationOnly ? (
                                     <Badge type="warning">{c('Key badge').t`Verification only`}</Badge>
                                 ) : null}
-                                {isWKD ? <Badge>{c('Key badge').t`WKD`}</Badge> : null}
-                                {isTrusted ? <Badge>{c('Key badge').t`Trusted`}</Badge> : null}
+                                {isWKD ? <Badge type="origin">{c('Key badge').t`WKD`}</Badge> : null}
+                                {isTrusted ? <Badge type="success">{c('Key badge').t`Trusted`}</Badge> : null}
                                 {isRevoked ? <Badge type="error">{c('Key badge').t`Revoked`}</Badge> : null}
                                 {isExpired ? <Badge type="error">{c('Key badge').t`Expired`}</Badge> : null}
                             </React.Fragment>,
