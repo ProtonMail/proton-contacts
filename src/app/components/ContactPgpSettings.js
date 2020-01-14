@@ -48,7 +48,7 @@ const ContactPgpSettings = ({ model, setModel }) => {
                         type: 'error',
                         text: c('Error').t`Invalid public key file`
                     });
-                    return Promise.resolve();
+                    return;
                 }
                 const fingerprint = publicKey.getFingerprint();
                 const { isExpired, isRevoked } = await getKeyEncryptStatus(publicKey);
