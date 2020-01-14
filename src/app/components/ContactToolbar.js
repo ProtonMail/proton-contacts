@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Checkbox, Toolbar, ToolbarButton, ToolbarSeparator } from 'react-components';
-import { Link } from 'react-router-dom';
+import { Icon, Checkbox, Toolbar, ToolbarLink, ToolbarButton, ToolbarSeparator } from 'react-components';
 import { c } from 'ttag';
 import ContactGroupDropdown from './ContactGroupDropdown';
 
@@ -28,9 +27,7 @@ const ContactToolbar = ({
     if (simplified) {
         return (
             <Toolbar>
-                <Link to="/contacts" className="toolbar-button">
-                    <Icon name="arrow-left" className="toolbar-icon mauto" />
-                </Link>
+                <ToolbarLink to="/contacts" icon="arrow-left" />
             </Toolbar>
         );
     }
