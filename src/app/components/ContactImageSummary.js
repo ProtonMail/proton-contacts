@@ -10,12 +10,12 @@ import { SHOW_IMAGES } from 'proton-shared/lib/constants';
 import { CONTACT_IMG_SIZE } from '../constants';
 
 const ContactImageSummary = ({ photo, name }) => {
-    const [showAnyways, setShowAnyways] = useState(!isURL(photo));
+    const [showAnyway, setShowAnyway] = useState(!isURL(photo));
     const [image, setImage] = useState({ src: photo });
     const [{ ShowImages }, loadingMailSettings] = useMailSettings();
     const [loadingResize, withLoadingResize] = useLoading(true);
     const loading = loadingMailSettings || loadingResize;
-    const showPhoto = ShowImages & SHOW_IMAGES.REMOTE || showAnyways;
+    const showPhoto = ShowImages & SHOW_IMAGES.REMOTE || showAnyway;
 
     useEffect(() => {
         if (!photo || !showPhoto) {
@@ -25,7 +25,8 @@ const ContactImageSummary = ({ photo, name }) => {
             const { src, width, height } = await toImage(photo);
 
             if (width <= CONTACT_IMG_SIZE && height <= CONTACT_IMG_SIZE) {
-                return setImage({ src, width, height, isSmall: true });
+                setImage({ src, width, height, isSmall: true });
+                return;
             }
             const resized = await resizeImage({
                 original: photo,
@@ -48,7 +49,7 @@ const ContactImageSummary = ({ photo, name }) => {
         );
     }
 
-    const handleClick = () => setShowAnyways(true);
+    const handleClick = () => setShowAnyway(true);
 
     if (showPhoto) {
         if (loading) {
@@ -62,6 +63,7 @@ const ContactImageSummary = ({ photo, name }) => {
         };
 
         if (!image.isSmall) {
+            // fit the image in the rounded container as background image
             return (
                 <div className="rounded50 ratio-container-square" style={style}>
                     <span className="inner-ratio-container" />
@@ -69,10 +71,12 @@ const ContactImageSummary = ({ photo, name }) => {
             );
         }
 
+        // For a small image, we have to create a smaller rounded container inside the bigger standard one,
+        // and fit the image as background inside it. As container width we must pick the smallest dimension
         return (
             <div className="rounded50 ratio-container-square mb0">
                 <span className="inner-ratio-container flex">
-                    <div className="mbauto mtauto center" style={{ width: `${image.width}px` }}>
+                    <div className="mbauto mtauto center" style={{ width: `${Math.min(image.width, image.height)}px` }}>
                         <div className="rounded50 ratio-container-square" style={style}>
                             <span className="inner-ratio-container" />
                         </div>
