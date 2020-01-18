@@ -36,6 +36,8 @@ const ContactImageSummary = ({ photo, name }) => {
             });
             setImage({ src: resized });
         };
+        // if resize fails (e.g. toImage will throw if the requested resource hasn't specified a CORS policy),
+        // fallback to the original src
         withLoadingResize(resize().catch(noop));
     }, [photo, showPhoto]);
 
