@@ -7,8 +7,11 @@ import { CONTACT_IMG_SIZE } from '../constants';
 
 const ContactImageModal = ({ url: initialUrl, onSubmit, onClose, ...rest }) => {
     const [url, setUrl] = useState(initialUrl);
-    const title = c('Title').t`Edit image`;
     const { createNotification } = useNotifications();
+
+    const title = c('Title').t`Edit image`;
+    const isBase64Str = url.startsWith('data:image');
+
     const handleChange = ({ target }) => setUrl(target.value);
 
     const handleSubmit = () => {
@@ -48,7 +51,7 @@ const ContactImageModal = ({ url: initialUrl, onSubmit, onClose, ...rest }) => {
                 <Field>
                     <Input
                         id="contactImageModal-input-url"
-                        value={url}
+                        value={isBase64Str ? '' : url}
                         onChange={handleChange}
                         placeholder={c('Placeholder').t`Image URL`}
                     />
