@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2020-01-08 21:20\n"
+"PO-Revision-Date: 2020-01-18 09:20\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -171,6 +171,7 @@ msgid "Contact could not be saved"
 msgstr ""
 
 #: src/app/components/ContactPgpSettings.js:35
+#: src/app/components/ContactPgpSettings.js:49
 msgctxt "Error"
 msgid "Invalid public key file"
 msgstr "Неправильный файл публичного ключа"
@@ -633,7 +634,7 @@ msgctxt "Placeholder"
 msgid "Browser version"
 msgstr "Версия браузера"
 
-#: node_modules/react-components/containers/payments/PaymentSelector.js:30
+#: node_modules/react-components/containers/payments/PaymentSelector.js:47
 msgctxt "Placeholder"
 msgid "Other"
 msgstr "Другое"
@@ -1180,32 +1181,37 @@ msgctxt "Info"
 msgid "Create a new contact group"
 msgstr "Создать новую группу контактов"
 
-#: src/app/components/ContactPgpSettings.js:71
+#: src/app/components/ContactPgpSettings.js:63
+msgctxt "Info"
+msgid "Duplicate key updated"
+msgstr "Дубликат ключа обновлен"
+
+#: src/app/components/ContactPgpSettings.js:82
 msgctxt "Info"
 msgid "Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service."
 msgstr "Настройка PGP позволяет вам отправлять зашифрованные письма пользователям вне ProtonMail, которые пользуются совместимыми с PGP сервисами."
 
-#: src/app/components/ContactPgpSettings.js:76
+#: src/app/components/ContactPgpSettings.js:87
 msgctxt "Info"
 msgid "Address Verification with Trusted Keys is enabled for this address. To be able to send to this address, first trust public keys that can be used for sending."
 msgstr "Проверка адреса доверяемыми ключами для этого адреса включена. Чтобы получить возможность отправки на этот адрес, сначала включите режим доверия публичным ключам, которые можно применять для отправки."
 
-#: src/app/components/ContactPgpSettings.js:80
+#: src/app/components/ContactPgpSettings.js:91
 msgctxt "Info"
 msgid "This address is disabled. To be able to send to this address, the owner must first enable the address."
 msgstr "Этот адрес отключён. Чтобы иметь возможность отправки на этот адрес, сначала он должен быть включён его владельцем."
 
-#: src/app/components/ContactPgpSettings.js:84
+#: src/app/components/ContactPgpSettings.js:95
 msgctxt "Info"
 msgid "To use Address Verification, you must trust one or more available public keys, including the one you want to use for sending. This prevents the encrypted keys from being faked."
 msgstr ""
 
-#: src/app/components/ContactPgpSettings.js:88
+#: src/app/components/ContactPgpSettings.js:99
 msgctxt "Info"
 msgid "Only change these settings if you are using PGP with non-ProtonMail recipients."
 msgstr "Изменяйте эти настройки только в том случае, если применяете PGP для переписки с получателями вне ProtonMail."
 
-#: src/app/components/ContactPgpSettings.js:92
+#: src/app/components/ContactPgpSettings.js:103
 msgctxt "Info"
 msgid "All uploaded keys are expired or revoked! Encryption is automatically disabled."
 msgstr "У всех загруженных ключей либо истекли сроки действия, либо эти ключи были отозваны! Шифрование было автоматически отключено."
@@ -1527,22 +1533,22 @@ msgctxt "Label"
 msgid "Add to group"
 msgstr "Добавить в группу"
 
-#: src/app/components/ContactPgpSettings.js:98
+#: src/app/components/ContactPgpSettings.js:109
 msgctxt "Label"
 msgid "Encrypt emails"
 msgstr "Шифровать письма"
 
-#: src/app/components/ContactPgpSettings.js:124
+#: src/app/components/ContactPgpSettings.js:135
 msgctxt "Label"
 msgid "Sign emails"
 msgstr "Подписывать письма"
 
-#: src/app/components/ContactPgpSettings.js:149
+#: src/app/components/ContactPgpSettings.js:160
 msgctxt "Label"
 msgid "Public keys"
 msgstr "Публичные ключи"
 
-#: src/app/components/ContactPgpSettings.js:164
+#: src/app/components/ContactPgpSettings.js:175
 msgctxt "Label"
 msgid "Cryptographic scheme"
 msgstr "Криптографическая схема"
@@ -2420,22 +2426,22 @@ msgctxt "Tooltip"
 msgid "Encrypted data with verified digital signature"
 msgstr "Зашифрованные данные с подтверждённой цифровой подписью"
 
-#: src/app/components/ContactPgpSettings.js:101
+#: src/app/components/ContactPgpSettings.js:112
 msgctxt "Tooltip"
 msgid "Email encryption forces email signature to help authenticate your sent messages"
 msgstr ""
 
-#: src/app/components/ContactPgpSettings.js:127
+#: src/app/components/ContactPgpSettings.js:138
 msgctxt "Tooltip"
 msgid "Digitally signing emails helps authenticating that messages are sent by you"
 msgstr ""
 
-#: src/app/components/ContactPgpSettings.js:152
+#: src/app/components/ContactPgpSettings.js:163
 msgctxt "Tooltip"
 msgid "Upload a public key to enable sending end-to-end encrypted emails to this email"
 msgstr "Загрузите публичный ключ, чтобы включить отправку зашифрованных писем на этот адрес"
 
-#: src/app/components/ContactPgpSettings.js:167
+#: src/app/components/ContactPgpSettings.js:178
 msgctxt "Tooltip"
 msgid "Select the PGP scheme to be used when signing or encrypting to a user. Note that PGP/Inline forces plain text messages"
 msgstr "Выберите схему PGP, которая будет применяться при подписи или шифровании для пользователя. Учтите, что PGP/Inline принудительно устанавливает формат сообщений на \"простой текст\""
@@ -2446,7 +2452,7 @@ msgctxt "Tooltip"
 msgid "Automatic indicates that the format in the composer is used to send to this user. Plain text indicates that the message will always be converted to plain text on send."
 msgstr "Значение \"Автоматический\" обозначает формат содержимого редактора, применяемый при отправке этому пользователю. \"Простой текст\" означает, что при отправке сообщение всегда будет преобразовываться в простой текст."
 
-#: src/app/components/ContactToolbar.js:44
+#: src/app/components/ContactToolbar.js:41
 msgctxt "Tooltip"
 msgid "Delete"
 msgstr "Удалить"
@@ -2584,8 +2590,8 @@ msgstr "Этот ключ назначен для ${ emails }"
 
 #: src/app/components/ContactKeysTable.js:206
 msgctxt "Key badge"
-msgid "Active"
-msgstr ""
+msgid "Primary"
+msgstr "Основной"
 
 #: src/app/components/ContactKeysTable.js:208
 msgctxt "Key badge"

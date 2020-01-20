@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
-"PO-Revision-Date: 2020-01-08 11:21\n"
+"PO-Revision-Date: 2020-01-18 12:20\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -171,6 +171,7 @@ msgid "Contact could not be saved"
 msgstr "O contato não pôde ser salvo"
 
 #: src/app/components/ContactPgpSettings.js:35
+#: src/app/components/ContactPgpSettings.js:49
 msgctxt "Error"
 msgid "Invalid public key file"
 msgstr "Arquivo de chave pública inválido"
@@ -631,7 +632,7 @@ msgctxt "Placeholder"
 msgid "Browser version"
 msgstr "Versão do navegador"
 
-#: node_modules/react-components/containers/payments/PaymentSelector.js:30
+#: node_modules/react-components/containers/payments/PaymentSelector.js:47
 msgctxt "Placeholder"
 msgid "Other"
 msgstr "Outro"
@@ -1174,32 +1175,37 @@ msgctxt "Info"
 msgid "Create a new contact group"
 msgstr "Criar novo grupo de contato"
 
-#: src/app/components/ContactPgpSettings.js:71
+#: src/app/components/ContactPgpSettings.js:63
+msgctxt "Info"
+msgid "Duplicate key updated"
+msgstr "Chave duplicada atualizada"
+
+#: src/app/components/ContactPgpSettings.js:82
 msgctxt "Info"
 msgid "Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service."
 msgstr "A configuração do PGP permitir que você envie e-mails criptografados de ponta a ponta com um usuário que não usa o ProtonMail, mas que usa um serviço compatível com PGP."
 
-#: src/app/components/ContactPgpSettings.js:76
+#: src/app/components/ContactPgpSettings.js:87
 msgctxt "Info"
 msgid "Address Verification with Trusted Keys is enabled for this address. To be able to send to this address, first trust public keys that can be used for sending."
 msgstr "A verificação de endereço com chaves confiáveis ​​está ativada para este endereço. Para poder enviar para este endereço, primeiro confie nas chaves públicas que podem ser usadas para envio."
 
-#: src/app/components/ContactPgpSettings.js:80
+#: src/app/components/ContactPgpSettings.js:91
 msgctxt "Info"
 msgid "This address is disabled. To be able to send to this address, the owner must first enable the address."
 msgstr "Este endereço está desativado. Para poder enviar para este endereço, o proprietário deve primeiro ativar o endereço."
 
-#: src/app/components/ContactPgpSettings.js:84
+#: src/app/components/ContactPgpSettings.js:95
 msgctxt "Info"
 msgid "To use Address Verification, you must trust one or more available public keys, including the one you want to use for sending. This prevents the encrypted keys from being faked."
 msgstr "Para usar a verificação de endereço, você deve ativar as chaves confiáveis ​​e confiar em uma ou mais chaves públicas disponíveis, incluindo a chave primária para esse endereço. Isso impede que as chaves de criptografia sejam falsificadas."
 
-#: src/app/components/ContactPgpSettings.js:88
+#: src/app/components/ContactPgpSettings.js:99
 msgctxt "Info"
 msgid "Only change these settings if you are using PGP with non-ProtonMail recipients."
 msgstr "Altere essas configurações apenas se você estiver usando o PGP com destinatários que não usam o ProtonMail."
 
-#: src/app/components/ContactPgpSettings.js:92
+#: src/app/components/ContactPgpSettings.js:103
 msgctxt "Info"
 msgid "All uploaded keys are expired or revoked! Encryption is automatically disabled."
 msgstr "Todas as chaves enviadas expiraram ou foram revogadas! A criptografia foi desativada automaticamente."
@@ -1517,22 +1523,22 @@ msgctxt "Label"
 msgid "Add to group"
 msgstr "Adicionar ao grupo"
 
-#: src/app/components/ContactPgpSettings.js:98
+#: src/app/components/ContactPgpSettings.js:109
 msgctxt "Label"
 msgid "Encrypt emails"
 msgstr "Criptografar e-mails"
 
-#: src/app/components/ContactPgpSettings.js:124
+#: src/app/components/ContactPgpSettings.js:135
 msgctxt "Label"
 msgid "Sign emails"
 msgstr "Assinar e-mails"
 
-#: src/app/components/ContactPgpSettings.js:149
+#: src/app/components/ContactPgpSettings.js:160
 msgctxt "Label"
 msgid "Public keys"
 msgstr "Chaves públicas"
 
-#: src/app/components/ContactPgpSettings.js:164
+#: src/app/components/ContactPgpSettings.js:175
 msgctxt "Label"
 msgid "Cryptographic scheme"
 msgstr "Esquema criptográfico"
@@ -2404,22 +2410,22 @@ msgctxt "Tooltip"
 msgid "Encrypted data with verified digital signature"
 msgstr "Dados criptografados com assinatura digital verificada"
 
-#: src/app/components/ContactPgpSettings.js:101
+#: src/app/components/ContactPgpSettings.js:112
 msgctxt "Tooltip"
 msgid "Email encryption forces email signature to help authenticate your sent messages"
 msgstr "A criptografia de e-mail sempre utiliza a assinatura de e-mail para ajudar a autenticar as mensagens enviadas"
 
-#: src/app/components/ContactPgpSettings.js:127
+#: src/app/components/ContactPgpSettings.js:138
 msgctxt "Tooltip"
 msgid "Digitally signing emails helps authenticating that messages are sent by you"
 msgstr "Assinar e-mails digitalmente permite autenticar as mensagens que são enviadas por você"
 
-#: src/app/components/ContactPgpSettings.js:152
+#: src/app/components/ContactPgpSettings.js:163
 msgctxt "Tooltip"
 msgid "Upload a public key to enable sending end-to-end encrypted emails to this email"
 msgstr "Carregue uma chave pública para permitir o envio de e-mails criptografados de ponta a ponta para este e-mail"
 
-#: src/app/components/ContactPgpSettings.js:167
+#: src/app/components/ContactPgpSettings.js:178
 msgctxt "Tooltip"
 msgid "Select the PGP scheme to be used when signing or encrypting to a user. Note that PGP/Inline forces plain text messages"
 msgstr "Selecione o esquema PGP a ser usado durante a assinatura ou criptografia de um usuário. Observe que o PGP/Incorporado força o envio de mensagens de texto sem formatação"
@@ -2430,7 +2436,7 @@ msgctxt "Tooltip"
 msgid "Automatic indicates that the format in the composer is used to send to this user. Plain text indicates that the message will always be converted to plain text on send."
 msgstr "Indica automaticamente o formato no compositor a ser usado para enviar para este usuário. Texto sem formatação indica que a mensagem será sempre convertida em texto sem formatação no envio."
 
-#: src/app/components/ContactToolbar.js:44
+#: src/app/components/ContactToolbar.js:41
 msgctxt "Tooltip"
 msgid "Delete"
 msgstr "Excluir"
@@ -2568,8 +2574,8 @@ msgstr "Esta chave está atribuída para ${ emails }"
 
 #: src/app/components/ContactKeysTable.js:206
 msgctxt "Key badge"
-msgid "Active"
-msgstr "Ativo"
+msgid "Primary"
+msgstr "Primária"
 
 #: src/app/components/ContactKeysTable.js:208
 msgctxt "Key badge"

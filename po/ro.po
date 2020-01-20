@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
-"PO-Revision-Date: 2020-01-06 12:20\n"
+"PO-Revision-Date: 2020-01-18 11:20\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -171,6 +171,7 @@ msgid "Contact could not be saved"
 msgstr "Contactul nu a putut fi salvat"
 
 #: src/app/components/ContactPgpSettings.js:35
+#: src/app/components/ContactPgpSettings.js:49
 msgctxt "Error"
 msgid "Invalid public key file"
 msgstr "Cheie publică nevalidă."
@@ -632,7 +633,7 @@ msgctxt "Placeholder"
 msgid "Browser version"
 msgstr "Versiune navigator"
 
-#: node_modules/react-components/containers/payments/PaymentSelector.js:30
+#: node_modules/react-components/containers/payments/PaymentSelector.js:47
 msgctxt "Placeholder"
 msgid "Other"
 msgstr "Altele"
@@ -1177,32 +1178,37 @@ msgctxt "Info"
 msgid "Create a new contact group"
 msgstr "Creare grup de contacte"
 
-#: src/app/components/ContactPgpSettings.js:71
+#: src/app/components/ContactPgpSettings.js:63
+msgctxt "Info"
+msgid "Duplicate key updated"
+msgstr "Cheie duplicat actualizată"
+
+#: src/app/components/ContactPgpSettings.js:82
 msgctxt "Info"
 msgid "Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service."
 msgstr "Setând criptarea PGP veți putea cripta mesajele în ambele părți cu un utilizator fără cont la ProtonMail care folosește un serviciu PGP compatibil."
 
-#: src/app/components/ContactPgpSettings.js:76
+#: src/app/components/ContactPgpSettings.js:87
 msgctxt "Info"
 msgid "Address Verification with Trusted Keys is enabled for this address. To be able to send to this address, first trust public keys that can be used for sending."
 msgstr "Verificarea adresei cu chei de încredere este activată pentru această adresă. Pentru a putea trimite la această adresă, aprobați cheile publice care pot fi folosite pentru trimitere."
 
-#: src/app/components/ContactPgpSettings.js:80
+#: src/app/components/ContactPgpSettings.js:91
 msgctxt "Info"
 msgid "This address is disabled. To be able to send to this address, the owner must first enable the address."
 msgstr "Această adresă este dezactivată. Pentru a putea trimite la această adresă, proprietarul trebuie s-o activeze mai întâi."
 
-#: src/app/components/ContactPgpSettings.js:84
+#: src/app/components/ContactPgpSettings.js:95
 msgctxt "Info"
 msgid "To use Address Verification, you must trust one or more available public keys, including the one you want to use for sending. This prevents the encrypted keys from being faked."
 msgstr "Pentru a utiliza verificarea adresei, trebuie să aprobați una sau mai multe chei publice disponibile, inclusiv pe cea care o veți folosi pentru trimiteri. Aceasta va împiedica falsificarea cheilor de criptare."
 
-#: src/app/components/ContactPgpSettings.js:88
+#: src/app/components/ContactPgpSettings.js:99
 msgctxt "Info"
 msgid "Only change these settings if you are using PGP with non-ProtonMail recipients."
 msgstr "Schimbați aceste setări doar dacă utilizați PGP cu destinatari non-ProtonMail."
 
-#: src/app/components/ContactPgpSettings.js:92
+#: src/app/components/ContactPgpSettings.js:103
 msgctxt "Info"
 msgid "All uploaded keys are expired or revoked! Encryption is automatically disabled."
 msgstr "Toate cheile încărcate sunt expirate sau revocate! Criptarea a fost dezactivată automat."
@@ -1522,22 +1528,22 @@ msgctxt "Label"
 msgid "Add to group"
 msgstr "Adăugare la grup"
 
-#: src/app/components/ContactPgpSettings.js:98
+#: src/app/components/ContactPgpSettings.js:109
 msgctxt "Label"
 msgid "Encrypt emails"
 msgstr "Criptare mesaje"
 
-#: src/app/components/ContactPgpSettings.js:124
+#: src/app/components/ContactPgpSettings.js:135
 msgctxt "Label"
 msgid "Sign emails"
 msgstr "Semnare mesaje"
 
-#: src/app/components/ContactPgpSettings.js:149
+#: src/app/components/ContactPgpSettings.js:160
 msgctxt "Label"
 msgid "Public keys"
 msgstr "Chei publice"
 
-#: src/app/components/ContactPgpSettings.js:164
+#: src/app/components/ContactPgpSettings.js:175
 msgctxt "Label"
 msgid "Cryptographic scheme"
 msgstr "Schema criptografică"
@@ -2412,22 +2418,22 @@ msgctxt "Tooltip"
 msgid "Encrypted data with verified digital signature"
 msgstr "Date criptate cu semnătură digitală verificată"
 
-#: src/app/components/ContactPgpSettings.js:101
+#: src/app/components/ContactPgpSettings.js:112
 msgctxt "Tooltip"
 msgid "Email encryption forces email signature to help authenticate your sent messages"
 msgstr "Criptarea mesajelor forțează semnătura mesajului să ajute la autentificarea mesajelor trimise"
 
-#: src/app/components/ContactPgpSettings.js:127
+#: src/app/components/ContactPgpSettings.js:138
 msgctxt "Tooltip"
 msgid "Digitally signing emails helps authenticating that messages are sent by you"
 msgstr "Semnarea digitală a mesajelor ajută la confirmarea că mesajele sunt trimise de către dvs."
 
-#: src/app/components/ContactPgpSettings.js:152
+#: src/app/components/ContactPgpSettings.js:163
 msgctxt "Tooltip"
 msgid "Upload a public key to enable sending end-to-end encrypted emails to this email"
 msgstr "Încărcați o cheie publică pentru a activa trimiterea mesajelor criptate la ambele capete la această adresă"
 
-#: src/app/components/ContactPgpSettings.js:167
+#: src/app/components/ContactPgpSettings.js:178
 msgctxt "Tooltip"
 msgid "Select the PGP scheme to be used when signing or encrypting to a user. Note that PGP/Inline forces plain text messages"
 msgstr "Selectați schema PGP ce va fi folosită la semnare sau criptare de către un utilizator. Rețineți că PGP integrat forțează folosirea mesajelor simple."
@@ -2438,7 +2444,7 @@ msgctxt "Tooltip"
 msgid "Automatic indicates that the format in the composer is used to send to this user. Plain text indicates that the message will always be converted to plain text on send."
 msgstr "«Automat» înseamnă că mesajul trimis acestui contact va fi trimis în formatul din modul de compunere. «Text simplu» înseamnă că mesajul trimis va fi întotdeauna convertit în text simplu fără formatări."
 
-#: src/app/components/ContactToolbar.js:44
+#: src/app/components/ContactToolbar.js:41
 msgctxt "Tooltip"
 msgid "Delete"
 msgstr "Ștergere"
@@ -2576,8 +2582,8 @@ msgstr "Cheia este asociată cu ${ emails }"
 
 #: src/app/components/ContactKeysTable.js:206
 msgctxt "Key badge"
-msgid "Active"
-msgstr "Activă"
+msgid "Primary"
+msgstr "Primară"
 
 #: src/app/components/ContactKeysTable.js:208
 msgctxt "Key badge"
