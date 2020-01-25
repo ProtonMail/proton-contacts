@@ -34,7 +34,12 @@ const ContactFieldProperty = ({ field, value, uid, onChange, ...rest }) => {
     if (field === 'bday' || field === 'anniversary') {
         const date = value === '' ? new Date() : parseISO(value);
         if (isValid(date)) {
-            const handleSelectDate = (date) => onChange({ value: date.toISOString(), uid });
+            const handleSelectDate = (newDate) => {
+                if (!isValid(newDate)) {
+                    return;
+                }
+                onChange({ value: newDate.toISOString(), uid });
+            };
             return <DateInput placeholder={labels[field]} value={date} onChange={handleSelectDate} {...rest} />;
         }
     }
