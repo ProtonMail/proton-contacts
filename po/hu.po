@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
-"PO-Revision-Date: 2020-01-19 20:21\n"
+"PO-Revision-Date: 2020-01-26 19:20\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -28,194 +28,192 @@ msgstr ""
 #: node_modules/proton-shared/lib/keys/keys.js:102
 msgctxt "Error"
 msgid "Signature verification failed"
-msgstr ""
+msgstr "Az aláírás ellenőrzése sikertelen volt"
 
 #: node_modules/proton-shared/lib/keys/keys.js:122
 msgctxt "Error"
 msgid "Incorrect decryption password"
-msgstr ""
+msgstr "Helytelen visszafejtési jelszó"
 
 #: node_modules/react-components/containers/api/ApiProvider.js:47
 msgctxt "Error"
 msgid "Could not connect to server."
-msgstr ""
+msgstr "Nem sikerült a szerverhez csatlakozni."
 
 #: node_modules/react-components/containers/api/ApiProvider.js:48
 msgctxt "Error"
 msgid "No internet connection found"
-msgstr ""
+msgstr "Nem található internet kapcsolat"
 
 #: node_modules/react-components/containers/api/ApiProvider.js:56
 msgctxt "Error"
 msgid "Request timed out."
-msgstr ""
+msgstr "A kérés túllépte az időkorlátot."
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:32
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:128
 msgctxt "Error"
 msgid "Process aborted"
-msgstr ""
+msgstr "A folyamat megszakítva"
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:36
 msgctxt "Error"
 msgid "Payment process cancelled"
-msgstr ""
+msgstr "A fizetés folyamata megszakadt"
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:42
 msgctxt "Error"
 msgid "Payment process failed"
-msgstr ""
+msgstr "Fizetés sikertelen"
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:46
 msgctxt "Error"
 msgid "Payment process consumed"
-msgstr ""
+msgstr "Fizetési folyamat befejezve"
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:50
 msgctxt "Error"
 msgid "Payment process not supported"
-msgstr ""
+msgstr "Fizetési folyamat nem támogatott"
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:62
 msgctxt "Error"
 msgid "Unknown payment token status"
-msgstr ""
+msgstr "Fizetési token státusza ismeretlen"
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:95
 msgctxt "Error"
 msgid "Tab closed"
-msgstr ""
+msgstr "Fül bezárva"
 
 #: node_modules/react-components/containers/payments/PayPal.js:85
 msgctxt "Error"
 msgid "Amount below minimum."
-msgstr ""
+msgstr "Túl alacsony összeg."
 
 #: node_modules/react-components/containers/payments/PayPal.js:91
 msgctxt "Error"
 msgid "Amount above the maximum."
-msgstr ""
+msgstr "Túl magas összeg."
 
 #: node_modules/react-components/containers/payments/Bitcoin.js:51
 msgctxt "Error"
 msgid "Error connecting to the Bitcoin API."
-msgstr ""
+msgstr "Hiba a Bitcoin API-ra csatlakozás közben."
 
 #: node_modules/react-components/containers/payments/Payment.js:50
 #, javascript-format
 msgctxt "Error"
 msgid "The minimum amount that can be donated is ${ price }"
-msgstr ""
+msgstr "A legkisebb küldhető adomány: ${ price }"
 
 #: node_modules/react-components/containers/payments/Payment.js:59
 #, javascript-format
 msgctxt "Error"
 msgid "The minimum amount of credit that can be added is ${ _price }"
-msgstr ""
+msgstr "Legalább ${ _price } kredit feltöltése szükséges"
 
 #: node_modules/react-components/containers/payments/Payment.js:68
 #, javascript-format
 msgctxt "Error"
 msgid "The minimum payment we accept is ${ _price2 }"
-msgstr ""
+msgstr "Legalacsonyabb elfogadható összeg: ${ _price2 }"
 
 #: node_modules/react-components/containers/payments/cardValidator.js:16
 msgctxt "Error"
 msgid "Name on card required"
-msgstr ""
+msgstr "Kártyára írt név megadása kötelező"
 
 #: node_modules/react-components/containers/payments/cardValidator.js:22
 msgctxt "Error"
 msgid "Invalid expiration date"
-msgstr ""
+msgstr "Érvénytelen lejárati dátum"
 
 #: node_modules/react-components/containers/payments/cardValidator.js:27
 msgctxt "Error"
 msgid "Invalid card number"
-msgstr ""
+msgstr "Érvénytelen kártyaszám"
 
 #: node_modules/react-components/containers/payments/cardValidator.js:36
 #, javascript-format
 msgctxt "Error"
 msgid "Invalid ${ name } code"
-msgstr ""
+msgstr "Érvénytelen ${ name } kód"
 
 #: node_modules/react-components/containers/payments/cardValidator.js:43
 msgctxt "Error"
 msgid "Invalid postal code"
-msgstr ""
+msgstr "Érvénytelen irányítószám"
 
 #: node_modules/react-components/components/alert/DoNotWindowOpenAlertError.js:7
 msgctxt "Error"
 msgid "The browser you are using does not allow the payment to be fully authorized. Please use a different browser or log in via a computer."
-msgstr ""
+msgstr "Az Ön által használt böngésző nem támogatja a kívánt fizetési módot. Kérjük, használjon másik böngészőt, vagy jelentkezzen be egy számítógépről."
 
 #: node_modules/react-components/components/input/Input.js:32
 msgctxt "Error"
 msgid "This field is required"
-msgstr ""
+msgstr "A mező kitöltése kötelező"
 
 #: node_modules/react-components/components/input/EmailInput.js:9
 msgctxt "Error"
 msgid "Email address invalid"
-msgstr ""
+msgstr "Érvénytelen e-mail cím"
 
 #: src/app/components/ContactImageModal.js:36
 msgctxt "Error"
 msgid "Image upload failed"
-msgstr ""
+msgstr "Képfeltöltés sikertelen"
 
 #: src/app/components/ContactModal.js:86
 msgctxt "Error"
 msgid "Contact could not be saved"
-msgstr ""
+msgstr "A névjegy mentése nem sikerült"
 
 #: src/app/components/ContactPgpSettings.js:35
 #: src/app/components/ContactPgpSettings.js:49
 msgctxt "Error"
 msgid "Invalid public key file"
-msgstr ""
+msgstr "Érvénytelen nyilvános kulcs fájl"
 
 #: src/app/components/delete/DeleteModal.js:30
 msgctxt "Error"
 msgid "Some contacts could not be deleted"
-msgstr ""
+msgstr "Néhány névjegy törlése nem sikerült"
 
 #: node_modules/proton-shared/lib/themes/themes.js:13
 msgctxt "Theme"
 msgid "Default theme"
-msgstr ""
+msgstr "Alap téma"
 
 #: node_modules/proton-shared/lib/themes/themes.js:23
 msgctxt "Theme"
 msgid "Custom theme"
-msgstr ""
+msgstr "Egyéni téma"
 
 #: node_modules/proton-shared/lib/themes/themes.js:33
 msgctxt "Theme"
 msgid "Light"
-msgstr ""
+msgstr "Világos"
 
 #: node_modules/proton-shared/lib/themes/themes.js:42
 msgctxt "Theme"
 msgid "Blue"
-msgstr ""
+msgstr "Kék"
 
 #: node_modules/proton-shared/lib/themes/themes.js:51
 msgctxt "Theme"
 msgid "Dark theme"
-msgstr ""
+msgstr "Sötét téma"
 
 #: node_modules/react-components/containers/search/SearchDropdown.js:60
-#: node_modules/react-components/containers/search/Searchbox.js:48
+#: node_modules/react-components/containers/search/Searchbox.js:43
 msgctxt "Action"
 msgid "Search"
 msgstr "Keresés"
 
-#.  Clear button is hidden when using advanced mode because the buttons use the same spots
-#.  If there is the need of having both, a positioning solution will have to be found
 #: node_modules/react-components/containers/search/SearchDropdown.js:59
-#: node_modules/react-components/containers/search/Searchbox.js:55
+#: node_modules/react-components/containers/search/Searchbox.js:48
 #: node_modules/react-components/containers/support/AttachScreenshot.js:46
 #: src/app/components/ContactModalRow.js:30
 msgctxt "Action"
@@ -457,7 +455,7 @@ msgstr "Csoport szerkesztése"
 #: src/app/components/ContactsList.js:146
 msgctxt "Action"
 msgid "Clear it"
-msgstr ""
+msgstr "Törlés"
 
 #: src/app/components/ContactImageSummary.js:89
 msgctxt "Action"
@@ -478,7 +476,7 @@ msgstr "Letöltés"
 #: src/app/components/ContactKeysTable.js:132
 msgctxt "Action"
 msgid "Use for sending"
-msgstr ""
+msgstr "Küldéshez használható"
 
 #: src/app/components/ContactKeysTable.js:153
 msgctxt "Action"
@@ -575,17 +573,17 @@ msgstr "Új névjegy"
 #: src/app/content/PrivateHeader.js:40
 msgctxt "Placeholder"
 msgid "Search"
-msgstr ""
+msgstr "Keresés"
 
 #: node_modules/react-components/containers/login/PasswordForm.js:22
 msgctxt "Placeholder"
 msgid "Username or email"
-msgstr ""
+msgstr "Felhasználónév vagy e-mail cím"
 
 #: node_modules/react-components/containers/login/PasswordForm.js:37
 msgctxt "Placeholder"
 msgid "Password"
-msgstr ""
+msgstr "Jelszó"
 
 #: node_modules/react-components/containers/login/TOTPForm.js:20
 msgctxt "Placeholder"
@@ -595,97 +593,97 @@ msgstr "Kétlépéses kód"
 #: node_modules/react-components/containers/login/UnlockForm.js:20
 msgctxt "Placeholder"
 msgid "Mailbox password"
-msgstr ""
+msgstr "E-mail titkosítási jelszó"
 
 #: node_modules/react-components/containers/support/BugModal.js:150
 msgctxt "Placeholder"
 msgid "Proton username"
-msgstr ""
+msgstr "Proton felhasználónév"
 
 #: node_modules/react-components/containers/support/BugModal.js:162
 msgctxt "Placeholder"
 msgid "A way to contact you"
-msgstr ""
+msgstr "Kapcsolatfelvételi lehetőség"
 
 #: node_modules/react-components/containers/support/BugModal.js:186
 msgctxt "Placeholder"
 msgid "Please describe the problem and include any error messages"
-msgstr ""
+msgstr "Írja körül a problémát és a kapott hibaüzeneteket"
 
 #: node_modules/react-components/containers/support/BugModal.js:215
 msgctxt "Placeholder"
 msgid "OS name"
-msgstr ""
+msgstr "Operációs rendszer neve"
 
 #: node_modules/react-components/containers/support/BugModal.js:226
 msgctxt "Placeholder"
 msgid "OS version"
-msgstr ""
+msgstr "Operációs rendszer verziója"
 
 #: node_modules/react-components/containers/support/BugModal.js:237
 msgctxt "Placeholder"
 msgid "Browser name"
-msgstr ""
+msgstr "Böngésző neve"
 
 #: node_modules/react-components/containers/support/BugModal.js:248
 msgctxt "Placeholder"
 msgid "Browser version"
-msgstr ""
+msgstr "Böngésző verziója"
 
 #: node_modules/react-components/containers/payments/PaymentSelector.js:47
 msgctxt "Placeholder"
 msgid "Other"
-msgstr ""
+msgstr "Egyéb"
 
 #: node_modules/react-components/containers/payments/CardNumberInput.js:48
 msgctxt "Placeholder"
 msgid "Card number"
-msgstr ""
+msgstr "Kártyaszám"
 
 #: node_modules/react-components/containers/payments/Card.js:22
 msgctxt "Placeholder"
 msgid "Full name"
-msgstr ""
+msgstr "Teljes név"
 
 #: node_modules/react-components/containers/payments/Card.js:79
 msgctxt "Placeholder"
 msgid "ZIP"
-msgstr ""
+msgstr "Irányítószám"
 
 #: node_modules/react-components/containers/payments/Card.js:79
 msgctxt "Placeholder"
 msgid "Postal code"
-msgstr ""
+msgstr "Irányítószám"
 
 #: src/app/components/ContactImageModal.js:53
 msgctxt "Placeholder"
 msgid "Image URL"
-msgstr ""
+msgstr "Kép URL"
 
 #: src/app/components/ContactGroupDropdown.js:186
 msgctxt "Placeholder"
 msgid "Filter groups"
-msgstr ""
+msgstr "Csoportok szűrése"
 
 #: src/app/content/PrivateHeader.js:62
 msgctxt "Placeholder"
 msgid "Search contacts"
-msgstr ""
+msgstr "Névjegyek keresése"
 
 #: node_modules/react-components/containers/error/GenericError.js:13
 msgctxt "Error message"
 msgid "Aaah! Something went wrong"
-msgstr ""
+msgstr "Valami nem stimmel"
 
 #: node_modules/react-components/containers/error/GenericError.js:16
 msgctxt "Error message"
 msgid "Brace yourself till we get the error fixed."
-msgstr ""
+msgstr "Kérjük várjon, amíg a hibát elhárítjuk."
 
 #: node_modules/react-components/containers/error/GenericError.js:17
 msgctxt "Error message"
 msgid "You may also refresh the page or try again later."
-msgstr ""
+msgstr "Megpróbálhatja frissíteni az oldalt vagy később újra próbálni."
 
 #: node_modules/react-components/containers/sidebar/StorageSpaceStatus.js:77
 msgctxt "Title"
@@ -720,7 +718,7 @@ msgstr "Irányítószám"
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:44
 msgctxt "Title"
 msgid "Unsupported browser"
-msgstr ""
+msgstr "Nem támogatott böngésző"
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:45
 msgctxt "Title"
@@ -779,7 +777,7 @@ msgstr "Névjegyek"
 #: src/app/containers/ContactsContainer.js:252
 msgctxt "Title"
 msgid "Search"
-msgstr ""
+msgstr "Keresés"
 
 #: src/app/containers/SettingsContainer.js:35
 msgctxt "Title"
@@ -972,181 +970,181 @@ msgstr "Általános"
 #, javascript-format
 msgctxt "Info"
 msgid "${ usedSpaceFormatted } of ${ maxSpaceFormatted } used"
-msgstr ""
+msgstr "${ usedSpaceFormatted } felhasználva (Maximum: { maxSpaceFormatted })"
 
 #: node_modules/react-components/containers/sidebar/StorageSpaceStatus.js:81
 msgctxt "Info"
 msgid "Your storage space is shared across all Proton products."
-msgstr ""
+msgstr "A tárhelyen az összes Proton termék osztozik."
 
 #: node_modules/react-components/containers/api/HumanVerificationModal.js:19
 msgctxt "Info"
 msgid "For security reasons, please verify that you are not a robot."
-msgstr ""
+msgstr "Biztonsági okokból, kérjük, igazolja, hogy nem egy robot."
 
 #: node_modules/react-components/containers/app/LoaderPage.js:15
 #, javascript-format
 msgctxt "Info"
 msgid "Loading ${ appName }"
-msgstr ""
+msgstr "${ appName } betöltése"
 
 #: node_modules/react-components/containers/login/AbuseModal.js:10
 msgctxt "Info"
 msgid "abuse or fraud"
-msgstr ""
+msgstr "visszaélés vagy csalás"
 
 #: node_modules/react-components/containers/login/AbuseModal.js:16
 msgctxt "Info"
 msgid "here"
-msgstr ""
+msgstr "itt"
 
 #: node_modules/react-components/containers/login/AbuseModal.js:23
 #, javascript-format
 msgctxt "Info"
 msgid "Account disabled due to ${ abuseOrFraudLink }."
-msgstr ""
+msgstr "A fiók letiltva ${ abuseOrFraudLink } miatt."
 
 #: node_modules/react-components/containers/login/AbuseModal.js:24
 #, javascript-format
 msgctxt "Info"
 msgid "You can find more information and contact us ${ contactLink }."
-msgstr ""
+msgstr "További információkért lépjen kapcsolatba velünk ${ contactLink }."
 
 #: node_modules/react-components/containers/support/AttachScreenshot.js:45
 msgctxt "Info"
 msgid "Screenshot(s) attached"
-msgstr ""
+msgstr "Képernyőkép(ek) csatolva"
 
 #: node_modules/react-components/containers/support/BugModal.js:139
 #, javascript-format
 msgctxt "Info"
 msgid "Refreshing the page or ${ link } will automatically resolve most issues."
-msgstr ""
+msgstr "Az oldal frissítése vagy ${ link } automatikusan megoldja a legtöbb problémát."
 
 #: node_modules/react-components/containers/support/BugModal.js:254
 #, javascript-format
 msgctxt "Info"
 msgid "Contact us at ${ criticalEmail } for critical security issues."
-msgstr ""
+msgstr "Kritikus biztonsági hibák esetén keressen minket a ${ criticalEmail } címen."
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:112
 msgctxt "Info"
 msgid "Your bank requires 3-D Secure verification for security purposes."
-msgstr ""
+msgstr "Biztonsági okokból a bankja megköveteli a 3-D Secure biztonsági ellenőrzést."
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:119
 msgctxt "Info"
 msgid "Verification will open a new tab, please disable any popup blockers. You will not be charged. Any amount used to verify the card will be refunded immediately."
-msgstr ""
+msgstr "Az ellenőrzés meg fog nyitni egy új böngészőfület. Kérjük engedélyezze a felugró ablakokat. Nem fog fizetés történni. A kártya ellenőrzéséhez felhasznált összeg azonnal visszatérítésre kerül."
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:121
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:130
 msgctxt "Info"
 msgid "Verification will open a new tab, please disable any popup blockers."
-msgstr ""
+msgstr "Az ellenőrzés meg fog nyitni egy új böngészőfület. Kérjük engedélyezze a felugró ablakokat."
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:127
 msgctxt "Info"
 msgid "You will be soon redirected to your bank to verify your payment."
-msgstr ""
+msgstr "A kifizetés ellenőrzéséhez átirányítjuk a bankjához."
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:138
 msgctxt "Info"
 msgid "Please verify the card in the new tab which was opened."
-msgstr ""
+msgstr "Kérjük ellenőrizze a bankkártyát az újonnan megnyílt böngészőfülön."
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:139
 msgctxt "Info"
 msgid "Please verify payment at the new tab which was opened."
-msgstr ""
+msgstr "Kérjük ellenőrizze a kifizetést az újonnan megnyílt böngészőfülön."
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:147
 msgctxt "Info"
 msgid "Verification can take a few minutes."
-msgstr ""
+msgstr "Az ellenőrzés néhány percet is igénybe vehet."
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:148
 msgctxt "Info"
 msgid "Payment can take a few minutes to fully verify."
-msgstr ""
+msgstr "A kifizetés ellenőrzése néhány percet is igénybe vehet."
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:160
 msgctxt "Info"
 msgid "Please try again, use a different payment method, or call your bank for assistance."
-msgstr ""
+msgstr "Kérjük, próbálja újra, válasszon más fizetési módot vagy kérjen segítséget a bankjától."
 
 #: node_modules/react-components/containers/payments/PayPal.js:135
 msgctxt "Info"
 msgid "Please verify the payment in the new tab."
-msgstr ""
+msgstr "Kérjük ellenőrizze a kifizetést az új ablakban."
 
 #: node_modules/react-components/containers/payments/PayPal.js:145
 #: node_modules/react-components/containers/payments/PayPal.js:175
 msgctxt "Info"
 msgid "We will redirect you to PayPal in a new browser tab to complete this transaction. If you use any pop-up blockers, please disable them to continue."
-msgstr ""
+msgstr "A tranzakció befejezéséhez átirányításra kerül a PayPalhoz egy új böngészőfülön. A folytatáshoz engedélyezze a felugró ablakokat."
 
 #: node_modules/react-components/containers/payments/PayPal.js:153
 #, javascript-format
 msgctxt "Info"
 msgid "You must have a credit card or bank account linked with your PayPal account. If your PayPal account doesn't have that, please ${ clickHere }."
-msgstr ""
+msgstr "PayPal számlájához hozzá kell rendelnie egy bankkártyát vagy egy bankszámlát. Ha ezek egyike sincs, akkor kérjük ${ clickHere }."
 
 #: node_modules/react-components/containers/payments/PayPal.js:160
 msgctxt "Info"
 msgid "This will enable PayPal to be used to pay for your Proton subscription. We will redirect you to PayPal in a new browser tab. If you use any pop-up blockers, please disable them to continue."
-msgstr ""
+msgstr "Ez lehetővé teszi, hogy a Proton előfizetését PayPallal fizesse. A tranzakció befejezéséhez átirányításra kerül a PayPalhoz egy új böngészőfülön. A folytatáshoz engedélyezze a felugró ablakokat."
 
 #: node_modules/react-components/containers/payments/PayPal.js:168
 msgctxt "Info"
 msgid "You must have a credit card or bank account linked with your PayPal account in order to add it as a payment method."
-msgstr ""
+msgstr "Ahhoz, hogy felvehesse fizetési módként, a PayPal számlájához hozzá kell rendelnie egy bankkártyát vagy egy bankszámlát."
 
 #: node_modules/react-components/containers/payments/Bitcoin.js:40
 #, javascript-format
 msgctxt "Info"
 msgid "Amount below minimum. (${ amount })"
-msgstr ""
+msgstr "Az összeg a minimum alatt. (${ amount })"
 
 #: node_modules/react-components/containers/payments/Bitcoin.js:64
 msgctxt "Info"
 msgid "Bitcoin transactions can take some time to be confirmed (up to 24 hours). Once confirmed, we will add credits to your account. After transaction confirmation, you can pay your invoice with the credits."
-msgstr ""
+msgstr "A Bitcoin tranzakciók visszaigazolása időbe telhet (akár 24 órába). Amint a visszaigazolás megtörténik, jóváírjuk a fiókján. A tranzakció megerősítését követően fizetheti a számláit a jóváírt összeggel."
 
 #: node_modules/react-components/containers/payments/Bitcoin.js:73
 msgctxt "Info"
 msgid "After making your Bitcoin payment, please follow the instructions below to upgrade."
-msgstr ""
+msgstr "A Bitcoin fizetés után, kövesse a lenti utasításokat a nagyobb csomagra váltáshoz."
 
 #: node_modules/react-components/containers/payments/DonateModal.js:46
 msgctxt "Info"
 msgid "Your payment details are protected with TLS encryption and Swiss privacy laws."
-msgstr ""
+msgstr "Fizetés adatait TLS titkosítással védjük. Svájci adatvédelmi törvények vonatkoznak rá."
 
 #: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:43
 msgctxt "Info"
 msgid "Expired"
-msgstr ""
+msgstr "Lejárt"
 
 #: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:44
 msgctxt "Info"
 msgid "default"
-msgstr ""
+msgstr "alapértelmezett"
 
 #: node_modules/react-components/components/miniCalendar/WeekNumbers.js:36
 msgctxt "Info"
 msgid "Week"
-msgstr ""
+msgstr "Hét"
 
 #: src/app/components/import/ImportCsvModalContent.js:88
 msgctxt "Info"
 msgid "No contacts to be imported"
-msgstr ""
+msgstr "Egyetlen névjegy sem kerül importálásra"
 
 #: src/app/components/UpsellFree.js:15
 msgctxt "Info"
 msgid "Unlock access to encrypted contact details such as phone numbers and addresses with ProtonMail Plus."
-msgstr ""
+msgstr "A ProtonMail Plus csomagban titkosított névjegy adatokat is tárolhat, például telefonszámokat, címeket."
 
 #: src/app/components/ContactModal.js:128
 msgctxt "Info"
@@ -1161,24 +1159,24 @@ msgstr "Még nincsenek névjegyek"
 #: src/app/components/SelectEmailsModal.js:48
 msgctxt "Info"
 msgid "Please select which email address or addresses to add to this group."
-msgstr ""
+msgstr "Válasszon ki e-mail címet vagy címeket a csoporthoz adáshoz."
 
 #: src/app/components/ContactGroupDropdown.js:134
 msgctxt "Info"
 msgid "Contact group apply"
 msgid_plural "Contact groups apply"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Névjegy csoport alkalmazva"
+msgstr[1] "Névjegy csoportok alkalmazva"
 
 #: src/app/components/ContactGroupDropdown.js:175
 msgctxt "Info"
 msgid "Create a new contact group"
-msgstr ""
+msgstr "Új névjegy csoport"
 
 #: src/app/components/ContactPgpSettings.js:63
 msgctxt "Info"
 msgid "Duplicate key updated"
-msgstr ""
+msgstr "Duplikált kulcs frissítve"
 
 #: src/app/components/ContactPgpSettings.js:82
 msgctxt "Info"
@@ -1198,23 +1196,23 @@ msgstr "Ez a cím tiltva van. A tulajdonos engedélyére van szüksége ahhoz, h
 #: src/app/components/ContactPgpSettings.js:95
 msgctxt "Info"
 msgid "To use Address Verification, you must trust one or more available public keys, including the one you want to use for sending. This prevents the encrypted keys from being faked."
-msgstr ""
+msgstr "A cím hitelesítés használatához egy vagy több nyilvános kulcsot megbízhatóként megjelölnie, beleértve azt is amelyiket a küldéshez szeretné használni. Ez megakadályozza hamisított titkosítási kulcsok használatát."
 
 #: src/app/components/ContactPgpSettings.js:99
 msgctxt "Info"
 msgid "Only change these settings if you are using PGP with non-ProtonMail recipients."
-msgstr ""
+msgstr "Csak akkor változtassa meg ezeket a beállításokat, ha PGP-t használ a nem ProtonMail címzettekhez."
 
 #: src/app/components/ContactPgpSettings.js:103
 msgctxt "Info"
 msgid "All uploaded keys are expired or revoked! Encryption is automatically disabled."
-msgstr ""
+msgstr "Minden feltöltött kulcs lejárt vagy vissza van vonva. A titkosítás automatikusan kikapcsolt."
 
 #.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
 #: src/app/components/ContactEmailSettingsModal.js:236
 msgctxt "Info"
 msgid "Select the email format you want to be used by default when sending an email to this email address."
-msgstr ""
+msgstr "Válassza ki az e-mail alapértelmezett formátumát, erre a címre való küldéshez."
 
 #.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
 #: src/app/components/ContactEmailSettingsModal.js:241
@@ -1231,111 +1229,111 @@ msgstr "A PGP/MIME automatikusan, a szerkesztő mód aktuális beállításainak
 #: src/app/components/MergeRow.js:7
 msgctxt "Info"
 msgid "Two or more contacts appear to be identical."
-msgstr ""
+msgstr "Két vagy több névjegy azonosnak tűnik."
 
 #: src/app/components/MergeRow.js:15
 #, javascript-format
 msgctxt "Info"
 msgid "${ boldText } Do you want to merge these contacts now?"
-msgstr ""
+msgstr "${ boldText } Kívánja ezeket a névjegyeket most egyesíteni?"
 
 #: src/app/components/ContactPlaceholder.js:26
 #: src/app/components/ContactPlaceholder.js:76
 msgctxt "Info"
 msgid "Add contacts to your ProtonMail account by importing them from a CSV or vCard file."
-msgstr ""
+msgstr "CSV vagy vCard fájl feltöltésével is importálhat névjegyeket a ProtonMailbe."
 
 #: src/app/components/ContactPlaceholder.js:38
 #: src/app/components/ContactPlaceholder.js:88
 msgctxt "Info"
 msgid "Create a backup of your ProtonMail contacts by exporting them to a vCard file."
-msgstr ""
+msgstr "Biztonsági mentést készítéséhez vCard fájlba exportálhatja a névjegyeit."
 
 #: src/app/components/ContactPlaceholder.js:49
 msgctxt "Info"
 msgid "Use groups to send email to a list of addresses you regularly communicate with."
-msgstr ""
+msgstr "Egyszerre több címzettnek való küldéshez csoportokat készíthet."
 
 #: src/app/components/ContactPlaceholder.js:99
 msgctxt "Info"
 msgid "Upgrade to a paid plan to enable encrypted contact details and manage contact groups."
-msgstr ""
+msgstr "Váltson előfizetéses csomagra, hogy titkosított névjegyadatokat is tárolhasson és névjegy csoportokat készíthessen."
 
 #: src/app/components/ContactPlaceholder.js:140
 #: src/app/components/ContactPlaceholder.js:165
 msgctxt "Info"
 msgid "1 contact"
 msgid_plural "${ selectedContacts } contacts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 névjegy"
+msgstr[1] "${ selectedContacts } névjegy"
 
 #: src/app/components/ContactPlaceholder.js:147
 #, javascript-format
 msgctxt "Info"
 msgid "You selected ${ totalContactsText } from your address book."
-msgstr ""
+msgstr "A névjegyekből jelenleg ${ totalContactsText } van kiválasztva."
 
 #: src/app/components/ContactPlaceholder.js:165
 #, javascript-format
 msgctxt "Info"
 msgid "${ totalContactsInGroup } contacts"
-msgstr ""
+msgstr "${ totalContactsInGroup } névjegy"
 
 #: src/app/components/ContactPlaceholder.js:177
 msgctxt "Info"
 msgid "You have ${ _totalContactsText } in this group."
-msgstr ""
+msgstr "Ebben a csoportban jelenleg ${ _totalContactsText } van."
 
 #: src/app/components/ContactPlaceholder.js:196
 msgctxt "Info"
 msgid "one contact"
-msgstr ""
+msgstr "egy névjegy"
 
 #: src/app/components/ContactPlaceholder.js:198
 #, javascript-format
 msgctxt "Info"
 msgid "${ totalContacts } contacts"
-msgstr ""
+msgstr "${ totalContacts } névjegy"
 
 #: src/app/components/ContactPlaceholder.js:200
 msgctxt "Info"
 msgid "Settings > General > Contacts"
-msgstr ""
+msgstr "Beállítások > Általános > Névjegyek"
 
 #: src/app/components/ContactPlaceholder.js:206
 #, javascript-format
 msgctxt "Info"
 msgid "You have ${ boldTotalContacts } in your address book"
-msgstr ""
+msgstr "Jelenleg ${ boldTotalContacts } van"
 
 #: src/app/components/ContactPlaceholder.js:208
 #, javascript-format
 msgctxt "Info"
 msgid "You can decide whether or not contacts are automatically added to your address book by navigating to ${ navigateTo }"
-msgstr ""
+msgstr "Ennél a beállításnál adhatja meg, hogy a névjegyek automatikusan felvételre kerüljenek-e:"
 
 #: src/app/components/ContactGroupsTable.js:86
 msgctxt "Info"
 msgid "Are you sure you want to delete this contact group?"
-msgstr ""
+msgstr "Biztos, hogy törli ezt a névjegy csoportot?"
 
 #: src/app/components/ContactGroupsTable.js:87
 msgctxt "Info"
 msgid "Contacts in the group aren't deleted if the contact group is deleted."
-msgstr ""
+msgstr "A csoportban található névjegyek nem törlődnek a csoport törlésével."
 
 #: src/app/components/ContactGroupsTable.js:101
 #, javascript-format
 msgctxt "Info"
 msgid "${ countEmailAddresses } email address"
 msgid_plural "${ countEmailAddresses } email addresses"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "${ countEmailAddresses } e-mail cím"
+msgstr[1] "${ countEmailAddresses } e-mail cím"
 
 #: src/app/components/ContactGroupsSection.js:14
 msgctxt "Info"
 msgid "A group can contain multiple email addresses from the same contact. Please note that a sending limit may apply and prevent you from sending emails to excessively large groups."
-msgstr ""
+msgstr "A csoport egy-egy névjegyről több e-mail címet is tartalmazhat. Figyeljen arra, hogy a levélküldési korlátok megakadályozhatják a nagyobb csoportoknak való küldést."
 
 #: node_modules/react-components/containers/api/HumanVerificationModal.js:22
 msgctxt "Label"
@@ -1345,18 +1343,18 @@ msgstr "Captcha"
 #: node_modules/react-components/containers/login/UnlockModal.js:34
 msgctxt "Label"
 msgid "Cancel"
-msgstr ""
+msgstr "Mégsem"
 
 #: node_modules/react-components/containers/login/UnlockModal.js:35
 msgctxt "Label"
 msgid "Submit"
-msgstr ""
+msgstr "Küldés"
 
 #: node_modules/react-components/containers/login/PasswordForm.js:28
 #: node_modules/react-components/containers/login/UnlockModal.js:41
 msgctxt "Label"
 msgid "Password"
-msgstr ""
+msgstr "Jelszó"
 
 #: node_modules/react-components/containers/login/PasswordForm.js:10
 msgctxt "Label"
@@ -1371,52 +1369,52 @@ msgstr "Kétlépéses kód"
 #: node_modules/react-components/containers/login/UnlockForm.js:9
 msgctxt "Label"
 msgid "Mailbox password"
-msgstr ""
+msgstr "E-mail titkosítási jelszó"
 
 #: node_modules/react-components/containers/support/BugModal.js:144
 msgctxt "Label"
 msgid "Proton username"
-msgstr ""
+msgstr "Proton felhasználónév"
 
 #: node_modules/react-components/containers/support/BugModal.js:156
 msgctxt "Label"
 msgid "Email address"
-msgstr ""
+msgstr "E-mail cím"
 
 #: node_modules/react-components/containers/support/BugModal.js:168
 msgctxt "Label"
 msgid "Category"
-msgstr ""
+msgstr "Kategória"
 
 #: node_modules/react-components/containers/support/BugModal.js:180
 msgctxt "Label"
 msgid "What happened?"
-msgstr ""
+msgstr "Mi történt?"
 
 #: node_modules/react-components/containers/support/BugModal.js:201
 msgctxt "Label"
 msgid "System information"
-msgstr ""
+msgstr "Rendszerinformáció"
 
 #: node_modules/react-components/containers/support/BugModal.js:209
 msgctxt "Label"
 msgid "Operating system"
-msgstr ""
+msgstr "Operációs rendszer"
 
 #: node_modules/react-components/containers/support/BugModal.js:220
 msgctxt "Label"
 msgid "Operating system version"
-msgstr ""
+msgstr "Az operációs rendszer verziója"
 
 #: node_modules/react-components/containers/support/BugModal.js:231
 msgctxt "Label"
 msgid "Browser"
-msgstr ""
+msgstr "Böngésző"
 
 #: node_modules/react-components/containers/support/BugModal.js:242
 msgctxt "Label"
 msgid "Browser version"
-msgstr ""
+msgstr "Böngésző verziója"
 
 #: node_modules/react-components/containers/payments/BitcoinDetails.js:10
 msgctxt "Label"
@@ -1451,238 +1449,238 @@ msgstr "Készpénzes fizetés"
 #: node_modules/react-components/components/button/Copy.js:20
 msgctxt "Label"
 msgid "Copied"
-msgstr ""
+msgstr "Másolva"
 
 #: node_modules/react-components/components/button/Copy.js:20
 msgctxt "Label"
 msgid "Copy"
-msgstr ""
+msgstr "Másolás"
 
 #: node_modules/react-components/components/input/PasswordInput.js:21
 msgctxt "Label"
 msgid "Reveal password"
-msgstr ""
+msgstr "Jelszó felfedése"
 
 #: node_modules/react-components/components/input/PasswordInput.js:21
 msgctxt "Label"
 msgid "Hide password"
-msgstr ""
+msgstr "Jelszó elrejtése"
 
 #: src/app/components/ContactAdrField.js:29
 msgctxt "Label"
 msgid "Street address"
-msgstr ""
+msgstr "Utca, házszám"
 
 #: src/app/components/ContactAdrField.js:37
 msgctxt "Label"
 msgid "City"
-msgstr ""
+msgstr "Település"
 
 #: src/app/components/ContactAdrField.js:46
 msgctxt "Label"
 msgid "Region"
-msgstr ""
+msgstr "Régió"
 
 #: src/app/components/ContactAdrField.js:54
 msgctxt "Label"
 msgid "Postal code"
-msgstr ""
+msgstr "Irányítószám"
 
 #: src/app/components/ContactAdrField.js:62
 msgctxt "Label"
 msgid "Country"
-msgstr ""
+msgstr "Ország"
 
 #: src/app/components/ContactAdrField.js:71
 msgctxt "Label"
 msgid "Post office box"
-msgstr ""
+msgstr "Postafiók"
 
 #: src/app/components/ContactAdrField.js:81
 msgctxt "Label"
 msgid "Extended address"
-msgstr ""
+msgstr "Bővebb cím"
 
 #: src/app/components/ContactImageModal.js:47
 msgctxt "Label"
 msgid "Add image URL"
-msgstr ""
+msgstr "Kép URL megadása"
 
 #: src/app/components/ContactImageModal.js:58
 msgctxt "Label"
 msgid "Upload picture"
-msgstr ""
+msgstr "Kép feltöltése"
 
 #: src/app/components/ContactGroupModal.js:169
 msgctxt "Label"
 msgid "Add email address"
-msgstr ""
+msgstr "E-mail cím hozzáadása"
 
 #: src/app/components/ContactGroupDropdown.js:174
 msgctxt "Label"
 msgid "Add to group"
-msgstr ""
+msgstr "Hozzáadás a csoporthoz"
 
 #: src/app/components/ContactPgpSettings.js:109
 msgctxt "Label"
 msgid "Encrypt emails"
-msgstr ""
+msgstr "Üzenetek titkosítása"
 
 #: src/app/components/ContactPgpSettings.js:135
 msgctxt "Label"
 msgid "Sign emails"
-msgstr ""
+msgstr "Üzenetek aláírása"
 
 #: src/app/components/ContactPgpSettings.js:160
 msgctxt "Label"
 msgid "Public keys"
-msgstr ""
+msgstr "Nyilvános kulcsok"
 
 #: src/app/components/ContactPgpSettings.js:175
 msgctxt "Label"
 msgid "Cryptographic scheme"
-msgstr ""
+msgstr "Titkosítási séma"
 
 #.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
 #: src/app/components/ContactEmailSettingsModal.js:252
 msgctxt "Label"
 msgid "Email format"
-msgstr ""
+msgstr "E-mail formátum"
 
 #: src/app/components/ContactsSection.js:12
 msgctxt "Label"
 msgid "Automatically save contacts"
-msgstr ""
+msgstr "Névjegyek automatikus létrehozása"
 
 #: node_modules/react-components/containers/keys/shared/SelectKeyFiles.js:35
 msgctxt "Select files"
 msgid "Upload"
-msgstr ""
+msgstr "Feltöltés"
 
 #: node_modules/react-components/containers/support/AttachScreenshot.js:23
 msgctxt "Error notification in the bug report modal when the user upload file"
 msgid "No image selected"
-msgstr ""
+msgstr "Nincs kép kiválasztva"
 
 #: node_modules/react-components/containers/support/BugModal.js:38
 #: node_modules/react-components/containers/support/BugModal.js:52
 msgctxt "Bug category"
 msgid "Login problem"
-msgstr ""
+msgstr "Bejelentkezési probléma"
 
 #: node_modules/react-components/containers/support/BugModal.js:39
 msgctxt "Bug category"
 msgid "Sign up problem"
-msgstr ""
+msgstr "Probléma a regisztrációval"
 
 #: node_modules/react-components/containers/support/BugModal.js:40
 msgctxt "Bug category"
 msgid "Bridge problem"
-msgstr ""
+msgstr "A Birdge-zsel kapcsolatos probléma"
 
 #: node_modules/react-components/containers/support/BugModal.js:41
 msgctxt "Bug category"
 msgid "Import / export problem"
-msgstr ""
+msgstr "Importálási vagy exportálási probléma"
 
 #: node_modules/react-components/containers/support/BugModal.js:42
 msgctxt "Bug category"
 msgid "Custom domains problem"
-msgstr ""
+msgstr "Probléma saját domain névvel"
 
 #: node_modules/react-components/containers/support/BugModal.js:43
 #: node_modules/react-components/containers/support/BugModal.js:54
 msgctxt "Bug category"
 msgid "Payments problem"
-msgstr ""
+msgstr "Fizetéssel kapcsolatos probléma"
 
 #: node_modules/react-components/containers/support/BugModal.js:44
 #: node_modules/react-components/containers/support/BugModal.js:58
 msgctxt "Bug category"
 msgid "Connection problem"
-msgstr ""
+msgstr "Kapcsolódási probléma"
 
 #: node_modules/react-components/containers/support/BugModal.js:45
 msgctxt "Bug category"
 msgid "Slow speed problem"
-msgstr ""
+msgstr "Túl lassú működés"
 
 #: node_modules/react-components/containers/support/BugModal.js:46
 msgctxt "Bug category"
 msgid "VPN problem"
-msgstr ""
+msgstr "VPN probléma"
 
 #: node_modules/react-components/containers/support/BugModal.js:47
 #: node_modules/react-components/containers/support/BugModal.js:63
 msgctxt "Bug category"
 msgid "Feature request"
-msgstr ""
+msgstr "Ötlet, javaslat"
 
 #: node_modules/react-components/containers/support/BugModal.js:48
 msgctxt "Bug category"
 msgid "Other"
-msgstr ""
+msgstr "Egyéb"
 
 #: node_modules/react-components/containers/support/BugModal.js:53
 msgctxt "Bug category"
 msgid "Signup problem"
-msgstr ""
+msgstr "Probléma a regisztrációval"
 
 #: node_modules/react-components/containers/support/BugModal.js:55
 msgctxt "Bug category"
 msgid "Installation problem"
-msgstr ""
+msgstr "Telepítési probléma"
 
 #: node_modules/react-components/containers/support/BugModal.js:56
 msgctxt "Bug category"
 msgid "Update problem"
-msgstr ""
+msgstr "Frissítési probléma"
 
 #: node_modules/react-components/containers/support/BugModal.js:57
 msgctxt "Bug category"
 msgid "Application problem"
-msgstr ""
+msgstr "Probléma az alkalmazással"
 
 #: node_modules/react-components/containers/support/BugModal.js:59
 msgctxt "Bug category"
 msgid "Speed problem"
-msgstr ""
+msgstr "Probléma a sebességgel"
 
 #: node_modules/react-components/containers/support/BugModal.js:60
 msgctxt "Bug category"
 msgid "Manual setup problem"
-msgstr ""
+msgstr "Probléma a kézi beállítással"
 
 #: node_modules/react-components/containers/support/BugModal.js:61
 msgctxt "Bug category"
 msgid "Website access problem"
-msgstr ""
+msgstr "Probléma a weboldal elérésével"
 
 #: node_modules/react-components/containers/support/BugModal.js:62
 msgctxt "Bug category"
 msgid "Streaming problem"
-msgstr ""
+msgstr "Videó nézési probléma"
 
 #: node_modules/react-components/containers/support/BugModal.js:80
 msgctxt "Action to select a title for the bug report modal"
 msgid "Select"
-msgstr ""
+msgstr "Válasszon"
 
 #: node_modules/react-components/containers/support/BugModal.js:89
 msgctxt "Link"
 msgid "clearing your browser cache"
-msgstr ""
+msgstr "böngésző gyorsítótárának ürítése"
 
 #: node_modules/react-components/containers/payments/PayPal.js:125
 msgctxt "Link"
 msgid "click here"
-msgstr ""
+msgstr "kattintson ide"
 
 #: node_modules/react-components/containers/heading/UpgradeButton.js:13
 #: node_modules/react-components/containers/heading/UpgradeButton.js:21
 msgctxt "Link"
 msgid "Upgrade"
-msgstr ""
+msgstr "Váltás nagyobb csomagra"
 
 #: node_modules/react-components/components/link/LearnMore.js:7
 #: src/app/components/ContactViewErrors.js:14
@@ -1690,158 +1688,158 @@ msgstr ""
 #: src/app/components/ContactViewErrors.js:38
 msgctxt "Link"
 msgid "Learn more"
-msgstr ""
+msgstr "További információk"
 
 #: src/app/containers/SettingsContainer.js:24
 msgctxt "Link"
 msgid "General"
-msgstr ""
+msgstr "Általános"
 
 #: src/app/containers/SettingsContainer.js:25
 msgctxt "Link"
 msgid "Contact groups"
-msgstr ""
+msgstr "Névjegy csoportok"
 
 #: src/app/content/PrivateSidebar.js:37
 msgctxt "Link"
 msgid "Contacts"
-msgstr ""
+msgstr "Névjegyek"
 
 #: src/app/content/PrivateSidebar.js:44
 msgctxt "Link"
 msgid "Import"
-msgstr ""
+msgstr "Importálás"
 
 #: src/app/content/PrivateSidebar.js:54
 msgctxt "Link"
 msgid "Export all"
-msgstr ""
+msgstr "Összes exportálása"
 
 #: src/app/content/PrivateSidebar.js:63
 msgctxt "Link"
 msgid "Groups"
-msgstr ""
+msgstr "Csoportok"
 
 #: node_modules/react-components/containers/support/BugModal.js:120
 msgctxt "Success"
 msgid "Bug reported"
-msgstr ""
+msgstr "Hiba bejelentve"
 
 #: node_modules/react-components/containers/payments/DonateModal.js:33
 msgctxt "Success"
 msgid "Your support is essential to keeping Proton running. Thank you for supporting internet privacy!"
-msgstr ""
+msgstr "A támogatása elengedhetetlen, hogy a Proton működhessen. Köszönjük, hogy támogatja a személyes adatok védelmét az interneten!"
 
 #: node_modules/react-components/containers/general/AutoSaveContactsToggle.js:16
 msgctxt "Success"
 msgid "Preference saved"
-msgstr ""
+msgstr "Beállítások mentve"
 
 #: src/app/components/ContactModal.js:94
 msgctxt "Success"
 msgid "Contact saved"
-msgstr ""
+msgstr "Névjegy mentve"
 
 #: src/app/components/ContactEmailSettingsModal.js:161
 msgctxt "Success"
 msgid "Preferences saved"
-msgstr ""
+msgstr "Beállítások mentve"
 
 #: src/app/components/delete/DeleteModal.js:23
 msgctxt "Success"
 msgid "Contacts deleted"
-msgstr ""
+msgstr "Névjegyek törölve"
 
 #: src/app/components/delete/DeleteModal.js:33
 msgctxt "Success"
 msgid "Contact deleted"
 msgid_plural "Contacts deleted"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Névjegy törölve"
+msgstr[1] "Névjegyek törölve"
 
 #: node_modules/react-components/containers/support/BugModal.js:140
 msgctxt "Warning"
 msgid "Bug reports are not end-to-end encrypted, please do not send any sensitive information."
-msgstr ""
+msgstr "A hibajelentések nem végpontok közt titkosítottak, kérjük ne küldjön semmilyen érzékeny információt."
 
 #: src/app/components/ContactViewErrors.js:12
 msgctxt "Warning"
 msgid "Warning: the verification of this contact's signature failed."
-msgstr ""
+msgstr "Figyelem: a névjegy aláírásának ellenőrzése nem sikerült."
 
 #: src/app/components/ContactViewErrors.js:24
 #: src/app/components/ContactViewErrors.js:36
 msgctxt "Warning"
 msgid "Error: the encrypted content failed decryption and cannot be read."
-msgstr ""
+msgstr "Hiba: a titkosított adatok visszafejtése nem sikerült, így nem olvashatók."
 
 #: src/app/components/UpgradeModal.js:19
 msgctxt "Warning"
 msgid "This feature requires a paid Proton account"
-msgstr ""
+msgstr "Ehhez a lehetőséghez előfizetéses csomag szükséges"
 
 #: src/app/components/merge/MergeContactPreview.js:82
 msgctxt "Warning"
 msgid "Some of the contacts to be merged display errors. Please review them individually"
-msgstr ""
+msgstr "Némelyik névjegy egyesítése hibát jelez. Vizsgálja meg ezeket"
 
 #: src/app/components/merge/MergeContactPreview.js:84
 msgctxt "Warning"
 msgid "Contacts could not be merged"
-msgstr ""
+msgstr "A névjegyek egyesítése nem sikerült"
 
 #: src/app/components/delete/DeleteModal.js:45
 msgctxt "Warning"
 msgid "This action will permanently delete the selected contact. Are you sure you want to delete this contact?"
 msgid_plural "This action will permanently delete selected contacts. Are you sure you want to delete these contacts?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ez a művelet véglegesen törli kijelölt névjegyet. Biztos benne, hogy folytatja?"
+msgstr[1] "Ez a művelet véglegesen törli kijelölt névjegyeket. Biztos benne, hogy folytatja?"
 
 #: node_modules/react-components/containers/support/BugModal.js:193
 msgctxt "Label, make it short please"
 msgid "Attach screenshot(s)"
-msgstr ""
+msgstr "Képernyőkép csatolása"
 
 #: node_modules/react-components/containers/payments/Card.js:57
 msgctxt "Placeholder, make it short"
 msgid "Security code"
-msgstr ""
+msgstr "Biztonsági kód"
 
 #: node_modules/react-components/containers/payments/Cash.js:13
 #, javascript-format
 msgctxt "Info for cash payment method"
 msgid "To pay via Cash, please email us at ${ email } for instructions."
-msgstr ""
+msgstr "Készpénzzel való fizetéshez, kérjük írjon a címünkre: ${ email }."
 
 #: node_modules/react-components/containers/paymentMethods/PaymentMethodDetails.js:21
 msgctxt "Label for credit card"
 msgid "Expiration"
-msgstr ""
+msgstr "Lejárat"
 
 #: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:34
 msgctxt "Payment method option"
 msgid "Pay with credit/debit card"
-msgstr ""
+msgstr "Fizetés bankkártyával"
 
 #: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:56
 msgctxt "Payment method option"
 msgid "Pay with PayPal"
-msgstr ""
+msgstr "Fizetés PayPallal"
 
 #: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:63
 msgctxt "Payment method option"
 msgid "Pay with Bitcoin"
-msgstr ""
+msgstr "Fizetés Bitcoinnal"
 
 #: node_modules/react-components/components/toggle/Toggle.js:10
 msgctxt "Toggle button"
 msgid "On"
-msgstr ""
+msgstr "Be"
 
 #: node_modules/react-components/components/toggle/Toggle.js:11
 msgctxt "Toggle button"
 msgid "Off"
-msgstr ""
+msgstr "Ki"
 
 #: src/app/helpers/fields.js:4
 #: src/app/helpers/fields.js:31
@@ -1985,7 +1983,7 @@ msgstr "Helyzet"
 #: src/app/helpers/fields.js:86
 msgctxt "Contact field label"
 msgid "Logo"
-msgstr ""
+msgstr "Logó"
 
 #: src/app/helpers/fields.js:23
 #: src/app/helpers/fields.js:41
@@ -1993,7 +1991,7 @@ msgstr ""
 #: src/app/helpers/fields.js:87
 msgctxt "Contact field label"
 msgid "Member"
-msgstr ""
+msgstr "Tag"
 
 #: src/app/helpers/fields.js:24
 #: src/app/helpers/fields.js:88
@@ -2005,19 +2003,19 @@ msgstr ""
 #: src/app/helpers/fields.js:89
 msgctxt "Contact field label"
 msgid "Related"
-msgstr ""
+msgstr "Kapcsolódó"
 
 #: src/app/helpers/fields.js:26
 #: src/app/helpers/fields.js:90
 msgctxt "Contact field label"
 msgid "Categories"
-msgstr ""
+msgstr "Kategóriák"
 
 #: src/app/helpers/fields.js:27
 #: src/app/helpers/fields.js:91
 msgctxt "Contact field label"
 msgid "Sound"
-msgstr ""
+msgstr "Hang"
 
 #: src/app/helpers/types.js:4
 msgctxt "Contact type label"
@@ -2108,7 +2106,7 @@ msgstr "Mobil"
 #: src/app/helpers/types.js:30
 msgctxt "Property type"
 msgid "Main"
-msgstr ""
+msgstr "Elsődleges"
 
 #: src/app/helpers/types.js:31
 msgctxt "Property type"
@@ -2229,216 +2227,216 @@ msgstr "Ismeretlen"
 #: src/app/components/import/AttachingModalContent.js:12
 msgctxt "Description"
 msgid "We support importing CSV files from Outlook, Outlook Express, Yahoo! Mail, Hotmail, Eudora and some other apps. We also support importing vCard 4.0. (UTF-8 encoding)."
-msgstr ""
+msgstr "CSV fájlok importálása támogatott a következőkből: Outlook, Outlook Express, Yahoo! Mail, Hotmail, Eudora és néhány egyéb. vCard 4.0 importálása szintén támogatott (UTF-8 kódolással)."
 
 #: src/app/components/import/ImportingModalContent.js:246
 msgctxt "Description"
 msgid "Encrypting and importing contacts... This may take a few minutes. When the process is completed, you can close this modal."
-msgstr ""
+msgstr "Névjegyek betöltése és titkosítása. Ez eltarthat néhány percig. A folyamat befejezésekor bezárhatja ezt az ablakot."
 
 #: src/app/components/import/ImportGroupsModalContent.js:10
 msgctxt "Description"
 msgid "We picked up at least one group/organization from the list of contacts you are importing. Take the time to review how we should import these groups."
-msgstr ""
+msgstr "Néhány csoport vagy szervezet található az importált fájlban. Döntse el, hogy ezek hogyan kerüljenek importálásra."
 
 #: src/app/components/ExportModal.js:119
 msgctxt "Description"
 msgid "Decrypting contacts... This may take a few minutes. When the process is completed, you will be able to download the file with all your contacts exported."
-msgstr ""
+msgstr "Névjegyek visszafejtése. Ez eltarthat néhány percig. A folyamat végeztével letölthető lesz az exportált névjegy lista."
 
 #: src/app/components/merge/MergingModalContent.js:267
 msgctxt "Description"
 msgid "Merging contacts... This may take a few minutes. When the process is completed, you can close this modal."
-msgstr ""
+msgstr "Névjegyek egyesítése. Ez eltarthat néhány percig. A folyamat befejezésekor bezárhatja ezt az ablakot."
 
 #: src/app/components/merge/MergeModalContent.js:70
 msgctxt "Description"
 msgid "Use Drag and Drop to rank merging priority between contacts. Uncheck the contacts you do not want to merge."
-msgstr ""
+msgstr "Húzással határozza meg az egyesítés prioritását. Szüntesse meg a kijelölést azoknál, amelyeket nem szeretne egyesíteni."
 
 #: src/app/components/merge/MergeModalContent.js:74
 msgctxt "Description"
 msgid "You can mark for deletion the contacts that you do not want neither to merge nor to keep.\n"
 "Deletion will only take place after the merge button is clicked"
-msgstr ""
+msgstr "Amelyekből egyiket sem szeretné megtartani, azokat törlésre jelölheti. A törlés az egyesítés gomb megnyomása után fog megtörténni"
 
 #: src/app/components/import/ImportCsvTableHeader.js:11
 msgctxt "TableHeader"
 msgid "IMPORT"
-msgstr ""
+msgstr "IMPORTÁLÁS"
 
 #: src/app/components/import/ImportCsvTableHeader.js:13
 msgctxt "TableHeader"
 msgid "CSV FIELD"
-msgstr ""
+msgstr "CSV MEZŐ"
 
 #: src/app/components/import/ImportCsvTableHeader.js:14
 msgctxt "TableHeader"
 msgid "VCARD FIELD"
-msgstr ""
+msgstr "VCARD MEZŐ"
 
 #: src/app/components/import/ImportCsvTableHeader.js:17
 msgctxt "TableHeader"
 msgid "VALUES"
-msgstr ""
+msgstr "ÉRTÉKEK"
 
 #: src/app/components/merge/MergeTable.js:13
 msgctxt "TableHeader"
 msgid "NAME"
-msgstr ""
+msgstr "NÉV"
 
 #: src/app/components/merge/MergeTable.js:14
 msgctxt "TableHeader"
 msgid "ADDRESS"
-msgstr ""
+msgstr "CÍM"
 
 #: src/app/components/merge/MergeTable.js:15
 msgctxt "TableHeader"
 msgid "ACTIONS"
-msgstr ""
+msgstr "MŰVELETEK"
 
 #: src/app/components/import/ImportCsvModalContent.js:34
 msgctxt "Error notification"
 msgid "First name and last name cannot be unchecked at the same time"
-msgstr ""
+msgstr "A vezetéknév vagy keresztnév egyike kiválasztva kell maradjon"
 
 #: src/app/components/import/ImportModal.js:70
 msgctxt "Error notification"
 msgid "No .csv or .vcf file selected"
-msgstr ""
+msgstr "Nincs kiválasztva .csv vagy .vcf fájl"
 
 #: src/app/components/import/ImportModal.js:106
 msgctxt "Error notification"
 msgid "File selected appears to be corrupted"
-msgstr ""
+msgstr "A fájl hibásnak tűnik"
 
 #: src/app/components/import/ImportCsvModalContent.js:63
 msgctxt "Description of the purpose of the import CSV modal"
 msgid "We have detected the following fields in the CSV file you uploaded. Check the ones you want to import."
-msgstr ""
+msgstr "A CSV fájl az alábbi mezőket tartalmazza. Válassza ki, hogy melyeket szeretné importálni."
 
 #: src/app/components/import/ImportCsvModalContent.js:67
 msgctxt "Description of the purpose of the import CSV modal"
 msgid "Also, we have automatically matched CSV fields with vCard fields. You can review and change this matching manually."
-msgstr ""
+msgstr "A CSV és vCard mezők automatikusan összepárosítása kerültek. Ezt is ellenőrizze és manuálisan átalakíthatja."
 
 #: src/app/components/import/ErrorDetails.js:6
 msgctxt "Info on errors"
 msgid "Click for details"
-msgstr ""
+msgstr "Kattintson a részletekért"
 
 #: src/app/components/import/ImportingModalContent.js:31
 #, javascript-format
 msgctxt "Info on errors importing contacts"
 msgid "Contact ${ index } from your list could not be parsed. ${ message }"
-msgstr ""
+msgstr "A lista ${ index }. elemének olvasása nem sikerült. ${ message }"
 
 #: src/app/components/import/ImportingModalContent.js:33
 msgctxt "Info on errors importing contacts"
 msgid "Contact ${ index } from your list could not be encrypted."
-msgstr ""
+msgstr "A lista ${ index }. elemének titkosítása nem sikerült."
 
 #: src/app/components/import/ImportingModalContent.js:35
 #, javascript-format
 msgctxt "Info on errors importing contacts"
 msgid "Contact ${ index } from your list could not be imported. ${ message }"
-msgstr ""
+msgstr "A lista ${ index }. elemének importálása nem sikerült. ${ message }"
 
 #: src/app/components/import/ImportingModalContent.js:265
 msgctxt "Info on errors importing contacts"
 msgid "Some contacts could not be imported. Click for details"
-msgstr ""
+msgstr "Néhány névjegy importálása nem sikerült. Kattintson a részletekért"
 
 #: src/app/components/import/ImportingModalContent.js:253
 #, javascript-format
 msgctxt "Progress bar description"
 msgid "${ model.submitted.length } out of ${ model.total } contact successfully imported."
 msgid_plural "${ model.submitted.length } out of ${ model.total } contacts successfully imported."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "${ model.total } névjegy sikeresen importálva (összesen: ${ model.submitted.length })."
+msgstr[1] "${ model.total } névjegy sikeresen importálva (összesen: ${ model.submitted.length })."
 
 #: src/app/components/import/ImportingModalContent.js:258
 msgctxt "Progress bar description"
 msgid "No contacts imported"
-msgstr ""
+msgstr "Egyetlen névjegy sem került importálásra"
 
 #: src/app/components/DynamicProgress.js:9
 msgctxt "Progress bar description"
 msgid "Progress"
-msgstr ""
+msgstr "Folyamat"
 
 #: src/app/components/DynamicProgress.js:10
 msgctxt "Progress bar description"
 msgid "Completed"
-msgstr ""
+msgstr "Kész"
 
 #: src/app/components/DynamicProgress.js:11
 msgctxt "Progress bar description"
 msgid "Failed"
-msgstr ""
+msgstr "Sikertelen"
 
 #: src/app/components/ExportModal.js:127
 #, javascript-format
 msgctxt "Progress bar description"
 msgid "${ contactsExported.length } out of ${ countContacts } contacts successfully exported."
-msgstr ""
+msgstr "${ contactsExported.length } névjegy sikeresen exportálva (összesen: ${ countContacts })."
 
 #: src/app/components/ExportModal.js:129
 msgctxt "Progress bar description"
 msgid "No contacts exported."
-msgstr ""
+msgstr "Egyetlen névjegy sem került exportálásra."
 
 #: src/app/components/merge/MergingModalContent.js:275
 #, javascript-format
 msgctxt "Progress bar description"
 msgid "${ model.submitted.length } out of ${ totalBeMerged } contacts successfully merged."
-msgstr ""
+msgstr "${ model.submitted.length } névjegy sikeresen egyesítve (összesen: ${ totalBeMerged })."
 
 #: src/app/components/merge/MergingModalContent.js:277
 msgctxt "Progress bar description"
 msgid "No contacts merged."
-msgstr ""
+msgstr "Egyetlen névjegy sem került egyesítésre."
 
 #: src/app/components/import/ImportModal.js:82
 msgctxt "Error info"
 msgid "We only support importing files smaller than 10 MB. Please split your contacts into several smaller files."
-msgstr ""
+msgstr "Csak 10 MB-nál kisebb fájlt importálható. Válassza szét a listát több kisebb fájlra."
 
 #: src/app/components/EncryptedIcon.js:7
 msgctxt "Tooltip"
 msgid "Encrypted data with verified digital signature"
-msgstr ""
+msgstr "Titkosított adat, ellenőrzött digitális aláírással"
 
 #: src/app/components/ContactPgpSettings.js:112
 msgctxt "Tooltip"
 msgid "Email encryption forces email signature to help authenticate your sent messages"
-msgstr ""
+msgstr "Az e-mail titkosítása aláírást is von magával, az elküldött üzenetek pontosabb ellenőrizhetősége érdekében"
 
 #: src/app/components/ContactPgpSettings.js:138
 msgctxt "Tooltip"
 msgid "Digitally signing emails helps authenticating that messages are sent by you"
-msgstr ""
+msgstr "Az üzenetek digitális aláírása teszi ellenőrizhetővé, hogy az üzenetet valóban ön küldte"
 
 #: src/app/components/ContactPgpSettings.js:163
 msgctxt "Tooltip"
 msgid "Upload a public key to enable sending end-to-end encrypted emails to this email"
-msgstr ""
+msgstr "Töltsön fel egy nyilvános kulcsot, hogy erre a címre lehetővé tegye végpontok közt titkosított üzenetek küldését"
 
 #: src/app/components/ContactPgpSettings.js:178
 msgctxt "Tooltip"
 msgid "Select the PGP scheme to be used when signing or encrypting to a user. Note that PGP/Inline forces plain text messages"
-msgstr ""
+msgstr "Megadható a partnernek küldött titkosított vagy aláírt levelekben használandó PGP séma. PGP/Inline esetén az üzenet mindig Egyszerű Szöveg formátumú lesz"
 
 #.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
 #: src/app/components/ContactEmailSettingsModal.js:255
 msgctxt "Tooltip"
 msgid "Automatic indicates that the format in the composer is used to send to this user. Plain text indicates that the message will always be converted to plain text on send."
-msgstr ""
+msgstr "Automatikus beállítás esetén, a szerkesztőben használt módban kerülnek elküldésre a levelek. Egyszerű szöveg esetén, ennek a partnernek, az összes üzenet egyszerű szöveggé alakul az elküldéskor."
 
 #: src/app/components/ContactToolbar.js:41
 msgctxt "Tooltip"
 msgid "Delete"
-msgstr ""
+msgstr "Törlés"
 
 #: src/app/components/ContactGroupModal.js:31
 #: src/app/components/ContactGroupsTable.js:60
@@ -2469,7 +2467,7 @@ msgstr "Létrehozva"
 #: src/app/components/ContactKeysTable.js:89
 msgctxt "Table header"
 msgid "Expires"
-msgstr ""
+msgstr "Lejárat"
 
 #: src/app/components/ContactKeysTable.js:90
 msgctxt "Table header"
@@ -2520,89 +2518,89 @@ msgstr "Szín"
 #: src/app/components/ContactsList.js:105
 msgctxt "Info message"
 msgid "Your address book is empty"
-msgstr ""
+msgstr "Nincsenek névjegyek"
 
 #: src/app/components/ContactsList.js:133
 msgctxt "Info message"
 msgid "Your contact group is empty"
-msgstr ""
+msgstr "A névjegy csoport üres"
 
 #: src/app/components/ContactsList.js:152
 msgctxt "Info message"
 msgid "No results found"
-msgstr ""
+msgstr "Nincs találat"
 
 #: src/app/components/ContactsList.js:110
 #, javascript-format
 msgctxt "Actions message"
 msgid "You can either ${ addContact } or ${ importContact } from a file."
-msgstr ""
+msgstr "Választhat a műveletek között: ${ addContact }, ${ importContact } (fájlból)."
 
 #: src/app/components/ContactsList.js:137
 #, javascript-format
 msgctxt "Actions message"
 msgid "You can ${ editGroup } to add a contact."
-msgstr ""
+msgstr "Névjegy felvételéhez: ${ editGroup }."
 
 #: src/app/components/ContactsList.js:154
 #, javascript-format
 msgctxt "Actions message"
 msgid "You can either update your search query or ${ clearSearch }."
-msgstr ""
+msgstr "Próbálkozzon másik kereséssel vagy ${ clearSearch }."
 
 #: src/app/components/ContactMIMETypeSelect.js:9
 msgctxt "MIME type"
 msgid "Automatic"
-msgstr ""
+msgstr "Automatikus"
 
 #: src/app/components/ContactMIMETypeSelect.js:10
 msgctxt "MIME type"
 msgid "Plain text"
-msgstr ""
+msgstr "Egyszerű szöveg"
 
 #: src/app/components/ContactSchemeSelect.js:13
 #, javascript-format
 msgctxt "Default encryption scheme"
 msgid "Use global default (${ defaultValue })"
-msgstr ""
+msgstr "Globális beállítások használata (${ defaultValue })"
 
 #: src/app/components/KeyWarningIcon.js:14
 msgctxt "PGP key warning"
 msgid "This key is assigned to ${ emails }"
-msgstr ""
+msgstr "Ez a kulcs a következőkhöz van rendelve: ${ emails }"
 
 #: src/app/components/ContactKeysTable.js:206
 msgctxt "Key badge"
 msgid "Primary"
-msgstr ""
+msgstr "Elsődleges"
 
 #: src/app/components/ContactKeysTable.js:208
 msgctxt "Key badge"
 msgid "Verification only"
-msgstr ""
+msgstr "Csak ellenőrzés"
 
 #: src/app/components/ContactKeysTable.js:210
 msgctxt "Key badge"
 msgid "WKD"
-msgstr ""
+msgstr "WKD"
 
 #: src/app/components/ContactKeysTable.js:211
 msgctxt "Key badge"
 msgid "Trusted"
-msgstr ""
+msgstr "Megbízható"
 
 #: src/app/components/ContactKeysTable.js:212
 msgctxt "Key badge"
 msgid "Revoked"
-msgstr ""
+msgstr "Visszavont"
 
 #: src/app/components/ContactKeysTable.js:213
 msgctxt "Key badge"
 msgid "Expired"
-msgstr ""
+msgstr "Lejárt"
 
 #: src/app/components/ContactGroupsTable.js:42
 msgctxt "Contact group notification"
 msgid "Contact group removed"
-msgstr ""
+msgstr "Névjegy csoport törölve"
 

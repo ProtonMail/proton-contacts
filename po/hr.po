@@ -8,22 +8,22 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Croatian\n"
 "Language: hr_HR\n"
-"PO-Revision-Date: 2020-01-16 22:22\n"
+"PO-Revision-Date: 2020-01-24 15:20\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
 msgid "KB"
-msgstr ""
+msgstr "KB"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:14
 msgctxt "file size format"
 msgid "MB"
-msgstr ""
+msgstr "MB"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:15
 msgctxt "file size format"
 msgid "GB"
-msgstr ""
+msgstr "GB"
 
 #: node_modules/proton-shared/lib/keys/keys.js:102
 msgctxt "Error"
@@ -207,7 +207,7 @@ msgid "Dark theme"
 msgstr "Tamna tema"
 
 #: node_modules/react-components/containers/search/SearchDropdown.js:60
-#: node_modules/react-components/containers/search/Searchbox.js:48
+#: node_modules/react-components/containers/search/Searchbox.js:49
 msgctxt "Action"
 msgid "Search"
 msgstr "Pretraga"
@@ -215,7 +215,7 @@ msgstr "Pretraga"
 #.  Clear button is hidden when using advanced mode because the buttons use the same spots
 #.  If there is the need of having both, a positioning solution will have to be found
 #: node_modules/react-components/containers/search/SearchDropdown.js:59
-#: node_modules/react-components/containers/search/Searchbox.js:55
+#: node_modules/react-components/containers/search/Searchbox.js:56
 #: node_modules/react-components/containers/support/AttachScreenshot.js:46
 #: src/app/components/ContactModalRow.js:30
 msgctxt "Action"
@@ -2006,7 +2006,7 @@ msgstr "Član"
 #: src/app/helpers/fields.js:88
 msgctxt "Contact field label"
 msgid "IMPP"
-msgstr ""
+msgstr "IMPP"
 
 #: src/app/helpers/fields.js:25
 #: src/app/helpers/fields.js:89

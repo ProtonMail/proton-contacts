@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2020-01-18 16:21\n"
+"PO-Revision-Date: 2020-01-27 05:21\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -99,13 +99,13 @@ msgstr "数额太大。"
 #: node_modules/react-components/containers/payments/Bitcoin.js:51
 msgctxt "Error"
 msgid "Error connecting to the Bitcoin API."
-msgstr "连接至 Bitcoin API 时出错。"
+msgstr "连接比特币 API 失败。"
 
 #: node_modules/react-components/containers/payments/Payment.js:50
 #, javascript-format
 msgctxt "Error"
 msgid "The minimum amount that can be donated is ${ price }"
-msgstr "捐赠的最低金额为 ${ price }"
+msgstr "捐款金额不应低于 ${ price }"
 
 #: node_modules/react-components/containers/payments/Payment.js:59
 #, javascript-format
@@ -153,12 +153,12 @@ msgstr "您使用的浏览器无法完成支付验证，请使用其他浏览器
 #: node_modules/react-components/components/input/Input.js:32
 msgctxt "Error"
 msgid "This field is required"
-msgstr "该字段必须填写"
+msgstr "此项必须填写"
 
 #: node_modules/react-components/components/input/EmailInput.js:9
 msgctxt "Error"
 msgid "Email address invalid"
-msgstr "无效的电子邮箱"
+msgstr "邮箱格式不正确"
 
 #: src/app/components/ContactImageModal.js:36
 msgctxt "Error"
@@ -174,7 +174,7 @@ msgstr "无法保存联系人"
 #: src/app/components/ContactPgpSettings.js:49
 msgctxt "Error"
 msgid "Invalid public key file"
-msgstr "无效的公钥文件"
+msgstr "公钥文件无效"
 
 #: src/app/components/delete/DeleteModal.js:30
 msgctxt "Error"
@@ -189,12 +189,12 @@ msgstr "预设样式"
 #: node_modules/proton-shared/lib/themes/themes.js:23
 msgctxt "Theme"
 msgid "Custom theme"
-msgstr "自定义样式"
+msgstr "定制样式"
 
 #: node_modules/proton-shared/lib/themes/themes.js:33
 msgctxt "Theme"
 msgid "Light"
-msgstr "浅色主题"
+msgstr "亮色"
 
 #: node_modules/proton-shared/lib/themes/themes.js:42
 msgctxt "Theme"
@@ -204,18 +204,16 @@ msgstr "蓝色"
 #: node_modules/proton-shared/lib/themes/themes.js:51
 msgctxt "Theme"
 msgid "Dark theme"
-msgstr "暗色主题"
+msgstr "暗色"
 
 #: node_modules/react-components/containers/search/SearchDropdown.js:60
-#: node_modules/react-components/containers/search/Searchbox.js:48
+#: node_modules/react-components/containers/search/Searchbox.js:43
 msgctxt "Action"
 msgid "Search"
 msgstr "搜索"
 
-#.  Clear button is hidden when using advanced mode because the buttons use the same spots
-#.  If there is the need of having both, a positioning solution will have to be found
 #: node_modules/react-components/containers/search/SearchDropdown.js:59
-#: node_modules/react-components/containers/search/Searchbox.js:55
+#: node_modules/react-components/containers/search/Searchbox.js:48
 #: node_modules/react-components/containers/support/AttachScreenshot.js:46
 #: src/app/components/ContactModalRow.js:30
 msgctxt "Action"
@@ -311,7 +309,7 @@ msgstr "添加 PayPal 支付方式"
 #: node_modules/react-components/containers/payments/DonateModal.js:43
 msgctxt "Action"
 msgid "Donate"
-msgstr "捐赠"
+msgstr "捐款"
 
 #: node_modules/react-components/containers/heading/UserDropdown.js:84
 #: node_modules/react-components/containers/heading/UserDropdown.js:92
@@ -332,7 +330,7 @@ msgstr "问题反馈"
 #: node_modules/react-components/containers/heading/UserDropdown.js:130
 msgctxt "Action"
 msgid "Proton shop"
-msgstr "Proton 网店"
+msgstr "Proton 商店"
 
 #: node_modules/react-components/containers/heading/UserDropdown.js:140
 msgctxt "Action"
@@ -342,7 +340,7 @@ msgstr "支持我们"
 #: node_modules/react-components/containers/heading/UserDropdown.js:149
 msgctxt "Action"
 msgid "Logout"
-msgstr "退出"
+msgstr "退出账户"
 
 #: node_modules/react-components/components/modal/Confirm.js:10
 #: node_modules/react-components/components/modal/Confirm.js:12
@@ -366,12 +364,12 @@ msgstr "加载图片"
 #: node_modules/react-components/components/miniCalendar/LocalizedMiniCalendar.js:31
 msgctxt "Action"
 msgid "Next month"
-msgstr "下月"
+msgstr "下个月"
 
 #: node_modules/react-components/components/miniCalendar/LocalizedMiniCalendar.js:32
 msgctxt "Action"
 msgid "Prev month"
-msgstr "上月"
+msgstr "上个月"
 
 #: src/app/components/ContactGroupModal.js:44
 #: src/app/components/ContactGroupsTable.js:78
@@ -426,7 +424,7 @@ msgstr "保存"
 #: src/app/components/ContactView.js:30
 msgctxt "Action"
 msgid "Edit"
-msgstr "编辑"
+msgstr "更改"
 
 #: src/app/components/ContactGroupModal.js:182
 #: src/app/components/ContactModalProperties.js:87
@@ -452,7 +450,7 @@ msgstr "导入联系人"
 #: src/app/components/ContactsList.js:126
 msgctxt "Action"
 msgid "Edit your group"
-msgstr "编辑群组"
+msgstr "更改群组"
 
 #: src/app/components/ContactsList.js:146
 msgctxt "Action"
@@ -478,7 +476,7 @@ msgstr "下载"
 #: src/app/components/ContactKeysTable.js:132
 msgctxt "Action"
 msgid "Use for sending"
-msgstr "用于发送"
+msgstr "用于发送邮件"
 
 #: src/app/components/ContactKeysTable.js:153
 msgctxt "Action"
@@ -548,12 +546,12 @@ msgstr "联系人详细信息"
 #: src/app/components/merge/MergeTableBody.js:31
 msgctxt "Action"
 msgid "Unmark for deletion"
-msgstr "取消删除标记"
+msgstr "取消稍后删除"
 
 #: src/app/components/merge/MergeTableBody.js:31
 msgctxt "Action"
 msgid "Mark for deletion"
-msgstr "标记为删除"
+msgstr "稍后删除"
 
 #: src/app/components/merge/MergeTable.js:58
 msgctxt "Action"
@@ -563,7 +561,7 @@ msgstr "预览联系人"
 #: src/app/components/ContactGroupsSection.js:17
 msgctxt "Action"
 msgid "Add group"
-msgstr "添加群组"
+msgstr "创建群组"
 
 #: src/app/content/PrivateSidebar.js:106
 msgctxt "Action"
@@ -579,7 +577,7 @@ msgstr "搜索"
 #: node_modules/react-components/containers/login/PasswordForm.js:22
 msgctxt "Placeholder"
 msgid "Username or email"
-msgstr "用户名或电子邮箱"
+msgstr "用户名或邮箱"
 
 #: node_modules/react-components/containers/login/PasswordForm.js:37
 msgctxt "Placeholder"
@@ -604,12 +602,12 @@ msgstr "Proton 用户名"
 #: node_modules/react-components/containers/support/BugModal.js:162
 msgctxt "Placeholder"
 msgid "A way to contact you"
-msgstr "联系您的方式"
+msgstr "您的联系方式"
 
 #: node_modules/react-components/containers/support/BugModal.js:186
 msgctxt "Placeholder"
 msgid "Please describe the problem and include any error messages"
-msgstr "请描述问题并包含任何错误信息"
+msgstr "请说明您的问题，并附上看到的所有错误提示"
 
 #: node_modules/react-components/containers/support/BugModal.js:215
 msgctxt "Placeholder"
@@ -639,7 +637,7 @@ msgstr "其它"
 #: node_modules/react-components/containers/payments/CardNumberInput.js:48
 msgctxt "Placeholder"
 msgid "Card number"
-msgstr "信用卡号码"
+msgstr "卡号"
 
 #: node_modules/react-components/containers/payments/Card.js:22
 msgctxt "Placeholder"
@@ -664,7 +662,7 @@ msgstr "图像网址"
 #: src/app/components/ContactGroupDropdown.js:186
 msgctxt "Placeholder"
 msgid "Filter groups"
-msgstr "筛选群组"
+msgstr "查找群组"
 
 #: src/app/content/PrivateHeader.js:62
 msgctxt "Placeholder"
@@ -689,7 +687,7 @@ msgstr "您也可以刷新页面或稍后重试。"
 #: node_modules/react-components/containers/sidebar/StorageSpaceStatus.js:77
 msgctxt "Title"
 msgid "Storage"
-msgstr "存储"
+msgstr "存储空间"
 
 #: node_modules/react-components/containers/api/HumanVerificationModal.js:9
 msgctxt "Title"
@@ -704,12 +702,12 @@ msgstr "此操作需要重新登录"
 #: node_modules/react-components/containers/login/AbuseModal.js:6
 msgctxt "Title"
 msgid "Account disabled"
-msgstr "账户已被停用"
+msgstr "此账户已被封禁"
 
 #: node_modules/react-components/containers/support/BugModal.js:136
 msgctxt "Title"
 msgid "Report bug"
-msgstr "报告错误"
+msgstr "反馈问题"
 
 #: node_modules/react-components/containers/payments/Card.js:80
 msgctxt "Title"
@@ -729,7 +727,7 @@ msgstr "银行卡验证"
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:45
 msgctxt "Title"
 msgid "Payment verification"
-msgstr "确认交易"
+msgstr "确认支付"
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:46
 msgctxt "Title"
@@ -744,7 +742,7 @@ msgstr "正在进行银行卡验证"
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:49
 msgctxt "Title"
 msgid "Payment verification in progress"
-msgstr "正在确认交易"
+msgstr "正在确认支付"
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:50
 msgctxt "Title"
@@ -783,7 +781,7 @@ msgstr "搜索"
 #: src/app/containers/SettingsContainer.js:35
 msgctxt "Title"
 msgid "Contact settings"
-msgstr "联系人设置"
+msgstr "通讯录设置"
 
 #: src/app/components/ContactPlaceholder.js:214
 #: src/app/containers/SettingsContainer.js:38
@@ -857,7 +855,7 @@ msgstr "开通付费账户"
 #: src/app/components/ContactModal.js:53
 msgctxt "Title"
 msgid "Edit contact details"
-msgstr "编辑联系人信息"
+msgstr "更改联系人详细信息"
 
 #: src/app/components/ContactModal.js:53
 msgctxt "Title"
@@ -867,12 +865,12 @@ msgstr "添加联系人"
 #: src/app/components/ContactGroupModal.js:71
 msgctxt "Title"
 msgid "Edit contact group"
-msgstr "编辑联系人群组"
+msgstr "更改联系人群组"
 
 #: src/app/components/ContactGroupModal.js:71
 msgctxt "Title"
 msgid "Create new group"
-msgstr "创建新群组"
+msgstr "创建群组"
 
 #: src/app/components/SelectEmailsModal.js:47
 msgctxt "Title"
@@ -884,7 +882,7 @@ msgstr "添加至群组"
 #, javascript-format
 msgctxt "Title"
 msgid "Email settings (${ Email })"
-msgstr "邮件设置 (${ Email })"
+msgstr "邮件设置（${ Email }）"
 
 #: src/app/components/ContactViewProperty.js:112
 msgctxt "Title"
@@ -970,17 +968,17 @@ msgstr "常规"
 #, javascript-format
 msgctxt "Info"
 msgid "${ usedSpaceFormatted } of ${ maxSpaceFormatted } used"
-msgstr "共 ${ maxSpaceFormatted }，已使用 ${ usedSpaceFormatted }"
+msgstr "已用 ${ usedSpaceFormatted } / ${ maxSpaceFormatted }"
 
 #: node_modules/react-components/containers/sidebar/StorageSpaceStatus.js:81
 msgctxt "Info"
 msgid "Your storage space is shared across all Proton products."
-msgstr "您的存储空间被您的所有Proton服务共享。"
+msgstr "您的所有 Proton 服务共用存储空间。"
 
 #: node_modules/react-components/containers/api/HumanVerificationModal.js:19
 msgctxt "Info"
 msgid "For security reasons, please verify that you are not a robot."
-msgstr "出于安全原因，请完成验证。"
+msgstr "出于安全考虑，请验证您是真人操作。"
 
 #: node_modules/react-components/containers/app/LoaderPage.js:15
 #, javascript-format
@@ -1002,13 +1000,13 @@ msgstr "这里"
 #, javascript-format
 msgctxt "Info"
 msgid "Account disabled due to ${ abuseOrFraudLink }."
-msgstr "此账户因 ${ abuseOrFraudLink } 已被封禁。"
+msgstr "此账户因${ abuseOrFraudLink }已被封禁。"
 
 #: node_modules/react-components/containers/login/AbuseModal.js:24
 #, javascript-format
 msgctxt "Info"
 msgid "You can find more information and contact us ${ contactLink }."
-msgstr "您可以点击${ contactLink } 了解详情或联系我们。"
+msgstr "您可以点击${ contactLink }了解详情或联系我们。"
 
 #: node_modules/react-components/containers/support/AttachScreenshot.js:45
 msgctxt "Info"
@@ -1019,7 +1017,7 @@ msgstr "已添加截图"
 #, javascript-format
 msgctxt "Info"
 msgid "Refreshing the page or ${ link } will automatically resolve most issues."
-msgstr "大多数问题都能通过刷新页面或${ link } 来解决。"
+msgstr "大多数问题都能通过刷新页面或${ link }来解决。"
 
 #: node_modules/react-components/containers/support/BugModal.js:254
 #, javascript-format
@@ -1066,7 +1064,7 @@ msgstr "验证可能需要数分钟。"
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:148
 msgctxt "Info"
 msgid "Payment can take a few minutes to fully verify."
-msgstr "验证需要几分钟才能完成。"
+msgstr "验证可能需要几分钟才能完成。"
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:160
 msgctxt "Info"
@@ -1076,7 +1074,7 @@ msgstr "请用其他方式支付，或联系银行寻求帮助。"
 #: node_modules/react-components/containers/payments/PayPal.js:135
 msgctxt "Info"
 msgid "Please verify the payment in the new tab."
-msgstr "请在新标签页中确认交易。"
+msgstr "请在新标签页中确认支付。"
 
 #: node_modules/react-components/containers/payments/PayPal.js:145
 #: node_modules/react-components/containers/payments/PayPal.js:175
@@ -1104,12 +1102,12 @@ msgstr "您的 PayPal 账户需要绑定信用卡或银行账户才能作为支�
 #, javascript-format
 msgctxt "Info"
 msgid "Amount below minimum. (${ amount })"
-msgstr "数额低于最小值 (${ amount })。"
+msgstr "数额 ${ amount } 太小。"
 
 #: node_modules/react-components/containers/payments/Bitcoin.js:64
 msgctxt "Info"
 msgid "Bitcoin transactions can take some time to be confirmed (up to 24 hours). Once confirmed, we will add credits to your account. After transaction confirmation, you can pay your invoice with the credits."
-msgstr "比特币付款需要一段时间（最长 24 小时）来确认交易。确认后金额将充入您的账户余额中，然后您就可以用余额支付了。"
+msgstr "比特币付款需要一段时间（可能长达 24 小时）来确认交易。确认后金额将充入您的账户余额中，然后您就可以用余额支付了。"
 
 #: node_modules/react-components/containers/payments/Bitcoin.js:73
 msgctxt "Info"
@@ -1129,7 +1127,7 @@ msgstr "已过期"
 #: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:44
 msgctxt "Info"
 msgid "default"
-msgstr "默认"
+msgstr "首选"
 
 #: node_modules/react-components/components/miniCalendar/WeekNumbers.js:36
 msgctxt "Info"
@@ -1144,7 +1142,7 @@ msgstr "没有要导入的联系人"
 #: src/app/components/UpsellFree.js:15
 msgctxt "Info"
 msgid "Unlock access to encrypted contact details such as phone numbers and addresses with ProtonMail Plus."
-msgstr "使用ProtonMail Plus解锁加密的联系详细信息，如电话号码和地址。"
+msgstr "开通 ProtonMail 增强版方可填写联系人电话和地址等详细信息。"
 
 #: src/app/components/ContactModal.js:128
 msgctxt "Info"
@@ -1159,18 +1157,18 @@ msgstr "尚未添加联系人"
 #: src/app/components/SelectEmailsModal.js:48
 msgctxt "Info"
 msgid "Please select which email address or addresses to add to this group."
-msgstr "请选择要添加到此组的电子邮件地址。"
+msgstr "请选择将哪些邮箱地址加入此群组。"
 
 #: src/app/components/ContactGroupDropdown.js:134
 msgctxt "Info"
 msgid "Contact group apply"
 msgid_plural "Contact groups apply"
-msgstr[0] "联系人群组应用"
+msgstr[0] "联系人群组已设定"
 
 #: src/app/components/ContactGroupDropdown.js:175
 msgctxt "Info"
 msgid "Create a new contact group"
-msgstr "创建一个新联系人群组"
+msgstr "创建联系人群组"
 
 #: src/app/components/ContactPgpSettings.js:63
 msgctxt "Info"
@@ -1180,7 +1178,7 @@ msgstr "重复的密钥已更新"
 #: src/app/components/ContactPgpSettings.js:82
 msgctxt "Info"
 msgid "Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service."
-msgstr "设置 PGP 允许您发送端到端加密的电子邮件给使用兼容PGP的非Protonmail用户。"
+msgstr "设置 PGP 后，您就可以向 ProtonMail 以外其他兼容 PGP 的邮箱发送端到端加密邮件了。"
 
 #: src/app/components/ContactPgpSettings.js:87
 msgctxt "Info"
@@ -1195,23 +1193,23 @@ msgstr "此地址已被停用。待其所有者启用此地址后才能向其发
 #: src/app/components/ContactPgpSettings.js:95
 msgctxt "Info"
 msgid "To use Address Verification, you must trust one or more available public keys, including the one you want to use for sending. This prevents the encrypted keys from being faked."
-msgstr "如果要使用电子邮件验证，您必须信任一个或多个可用的公钥，包括此电子邮件的主密钥钥。如此一来可以防止加密密钥被伪造。"
+msgstr "要使用地址密钥验证，您需要先信任其若干个公钥，包括您要用于发送邮件的密钥。这样可以防止其密钥被伪造。"
 
 #: src/app/components/ContactPgpSettings.js:99
 msgctxt "Info"
 msgid "Only change these settings if you are using PGP with non-ProtonMail recipients."
-msgstr "只有在使用PGP和非ProtonMail收件人时才更改这些设置。"
+msgstr "只有在与 ProtonMail 以外的邮箱使用 PGP 通讯时才应更改下列选项。"
 
 #: src/app/components/ContactPgpSettings.js:103
 msgctxt "Info"
 msgid "All uploaded keys are expired or revoked! Encryption is automatically disabled."
-msgstr "所有上传的密钥已过期或撤销！加密被自动禁用。"
+msgstr "上传的所有密钥都已过期或作废，加密已自动关闭。"
 
 #.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
 #: src/app/components/ContactEmailSettingsModal.js:236
 msgctxt "Info"
 msgid "Select the email format you want to be used by default when sending an email to this email address."
-msgstr "选择您想要发送邮件到此电子邮件地址时默认使用的电子邮件格式。"
+msgstr "选择向该地址发送邮件的首选格式。"
 
 #.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
 #: src/app/components/ContactEmailSettingsModal.js:241
@@ -1228,13 +1226,13 @@ msgstr "PGP/MIME 可使用编辑器中指定的格式发送邮件。请注意 Pr
 #: src/app/components/MergeRow.js:7
 msgctxt "Info"
 msgid "Two or more contacts appear to be identical."
-msgstr "两或多位联系人似乎是相同的。"
+msgstr "有几名联系人似乎完全相同。"
 
 #: src/app/components/MergeRow.js:15
 #, javascript-format
 msgctxt "Info"
 msgid "${ boldText } Do you want to merge these contacts now?"
-msgstr "${ boldText } 您想合并这些联系人吗？"
+msgstr "${ boldText }要合并这些联系人吗？"
 
 #: src/app/components/ContactPlaceholder.js:26
 #: src/app/components/ContactPlaceholder.js:76
@@ -1280,18 +1278,18 @@ msgstr "${ totalContactsInGroup } 名联系人"
 #: src/app/components/ContactPlaceholder.js:177
 msgctxt "Info"
 msgid "You have ${ _totalContactsText } in this group."
-msgstr "您在此群组中有${ _totalContactsText }。"
+msgstr "此群组中有 ${ _totalContactsText }。"
 
 #: src/app/components/ContactPlaceholder.js:196
 msgctxt "Info"
 msgid "one contact"
-msgstr "一个联系人"
+msgstr "1 名联系人"
 
 #: src/app/components/ContactPlaceholder.js:198
 #, javascript-format
 msgctxt "Info"
 msgid "${ totalContacts } contacts"
-msgstr "${ totalContacts } 联系人"
+msgstr "${ totalContacts } 名联系人"
 
 #: src/app/components/ContactPlaceholder.js:200
 msgctxt "Info"
@@ -1318,19 +1316,19 @@ msgstr "确定要删除这个群组吗？"
 #: src/app/components/ContactGroupsTable.js:87
 msgctxt "Info"
 msgid "Contacts in the group aren't deleted if the contact group is deleted."
-msgstr "如果群组被删除，群组中的联系人不会被删除。"
+msgstr "群组中的联系人不会被删除。"
 
 #: src/app/components/ContactGroupsTable.js:101
 #, javascript-format
 msgctxt "Info"
 msgid "${ countEmailAddresses } email address"
 msgid_plural "${ countEmailAddresses } email addresses"
-msgstr[0] "${ countEmailAddresses } 电子邮件地址"
+msgstr[0] "${ countEmailAddresses } 个邮箱地址"
 
 #: src/app/components/ContactGroupsSection.js:14
 msgctxt "Info"
 msgid "A group can contain multiple email addresses from the same contact. Please note that a sending limit may apply and prevent you from sending emails to excessively large groups."
-msgstr "群组可以包含来自同一联系人的多个电子邮件地址。 请注意，发送限制可能会适用，并阻止您向过大的群组发送电子邮件。"
+msgstr "一名联系人可以有多个邮箱属于同一群组。请注意，由于每封邮件收件人数量有上限，因此不能向过大的群组群发邮件。"
 
 #: node_modules/react-components/containers/api/HumanVerificationModal.js:22
 msgctxt "Label"
@@ -1376,7 +1374,7 @@ msgstr "Proton 用户名"
 #: node_modules/react-components/containers/support/BugModal.js:156
 msgctxt "Label"
 msgid "Email address"
-msgstr "电子邮箱"
+msgstr "邮箱地址"
 
 #: node_modules/react-components/containers/support/BugModal.js:168
 msgctxt "Label"
@@ -1386,7 +1384,7 @@ msgstr "类别"
 #: node_modules/react-components/containers/support/BugModal.js:180
 msgctxt "Label"
 msgid "What happened?"
-msgstr "发生了什么？"
+msgstr "问题描述"
 
 #: node_modules/react-components/containers/support/BugModal.js:201
 msgctxt "Label"
@@ -1416,12 +1414,12 @@ msgstr "浏览器版本"
 #: node_modules/react-components/containers/payments/BitcoinDetails.js:10
 msgctxt "Label"
 msgid "Amount BTC"
-msgstr "BTC 金额"
+msgstr "比特币金额"
 
 #: node_modules/react-components/containers/payments/BitcoinDetails.js:16
 msgctxt "Label"
 msgid "BTC address"
-msgstr "BTC 地址"
+msgstr "比特币地址"
 
 #: node_modules/react-components/containers/payments/Payment.js:74
 msgctxt "Label"
@@ -1496,12 +1494,12 @@ msgstr "邮局信箱"
 #: src/app/components/ContactAdrField.js:81
 msgctxt "Label"
 msgid "Extended address"
-msgstr "地址"
+msgstr "详细地址"
 
 #: src/app/components/ContactImageModal.js:47
 msgctxt "Label"
 msgid "Add image URL"
-msgstr "添加图像网址"
+msgstr "图像网址"
 
 #: src/app/components/ContactImageModal.js:58
 msgctxt "Label"
@@ -1521,12 +1519,12 @@ msgstr "添加至群组"
 #: src/app/components/ContactPgpSettings.js:109
 msgctxt "Label"
 msgid "Encrypt emails"
-msgstr "加密电子邮件"
+msgstr "发送加密邮件"
 
 #: src/app/components/ContactPgpSettings.js:135
 msgctxt "Label"
 msgid "Sign emails"
-msgstr "签名电子邮件"
+msgstr "发信附带数字签名"
 
 #: src/app/components/ContactPgpSettings.js:160
 msgctxt "Label"
@@ -1536,7 +1534,7 @@ msgstr "公钥"
 #: src/app/components/ContactPgpSettings.js:175
 msgctxt "Label"
 msgid "Cryptographic scheme"
-msgstr "加密方式"
+msgstr "加密格式"
 
 #.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
 #: src/app/components/ContactEmailSettingsModal.js:252
@@ -1557,7 +1555,7 @@ msgstr "上传"
 #: node_modules/react-components/containers/support/AttachScreenshot.js:23
 msgctxt "Error notification in the bug report modal when the user upload file"
 msgid "No image selected"
-msgstr "未选择图像"
+msgstr "没有选择图片"
 
 #: node_modules/react-components/containers/support/BugModal.js:38
 #: node_modules/react-components/containers/support/BugModal.js:52
@@ -1583,7 +1581,7 @@ msgstr "导入/导出问题"
 #: node_modules/react-components/containers/support/BugModal.js:42
 msgctxt "Bug category"
 msgid "Custom domains problem"
-msgstr "自定义域名问题"
+msgstr "自有域名问题"
 
 #: node_modules/react-components/containers/support/BugModal.js:43
 #: node_modules/react-components/containers/support/BugModal.js:54
@@ -1671,7 +1669,7 @@ msgstr "清除浏览器缓存"
 #: node_modules/react-components/containers/payments/PayPal.js:125
 msgctxt "Link"
 msgid "click here"
-msgstr "请单击此处"
+msgstr "点击此处"
 
 #: node_modules/react-components/containers/heading/UpgradeButton.js:13
 #: node_modules/react-components/containers/heading/UpgradeButton.js:21
@@ -1700,7 +1698,7 @@ msgstr "联系人群组"
 #: src/app/content/PrivateSidebar.js:37
 msgctxt "Link"
 msgid "Contacts"
-msgstr "通信录"
+msgstr "通讯录"
 
 #: src/app/content/PrivateSidebar.js:44
 msgctxt "Link"
@@ -1720,12 +1718,12 @@ msgstr "群组"
 #: node_modules/react-components/containers/support/BugModal.js:120
 msgctxt "Success"
 msgid "Bug reported"
-msgstr "收到错误报告"
+msgstr "问题已反馈"
 
 #: node_modules/react-components/containers/payments/DonateModal.js:33
 msgctxt "Success"
 msgid "Your support is essential to keeping Proton running. Thank you for supporting internet privacy!"
-msgstr "您的支持对于 ProtonMail 至关重要。感谢您支持互联网隐私保护！"
+msgstr "您的支持对 Proton 至关重要，感谢您支持网络隐私保护！"
 
 #: node_modules/react-components/containers/general/AutoSaveContactsToggle.js:16
 msgctxt "Success"
@@ -1745,18 +1743,18 @@ msgstr "设置已保存"
 #: src/app/components/delete/DeleteModal.js:23
 msgctxt "Success"
 msgid "Contacts deleted"
-msgstr "已删除联系人"
+msgstr "联系人已删除"
 
 #: src/app/components/delete/DeleteModal.js:33
 msgctxt "Success"
 msgid "Contact deleted"
 msgid_plural "Contacts deleted"
-msgstr[0] "已删除联系人"
+msgstr[0] "联系人已删除"
 
 #: node_modules/react-components/containers/support/BugModal.js:140
 msgctxt "Warning"
 msgid "Bug reports are not end-to-end encrypted, please do not send any sensitive information."
-msgstr "反馈内容不会经过端对端加密，请勿发送敏感信息。"
+msgstr "反馈内容不会经过端到端加密，请勿发送敏感信息。"
 
 #: src/app/components/ContactViewErrors.js:12
 msgctxt "Warning"
@@ -1772,12 +1770,12 @@ msgstr "错误：加密内容解密失败，无法读取。"
 #: src/app/components/UpgradeModal.js:19
 msgctxt "Warning"
 msgid "This feature requires a paid Proton account"
-msgstr "此功能需要付费的账户"
+msgstr "此功能仅限付费用户使用"
 
 #: src/app/components/merge/MergeContactPreview.js:82
 msgctxt "Warning"
 msgid "Some of the contacts to be merged display errors. Please review them individually"
-msgstr "有些要合并的联系人显示错误。请单独查看。"
+msgstr "部分需合并的联系人无法显示，请单独查看。"
 
 #: src/app/components/merge/MergeContactPreview.js:84
 msgctxt "Warning"
@@ -1788,7 +1786,7 @@ msgstr "无法合并联系人"
 msgctxt "Warning"
 msgid "This action will permanently delete the selected contact. Are you sure you want to delete this contact?"
 msgid_plural "This action will permanently delete selected contacts. Are you sure you want to delete these contacts?"
-msgstr[0] "此操作将永久删除所选联系人。确定要继续吗？"
+msgstr[0] "确定要永久删除所选联系人吗？"
 
 #: node_modules/react-components/containers/support/BugModal.js:193
 msgctxt "Label, make it short please"
@@ -1798,7 +1796,7 @@ msgstr "添加截图"
 #: node_modules/react-components/containers/payments/Card.js:57
 msgctxt "Placeholder, make it short"
 msgid "Security code"
-msgstr "银行卡安全码"
+msgstr "安全码"
 
 #: node_modules/react-components/containers/payments/Cash.js:13
 #, javascript-format
@@ -1860,7 +1858,7 @@ msgstr "昵称"
 #: src/app/helpers/fields.js:71
 msgctxt "Contact field label"
 msgid "Email"
-msgstr "电子邮件"
+msgstr "邮箱"
 
 #: src/app/helpers/fields.js:8
 #: src/app/helpers/fields.js:33
@@ -1890,7 +1888,7 @@ msgstr "照片"
 #: src/app/helpers/fields.js:75
 msgctxt "Contact field label"
 msgid "Organization"
-msgstr "机构"
+msgstr "单位"
 
 #: src/app/helpers/fields.js:12
 #: src/app/helpers/fields.js:37
@@ -1906,7 +1904,7 @@ msgstr "生日"
 #: src/app/helpers/fields.js:77
 msgctxt "Contact field label"
 msgid "Anniversary"
-msgstr "周年"
+msgstr "纪念日"
 
 #: src/app/helpers/fields.js:14
 #: src/app/helpers/fields.js:39
@@ -1922,7 +1920,7 @@ msgstr "标题"
 #: src/app/helpers/fields.js:79
 msgctxt "Contact field label"
 msgid "Role"
-msgstr "角色"
+msgstr "身份"
 
 #: src/app/helpers/fields.js:16
 #: src/app/helpers/fields.js:42
@@ -1970,7 +1968,7 @@ msgstr "时区"
 #: src/app/helpers/fields.js:85
 msgctxt "Contact field label"
 msgid "Geo"
-msgstr "地理"
+msgstr "坐标"
 
 #: src/app/helpers/fields.js:22
 #: src/app/helpers/fields.js:48
@@ -1978,7 +1976,7 @@ msgstr "地理"
 #: src/app/helpers/fields.js:86
 msgctxt "Contact field label"
 msgid "Logo"
-msgstr "标识"
+msgstr "标志"
 
 #: src/app/helpers/fields.js:23
 #: src/app/helpers/fields.js:41
@@ -1998,7 +1996,7 @@ msgstr ""
 #: src/app/helpers/fields.js:89
 msgctxt "Contact field label"
 msgid "Related"
-msgstr "相关的"
+msgstr "关系"
 
 #: src/app/helpers/fields.js:26
 #: src/app/helpers/fields.js:90
@@ -2035,7 +2033,7 @@ msgstr "主要"
 #: src/app/helpers/types.js:8
 msgctxt "Contact type label"
 msgid "Yomi"
-msgstr "Yomi"
+msgstr "读音"
 
 #: src/app/helpers/types.js:9
 msgctxt "Contact type label"
@@ -2060,7 +2058,7 @@ msgstr "姓名"
 #: src/app/helpers/types.js:15
 msgctxt "Property type"
 msgid "Yomi"
-msgstr "Yomi"
+msgstr "读音"
 
 #: src/app/helpers/types.js:19
 msgctxt "Property type"
@@ -2126,7 +2124,7 @@ msgstr "联系人"
 #: src/app/helpers/types.js:53
 msgctxt "Property type"
 msgid "Acquaintance"
-msgstr "熟人"
+msgstr "认识"
 
 #: src/app/helpers/types.js:54
 msgctxt "Property type"
@@ -2136,7 +2134,7 @@ msgstr "朋友"
 #: src/app/helpers/types.js:55
 msgctxt "Property type"
 msgid "Met"
-msgstr "遇见"
+msgstr "见过"
 
 #: src/app/helpers/types.js:56
 msgctxt "Property type"
@@ -2146,12 +2144,12 @@ msgstr "同事"
 #: src/app/helpers/types.js:57
 msgctxt "Property type"
 msgid "Colleague"
-msgstr "同事"
+msgstr "同行"
 
 #: src/app/helpers/types.js:58
 msgctxt "Property type"
 msgid "Co-resident"
-msgstr "共同居住"
+msgstr "室友"
 
 #: src/app/helpers/types.js:59
 msgctxt "Property type"
@@ -2161,18 +2159,18 @@ msgstr "邻居"
 #: src/app/helpers/types.js:60
 msgctxt "Property type"
 msgid "Child"
-msgstr "儿童"
+msgstr "子女"
 
 #: src/app/helpers/types.js:61
 msgctxt "Property type"
 msgid "Parent"
-msgstr "家长"
+msgstr "父母"
 
 #: src/app/helpers/types.js:62
 #: src/app/helpers/types.js:63
 msgctxt "Property type"
 msgid "Sibling"
-msgstr "兄弟姐妹"
+msgstr "同胞"
 
 #: src/app/helpers/types.js:64
 msgctxt "Property type"
@@ -2182,12 +2180,12 @@ msgstr "亲属"
 #: src/app/helpers/types.js:65
 msgctxt "Property type"
 msgid "Muse"
-msgstr "诗人"
+msgstr "灵感来源"
 
 #: src/app/helpers/types.js:66
 msgctxt "Property type"
 msgid "Crush"
-msgstr "暗恋"
+msgstr "热恋"
 
 #: src/app/helpers/types.js:67
 msgctxt "Property type"
@@ -2212,7 +2210,7 @@ msgstr "代理人"
 #: src/app/helpers/types.js:71
 msgctxt "Property type"
 msgid "Emergency"
-msgstr "紧急"
+msgstr "紧急联系人"
 
 #: src/app/helpers/encrypt.js:74
 msgctxt "Default display name vcard"
@@ -2227,12 +2225,12 @@ msgstr "我们支持从 Outlook、Outlook Express、Yahoo! Mail、Hotmail、Eudo
 #: src/app/components/import/ImportingModalContent.js:246
 msgctxt "Description"
 msgid "Encrypting and importing contacts... This may take a few minutes. When the process is completed, you can close this modal."
-msgstr "正在加密和导入联系人... 这可能需要几分钟的时间。当过程完成时，您可以关闭这个模块。"
+msgstr "正在加密并导入联系人，可能需要几分钟的时间。完成后您就可以关闭此对话框了。"
 
 #: src/app/components/import/ImportGroupsModalContent.js:10
 msgctxt "Description"
 msgid "We picked up at least one group/organization from the list of contacts you are importing. Take the time to review how we should import these groups."
-msgstr "我们从您正在导入的联系人列表中选择了至少一个群组。 花时间来审查我们应该如何导入这些组。"
+msgstr "我们从您导入的联系人中提取出了若干群组，您可以选择如何导入这些群组。"
 
 #: src/app/components/ExportModal.js:119
 msgctxt "Description"
@@ -2242,18 +2240,18 @@ msgstr "正在解密联系人，可能需要几分钟的时间。完成后您就
 #: src/app/components/merge/MergingModalContent.js:267
 msgctxt "Description"
 msgid "Merging contacts... This may take a few minutes. When the process is completed, you can close this modal."
-msgstr "合并联系人... 这可能需要几分钟的时间。当过程完成时，您可以关闭这个模块。"
+msgstr "正在合并联系人，可能需要几分钟的时间。完成后您就可以关闭此对话框了。"
 
 #: src/app/components/merge/MergeModalContent.js:70
 msgctxt "Description"
 msgid "Use Drag and Drop to rank merging priority between contacts. Uncheck the contacts you do not want to merge."
-msgstr "使用拖放来排序联系人之间的合并优先级。取消选中您不想合并的联系人。"
+msgstr "拖动可调整联系人合并优先级，未勾选的联系人不会被合并。"
 
 #: src/app/components/merge/MergeModalContent.js:74
 msgctxt "Description"
 msgid "You can mark for deletion the contacts that you do not want neither to merge nor to keep.\n"
 "Deletion will only take place after the merge button is clicked"
-msgstr "您可以标记删除您不想合并或保留的联系人。只有在点击合并按钮后才会删除。"
+msgstr "您可以选择稍后删除不想合并也不想保留的联系人，点击合并按钮后他们就会被删除。"
 
 #: src/app/components/import/ImportCsvTableHeader.js:11
 msgctxt "TableHeader"
@@ -2263,17 +2261,17 @@ msgstr "导入"
 #: src/app/components/import/ImportCsvTableHeader.js:13
 msgctxt "TableHeader"
 msgid "CSV FIELD"
-msgstr "CSV FIELD"
+msgstr "CSV 信息"
 
 #: src/app/components/import/ImportCsvTableHeader.js:14
 msgctxt "TableHeader"
 msgid "VCARD FIELD"
-msgstr "VCARD FIELD"
+msgstr "vCard 信息"
 
 #: src/app/components/import/ImportCsvTableHeader.js:17
 msgctxt "TableHeader"
 msgid "VALUES"
-msgstr "值"
+msgstr "内容"
 
 #: src/app/components/merge/MergeTable.js:13
 msgctxt "TableHeader"
@@ -2288,12 +2286,12 @@ msgstr "地址"
 #: src/app/components/merge/MergeTable.js:15
 msgctxt "TableHeader"
 msgid "ACTIONS"
-msgstr "动作"
+msgstr "操作"
 
 #: src/app/components/import/ImportCsvModalContent.js:34
 msgctxt "Error notification"
 msgid "First name and last name cannot be unchecked at the same time"
-msgstr "姓和名字不能同时不选"
+msgstr "姓氏和名字至少应勾选一个"
 
 #: src/app/components/import/ImportModal.js:70
 msgctxt "Error notification"
@@ -2308,46 +2306,46 @@ msgstr "选择的文件已损坏"
 #: src/app/components/import/ImportCsvModalContent.js:63
 msgctxt "Description of the purpose of the import CSV modal"
 msgid "We have detected the following fields in the CSV file you uploaded. Check the ones you want to import."
-msgstr "我们在您上传的 CSV 文件中检测到以下信息。请检查您想要导入的信息。"
+msgstr "我们从您选择的 CSV 文件中检测到了以下信息，请选择要导入的内容。"
 
 #: src/app/components/import/ImportCsvModalContent.js:67
 msgctxt "Description of the purpose of the import CSV modal"
 msgid "Also, we have automatically matched CSV fields with vCard fields. You can review and change this matching manually."
-msgstr "另外，我们已经自动匹配了 vCard 字段的 CSV 字段。您可以手动查看和更改此匹配。"
+msgstr "另外，我们已将 CSV 自动转换成 vCard 信息，您可以查看并修改对应关系。"
 
 #: src/app/components/import/ErrorDetails.js:6
 msgctxt "Info on errors"
 msgid "Click for details"
-msgstr "点击此处查看详细信息"
+msgstr "点击查看详情"
 
 #: src/app/components/import/ImportingModalContent.js:31
 #, javascript-format
 msgctxt "Info on errors importing contacts"
 msgid "Contact ${ index } from your list could not be parsed. ${ message }"
-msgstr "无法解析您列表中的 ${ index } 联系人。${ message }"
+msgstr "第 ${ index } 位联系人解析失败。${ message }"
 
 #: src/app/components/import/ImportingModalContent.js:33
 msgctxt "Info on errors importing contacts"
 msgid "Contact ${ index } from your list could not be encrypted."
-msgstr "无法加密您列表中的${ index }。"
+msgstr "第 ${ index } 位联系人加密失败。"
 
 #: src/app/components/import/ImportingModalContent.js:35
 #, javascript-format
 msgctxt "Info on errors importing contacts"
 msgid "Contact ${ index } from your list could not be imported. ${ message }"
-msgstr "无法从您的列表中导入${ index } 联系人。${ message }"
+msgstr "第 ${ index } 位联系人导入失败。${ message }"
 
 #: src/app/components/import/ImportingModalContent.js:265
 msgctxt "Info on errors importing contacts"
 msgid "Some contacts could not be imported. Click for details"
-msgstr "有些联系人无法导入。点击查看详情。"
+msgstr "部分联系人导入失败，点击查看详情"
 
 #: src/app/components/import/ImportingModalContent.js:253
 #, javascript-format
 msgctxt "Progress bar description"
 msgid "${ model.submitted.length } out of ${ model.total } contact successfully imported."
 msgid_plural "${ model.submitted.length } out of ${ model.total } contacts successfully imported."
-msgstr[0] "共 ${ model.total } 名联系人，成功导出 ${ model.submitted.length } 名联系人。"
+msgstr[0] "共 ${ model.total } 名联系人，成功导入 ${ model.submitted.length } 名联系人。"
 
 #: src/app/components/import/ImportingModalContent.js:258
 msgctxt "Progress bar description"
@@ -2378,13 +2376,13 @@ msgstr "共 ${ countContacts } 名联系人，成功导出 ${ contactsExported.l
 #: src/app/components/ExportModal.js:129
 msgctxt "Progress bar description"
 msgid "No contacts exported."
-msgstr "没有联系人导出。"
+msgstr "没有导出联系人。"
 
 #: src/app/components/merge/MergingModalContent.js:275
 #, javascript-format
 msgctxt "Progress bar description"
 msgid "${ model.submitted.length } out of ${ totalBeMerged } contacts successfully merged."
-msgstr "已成功合并了{ model.submitted.length } 里 { totalBeMerged } 的联系人。"
+msgstr "共 ${ totalBeMerged } 名联系人，成功合并 ${ model.submitted.length } 名联系人。"
 
 #: src/app/components/merge/MergingModalContent.js:277
 msgctxt "Progress bar description"
@@ -2394,7 +2392,7 @@ msgstr "没有合并联系人。"
 #: src/app/components/import/ImportModal.js:82
 msgctxt "Error info"
 msgid "We only support importing files smaller than 10 MB. Please split your contacts into several smaller files."
-msgstr "我们只支持导入小于 10 MB的文件。请将您的联系人分成几个较小的文件。"
+msgstr "只支持导入小于 10 MB 的文件。请将您的联系人拆分成较小的文件。"
 
 #: src/app/components/EncryptedIcon.js:7
 msgctxt "Tooltip"
@@ -2404,28 +2402,28 @@ msgstr "已加密且已核实数字签名"
 #: src/app/components/ContactPgpSettings.js:112
 msgctxt "Tooltip"
 msgid "Email encryption forces email signature to help authenticate your sent messages"
-msgstr "电子邮件加密迫使电子邮件签名以帮助验证您发送的消息"
+msgstr "加密邮件必须予以数字签名以表明您的邮件真实性"
 
 #: src/app/components/ContactPgpSettings.js:138
 msgctxt "Tooltip"
 msgid "Digitally signing emails helps authenticating that messages are sent by you"
-msgstr "数字签名电子邮件有助于验证您发送的消息"
+msgstr "数字签名有助于证明您的邮件真实性"
 
 #: src/app/components/ContactPgpSettings.js:163
 msgctxt "Tooltip"
 msgid "Upload a public key to enable sending end-to-end encrypted emails to this email"
-msgstr "上传公钥以启用向此电子邮件发送端到端加密邮件"
+msgstr "上传公钥后方可向其发送端到端加密的邮件"
 
 #: src/app/components/ContactPgpSettings.js:178
 msgctxt "Tooltip"
 msgid "Select the PGP scheme to be used when signing or encrypting to a user. Note that PGP/Inline forces plain text messages"
-msgstr "选择在向用户签名或加密时要使用的 PGP 方案。请注意, PGP/内嵌强制纯文本消息。"
+msgstr "选择加密和数字签名的 PGP 格式，注意 PGP/Inline 只能用于纯文本邮件"
 
 #.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
 #: src/app/components/ContactEmailSettingsModal.js:255
 msgctxt "Tooltip"
 msgid "Automatic indicates that the format in the composer is used to send to this user. Plain text indicates that the message will always be converted to plain text on send."
-msgstr "“自动”表示使用编辑区中指定的格式，“纯文本”则表示向此人发送的邮件一律转换为纯文本。"
+msgstr "“自动”表示使用编辑区中指定的格式，“纯文本”则表示向此人发送的邮件一律使用纯文本。"
 
 #: src/app/components/ContactToolbar.js:41
 msgctxt "Tooltip"
@@ -2456,7 +2454,7 @@ msgstr "指纹"
 #: src/app/components/ContactKeysTable.js:88
 msgctxt "Table header"
 msgid "Created"
-msgstr "已创建"
+msgstr "创建时间"
 
 #: src/app/components/ContactKeysTable.js:89
 msgctxt "Table header"
@@ -2482,27 +2480,27 @@ msgstr "操作"
 #: src/app/components/ContactGroupsTable.js:60
 msgctxt "Table header"
 msgid "Group size"
-msgstr "组大小"
+msgstr "大小"
 
 #: src/app/components/ContactGroupModal.js:130
 msgctxt "Notification"
 msgid "Contact group updated"
-msgstr "群组已更新"
+msgstr "群组已更改"
 
 #: src/app/components/ContactGroupModal.js:131
 msgctxt "Notification"
 msgid "Contact group created"
-msgstr "群组已更新"
+msgstr "群组已创建"
 
 #: src/app/components/ContactGroupModal.js:151
 msgctxt "Label for contact group name"
 msgid "Name"
-msgstr "姓名"
+msgstr "名称"
 
 #: src/app/components/ContactGroupModal.js:155
 msgctxt "Placeholder for contact group name"
 msgid "Name"
-msgstr "姓名"
+msgstr "名称"
 
 #: src/app/components/ContactGroupModal.js:162
 msgctxt "Label for contact group color"
@@ -2517,7 +2515,7 @@ msgstr "您的通讯录是空的"
 #: src/app/components/ContactsList.js:133
 msgctxt "Info message"
 msgid "Your contact group is empty"
-msgstr "您的群组为空"
+msgstr "此群组为空"
 
 #: src/app/components/ContactsList.js:152
 msgctxt "Info message"
@@ -2528,13 +2526,13 @@ msgstr "找不到符合条件的联系人"
 #, javascript-format
 msgctxt "Actions message"
 msgid "You can either ${ addContact } or ${ importContact } from a file."
-msgstr "您可以${ addContact } 或从文件中${ importContact }"
+msgstr "您可以${ addContact }或从文件中${ importContact }。"
 
 #: src/app/components/ContactsList.js:137
 #, javascript-format
 msgctxt "Actions message"
 msgid "You can ${ editGroup } to add a contact."
-msgstr "您可以${ editGroup } 添加一个联系人。"
+msgstr "您可以通过${ editGroup }添加联系人。"
 
 #: src/app/components/ContactsList.js:154
 #, javascript-format
@@ -2556,12 +2554,12 @@ msgstr "纯文本"
 #, javascript-format
 msgctxt "Default encryption scheme"
 msgid "Use global default (${ defaultValue })"
-msgstr "使用全局默认 (${ defaultValue })"
+msgstr "遵循系统设置（${ defaultValue }）"
 
 #: src/app/components/KeyWarningIcon.js:14
 msgctxt "PGP key warning"
 msgid "This key is assigned to ${ emails }"
-msgstr "此密钥已分配给 ${ emails }"
+msgstr "此密钥的所有者是 ${ emails }"
 
 #: src/app/components/ContactKeysTable.js:206
 msgctxt "Key badge"
@@ -2571,22 +2569,22 @@ msgstr "主密钥"
 #: src/app/components/ContactKeysTable.js:208
 msgctxt "Key badge"
 msgid "Verification only"
-msgstr "只验证"
+msgstr "仅用于验证"
 
 #: src/app/components/ContactKeysTable.js:210
 msgctxt "Key badge"
 msgid "WKD"
-msgstr "网络密钥目录"
+msgstr "WKD"
 
 #: src/app/components/ContactKeysTable.js:211
 msgctxt "Key badge"
 msgid "Trusted"
-msgstr "信任"
+msgstr "已信任"
 
 #: src/app/components/ContactKeysTable.js:212
 msgctxt "Key badge"
 msgid "Revoked"
-msgstr "已撤销"
+msgstr "已作废"
 
 #: src/app/components/ContactKeysTable.js:213
 msgctxt "Key badge"

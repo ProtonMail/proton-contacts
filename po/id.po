@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2020-01-20 04:20\n"
+"PO-Revision-Date: 2020-01-27 05:22\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -207,15 +207,13 @@ msgid "Dark theme"
 msgstr "Tema gelap"
 
 #: node_modules/react-components/containers/search/SearchDropdown.js:60
-#: node_modules/react-components/containers/search/Searchbox.js:48
+#: node_modules/react-components/containers/search/Searchbox.js:43
 msgctxt "Action"
 msgid "Search"
 msgstr "Cari"
 
-#.  Clear button is hidden when using advanced mode because the buttons use the same spots
-#.  If there is the need of having both, a positioning solution will have to be found
 #: node_modules/react-components/containers/search/SearchDropdown.js:59
-#: node_modules/react-components/containers/search/Searchbox.js:55
+#: node_modules/react-components/containers/search/Searchbox.js:48
 #: node_modules/react-components/containers/support/AttachScreenshot.js:46
 #: src/app/components/ContactModalRow.js:30
 msgctxt "Action"
@@ -483,12 +481,12 @@ msgstr "Gunakan untuk pengiriman"
 #: src/app/components/ContactKeysTable.js:153
 msgctxt "Action"
 msgid "Trust"
-msgstr ""
+msgstr "Percayai"
 
 #: src/app/components/ContactKeysTable.js:161
 msgctxt "Action"
 msgid "Untrust"
-msgstr ""
+msgstr "Jangan percayai"
 
 #: src/app/components/ContactKeysTable.js:169
 msgctxt "Action"
@@ -548,12 +546,12 @@ msgstr "Rincian kontak"
 #: src/app/components/merge/MergeTableBody.js:31
 msgctxt "Action"
 msgid "Unmark for deletion"
-msgstr ""
+msgstr "Cabut tanda hapus"
 
 #: src/app/components/merge/MergeTableBody.js:31
 msgctxt "Action"
 msgid "Mark for deletion"
-msgstr ""
+msgstr "Tandai untuk dihapus"
 
 #: src/app/components/merge/MergeTable.js:58
 msgctxt "Action"
@@ -823,7 +821,7 @@ msgstr "Edit gambar"
 #: src/app/components/ContactModalProperties.js:21
 msgctxt "Title"
 msgid "Display name"
-msgstr ""
+msgstr "Nama tampilan"
 
 #: src/app/components/ContactModalProperties.js:22
 #: src/app/components/ContactViewProperties.js:28
@@ -925,7 +923,7 @@ msgstr "Buka fitur"
 #: src/app/components/UpgradeModal.js:10
 msgctxt "Title"
 msgid "Upgrade required"
-msgstr ""
+msgstr "Butuh peningkatan akun"
 
 #: src/app/components/merge/ContactDetails.js:36
 #: src/app/components/merge/MergeContactPreview.js:96
@@ -1109,7 +1107,7 @@ msgstr "Di bawah jumlah minimum. (${ amount })"
 #: node_modules/react-components/containers/payments/Bitcoin.js:64
 msgctxt "Info"
 msgid "Bitcoin transactions can take some time to be confirmed (up to 24 hours). Once confirmed, we will add credits to your account. After transaction confirmation, you can pay your invoice with the credits."
-msgstr ""
+msgstr "Transaksi bitcoin membutuhkan waktu untuk dikonfirmasi (hingga 24 jam). Setelah dikonfirmasi, kami akan menambahkan kredit ke akun Anda. Setelah konfirmasi transaksi, Anda dapat membayar tagihan Anda dengan kredit."
 
 #: node_modules/react-components/containers/payments/Bitcoin.js:73
 msgctxt "Info"
@@ -1119,7 +1117,7 @@ msgstr "Usai melakukan pembayaran dengan Bitcoin, harap ikuti instruksi di bawah
 #: node_modules/react-components/containers/payments/DonateModal.js:46
 msgctxt "Info"
 msgid "Your payment details are protected with TLS encryption and Swiss privacy laws."
-msgstr ""
+msgstr "Rincian pembayaran Anda dilindungi oleh enkripsi TLS dan peraturan privasi Swiss."
 
 #: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:43
 msgctxt "Info"
@@ -1144,7 +1142,7 @@ msgstr "Tidak ada kontak yang diimpor"
 #: src/app/components/UpsellFree.js:15
 msgctxt "Info"
 msgid "Unlock access to encrypted contact details such as phone numbers and addresses with ProtonMail Plus."
-msgstr ""
+msgstr "Gunakan ProtonMail Plus untuk mulai mengenkripsi informasi sensitif seperti nomor telepon dan alamat rumah."
 
 #: src/app/components/ContactModal.js:128
 msgctxt "Info"
@@ -1159,13 +1157,13 @@ msgstr "Belum ada kontak yang ditambahkan"
 #: src/app/components/SelectEmailsModal.js:48
 msgctxt "Info"
 msgid "Please select which email address or addresses to add to this group."
-msgstr ""
+msgstr "Pilih alamat surel yang ingin ditambahkan ke grup ini."
 
 #: src/app/components/ContactGroupDropdown.js:134
 msgctxt "Info"
 msgid "Contact group apply"
 msgid_plural "Contact groups apply"
-msgstr[0] ""
+msgstr[0] "Grup kontak ditambahkan"
 
 #: src/app/components/ContactGroupDropdown.js:175
 msgctxt "Info"
@@ -1180,12 +1178,12 @@ msgstr "Kunci ganda diperbarui"
 #: src/app/components/ContactPgpSettings.js:82
 msgctxt "Info"
 msgid "Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service."
-msgstr ""
+msgstr "PGP memungkinkan Anda mengirim surel terenkripsi ke penerima non-ProtonMail yang memiliki fitur PGP."
 
 #: src/app/components/ContactPgpSettings.js:87
 msgctxt "Info"
 msgid "Address Verification with Trusted Keys is enabled for this address. To be able to send to this address, first trust public keys that can be used for sending."
-msgstr ""
+msgstr "Verifikasi Alamat dengan Kunci Terpercaya sudah diaktifkan untuk alamat ini. Untuk mengirim ke alamat ini, percayai dulu kunci publik yang akan dipakai untuk mengirim pesan."
 
 #: src/app/components/ContactPgpSettings.js:91
 msgctxt "Info"
@@ -1211,52 +1209,52 @@ msgstr "Semua kunci yang terunggah sudah usang atau ditolak! Enkripsi secara oto
 #: src/app/components/ContactEmailSettingsModal.js:236
 msgctxt "Info"
 msgid "Select the email format you want to be used by default when sending an email to this email address."
-msgstr ""
+msgstr "Pilih format surel baku yang akan Anda gunakan setiap kali mengirim surat ke alamat ini."
 
 #.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
 #: src/app/components/ContactEmailSettingsModal.js:241
 msgctxt "Info"
 msgid "PGP/Inline is only compatible with Plain Text format. Please note that ProtonMail always signs PGP/Inline messages."
-msgstr ""
+msgstr "PGP/Inline cocok dengan format Teks Polos saja. ProtonMail selalu menandatangani pesan PGP/Inline."
 
 #.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
 #: src/app/components/ContactEmailSettingsModal.js:246
 msgctxt "Info"
 msgid "PGP/MIME automatically sends the message using the current composer mode. Please note that ProtonMail always signs PGP/MIME messages."
-msgstr ""
+msgstr "PGP/MIME otomatis mengirim pesan dengan mode tulis saat ini. ProtonMail selalu menandatangani pesan PGP/MIME."
 
 #: src/app/components/MergeRow.js:7
 msgctxt "Info"
 msgid "Two or more contacts appear to be identical."
-msgstr ""
+msgstr "Dua kontak atau lebih tampaknya mirip."
 
 #: src/app/components/MergeRow.js:15
 #, javascript-format
 msgctxt "Info"
 msgid "${ boldText } Do you want to merge these contacts now?"
-msgstr ""
+msgstr "${ boldText } Apakah Anda ingin menggabung kontak ini sekarang juga?"
 
 #: src/app/components/ContactPlaceholder.js:26
 #: src/app/components/ContactPlaceholder.js:76
 msgctxt "Info"
 msgid "Add contacts to your ProtonMail account by importing them from a CSV or vCard file."
-msgstr ""
+msgstr "Tambahkan kontak ke akun ProtonMail Anda dengan mengimpornya dari berkas CSV atau vCard."
 
 #: src/app/components/ContactPlaceholder.js:38
 #: src/app/components/ContactPlaceholder.js:88
 msgctxt "Info"
 msgid "Create a backup of your ProtonMail contacts by exporting them to a vCard file."
-msgstr ""
+msgstr "Buat cadangan kontak ProtonMail Anda dengan mengekspornya ke berkas vCard."
 
 #: src/app/components/ContactPlaceholder.js:49
 msgctxt "Info"
 msgid "Use groups to send email to a list of addresses you regularly communicate with."
-msgstr ""
+msgstr "Gunakan grup untuk mengirim surel ke daftar alamat yang sering Anda hubungi."
 
 #: src/app/components/ContactPlaceholder.js:99
 msgctxt "Info"
 msgid "Upgrade to a paid plan to enable encrypted contact details and manage contact groups."
-msgstr ""
+msgstr "Tingkatkan ke paket berbayar untuk mengaktifkan enkripsi informasi kontak dan mengelola grup kontak."
 
 #: src/app/components/ContactPlaceholder.js:140
 #: src/app/components/ContactPlaceholder.js:165
@@ -1269,7 +1267,7 @@ msgstr[0] "${ selectedContacts } kontak"
 #, javascript-format
 msgctxt "Info"
 msgid "You selected ${ totalContactsText } from your address book."
-msgstr ""
+msgstr "Anda memilih ${ totalContactsText } dari daftar alamat Anda."
 
 #: src/app/components/ContactPlaceholder.js:165
 #, javascript-format
@@ -1280,7 +1278,7 @@ msgstr "${ totalContactsInGroup } kontak"
 #: src/app/components/ContactPlaceholder.js:177
 msgctxt "Info"
 msgid "You have ${ _totalContactsText } in this group."
-msgstr ""
+msgstr "Ada ${ _totalContactsText } di grup ini."
 
 #: src/app/components/ContactPlaceholder.js:196
 msgctxt "Info"
@@ -1302,13 +1300,13 @@ msgstr "Pengaturan > Umum > Kontak"
 #, javascript-format
 msgctxt "Info"
 msgid "You have ${ boldTotalContacts } in your address book"
-msgstr ""
+msgstr "Ada ${ boldTotalContacts } di buku alamat Anda"
 
 #: src/app/components/ContactPlaceholder.js:208
 #, javascript-format
 msgctxt "Info"
 msgid "You can decide whether or not contacts are automatically added to your address book by navigating to ${ navigateTo }"
-msgstr ""
+msgstr "Anda dapat mengaktifkan atau menonaktifkan penambahan kontak otomatis di ${ navigateTo }"
 
 #: src/app/components/ContactGroupsTable.js:86
 msgctxt "Info"
@@ -1318,19 +1316,19 @@ msgstr "Yakin ingin menghapus grup kontak ini?"
 #: src/app/components/ContactGroupsTable.js:87
 msgctxt "Info"
 msgid "Contacts in the group aren't deleted if the contact group is deleted."
-msgstr ""
+msgstr "Kontak di dalam grup tidak akan terhapus meski grupnya dihapus."
 
 #: src/app/components/ContactGroupsTable.js:101
 #, javascript-format
 msgctxt "Info"
 msgid "${ countEmailAddresses } email address"
 msgid_plural "${ countEmailAddresses } email addresses"
-msgstr[0] ""
+msgstr[0] "${ countEmailAddresses } alamat surel"
 
 #: src/app/components/ContactGroupsSection.js:14
 msgctxt "Info"
 msgid "A group can contain multiple email addresses from the same contact. Please note that a sending limit may apply and prevent you from sending emails to excessively large groups."
-msgstr ""
+msgstr "Satu grup bisa mengandung beberapa alamat surel dari kontak yang sama. Namun, sistem akan mencegah Anda mengirim surat ke grup kontak yang terlalu besar."
 
 #: node_modules/react-components/containers/api/HumanVerificationModal.js:22
 msgctxt "Label"
@@ -1376,7 +1374,7 @@ msgstr "Nama pengguna Proton"
 #: node_modules/react-components/containers/support/BugModal.js:156
 msgctxt "Label"
 msgid "Email address"
-msgstr ""
+msgstr "Alamat surel"
 
 #: node_modules/react-components/containers/support/BugModal.js:168
 msgctxt "Label"
@@ -1456,47 +1454,47 @@ msgstr "Salin"
 #: node_modules/react-components/components/input/PasswordInput.js:21
 msgctxt "Label"
 msgid "Reveal password"
-msgstr ""
+msgstr "Lihat sandi"
 
 #: node_modules/react-components/components/input/PasswordInput.js:21
 msgctxt "Label"
 msgid "Hide password"
-msgstr ""
+msgstr "Sembunyikan sandi"
 
 #: src/app/components/ContactAdrField.js:29
 msgctxt "Label"
 msgid "Street address"
-msgstr ""
+msgstr "Alamat rumah"
 
 #: src/app/components/ContactAdrField.js:37
 msgctxt "Label"
 msgid "City"
-msgstr ""
+msgstr "Kota"
 
 #: src/app/components/ContactAdrField.js:46
 msgctxt "Label"
 msgid "Region"
-msgstr ""
+msgstr "Provinsi"
 
 #: src/app/components/ContactAdrField.js:54
 msgctxt "Label"
 msgid "Postal code"
-msgstr ""
+msgstr "Kode pos"
 
 #: src/app/components/ContactAdrField.js:62
 msgctxt "Label"
 msgid "Country"
-msgstr ""
+msgstr "Negara"
 
 #: src/app/components/ContactAdrField.js:71
 msgctxt "Label"
 msgid "Post office box"
-msgstr ""
+msgstr "Kotak surat"
 
 #: src/app/components/ContactAdrField.js:81
 msgctxt "Label"
 msgid "Extended address"
-msgstr ""
+msgstr "Alamat lengkap"
 
 #: src/app/components/ContactImageModal.js:47
 msgctxt "Label"
@@ -1531,12 +1529,12 @@ msgstr "Tanda tangani surel"
 #: src/app/components/ContactPgpSettings.js:160
 msgctxt "Label"
 msgid "Public keys"
-msgstr ""
+msgstr "Kunci publik"
 
 #: src/app/components/ContactPgpSettings.js:175
 msgctxt "Label"
 msgid "Cryptographic scheme"
-msgstr ""
+msgstr "Skema kriptografi"
 
 #.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
 #: src/app/components/ContactEmailSettingsModal.js:252
@@ -1777,7 +1775,7 @@ msgstr "Fitur ini tersedia untuk akun Proton berbayar"
 #: src/app/components/merge/MergeContactPreview.js:82
 msgctxt "Warning"
 msgid "Some of the contacts to be merged display errors. Please review them individually"
-msgstr ""
+msgstr "Sebagian kontak yang akan digabung rusak. Mohon periksa satu per satu"
 
 #: src/app/components/merge/MergeContactPreview.js:84
 msgctxt "Warning"
@@ -1788,7 +1786,7 @@ msgstr "Kontak tidak dapat digabung"
 msgctxt "Warning"
 msgid "This action will permanently delete the selected contact. Are you sure you want to delete this contact?"
 msgid_plural "This action will permanently delete selected contacts. Are you sure you want to delete these contacts?"
-msgstr[0] ""
+msgstr[0] "Kontak yang dipilih akan dihapus permanen. Anda yakin ingin menghapusnya?"
 
 #: node_modules/react-components/containers/support/BugModal.js:193
 msgctxt "Label, make it short please"
@@ -1970,7 +1968,7 @@ msgstr "Zona waktu"
 #: src/app/helpers/fields.js:85
 msgctxt "Contact field label"
 msgid "Geo"
-msgstr ""
+msgstr "Koordinat"
 
 #: src/app/helpers/fields.js:22
 #: src/app/helpers/fields.js:48
@@ -2136,7 +2134,7 @@ msgstr "Teman"
 #: src/app/helpers/types.js:55
 msgctxt "Property type"
 msgid "Met"
-msgstr ""
+msgstr "Temu kenal"
 
 #: src/app/helpers/types.js:56
 msgctxt "Property type"
@@ -2151,7 +2149,7 @@ msgstr "Kolega"
 #: src/app/helpers/types.js:58
 msgctxt "Property type"
 msgid "Co-resident"
-msgstr ""
+msgstr "Teman serumah"
 
 #: src/app/helpers/types.js:59
 msgctxt "Property type"
@@ -2177,17 +2175,17 @@ msgstr "Saudara kandung"
 #: src/app/helpers/types.js:64
 msgctxt "Property type"
 msgid "Kin"
-msgstr ""
+msgstr "Kerabat"
 
 #: src/app/helpers/types.js:65
 msgctxt "Property type"
 msgid "Muse"
-msgstr ""
+msgstr "Ilham"
 
 #: src/app/helpers/types.js:66
 msgctxt "Property type"
 msgid "Crush"
-msgstr ""
+msgstr "Taksiran"
 
 #: src/app/helpers/types.js:67
 msgctxt "Property type"
@@ -2197,7 +2195,7 @@ msgstr "Tanggal"
 #: src/app/helpers/types.js:68
 msgctxt "Property type"
 msgid "Sweetheart"
-msgstr ""
+msgstr "Tersayang"
 
 #: src/app/helpers/types.js:69
 msgctxt "Property type"
@@ -2232,7 +2230,7 @@ msgstr "Enkripsi dan impor kontak memakan beberapa menit. Anda dapat menutup jen
 #: src/app/components/import/ImportGroupsModalContent.js:10
 msgctxt "Description"
 msgid "We picked up at least one group/organization from the list of contacts you are importing. Take the time to review how we should import these groups."
-msgstr ""
+msgstr "Kami menemukan sedikitnya satu grup/organisasi di daftar kontak Anda. Silakan tentukan langkah impor grup selanjutnya."
 
 #: src/app/components/ExportModal.js:119
 msgctxt "Description"
@@ -2247,53 +2245,53 @@ msgstr "Penggabungan kontak memakan beberapa menit. Anda dapat menutup jendela s
 #: src/app/components/merge/MergeModalContent.js:70
 msgctxt "Description"
 msgid "Use Drag and Drop to rank merging priority between contacts. Uncheck the contacts you do not want to merge."
-msgstr ""
+msgstr "Seret-lepas untuk mengurutkan prioritas penggabungan kontak. Tandai kontak yang ingin digabung."
 
 #: src/app/components/merge/MergeModalContent.js:74
 msgctxt "Description"
 msgid "You can mark for deletion the contacts that you do not want neither to merge nor to keep.\n"
 "Deletion will only take place after the merge button is clicked"
-msgstr ""
+msgstr "Anda dapat menandai kontak-kontak yang tidak ingin digabung atau disimpan. Penghapusan akan dilakukan setelah Anda menekan tombol gabung"
 
 #: src/app/components/import/ImportCsvTableHeader.js:11
 msgctxt "TableHeader"
 msgid "IMPORT"
-msgstr ""
+msgstr "IMPOR"
 
 #: src/app/components/import/ImportCsvTableHeader.js:13
 msgctxt "TableHeader"
 msgid "CSV FIELD"
-msgstr ""
+msgstr "KOTAK CSV"
 
 #: src/app/components/import/ImportCsvTableHeader.js:14
 msgctxt "TableHeader"
 msgid "VCARD FIELD"
-msgstr ""
+msgstr "KOTAK VCARD"
 
 #: src/app/components/import/ImportCsvTableHeader.js:17
 msgctxt "TableHeader"
 msgid "VALUES"
-msgstr ""
+msgstr "ISIAN"
 
 #: src/app/components/merge/MergeTable.js:13
 msgctxt "TableHeader"
 msgid "NAME"
-msgstr ""
+msgstr "NAMA"
 
 #: src/app/components/merge/MergeTable.js:14
 msgctxt "TableHeader"
 msgid "ADDRESS"
-msgstr ""
+msgstr "ALAMAT"
 
 #: src/app/components/merge/MergeTable.js:15
 msgctxt "TableHeader"
 msgid "ACTIONS"
-msgstr ""
+msgstr "AKSI"
 
 #: src/app/components/import/ImportCsvModalContent.js:34
 msgctxt "Error notification"
 msgid "First name and last name cannot be unchecked at the same time"
-msgstr ""
+msgstr "Nama depan dan nama belakang tidak boleh dikosongkan sekaligus"
 
 #: src/app/components/import/ImportModal.js:70
 msgctxt "Error notification"
@@ -2308,12 +2306,12 @@ msgstr "Berkas yang dipilih sepertinya rusak"
 #: src/app/components/import/ImportCsvModalContent.js:63
 msgctxt "Description of the purpose of the import CSV modal"
 msgid "We have detected the following fields in the CSV file you uploaded. Check the ones you want to import."
-msgstr ""
+msgstr "Kami menemukan baris-baris berikut ini di berkas CSV Anda. Pilih baris yang ingin Anda impor."
 
 #: src/app/components/import/ImportCsvModalContent.js:67
 msgctxt "Description of the purpose of the import CSV modal"
 msgid "Also, we have automatically matched CSV fields with vCard fields. You can review and change this matching manually."
-msgstr ""
+msgstr "Kami juga menyamakan kotak CSV dengan kotak vCard secara otomatis. Anda bisa memeriksa dan mengubahnya secara manual."
 
 #: src/app/components/import/ErrorDetails.js:6
 msgctxt "Info on errors"
@@ -2404,7 +2402,7 @@ msgstr "Data terenkripsi dengan tanda tangan digital terverifikasi"
 #: src/app/components/ContactPgpSettings.js:112
 msgctxt "Tooltip"
 msgid "Email encryption forces email signature to help authenticate your sent messages"
-msgstr ""
+msgstr "Enkripsi surel mewajibkan tanda tangan surel untuk memastikan pesan yang Anda kirim"
 
 #: src/app/components/ContactPgpSettings.js:138
 msgctxt "Tooltip"
@@ -2419,13 +2417,13 @@ msgstr "Unggah kunci publik untuk mengaktifkan enkripsi pengiriman surel ke alam
 #: src/app/components/ContactPgpSettings.js:178
 msgctxt "Tooltip"
 msgid "Select the PGP scheme to be used when signing or encrypting to a user. Note that PGP/Inline forces plain text messages"
-msgstr ""
+msgstr "Pilih skema PGP untuk menandatangani atau mengenkripsi pesan. PGP/Inline mewajibkan penggunaan pesan teks polos"
 
 #.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
 #: src/app/components/ContactEmailSettingsModal.js:255
 msgctxt "Tooltip"
 msgid "Automatic indicates that the format in the composer is used to send to this user. Plain text indicates that the message will always be converted to plain text on send."
-msgstr ""
+msgstr "Opsi Otomatis berarti pesan akan dikirim apa adanya sesuai format tulis yang dipakai. Opsi Teks Polos berarti pesan akan selalu dikirim dalam bentuk teks polos."
 
 #: src/app/components/ContactToolbar.js:41
 msgctxt "Tooltip"
@@ -2576,7 +2574,7 @@ msgstr "Verifikasi saja"
 #: src/app/components/ContactKeysTable.js:210
 msgctxt "Key badge"
 msgid "WKD"
-msgstr ""
+msgstr "WKD"
 
 #: src/app/components/ContactKeysTable.js:211
 msgctxt "Key badge"
