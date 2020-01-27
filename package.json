@@ -23,7 +23,8 @@
         "deploy:prod": "proton-bundler --remote --branch=deploy-prod",
         "deploy:standalone": "proton-bundler --appMode=standalone",
         "bundle": "cross-env NODE_ENV_DIST=bundle-only proton-bundler",
-        "check-types": "tsc"
+        "check-types": "tsc",
+        "postinstall": "proton-i18n post-install"
     },
     "repository": {
         "type": "git",

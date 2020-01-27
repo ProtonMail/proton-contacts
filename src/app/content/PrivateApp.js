@@ -30,12 +30,7 @@ const PRELOAD_MODELS = [UserSettingsModel, UserModel];
 
 const PrivateApp = ({ onLogout }) => {
     return (
-        <StandardPrivateApp
-            onLogout={onLogout}
-            locales={{} /* todo */}
-            preloadModels={PRELOAD_MODELS}
-            eventModels={EVENT_MODELS}
-        >
+        <StandardPrivateApp onLogout={onLogout} preloadModels={PRELOAD_MODELS} eventModels={EVENT_MODELS}>
             <ContactsProvider>
                 <ErrorBoundary>
                     <Switch>
