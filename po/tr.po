@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: protonmail\n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
-"PO-Revision-Date: 2020-01-25 09:21\n"
+"PO-Revision-Date: 2020-01-29 19:20\n"
 
 #: node_modules/proton-shared/lib/helpers/humanSize.js:13
 msgctxt "file size format"
@@ -28,142 +28,142 @@ msgstr "GB"
 #: node_modules/proton-shared/lib/keys/keys.js:102
 msgctxt "Error"
 msgid "Signature verification failed"
-msgstr "İmza doğrulama başarısız"
+msgstr ""
 
 #: node_modules/proton-shared/lib/keys/keys.js:122
 msgctxt "Error"
 msgid "Incorrect decryption password"
-msgstr "Yanlış çözümleme şifresi"
+msgstr ""
 
 #: node_modules/react-components/containers/api/ApiProvider.js:47
 msgctxt "Error"
 msgid "Could not connect to server."
-msgstr "Sunucuyla bağlantı kurulamadı."
+msgstr ""
 
 #: node_modules/react-components/containers/api/ApiProvider.js:48
 msgctxt "Error"
 msgid "No internet connection found"
-msgstr "İnternet bağlantısı bulunamadı"
+msgstr ""
 
 #: node_modules/react-components/containers/api/ApiProvider.js:56
 msgctxt "Error"
 msgid "Request timed out."
-msgstr "İstek zaman aşımına uğradı."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:32
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:128
 msgctxt "Error"
 msgid "Process aborted"
-msgstr "Işlem iptal oldu"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:36
 msgctxt "Error"
 msgid "Payment process cancelled"
-msgstr "Ödeme işlemi iptal edildi"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:42
 msgctxt "Error"
 msgid "Payment process failed"
-msgstr "Ödeme işlemi başarısız oldu"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:46
 msgctxt "Error"
 msgid "Payment process consumed"
-msgstr "Ödeme işlemi tamamlandı"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:50
 msgctxt "Error"
 msgid "Payment process not supported"
-msgstr "Ödeme işlemi desteklenmiyor"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:62
 msgctxt "Error"
 msgid "Unknown payment token status"
-msgstr "Bilinmeyen ödeme belirteci durumu"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/paymentTokenHelper.js:95
 msgctxt "Error"
 msgid "Tab closed"
-msgstr "Sekme kapatıldı"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PayPal.js:85
 msgctxt "Error"
 msgid "Amount below minimum."
-msgstr "En düşük değerin altındaki tutar."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PayPal.js:91
 msgctxt "Error"
 msgid "Amount above the maximum."
-msgstr "En yüksek değerin üzerindeki tutar."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/Bitcoin.js:51
 msgctxt "Error"
 msgid "Error connecting to the Bitcoin API."
-msgstr "Bitcoin API'sine bağlanırken hata oluştu."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/Payment.js:50
 #, javascript-format
 msgctxt "Error"
 msgid "The minimum amount that can be donated is ${ price }"
-msgstr "Bağışlanabilecek en düşük tutar ${ price }"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/Payment.js:59
 #, javascript-format
 msgctxt "Error"
 msgid "The minimum amount of credit that can be added is ${ _price }"
-msgstr "Eklenebilecek en düşük kredi tutarı ${ _price }"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/Payment.js:68
 #, javascript-format
 msgctxt "Error"
 msgid "The minimum payment we accept is ${ _price2 }"
-msgstr "Onayladığımız en düşük ödeme ${ _price2 }"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/cardValidator.js:16
 msgctxt "Error"
 msgid "Name on card required"
-msgstr "Karttaki ad gerekli"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/cardValidator.js:22
 msgctxt "Error"
 msgid "Invalid expiration date"
-msgstr "Geçersiz sona erme tarihi"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/cardValidator.js:27
 msgctxt "Error"
 msgid "Invalid card number"
-msgstr "Geçersiz kart numarası"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/cardValidator.js:36
 #, javascript-format
 msgctxt "Error"
 msgid "Invalid ${ name } code"
-msgstr "Geçersiz ${ name } kodu"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/cardValidator.js:43
 msgctxt "Error"
 msgid "Invalid postal code"
-msgstr "Geçersiz posta kodu"
+msgstr ""
 
 #: node_modules/react-components/components/alert/DoNotWindowOpenAlertError.js:7
 msgctxt "Error"
 msgid "The browser you are using does not allow the payment to be fully authorized. Please use a different browser or log in via a computer."
-msgstr "Kullanmakta olduğunuz tarayıcı ödemenin tam olarak onaylanmasına izin vermez. Lütfen değişik bir tarayıcı kullanın ya da bir bilgisayarla oturum açın."
+msgstr ""
 
 #: node_modules/react-components/components/input/Input.js:32
 msgctxt "Error"
 msgid "This field is required"
-msgstr "Bu alan gerekli"
+msgstr ""
 
 #: node_modules/react-components/components/input/EmailInput.js:9
 msgctxt "Error"
 msgid "Email address invalid"
-msgstr "E-posta adresi geçersiz"
+msgstr ""
 
 #: src/app/components/ContactImageModal.js:36
 msgctxt "Error"
 msgid "Image upload failed"
-msgstr "Resim yükleme başarısız"
+msgstr ""
 
 #: src/app/components/ContactModal.js:86
 msgctxt "Error"
@@ -184,43 +184,41 @@ msgstr "Bazı kişiler silinemedi"
 #: node_modules/proton-shared/lib/themes/themes.js:13
 msgctxt "Theme"
 msgid "Default theme"
-msgstr "Varsayılan tema"
+msgstr ""
 
 #: node_modules/proton-shared/lib/themes/themes.js:23
 msgctxt "Theme"
 msgid "Custom theme"
-msgstr "Özel tema"
+msgstr ""
 
 #: node_modules/proton-shared/lib/themes/themes.js:33
 msgctxt "Theme"
 msgid "Light"
-msgstr "Beyaz"
+msgstr ""
 
 #: node_modules/proton-shared/lib/themes/themes.js:42
 msgctxt "Theme"
 msgid "Blue"
-msgstr "Mavi"
+msgstr ""
 
 #: node_modules/proton-shared/lib/themes/themes.js:51
 msgctxt "Theme"
 msgid "Dark theme"
-msgstr "Koyu tema"
+msgstr ""
 
 #: node_modules/react-components/containers/search/SearchDropdown.js:60
-#: node_modules/react-components/containers/search/Searchbox.js:49
+#: node_modules/react-components/containers/search/Searchbox.js:43
 msgctxt "Action"
 msgid "Search"
-msgstr "Ara"
+msgstr ""
 
-#.  Clear button is hidden when using advanced mode because the buttons use the same spots
-#.  If there is the need of having both, a positioning solution will have to be found
 #: node_modules/react-components/containers/search/SearchDropdown.js:59
-#: node_modules/react-components/containers/search/Searchbox.js:56
+#: node_modules/react-components/containers/search/Searchbox.js:48
 #: node_modules/react-components/containers/support/AttachScreenshot.js:46
 #: src/app/components/ContactModalRow.js:30
 msgctxt "Action"
 msgid "Clear"
-msgstr "Temizle"
+msgstr ""
 
 #: node_modules/react-components/containers/login/AbuseModal.js:21
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:155
@@ -230,12 +228,12 @@ msgstr "Temizle"
 #: src/app/components/merge/MergeModal.js:93
 msgctxt "Action"
 msgid "Close"
-msgstr "Kapat"
+msgstr ""
 
 #: node_modules/react-components/containers/login/LoginForm.js:207
 msgctxt "Action"
 msgid "Log in"
-msgstr "Giriş yap"
+msgstr ""
 
 #: node_modules/react-components/components/modal/Confirm.js:11
 #: node_modules/react-components/components/modal/FormModal.js:19
@@ -250,7 +248,7 @@ msgstr "Giriş yap"
 #: src/app/components/merge/MergeModal.js:90
 msgctxt "Action"
 msgid "Cancel"
-msgstr "Iptal et"
+msgstr ""
 
 #: node_modules/react-components/components/modal/FormModal.js:20
 #: node_modules/react-components/containers/login/LoginForm.js:239
@@ -258,39 +256,39 @@ msgstr "Iptal et"
 #: node_modules/react-components/containers/support/BugModal.js:135
 msgctxt "Action"
 msgid "Submit"
-msgstr "Gönder"
+msgstr ""
 
 #: node_modules/react-components/containers/support/AttachScreenshot.js:53
 msgctxt "Action"
 msgid "Add screenshot(s)"
-msgstr "Ekran görüntüsü(leri) ekle"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:203
 msgctxt "Action"
 msgid "Hide info"
-msgstr "Bilgiyi gizle"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:203
 msgctxt "Action"
 msgid "Show info"
-msgstr "Bilgiyi göster"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:102
 msgctxt "Action"
 msgid "Verify"
-msgstr "Doğrula"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/Bitcoin.js:52
 #: node_modules/react-components/containers/payments/PayPal.js:105
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:165
 msgctxt "Action"
 msgid "Try again"
-msgstr "Tekrar deneyin"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:171
 msgctxt "Action"
 msgid "Use a different card"
-msgstr "Değişik bir kart kullan"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:172
 msgctxt "Action"
@@ -301,7 +299,7 @@ msgstr "Farklı bir ödeme yöntemi kullan"
 #: node_modules/react-components/containers/payments/PayPal.js:178
 msgctxt "Action"
 msgid "Check out with PayPal"
-msgstr "PayPal ile ödeme yap"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PayPal.js:164
 msgctxt "Action"
@@ -311,44 +309,44 @@ msgstr "PayPal ödeme yöntemi ekle"
 #: node_modules/react-components/containers/payments/DonateModal.js:43
 msgctxt "Action"
 msgid "Donate"
-msgstr "Bağış Yap"
+msgstr ""
 
 #: node_modules/react-components/containers/heading/UserDropdown.js:84
 #: node_modules/react-components/containers/heading/UserDropdown.js:92
 msgctxt "Action"
 msgid "Settings"
-msgstr "Ayarlar"
+msgstr ""
 
 #: node_modules/react-components/containers/heading/UserDropdown.js:109
 msgctxt "Action"
 msgid "I have a question"
-msgstr "Bir sorum var"
+msgstr ""
 
 #: node_modules/react-components/containers/heading/UserDropdown.js:119
 msgctxt "Action"
 msgid "Report bug"
-msgstr "Hata bildir"
+msgstr ""
 
 #: node_modules/react-components/containers/heading/UserDropdown.js:130
 msgctxt "Action"
 msgid "Proton shop"
-msgstr "Proton mağazası"
+msgstr ""
 
 #: node_modules/react-components/containers/heading/UserDropdown.js:140
 msgctxt "Action"
 msgid "Support us"
-msgstr "Bizi destekleyin"
+msgstr ""
 
 #: node_modules/react-components/containers/heading/UserDropdown.js:149
 msgctxt "Action"
 msgid "Logout"
-msgstr "Çıkış yap"
+msgstr ""
 
 #: node_modules/react-components/components/modal/Confirm.js:10
 #: node_modules/react-components/components/modal/Confirm.js:12
 msgctxt "Action"
 msgid "Confirm"
-msgstr "Onayla"
+msgstr ""
 
 #: node_modules/react-components/components/modal/Header.js:11
 #: node_modules/react-components/components/modal/Header.js:13
@@ -356,22 +354,22 @@ msgstr "Onayla"
 #: src/app/components/ContactEmailSettingsModal.js:226
 msgctxt "Action"
 msgid "Close modal"
-msgstr "Pencereyi kapat"
+msgstr ""
 
 #: node_modules/react-components/components/image/RemoteImage.js:9
 msgctxt "Action"
 msgid "Load image"
-msgstr "Resim yükle"
+msgstr ""
 
 #: node_modules/react-components/components/miniCalendar/LocalizedMiniCalendar.js:31
 msgctxt "Action"
 msgid "Next month"
-msgstr "Sonraki ay"
+msgstr ""
 
 #: node_modules/react-components/components/miniCalendar/LocalizedMiniCalendar.js:32
 msgctxt "Action"
 msgid "Prev month"
-msgstr "Önceki ay"
+msgstr ""
 
 #: src/app/components/ContactGroupModal.js:44
 #: src/app/components/ContactGroupsTable.js:78
@@ -380,7 +378,7 @@ msgstr "Önceki ay"
 #: src/app/components/import/AttachedFile.js:9
 msgctxt "Action"
 msgid "Delete"
-msgstr "Sil"
+msgstr ""
 
 #: src/app/components/import/AttachingModalContent.js:21
 msgctxt "Action"
@@ -409,7 +407,7 @@ msgstr "Oluştur"
 #: src/app/components/ContactImageModal.js:60
 msgctxt "Action"
 msgid "Upload picture"
-msgstr "Resim yükle"
+msgstr ""
 
 #: src/app/components/ContactEmailSettingsModal.js:282
 #: src/app/components/ContactGroupModal.js:149
@@ -418,7 +416,7 @@ msgstr "Resim yükle"
 #: src/app/components/ExportModal.js:25
 msgctxt "Action"
 msgid "Save"
-msgstr "Kaydet"
+msgstr ""
 
 #: src/app/components/ContactGroupsTable.js:72
 #: src/app/components/ContactModalRow.js:26
@@ -442,12 +440,12 @@ msgstr "ProtonMail'i yükselt"
 #: src/app/components/ContactsList.js:87
 msgctxt "Action"
 msgid "Add a contact"
-msgstr "Kişi ekle"
+msgstr ""
 
 #: src/app/components/ContactsList.js:98
 msgctxt "Action"
 msgid "Import contact"
-msgstr "Kişiyi içe aktar"
+msgstr ""
 
 #: src/app/components/ContactsList.js:126
 msgctxt "Action"
@@ -457,7 +455,7 @@ msgstr "Grubunuzu düzenleyin"
 #: src/app/components/ContactsList.js:146
 msgctxt "Action"
 msgid "Clear it"
-msgstr "Temizle"
+msgstr ""
 
 #: src/app/components/ContactImageSummary.js:89
 msgctxt "Action"
@@ -468,7 +466,7 @@ msgstr "Fotoğrafı yükle"
 #: src/app/components/SelectEmailsModal.js:47
 msgctxt "Action"
 msgid "Apply"
-msgstr "Onayla"
+msgstr ""
 
 #: src/app/components/ContactKeysTable.js:119
 msgctxt "Action"
@@ -478,7 +476,7 @@ msgstr "İndir"
 #: src/app/components/ContactKeysTable.js:132
 msgctxt "Action"
 msgid "Use for sending"
-msgstr "Gönderme için kullan"
+msgstr ""
 
 #: src/app/components/ContactKeysTable.js:153
 msgctxt "Action"
@@ -499,13 +497,13 @@ msgstr "Kaldır"
 #: src/app/components/ContactEmailSettingsModal.js:273
 msgctxt "Action"
 msgid "Hide advanced PGP settings"
-msgstr "Gelişmiş PGP ayarlarını gizle"
+msgstr ""
 
 #.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
 #: src/app/components/ContactEmailSettingsModal.js:274
 msgctxt "Action"
 msgid "Show advanced PGP settings"
-msgstr "Gelişmiş PGP ayarlarını göster"
+msgstr ""
 
 #: src/app/components/ContactPlaceholder.js:41
 #: src/app/components/ContactPlaceholder.js:91
@@ -520,7 +518,7 @@ msgstr "Dışa aktar"
 #: src/app/components/merge/MergeModal.js:65
 msgctxt "Action"
 msgid "Merge"
-msgstr "Birleştir"
+msgstr ""
 
 #: src/app/components/ContactPlaceholder.js:53
 msgctxt "Action"
@@ -564,108 +562,108 @@ msgstr "Kişiyi önizle"
 #: src/app/components/ContactGroupsSection.js:17
 msgctxt "Action"
 msgid "Add group"
-msgstr "Grup ekle"
+msgstr ""
 
 #: src/app/content/PrivateSidebar.js:106
 msgctxt "Action"
 msgid "Add contact"
-msgstr "Kişi ekle"
+msgstr ""
 
 #: node_modules/react-components/containers/search/SearchDropdown.js:19
 #: src/app/content/PrivateHeader.js:40
 msgctxt "Placeholder"
 msgid "Search"
-msgstr "Ara"
+msgstr ""
 
 #: node_modules/react-components/containers/login/PasswordForm.js:22
 msgctxt "Placeholder"
 msgid "Username or email"
-msgstr "Kullanıcı adı ya da e-posta"
+msgstr ""
 
 #: node_modules/react-components/containers/login/PasswordForm.js:37
 msgctxt "Placeholder"
 msgid "Password"
-msgstr "Şifre"
+msgstr ""
 
 #: node_modules/react-components/containers/login/TOTPForm.js:20
 msgctxt "Placeholder"
 msgid "Two-factor code"
-msgstr "İki adımlı doğrulama kodu"
+msgstr ""
 
 #: node_modules/react-components/containers/login/UnlockForm.js:20
 msgctxt "Placeholder"
 msgid "Mailbox password"
-msgstr "Posta kutusu şifresi"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:150
 msgctxt "Placeholder"
 msgid "Proton username"
-msgstr "Proton kullanıcı adı"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:162
 msgctxt "Placeholder"
 msgid "A way to contact you"
-msgstr "Sizinle iletişim kurmak için bir yol"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:186
 msgctxt "Placeholder"
 msgid "Please describe the problem and include any error messages"
-msgstr "Lütfen sorunu açıklayın ve varsa hata iletisini ekleyin"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:215
 msgctxt "Placeholder"
 msgid "OS name"
-msgstr "İşletim sistemi adı"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:226
 msgctxt "Placeholder"
 msgid "OS version"
-msgstr "İşletim sistemi sürümü"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:237
 msgctxt "Placeholder"
 msgid "Browser name"
-msgstr "Tarayıcı adı"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:248
 msgctxt "Placeholder"
 msgid "Browser version"
-msgstr "Tarayıcı sürümü"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentSelector.js:47
 msgctxt "Placeholder"
 msgid "Other"
-msgstr "Diğer"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/CardNumberInput.js:48
 msgctxt "Placeholder"
 msgid "Card number"
-msgstr "Kart numarası"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/Card.js:22
 msgctxt "Placeholder"
 msgid "Full name"
-msgstr "Tam ad"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/Card.js:79
 msgctxt "Placeholder"
 msgid "ZIP"
-msgstr "ZIP"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/Card.js:79
 msgctxt "Placeholder"
 msgid "Postal code"
-msgstr "Posta kodu"
+msgstr ""
 
 #: src/app/components/ContactImageModal.js:53
 msgctxt "Placeholder"
 msgid "Image URL"
-msgstr "Resim URL'si"
+msgstr ""
 
 #: src/app/components/ContactGroupDropdown.js:186
 msgctxt "Placeholder"
 msgid "Filter groups"
-msgstr "Grupları filtrele"
+msgstr ""
 
 #: src/app/content/PrivateHeader.js:62
 msgctxt "Placeholder"
@@ -680,12 +678,12 @@ msgstr "Aaah! Bir şeyler yanlış gitti"
 #: node_modules/react-components/containers/error/GenericError.js:16
 msgctxt "Error message"
 msgid "Brace yourself till we get the error fixed."
-msgstr "Lütfen sorun düzelene dek bekleyin."
+msgstr ""
 
 #: node_modules/react-components/containers/error/GenericError.js:17
 msgctxt "Error message"
 msgid "You may also refresh the page or try again later."
-msgstr "Ayrıca sayfayı yenileyebilir ya da daha sonra tekrar deneyebilirsiniz."
+msgstr ""
 
 #: node_modules/react-components/containers/sidebar/StorageSpaceStatus.js:77
 msgctxt "Title"
@@ -710,7 +708,7 @@ msgstr "Hesap devre dışı bırakıldı"
 #: node_modules/react-components/containers/support/BugModal.js:136
 msgctxt "Title"
 msgid "Report bug"
-msgstr "Hata bildir"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/Card.js:80
 msgctxt "Title"
@@ -720,32 +718,32 @@ msgstr "ZIP / posta kodu"
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:44
 msgctxt "Title"
 msgid "Unsupported browser"
-msgstr "Desteklenmeyen tarayıcı"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:45
 msgctxt "Title"
 msgid "Card verification"
-msgstr "Kart doğrulama"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:45
 msgctxt "Title"
 msgid "Payment verification"
-msgstr "Ödeme doğrulama"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:46
 msgctxt "Title"
 msgid "Processing..."
-msgstr "İşleniyor..."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:48
 msgctxt "Title"
 msgid "Card verification in progress"
-msgstr "Kart doğrulama işlemi sürüyor"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:49
 msgctxt "Title"
 msgid "Payment verification in progress"
-msgstr "Ödeme doğrulaması sürüyor"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:50
 msgctxt "Title"
@@ -760,7 +758,7 @@ msgstr "Hata"
 #: node_modules/react-components/containers/payments/DonateModal.js:42
 msgctxt "Title"
 msgid "Make a donation"
-msgstr "Bağış yap"
+msgstr ""
 
 #: node_modules/react-components/components/dropdown/DropdownActions.js:48
 msgctxt "Title"
@@ -774,12 +772,12 @@ msgstr "İşlemler listesini aç"
 #: src/app/content/PrivateHeader.js:49
 msgctxt "Title"
 msgid "Contacts"
-msgstr "Kişiler"
+msgstr ""
 
 #: src/app/containers/ContactsContainer.js:252
 msgctxt "Title"
 msgid "Search"
-msgstr "Arama"
+msgstr ""
 
 #: src/app/containers/SettingsContainer.js:35
 msgctxt "Title"
@@ -791,7 +789,7 @@ msgstr "Kişi ayarları"
 #: src/app/content/PrivateHeader.js:72
 msgctxt "Title"
 msgid "Settings"
-msgstr "Ayarlar"
+msgstr ""
 
 #: src/app/components/ContactPlaceholder.js:25
 #: src/app/components/ContactPlaceholder.js:75
@@ -799,12 +797,12 @@ msgstr "Ayarlar"
 #: src/app/components/import/ImportModal.js:32
 msgctxt "Title"
 msgid "Import contacts"
-msgstr "Kişileri içe aktar"
+msgstr ""
 
 #: src/app/components/import/ImportModal.js:33
 msgctxt "Title"
 msgid "Import CSV file"
-msgstr "CSV dosyasını içe aktar"
+msgstr ""
 
 #: src/app/components/import/ImportModal.js:34
 msgctxt "Title"
@@ -814,46 +812,46 @@ msgstr "Kişiler içe aktarılıyor"
 #: src/app/components/import/ImportModal.js:80
 msgctxt "Title"
 msgid "File is too big!"
-msgstr "Dosya çok büyük!"
+msgstr ""
 
 #: src/app/components/ContactImageModal.js:10
 msgctxt "Title"
 msgid "Edit image"
-msgstr "Resmi düzenle"
+msgstr ""
 
 #: src/app/components/ContactModalProperties.js:21
 msgctxt "Title"
 msgid "Display name"
-msgstr "Görünen ad"
+msgstr ""
 
 #: src/app/components/ContactModalProperties.js:22
 #: src/app/components/ContactViewProperties.js:28
 msgctxt "Title"
 msgid "Email addresses"
-msgstr "E-posta adresleri"
+msgstr ""
 
 #: src/app/components/ContactModalProperties.js:23
 #: src/app/components/ContactViewProperties.js:29
 msgctxt "Title"
 msgid "Phone numbers"
-msgstr "Telefon numaraları"
+msgstr ""
 
 #: src/app/components/ContactModalProperties.js:24
 #: src/app/components/ContactViewProperties.js:30
 msgctxt "Title"
 msgid "Addresses"
-msgstr "Adresler"
+msgstr ""
 
 #: src/app/components/ContactModalProperties.js:25
 #: src/app/components/ContactViewProperties.js:31
 msgctxt "Title"
 msgid "Other information"
-msgstr "Diğer bilgiler"
+msgstr ""
 
 #: src/app/components/UpsellFree.js:8
 msgctxt "Title"
 msgid "Upgrade to a paid plan"
-msgstr "Ücretli bir plana yükselt"
+msgstr ""
 
 #: src/app/components/ContactModal.js:53
 msgctxt "Title"
@@ -868,12 +866,12 @@ msgstr "Yeni kişi ekle"
 #: src/app/components/ContactGroupModal.js:71
 msgctxt "Title"
 msgid "Edit contact group"
-msgstr "Kışi grubunu düzenle"
+msgstr ""
 
 #: src/app/components/ContactGroupModal.js:71
 msgctxt "Title"
 msgid "Create new group"
-msgstr "Yeni grup oluştur"
+msgstr ""
 
 #: src/app/components/SelectEmailsModal.js:47
 msgctxt "Title"
@@ -885,7 +883,7 @@ msgstr "Gruba ekle"
 #, javascript-format
 msgctxt "Title"
 msgid "Email settings (${ Email })"
-msgstr "E-posta ayarları (${ Email })"
+msgstr ""
 
 #: src/app/components/ContactViewProperty.js:112
 msgctxt "Title"
@@ -900,7 +898,7 @@ msgstr "E-posta ayarları"
 #: src/app/components/ContactView.js:27
 msgctxt "Title"
 msgid "Contact details"
-msgstr "Kişi ayrıntıları"
+msgstr ""
 
 #: src/app/components/ExportModal.js:112
 msgctxt "Title"
@@ -916,17 +914,17 @@ msgstr "Kişiler dışa aktar"
 #: src/app/components/ContactPlaceholder.js:48
 msgctxt "Title"
 msgid "Manage groups"
-msgstr "Grupları yönet"
+msgstr ""
 
 #: src/app/components/ContactPlaceholder.js:98
 msgctxt "Title"
 msgid "Unlock features"
-msgstr "Özelliklerin kilidini aç"
+msgstr ""
 
 #: src/app/components/UpgradeModal.js:10
 msgctxt "Title"
 msgid "Upgrade required"
-msgstr "Yükseltme gerekli"
+msgstr ""
 
 #: src/app/components/merge/ContactDetails.js:36
 #: src/app/components/merge/MergeContactPreview.js:96
@@ -949,19 +947,19 @@ msgstr "Kişileri birleştir"
 msgctxt "Title"
 msgid "Delete contact"
 msgid_plural "Delete contacts"
-msgstr[0] "Kişiyi sil"
-msgstr[1] "Kişileri sil"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/app/components/ContactGroupsTable.js:83
 msgctxt "Title"
 msgid "Delete contact group"
-msgstr "Kişi grubunu sil"
+msgstr ""
 
 #: src/app/components/ContactGroupsSection.js:13
 #: src/app/pages/ContactGroupsPage.js:9
 msgctxt "Title"
 msgid "Contact groups"
-msgstr "Kişi grupları"
+msgstr ""
 
 #: src/app/pages/GeneralPage.js:9
 msgctxt "Title"
@@ -972,28 +970,28 @@ msgstr "Genel"
 #, javascript-format
 msgctxt "Info"
 msgid "${ usedSpaceFormatted } of ${ maxSpaceFormatted } used"
-msgstr "{ usedSpaceFormatted } / { maxSpaceFormatted } kullanıldı"
+msgstr "${ maxSpaceFormatted } alandan ${ usedSpaceFormatted } kullanıldı"
 
 #: node_modules/react-components/containers/sidebar/StorageSpaceStatus.js:81
 msgctxt "Info"
 msgid "Your storage space is shared across all Proton products."
-msgstr "Saklama alanınız tüm Proton ürünleri arasında paylaşılır."
+msgstr "Depolama alanınız tüm Proton ürünleri arasında paylaşılır."
 
 #: node_modules/react-components/containers/api/HumanVerificationModal.js:19
 msgctxt "Info"
 msgid "For security reasons, please verify that you are not a robot."
-msgstr "Güvenlik nedenleriyle lütfen bir robot olmadığınızı doğrulayın."
+msgstr ""
 
 #: node_modules/react-components/containers/app/LoaderPage.js:15
 #, javascript-format
 msgctxt "Info"
 msgid "Loading ${ appName }"
-msgstr "${ appName } yükleniyor"
+msgstr ""
 
 #: node_modules/react-components/containers/login/AbuseModal.js:10
 msgctxt "Info"
 msgid "abuse or fraud"
-msgstr "kötüye kullanım ya da dolandırıcılık"
+msgstr ""
 
 #: node_modules/react-components/containers/login/AbuseModal.js:16
 msgctxt "Info"
@@ -1004,186 +1002,186 @@ msgstr "burada"
 #, javascript-format
 msgctxt "Info"
 msgid "Account disabled due to ${ abuseOrFraudLink }."
-msgstr "${ abuseOrFraudLink } nedeniyle, hesap devre dışı bırakıldı."
+msgstr ""
 
 #: node_modules/react-components/containers/login/AbuseModal.js:24
 #, javascript-format
 msgctxt "Info"
 msgid "You can find more information and contact us ${ contactLink }."
-msgstr "{ contactLink } ile bize ulaşarak daha çok bilgi bulabilirsiniz."
+msgstr ""
 
 #: node_modules/react-components/containers/support/AttachScreenshot.js:45
 msgctxt "Info"
 msgid "Screenshot(s) attached"
-msgstr "Ekran görüntüsü(leri) eklendi"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:139
 #, javascript-format
 msgctxt "Info"
 msgid "Refreshing the page or ${ link } will automatically resolve most issues."
-msgstr "Sayfayı yenilemek ya da ${ link } çoğu sorunu kendiliğinden çözecektir."
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:254
 #, javascript-format
 msgctxt "Info"
 msgid "Contact us at ${ criticalEmail } for critical security issues."
-msgstr "Önemli güvenlik sorunları için bize ${ criticalEmail } adresinden ulaşın."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:112
 msgctxt "Info"
 msgid "Your bank requires 3-D Secure verification for security purposes."
-msgstr "Bankanız güvenlik gerekçesiyle 3-D Güvenlik doğrulaması gerektiriyor."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:119
 msgctxt "Info"
 msgid "Verification will open a new tab, please disable any popup blockers. You will not be charged. Any amount used to verify the card will be refunded immediately."
-msgstr "Doğrulama yeni bir sekme açar, lütfen açılır pencere engelleyicileri kapatın. Sorumlu tutulmayacaksınız. Kartı doğrulamak için kullanılan herhangi bir miktar derhal iade edilir."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:121
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:130
 msgctxt "Info"
 msgid "Verification will open a new tab, please disable any popup blockers."
-msgstr "Doğrulama yeni sekmede açılacak, lütfen herhangi bir açılır pencere engelleyiciyi kapalı tutun."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:127
 msgctxt "Info"
 msgid "You will be soon redirected to your bank to verify your payment."
-msgstr "Yakında ödemenizi doğrulamak için bankanıza yönlendirileceksiniz."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:138
 msgctxt "Info"
 msgid "Please verify the card in the new tab which was opened."
-msgstr "Lütfen açılmış olan yeni sekmede kartı doğrulayın."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:139
 msgctxt "Info"
 msgid "Please verify payment at the new tab which was opened."
-msgstr "Lütfen açılmış olan yeni sekmede ödemeyi doğrulayın."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:147
 msgctxt "Info"
 msgid "Verification can take a few minutes."
-msgstr "Doğrulama birkaç dakika sürebilir."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:148
 msgctxt "Info"
 msgid "Payment can take a few minutes to fully verify."
-msgstr "Ödemenin tamamen doğrulanması birkaç dakika sürebilir."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PaymentVerificationModal.js:160
 msgctxt "Info"
 msgid "Please try again, use a different payment method, or call your bank for assistance."
-msgstr "Lütfen tekrar deneyin, değişik bir ödeme yöntemi kullanın ya da yardım için bankanızı arayın."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PayPal.js:135
 msgctxt "Info"
 msgid "Please verify the payment in the new tab."
-msgstr "Lütfen ödemeyi yeni sekmede doğrulayın."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PayPal.js:145
 #: node_modules/react-components/containers/payments/PayPal.js:175
 msgctxt "Info"
 msgid "We will redirect you to PayPal in a new browser tab to complete this transaction. If you use any pop-up blockers, please disable them to continue."
-msgstr "Bu işlemi tamamlamak için sizi yeni bir tarayıcı sekmesinde PayPal'a yönlendireceğiz. Herhangi bir açılır pencere engelleyici kullanıyorsanız, devam etmek için lütfen onları devre dışı bırakın."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PayPal.js:153
 #, javascript-format
 msgctxt "Info"
 msgid "You must have a credit card or bank account linked with your PayPal account. If your PayPal account doesn't have that, please ${ clickHere }."
-msgstr "PayPal hesabınızla bağlantılı bir kredi kartınız ya da banka hesabınız olmalıdır. PayPal hesabınız buna sahip değilse, lütfen ${ clickHere }."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PayPal.js:160
 msgctxt "Info"
 msgid "This will enable PayPal to be used to pay for your Proton subscription. We will redirect you to PayPal in a new browser tab. If you use any pop-up blockers, please disable them to continue."
-msgstr "Bu, PayPal'ın Proton aboneliğiniz için ödeme yapmak üzere kullanılmasını sağlayacaktır. Sizi yeni bir tarayıcı sekmesinde PayPal'a yönlendireceğiz. Herhangi bir açılır pencere engelleyici kullanıyorsanız, devam etmek için lütfen onları devre dışı bırakın."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/PayPal.js:168
 msgctxt "Info"
 msgid "You must have a credit card or bank account linked with your PayPal account in order to add it as a payment method."
-msgstr "Ödeme yöntemi olarak eklemek için PayPal hesabınızla bağlantılı bir kredi kartınız ya da banka hesabınız olmalıdır."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/Bitcoin.js:40
 #, javascript-format
 msgctxt "Info"
 msgid "Amount below minimum. (${ amount })"
-msgstr "En düşüğün altındaki tutar. (${ amount })"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/Bitcoin.js:64
 msgctxt "Info"
 msgid "Bitcoin transactions can take some time to be confirmed (up to 24 hours). Once confirmed, we will add credits to your account. After transaction confirmation, you can pay your invoice with the credits."
-msgstr "Bitcoin işlemlerinin onaylanması biraz zaman alabilir (24 saat kadar). Onaylandıktan sonra hesabınıza kredileri ekleyeceğiz. İşlem onayından sonra faturanızı kredilerle ödeyebilirsiniz."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/Bitcoin.js:73
 msgctxt "Info"
 msgid "After making your Bitcoin payment, please follow the instructions below to upgrade."
-msgstr "Bitcoin ödemenizi yaptıktan sonra, yükseltme yapmak için lütfen aşağıdaki yönergeyi izleyin."
+msgstr ""
 
 #: node_modules/react-components/containers/payments/DonateModal.js:46
 msgctxt "Info"
 msgid "Your payment details are protected with TLS encryption and Swiss privacy laws."
-msgstr "Ödeme ayrıntılarınız TLS şifrelemesi ve İsviçre gizlilik yasaları ile korunmaktadır."
+msgstr ""
 
 #: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:43
 msgctxt "Info"
 msgid "Expired"
-msgstr "Süresi dolmuş"
+msgstr ""
 
 #: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:44
 msgctxt "Info"
 msgid "default"
-msgstr "varsayılan"
+msgstr ""
 
 #: node_modules/react-components/components/miniCalendar/WeekNumbers.js:36
 msgctxt "Info"
 msgid "Week"
-msgstr "Hafta"
+msgstr ""
 
 #: src/app/components/import/ImportCsvModalContent.js:88
 msgctxt "Info"
 msgid "No contacts to be imported"
-msgstr "Içe aktarılacak kişi yok"
+msgstr ""
 
 #: src/app/components/UpsellFree.js:15
 msgctxt "Info"
 msgid "Unlock access to encrypted contact details such as phone numbers and addresses with ProtonMail Plus."
-msgstr "ProtonMail Plus ile telefon numaraları ve adresler gibi şifreli iletişim bilgilerine erişimin kilidini açın."
+msgstr ""
 
 #: src/app/components/ContactModal.js:128
 msgctxt "Info"
 msgid "Email address, phone number and address at the top of their respective list are automatically set as the default information and will be displayed in the contact information's summary section."
-msgstr "E-posta adresi, telefon numarası ve listesinin en üstündeki adres kendiliğinden varsayılan bilgiler olarak ayarlanır ve iletişim bilgilerinin özeti bölümünde görüntülenir."
+msgstr ""
 
 #: src/app/components/ContactGroupModal.js:178
 msgctxt "Info"
 msgid "No contacts added yet"
-msgstr "Henüz kişi eklenmedi"
+msgstr ""
 
 #: src/app/components/SelectEmailsModal.js:48
 msgctxt "Info"
 msgid "Please select which email address or addresses to add to this group."
-msgstr "Lütfen bu gruba eklenecek e-posta adresini ya da adreslerini seçin."
+msgstr ""
 
 #: src/app/components/ContactGroupDropdown.js:134
 msgctxt "Info"
 msgid "Contact group apply"
 msgid_plural "Contact groups apply"
-msgstr[0] "Kişi grubunu uygula"
-msgstr[1] "Kişi grublarını uygula"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/app/components/ContactGroupDropdown.js:175
 msgctxt "Info"
 msgid "Create a new contact group"
-msgstr "Yeni bir kişi grubu oluştur"
+msgstr ""
 
 #: src/app/components/ContactPgpSettings.js:63
 msgctxt "Info"
 msgid "Duplicate key updated"
-msgstr "Yinelenen anahtar güncellendi"
+msgstr ""
 
 #: src/app/components/ContactPgpSettings.js:82
 msgctxt "Info"
 msgid "Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service."
-msgstr "PGP'yi ayarlamak, PGP uyumlu bir servis kullanan ve Protonmail kullanmayan bir kullanıcıyla uçtan uca şifreli e-postalar göndermenizi sağlar."
+msgstr ""
 
 #: src/app/components/ContactPgpSettings.js:87
 msgctxt "Info"
@@ -1193,28 +1191,28 @@ msgstr "Bu adres için Güvenilir Anahtarlar ile Adres Doğrulama etkinleştiril
 #: src/app/components/ContactPgpSettings.js:91
 msgctxt "Info"
 msgid "This address is disabled. To be able to send to this address, the owner must first enable the address."
-msgstr "Bu adres devre dışı. Bu adrese gönderebilmek için öncelikle adresin sahibinin etkinleştirmesi gerekir."
+msgstr ""
 
 #: src/app/components/ContactPgpSettings.js:95
 msgctxt "Info"
 msgid "To use Address Verification, you must trust one or more available public keys, including the one you want to use for sending. This prevents the encrypted keys from being faked."
-msgstr "Adres Doğrulama'yı kullanmak için, gönderme için kullanmak istediğinizi de içermek üzere bir ya da daha çok kullanılabilir genel anahtara güvenmelisiniz. Bu şifreli anahtarların taklit edilmesini önler."
+msgstr ""
 
 #: src/app/components/ContactPgpSettings.js:99
 msgctxt "Info"
 msgid "Only change these settings if you are using PGP with non-ProtonMail recipients."
-msgstr "Bu ayarları yalnızca ProtonMail kullanmayan alıcılarla PGP kullanıyorsanız değiştirin."
+msgstr ""
 
 #: src/app/components/ContactPgpSettings.js:103
 msgctxt "Info"
 msgid "All uploaded keys are expired or revoked! Encryption is automatically disabled."
-msgstr "Tüm yüklenen anahtarların süresi doldu ya da iptal edildi! Şifreleme kendiliğinden devre dışı bırakıldı."
+msgstr ""
 
 #.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
 #: src/app/components/ContactEmailSettingsModal.js:236
 msgctxt "Info"
 msgid "Select the email format you want to be used by default when sending an email to this email address."
-msgstr "Bu e-posta adresine bir e-posta gönderirken varsayılan olarak kullanmak istediğiniz e-posta biçimini seçin."
+msgstr ""
 
 #.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
 #: src/app/components/ContactEmailSettingsModal.js:241
@@ -1226,24 +1224,24 @@ msgstr "PGP/Satır-içi yalnızca Düz Metin formatıyla uyumludur. Lütfen Prot
 #: src/app/components/ContactEmailSettingsModal.js:246
 msgctxt "Info"
 msgid "PGP/MIME automatically sends the message using the current composer mode. Please note that ProtonMail always signs PGP/MIME messages."
-msgstr "PGP/MIME, geçerli yazım modunu kullanarak iletiyi kendiliğinden gönderir. ProtonMail'in her zaman PGP/MIME'nin iletilerinizi imzaladığını lütfen unutmayın."
+msgstr ""
 
 #: src/app/components/MergeRow.js:7
 msgctxt "Info"
 msgid "Two or more contacts appear to be identical."
-msgstr "İki ya da daha çok kişi aynı görünüyor."
+msgstr ""
 
 #: src/app/components/MergeRow.js:15
 #, javascript-format
 msgctxt "Info"
 msgid "${ boldText } Do you want to merge these contacts now?"
-msgstr "${ boldText } Bu kişileri birleştirmek istiyor musunuz?"
+msgstr ""
 
 #: src/app/components/ContactPlaceholder.js:26
 #: src/app/components/ContactPlaceholder.js:76
 msgctxt "Info"
 msgid "Add contacts to your ProtonMail account by importing them from a CSV or vCard file."
-msgstr "ProtonMail hesabına bir CSV ya da vCard dosyasından içe aktararak kişileri ekle."
+msgstr ""
 
 #: src/app/components/ContactPlaceholder.js:38
 #: src/app/components/ContactPlaceholder.js:88
@@ -1254,12 +1252,12 @@ msgstr "Bir vCard dosyasına aktararak ProtonMail kişilerinizin bir yedeğini o
 #: src/app/components/ContactPlaceholder.js:49
 msgctxt "Info"
 msgid "Use groups to send email to a list of addresses you regularly communicate with."
-msgstr "Düzenli olarak iletişim kurduğunuz bir adres listesine e-posta göndermek için grupları kullanın."
+msgstr ""
 
 #: src/app/components/ContactPlaceholder.js:99
 msgctxt "Info"
 msgid "Upgrade to a paid plan to enable encrypted contact details and manage contact groups."
-msgstr "Şifreli iletişim bilgilerini etkinleştirmek ve iletişim gruplarını yönetmek için ücretli bir plana geçin."
+msgstr ""
 
 #: src/app/components/ContactPlaceholder.js:140
 #: src/app/components/ContactPlaceholder.js:165
@@ -1279,7 +1277,7 @@ msgstr "Adres defterinizden ${ totalContactsText } kişi seçtiniz."
 #, javascript-format
 msgctxt "Info"
 msgid "${ totalContactsInGroup } contacts"
-msgstr "${ totalContactsInGroup } kişi"
+msgstr ""
 
 #: src/app/components/ContactPlaceholder.js:177
 msgctxt "Info"
@@ -1289,18 +1287,18 @@ msgstr "Bu grupta ${ _totalContactsText } kişiye sahipsiniz."
 #: src/app/components/ContactPlaceholder.js:196
 msgctxt "Info"
 msgid "one contact"
-msgstr "bir kişi"
+msgstr ""
 
 #: src/app/components/ContactPlaceholder.js:198
 #, javascript-format
 msgctxt "Info"
 msgid "${ totalContacts } contacts"
-msgstr "${ totalContacts } kişi"
+msgstr ""
 
 #: src/app/components/ContactPlaceholder.js:200
 msgctxt "Info"
 msgid "Settings > General > Contacts"
-msgstr "Ayarlar > Genel > Kişiler"
+msgstr ""
 
 #: src/app/components/ContactPlaceholder.js:206
 #, javascript-format
@@ -1312,226 +1310,226 @@ msgstr "Adres defterinizde ${ boldTotalContacts } kişiye sahipsiniz"
 #, javascript-format
 msgctxt "Info"
 msgid "You can decide whether or not contacts are automatically added to your address book by navigating to ${ navigateTo }"
-msgstr "${ navigateTo } adresine giderek, kişilerin adres defterinize kendiliğinden eklenip eklenmeyeceğine karar verebilirsiniz"
+msgstr ""
 
 #: src/app/components/ContactGroupsTable.js:86
 msgctxt "Info"
 msgid "Are you sure you want to delete this contact group?"
-msgstr "Bu kişi grubunu silmek istediğinizden emin misiniz?"
+msgstr ""
 
 #: src/app/components/ContactGroupsTable.js:87
 msgctxt "Info"
 msgid "Contacts in the group aren't deleted if the contact group is deleted."
-msgstr "Kişi grubu silinirse gruptaki kişiler silinmez."
+msgstr ""
 
 #: src/app/components/ContactGroupsTable.js:101
 #, javascript-format
 msgctxt "Info"
 msgid "${ countEmailAddresses } email address"
 msgid_plural "${ countEmailAddresses } email addresses"
-msgstr[0] "${ countEmailAddresses } e-posta adresi"
-msgstr[1] "${ countEmailAddresses } e-posta adresleri"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/app/components/ContactGroupsSection.js:14
 msgctxt "Info"
 msgid "A group can contain multiple email addresses from the same contact. Please note that a sending limit may apply and prevent you from sending emails to excessively large groups."
-msgstr "Bir grup aynı kişiden birden fazla e-posta adresi içerebilir. Lütfen gönderme sınırının geçerli olabileceğini ve aşırı büyük gruplara e-posta göndermenizi engelleyebileceğini unutmayın."
+msgstr ""
 
 #: node_modules/react-components/containers/api/HumanVerificationModal.js:22
 msgctxt "Label"
 msgid "Captcha"
-msgstr "Captcha"
+msgstr ""
 
 #: node_modules/react-components/containers/login/UnlockModal.js:34
 msgctxt "Label"
 msgid "Cancel"
-msgstr "İptal"
+msgstr ""
 
 #: node_modules/react-components/containers/login/UnlockModal.js:35
 msgctxt "Label"
 msgid "Submit"
-msgstr "Gönder"
+msgstr ""
 
 #: node_modules/react-components/containers/login/PasswordForm.js:28
 #: node_modules/react-components/containers/login/UnlockModal.js:41
 msgctxt "Label"
 msgid "Password"
-msgstr "Şifre"
+msgstr ""
 
 #: node_modules/react-components/containers/login/PasswordForm.js:10
 msgctxt "Label"
 msgid "Username"
-msgstr "Kullanıcı adı"
+msgstr ""
 
 #: node_modules/react-components/containers/login/TOTPForm.js:9
 msgctxt "Label"
 msgid "Two-factor code"
-msgstr "İki adımlı doğrulama kodu"
+msgstr ""
 
 #: node_modules/react-components/containers/login/UnlockForm.js:9
 msgctxt "Label"
 msgid "Mailbox password"
-msgstr "Posta kutusu şifresi"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:144
 msgctxt "Label"
 msgid "Proton username"
-msgstr "Proton kullanıcı adı"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:156
 msgctxt "Label"
 msgid "Email address"
-msgstr "E-posta adresi"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:168
 msgctxt "Label"
 msgid "Category"
-msgstr "Kategori"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:180
 msgctxt "Label"
 msgid "What happened?"
-msgstr "Ne oldu?"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:201
 msgctxt "Label"
 msgid "System information"
-msgstr "Sistem bilgisi"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:209
 msgctxt "Label"
 msgid "Operating system"
-msgstr "İşletim sistemi"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:220
 msgctxt "Label"
 msgid "Operating system version"
-msgstr "İşletim sistemi sürümü"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:231
 msgctxt "Label"
 msgid "Browser"
-msgstr "Tarayıcı"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:242
 msgctxt "Label"
 msgid "Browser version"
-msgstr "Tarayıcı sürümü"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/BitcoinDetails.js:10
 msgctxt "Label"
 msgid "Amount BTC"
-msgstr "BTC miktarı"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/BitcoinDetails.js:16
 msgctxt "Label"
 msgid "BTC address"
-msgstr "BTC adresi"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/Payment.js:74
 msgctxt "Label"
 msgid "Payment method"
-msgstr "Ödeme yöntemi"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/DonateModal.js:48
 msgctxt "Label"
 msgid "Amount"
-msgstr "Miktar"
+msgstr ""
 
 #: node_modules/react-components/containers/paymentMethods/PaymentMethodDetails.js:17
 msgctxt "Label"
 msgid "Cardholder name"
-msgstr "Kart sahibinin adı"
+msgstr ""
 
 #: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:68
 msgctxt "Label"
 msgid "Pay with cash"
-msgstr "Nakit öde"
+msgstr ""
 
 #: node_modules/react-components/components/button/Copy.js:20
 msgctxt "Label"
 msgid "Copied"
-msgstr "Kopyalandı"
+msgstr ""
 
 #: node_modules/react-components/components/button/Copy.js:20
 msgctxt "Label"
 msgid "Copy"
-msgstr "Kopyala"
+msgstr ""
 
 #: node_modules/react-components/components/input/PasswordInput.js:21
 msgctxt "Label"
 msgid "Reveal password"
-msgstr "Şifreyi göster"
+msgstr ""
 
 #: node_modules/react-components/components/input/PasswordInput.js:21
 msgctxt "Label"
 msgid "Hide password"
-msgstr "Şifreyi gizle"
+msgstr ""
 
 #: src/app/components/ContactAdrField.js:29
 msgctxt "Label"
 msgid "Street address"
-msgstr "Sokak adresi"
+msgstr ""
 
 #: src/app/components/ContactAdrField.js:37
 msgctxt "Label"
 msgid "City"
-msgstr "Kent"
+msgstr ""
 
 #: src/app/components/ContactAdrField.js:46
 msgctxt "Label"
 msgid "Region"
-msgstr "Bölge"
+msgstr ""
 
 #: src/app/components/ContactAdrField.js:54
 msgctxt "Label"
 msgid "Postal code"
-msgstr "Posta kodu"
+msgstr ""
 
 #: src/app/components/ContactAdrField.js:62
 msgctxt "Label"
 msgid "Country"
-msgstr "Ülke"
+msgstr ""
 
 #: src/app/components/ContactAdrField.js:71
 msgctxt "Label"
 msgid "Post office box"
-msgstr "Posta kutusu"
+msgstr ""
 
 #: src/app/components/ContactAdrField.js:81
 msgctxt "Label"
 msgid "Extended address"
-msgstr "Tam adres"
+msgstr ""
 
 #: src/app/components/ContactImageModal.js:47
 msgctxt "Label"
 msgid "Add image URL"
-msgstr "Resim URL’si ekle"
+msgstr ""
 
 #: src/app/components/ContactImageModal.js:58
 msgctxt "Label"
 msgid "Upload picture"
-msgstr "Resim yükle"
+msgstr ""
 
 #: src/app/components/ContactGroupModal.js:169
 msgctxt "Label"
 msgid "Add email address"
-msgstr "E-posta adresi ekle"
+msgstr ""
 
 #: src/app/components/ContactGroupDropdown.js:174
 msgctxt "Label"
 msgid "Add to group"
-msgstr "Gruba ekle"
+msgstr ""
 
 #: src/app/components/ContactPgpSettings.js:109
 msgctxt "Label"
 msgid "Encrypt emails"
-msgstr "E-postaları şifrele"
+msgstr ""
 
 #: src/app/components/ContactPgpSettings.js:135
 msgctxt "Label"
 msgid "Sign emails"
-msgstr "E-postaları imzala"
+msgstr ""
 
 #: src/app/components/ContactPgpSettings.js:160
 msgctxt "Label"
@@ -1541,148 +1539,148 @@ msgstr "Genel anahtarlar"
 #: src/app/components/ContactPgpSettings.js:175
 msgctxt "Label"
 msgid "Cryptographic scheme"
-msgstr "Şifreleme tasarımı"
+msgstr ""
 
 #.  we cannot use the FormModal component because we need to introduce the class ellipsis inside the header
 #: src/app/components/ContactEmailSettingsModal.js:252
 msgctxt "Label"
 msgid "Email format"
-msgstr "E-posta şekli"
+msgstr ""
 
 #: src/app/components/ContactsSection.js:12
 msgctxt "Label"
 msgid "Automatically save contacts"
-msgstr "Kişileri kendiliğinden kaydet"
+msgstr ""
 
 #: node_modules/react-components/containers/keys/shared/SelectKeyFiles.js:35
 msgctxt "Select files"
 msgid "Upload"
-msgstr "Yükle"
+msgstr ""
 
 #: node_modules/react-components/containers/support/AttachScreenshot.js:23
 msgctxt "Error notification in the bug report modal when the user upload file"
 msgid "No image selected"
-msgstr "Hiçbir görüntü seçilmedi"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:38
 #: node_modules/react-components/containers/support/BugModal.js:52
 msgctxt "Bug category"
 msgid "Login problem"
-msgstr "Giriş sorunu"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:39
 msgctxt "Bug category"
 msgid "Sign up problem"
-msgstr "Kayıt sorunu"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:40
 msgctxt "Bug category"
 msgid "Bridge problem"
-msgstr "Bridge sorunu"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:41
 msgctxt "Bug category"
 msgid "Import / export problem"
-msgstr "İçe / dışa aktarma sorunu"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:42
 msgctxt "Bug category"
 msgid "Custom domains problem"
-msgstr "Özel etki alanı sorunu"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:43
 #: node_modules/react-components/containers/support/BugModal.js:54
 msgctxt "Bug category"
 msgid "Payments problem"
-msgstr "Ödeme sorunu"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:44
 #: node_modules/react-components/containers/support/BugModal.js:58
 msgctxt "Bug category"
 msgid "Connection problem"
-msgstr "Bağlantı sorunu"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:45
 msgctxt "Bug category"
 msgid "Slow speed problem"
-msgstr "Yavaş hız sorunu"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:46
 msgctxt "Bug category"
 msgid "VPN problem"
-msgstr "VPN sorunu"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:47
 #: node_modules/react-components/containers/support/BugModal.js:63
 msgctxt "Bug category"
 msgid "Feature request"
-msgstr "Özellik isteği"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:48
 msgctxt "Bug category"
 msgid "Other"
-msgstr "Diğer"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:53
 msgctxt "Bug category"
 msgid "Signup problem"
-msgstr "Kayıt sorunu"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:55
 msgctxt "Bug category"
 msgid "Installation problem"
-msgstr "Kurulum sorunu"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:56
 msgctxt "Bug category"
 msgid "Update problem"
-msgstr "Yükseltme sorunu"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:57
 msgctxt "Bug category"
 msgid "Application problem"
-msgstr "Uygulama sorunu"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:59
 msgctxt "Bug category"
 msgid "Speed problem"
-msgstr "Hız sorunu"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:60
 msgctxt "Bug category"
 msgid "Manual setup problem"
-msgstr "Elden kurulum sorunu"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:61
 msgctxt "Bug category"
 msgid "Website access problem"
-msgstr "Genel ağ sayfası erişim sorunu"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:62
 msgctxt "Bug category"
 msgid "Streaming problem"
-msgstr "Veri akışı sorunu"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:80
 msgctxt "Action to select a title for the bug report modal"
 msgid "Select"
-msgstr "Seç"
+msgstr ""
 
 #: node_modules/react-components/containers/support/BugModal.js:89
 msgctxt "Link"
 msgid "clearing your browser cache"
-msgstr "tarayıcı çerezleriniz temizleniyor"
+msgstr "tarayıcı önbelleğiniz temizleniyor"
 
 #: node_modules/react-components/containers/payments/PayPal.js:125
 msgctxt "Link"
 msgid "click here"
-msgstr "buraya tıklayın"
+msgstr ""
 
 #: node_modules/react-components/containers/heading/UpgradeButton.js:13
 #: node_modules/react-components/containers/heading/UpgradeButton.js:21
 msgctxt "Link"
 msgid "Upgrade"
-msgstr "Yükselt"
+msgstr ""
 
 #: node_modules/react-components/components/link/LearnMore.js:7
 #: src/app/components/ContactViewErrors.js:14
@@ -1690,7 +1688,7 @@ msgstr "Yükselt"
 #: src/app/components/ContactViewErrors.js:38
 msgctxt "Link"
 msgid "Learn more"
-msgstr "Daha çok bilgi edinin"
+msgstr ""
 
 #: src/app/containers/SettingsContainer.js:24
 msgctxt "Link"
@@ -1725,49 +1723,49 @@ msgstr "Gruplar"
 #: node_modules/react-components/containers/support/BugModal.js:120
 msgctxt "Success"
 msgid "Bug reported"
-msgstr "Hata bildirildi"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/DonateModal.js:33
 msgctxt "Success"
 msgid "Your support is essential to keeping Proton running. Thank you for supporting internet privacy!"
-msgstr "Proton'u çalışır durumda tutmak için desteğiniz çok önemlidir. İnternet gizliliğini desteklediğiniz için teşekkür ederiz!"
+msgstr ""
 
 #: node_modules/react-components/containers/general/AutoSaveContactsToggle.js:16
 msgctxt "Success"
 msgid "Preference saved"
-msgstr "Seçim kaydedildi"
+msgstr ""
 
 #: src/app/components/ContactModal.js:94
 msgctxt "Success"
 msgid "Contact saved"
-msgstr "Kişi kaydedildi"
+msgstr ""
 
 #: src/app/components/ContactEmailSettingsModal.js:161
 msgctxt "Success"
 msgid "Preferences saved"
-msgstr "Seçimler kaydedildi"
+msgstr ""
 
 #: src/app/components/delete/DeleteModal.js:23
 msgctxt "Success"
 msgid "Contacts deleted"
-msgstr "Kişiler silindi"
+msgstr ""
 
 #: src/app/components/delete/DeleteModal.js:33
 msgctxt "Success"
 msgid "Contact deleted"
 msgid_plural "Contacts deleted"
-msgstr[0] "Kişi silindi"
-msgstr[1] "Kişiler silindi"
+msgstr[0] ""
+msgstr[1] ""
 
 #: node_modules/react-components/containers/support/BugModal.js:140
 msgctxt "Warning"
 msgid "Bug reports are not end-to-end encrypted, please do not send any sensitive information."
-msgstr "Hata raporları uçtan uca şifreli değildir, lütfen herhangi bir hassas bilgi göndermeyin."
+msgstr ""
 
 #: src/app/components/ContactViewErrors.js:12
 msgctxt "Warning"
 msgid "Warning: the verification of this contact's signature failed."
-msgstr "Uyarı: kişi imzasının doğrulanması başarısız oldu."
+msgstr ""
 
 #: src/app/components/ContactViewErrors.js:24
 #: src/app/components/ContactViewErrors.js:36
@@ -1778,24 +1776,24 @@ msgstr "Hata: Şifreli içeriğin çözülmesi başarısız oldu ve okunamıyor.
 #: src/app/components/UpgradeModal.js:19
 msgctxt "Warning"
 msgid "This feature requires a paid Proton account"
-msgstr "Bu özellik ücretli bir Proton hesabı gerektirir"
+msgstr ""
 
 #: src/app/components/merge/MergeContactPreview.js:82
 msgctxt "Warning"
 msgid "Some of the contacts to be merged display errors. Please review them individually"
-msgstr "Birleştirilecek kişilerden bazıları hata veriyor. Lütfen bunları ayrı ayrı inceleyin"
+msgstr ""
 
 #: src/app/components/merge/MergeContactPreview.js:84
 msgctxt "Warning"
 msgid "Contacts could not be merged"
-msgstr "Kişiler birleştirilemedi"
+msgstr ""
 
 #: src/app/components/delete/DeleteModal.js:45
 msgctxt "Warning"
 msgid "This action will permanently delete the selected contact. Are you sure you want to delete this contact?"
 msgid_plural "This action will permanently delete selected contacts. Are you sure you want to delete these contacts?"
-msgstr[0] "Bu işlem seçilen kişiyi kalıcı olarak siler. Bu kişiyi silmek istediğinize emin misiniz?"
-msgstr[1] "Bu işlem seçilen kişleri kalıcı olarak siler. Bu kişileri silmek istediğinize emin misiniz?"
+msgstr[0] ""
+msgstr[1] ""
 
 #: node_modules/react-components/containers/support/BugModal.js:193
 msgctxt "Label, make it short please"
@@ -1805,83 +1803,83 @@ msgstr "Ekran görüntüsü(leri) ekle"
 #: node_modules/react-components/containers/payments/Card.js:57
 msgctxt "Placeholder, make it short"
 msgid "Security code"
-msgstr "Güvenlik kodu"
+msgstr ""
 
 #: node_modules/react-components/containers/payments/Cash.js:13
 #, javascript-format
 msgctxt "Info for cash payment method"
 msgid "To pay via Cash, please email us at ${ email } for instructions."
-msgstr "Nakit ödeme yapmak için lütfen bize ${ email } ile bilgi için e-posta gönderin."
+msgstr ""
 
 #: node_modules/react-components/containers/paymentMethods/PaymentMethodDetails.js:21
 msgctxt "Label for credit card"
 msgid "Expiration"
-msgstr "Son kullanma tarihi"
+msgstr ""
 
 #: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:34
 msgctxt "Payment method option"
 msgid "Pay with credit/debit card"
-msgstr "Kredi/banka kartı ile öde"
+msgstr ""
 
 #: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:56
 msgctxt "Payment method option"
 msgid "Pay with PayPal"
-msgstr "PayPal ile öde"
+msgstr ""
 
 #: node_modules/react-components/containers/paymentMethods/usePaymentMethods.js:63
 msgctxt "Payment method option"
 msgid "Pay with Bitcoin"
-msgstr "Bitcoin ile öde"
+msgstr ""
 
 #: node_modules/react-components/components/toggle/Toggle.js:10
 msgctxt "Toggle button"
 msgid "On"
-msgstr "Açık"
+msgstr ""
 
 #: node_modules/react-components/components/toggle/Toggle.js:11
 msgctxt "Toggle button"
 msgid "Off"
-msgstr "Kapalı"
+msgstr ""
 
 #: src/app/helpers/fields.js:4
 #: src/app/helpers/fields.js:31
 #: src/app/helpers/fields.js:68
 msgctxt "Contact field label"
 msgid "Name"
-msgstr "Ad"
+msgstr ""
 
 #: src/app/helpers/fields.js:5
 #: src/app/helpers/fields.js:69
 msgctxt "Contact field label"
 msgid "Compact name"
-msgstr "Kısa ad"
+msgstr ""
 
 #: src/app/helpers/fields.js:6
 #: src/app/helpers/fields.js:70
 msgctxt "Contact field label"
 msgid "Nickname"
-msgstr "Takma ad"
+msgstr ""
 
 #: src/app/helpers/fields.js:7
 #: src/app/helpers/fields.js:32
 #: src/app/helpers/fields.js:71
 msgctxt "Contact field label"
 msgid "Email"
-msgstr "E-posta"
+msgstr ""
 
 #: src/app/helpers/fields.js:8
 #: src/app/helpers/fields.js:33
 #: src/app/helpers/fields.js:72
 msgctxt "Contact field label"
 msgid "Phone"
-msgstr "Telefon"
+msgstr ""
 
 #: src/app/helpers/fields.js:9
 #: src/app/helpers/fields.js:34
 #: src/app/helpers/fields.js:73
 msgctxt "Contact field label"
 msgid "Address"
-msgstr "Adres"
+msgstr ""
 
 #: src/app/helpers/fields.js:10
 #: src/app/helpers/fields.js:35
@@ -1889,7 +1887,7 @@ msgstr "Adres"
 #: src/app/helpers/fields.js:74
 msgctxt "Contact field label"
 msgid "Photo"
-msgstr "Fotoğraf"
+msgstr ""
 
 #: src/app/helpers/fields.js:11
 #: src/app/helpers/fields.js:36
@@ -1897,7 +1895,7 @@ msgstr "Fotoğraf"
 #: src/app/helpers/fields.js:75
 msgctxt "Contact field label"
 msgid "Organization"
-msgstr "Kuruluş"
+msgstr ""
 
 #: src/app/helpers/fields.js:12
 #: src/app/helpers/fields.js:37
@@ -1905,7 +1903,7 @@ msgstr "Kuruluş"
 #: src/app/helpers/fields.js:76
 msgctxt "Contact field label"
 msgid "Birthday"
-msgstr "Doğum günü"
+msgstr ""
 
 #: src/app/helpers/fields.js:13
 #: src/app/helpers/fields.js:38
@@ -1913,7 +1911,7 @@ msgstr "Doğum günü"
 #: src/app/helpers/fields.js:77
 msgctxt "Contact field label"
 msgid "Anniversary"
-msgstr "Yıl dönümü"
+msgstr ""
 
 #: src/app/helpers/fields.js:14
 #: src/app/helpers/fields.js:39
@@ -1921,7 +1919,7 @@ msgstr "Yıl dönümü"
 #: src/app/helpers/fields.js:78
 msgctxt "Contact field label"
 msgid "Title"
-msgstr "Başlık"
+msgstr ""
 
 #: src/app/helpers/fields.js:15
 #: src/app/helpers/fields.js:40
@@ -1929,7 +1927,7 @@ msgstr "Başlık"
 #: src/app/helpers/fields.js:79
 msgctxt "Contact field label"
 msgid "Role"
-msgstr "Iş konumu"
+msgstr ""
 
 #: src/app/helpers/fields.js:16
 #: src/app/helpers/fields.js:42
@@ -1937,7 +1935,7 @@ msgstr "Iş konumu"
 #: src/app/helpers/fields.js:80
 msgctxt "Contact field label"
 msgid "Note"
-msgstr "Not"
+msgstr ""
 
 #: src/app/helpers/fields.js:17
 #: src/app/helpers/fields.js:43
@@ -1945,7 +1943,7 @@ msgstr "Not"
 #: src/app/helpers/fields.js:81
 msgctxt "Contact field label"
 msgid "URL"
-msgstr "URL"
+msgstr ""
 
 #: src/app/helpers/fields.js:18
 #: src/app/helpers/fields.js:44
@@ -1953,7 +1951,7 @@ msgstr "URL"
 #: src/app/helpers/fields.js:82
 msgctxt "Contact field label"
 msgid "Gender"
-msgstr "Cinsiyet"
+msgstr ""
 
 #: src/app/helpers/fields.js:19
 #: src/app/helpers/fields.js:45
@@ -1961,7 +1959,7 @@ msgstr "Cinsiyet"
 #: src/app/helpers/fields.js:83
 msgctxt "Contact field label"
 msgid "Language"
-msgstr "Dil"
+msgstr ""
 
 #: src/app/helpers/fields.js:20
 #: src/app/helpers/fields.js:46
@@ -1969,7 +1967,7 @@ msgstr "Dil"
 #: src/app/helpers/fields.js:84
 msgctxt "Contact field label"
 msgid "Timezone"
-msgstr "Zaman dilimi"
+msgstr ""
 
 #: src/app/helpers/fields.js:21
 #: src/app/helpers/fields.js:47
@@ -1977,7 +1975,7 @@ msgstr "Zaman dilimi"
 #: src/app/helpers/fields.js:85
 msgctxt "Contact field label"
 msgid "Geo"
-msgstr "Koordinat"
+msgstr ""
 
 #: src/app/helpers/fields.js:22
 #: src/app/helpers/fields.js:48
@@ -1985,7 +1983,7 @@ msgstr "Koordinat"
 #: src/app/helpers/fields.js:86
 msgctxt "Contact field label"
 msgid "Logo"
-msgstr "Logo"
+msgstr ""
 
 #: src/app/helpers/fields.js:23
 #: src/app/helpers/fields.js:41
@@ -1993,7 +1991,7 @@ msgstr "Logo"
 #: src/app/helpers/fields.js:87
 msgctxt "Contact field label"
 msgid "Member"
-msgstr "Üye"
+msgstr ""
 
 #: src/app/helpers/fields.js:24
 #: src/app/helpers/fields.js:88
@@ -2005,34 +2003,34 @@ msgstr "IMPP"
 #: src/app/helpers/fields.js:89
 msgctxt "Contact field label"
 msgid "Related"
-msgstr "Ilişik"
+msgstr ""
 
 #: src/app/helpers/fields.js:26
 #: src/app/helpers/fields.js:90
 msgctxt "Contact field label"
 msgid "Categories"
-msgstr "Kategoriler"
+msgstr ""
 
 #: src/app/helpers/fields.js:27
 #: src/app/helpers/fields.js:91
 msgctxt "Contact field label"
 msgid "Sound"
-msgstr "Ses"
+msgstr ""
 
 #: src/app/helpers/types.js:4
 msgctxt "Contact type label"
 msgid "Work"
-msgstr "İş"
+msgstr ""
 
 #: src/app/helpers/types.js:5
 msgctxt "Contact type label"
 msgid "Personal"
-msgstr "Kişisel"
+msgstr ""
 
 #: src/app/helpers/types.js:6
 msgctxt "Contact type label"
 msgid "Mobile"
-msgstr "Mobil"
+msgstr ""
 
 #: src/app/helpers/types.js:7
 msgctxt "Contact type label"
@@ -2047,7 +2045,7 @@ msgstr "Yomi"
 #: src/app/helpers/types.js:9
 msgctxt "Contact type label"
 msgid "Other"
-msgstr "Diğer"
+msgstr ""
 
 #: src/app/helpers/types.js:10
 msgctxt "Contact type label"
@@ -2062,7 +2060,7 @@ msgstr "Çağrı cihazı"
 #: src/app/helpers/types.js:15
 msgctxt "Property type"
 msgid "Name"
-msgstr "Ad"
+msgstr ""
 
 #: src/app/helpers/types.js:15
 msgctxt "Property type"
@@ -2072,38 +2070,38 @@ msgstr "Yomi"
 #: src/app/helpers/types.js:19
 msgctxt "Property type"
 msgid "Email"
-msgstr "E-posta"
+msgstr ""
 
 #: src/app/helpers/types.js:20
 #: src/app/helpers/types.js:26
 #: src/app/helpers/types.js:36
 msgctxt "Property type"
 msgid "Home"
-msgstr "Ev"
+msgstr ""
 
 #: src/app/helpers/types.js:21
 #: src/app/helpers/types.js:27
 #: src/app/helpers/types.js:37
 msgctxt "Property type"
 msgid "Work"
-msgstr "İş"
+msgstr ""
 
 #: src/app/helpers/types.js:22
 #: src/app/helpers/types.js:28
 #: src/app/helpers/types.js:38
 msgctxt "Property type"
 msgid "Other"
-msgstr "Diğer"
+msgstr ""
 
 #: src/app/helpers/types.js:25
 msgctxt "Property type"
 msgid "Phone"
-msgstr "Telefon"
+msgstr ""
 
 #: src/app/helpers/types.js:29
 msgctxt "Property type"
 msgid "Mobile"
-msgstr "Mobil"
+msgstr ""
 
 #: src/app/helpers/types.js:30
 msgctxt "Property type"
@@ -2123,27 +2121,27 @@ msgstr "Çağrı cihazı"
 #: src/app/helpers/types.js:35
 msgctxt "Property type"
 msgid "Address"
-msgstr "Adres"
+msgstr ""
 
 #: src/app/helpers/types.js:52
 msgctxt "Property type"
 msgid "Contact"
-msgstr "Kişi"
+msgstr ""
 
 #: src/app/helpers/types.js:53
 msgctxt "Property type"
 msgid "Acquaintance"
-msgstr "Bildik"
+msgstr "Tanıdık"
 
 #: src/app/helpers/types.js:54
 msgctxt "Property type"
 msgid "Friend"
-msgstr "Arkadaş"
+msgstr ""
 
 #: src/app/helpers/types.js:55
 msgctxt "Property type"
 msgid "Met"
-msgstr "Tanıdık"
+msgstr ""
 
 #: src/app/helpers/types.js:56
 msgctxt "Property type"
@@ -2153,38 +2151,38 @@ msgstr "İş arkadaşı"
 #: src/app/helpers/types.js:57
 msgctxt "Property type"
 msgid "Colleague"
-msgstr "Meslektaş"
+msgstr ""
 
 #: src/app/helpers/types.js:58
 msgctxt "Property type"
 msgid "Co-resident"
-msgstr "Ev arkadaşı"
+msgstr ""
 
 #: src/app/helpers/types.js:59
 msgctxt "Property type"
 msgid "Neighbor"
-msgstr "Komşu"
+msgstr ""
 
 #: src/app/helpers/types.js:60
 msgctxt "Property type"
 msgid "Child"
-msgstr "Çocuk"
+msgstr ""
 
 #: src/app/helpers/types.js:61
 msgctxt "Property type"
 msgid "Parent"
-msgstr "Ebeveyn"
+msgstr ""
 
 #: src/app/helpers/types.js:62
 #: src/app/helpers/types.js:63
 msgctxt "Property type"
 msgid "Sibling"
-msgstr "Kardeş"
+msgstr ""
 
 #: src/app/helpers/types.js:64
 msgctxt "Property type"
 msgid "Kin"
-msgstr "Akraba"
+msgstr ""
 
 #: src/app/helpers/types.js:65
 msgctxt "Property type"
@@ -2194,7 +2192,7 @@ msgstr "İlham perisi"
 #: src/app/helpers/types.js:66
 msgctxt "Property type"
 msgid "Crush"
-msgstr "Aşkım"
+msgstr ""
 
 #: src/app/helpers/types.js:67
 msgctxt "Property type"
@@ -2204,42 +2202,42 @@ msgstr "Flört"
 #: src/app/helpers/types.js:68
 msgctxt "Property type"
 msgid "Sweetheart"
-msgstr "Sevgilim"
+msgstr ""
 
 #: src/app/helpers/types.js:69
 msgctxt "Property type"
 msgid "Me"
-msgstr "Ben"
+msgstr ""
 
 #: src/app/helpers/types.js:70
 msgctxt "Property type"
 msgid "Agent"
-msgstr "Ajan"
+msgstr ""
 
 #: src/app/helpers/types.js:71
 msgctxt "Property type"
 msgid "Emergency"
-msgstr "Acil durum"
+msgstr ""
 
 #: src/app/helpers/encrypt.js:74
 msgctxt "Default display name vcard"
 msgid "Unknown"
-msgstr "Bilinmiyor"
+msgstr ""
 
 #: src/app/components/import/AttachingModalContent.js:12
 msgctxt "Description"
 msgid "We support importing CSV files from Outlook, Outlook Express, Yahoo! Mail, Hotmail, Eudora and some other apps. We also support importing vCard 4.0. (UTF-8 encoding)."
-msgstr "CSV dosyalarının Outlook, Outlook Express, Yahoo! Mail, Hotmail, Eudora ve diğer bazı uygulamalardan içe aktarımını destekliyoruz. Ayrıca vCard 4.0'ın içe aktarılmasını da destekliyoruz. (UTF-8 kodlaması)."
+msgstr ""
 
 #: src/app/components/import/ImportingModalContent.js:246
 msgctxt "Description"
 msgid "Encrypting and importing contacts... This may take a few minutes. When the process is completed, you can close this modal."
-msgstr "Kişileri şifreleme ve içe aktarma... Bu birkaç dakika sürebilir. İşlem tamamlandığında, bu pencereyi kapatabilirsiniz."
+msgstr ""
 
 #: src/app/components/import/ImportGroupsModalContent.js:10
 msgctxt "Description"
 msgid "We picked up at least one group/organization from the list of contacts you are importing. Take the time to review how we should import these groups."
-msgstr "İçe aktarmakta olduğunuz kişi listesinden en az bir grup/kuruluş seçtik. Bu grupları nasıl içe aktarmamız gerektiğini incelemek için zaman ayırın."
+msgstr ""
 
 #: src/app/components/ExportModal.js:119
 msgctxt "Description"
@@ -2249,7 +2247,7 @@ msgstr "Kişilerin şifresini çözülüyor... Bu birkaç dakika sürebilir. İ�
 #: src/app/components/merge/MergingModalContent.js:267
 msgctxt "Description"
 msgid "Merging contacts... This may take a few minutes. When the process is completed, you can close this modal."
-msgstr "Kişiler birleştiriliyor... Bu birkaç dakika sürebilir. İşlem tamamlandığında, bu pencereyi kapatabilirsiniz."
+msgstr ""
 
 #: src/app/components/merge/MergeModalContent.js:70
 msgctxt "Description"
@@ -2260,150 +2258,149 @@ msgstr "Kişiler arasında birleştirme önceliğini sıralamak için Sürükle 
 msgctxt "Description"
 msgid "You can mark for deletion the contacts that you do not want neither to merge nor to keep.\n"
 "Deletion will only take place after the merge button is clicked"
-msgstr "Ne birleştirmek ne de tutmak istemediğiniz kişileri silmek için işaretleyebilirsiniz.\n"
-"Silme işlemi yalnızca birleştirme düğmesine tıklandıktan sonra gerçekleşir"
+msgstr ""
 
 #: src/app/components/import/ImportCsvTableHeader.js:11
 msgctxt "TableHeader"
 msgid "IMPORT"
-msgstr "IÇE AKTAR"
+msgstr ""
 
 #: src/app/components/import/ImportCsvTableHeader.js:13
 msgctxt "TableHeader"
 msgid "CSV FIELD"
-msgstr "CSV ALANI"
+msgstr ""
 
 #: src/app/components/import/ImportCsvTableHeader.js:14
 msgctxt "TableHeader"
 msgid "VCARD FIELD"
-msgstr "VCARD ALANI"
+msgstr ""
 
 #: src/app/components/import/ImportCsvTableHeader.js:17
 msgctxt "TableHeader"
 msgid "VALUES"
-msgstr "DEĞERLER"
+msgstr ""
 
 #: src/app/components/merge/MergeTable.js:13
 msgctxt "TableHeader"
 msgid "NAME"
-msgstr "AD"
+msgstr ""
 
 #: src/app/components/merge/MergeTable.js:14
 msgctxt "TableHeader"
 msgid "ADDRESS"
-msgstr "ADRES"
+msgstr ""
 
 #: src/app/components/merge/MergeTable.js:15
 msgctxt "TableHeader"
 msgid "ACTIONS"
-msgstr "EYLEMLER"
+msgstr ""
 
 #: src/app/components/import/ImportCsvModalContent.js:34
 msgctxt "Error notification"
 msgid "First name and last name cannot be unchecked at the same time"
-msgstr "Adınız ve soyadınız aynı anda seçilemez"
+msgstr ""
 
 #: src/app/components/import/ImportModal.js:70
 msgctxt "Error notification"
 msgid "No .csv or .vcf file selected"
-msgstr "Seçilmiş .csv ya da .vcf dosyası yok"
+msgstr ""
 
 #: src/app/components/import/ImportModal.js:106
 msgctxt "Error notification"
 msgid "File selected appears to be corrupted"
-msgstr "Seçilmiş dosyalar bozulmuş görünüyor"
+msgstr ""
 
 #: src/app/components/import/ImportCsvModalContent.js:63
 msgctxt "Description of the purpose of the import CSV modal"
 msgid "We have detected the following fields in the CSV file you uploaded. Check the ones you want to import."
-msgstr "Yüklediğiniz CSV dosyasında aşağıdaki alanları tespit ettik. Almak istediklerinizi kontrol edin."
+msgstr ""
 
 #: src/app/components/import/ImportCsvModalContent.js:67
 msgctxt "Description of the purpose of the import CSV modal"
 msgid "Also, we have automatically matched CSV fields with vCard fields. You can review and change this matching manually."
-msgstr "Ayrıca, CSV alanlarını kendiliğinden olarak vCard alanlarıyla eşleştirdik. Bu eşleşmeyi elden inceleyebilir ve değiştirebilirsiniz."
+msgstr ""
 
 #: src/app/components/import/ErrorDetails.js:6
 msgctxt "Info on errors"
 msgid "Click for details"
-msgstr "Ayrıntılar için tıklayınız"
+msgstr ""
 
 #: src/app/components/import/ImportingModalContent.js:31
 #, javascript-format
 msgctxt "Info on errors importing contacts"
 msgid "Contact ${ index } from your list could not be parsed. ${ message }"
-msgstr "Listenizdeki ${ index } kişisi ayrıştırılamadı. ${ message }"
+msgstr ""
 
 #: src/app/components/import/ImportingModalContent.js:33
 msgctxt "Info on errors importing contacts"
 msgid "Contact ${ index } from your list could not be encrypted."
-msgstr "Listenizdeki ${ index } kişisi şifrelenemedi."
+msgstr ""
 
 #: src/app/components/import/ImportingModalContent.js:35
 #, javascript-format
 msgctxt "Info on errors importing contacts"
 msgid "Contact ${ index } from your list could not be imported. ${ message }"
-msgstr "Listenizdeki ${ index } kişisi içe aktarılamadı. ${ message }"
+msgstr ""
 
 #: src/app/components/import/ImportingModalContent.js:265
 msgctxt "Info on errors importing contacts"
 msgid "Some contacts could not be imported. Click for details"
-msgstr "Bazı kişiler içe aktarılamadı. Ayrıntılar için tıklayın"
+msgstr ""
 
 #: src/app/components/import/ImportingModalContent.js:253
 #, javascript-format
 msgctxt "Progress bar description"
 msgid "${ model.submitted.length } out of ${ model.total } contact successfully imported."
 msgid_plural "${ model.submitted.length } out of ${ model.total } contacts successfully imported."
-msgstr[0] "${ model.total } kişiden ${ model.submitted.length } kişi başarıyla içe aktarıldı."
-msgstr[1] "${ model.total } kişiden ${ model.submitted.length } kişi başarıyla içe aktarıldı."
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/app/components/import/ImportingModalContent.js:258
 msgctxt "Progress bar description"
 msgid "No contacts imported"
-msgstr "İçe aktarılan kişi yok"
+msgstr ""
 
 #: src/app/components/DynamicProgress.js:9
 msgctxt "Progress bar description"
 msgid "Progress"
-msgstr "İlerleme"
+msgstr ""
 
 #: src/app/components/DynamicProgress.js:10
 msgctxt "Progress bar description"
 msgid "Completed"
-msgstr "Tamamlandı"
+msgstr ""
 
 #: src/app/components/DynamicProgress.js:11
 msgctxt "Progress bar description"
 msgid "Failed"
-msgstr "Başarısız"
+msgstr ""
 
 #: src/app/components/ExportModal.js:127
 #, javascript-format
 msgctxt "Progress bar description"
 msgid "${ contactsExported.length } out of ${ countContacts } contacts successfully exported."
-msgstr "${ countContacts } kişiden ${ contactsExported.length } kişi başarıyla dışa aktarıldı."
+msgstr ""
 
 #: src/app/components/ExportModal.js:129
 msgctxt "Progress bar description"
 msgid "No contacts exported."
-msgstr "Dışa aktarılan kişi yok."
+msgstr ""
 
 #: src/app/components/merge/MergingModalContent.js:275
 #, javascript-format
 msgctxt "Progress bar description"
 msgid "${ model.submitted.length } out of ${ totalBeMerged } contacts successfully merged."
-msgstr "${ totalBeMerged } kişiden ${ model.submitted.length } kişi başarıyla birleştirildi."
+msgstr ""
 
 #: src/app/components/merge/MergingModalContent.js:277
 msgctxt "Progress bar description"
 msgid "No contacts merged."
-msgstr "Birleştirilen kişi yok."
+msgstr ""
 
 #: src/app/components/import/ImportModal.js:82
 msgctxt "Error info"
 msgid "We only support importing files smaller than 10 MB. Please split your contacts into several smaller files."
-msgstr "Yalnızca 10 MB'den küçük dosyaları içe aktarmayı destekliyoruz. Lütfen daha küçük dosyalara bölün."
+msgstr ""
 
 #: src/app/components/EncryptedIcon.js:7
 msgctxt "Tooltip"
@@ -2418,7 +2415,7 @@ msgstr "E-posta şifreleme, gönderilen mesajlarınızın kimliğini doğrulamay
 #: src/app/components/ContactPgpSettings.js:138
 msgctxt "Tooltip"
 msgid "Digitally signing emails helps authenticating that messages are sent by you"
-msgstr "E-postaları dijital olarak imzalamak, iletilerin sizin tarafınızdan gönderildiğinin doğrulanmasına yardımcı olur"
+msgstr ""
 
 #: src/app/components/ContactPgpSettings.js:163
 msgctxt "Tooltip"
@@ -2445,83 +2442,83 @@ msgstr "Sil"
 #: src/app/components/ContactGroupsTable.js:60
 msgctxt "Table header"
 msgid "Name"
-msgstr "Ad"
+msgstr ""
 
 #: src/app/components/ContactGroupModal.js:31
 msgctxt "Table header"
 msgid "Address"
-msgstr "Adres"
+msgstr ""
 
 #: src/app/components/ContactGroupModal.js:31
 msgctxt "Table header"
 msgid "Action"
-msgstr "Eylem"
+msgstr ""
 
 #: src/app/components/ContactKeysTable.js:87
 msgctxt "Table header"
 msgid "Fingerprint"
-msgstr "Parmak izi"
+msgstr ""
 
 #: src/app/components/ContactKeysTable.js:88
 msgctxt "Table header"
 msgid "Created"
-msgstr "Oluşturuldu"
+msgstr ""
 
 #: src/app/components/ContactKeysTable.js:89
 msgctxt "Table header"
 msgid "Expires"
-msgstr "Süre sonu"
+msgstr ""
 
 #: src/app/components/ContactKeysTable.js:90
 msgctxt "Table header"
 msgid "Type"
-msgstr "Tip"
+msgstr ""
 
 #: src/app/components/ContactKeysTable.js:91
 msgctxt "Table header"
 msgid "Status"
-msgstr "Durum"
+msgstr ""
 
 #: src/app/components/ContactGroupsTable.js:60
 #: src/app/components/ContactKeysTable.js:92
 msgctxt "Table header"
 msgid "Actions"
-msgstr "Eylemler"
+msgstr ""
 
 #: src/app/components/ContactGroupsTable.js:60
 msgctxt "Table header"
 msgid "Group size"
-msgstr "Grup boyutu"
+msgstr ""
 
 #: src/app/components/ContactGroupModal.js:130
 msgctxt "Notification"
 msgid "Contact group updated"
-msgstr "Kişi grubu güncellendi"
+msgstr ""
 
 #: src/app/components/ContactGroupModal.js:131
 msgctxt "Notification"
 msgid "Contact group created"
-msgstr "Kişi grubu oluşturuldu"
+msgstr ""
 
 #: src/app/components/ContactGroupModal.js:151
 msgctxt "Label for contact group name"
 msgid "Name"
-msgstr "Ad"
+msgstr ""
 
 #: src/app/components/ContactGroupModal.js:155
 msgctxt "Placeholder for contact group name"
 msgid "Name"
-msgstr "Ad"
+msgstr ""
 
 #: src/app/components/ContactGroupModal.js:162
 msgctxt "Label for contact group color"
 msgid "Color"
-msgstr "Renk"
+msgstr ""
 
 #: src/app/components/ContactsList.js:105
 msgctxt "Info message"
 msgid "Your address book is empty"
-msgstr "Adres defteriniz boş"
+msgstr ""
 
 #: src/app/components/ContactsList.js:133
 msgctxt "Info message"
@@ -2531,7 +2528,7 @@ msgstr "Kişi grubunuz boş"
 #: src/app/components/ContactsList.js:152
 msgctxt "Info message"
 msgid "No results found"
-msgstr "Hiçbir sonuç bulunamadı"
+msgstr ""
 
 #: src/app/components/ContactsList.js:110
 #, javascript-format
@@ -2549,61 +2546,61 @@ msgstr "Kişi eklemek için ${ editGroup } yapabilirsiniz."
 #, javascript-format
 msgctxt "Actions message"
 msgid "You can either update your search query or ${ clearSearch }."
-msgstr "Arama sorgunuzu güncelleyebilir ya da ${ clearSearch }."
+msgstr ""
 
 #: src/app/components/ContactMIMETypeSelect.js:9
 msgctxt "MIME type"
 msgid "Automatic"
-msgstr "Kendiliğinden"
+msgstr ""
 
 #: src/app/components/ContactMIMETypeSelect.js:10
 msgctxt "MIME type"
 msgid "Plain text"
-msgstr "Düz metin"
+msgstr ""
 
 #: src/app/components/ContactSchemeSelect.js:13
 #, javascript-format
 msgctxt "Default encryption scheme"
 msgid "Use global default (${ defaultValue })"
-msgstr "Genel varsayılanı kullan (${ defaultValue })"
+msgstr ""
 
 #: src/app/components/KeyWarningIcon.js:14
 msgctxt "PGP key warning"
 msgid "This key is assigned to ${ emails }"
-msgstr "Bu anahtar ${ emails } adreslerine atanmıştır"
+msgstr ""
 
 #: src/app/components/ContactKeysTable.js:206
 msgctxt "Key badge"
 msgid "Primary"
-msgstr "Birincil"
+msgstr ""
 
 #: src/app/components/ContactKeysTable.js:208
 msgctxt "Key badge"
 msgid "Verification only"
-msgstr "Yalnızca doğrulama"
+msgstr ""
 
 #: src/app/components/ContactKeysTable.js:210
 msgctxt "Key badge"
 msgid "WKD"
-msgstr "WKD"
+msgstr ""
 
 #: src/app/components/ContactKeysTable.js:211
 msgctxt "Key badge"
 msgid "Trusted"
-msgstr "Güvenilir"
+msgstr ""
 
 #: src/app/components/ContactKeysTable.js:212
 msgctxt "Key badge"
 msgid "Revoked"
-msgstr "İptal edildi"
+msgstr ""
 
 #: src/app/components/ContactKeysTable.js:213
 msgctxt "Key badge"
 msgid "Expired"
-msgstr "Süresi doldu"
+msgstr ""
 
 #: src/app/components/ContactGroupsTable.js:42
 msgctxt "Contact group notification"
 msgid "Contact group removed"
-msgstr "Kişi grubu kaldırıldı"
+msgstr ""
 
