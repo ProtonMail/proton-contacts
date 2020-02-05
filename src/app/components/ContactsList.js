@@ -6,13 +6,15 @@ import { withRouter } from 'react-router';
 import List from 'react-virtualized/dist/commonjs/List';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 
-import noContactsImg from 'design-system/assets/img/shared/empty-address-book.svg';
+import noContactsImgLight from 'design-system/assets/img/shared/empty-address-book.svg';
+import noContactsImgDark from 'design-system/assets/img/shared/empty-address-book-dark.svg';
 import noResultsImg from 'design-system/assets/img/shared/no-result-search.svg';
 
 import ImportModal from './import/ImportModal';
 import ContactModal from './ContactModal';
 import ContactGroupModal from './ContactGroupModal';
 import ContactRow from './ContactRow';
+import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
 
 const ContactsList = ({
     totalContacts,
@@ -35,6 +37,8 @@ const ContactsList = ({
     const containerRef = useRef(null);
     const [lastChecked, setLastChecked] = useState(); // Store ID of the last contact ID checked
     const { createModal } = useModals();
+
+    const noContactsImg = getLightOrDark(noContactsImgLight, noContactsImgDark);
 
     const handleImport = () => {
         createModal(<ImportModal userKeysList={userKeysList} />);
