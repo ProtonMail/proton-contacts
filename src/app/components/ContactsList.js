@@ -8,7 +8,9 @@ import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 
 import noContactsImgLight from 'design-system/assets/img/shared/empty-address-book.svg';
 import noContactsImgDark from 'design-system/assets/img/shared/empty-address-book-dark.svg';
-import noResultsImg from 'design-system/assets/img/shared/no-result-search.svg';
+
+import noResultsImgLight from 'design-system/assets/img/shared/no-result-search.svg';
+import noResultsImgDark from 'design-system/assets/img/shared/no-result-search-dark.svg';
 
 import ImportModal from './import/ImportModal';
 import ContactModal from './ContactModal';
@@ -150,6 +152,8 @@ const ContactsList = ({
                 {c('Action').t`Clear it`}
             </LinkButton>
         );
+
+        const noResultsImg = getLightOrDark(noResultsImgLight, noResultsImgDark);
 
         return (
             <div className="p2 aligncenter w100">

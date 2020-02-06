@@ -10,11 +10,13 @@ import exportSvg from 'design-system/assets/img/pm-images/contact-export.svg';
 import contactGroupsSvg from 'design-system/assets/img/pm-images/contact-groups.svg';
 import upgradeSvg from 'design-system/assets/img/pm-images/contact-unlock-features.svg';
 
-import contactGroupCard from 'design-system/assets/img/pm-images/contact-group-card.svg';
+import contactGroupCardLight from 'design-system/assets/img/shared/empty-address-book.svg';
+import contactGroupCardDark from 'design-system/assets/img/shared/empty-address-book-dark.svg';
 
 import ContactGroupModal from './ContactGroupModal';
 import ExportModal from './ExportModal';
 import MergeRow from './MergeRow';
+import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
 
 const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
     return (
@@ -133,6 +135,8 @@ const ContactPlaceholder = ({
 }) => {
     const { hasPaidMail } = user;
     const { createModal } = useModals();
+
+    const contactGroupCard = getLightOrDark(contactGroupCardLight, contactGroupCardDark);
 
     if (selectedContacts) {
         const totalContactsText = (
