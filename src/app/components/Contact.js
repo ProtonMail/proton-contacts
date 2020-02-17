@@ -17,11 +17,11 @@ const Contact = ({ contactID, contactEmails, contactGroupsMap, userKeysList = []
             ref.current = contact.ID;
             const { publicKeys, privateKeys } = splitKeys(userKeysList);
 
-            prepareContact(contact, { publicKeys, privateKeys }).then(({ properties, error }) => {
+            prepareContact(contact, { publicKeys, privateKeys }).then(({ properties, errors }) => {
                 if (ref.current !== contact.ID) {
                     return;
                 }
-                setModel({ ID: contact.ID, properties, error });
+                setModel({ ID: contact.ID, properties, errors });
             });
         }
     }, [contact, userKeysList]);
