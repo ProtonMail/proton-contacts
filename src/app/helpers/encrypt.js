@@ -5,7 +5,7 @@ import { c } from 'ttag';
 import { generateUID } from './contact';
 import { CLEAR_FIELDS, SIGNED_FIELDS } from '../constants';
 import { toICAL } from './vcard';
-import { sanitizeProperties, addPref, addGroup } from './properties';
+import { hasCategories, sanitizeProperties, addPref, addGroup } from './properties';
 
 const { CLEAR_TEXT, ENCRYPTED_AND_SIGNED, SIGNED } = CONTACT_CARD_TYPE;
 
@@ -15,12 +15,20 @@ const { CLEAR_TEXT, ENCRYPTED_AND_SIGNED, SIGNED } = CONTACT_CARD_TYPE;
  * @returns {Object}
  */
 export const splitProperties = (properties) => {
+    // we should only create a clear text part if categories are present
+    const splitClearText = hasCategories(properties);
+
     return properties.reduce(
         (acc, property) => {
             const { field } = property;
 
-            if (CLEAR_FIELDS.includes(field)) {
+            if (splitClearText && CLEAR_FIELDS.includes(field)) {
                 acc.toClearText.push(property);
+                // Notice CLEAR_FIELDS and SIGNED_FIELDS have some overlap.
+                // The repeated fields need to be in the clear-text and signed parts
+                if (SIGNED_FIELDS.includes(field)) {
+                    acc.toSign.push(property);
+                }
                 return acc;
             }
 

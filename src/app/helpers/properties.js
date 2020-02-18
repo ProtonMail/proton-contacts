@@ -1,12 +1,34 @@
+// See './csv.js' for the definition of pre-vCard and pre-vCards contact
+
 // Vcard fields for which we keep track of PREF parameter
 const FIELDS_WITH_PREF = ['fn', 'email', 'tel', 'adr', 'key'];
 
 /**
- * Given a Vcard field, return true if we take into consideration its PREF parameters
+ * Given a vCard field, return true if we take into consideration its PREF parameters
  * @param {String} field
  * @returns {Boolean}
  */
 export const hasPref = (field) => FIELDS_WITH_PREF.includes(field);
+
+/**
+ * For a vCard contact, check if it contains categories
+ * @param {Array<Object>} vcardContact       A vCard contact
+ *
+ * @return {Boolean}
+ */
+export const hasCategories = (vcardContact) => {
+    return vcardContact.some(({ field, value }) => value && field === 'categories');
+};
+
+/**
+ * For a list of vCard contacts, check if any contains categories
+ * @param {Array<Array<Object>>} vcardContacts       Array of vCard contacts
+ *
+ * @return {Boolean}
+ */
+export const haveCategories = (vcardContacts) => {
+    return vcardContacts.some((contact) => hasCategories(contact));
+};
 
 /**
  * Make sure we keep only valid properties

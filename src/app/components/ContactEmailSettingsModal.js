@@ -23,8 +23,7 @@ import {
 import { c } from 'ttag';
 
 import { prepareContacts } from '../helpers/encrypt';
-import { hasCategories } from '../helpers/import';
-import { reOrderByPref } from '../helpers/properties';
+import { hasCategories, reOrderByPref } from '../helpers/properties';
 import { getKeysFromProperties, toKeyProperty } from '../helpers/property';
 import { isInternalUser, isDisabledUser, getKeyEncryptStatus, sortPinnedKeys, sortApiKeys } from '../helpers/pgp';
 import { addContacts } from 'proton-shared/lib/api/contacts';

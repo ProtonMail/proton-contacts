@@ -17,14 +17,17 @@ import ContactModalProperties from './ContactModalProperties';
 import { randomIntFromInterval } from 'proton-shared/lib/helpers/function';
 import { generateUID } from 'react-components/helpers/component';
 import { prepareContacts } from '../helpers/encrypt';
-import { hasCategories } from '../helpers/import';
+import { hasCategories } from '../helpers/properties';
 import { getEditableFields, getOtherInformationFields } from '../helpers/fields';
 import { OVERWRITE, CATEGORIES } from '../constants';
 import { API_CODES } from 'proton-shared/lib/constants';
 
 import UpsellFree from './UpsellFree';
 
-const DEFAULT_MODEL = [{ field: 'fn', value: '' }, { field: 'email', value: '' }];
+const DEFAULT_MODEL = [
+    { field: 'fn', value: '' },
+    { field: 'email', value: '' }
+];
 const { OVERWRITE_CONTACT, THROW_ERROR_IF_CONFLICT } = OVERWRITE;
 const { INCLUDE, IGNORE } = CATEGORIES;
 const { SINGLE_SUCCESS } = API_CODES;
