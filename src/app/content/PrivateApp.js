@@ -11,6 +11,7 @@ import {
     SubscriptionModel,
     MailSettingsModel
 } from 'proton-shared/lib/models';
+import locales from '../locales';
 
 import ContactsProvider from '../containers/ContactProvider';
 import ContactsContainer from '../containers/ContactsContainer';
@@ -30,7 +31,12 @@ const PRELOAD_MODELS = [UserSettingsModel, UserModel];
 
 const PrivateApp = ({ onLogout }) => {
     return (
-        <StandardPrivateApp onLogout={onLogout} preloadModels={PRELOAD_MODELS} eventModels={EVENT_MODELS}>
+        <StandardPrivateApp
+            locales={locales}
+            onLogout={onLogout}
+            preloadModels={PRELOAD_MODELS}
+            eventModels={EVENT_MODELS}
+        >
             <ContactsProvider>
                 <ErrorBoundary>
                     <Switch>
