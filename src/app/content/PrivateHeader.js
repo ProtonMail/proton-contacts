@@ -37,7 +37,7 @@ const PrivateHeader = ({
             <Hamburger expanded={expanded} onToggle={onToggleExpand} />
             {title && isNarrow ? <span className="h3 mb0 ellipsis lh-standard">{title}</span> : null}
             {inSettings || isNarrow ? null : (
-                <Searchbox placeholder={c('Placeholder').t`Search`} value={search} onChange={onSearch} />
+                <Searchbox placeholder={c('Placeholder').t`Search contacts`} value={search} onChange={onSearch} />
             )}
             <TopNavbar>
                 {hasPaidMail || isNarrow ? null : <UpgradeButton external={true} />}
@@ -52,6 +52,7 @@ const PrivateHeader = ({
                 )}
                 {!inSettings && isNarrow ? (
                     <SearchDropdown
+                        originalPlacement="bottom-right"
                         content={
                             <Icon
                                 name="search"
