@@ -214,7 +214,7 @@ const ContactPlaceholder = ({
                 </div>
                 <div className="mb1">
                     <Link to="/contacts/settings" className="inline-flex flex-nowrap nodecoration">
-                        <Icon className="mr0-5 flex-item-centered-vert fill-primary" name="settings-master" />
+                        <Icon className="mr0-5 flex-item-centered-vert" name="settings-master" />
                         <span>{c('Title').t`Settings`}</span>
                     </Link>
                 </div>

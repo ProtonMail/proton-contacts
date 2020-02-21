@@ -174,7 +174,7 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled, fo
                     <strong>{c('Label').t`Add to group`}</strong>
                     <Tooltip title={c('Info').t`Create a new contact group`}>
                         <SmallButton className="pm-button--primary pm-button--for-icon" onClick={handleAdd}>
-                            <Icon name="contacts-groups" fill="light" />+
+                            <Icon name="contacts-groups" />+
                         </SmallButton>
                     </Tooltip>
                 </div>

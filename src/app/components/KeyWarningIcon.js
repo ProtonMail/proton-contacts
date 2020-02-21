@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { Icon, Tooltip } from 'react-components';
+import { classnames, Icon, Tooltip } from 'react-components';
 
 import { emailMismatch } from '../helpers/pgp';
 
-const KeyWarningIcon = ({ publicKey, email, ...rest }) => {
-    const icon = <Icon name="attention" fill="attention" {...rest} />;
+const KeyWarningIcon = ({ publicKey, email, className }) => {
+    const icon = <Icon name="attention" className={classnames([className, 'color-global-attention'])} />;
     const assignedEmails = emailMismatch(publicKey, email); // Returns Boolean|Array<String>
 
     if (assignedEmails) {
@@ -19,7 +19,8 @@ const KeyWarningIcon = ({ publicKey, email, ...rest }) => {
 
 KeyWarningIcon.propTypes = {
     publicKey: PropTypes.object.isRequired,
-    email: PropTypes.string.isRequired
+    email: PropTypes.string.isRequired,
+    className: PropTypes.string
 };
 
 export default KeyWarningIcon;

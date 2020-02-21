@@ -19,9 +19,9 @@ const DynamicProgress = ({
     const icon = loading ? (
         <Loader />
     ) : failed ? (
-        <Icon name="off" fill="warning" size={100} alt={`${alt}-finished`} />
+        <Icon name="off" className="color-global-warning" size={100} alt={`${alt}-finished`} />
     ) : (
-        <Icon name="on" fill="success" size={100} alt={`${alt}-finished`} />
+        <Icon name="on" className="color-global-success" size={100} alt={`${alt}-finished`} />
     );
     const displayEnd = failed ? displayFailed : displaySuccess;
 

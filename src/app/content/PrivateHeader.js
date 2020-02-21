@@ -53,13 +53,7 @@ const PrivateHeader = ({
                 {!inSettings && isNarrow ? (
                     <SearchDropdown
                         originalPlacement="bottom-right"
-                        content={
-                            <Icon
-                                name="search"
-                                size={25}
-                                className="topnav-icon mr0-5 flex-item-centered-vert fill-white"
-                            />
-                        }
+                        content={<Icon name="search" size={25} className="topnav-icon mr0-5 flex-item-centered-vert" />}
                         placeholder={c('Placeholder').t`Search contacts`}
                         search={search}
                         onSearch={onSearch}
