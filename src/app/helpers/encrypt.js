@@ -14,7 +14,7 @@ const { CLEAR_TEXT, ENCRYPTED_AND_SIGNED, SIGNED } = CONTACT_CARD_TYPE;
  * @param {Array} properties
  * @returns {Object}
  */
-export const splitProperties = (properties) => {
+const splitProperties = (properties) => {
     // we should only create a clear text part if categories are present
     const splitClearText = hasCategories(properties);
 

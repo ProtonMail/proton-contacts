@@ -44,7 +44,6 @@ export const PROPERTIES = {
     caluri: { cardinality: ONE_OR_MORE_MAY_BE_PRESENT }
 };
 
-export const getAllFields = () => Object.keys(PROPERTIES);
 export const isCustomField = (field = '') => field.startsWith('x-');
 
 /**
@@ -92,13 +91,15 @@ export const parse = (vcard = '') => {
  * @returns {ICAL.Component} vcard
  */
 export const toICAL = (properties = []) => {
+    // make sure version (we enforce 4.0) is the first property; otherwise invalid vcards can be generated
+    const versionLessProperties = properties.filter(({ field }) => field !== 'version');
+
     const comp = new ICAL.Component('vcard');
-    if (!properties.some(({ field }) => field === 'version')) {
-        const versionProperty = new ICAL.Property('version');
-        versionProperty.setValue('4.0');
-        comp.addProperty(versionProperty);
-    }
-    return properties.reduce((component, { field, type, pref, value, group }) => {
+    const versionProperty = new ICAL.Property('version');
+    versionProperty.setValue('4.0');
+    comp.addProperty(versionProperty);
+
+    return versionLessProperties.reduce((component, { field, type, pref, value, group }) => {
         const fieldWithGroup = [group, field].filter(Boolean).join('.');
         const property = new ICAL.Property(fieldWithGroup);
         property.setValue(value);
