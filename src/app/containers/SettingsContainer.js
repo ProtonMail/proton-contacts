@@ -8,6 +8,7 @@ import PrivateHeader from '../content/PrivateHeader';
 import GeneralPage from '../pages/GeneralPage';
 import ContactGroupsPage from '../pages/ContactGroupsPage';
 import PrivateLayout from '../content/PrivateLayout';
+import SidebarVersion from '../content/SidebarVersion';
 
 const SettingsContainer = ({ location }) => {
     const mainAreaRef = useRef();
@@ -46,6 +47,7 @@ const SettingsContainer = ({ location }) => {
                     list={list}
                     expanded={expanded}
                     onToggleExpand={onToggleExpand}
+                    version={<SidebarVersion />}
                     mobileLinks={mobileLinks}
                 />
                 <div className="main flex-item-fluid main-area" ref={mainAreaRef}>

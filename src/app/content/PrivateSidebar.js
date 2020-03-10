@@ -7,6 +7,7 @@ import ContactModal from '../components/ContactModal';
 import ImportModal from '../components/import/ImportModal';
 import ExportModal from '../components/ExportModal';
 import UpgradeModal from '../components/UpgradeModal';
+import SidebarVersion from './SidebarVersion';
 
 const PrivateSidebar = ({
     url,
@@ -97,6 +98,7 @@ const PrivateSidebar = ({
             onToggleExpand={onToggleExpand}
             url={url}
             list={list.filter(Boolean)}
+            version={<SidebarVersion />}
             mobileLinks={mobileLinks}
         >
             <div className="pl1 pr1 nomobile">
