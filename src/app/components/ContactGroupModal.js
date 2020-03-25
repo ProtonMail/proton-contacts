@@ -81,7 +81,7 @@ const ContactGroupModal = ({ contactGroupID, ...rest }) => {
         .map(({ ID, Email, Name }) => ({ text: Email === Name ? `<${Email}>` : `${Name} <${Email}>`, value: ID }));
 
     const handleChangeName = ({ target }) => setModel({ ...model, name: target.value });
-    const handleChangeColor = (color) => () => setModel({ ...model, color });
+    const handleChangeColor = (color) => setModel({ ...model, color });
     const handleChangeEmail = ({ target }) => setModel({ ...model, contactEmailID: target.value });
 
     const handleAddEmail = () => {
