@@ -19,6 +19,7 @@ const ContactViewProperties = ({
     contactID,
     contactEmails,
     contactGroupsMap = {},
+    ownAddresses,
     field,
     userKeysList,
     leftBlockWidth = 'w30',
@@ -61,6 +62,7 @@ const ContactViewProperties = ({
                         contactID={contactID}
                         contactEmail={contactEmail}
                         contactGroups={contactGroups}
+                        ownAddresses={ownAddresses}
                         property={property}
                         properties={allProperties}
                         userKeysList={userKeysList}

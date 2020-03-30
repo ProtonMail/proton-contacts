@@ -7,7 +7,7 @@ import useContact from '../hooks/useContact';
 import { prepareContact } from '../helpers/decrypt';
 import ContactView from './ContactView';
 
-const Contact = ({ contactID, contactEmails, contactGroupsMap, userKeysList = [] }) => {
+const Contact = ({ contactID, contactEmails, contactGroupsMap, ownAddresses, userKeysList = [] }) => {
     const [model, setModel] = useState({ ID: contactID });
     const ref = useRef(contactID);
     const [contact, contactLoading] = useContact(contactID);
@@ -38,6 +38,7 @@ const Contact = ({ contactID, contactEmails, contactGroupsMap, userKeysList = []
             contactID={contactID}
             contactEmails={contactEmails}
             contactGroupsMap={contactGroupsMap}
+            ownAddresses={ownAddresses}
             userKeysList={userKeysList}
             errors={errors}
         />

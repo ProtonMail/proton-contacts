@@ -10,7 +10,15 @@ import ContactSummary from './ContactSummary';
 import ContactViewProperties from './ContactViewProperties';
 import UpsellFree from './UpsellFree';
 
-const ContactView = ({ properties = [], contactID, contactEmails, contactGroupsMap, userKeysList, errors }) => {
+const ContactView = ({
+    properties = [],
+    contactID,
+    contactEmails,
+    contactGroupsMap,
+    ownAddresses,
+    userKeysList,
+    errors
+}) => {
     const { createModal } = useModals();
     const [user] = useUser();
 
@@ -39,6 +47,7 @@ const ContactView = ({ properties = [], contactID, contactEmails, contactGroupsM
                     contactID={contactID}
                     contactEmails={contactEmails}
                     contactGroupsMap={contactGroupsMap}
+                    ownAddresses={ownAddresses}
                     properties={properties}
                     field="email"
                 />

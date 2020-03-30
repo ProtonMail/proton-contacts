@@ -8,6 +8,7 @@ import {
     useUser,
     useUserKeys,
     useContactGroups,
+    useAddresses,
     useActiveBreakpoint,
     useModals,
     useToggle,
@@ -33,16 +34,17 @@ import PrivateLayout from '../content/PrivateLayout';
 const ContactsContainer = ({ location, history }) => {
     const { state: expanded, toggle: onToggleExpand, set: setExpand } = useToggle();
     const { createModal } = useModals();
+    const { isDesktop, isNarrow } = useActiveBreakpoint();
     const [search, updateSearch] = useState('');
     const normalizedSearch = normalize(search);
     const [contactEmails, loadingContactEmails] = useContactEmails();
     const [contacts, loadingContacts] = useContacts();
     const [contactGroups = [], loadingContactGroups] = useContactGroups();
-    const [checkedContacts, setCheckedContacts] = useState(Object.create(null));
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
+    const [addresses = [], loadingAddresses] = useAddresses();
 
-    const { isDesktop, isNarrow } = useActiveBreakpoint();
+    const [checkedContacts, setCheckedContacts] = useState(Object.create(null));
 
     const contactID = useMemo(() => {
         const [, contactID] = location.pathname.split('/contacts/');
@@ -64,6 +66,8 @@ const ContactsContainer = ({ location, history }) => {
             totalContactsInGroup: contacts.filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID)).length
         };
     }, [contacts, contactGroups, contactGroupID]);
+
+    const ownAddresses = useMemo(() => addresses.map(({ Email }) => Email), [addresses]);
 
     const hasChecked = useMemo(() => {
         return Object.keys(checkedContacts).some((key) => checkedContacts[key]);
@@ -195,7 +199,8 @@ const ContactsContainer = ({ location, history }) => {
         createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
     const handleGroups = () => history.replace('/contacts/settings/groups');
 
-    const isLoading = loadingContactEmails || loadingContacts || loadingContactGroups || loadingUserKeys;
+    const isLoading =
+        loadingContactEmails || loadingContacts || loadingContactGroups || loadingUserKeys || loadingAddresses;
     const contactsLength = contacts ? contacts.length : 0;
     const noHeader = isNarrow && contactID ? '--noHeader' : '';
 
@@ -205,6 +210,7 @@ const ContactsContainer = ({ location, history }) => {
                 contactID={contactID}
                 contactEmails={contactEmailsMap[contactID]}
                 contactGroupsMap={contactGroupsMap}
+                ownAddresses={ownAddresses}
                 userKeysList={userKeysList}
             />
         </ErrorBoundary>
