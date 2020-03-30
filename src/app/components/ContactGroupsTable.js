@@ -22,7 +22,7 @@ import ContactGroupModal from './ContactGroupModal';
 import ContactGroupIcon from './ContactGroupIcon';
 
 const ContactGroupsTable = () => {
-    const [contactGroups] = useContactGroups();
+    const [contactGroups = []] = useContactGroups();
     const [contactEmails] = useContactEmails();
     const { createNotification } = useNotifications();
     const { createModal } = useModals();

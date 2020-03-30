@@ -15,7 +15,7 @@ const PrivateSidebar = ({
     userKeysList = [],
     loadingUserKeys,
     totalContacts,
-    contactGroups = [],
+    contactGroups,
     expanded,
     onToggleExpand,
     onClearSearch,

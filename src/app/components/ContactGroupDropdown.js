@@ -83,7 +83,7 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled, fo
     const api = useApi();
     const { createModal } = useModals();
     const [contacts] = useContacts();
-    const [contactGroups] = useContactGroups();
+    const [contactGroups = []] = useContactGroups();
     const [model, setModel] = useState(Object.create(null));
     const [uid] = useState(generateUID('contactGroupDropdown'));
 

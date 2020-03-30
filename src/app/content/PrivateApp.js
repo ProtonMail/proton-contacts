@@ -6,7 +6,7 @@ import {
     UserModel,
     ContactsModel,
     ContactEmailsModel,
-    ContactGroupsModel,
+    LabelsModel,
     UserSettingsModel,
     SubscriptionModel,
     MailSettingsModel
@@ -24,7 +24,7 @@ const EVENT_MODELS = [
     ContactsModel,
     SubscriptionModel,
     ContactEmailsModel,
-    ContactGroupsModel
+    LabelsModel
 ];
 
 const PRELOAD_MODELS = [UserSettingsModel, UserModel];

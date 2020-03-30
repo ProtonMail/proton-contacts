@@ -37,7 +37,7 @@ const ContactsContainer = ({ location, history }) => {
     const normalizedSearch = normalize(search);
     const [contactEmails, loadingContactEmails] = useContactEmails();
     const [contacts, loadingContacts] = useContacts();
-    const [contactGroups, loadingContactGroups] = useContactGroups();
+    const [contactGroups = [], loadingContactGroups] = useContactGroups();
     const [checkedContacts, setCheckedContacts] = useState(Object.create(null));
     const [user] = useUser();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
@@ -55,7 +55,7 @@ const ContactsContainer = ({ location, history }) => {
     }, [location.search]);
 
     const { contactGroupName, totalContactsInGroup } = useMemo(() => {
-        if (!contactGroups || !contactGroupID) {
+        if (!contactGroups.length || !contactGroupID) {
             return Object.create(null);
         }
         const contactGroup = contactGroups.find(({ ID }) => ID === contactGroupID);
@@ -63,7 +63,7 @@ const ContactsContainer = ({ location, history }) => {
             contactGroupName: contactGroup.Name,
             totalContactsInGroup: contacts.filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID)).length
         };
-    }, [contacts, contactGroupID]);
+    }, [contacts, contactGroups, contactGroupID]);
 
     const hasChecked = useMemo(() => {
         return Object.keys(checkedContacts).some((key) => checkedContacts[key]);
