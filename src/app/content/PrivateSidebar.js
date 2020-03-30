@@ -86,12 +86,6 @@ const PrivateSidebar = ({
         );
     }
 
-    const mobileLinks = [
-        { to: '/inbox', icon: 'protonmail', external: true, current: false },
-        { to: '/contacts', icon: 'protoncontacts', external: false, current: true },
-        { to: '/calendar', icon: 'protoncalendar', external: true, current: false }
-    ].filter(Boolean);
-
     return (
         <Sidebar
             expanded={expanded}
@@ -99,7 +93,6 @@ const PrivateSidebar = ({
             url={url}
             list={list.filter(Boolean)}
             version={<SidebarVersion />}
-            mobileLinks={mobileLinks}
         >
             <div className="pl1 pr1 nomobile">
                 <PrimaryButton

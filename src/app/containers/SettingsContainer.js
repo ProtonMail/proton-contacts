@@ -26,12 +26,6 @@ const SettingsContainer = ({ location }) => {
         hasPaidMail && { link: '/contacts/settings/groups', icon: 'contacts-groups', text: c('Link').t`Contact groups` }
     ].filter(Boolean);
 
-    const mobileLinks = [
-        { to: '/inbox', icon: 'protonmail', external: true, current: false },
-        { to: '/contacts', icon: 'protoncontacts', external: false, current: true },
-        { to: '/calendar', icon: 'protoncalendar', external: true, current: false }
-    ].filter(Boolean);
-
     return (
         <PrivateLayout title={c('Title').t`Contact settings`}>
             <PrivateHeader
@@ -48,7 +42,6 @@ const SettingsContainer = ({ location }) => {
                     expanded={expanded}
                     onToggleExpand={onToggleExpand}
                     version={<SidebarVersion />}
-                    mobileLinks={mobileLinks}
                 />
                 <div className="main flex-item-fluid main-area" ref={mainAreaRef}>
                     <div className="flex flex-reverse">
