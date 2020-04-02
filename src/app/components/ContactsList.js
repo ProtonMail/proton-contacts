@@ -168,30 +168,32 @@ const ContactsList = ({
 
     return (
         <div ref={containerRef} className={`items-column-list${isDesktop ? '' : '--mobile'}`}>
-            <AutoSizer>
-                {({ height, width }) => (
-                    <List
-                        className="contacts-list no-outline"
-                        ref={listRef}
-                        rowRenderer={({ index, style, key }) => (
-                            <ContactRow
-                                style={style}
-                                key={key}
-                                contactID={contactID}
-                                hasPaidMail={!!user.hasPaidMail}
-                                contactGroupsMap={contactGroupsMap}
-                                contact={contacts[index]}
-                                onClick={handleClick}
-                                onCheck={handleCheck}
-                            />
-                        )}
-                        rowCount={contacts.length}
-                        height={height}
-                        width={width - 1}
-                        rowHeight={55}
-                    />
-                )}
-            </AutoSizer>
+            <div className="items-column-list-inner items-column-list-inner--noborder">
+                <AutoSizer>
+                    {({ height, width }) => (
+                        <List
+                            className="contacts-list no-outline"
+                            ref={listRef}
+                            rowRenderer={({ index, style, key }) => (
+                                <ContactRow
+                                    style={style}
+                                    key={key}
+                                    contactID={contactID}
+                                    hasPaidMail={!!user.hasPaidMail}
+                                    contactGroupsMap={contactGroupsMap}
+                                    contact={contacts[index]}
+                                    onClick={handleClick}
+                                    onCheck={handleCheck}
+                                />
+                            )}
+                            rowCount={contacts.length}
+                            height={height}
+                            width={width - 1}
+                            rowHeight={55}
+                        />
+                    )}
+                </AutoSizer>
+            </div>
         </div>
     );
 };
