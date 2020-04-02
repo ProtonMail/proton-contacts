@@ -2,9 +2,9 @@ import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Loader } from 'react-components';
 import { splitKeys } from 'proton-shared/lib/keys/keys';
+import { prepareContact } from 'proton-shared/lib/contacts/decrypt';
 
 import useContact from '../hooks/useContact';
-import { prepareContact } from '../helpers/decrypt';
 import ContactView from './ContactView';
 
 const Contact = ({ contactID, contactEmails, contactGroupsMap, ownAddresses, userKeysList = [] }) => {

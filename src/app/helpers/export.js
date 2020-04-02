@@ -1,4 +1,4 @@
-import { toICAL } from './vcard';
+import { toICAL } from 'proton-shared/lib/contacts/vcard';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 
 /**

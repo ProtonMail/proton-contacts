@@ -16,7 +16,7 @@ import { c } from 'ttag';
 import { parseISO, isValid, format } from 'date-fns';
 
 import { dateLocale } from 'proton-shared/lib/i18n';
-import { clearType, getType, formatAdr } from '../helpers/property';
+import { clearType, getType, formatAdr } from 'proton-shared/lib/contacts/property';
 import { getTypeLabels } from '../helpers/types';
 
 import ContactGroupIcon from './ContactGroupIcon';

@@ -8,8 +8,8 @@ import { getContact, addContacts, deleteContacts } from 'proton-shared/lib/api/c
 import { splitKeys } from 'proton-shared/lib/keys/keys';
 import { wait } from 'proton-shared/lib/helpers/promise';
 import { chunk } from 'proton-shared/lib/helpers/array';
-import { prepareContact as decrypt } from '../../helpers/decrypt';
-import { prepareContact as encrypt } from '../../helpers/encrypt';
+import { prepareContact as decrypt } from 'proton-shared/lib/contacts/decrypt';
+import { prepareContact as encrypt } from 'proton-shared/lib/contacts/encrypt';
 import { merge } from '../../helpers/merge';
 import { splitContacts } from '../../helpers/import';
 import { combineProgress } from '../../helpers/progress';
@@ -153,13 +153,15 @@ const MergingModalContent = ({
                 return;
             }
             const beDeletedBatchIDs = [];
-            const responses = (await apiWithAbort(
-                addContacts({
-                    Contacts: contacts.map(({ contact }) => contact),
-                    Overwrite: OVERWRITE_CONTACT,
-                    Labels: labels
-                })
-            )).Responses.map(({ Response }) => Response);
+            const responses = (
+                await apiWithAbort(
+                    addContacts({
+                        Contacts: contacts.map(({ contact }) => contact),
+                        Overwrite: OVERWRITE_CONTACT,
+                        Labels: labels
+                    })
+                )
+            ).Responses.map(({ Response }) => Response);
 
             if (signal.aborted) {
                 return;

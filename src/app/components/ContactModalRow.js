@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { OrderableHandle, Icon, DropdownActions, useModals } from 'react-components';
 import { c } from 'ttag';
 
-import { clearType, getType } from '../helpers/property';
+import { clearType, getType } from 'proton-shared/lib/contacts/property';
 import ContactFieldProperty from './ContactFieldProperty';
 import ContactModalLabel from './ContactModalLabel';
 import ContactImageModal from './ContactImageModal';

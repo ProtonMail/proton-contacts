@@ -20,7 +20,7 @@ import ImportGroupsModalContent from './ImportGroupsModalContent';
 // temporarily disabled
 // import { haveCategories } from '../../helpers/import';
 import { readCsv } from '../../helpers/csv';
-import { readVcf } from '../../helpers/vcard';
+import { readVcf } from 'proton-shared/lib/contacts/vcard';
 import { BASE_SIZE } from 'proton-shared/lib/constants';
 import { splitExtension } from 'proton-shared/lib/helpers/file';
 

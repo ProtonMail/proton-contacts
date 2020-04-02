@@ -15,9 +15,9 @@ import { addContacts } from 'proton-shared/lib/api/contacts';
 
 import ContactModalProperties from './ContactModalProperties';
 import { randomIntFromInterval } from 'proton-shared/lib/helpers/function';
+import { hasCategories } from 'proton-shared/lib/contacts/properties';
 import { generateUID } from 'react-components/helpers/component';
-import { prepareContacts } from '../helpers/encrypt';
-import { hasCategories } from '../helpers/properties';
+import { prepareContacts } from 'proton-shared/lib/contacts/encrypt';
 import { getEditableFields, getOtherInformationFields } from '../helpers/fields';
 import { OVERWRITE, CATEGORIES } from '../constants';
 import { API_CODES } from 'proton-shared/lib/constants';

@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Block, Icon, classnames } from 'react-components';
 
-import { formatAdr } from '../../helpers/property';
-import { getFirstValue, getAllValues } from '../../helpers/properties';
+import { formatAdr } from 'proton-shared/lib/contacts/property';
+import { getPreferredValue, getAllValues } from 'proton-shared/lib/contacts/properties';
 import UpsellFree from '../../components/UpsellFree';
 
 const MergedContactSummary = ({ properties = [], hasPaidMail }) => {
-    const name = getFirstValue(properties, 'fn');
+    const name = getPreferredValue(properties, 'fn');
     const emails = getAllValues(properties, 'email');
     const tels = getAllValues(properties, 'tel');
     const adrs = getAllValues(properties, 'adr');

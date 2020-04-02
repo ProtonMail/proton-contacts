@@ -22,102 +22,53 @@ import {
 } from 'react-components';
 import { c } from 'ttag';
 
-import { prepareContacts } from '../helpers/encrypt';
-import { hasCategories, reOrderByPref } from '../helpers/properties';
-import { getKeysFromProperties, toKeyProperty } from '../helpers/property';
-import { isInternalUser, isDisabledUser, getKeyEncryptStatus, sortPinnedKeys, sortApiKeys } from '../helpers/pgp';
+import { prepareContacts } from 'proton-shared/lib/contacts/encrypt';
+import { hasCategories, reOrderByPref } from 'proton-shared/lib/contacts/properties';
 import { addContacts } from 'proton-shared/lib/api/contacts';
-import { getPublicKeysEmailHelper } from 'proton-shared/lib/api/helpers/publicKeys';
+import getPublicKeysEmailHelper from 'proton-shared/lib/api/helpers/getPublicKeysEmailHelper';
+import { extractScheme } from 'proton-shared/lib/api/helpers/mailSettings';
+import { sortPinnedKeys, sortApiKeys, getPublicKeyModel } from 'proton-shared/lib/keys/publicKeys';
 import { uniqueBy } from 'proton-shared/lib/helpers/array';
 
-import { VCARD_KEY_FIELDS, PGP_INLINE, PGP_MIME, CATEGORIES } from '../constants';
-import { PACKAGE_TYPE, MIME_TYPES, KEY_FLAGS } from 'proton-shared/lib/constants';
+import { VCARD_KEY_FIELDS } from 'proton-shared/lib/contacts/constants';
+import { CATEGORIES } from '../constants';
 
 import ContactMIMETypeSelect from './ContactMIMETypeSelect';
 import ContactPgpSettings from './ContactPgpSettings';
+import { MIME_TYPES, PGP_SCHEMES } from 'proton-shared/lib/constants';
+import { getKeyInfoFromProperties, toKeyProperty } from 'proton-shared/lib/contacts/keyProperties';
 
-const { SEND_PGP_INLINE, SEND_PGP_MIME } = PACKAGE_TYPE;
+const { PGP_INLINE } = PGP_SCHEMES;
 const { INCLUDE, IGNORE } = CATEGORIES;
-
-const PGP_MAP = {
-    [SEND_PGP_INLINE]: PGP_INLINE,
-    [SEND_PGP_MIME]: PGP_MIME
-};
 
 const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailProperty, ...rest }) => {
     const api = useApi();
     const { call } = useEventManager();
-    const [model, setModel] = useState({ keys: { api: [], pinned: [] } });
+    const [model, setModel] = useState({ publicKeys: { api: [], pinned: [] } });
     const [showPgpSettings, setShowPgpSettings] = useState(false);
     const [loading, withLoading] = useLoading();
     const { createNotification } = useNotifications();
-    const [{ PGPScheme, Sign }, loadingMailSettings] = useMailSettings();
+    const [mailSettings, loadingMailSettings] = useMailSettings();
 
     const isLoading = loading || loadingMailSettings;
     const { value: Email, group: emailGroup } = emailProperty;
     const isMimeTypeFixed = model.isPGPExternal && model.sign;
-    const hasPGPInline = (model.scheme || PGP_MAP[PGPScheme]) === PGP_INLINE;
+    const hasPGPInline = (model.scheme || extractScheme(mailSettings.PGPScheme)) === PGP_INLINE;
 
     /**
-     * Initialize the model for the modal
+     * Initialize the key model for the modal
      * @returns {Promise}
      */
     const prepare = async (api) => {
-        // prepare keys stored in the vCard
-        const { pinnedKeys, mimeType, encrypt, scheme, sign } = await getKeysFromProperties(
-            properties,
-            emailGroup,
-            Sign
-        );
-        const trustedFingerprints = new Set();
-        const expiredFingerprints = new Set();
-        const revokedFingerprints = new Set();
-        await Promise.all(
-            pinnedKeys.map(async (publicKey) => {
-                const fingerprint = publicKey.getFingerprint();
-                const { isExpired, isRevoked } = await getKeyEncryptStatus(publicKey);
-                trustedFingerprints.add(fingerprint);
-                isExpired && expiredFingerprints.add(fingerprint);
-                isRevoked && revokedFingerprints.add(fingerprint);
-            })
-        );
-
-        // prepare keys retrieved from the API
         const apiKeysConfig = await getPublicKeysEmailHelper(api, Email);
-        const internalUser = isInternalUser(apiKeysConfig);
-        const externalUser = !internalUser;
-        const verifyOnlyFingerprints = new Set();
-        const { apiKeys } = apiKeysConfig.Keys.reduce(
-            (acc, { Flags }, index) => {
-                const publicKey = apiKeysConfig.publicKeys[index];
-                if (publicKey) {
-                    acc.apiKeys.push(publicKey);
-                    const isVerificationOnly = !(Flags & KEY_FLAGS.ENABLE_ENCRYPTION);
-                    isVerificationOnly && verifyOnlyFingerprints.add(publicKey.getFingerprint());
-                }
-                return acc;
-            },
-            { apiKeys: [] }
-        );
-        const orderedApiKeys = sortApiKeys(apiKeys, trustedFingerprints, verifyOnlyFingerprints);
-
-        setModel({
-            mimeType,
-            encrypt,
-            scheme,
-            sign,
-            email: Email,
-            keys: { api: orderedApiKeys, pinned: pinnedKeys },
-            trustedFingerprints,
-            expiredFingerprints,
-            revokedFingerprints,
-            verifyOnlyFingerprints,
-            isPGPExternal: externalUser,
-            isPGPInternal: internalUser,
-            isPGPExternalWithWKDKeys: externalUser && !!apiKeys.length,
-            isPGPExternalWithoutWKDKeys: externalUser && !apiKeys.length,
-            pgpAddressDisabled: isDisabledUser(apiKeysConfig)
+        const pinnedKeysConfig = await getKeyInfoFromProperties(properties, emailGroup);
+        const publicKeyModel = await getPublicKeyModel({
+            emailAddress: Email,
+            apiKeysConfig,
+            pinnedKeysConfig,
+            mailSettings
         });
+        setModel(publicKeyModel);
     };
 
     /**
@@ -126,7 +77,9 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
      * @returns {Array} key properties to save in the vCard
      */
     const getKeysProperties = (group) => {
-        const allKeys = model.isPGPInternal ? [...model.keys.api] : [...model.keys.api, ...model.keys.pinned];
+        const allKeys = model.isPGPInternal
+            ? [...model.publicKeys.api]
+            : [...model.publicKeys.api, ...model.publicKeys.pinned];
         const trustedKeys = allKeys.filter((publicKey) => model.trustedFingerprints.has(publicKey.getFingerprint()));
         const uniqueTrustedKeys = uniqueBy(trustedKeys, (publicKey) => publicKey.getFingerprint());
         return uniqueTrustedKeys.map((publicKey, index) => toKeyProperty({ publicKey, group, index }));
@@ -181,8 +134,8 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
          * * move expired keys to the bottom of the list
          */
         const noPinnedKeyCanSend =
-            !!model.keys.pinned.length &&
-            !model.keys.pinned.some((publicKey) => {
+            !!model.publicKeys.pinned.length &&
+            !model.publicKeys.pinned.some((publicKey) => {
                 const fingerprint = publicKey.getFingerprint();
                 const canSend =
                     !model.expiredFingerprints.has(fingerprint) && !model.revokedFingerprints.has(fingerprint);
@@ -190,10 +143,10 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             });
         setModel((model) => ({
             ...model,
-            encrypt: !noPinnedKeyCanSend && !!model.keys.pinned.length && model.encrypt,
-            keys: {
-                api: sortApiKeys(model.keys.api, model.trustedFingerprints, model.verifyOnlyFingerprints),
-                pinned: sortPinnedKeys(model.keys.pinned, model.expiredFingerprints, model.revokedFingerprints)
+            encrypt: !noPinnedKeyCanSend && !!model.publicKeys.pinned.length && model.encrypt,
+            publicKeys: {
+                api: sortApiKeys(model.publicKeys.api, model.trustedFingerprints, model.verifyOnlyFingerprints),
+                pinned: sortPinnedKeys(model.publicKeys.pinned, model.expiredFingerprints, model.revokedFingerprints)
             }
         }));
     }, [model.trustedFingerprints, model.expiredFingerprints, model.revokedFingerprints, model.verifyOnlyFingerprints]);
@@ -208,7 +161,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             return setModel((model) => ({ ...model, mimeType: MIME_TYPES.PLAINTEXT }));
         }
         // If PGP/Inline is not selected, go back to automatic
-        setModel((model) => ({ ...model, mimeType: '' }));
+        setModel((model) => ({ ...model, mimeType: undefined }));
     }, [isMimeTypeFixed, hasPGPInline]);
 
     return (
@@ -257,27 +210,26 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
                         </Label>
                         <Field>
                             <ContactMIMETypeSelect
-                                disabled={isMimeTypeFixed}
+                                disabled={isLoading || isMimeTypeFixed}
                                 value={model.mimeType}
                                 onChange={(mimeType) => setModel({ ...model, mimeType })}
                             />
                         </Field>
                     </Row>
                     <div className="mb1">
-                        <LinkButton
-                            onClick={() => setShowPgpSettings(!showPgpSettings)}
-                            disabled={loading || loadingMailSettings}
-                        >
+                        <LinkButton onClick={() => setShowPgpSettings(!showPgpSettings)} disabled={isLoading}>
                             {showPgpSettings
                                 ? c('Action').t`Hide advanced PGP settings`
                                 : c('Action').t`Show advanced PGP settings`}
                         </LinkButton>
                     </div>
-                    {showPgpSettings ? <ContactPgpSettings model={model} setModel={setModel} /> : null}
+                    {showPgpSettings ? (
+                        <ContactPgpSettings model={model} setModel={setModel} mailSettings={mailSettings} />
+                    ) : null}
                 </InnerModal>
                 <FooterModal>
                     <ResetButton>{c('Action').t`Cancel`}</ResetButton>
-                    <PrimaryButton loading={isLoading} disabled={!showPgpSettings} type="submit">
+                    <PrimaryButton loading={isLoading} type="submit">
                         {c('Action').t`Save`}
                     </PrimaryButton>
                 </FooterModal>

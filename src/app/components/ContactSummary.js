@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon, useUser, classnames } from 'react-components';
 
-import { getFirstValue } from '../helpers/properties';
-import { formatAdr } from '../helpers/property';
+import { getPreferredValue } from 'proton-shared/lib/contacts/properties';
+import { formatAdr } from 'proton-shared/lib/contacts/property';
 
 import ContactImageSummary from './ContactImageSummary';
 import './ContactSummary.scss';
@@ -11,12 +11,12 @@ import './ContactSummary.scss';
 const ContactSummary = ({ properties, leftBlockWidth = 'w30' }) => {
     const [user] = useUser();
     const { hasPaidMail } = user;
-    const photo = getFirstValue(properties, 'photo');
-    const name = getFirstValue(properties, 'fn');
-    const email = getFirstValue(properties, 'email');
-    const tel = getFirstValue(properties, 'tel');
-    const adr = getFirstValue(properties, 'adr');
-    const org = getFirstValue(properties, 'org');
+    const photo = getPreferredValue(properties, 'photo');
+    const name = getPreferredValue(properties, 'fn');
+    const email = getPreferredValue(properties, 'email');
+    const tel = getPreferredValue(properties, 'tel');
+    const adr = getPreferredValue(properties, 'adr');
+    const org = getPreferredValue(properties, 'org');
 
     const summary = [
         email && {

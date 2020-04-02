@@ -1,8 +1,7 @@
 import { normalize } from 'proton-shared/lib/helpers/string';
-
-import { hasPref, generateNewGroupName } from './properties';
+import { hasPref, generateNewGroupName } from 'proton-shared/lib/contacts/properties';
 import { unique } from 'proton-shared/lib/helpers/array';
-import { ONE_OR_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT, PROPERTIES, isCustomField } from './vcard';
+import { ONE_OR_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT, PROPERTIES, isCustomField } from 'proton-shared/lib/contacts/vcard';
 
 /**
  * Given an array of keys and an object storing an index for each key,

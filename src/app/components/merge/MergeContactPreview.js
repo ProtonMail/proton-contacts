@@ -4,8 +4,8 @@ import { c } from 'ttag';
 import { useApi, useLoading, useEventManager, Loader, FormModal, PrimaryButton, ResetButton } from 'react-components';
 import { splitKeys } from 'proton-shared/lib/keys/keys';
 import { getContact } from 'proton-shared/lib/api/contacts';
+import { prepareContact } from 'proton-shared/lib/contacts/decrypt';
 
-import { prepareContact } from '../../helpers/decrypt';
 import { merge } from '../../helpers/merge';
 
 import MergeErrorContent from './MergeErrorContent';

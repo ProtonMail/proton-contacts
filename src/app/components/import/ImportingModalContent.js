@@ -9,8 +9,8 @@ import ErrorDetails from './ErrorDetails';
 import { addContacts } from 'proton-shared/lib/api/contacts';
 import { chunk } from 'proton-shared/lib/helpers/array';
 import { wait } from 'proton-shared/lib/helpers/promise';
-import { extractVcards, parse as parseVcard } from '../../helpers/vcard';
-import { prepareContact } from '../../helpers/encrypt';
+import { extractVcards, parse as parseVcard } from 'proton-shared/lib/contacts/vcard';
+import { prepareContact } from 'proton-shared/lib/contacts/encrypt';
 import { splitContacts } from '../../helpers/import';
 import { combineProgress } from '../../helpers/progress';
 import {
@@ -141,16 +141,18 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
 
             const indexMap = contacts.map(({ index }) => index);
 
-            const responses = (await apiWithAbort(
-                addContacts({
-                    Contacts: contacts.map(({ contact }) => contact),
-                    Overwrite: OVERWRITE_CONTACT,
-                    Labels: labels,
-                    // we need to increase the standard timeout limit for this route since it may be slow sometimes
-                    // 1 hour to wait for an API response is essentially infinite time
-                    timeout: ONE_HOUR
-                })
-            )).Responses.map(({ Response }) => Response);
+            const responses = (
+                await apiWithAbort(
+                    addContacts({
+                        Contacts: contacts.map(({ contact }) => contact),
+                        Overwrite: OVERWRITE_CONTACT,
+                        Labels: labels,
+                        // we need to increase the standard timeout limit for this route since it may be slow sometimes
+                        // 1 hour to wait for an API response is essentially infinite time
+                        timeout: ONE_HOUR
+                    })
+                )
+            ).Responses.map(({ Response }) => Response);
 
             if (signal.aborted) {
                 return;

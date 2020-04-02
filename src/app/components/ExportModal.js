@@ -8,9 +8,9 @@ import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 import { wait } from 'proton-shared/lib/helpers/promise';
 import { noop } from 'proton-shared/lib/helpers/function';
 import { splitKeys } from 'proton-shared/lib/keys/keys';
+import { prepareContact } from 'proton-shared/lib/contacts/decrypt';
+import { toICAL } from 'proton-shared/lib/contacts/vcard';
 
-import { prepareContact } from '../helpers/decrypt';
-import { toICAL } from '../helpers/vcard';
 import { percentageProgress } from './../helpers/progress';
 import DynamicProgress from './DynamicProgress';
 import { QUERY_EXPORT_MAX_PAGESIZE, API_SAFE_INTERVAL } from '../constants';

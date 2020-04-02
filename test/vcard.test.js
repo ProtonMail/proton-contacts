@@ -1,4 +1,4 @@
-import { parse } from '../src/app/helpers/vcard';
+import { parse } from 'proton-shared/lib/contacts/vcard';
 
 const vcard = `BEGIN:VCARD
 FN:edu

@@ -4,9 +4,9 @@ import { c } from 'ttag';
 import { useApi, useLoading, Loader, FormModal, PrimaryButton } from 'react-components';
 import { splitKeys } from 'proton-shared/lib/keys/keys';
 import { getContact } from 'proton-shared/lib/api/contacts';
+import { prepareContact } from 'proton-shared/lib/contacts/decrypt';
 
-import { FAIL_TO_LOAD } from '../../constants';
-import { prepareContact } from '../../helpers/decrypt';
+import { CRYPTO_PROCESSING_TYPES } from 'proton-shared/lib/contacts/constants';
 
 import ContactViewErrors from '../ContactViewErrors';
 import MergedContactSummary from './MergedContactSummary';
@@ -26,7 +26,7 @@ const ContactDetails = ({ contactID, userKeysList, hasPaidMail, ...rest }) => {
         try {
             withLoading(request());
         } catch (error) {
-            setModel({ ...model, errors: [FAIL_TO_LOAD] });
+            setModel({ ...model, errors: [{ type: CRYPTO_PROCESSING_TYPES.FAIL_TO_LOAD, error }] });
         }
     }, []);
 

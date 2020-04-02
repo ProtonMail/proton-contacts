@@ -1,7 +1,7 @@
 import Papa from 'papaparse';
 import { standarize, combine, display, toPreVcard } from './csvFormat';
-import { sortByPref } from './properties';
-import { isEmptyValued } from './property';
+import { sortByPref } from 'proton-shared/lib/contacts/properties';
+import { isEmptyValued } from 'proton-shared/lib/contacts//property';
 
 /** NOTATION
  *
@@ -19,7 +19,7 @@ import { isEmptyValued } from './property';
  *
  * "csv contact value": Each of the string values inside a csv contact
  *
- * "vCard property": A format we are using for vCard properties in the file './vcard.js'.
+ * "vCard property": A format we are using for vCard properties in the file './vcard.ts'.
  *                   Namely a vCard property is the JS object:
  *                   { pref, field, group, type, value }
  *                   The key pref stands for preference, and is used when a property is repeated in a vcard
