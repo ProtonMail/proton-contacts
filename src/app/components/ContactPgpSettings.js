@@ -23,6 +23,7 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
         });
     const noTrustedApiKeyCanSend =
         hasTrustedApiKeys && !trustedApiKeys.some((key) => !model.verifyOnlyFingerprints.has(key.getFingerprint()));
+    const askForPinning = (hasPinnedKeys && !hasTrustedApiKeys) || noTrustedApiKeyCanSend;
 
     /**
      * Add / update keys to model
@@ -83,7 +84,7 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
                         .t`Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service.`}
                 </Alert>
             )}
-            {!!model.publicKeys.pinned.length && noTrustedApiKeyCanSend && (
+            {!!model.publicKeys.pinned.length && askForPinning && (
                 <Alert type="warning">{c('Info')
                     .t`Address Verification with Trusted Keys is enabled for this address. To be able to send to this address, first trust public keys that can be used for sending.`}</Alert>
             )}
