@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Checkbox, Toolbar, ToolbarLink, ToolbarButton, ToolbarSeparator } from 'react-components';
 import { c } from 'ttag';
+
 import ContactGroupDropdown from './ContactGroupDropdown';
 
 const ContactToolbar = ({
@@ -11,8 +12,10 @@ const ContactToolbar = ({
     checked = false,
     activeIDs = [],
     contactEmailsMap = {},
+    onMerge,
     simplified = false
 }) => {
+    const { hasPaidMail } = user;
     const handleCheck = ({ target }) => onCheck(target.checked);
 
     const contactEmailsSelected = useMemo(() => {
@@ -38,12 +41,12 @@ const ContactToolbar = ({
             <ToolbarSeparator />
             <ToolbarButton
                 icon="delete"
-                title={c('Tooltip').t`Delete`}
+                title={c('Action').t`Delete`}
                 className="toolbar-button"
                 onClick={onDelete}
                 disabled={!activeIDs.length}
             />
-            {user.hasPaidMail ? (
+            {hasPaidMail ? (
                 <ContactGroupDropdown
                     className="toolbar-button toolbar-button--dropdown"
                     disabled={!contactEmailsSelected.length}
@@ -53,6 +56,13 @@ const ContactToolbar = ({
                     <Icon name="contacts-groups" className="toolbar-icon mauto" />
                 </ContactGroupDropdown>
             ) : null}
+            <ToolbarButton
+                icon="merge"
+                title={c('Action').t`Merge`}
+                className="toolbar-button"
+                onClick={onMerge}
+                disabled={activeIDs.length <= 1}
+            />
         </Toolbar>
     );
 };
@@ -64,6 +74,7 @@ ContactToolbar.propTypes = {
     onDelete: PropTypes.func,
     activeIDs: PropTypes.array,
     contactEmailsMap: PropTypes.object,
+    onMerge: PropTypes.func,
     simplified: PropTypes.bool
 };
 

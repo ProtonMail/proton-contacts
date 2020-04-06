@@ -184,10 +184,12 @@ const ContactsContainer = ({ location, history }) => {
         createModal(<DeleteModal contactIDs={activeIDs} deleteAll={deleteAll} onDelete={onDelete} />);
     };
 
-    const handleMerge = () => {
+    const handleMerge = (mergeAll = true) => {
+        const contacts = mergeAll ? mergeableContacts : [formattedContacts.filter(({ isChecked }) => isChecked)];
+
         createModal(
             <MergeModal
-                contacts={mergeableContacts}
+                contacts={contacts}
                 contactID={contactID}
                 userKeysList={userKeysList}
                 hasPaidMail={!!hasPaidMail}
@@ -292,6 +294,7 @@ const ContactsContainer = ({ location, history }) => {
                         onCheck={handleCheckAllFiltered}
                         onDelete={handleDelete}
                         simplified={!!contactID && !isDesktop}
+                        onMerge={() => handleMerge(false)}
                     />
                     <div className={`main-area--withToolbar${noHeader} no-scroll flex flex-nowrap`}>
                         {isLoading ? (
