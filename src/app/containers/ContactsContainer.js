@@ -13,7 +13,8 @@ import {
     useModals,
     useToggle,
     ErrorBoundary,
-    GenericError
+    GenericError,
+    useUserSettings
 } from 'react-components';
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { toMap } from 'proton-shared/lib/helpers/object';
@@ -41,6 +42,7 @@ const ContactsContainer = ({ location, history }) => {
     const [contacts, loadingContacts] = useContacts();
     const [contactGroups = [], loadingContactGroups] = useContactGroups();
     const [user] = useUser();
+    const [userSettings, loadingUserSettings] = useUserSettings();
     const [userKeysList, loadingUserKeys] = useUserKeys(user);
     const [addresses = [], loadingAddresses] = useAddresses();
 
@@ -202,7 +204,7 @@ const ContactsContainer = ({ location, history }) => {
     const handleGroups = () => history.replace('/contacts/settings/groups');
 
     const isLoading =
-        loadingContactEmails || loadingContacts || loadingContactGroups || loadingUserKeys || loadingAddresses;
+        loadingContactEmails || loadingContacts || loadingContactGroups || loadingUserKeys || loadingAddresses || loadingUserSettings;
     const contactsLength = contacts ? contacts.length : 0;
     const noHeader = isNarrow && contactID ? '--noHeader' : '';
 
@@ -228,6 +230,7 @@ const ContactsContainer = ({ location, history }) => {
             contacts={formattedContacts}
             contactGroupsMap={contactGroupsMap}
             user={user}
+            userSettings={userSettings}
             userKeysList={userKeysList}
             loadingUserKeys={loadingUserKeys}
             onCheck={handleCheck}

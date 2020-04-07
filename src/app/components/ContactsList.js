@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { useModals, IllustrationPlaceholder, LinkButton } from 'react-components';
+import { useModals, IllustrationPlaceholder, LinkButton, classnames } from 'react-components';
 import { withRouter } from 'react-router';
 import List from 'react-virtualized/dist/commonjs/List';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
@@ -17,6 +17,7 @@ import ContactModal from './ContactModal';
 import ContactGroupModal from './ContactGroupModal';
 import ContactRow from './ContactRow';
 import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
+import { DENSITY } from 'proton-shared/lib/constants';
 
 const ContactsList = ({
     totalContacts,
@@ -27,6 +28,7 @@ const ContactsList = ({
     onClearSearch,
     onClearSelection,
     user,
+    userSettings,
     userKeysList,
     loadingUserKeys,
     history,
@@ -39,6 +41,7 @@ const ContactsList = ({
     const containerRef = useRef(null);
     const [lastChecked, setLastChecked] = useState(); // Store ID of the last contact ID checked
     const { createModal } = useModals();
+    const isCompactView = userSettings.Density === DENSITY.COMPACT;
 
     const noContactsImg = getLightOrDark(noContactsImgLight, noContactsImgDark);
 
@@ -166,8 +169,17 @@ const ContactsList = ({
         );
     }
 
+    const contactRowHeightComfort = 64;
+    const contactRowHeightCompact = 48;
+
     return (
-        <div ref={containerRef} className={`items-column-list${isDesktop ? '' : '--mobile'}`}>
+        <div
+            ref={containerRef}
+            className={classnames([
+                isDesktop ? 'items-column-list' : 'items-column-list--mobile',
+                isCompactView && 'is-compact'
+            ])}
+        >
             <div className="items-column-list-inner items-column-list-inner--noborder">
                 <AutoSizer>
                     {({ height, width }) => (
@@ -184,12 +196,13 @@ const ContactsList = ({
                                     contact={contacts[index]}
                                     onClick={handleClick}
                                     onCheck={handleCheck}
+                                    userSettings={userSettings}
                                 />
                             )}
                             rowCount={contacts.length}
                             height={height}
                             width={width - 1}
-                            rowHeight={55}
+                            rowHeight={isCompactView ? contactRowHeightCompact : contactRowHeightComfort}
                         />
                     )}
                 </AutoSizer>
@@ -206,6 +219,7 @@ ContactsList.propTypes = {
     onClearSearch: PropTypes.func,
     onClearSelection: PropTypes.func,
     user: PropTypes.object,
+    userSettings: PropTypes.object,
     userKeysList: PropTypes.array,
     loadingUserKeys: PropTypes.bool.isRequired,
     history: PropTypes.object.isRequired,
