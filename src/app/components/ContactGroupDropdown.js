@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import {
     Dropdown,
     SmallButton,
+    PrimaryButton,
     Icon,
+    Mark,
     SearchInput,
     Checkbox,
     useContactGroups,
@@ -24,6 +26,8 @@ import { labelContactEmails, unLabelContactEmails } from 'proton-shared/lib/api/
 import ContactGroupModal from './ContactGroupModal';
 import SelectEmailsModal from './SelectEmailsModal';
 import ContactGroupDropdownButton from './ContactGroupDropdownButton';
+
+import './ContactGroupDropdown.scss';
 
 const UNCHECKED = 0;
 const CHECKED = 1;
@@ -165,12 +169,14 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled, fo
             </ContactGroupDropdownButton>
             <Dropdown
                 id="contact-group-dropdown"
+                className="contactGroupDropdown"
                 isOpen={isOpen}
                 anchorRef={anchorRef}
                 onClose={close}
                 autoClose={false}
+                noMaxSize={true}
             >
-                <div className="flex flex-spacebetween pt1 pl1 pr1 mb1">
+                <div className="flex flex-spacebetween flex-items-center m1 mb0">
                     <strong>{c('Label').t`Add to group`}</strong>
                     <Tooltip title={c('Info').t`Create a new contact group`}>
                         <SmallButton className="pm-button--primary pm-button--for-icon" onClick={handleAdd}>
@@ -178,7 +184,7 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled, fo
                         </SmallButton>
                     </Tooltip>
                 </div>
-                <div className="pl1 pr1 mb1">
+                <div className="m1 mb0">
                     <SearchInput
                         value={keyword}
                         onChange={setKeyword}
@@ -186,43 +192,41 @@ const ContactGroupDropdown = ({ children, className, contactEmails, disabled, fo
                         placeholder={c('Placeholder').t`Filter groups`}
                     />
                 </div>
-                <div className="mb1 dropDown-content dropDown-content--narrow">
-                    <ul className="unstyled m0 pl1 pr1 dropDown-contentInner">
+                <div className="scroll-if-needed scroll-smooth-touch mt1 contactGroupDropdown-list-container">
+                    <ul className="unstyled mt0 mb0">
                         {filteredContactGroups.map(({ ID, Name, Color }) => {
                             const checkboxId = `${uid}${ID}`;
                             return (
                                 <li
                                     key={ID}
-                                    className="flex flex-nowrap border-bottom border-bottom--dashed pt0-5 pb0-5"
+                                    className="dropDown-item w100 flex flex-nowrap flex-items-center pt0-5 pb0-5 pl1 pr1"
                                 >
-                                    <label htmlFor={checkboxId} className="flex flex-item-fluid flex-nowrap">
-                                        <Icon
-                                            name="contacts-groups"
-                                            className="mr0-5 mtauto mbauto flex-item-noshrink"
-                                            color={Color}
-                                        />
-                                        <span className="ellipsis flex-item-fluid" title={Name}>
-                                            {Name}
-                                        </span>
-                                    </label>
                                     <Checkbox
-                                        className="flex flex-item-noshrink mtauto mbauto"
+                                        className="flex-item-noshrink"
                                         id={checkboxId}
                                         checked={model[ID] === CHECKED}
                                         indeterminate={model[ID] === INDETERMINATE}
                                         onChange={handleCheck(ID)}
                                     />
+                                    <label htmlFor={checkboxId} className="flex flex-item-fluid flex-nowrap">
+                                        <Icon
+                                            name="contacts-groups"
+                                            className="mr0-5 flex-item-noshrink"
+                                            color={Color}
+                                        />
+                                        <span className="flex-item-fluid ellipsis" title={Name}>
+                                            <Mark value={keyword}>{Name}</Mark>
+                                        </span>
+                                    </label>
                                 </li>
                             );
                         })}
                     </ul>
                 </div>
-                <div className="aligncenter mb1">
-                    <SmallButton
-                        loading={loading}
-                        className="pm-button--primary"
-                        onClick={() => withLoading(handleApply())}
-                    >{c('Action').t`Apply`}</SmallButton>
+                <div className="m1">
+                    <PrimaryButton className="w100" loading={loading} onClick={() => withLoading(handleApply())}>
+                        {c('Action').t`Apply`}
+                    </PrimaryButton>
                 </div>
             </Dropdown>
         </>
