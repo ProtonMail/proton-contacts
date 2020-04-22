@@ -44,7 +44,7 @@ const { INCLUDE, IGNORE } = CATEGORIES;
 const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailProperty, ...rest }) => {
     const api = useApi();
     const { call } = useEventManager();
-    const [model, setModel] = useState({ publicKeys: { api: [], pinned: [] } });
+    const [model, setModel] = useState({ publicKeys: { apiKeys: [], pinnedKeys: [] } });
     const [showPgpSettings, setShowPgpSettings] = useState(false);
     const [loading, withLoading] = useLoading();
     const { createNotification } = useNotifications();
@@ -78,8 +78,8 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
      */
     const getKeysProperties = (group) => {
         const allKeys = model.isPGPInternal
-            ? [...model.publicKeys.api]
-            : [...model.publicKeys.api, ...model.publicKeys.pinned];
+            ? [...model.publicKeys.apiKeys]
+            : [...model.publicKeys.apiKeys, ...model.publicKeys.pinnedKeys];
         const trustedKeys = allKeys.filter((publicKey) => model.trustedFingerprints.has(publicKey.getFingerprint()));
         const uniqueTrustedKeys = uniqueBy(trustedKeys, (publicKey) => publicKey.getFingerprint());
         return uniqueTrustedKeys.map((publicKey, index) => toKeyProperty({ publicKey, group, index }));
@@ -134,8 +134,8 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
          * * move expired keys to the bottom of the list
          */
         const noPinnedKeyCanSend =
-            !!model.publicKeys.pinned.length &&
-            !model.publicKeys.pinned.some((publicKey) => {
+            !!model.publicKeys.pinnedKeys.length &&
+            !model.publicKeys.pinnedKeys.some((publicKey) => {
                 const fingerprint = publicKey.getFingerprint();
                 const canSend =
                     !model.expiredFingerprints.has(fingerprint) && !model.revokedFingerprints.has(fingerprint);
@@ -143,10 +143,14 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             });
         setModel((model) => ({
             ...model,
-            encrypt: !noPinnedKeyCanSend && !!model.publicKeys.pinned.length && model.encrypt,
+            encrypt: !noPinnedKeyCanSend && !!model.publicKeys.pinnedKeys.length && model.encrypt,
             publicKeys: {
-                api: sortApiKeys(model.publicKeys.api, model.trustedFingerprints, model.verifyOnlyFingerprints),
-                pinned: sortPinnedKeys(model.publicKeys.pinned, model.expiredFingerprints, model.revokedFingerprints)
+                apiKeys: sortApiKeys(model.publicKeys.apiKeys, model.trustedFingerprints, model.verifyOnlyFingerprints),
+                pinnedKeys: sortPinnedKeys(
+                    model.publicKeys.pinnedKeys,
+                    model.expiredFingerprints,
+                    model.revokedFingerprints
+                )
             }
         }));
     }, [model.trustedFingerprints, model.expiredFingerprints, model.revokedFingerprints, model.verifyOnlyFingerprints]);

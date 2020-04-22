@@ -9,14 +9,16 @@ import ContactKeysTable from './ContactKeysTable';
 
 const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
     const { createNotification } = useNotifications();
-    const trustedApiKeys = model.publicKeys.api.filter((key) => model.trustedFingerprints.has(key.getFingerprint()));
-    const hasApiKeys = !!model.publicKeys.api.length;
-    const hasPinnedKeys = !!model.publicKeys.pinned.length;
+    const trustedApiKeys = model.publicKeys.apiKeys.filter((key) =>
+        model.trustedFingerprints.has(key.getFingerprint())
+    );
+    const hasApiKeys = !!model.publicKeys.apiKeys.length;
+    const hasPinnedKeys = !!model.publicKeys.pinnedKeys.length;
     const hasTrustedApiKeys = !!trustedApiKeys.length;
 
     const noPinnedKeyCanSend =
         hasPinnedKeys &&
-        !model.publicKeys.pinned.some((publicKey) => {
+        !model.publicKeys.pinnedKeys.some((publicKey) => {
             const fingerprint = publicKey.getFingerprint();
             const canSend = !model.expiredFingerprints.has(fingerprint) && !model.revokedFingerprints.has(fingerprint);
             return canSend;
@@ -36,7 +38,7 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
                 text: c('Error').t`Invalid public key file`
             });
         }
-        const pinned = [...model.publicKeys.pinned];
+        const pinned = [...model.publicKeys.pinnedKeys];
         const trustedFingerprints = new Set(model.trustedFingerprints);
         const revokedFingerprints = new Set(model.revokedFingerprints);
         const expiredFingerprints = new Set(model.expiredFingerprints);
@@ -84,7 +86,7 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
                         .t`Setting up PGP allows you to send end-to-end encrypted emails with a non-Protonmail user that uses a PGP compatible service.`}
                 </Alert>
             )}
-            {!!model.publicKeys.pinned.length && askForPinning && (
+            {!!model.publicKeys.pinnedKeys.length && askForPinning && (
                 <Alert type="warning">{c('Info')
                     .t`Address Verification with Trusted Keys is enabled for this address. To be able to send to this address, first trust public keys that can be used for sending.`}</Alert>
             )}
@@ -118,7 +120,7 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
                         <Toggle
                             id="encrypt-toggle"
                             checked={model.encrypt}
-                            disabled={!model.publicKeys.pinned.length || noPinnedKeyCanSend}
+                            disabled={!model.publicKeys.pinnedKeys.length || noPinnedKeyCanSend}
                             onChange={({ target }) =>
                                 setModel({
                                     ...model,
