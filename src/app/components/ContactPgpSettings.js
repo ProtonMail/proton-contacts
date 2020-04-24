@@ -38,7 +38,7 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
                 text: c('Error').t`Invalid public key file`
             });
         }
-        const pinned = [...model.publicKeys.pinnedKeys];
+        const pinnedKeys = [...model.publicKeys.pinnedKeys];
         const trustedFingerprints = new Set(model.trustedFingerprints);
         const revokedFingerprints = new Set(model.revokedFingerprints);
         const expiredFingerprints = new Set(model.expiredFingerprints);
@@ -59,19 +59,19 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
                 isRevoked && revokedFingerprints.add(fingerprint);
                 if (!trustedFingerprints.has(fingerprint)) {
                     trustedFingerprints.add(fingerprint);
-                    pinned.push(publicKey);
+                    pinnedKeys.push(publicKey);
                     return;
                 }
-                const indexFound = pinned.findIndex((publicKey) => publicKey.getFingerprint() === fingerprint);
+                const indexFound = pinnedKeys.findIndex((publicKey) => publicKey.getFingerprint() === fingerprint);
                 createNotification({ text: c('Info').t`Duplicate key updated`, type: 'warning' });
-                pinned.splice(indexFound, 1, publicKey);
+                pinnedKeys.splice(indexFound, 1, publicKey);
                 return;
             })
         );
 
         setModel({
             ...model,
-            publicKeys: { ...model.publicKeys, pinned },
+            publicKeys: { ...model.publicKeys, pinnedKeys },
             trustedFingerprints,
             expiredFingerprints,
             revokedFingerprints
