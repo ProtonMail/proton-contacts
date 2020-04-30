@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { AppsSidebar, StorageSpaceStatus, Href } from 'react-components';
+import { AppsSidebar, StorageSpaceStatus, Href, useDelinquent } from 'react-components';
 import { c } from 'ttag';
 
 const PrivateLayout = ({ children, title }) => {
+    useDelinquent();
+
     useEffect(() => {
         document.title = `${title} - ProtonContacts`;
     }, [title]);
