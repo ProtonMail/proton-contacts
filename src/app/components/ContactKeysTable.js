@@ -199,6 +199,7 @@ const ContactKeysTable = ({ model, setModel }) => {
                                     className="mr0-5 flex-item-noshrink"
                                     publicKey={publicKey}
                                     emailAddress={model.emailAddress}
+                                    isInternal={model.isPGPInternal}
                                 />
                                 <span className="flex-item-fluid ellipsis">{fingerprint}</span>
                             </div>,
