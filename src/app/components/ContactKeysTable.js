@@ -158,7 +158,18 @@ const ContactKeysTable = ({ model, setModel }) => {
                                 onClick() {
                                     const trustedFingerprints = new Set(model.trustedFingerprints);
                                     trustedFingerprints.add(fingerprint);
-                                    setModel({ ...model, trustedFingerprints });
+                                    const trustedKey = model.publicKeys.apiKeys.find(
+                                        (key) => key.getFingerprint() === fingerprint
+                                    );
+                                    trustedKey &&
+                                        setModel({
+                                            ...model,
+                                            publicKeys: {
+                                                ...model.publicKeys,
+                                                pinnedKeys: [...model.publicKeys.pinnedKeys, trustedKey]
+                                            },
+                                            trustedFingerprints
+                                        });
                                 }
                             },
                             canBeUntrusted && {
@@ -166,7 +177,17 @@ const ContactKeysTable = ({ model, setModel }) => {
                                 onClick() {
                                     const trustedFingerprints = new Set(model.trustedFingerprints);
                                     trustedFingerprints.delete(fingerprint);
-                                    setModel({ ...model, trustedFingerprints });
+                                    const pinnedKeys = model.publicKeys.pinnedKeys.filter(
+                                        (key) => key.getFingerprint() !== fingerprint
+                                    );
+                                    setModel({
+                                        ...model,
+                                        publicKeys: {
+                                            ...model.publicKeys,
+                                            pinnedKeys
+                                        },
+                                        trustedFingerprints
+                                    });
                                 }
                             },
                             isUploaded && {
