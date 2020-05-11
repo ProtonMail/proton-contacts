@@ -25,7 +25,7 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
         });
     const noTrustedApiKeyCanSend =
         hasTrustedApiKeys && !trustedApiKeys.some((key) => !model.verifyOnlyFingerprints.has(key.getFingerprint()));
-    const askForPinning = (hasPinnedKeys && hasApiKeys && !hasTrustedApiKeys) || noTrustedApiKeyCanSend;
+    const askForPinning = hasPinnedKeys && hasApiKeys && noTrustedApiKeyCanSend;
 
     /**
      * Add / update keys to model
