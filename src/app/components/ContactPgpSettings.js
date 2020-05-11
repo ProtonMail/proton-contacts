@@ -96,7 +96,7 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
             )}
             {hasApiKeys && (
                 <Alert learnMore="https://protonmail.com/support/knowledge-base/address-verification/">{c('Info')
-                    .t`To use Address Verification, you must trust one or more available public keys, including the one you want to use for sending. This prevents the encrypted keys from being faked.`}</Alert>
+                    .t`To use Address Verification, you must trust one or more available public keys, including the one you want to use for sending. This prevents the encryption keys from being faked.`}</Alert>
             )}
             {!hasApiKeys && !model.sign && (
                 <Alert learnMore="https://protonmail.com/support/knowledge-base/how-to-use-pgp/">{c('Info')
