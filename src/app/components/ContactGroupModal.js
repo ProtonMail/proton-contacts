@@ -14,7 +14,7 @@ import {
     Field,
     Input,
     Select,
-    ColorSelector,
+    ColorPicker,
     SmallButton,
     PrimaryButton,
     TableHeader,
@@ -161,7 +161,7 @@ const ContactGroupModal = ({ contactGroupID, ...rest }) => {
             <Row>
                 <Label htmlFor="contactGroupColor">{c('Label for contact group color').t`Color`}</Label>
                 <Field>
-                    <ColorSelector selected={model.color} onChange={handleChangeColor} />
+                    <ColorPicker color={model.color} onChange={handleChangeColor} />
                 </Field>
             </Row>
             {options.length ? (
