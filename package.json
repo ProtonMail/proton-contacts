@@ -49,7 +49,7 @@
         "jest": "^24.9.0",
         "lint-staged": "^8.1.5",
         "prettier": "^1.16.4",
-        "proton-bundler": "github:ProtonMail/proton-bundler#semver:^2.0.0",
+        "proton-bundler": "github:ProtonMail/proton-bundler#semver:^2.1.12",
         "proton-i18n": "github:ProtonMail/proton-i18n#semver:^2.0.0",
         "proton-pack": "github:ProtonMail/proton-pack#semver:^3.0.0",
         "typescript": "^3.6.3"
