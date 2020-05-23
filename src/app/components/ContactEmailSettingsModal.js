@@ -27,7 +27,12 @@ import { hasCategories, reOrderByPref } from 'proton-shared/lib/contacts/propert
 import { addContacts } from 'proton-shared/lib/api/contacts';
 import getPublicKeysEmailHelper from 'proton-shared/lib/api/helpers/getPublicKeysEmailHelper';
 import { extractScheme } from 'proton-shared/lib/api/helpers/mailSettings';
-import { sortPinnedKeys, sortApiKeys, getPublicKeyModel } from 'proton-shared/lib/keys/publicKeys';
+import {
+    sortPinnedKeys,
+    sortApiKeys,
+    getPublicKeyModel,
+    getIsValidForSending
+} from 'proton-shared/lib/keys/publicKeys';
 import { uniqueBy } from 'proton-shared/lib/helpers/array';
 
 import { VCARD_KEY_FIELDS } from 'proton-shared/lib/contacts/constants';
@@ -42,28 +47,29 @@ const { PGP_INLINE } = PGP_SCHEMES;
 const { INCLUDE, IGNORE } = CATEGORIES;
 
 const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailProperty, ...rest }) => {
+    const { value: emailAddress, group: emailGroup } = emailProperty;
+
     const api = useApi();
     const { call } = useEventManager();
-    const [model, setModel] = useState({ publicKeys: { apiKeys: [], pinnedKeys: [] } });
+    const [model, setModel] = useState(undefined);
     const [showPgpSettings, setShowPgpSettings] = useState(false);
     const [loading, withLoading] = useLoading();
     const { createNotification } = useNotifications();
     const [mailSettings, loadingMailSettings] = useMailSettings();
 
     const isLoading = loading || loadingMailSettings;
-    const { value: Email, group: emailGroup } = emailProperty;
-    const isMimeTypeFixed = model.isPGPExternal && model.sign;
-    const hasPGPInline = (model.scheme || extractScheme(mailSettings.PGPScheme)) === PGP_INLINE;
+    const isMimeTypeFixed = model?.isPGPExternal && model?.sign;
+    const hasPGPInline = (model?.scheme || extractScheme(mailSettings.PGPScheme)) === PGP_INLINE;
 
     /**
      * Initialize the key model for the modal
      * @returns {Promise}
      */
     const prepare = async (api) => {
-        const apiKeysConfig = await getPublicKeysEmailHelper(api, Email);
+        const apiKeysConfig = await getPublicKeysEmailHelper(api, emailAddress);
         const pinnedKeysConfig = await getKeyInfoFromProperties(properties, emailGroup);
         const publicKeyModel = await getPublicKeyModel({
-            emailAddress: Email,
+            emailAddress,
             apiKeysConfig,
             pinnedKeysConfig,
             mailSettings
@@ -126,6 +132,9 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     }, [loadingMailSettings]);
 
     useEffect(() => {
+        if (!model) {
+            return;
+        }
         /**
          * When the list of trusted, expired or revoked keys change,
          * * update the encrypt toggle (off if all keys are expired or no keys are pinned)
@@ -135,12 +144,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
          */
         const noPinnedKeyCanSend =
             !!model.publicKeys.pinnedKeys.length &&
-            !model.publicKeys.pinnedKeys.some((publicKey) => {
-                const fingerprint = publicKey.getFingerprint();
-                const canSend =
-                    !model.expiredFingerprints.has(fingerprint) && !model.revokedFingerprints.has(fingerprint);
-                return canSend;
-            });
+            !model.publicKeys.pinnedKeys.some((publicKey) => getIsValidForSending(publicKey.getFingerprint(), model));
         setModel((model) => ({
             ...model,
             encrypt: !noPinnedKeyCanSend && !!model.publicKeys.pinnedKeys.length && model.encrypt,
@@ -153,7 +157,12 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
                 )
             }
         }));
-    }, [model.trustedFingerprints, model.expiredFingerprints, model.revokedFingerprints, model.verifyOnlyFingerprints]);
+    }, [
+        model?.trustedFingerprints,
+        model?.expiredFingerprints,
+        model?.revokedFingerprints,
+        model?.verifyOnlyFingerprints
+    ]);
 
     useEffect(() => {
         // take into account rules relating email format and cryptographic scheme
@@ -182,7 +191,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
                     <span className="sr-only">{c('Action').t`Close modal`}</span>
                 </button>
                 <h1 id="modalTitle" className="pm-modalTitle ellipsis">
-                    {c('Title').t`Email settings (${Email})`}
+                    {c('Title').t`Email settings (${emailAddress})`}
                 </h1>
             </header>
             <ContentModal onSubmit={() => withLoading(handleSubmit())} onReset={rest.onClose} noValidate={false}>
@@ -215,7 +224,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
                         <Field>
                             <ContactMIMETypeSelect
                                 disabled={isLoading || isMimeTypeFixed}
-                                value={model.mimeType}
+                                value={model?.mimeType}
                                 onChange={(mimeType) => setModel({ ...model, mimeType })}
                             />
                         </Field>

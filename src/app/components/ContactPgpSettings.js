@@ -2,30 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { Alert, Row, Label, Field, Info, Toggle, SelectKeyFiles, useNotifications } from 'react-components';
-import { getKeyEncryptStatus } from 'proton-shared/lib/keys/publicKeys';
+import { getIsValidForSending, getKeyEncryptStatus } from 'proton-shared/lib/keys/publicKeys';
 
 import ContactSchemeSelect from './ContactSchemeSelect';
 import ContactKeysTable from './ContactKeysTable';
 
 const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
     const { createNotification } = useNotifications();
-    const trustedApiKeys = model.publicKeys.apiKeys.filter((key) =>
-        model.trustedFingerprints.has(key.getFingerprint())
-    );
+
     const hasApiKeys = !!model.publicKeys.apiKeys.length;
     const hasPinnedKeys = !!model.publicKeys.pinnedKeys.length;
-    const hasTrustedApiKeys = !!trustedApiKeys.length;
-
+    const isPrimaryPinned = hasApiKeys && model.trustedFingerprints.has(model.publicKeys.apiKeys[0].getFingerprint());
     const noPinnedKeyCanSend =
         hasPinnedKeys &&
-        !model.publicKeys.pinnedKeys.some((publicKey) => {
-            const fingerprint = publicKey.getFingerprint();
-            const canSend = !model.expiredFingerprints.has(fingerprint) && !model.revokedFingerprints.has(fingerprint);
-            return canSend;
-        });
-    const noTrustedApiKeyCanSend =
-        hasTrustedApiKeys && !trustedApiKeys.some((key) => !model.verifyOnlyFingerprints.has(key.getFingerprint()));
-    const askForPinning = hasPinnedKeys && hasApiKeys && noTrustedApiKeyCanSend;
+        !model.publicKeys.pinnedKeys.some((publicKey) => getIsValidForSending(publicKey.getFingerprint(), model));
+    const askForPinning = hasPinnedKeys && hasApiKeys && (noPinnedKeyCanSend || !isPrimaryPinned);
 
     /**
      * Add / update keys to model
@@ -87,7 +78,7 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
                 </Alert>
             )}
             {!!model.publicKeys.pinnedKeys.length && askForPinning && (
-                <Alert type="warning">{c('Info')
+                <Alert type="error">{c('Info')
                     .t`Address Verification with Trusted Keys is enabled for this address. To be able to send to this address, first trust public keys that can be used for sending.`}</Alert>
             )}
             {model.pgpAddressDisabled && (
