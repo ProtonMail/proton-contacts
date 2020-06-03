@@ -195,6 +195,7 @@ const ContactsContainer = ({ location, history }) => {
                 contactID={contactID}
                 userKeysList={userKeysList}
                 hasPaidMail={!!hasPaidMail}
+                onMerged={() => setCheckedContacts(Object.create(null))} // Unselect all contacts
             />
         );
     };
@@ -204,7 +205,12 @@ const ContactsContainer = ({ location, history }) => {
     const handleGroups = () => history.replace('/contacts/settings/groups');
 
     const isLoading =
-        loadingContactEmails || loadingContacts || loadingContactGroups || loadingUserKeys || loadingAddresses || loadingUserSettings;
+        loadingContactEmails ||
+        loadingContacts ||
+        loadingContactGroups ||
+        loadingUserKeys ||
+        loadingAddresses ||
+        loadingUserSettings;
     const contactsLength = contacts ? contacts.length : 0;
     const noHeader = isNarrow && contactID ? '--noHeader' : '';
 
