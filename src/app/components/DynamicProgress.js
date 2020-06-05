@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { Icon, Loader } from 'react-components';
+import { Icon, Loader, classnames, Progress } from 'react-components';
 
 const DynamicProgress = ({
     id,
@@ -28,7 +28,13 @@ const DynamicProgress = ({
     return (
         <div className="aligncenter">
             {icon}
-            <progress className="progress-contact w100 mt1" aria-describedby={id} value={value} max={max} {...rest} />
+            <Progress
+                className={classnames(['mt1', failed && 'progressbar--error'])}
+                aria-describedby={id}
+                value={value}
+                max={max}
+                {...rest}
+            />
             <p aria-atomic="true" aria-live="polite" id="id">
                 {loading ? `${displayDuring}: ${value}%` : displayEnd}
             </p>
