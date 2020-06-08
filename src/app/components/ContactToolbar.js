@@ -37,7 +37,7 @@ const ContactToolbar = ({
 
     return (
         <Toolbar>
-            <Checkbox className="flex pm-select-all ml0-75 pl1 pr1" checked={checked} onChange={handleCheck} />
+            <Checkbox className="flex pm-select-all ml0-5 pl1 pr1" checked={checked} onChange={handleCheck} />
             <ToolbarSeparator />
             <ToolbarButton
                 icon="delete"
