@@ -28,6 +28,7 @@ const MergeModal = ({ contacts, contactID, userKeysList, hasPaidMail, onMerged, 
     useEffect(() => {
         // close the modal if all contacts have been merged from preview
         if (!orderedContacts.flat().length) {
+            onMerged?.();
             rest.onClose();
         }
     }, [orderedContacts]);
@@ -115,7 +116,7 @@ const MergeModal = ({ contacts, contactID, userKeysList, hasPaidMail, onMerged, 
             close,
             submit,
             onSubmit: () => {
-                onMerged && onMerged();
+                onMerged?.();
                 rest.onClose();
             },
             ...rest

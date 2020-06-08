@@ -1,7 +1,12 @@
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { hasPref, generateNewGroupName } from 'proton-shared/lib/contacts/properties';
 import { unique } from 'proton-shared/lib/helpers/array';
-import { ONE_OR_MORE_MUST_BE_PRESENT, ONE_OR_MORE_MAY_BE_PRESENT, PROPERTIES, isCustomField } from 'proton-shared/lib/contacts/vcard';
+import {
+    ONE_OR_MORE_MUST_BE_PRESENT,
+    ONE_OR_MORE_MAY_BE_PRESENT,
+    PROPERTIES,
+    isCustomField
+} from 'proton-shared/lib/contacts/vcard';
 
 /**
  * Given an array of keys and an object storing an index for each key,
@@ -128,19 +133,17 @@ export const extractMergeable = (contacts = []) => {
  * @dev  Normalize strings in all fields but EMAIL
  */
 export const extractNewValue = (value, field, mergedValues = []) => {
-    //  the field adr has to be treated separately since it has an array value
-    if (field === 'adr') {
-        // the array structure of an 'adr' value is
-        // value = [ PObox, extAdr, street, city, region, postalCode, country ]
-        // each of the elements inside value can be a string or an array of strings
+    //  the fields n and adr have to be treated separately since they are array-valued
+    if (['adr', 'n'].includes(field)) {
+        // value is an array in this case, whose elements can be strings or arrays of strings
 
-        // compare with merged addresses. Normalize all strings
-        const isNotRepeatedAdr = mergedValues
-            .map((mergedAdr) => {
-                // check adr element by adr element to see if there are new values
-                const newComponents = mergedAdr
+        // compare with merged values. Normalize all strings
+        const isNotRepeatedValue = mergedValues
+            .map((mergedValue) => {
+                // check element by element to see if there are new values
+                const newComponents = mergedValue
                     .map((component, index) => {
-                        // each of the components inside adr may be an array itself
+                        // each of the components inside be an array itself
                         const componentIsArray = Array.isArray(component);
                         const valueIsArray = Array.isArray(value[index]);
                         if (componentIsArray && valueIsArray) {
@@ -149,7 +152,7 @@ export const extractNewValue = (value, field, mergedValues = []) => {
                         if (!componentIsArray && !valueIsArray) {
                             return normalize(component) !== normalize(value[index]);
                         }
-                        return true;
+                        return componentIsArray ? component.includes(value) : true;
                     })
                     .filter(Boolean);
 
@@ -159,7 +162,7 @@ export const extractNewValue = (value, field, mergedValues = []) => {
             .filter(Boolean);
 
         // if the be-new address is repeated, it is not new
-        const isNew = !isNotRepeatedAdr.length;
+        const isNew = !isNotRepeatedValue.length;
         return { isNewValue: isNew, newValue: isNew ? value : undefined };
     }
     // for the other fields, value is a string, and mergedValues an array of strings

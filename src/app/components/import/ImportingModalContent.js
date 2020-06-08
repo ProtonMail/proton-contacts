@@ -241,6 +241,8 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
             total: model.total - model.failedOnParse.length - model.failedOnEncrypt.length
         }
     ]);
+    const failed =
+        model.failedOnParse.length + model.failedOnEncrypt.length + model.failedOnSubmit.length === model.total;
 
     return (
         <>
@@ -258,7 +260,7 @@ const ImportingModalContent = ({ isVcf, file = '', vcardContacts, privateKey, on
                     model.submitted.length
                 )}
                 displayFailed={c('Progress bar description').t`No contacts imported`}
-                failed={!model.submitted.length}
+                failed={failed}
                 endPostponed={loading}
             />
             <ErrorDetails

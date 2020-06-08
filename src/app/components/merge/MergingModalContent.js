@@ -262,6 +262,7 @@ const MergingModalContent = ({
             total: totalBeMerged - model.failedOnMergeAndEncrypt.length
         }
     ]);
+    const failed = model.failedOnMergeAndEncrypt.length + model.failedOnSubmit.length === totalBeMerged;
 
     return (
         <>
@@ -273,7 +274,7 @@ const MergingModalContent = ({
                 id="progress-merge-contacts"
                 alt="contact-loader"
                 value={combinedProgress}
-                failed={!model.submitted.length}
+                failed={failed}
                 displaySuccess={c('Progress bar description')
                     .t`${model.submitted.length} out of ${totalBeMerged} contacts successfully merged.`}
                 displayFailed={c('Progress bar description').t`No contacts merged.`}

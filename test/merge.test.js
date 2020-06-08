@@ -150,6 +150,18 @@ describe('merge', () => {
                 .filter(Boolean);
             expect(newValues).toEqual(expectedNewValues);
         });
+        it('should capture only new values (up to normalization) for N field', () => {
+            const mergedValues = [['Stevenson', 'John', ['Philip', 'Paul'], 'Dr.', ['Jr.', 'M.D.', 'A.C.P.']]];
+            const values = [
+                ['Stevenson', 'John', 'Philip', 'Dr.', 'jr.'],
+                ['Stevenson', 'John', ['Philip', 'Paul', 'Peter'], 'Dr', 'Jr.']
+            ];
+            const expectedNewValues = [['Stevenson', 'John', ['Philip', 'Paul', 'Peter'], 'Dr', 'Jr.']];
+            const newValues = values
+                .map((value) => extractNewValue(value, 'adr', mergedValues).newValue)
+                .filter(Boolean);
+            expect(newValues).toEqual(expectedNewValues);
+        });
     });
 
     describe('merge', () => {

@@ -107,6 +107,8 @@ const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...
         };
     }, []);
 
+    const failed = contactsNotExported.length === countContacts;
+
     return (
         <FormModal
             title={c('Title').t`Exporting contacts`}
@@ -123,7 +125,7 @@ const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...
                 id="progress-export-contacts"
                 alt="contact-loader"
                 value={percentageProgress(contactsExported.length, contactsNotExported.length, countContacts)}
-                failed={!contactsExported.length}
+                failed={failed}
                 displaySuccess={c('Progress bar description')
                     .t`${contactsExported.length} out of ${countContacts} contacts successfully exported.`}
                 displayFailed={c('Progress bar description').t`No contacts exported.`}
