@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useDelinquent } from 'react-components';
+import { TopBanners } from 'react-components';
 
 const PrivateLayout = ({ children, title }) => {
-    useDelinquent();
-
     useEffect(() => {
         document.title = `${title} - ProtonContacts`;
     }, [title]);
 
     return (
         <div className="flex flex-nowrap no-scroll">
+            <TopBanners />
             <div className="content flex-item-fluid h100v reset4print">{children}</div>
         </div>
     );
