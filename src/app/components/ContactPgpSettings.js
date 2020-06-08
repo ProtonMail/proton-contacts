@@ -149,21 +149,7 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
                     </Field>
                 </Row>
             )}
-            <Row>
-                <Label>
-                    {c('Label').t`Public keys`}
-                    <Info
-                        className="ml0-5"
-                        title={c('Tooltip')
-                            .t`Upload a public key to enable sending end-to-end encrypted emails to this email`}
-                    />
-                </Label>
-                <Field className="onmobile-mt0-5">
-                    {model.isPGPExternalWithoutWKDKeys && <SelectKeyFiles onFiles={handleUploadKeys} multiple={true} />}
-                </Field>
-            </Row>
-            {(hasApiKeys || hasPinnedKeys) && <ContactKeysTable model={model} setModel={setModel} />}
-            {!hasApiKeys && (
+            {!model.isPGPInternal && (
                 <Row>
                     <Label>
                         {c('Label').t`Cryptographic scheme`}
@@ -182,6 +168,20 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
                     </Field>
                 </Row>
             )}
+            <Row>
+                <Label>
+                    {c('Label').t`Public keys`}
+                    <Info
+                        className="ml0-5"
+                        title={c('Tooltip')
+                            .t`Upload a public key to enable sending end-to-end encrypted emails to this email`}
+                    />
+                </Label>
+                <Field className="onmobile-mt0-5">
+                    {model.isPGPExternalWithoutWKDKeys && <SelectKeyFiles onFiles={handleUploadKeys} multiple={true} />}
+                </Field>
+            </Row>
+            {(hasApiKeys || hasPinnedKeys) && <ContactKeysTable model={model} setModel={setModel} />}
         </>
     );
 };

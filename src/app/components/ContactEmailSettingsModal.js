@@ -30,7 +30,7 @@ import { extractScheme } from 'proton-shared/lib/api/helpers/mailSettings';
 import {
     sortPinnedKeys,
     sortApiKeys,
-    getPublicKeyModel,
+    getContactPublicKeyModel,
     getIsValidForSending
 } from 'proton-shared/lib/keys/publicKeys';
 import { uniqueBy } from 'proton-shared/lib/helpers/array';
@@ -40,7 +40,7 @@ import { CATEGORIES } from '../constants';
 
 import ContactMIMETypeSelect from './ContactMIMETypeSelect';
 import ContactPgpSettings from './ContactPgpSettings';
-import { MIME_TYPES, PGP_SCHEMES } from 'proton-shared/lib/constants';
+import { API_CODES, MIME_TYPES, MIME_TYPES_MORE, PGP_SCHEMES } from 'proton-shared/lib/constants';
 import { getKeyInfoFromProperties, toKeyProperty } from 'proton-shared/lib/contacts/keyProperties';
 
 const { PGP_INLINE } = PGP_SCHEMES;
@@ -58,8 +58,8 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     const [mailSettings, loadingMailSettings] = useMailSettings();
 
     const isLoading = loading || loadingMailSettings;
-    const isMimeTypeFixed = model?.isPGPExternal && model?.sign;
-    const hasPGPInline = (model?.scheme || extractScheme(mailSettings.PGPScheme)) === PGP_INLINE;
+    const isMimeTypeFixed = model?.isPGPInternal ? false : model?.isPGPExternalWithWKDKeys ? true : !!model?.sign;
+    const hasPGPInline = model && mailSettings ? extractScheme(model, mailSettings) === PGP_INLINE : false;
 
     /**
      * Initialize the key model for the modal
@@ -68,11 +68,10 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
     const prepare = async (api) => {
         const apiKeysConfig = await getPublicKeysEmailHelper(api, emailAddress);
         const pinnedKeysConfig = await getKeyInfoFromProperties(properties, emailGroup);
-        const publicKeyModel = await getPublicKeyModel({
+        const publicKeyModel = await getContactPublicKeyModel({
             emailAddress,
             apiKeysConfig,
-            pinnedKeysConfig,
-            mailSettings
+            pinnedKeysConfig
         });
         setModel(publicKeyModel);
     };
@@ -113,7 +112,14 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
         const allProperties = reOrderByPref(otherProperties.concat(emailProperties));
         const Contacts = await prepareContacts([allProperties], userKeysList[0]);
         const labels = hasCategories(allProperties) ? INCLUDE : IGNORE;
-        await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: labels }));
+        const {
+            Responses: [{ Response: { Code } = {} }]
+        } = await api(addContacts({ Contacts, Overwrite: +!!contactID, Labels: labels }));
+        if (Code !== API_CODES.SINGLE_SUCCESS) {
+            rest.onClose();
+            createNotification({ text: c('Error').t`Preferences could not be saved`, type: 'error' });
+            return;
+        }
         await call();
         rest.onClose();
         createNotification({ text: c('Success').t`Preferences saved` });
@@ -174,7 +180,7 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
             return setModel((model) => ({ ...model, mimeType: MIME_TYPES.PLAINTEXT }));
         }
         // If PGP/Inline is not selected, go back to automatic
-        setModel((model) => ({ ...model, mimeType: undefined }));
+        setModel((model) => ({ ...model, mimeType: MIME_TYPES_MORE.AUTOMATIC }));
     }, [isMimeTypeFixed, hasPGPInline]);
 
     return (
@@ -202,14 +208,12 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
                                 .t`Select the email format you want to be used by default when sending an email to this email address.`}
                         </Alert>
                     ) : hasPGPInline ? (
-                        <Alert>
-                            {c('Info')
-                                .t`PGP/Inline is only compatible with Plain Text format. Please note that ProtonMail always signs PGP/Inline messages.`}
-                        </Alert>
+                        <Alert>{c('Info')
+                            .t`PGP/Inline is only compatible with Plain Text format.  Please note that ProtonMail always signs encrypted messages.`}</Alert>
                     ) : (
                         <Alert>
                             {c('Info')
-                                .t`PGP/MIME automatically sends the message using the current composer mode. Please note that ProtonMail always signs PGP/MIME messages.`}
+                                .t`PGP/MIME automatically sends the message using the current composer mode.  Please note that ProtonMail always signs encrypted messages.`}
                         </Alert>
                     )}
                     <Row>
