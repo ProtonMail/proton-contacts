@@ -9,14 +9,17 @@ describe('merge', () => {
             ];
             expect(linkConnections(connections)).toEqual(connections);
         });
+
         it('should return same if there is only one connection', () => {
             const connections = [[1, 2, 3, 4]];
             expect(linkConnections(connections)).toEqual(connections);
         });
+
         it('should return same if there are no connections', () => {
             const connections = [];
             expect(linkConnections(connections)).toEqual(connections);
         });
+
         it('should work as expected for a few cases', () => {
             const cases = [
                 [
@@ -76,6 +79,7 @@ describe('merge', () => {
                 [bob1, bob2]
             ]);
         });
+
         it('should capture together contacts with the same email', () => {
             const alice1 = { Name: 'Alice', emails: ['alice@domain.com'] };
             const alice2 = { Name: 'RkX02xqw7U', emails: ['ali@domain.com', 'alias@domain.com'] };
@@ -95,6 +99,7 @@ describe('merge', () => {
                 [alice2, alice3]
             ]);
         });
+
         it('should capture together contacts with the same email or the same name', () => {
             const onlyOne1 = { Name: 'name1', emails: ['email1@domain.com'] };
             const onlyOne2 = { Name: 'name2', emails: ['email1@domain.com', 'email2@domain.com'] };
@@ -115,6 +120,7 @@ describe('merge', () => {
             const { newValue } = extractNewValue(value, 'name', []);
             expect(newValue).toEqual(value);
         });
+
         it('should capture only new values for fields different (up to normalization) from adr', () => {
             const mergedValues = ['Old', 'older'];
             const values = [' old ', 'new'];
@@ -133,6 +139,7 @@ describe('merge', () => {
                 .filter(Boolean);
             expect(newValues).toEqual(expectedNewValues);
         });
+
         it('should capture only new values (up to normalization) for adr field', () => {
             const mergedValues = [
                 ['', '', 'Old Street', 'old city', 'old region', 'old postal code', 'old country'],
@@ -150,6 +157,7 @@ describe('merge', () => {
                 .filter(Boolean);
             expect(newValues).toEqual(expectedNewValues);
         });
+
         it('should capture only new values (up to normalization) for N field', () => {
             const mergedValues = [['Stevenson', 'John', ['Philip', 'Paul'], 'Dr.', ['Jr.', 'M.D.', 'A.C.P.']]];
             const values = [
@@ -178,6 +186,7 @@ describe('merge', () => {
             const mergedPrefs = merge(beMerged).map(({ pref }) => pref);
             expect(mergedPrefs).toEqual([1, 2, 3, 4]);
         });
+
         it('should only merge properties with different value', () => {
             const beMerged = [
                 [
@@ -199,6 +208,7 @@ describe('merge', () => {
 
             expect(merge(beMerged)).toHaveLength(5);
         });
+
         it('should change email groups when merging', () => {
             const beMerged = [
                 [
@@ -210,7 +220,8 @@ describe('merge', () => {
                 [
                     { field: 'version', group: undefined, type: undefined, value: '4.0' },
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name2' },
-                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email1@domain.org' }
+                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email1@domain.org' },
+                    { pref: 2, field: 'email', group: 'item2', type: 'email', value: 'email3@domain.org' }
                 ],
                 [
                     { field: 'version', group: undefined, type: undefined, value: '4.0' },
@@ -220,15 +231,42 @@ describe('merge', () => {
                 [
                     { field: 'version', group: undefined, type: undefined, value: '4.0' },
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name2' },
-                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email3@domain.org' }
+                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email4@domain.org' }
                 ]
             ];
             const emailGroups = merge(beMerged)
                 .map(({ field, group }) => field === 'email' && group)
                 .filter(Boolean);
 
-            expect(emailGroups).toEqual(['item1', 'item2', 'item3']);
+            expect(emailGroups).toEqual(['item1', 'item2', 'item3', 'item4']);
         });
+
+        it('should merge contacts with several emails', () => {
+            const beMerged = [
+                [
+                    { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name1' },
+                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email1@domain.org' }
+                ],
+                [
+                    { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name1' },
+                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email2@domain.org' },
+                    { pref: 2, field: 'email', group: 'item2', type: 'email', value: 'email3@domain.org' }
+                ]
+            ];
+            const merged = merge(beMerged);
+            const mergedFNPrefs = merged.filter(({ field }) => field === 'fn').map(({ pref }) => pref);
+            const mergedFNValues = merged.filter(({ field }) => field === 'fn').map(({ value }) => value);
+            const mergedEMAILPrefs = merged.filter(({ field }) => field === 'email').map(({ pref }) => pref);
+            const mergedEMAILValues = merged.filter(({ field }) => field === 'email').map(({ value }) => value);
+            const mergedEMAILGroups = merged.filter(({ field }) => field === 'email').map(({ group }) => group);
+
+            expect(mergedFNPrefs).toEqual([1]);
+            expect(mergedFNValues).toEqual(['name1']);
+            expect(mergedEMAILPrefs).toEqual([1, 2, 3]);
+            expect(mergedEMAILValues).toEqual(['email1@domain.org', 'email2@domain.org', 'email3@domain.org']);
+            expect(mergedEMAILGroups).toEqual(['item1', 'item2', 'item3']);
+        });
+
         it('should merge contacts with several properties properly', () => {
             const beMerged = [
                 [

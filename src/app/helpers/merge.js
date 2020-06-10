@@ -222,12 +222,14 @@ export const merge = (contacts = []) => {
                 // establish how groups should be changed
                 const changeGroup = groups.reduce((acc, { email, group }) => {
                     if (Object.values(mergedGroups).includes(group)) {
-                        acc[group] = mergedGroups[email] || generateNewGroupName(Object.values(mergedGroups));
+                        const newGroup = mergedGroups[email] || generateNewGroupName(Object.values(mergedGroups));
+                        acc[group] = newGroup;
+                        mergedGroups[email] = newGroup;
                     } else {
                         acc[group] = group;
                     }
                     return acc;
-                }, Object.create(null));
+                }, {});
 
                 for (const property of contact) {
                     const { pref, field, group, value } = property;
@@ -271,9 +273,9 @@ export const merge = (contacts = []) => {
         },
         {
             mergedContact: [],
-            mergedProperties: Object.create(null),
-            mergedPropertiesPrefs: Object.create(null),
-            mergedGroups: Object.create(null)
+            mergedProperties: {},
+            mergedPropertiesPrefs: {},
+            mergedGroups: {}
         }
     );
 
