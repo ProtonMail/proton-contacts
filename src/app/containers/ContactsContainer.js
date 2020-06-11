@@ -14,7 +14,10 @@ import {
     useToggle,
     ErrorBoundary,
     GenericError,
-    useUserSettings
+    useUserSettings,
+    PrivateMainArea,
+    PrivateAppContainer,
+    useAppTitle
 } from 'react-components';
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { toMap } from 'proton-shared/lib/helpers/object';
@@ -25,12 +28,11 @@ import Contact from '../components/Contact';
 import ContactPlaceholder from '../components/ContactPlaceholder';
 import ContactToolbar from '../components/ContactToolbar';
 import PrivateHeader from '../content/PrivateHeader';
-import PrivateSidebar from '../content/PrivateSidebar';
+import ContactsSidebar from '../content/ContactsSidebar';
 import MergeModal from '../components/merge/MergeModal';
 import ImportModal from '../components/import/ImportModal';
 import ExportModal from '../components/ExportModal';
 import DeleteModal from '../components/delete/DeleteModal';
-import PrivateLayout from '../content/PrivateLayout';
 
 const ContactsContainer = ({ location, history }) => {
     const { state: expanded, toggle: onToggleExpand, set: setExpand } = useToggle();
@@ -212,7 +214,6 @@ const ContactsContainer = ({ location, history }) => {
         loadingAddresses ||
         loadingUserSettings;
     const contactsLength = contacts ? contacts.length : 0;
-    const noHeader = isNarrow && contactID ? '--noHeader' : '';
 
     const contactComponent = contactID && !!contactsLength && !hasChecked && (
         <ErrorBoundary key={contactID} component={<GenericError className="pt2 view-column-detail flex-item-fluid" />}>
@@ -268,57 +269,59 @@ const ContactsContainer = ({ location, history }) => {
 
     const title = search === '' ? c('Title').t`Contacts` : c('Title').t`Search`;
 
+    useAppTitle(title, 'ProtonContacts');
+
+    const header = (
+        <PrivateHeader
+            title={title}
+            expanded={expanded}
+            onToggleExpand={onToggleExpand}
+            search={search}
+            onSearch={updateSearch}
+            onClearSearch={handleClearSearch}
+            isNarrow={isNarrow}
+            history={history}
+        />
+    );
+
+    const sidebar = (
+        <ContactsSidebar
+            url="/contacts"
+            history={history}
+            user={user}
+            expanded={expanded}
+            onToggleExpand={onToggleExpand}
+            onClearSearch={handleClearSearch}
+            totalContacts={contactsLength}
+            contactGroups={contactGroups}
+            userKeysList={userKeysList}
+        />
+    );
+
     return (
-        <PrivateLayout title={contactGroupName || c('Title').t`Contacts`}>
-            {(!isNarrow || !contactID) && (
-                <PrivateHeader
-                    title={title}
-                    expanded={expanded}
-                    onToggleExpand={onToggleExpand}
-                    search={search}
-                    onSearch={updateSearch}
-                    onClearSearch={handleClearSearch}
-                    isNarrow={isNarrow}
-                    history={history}
-                />
-            )}
-            <div className="flex flex-nowrap">
-                <PrivateSidebar
-                    url="/contacts"
-                    history={history}
-                    user={user}
-                    expanded={expanded}
-                    onToggleExpand={onToggleExpand}
-                    onClearSearch={handleClearSearch}
-                    totalContacts={contactsLength}
-                    contactGroups={contactGroups}
-                    userKeysList={userKeysList}
-                />
-                <div className="main flex-item-fluid">
-                    <ContactToolbar
-                        user={user}
-                        contactEmailsMap={contactEmailsMap}
-                        activeIDs={activeIDs}
-                        checked={hasCheckedAllFiltered}
-                        onCheck={handleCheckAllFiltered}
-                        onDelete={handleDelete}
-                        simplified={!!contactID && !isDesktop}
-                        onMerge={() => handleMerge(false)}
-                    />
-                    <div className={`main-area--withToolbar${noHeader} no-scroll flex flex-nowrap`}>
-                        {isLoading ? (
-                            <Loader />
-                        ) : (
-                            <>
-                                {contactsListComponent}
-                                {contactComponent}
-                                {contactPlaceHolderComponent}
-                            </>
-                        )}
-                    </div>
-                </div>
-            </div>
-        </PrivateLayout>
+        <PrivateAppContainer header={header} sidebar={sidebar}>
+            <ContactToolbar
+                user={user}
+                contactEmailsMap={contactEmailsMap}
+                activeIDs={activeIDs}
+                checked={hasCheckedAllFiltered}
+                onCheck={handleCheckAllFiltered}
+                onDelete={handleDelete}
+                simplified={!!contactID && !isDesktop}
+                onMerge={() => handleMerge(false)}
+            />
+            <PrivateMainArea hasToolbar className="flex">
+                {isLoading ? (
+                    <Loader />
+                ) : (
+                    <>
+                        {contactsListComponent}
+                        {contactComponent}
+                        {contactPlaceHolderComponent}
+                    </>
+                )}
+            </PrivateMainArea>
+        </PrivateAppContainer>
     );
 };
 

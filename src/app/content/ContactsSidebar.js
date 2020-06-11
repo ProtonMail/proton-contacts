@@ -9,7 +9,7 @@ import ExportModal from '../components/ExportModal';
 import UpgradeModal from '../components/UpgradeModal';
 import SidebarVersion from './SidebarVersion';
 
-const PrivateSidebar = ({
+const ContactsSidebar = ({
     url,
     user,
     userKeysList = [],
@@ -104,7 +104,7 @@ const PrivateSidebar = ({
     );
 };
 
-PrivateSidebar.propTypes = {
+ContactsSidebar.propTypes = {
     url: PropTypes.string,
     user: PropTypes.object,
     totalContacts: PropTypes.number,
@@ -117,4 +117,4 @@ PrivateSidebar.propTypes = {
     history: PropTypes.object.isRequired
 };
 
-export default PrivateSidebar;
+export default ContactsSidebar;
