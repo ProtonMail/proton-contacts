@@ -209,11 +209,11 @@ const ContactEmailSettingsModal = ({ userKeysList, contactID, properties, emailP
                         </Alert>
                     ) : hasPGPInline ? (
                         <Alert>{c('Info')
-                            .t`PGP/Inline is only compatible with Plain Text format.  Please note that ProtonMail always signs encrypted messages.`}</Alert>
+                            .t`PGP/Inline is only compatible with Plain Text format. Please note that ProtonMail always signs encrypted messages.`}</Alert>
                     ) : (
                         <Alert>
                             {c('Info')
-                                .t`PGP/MIME automatically sends the message using the current composer mode.  Please note that ProtonMail always signs encrypted messages.`}
+                                .t`PGP/MIME automatically sends the message using the current composer mode. Please note that ProtonMail always signs encrypted messages.`}
                         </Alert>
                     )}
                     <Row>
