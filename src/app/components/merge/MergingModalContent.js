@@ -10,11 +10,13 @@ import { wait } from 'proton-shared/lib/helpers/promise';
 import { chunk } from 'proton-shared/lib/helpers/array';
 import { prepareContact as decrypt } from 'proton-shared/lib/contacts/decrypt';
 import { prepareContact as encrypt } from 'proton-shared/lib/contacts/encrypt';
+import { API_CODES } from 'proton-shared/lib/constants';
+import { OVERWRITE, CATEGORIES } from 'proton-shared/lib/contacts/constants';
+
 import { merge } from '../../helpers/merge';
 import { splitContacts } from '../../helpers/import';
 import { combineProgress } from '../../helpers/progress';
-import { OVERWRITE, CATEGORIES, API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
-import { API_CODES } from 'proton-shared/lib/constants';
+import { API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
 
 import DynamicProgress from '../DynamicProgress';
 

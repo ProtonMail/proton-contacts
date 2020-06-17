@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
-import { useModals, PrimaryButton, Button, Icon } from 'react-components';
+import { useModals, PrimaryButton, Button, Icon, ContactGroupModal } from 'react-components';
 
 import { redirectTo } from 'proton-shared/lib/helpers/browser';
 import importSvg from 'design-system/assets/img/pm-images/contact-import.svg';
@@ -13,7 +13,6 @@ import upgradeSvg from 'design-system/assets/img/pm-images/contact-unlock-featur
 import contactGroupCardLight from 'design-system/assets/img/shared/empty-address-book.svg';
 import contactGroupCardDark from 'design-system/assets/img/shared/empty-address-book-dark.svg';
 
-import ContactGroupModal from './ContactGroupModal';
 import ExportModal from './ExportModal';
 import MergeRow from './MergeRow';
 import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
@@ -98,8 +97,7 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
                 <div className="flex-item-fluid">
                     <img src={upgradeSvg} alt="contact-unlock-features" className="mb1" />
                     <div className="bold">{c('Title').t`Unlock features`}</div>
-                    <p>{c('Info')
-                        .t`Upgrade to a paid plan to enable encrypted contact details and manage contact groups.`}</p>
+                    <p>{c('Info').t`Upgrade to a paid plan to manage contact groups.`}</p>
                 </div>
                 <div className="flex-item-noshrink mt2 boxes-placeholder-button">
                     <PrimaryButton className="bold" onClick={handleUpgrade}>

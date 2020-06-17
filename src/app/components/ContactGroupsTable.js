@@ -12,14 +12,13 @@ import {
     OrderableTable,
     OrderableTableHeader,
     OrderableTableBody,
-    OrderableTableRow
+    OrderableTableRow,
+    ContactGroupModal,
+    ContactGroupIcon
 } from 'react-components';
 import { c, msgid } from 'ttag';
 import { deleteLabel, orderContactGroup } from 'proton-shared/lib/api/labels';
 import { move } from 'proton-shared/lib/helpers/array';
-
-import ContactGroupModal from './ContactGroupModal';
-import ContactGroupIcon from './ContactGroupIcon';
 
 const ContactGroupsTable = () => {
     const [contactGroups = []] = useContactGroups();

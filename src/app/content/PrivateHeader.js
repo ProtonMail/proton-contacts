@@ -13,10 +13,9 @@ import {
     Icon,
     FloatingButton,
     useModals,
-    AppsDropdown
+    AppsDropdown,
+    ContactModal
 } from 'react-components';
-
-import ContactModal from '../components/ContactModal';
 
 const PrivateHeader = ({
     title,

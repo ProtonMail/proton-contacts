@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ErrorBoundary, StandardPrivateApp } from 'react-components';
+import { ErrorBoundary, StandardPrivateApp, ContactProvider } from 'react-components';
 import { Redirect, Route, Switch } from 'react-router';
 import {
     UserModel,
@@ -13,7 +13,6 @@ import {
 } from 'proton-shared/lib/models';
 import locales from '../locales';
 
-import ContactsProvider from '../containers/ContactProvider';
 import ContactsContainer from '../containers/ContactsContainer';
 import SettingsContainer from '../containers/SettingsContainer';
 
@@ -37,7 +36,7 @@ const PrivateApp = ({ onLogout }) => {
             preloadModels={PRELOAD_MODELS}
             eventModels={EVENT_MODELS}
         >
-            <ContactsProvider>
+            <ContactProvider>
                 <ErrorBoundary>
                     <Switch>
                         <Route
@@ -53,7 +52,7 @@ const PrivateApp = ({ onLogout }) => {
                         <Redirect to="/contacts" />
                     </Switch>
                 </ErrorBoundary>
-            </ContactsProvider>
+            </ContactProvider>
         </StandardPrivateApp>
     );
 };

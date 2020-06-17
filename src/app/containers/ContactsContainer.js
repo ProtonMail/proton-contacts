@@ -17,14 +17,15 @@ import {
     useUserSettings,
     PrivateMainArea,
     PrivateAppContainer,
-    useAppTitle
+    useAppTitle,
+    ContactContainer,
+    ContactDeleteModal
 } from 'react-components';
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { toMap } from 'proton-shared/lib/helpers/object';
 import { extractMergeable } from '../helpers/merge';
 
 import ContactsList from '../components/ContactsList';
-import Contact from '../components/Contact';
 import ContactPlaceholder from '../components/ContactPlaceholder';
 import ContactToolbar from '../components/ContactToolbar';
 import PrivateHeader from '../content/PrivateHeader';
@@ -32,7 +33,6 @@ import ContactsSidebar from '../content/ContactsSidebar';
 import MergeModal from '../components/merge/MergeModal';
 import ImportModal from '../components/import/ImportModal';
 import ExportModal from '../components/ExportModal';
-import DeleteModal from '../components/delete/DeleteModal';
 
 const ContactsContainer = ({ location, history }) => {
     const { state: expanded, toggle: onToggleExpand, set: setExpand } = useToggle();
@@ -41,7 +41,7 @@ const ContactsContainer = ({ location, history }) => {
     const [search, updateSearch] = useState('');
     const normalizedSearch = normalize(search);
     const [contactEmails, loadingContactEmails] = useContactEmails();
-    const [contacts, loadingContacts] = useContacts();
+    const [contacts = [], loadingContacts] = useContacts();
     const [contactGroups = [], loadingContactGroups] = useContactGroups();
     const [user] = useUser();
     const [userSettings, loadingUserSettings] = useUserSettings();
@@ -130,7 +130,6 @@ const ContactsContainer = ({ location, history }) => {
 
     const mergeableContacts = useMemo(() => extractMergeable(formattedContacts), [formattedContacts]);
     const canMerge = mergeableContacts.length > 0;
-    const { hasPaidMail } = user;
 
     const filteredCheckedIDs = useMemo(() => {
         return formattedContacts.filter(({ isChecked }) => isChecked).map(({ ID }) => ID);
@@ -170,22 +169,24 @@ const ContactsContainer = ({ location, history }) => {
         handleCheckAllFiltered(false);
     };
 
+    const onDelete = () => {
+        const deleteAll = activeIDs.length === contacts.length;
+        if (deleteAll) {
+            history.replace({ ...location, state: { ignoreClose: true }, pathname: '/contacts' });
+            return setCheckedContacts(Object.create(null));
+        }
+        if (activeIDs.length === filteredContacts.length) {
+            handleClearSearch();
+        }
+        if (contactID && activeIDs.includes(contactID)) {
+            history.replace({ ...location, state: { ignoreClose: true }, pathname: '/contacts' });
+        }
+        handleCheck(filteredCheckedIDs, false);
+    };
+
     const handleDelete = () => {
         const deleteAll = activeIDs.length === contacts.length;
-        const onDelete = () => {
-            if (deleteAll) {
-                history.replace({ ...location, state: { ignoreClose: true }, pathname: '/contacts' });
-                return setCheckedContacts(Object.create(null));
-            }
-            if (activeIDs.length === filteredContacts.length) {
-                handleClearSearch();
-            }
-            if (contactID && activeIDs.includes(contactID)) {
-                history.replace({ ...location, state: { ignoreClose: true }, pathname: '/contacts' });
-            }
-            handleCheck(filteredCheckedIDs, false);
-        };
-        createModal(<DeleteModal contactIDs={activeIDs} deleteAll={deleteAll} onDelete={onDelete} />);
+        createModal(<ContactDeleteModal contactIDs={activeIDs} deleteAll={deleteAll} onDelete={onDelete} />);
     };
 
     const handleMerge = (mergeAll = true) => {
@@ -196,7 +197,6 @@ const ContactsContainer = ({ location, history }) => {
                 contacts={contacts}
                 contactID={contactID}
                 userKeysList={userKeysList}
-                hasPaidMail={!!hasPaidMail}
                 onMerged={() => setCheckedContacts(Object.create(null))} // Unselect all contacts
             />
         );
@@ -217,12 +217,13 @@ const ContactsContainer = ({ location, history }) => {
 
     const contactComponent = contactID && !!contactsLength && !hasChecked && (
         <ErrorBoundary key={contactID} component={<GenericError className="pt2 view-column-detail flex-item-fluid" />}>
-            <Contact
+            <ContactContainer
                 contactID={contactID}
                 contactEmails={contactEmailsMap[contactID]}
                 contactGroupsMap={contactGroupsMap}
                 ownAddresses={ownAddresses}
                 userKeysList={userKeysList}
+                onDelete={onDelete}
             />
         </ErrorBoundary>
     );
@@ -294,7 +295,7 @@ const ContactsContainer = ({ location, history }) => {
             onClearSearch={handleClearSearch}
             totalContacts={contactsLength}
             contactGroups={contactGroups}
-            userKeysList={userKeysList}
+            contacts={contacts}
         />
     );
 
@@ -309,6 +310,7 @@ const ContactsContainer = ({ location, history }) => {
                 onDelete={handleDelete}
                 simplified={!!contactID && !isDesktop}
                 onMerge={() => handleMerge(false)}
+                userKeysList={userKeysList}
             />
             <PrivateMainArea hasToolbar className="flex">
                 {isLoading ? (

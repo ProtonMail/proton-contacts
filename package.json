@@ -60,15 +60,15 @@
         "design-system": "github:ProtonMail/design-system#master",
         "papaparse": "^5.0.0",
         "proton-shared": "github:ProtonMail/proton-shared#master",
+        "proton-version": "github:ProtonMail/proton-version#semver:^1.0.0",
         "react": "^16.8.1",
         "react-components": "github:ProtonMail/react-components#master",
         "react-dom": "^16.8.1",
         "react-router": "^4.3.1",
         "react-router-dom": "^4.3.1",
-        "react-virtualized": "^9.21.1",
+        "react-virtualized": "^9.21.2",
         "ttag": "^1.5.1",
-        "yetch": "^1.1.0",
-        "proton-version": "github:ProtonMail/proton-version#semver:^1.0.0"
+        "yetch": "^1.1.0"
     },
     "lint-staged": {
         "(*.ts|*.tsx|*.js)": [

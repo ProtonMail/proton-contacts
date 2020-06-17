@@ -1,11 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { Alert, Row, Label, Field, Info, Toggle, SelectKeyFiles, useNotifications } from 'react-components';
+import {
+    Alert,
+    Row,
+    Label,
+    Field,
+    Info,
+    Toggle,
+    SelectKeyFiles,
+    useNotifications,
+    ContactKeysTable
+} from 'react-components';
 import { getIsValidForSending, getKeyEncryptStatus } from 'proton-shared/lib/keys/publicKeys';
 
 import ContactSchemeSelect from './ContactSchemeSelect';
-import ContactKeysTable from './ContactKeysTable';
 
 const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
     const { createNotification } = useNotifications();

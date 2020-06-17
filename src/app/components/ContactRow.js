@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { classnames, Checkbox } from 'react-components';
+import { classnames, Checkbox, ContactGroupIcon } from 'react-components';
 import { DENSITY } from 'proton-shared/lib/constants';
 
 import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
 
 import ItemCheckbox from './ItemCheckbox';
-import ContactGroupIcon from './ContactGroupIcon';
 
 const ContactRow = ({ style, userSettings, contactID, hasPaidMail, contactGroupsMap, contact, onClick, onCheck }) => {
     const { ID, Name, LabelIDs = [], emails = [], isChecked } = contact;

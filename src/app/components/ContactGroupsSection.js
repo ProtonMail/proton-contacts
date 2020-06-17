@@ -1,9 +1,8 @@
 import React from 'react';
 import { c } from 'ttag';
-import { PrimaryButton, Alert, useModals } from 'react-components';
+import { PrimaryButton, Alert, useModals, ContactGroupModal } from 'react-components';
 
 import ContactGroupsTable from './ContactGroupsTable';
-import ContactGroupModal from './ContactGroupModal';
 
 const ContactGroupsSection = () => {
     const { createModal } = useModals();

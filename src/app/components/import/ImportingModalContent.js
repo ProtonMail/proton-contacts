@@ -11,15 +11,10 @@ import { chunk } from 'proton-shared/lib/helpers/array';
 import { wait } from 'proton-shared/lib/helpers/promise';
 import { extractVcards, parse as parseVcard } from 'proton-shared/lib/contacts/vcard';
 import { prepareContact } from 'proton-shared/lib/contacts/encrypt';
+import { OVERWRITE, CATEGORIES } from 'proton-shared/lib/contacts/constants';
 import { splitContacts } from '../../helpers/import';
 import { combineProgress } from '../../helpers/progress';
-import {
-    OVERWRITE,
-    CATEGORIES,
-    API_SAFE_INTERVAL,
-    ADD_CONTACTS_MAX_SIZE,
-    MAX_SIMULTANEOUS_CONTACTS_ENCRYPT
-} from '../../constants';
+import { API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE, MAX_SIMULTANEOUS_CONTACTS_ENCRYPT } from '../../constants';
 import { API_CODES } from 'proton-shared/lib/constants';
 
 const { OVERWRITE_CONTACT } = OVERWRITE;

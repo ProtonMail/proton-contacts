@@ -1,7 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { useModals, IllustrationPlaceholder, LinkButton, classnames } from 'react-components';
+import {
+    useModals,
+    IllustrationPlaceholder,
+    LinkButton,
+    classnames,
+    ContactModal,
+    ContactGroupModal
+} from 'react-components';
 import { withRouter } from 'react-router';
 import List from 'react-virtualized/dist/commonjs/List';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
@@ -13,8 +20,6 @@ import noResultsImgLight from 'design-system/assets/img/shared/no-result-search.
 import noResultsImgDark from 'design-system/assets/img/shared/no-result-search-dark.svg';
 
 import ImportModal from './import/ImportModal';
-import ContactModal from './ContactModal';
-import ContactGroupModal from './ContactGroupModal';
 import ContactRow from './ContactRow';
 import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
 import { DENSITY } from 'proton-shared/lib/constants';

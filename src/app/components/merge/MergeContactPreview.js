@@ -1,29 +1,42 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
-import { useApi, useLoading, useEventManager, Loader, FormModal, PrimaryButton, ResetButton } from 'react-components';
+import {
+    useApi,
+    useLoading,
+    useEventManager,
+    Loader,
+    FormModal,
+    PrimaryButton,
+    ResetButton,
+    ContactView,
+    useContactEmails,
+    useAddresses,
+    useContactGroups
+} from 'react-components';
 import { splitKeys } from 'proton-shared/lib/keys/keys';
 import { getContact } from 'proton-shared/lib/api/contacts';
 import { prepareContact } from 'proton-shared/lib/contacts/decrypt';
+import { noop } from 'proton-shared/lib/helpers/function';
+import { toMap } from 'proton-shared/lib/helpers/object';
 
 import { merge } from '../../helpers/merge';
 
 import MergeErrorContent from './MergeErrorContent';
-import MergedContactSummary from './MergedContactSummary';
 import MergingModalContent from './MergingModalContent';
 
-const MergeContactPreview = ({
-    contactID,
-    userKeysList,
-    hasPaidMail,
-    beMergedModel,
-    beDeletedModel,
-    updateModel,
-    ...rest
-}) => {
+const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeletedModel, updateModel, ...rest }) => {
     const { call } = useEventManager();
     const api = useApi();
     const { privateKeys, publicKeys } = useMemo(() => splitKeys(userKeysList), []);
+
+    const [contactEmails, loadingContactEmails] = useContactEmails();
+
+    const [addresses = [], loadingAddresses] = useAddresses();
+    const ownAddresses = useMemo(() => addresses.map(({ Email }) => Email), [addresses]);
+
+    const [contactGroups = [], loadingContactGroups] = useContactGroups();
+    const contactGroupsMap = useMemo(() => toMap(contactGroups), [contactGroups]);
 
     const [loading, withLoading] = useLoading(true);
     const [isMerging, setIsMerging] = useState(false);
@@ -74,7 +87,7 @@ const MergeContactPreview = ({
                 </PrimaryButton>
             );
             const content = (() => {
-                if (loading) {
+                if (loadingContactEmails || loadingAddresses || loadingContactGroups || loading) {
                     return <Loader />;
                 }
                 if (model.errorOnLoad || model.errorOnMerge) {
@@ -86,7 +99,19 @@ const MergeContactPreview = ({
                     return <MergeErrorContent error={error} />;
                 }
 
-                return <MergedContactSummary properties={model.mergedContact} hasPaidMail={hasPaidMail} />;
+                return (
+                    <ContactView
+                        properties={model.mergedContact}
+                        contactID={contactID}
+                        contactEmails={contactEmails}
+                        contactGroupsMap={contactGroupsMap}
+                        ownAddresses={ownAddresses}
+                        userKeysList={userKeysList}
+                        onDelete={noop}
+                        isModal
+                        isPreview
+                    />
+                );
             })();
 
             const handleSubmit = () => setIsMerging(true);
@@ -141,7 +166,6 @@ const MergeContactPreview = ({
 MergeContactPreview.propTypes = {
     contactID: PropTypes.string,
     userKeysList: PropTypes.array.isRequired,
-    hasPaidMail: PropTypes.bool,
     beMergedModel: PropTypes.shape({ ID: PropTypes.arrayOf(PropTypes.string) }),
     beDeletedModel: PropTypes.shape({ ID: PropTypes.string }),
     updateModel: PropTypes.func
