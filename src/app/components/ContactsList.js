@@ -10,8 +10,7 @@ import {
     ContactGroupModal
 } from 'react-components';
 import { withRouter } from 'react-router';
-import List from 'react-virtualized/dist/commonjs/List';
-import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
+import { List, AutoSizer } from 'react-virtualized';
 
 import noContactsImgLight from 'design-system/assets/img/shared/empty-address-book.svg';
 import noContactsImgDark from 'design-system/assets/img/shared/empty-address-book-dark.svg';
