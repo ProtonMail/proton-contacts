@@ -4,6 +4,7 @@ import {
     Icon,
     Checkbox,
     Toolbar,
+    Tooltip,
     useModals,
     ToolbarLink,
     ToolbarButton,
@@ -51,7 +52,16 @@ const ContactToolbar = ({
         <Toolbar>
             <div className="flex-item-fluid flex flex-spacebetween">
                 <div className="flex flex-nowrap">
-                    <Checkbox className="flex pm-select-all ml0-5 pl1 pr1" checked={checked} onChange={handleCheck} />
+                    <Tooltip
+                        title={checked ? c('Action').t`Deselect all` : c('Action').t`Select all`}
+                        className="flex flex-item-noshrink"
+                    >
+                        <Checkbox
+                            className="flex pm-select-all ml0-5 pl1 pr1"
+                            checked={checked}
+                            onChange={handleCheck}
+                        />
+                    </Tooltip>
                     <ToolbarSeparator />
                     <ToolbarButton
                         icon="delete"
@@ -61,14 +71,16 @@ const ContactToolbar = ({
                         disabled={!activeIDs.length}
                     />
                     {hasPaidMail ? (
-                        <ContactGroupDropdown
-                            className="toolbar-button toolbar-button--dropdown"
-                            disabled={!contactEmailsSelected.length}
-                            contactEmails={contactEmailsSelected}
-                            forToolbar={true}
-                        >
-                            <Icon name="contacts-groups" className="toolbar-icon mauto" />
-                        </ContactGroupDropdown>
+                        <Tooltip title={c('Action').t`Add to group`} className="flex flex-item-noshrink">
+                            <ContactGroupDropdown
+                                className="toolbar-button toolbar-button--dropdown"
+                                disabled={!contactEmailsSelected.length}
+                                contactEmails={contactEmailsSelected}
+                                forToolbar={true}
+                            >
+                                <Icon name="contacts-groups" className="toolbar-icon mauto" />
+                            </ContactGroupDropdown>
+                        </Tooltip>
                     ) : null}
                     <ToolbarButton
                         icon="merge"
