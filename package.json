@@ -45,6 +45,9 @@
         "@typescript-eslint/parser": "^2.3.2",
         "babel-jest": "^24.8.0",
         "cross-env": "^5.2.0",
+        "eslint": "^7.2.0",
+        "eslint-plugin-import": "^2.21.2",
+        "eslint-plugin-react-hooks": "^4.0.4",
         "husky": "^2.4.1",
         "jest": "^24.9.0",
         "lint-staged": "^8.1.5",
@@ -52,6 +55,7 @@
         "proton-bundler": "github:ProtonMail/proton-bundler#semver:^2.1.12",
         "proton-i18n": "github:ProtonMail/proton-i18n#semver:^2.0.0",
         "proton-pack": "github:ProtonMail/proton-pack#semver:^3.0.0",
+        "source-map-loader": "^1.0.0",
         "typescript": "^3.6.3"
     },
     "dependencies": {
