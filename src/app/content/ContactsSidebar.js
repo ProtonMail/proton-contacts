@@ -62,6 +62,7 @@ const ContactsSidebar = ({
                         }}
                         text={c('Link').t`All Contacts (${totalContacts})`}
                         link="/contacts"
+                        title={c('Link').t`All Contacts (${totalContacts})`}
                     />
                     <SidebarGroups
                         history={history}

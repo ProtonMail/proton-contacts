@@ -55,6 +55,7 @@ const SidebarGroups = ({ displayGroups, onToggle, hasPaidMail, contactGroups, hi
                         color={Color}
                         text={`${Name} (${count})`}
                         link={`/contacts?contactGroupID=${ID}`}
+                        title={`${Name} (${count})`}
                     />
                 ))}
         </>
