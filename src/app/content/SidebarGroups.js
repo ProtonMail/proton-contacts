@@ -47,6 +47,7 @@ const SidebarGroups = ({ displayGroups, onToggle, hasPaidMail, contactGroups, hi
                     <NavItem
                         key={ID}
                         icon="circle"
+                        iconSize={12}
                         isActive={(_match, location) => {
                             const params = new URLSearchParams(location.search);
                             return params.get('contactGroupID') === ID;

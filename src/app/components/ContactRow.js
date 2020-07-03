@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { classnames, Checkbox, ContactGroupIcon } from 'react-components';
+import { classnames, Checkbox, ContactGroupLabels } from 'react-components';
 import { DENSITY } from 'proton-shared/lib/constants';
 
 import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
@@ -10,6 +10,8 @@ import ItemCheckbox from './ItemCheckbox';
 const ContactRow = ({ style, userSettings, contactID, hasPaidMail, contactGroupsMap, contact, onClick, onCheck }) => {
     const { ID, Name, LabelIDs = [], emails = [], isChecked } = contact;
     const isCompactView = userSettings.Density === DENSITY.COMPACT;
+
+    const contactGroups = contact.LabelIDs.map((ID) => contactGroupsMap[ID]);
 
     return (
         <div
@@ -49,24 +51,7 @@ const ContactRow = ({ style, userSettings, contactID, hasPaidMail, contactGroups
                                 {Name}
                             </span>
                         </div>
-                        {hasPaidMail && LabelIDs.length ? (
-                            <div>
-                                {LabelIDs.map((labelID) => {
-                                    if (!contactGroupsMap[labelID]) {
-                                        return null;
-                                    }
-                                    const { Color, Name } = contactGroupsMap[labelID];
-                                    return (
-                                        <ContactGroupIcon
-                                            scrollContainerClass="contacts-list"
-                                            key={labelID}
-                                            name={Name}
-                                            color={Color}
-                                        />
-                                    );
-                                })}
-                            </div>
-                        ) : null}
+                        {hasPaidMail && contactGroups && <ContactGroupLabels contactGroups={contactGroups} />}
                     </div>
                     <div
                         className="flex flex-items-center item-secondline mw100 ellipsis item-sender--smaller"
