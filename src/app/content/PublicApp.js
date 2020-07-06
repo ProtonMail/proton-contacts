@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
-import { StandardPublicApp, LoginForm, ModalsChildren } from 'react-components';
+import { StandardPublicApp, MinimalLoginContainer, ModalsChildren } from 'react-components';
 import locales from '../locales';
 
 const PublicApp = ({ onLogin }) => {
@@ -9,7 +9,7 @@ const PublicApp = ({ onLogin }) => {
         <StandardPublicApp locales={locales}>
             <ModalsChildren />
             <Switch>
-                <Route render={() => <LoginForm onLogin={onLogin} />} />
+                <Route render={() => <MinimalLoginContainer onLogin={onLogin} />} />
             </Switch>
         </StandardPublicApp>
     );
