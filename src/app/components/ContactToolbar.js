@@ -59,8 +59,13 @@ const ContactToolbar = ({
                         <Checkbox
                             className="flex pm-select-all ml0-5 pl1 pr1"
                             checked={checked}
+                            id="idSelectAll"
                             onChange={handleCheck}
-                        />
+                        >
+                            <span className="sr-only">
+                                {checked ? c('Action').t`Deselect all` : c('Action').t`Select all`}
+                            </span>
+                        </Checkbox>
                     </Tooltip>
                     <ToolbarSeparator />
                     <ToolbarButton
