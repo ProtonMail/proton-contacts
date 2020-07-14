@@ -21,7 +21,7 @@ import { deleteLabel, orderContactGroup } from 'proton-shared/lib/api/labels';
 import { move } from 'proton-shared/lib/helpers/array';
 
 const ContactGroupsTable = () => {
-    const [contactGroups = []] = useContactGroups();
+    const [contactGroups] = useContactGroups();
     const [contactEmails] = useContactEmails();
     const { createNotification } = useNotifications();
     const { createModal } = useModals();
@@ -31,6 +31,9 @@ const ContactGroupsTable = () => {
     const [list = [], setContactGroups] = useState(contactGroups);
 
     useEffect(() => {
+        if (!contactGroups) {
+            return;
+        }
         setContactGroups(contactGroups);
     }, [contactGroups]);
 

@@ -15,11 +15,17 @@ import {
     ErrorBoundary,
     GenericError,
     useUserSettings,
+    PrivateHeader,
     PrivateMainArea,
     PrivateAppContainer,
     useAppTitle,
     ContactContainer,
-    ContactDeleteModal
+    ContactDeleteModal,
+    FloatingButton,
+    ContactModal,
+    Searchbox,
+    SearchDropdown,
+    Icon
 } from 'react-components';
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { toMap } from 'proton-shared/lib/helpers/object';
@@ -28,7 +34,6 @@ import { extractMergeable } from '../helpers/merge';
 import ContactsList from '../components/ContactsList';
 import ContactPlaceholder from '../components/ContactPlaceholder';
 import ContactToolbar from '../components/ContactToolbar';
-import PrivateHeader from '../content/PrivateHeader';
 import ContactsSidebar from '../content/ContactsSidebar';
 import MergeModal from '../components/merge/MergeModal';
 import ImportModal from '../components/import/ImportModal';
@@ -272,22 +277,42 @@ const ContactsContainer = ({ location, history }) => {
 
     useAppTitle(title, 'ProtonContacts');
 
+    const base = '/contacts';
+
     const header = (
         <PrivateHeader
+            url={base}
+            settingsUrl={`${base}/settings`}
             title={title}
             expanded={expanded}
             onToggleExpand={onToggleExpand}
             search={search}
-            onSearch={updateSearch}
-            onClearSearch={handleClearSearch}
             isNarrow={isNarrow}
             history={history}
+            searchDropdown={
+                <SearchDropdown
+                    originalPlacement="bottom-right"
+                    content={<Icon name="search" size={24} className="topnav-icon mr0-5 flex-item-centered-vert" />}
+                    placeholder={c('Placeholder').t`Search contacts`}
+                    search={search}
+                    onSearch={updateSearch}
+                    hasCaret={false}
+                />
+            }
+            searchBox={
+                <Searchbox placeholder={c('Placeholder').t`Search contacts`} value={search} onChange={updateSearch} />
+            }
+            floatingButton={
+                <FloatingButton
+                    onClick={() => createModal(<ContactModal history={history} onAdd={handleClearSearch} />)}
+                    icon="plus"
+                />
+            }
         />
     );
 
     const sidebar = (
         <ContactsSidebar
-            url="/contacts"
             history={history}
             user={user}
             expanded={expanded}

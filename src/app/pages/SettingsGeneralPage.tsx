@@ -6,7 +6,7 @@ import ContactsSection from '../components/ContactsSection';
 
 export const getGeneralSettingsPage = () => {
     return {
-        link: '/contacts/settings/general',
+        to: '/contacts/settings/general',
         icon: 'settings-singular',
         text: c('Link').t`General`,
         subsections: [

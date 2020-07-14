@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import {
     useModals,
-    PrimaryButton,
-    MainLogo,
-    Hamburger,
-    MobileAppsLinks,
     ContactModal,
-    NavItem
+    Sidebar,
+    SidebarPrimaryButton,
+    SidebarList,
+    SidebarNav,
+    SimpleSidebarListItemLink
 } from 'react-components';
 import { c } from 'ttag';
 import PropTypes from 'prop-types';
@@ -35,23 +35,21 @@ const ContactsSidebar = ({
     }));
 
     return (
-        <div className="sidebar flex flex-column noprint" data-expanded={expanded}>
-            <div className="nodesktop notablet flex-item-noshrink">
-                <div className="flex flex-spacebetween flex-items-center">
-                    <MainLogo url={url} />
-                    <Hamburger expanded={expanded} onToggle={onToggleExpand} />
-                </div>
-            </div>
-            <div className="pl1 pr1 nomobile">
-                <PrimaryButton
-                    className="pm-button--large bold mt0-25 w100"
+        <Sidebar
+            url={url}
+            expanded={expanded}
+            onToggleExpand={onToggleExpand}
+            primary={
+                <SidebarPrimaryButton
                     onClick={() => createModal(<ContactModal history={history} onAdd={onClearSearch} />)}
-                >{c('Action').t`Add contact`}</PrimaryButton>
-            </div>
-            <nav className="navigation mw100 flex-item-fluid customScrollBar-container scroll-if-needed">
-                <ul className="unstyled">
-                    <NavItem
-                        icon="contacts"
+                >{c('Action').t`Add contact`}</SidebarPrimaryButton>
+            }
+            version={<SidebarVersion />}
+        >
+            <SidebarNav>
+                <SidebarList>
+                    <SimpleSidebarListItemLink
+                        to="/contacts"
                         isActive={(match, location) => {
                             if (!match) {
                                 return false;
@@ -60,10 +58,10 @@ const ContactsSidebar = ({
                             const contactGroupID = params.get('contactGroupID');
                             return !contactGroupID;
                         }}
-                        text={c('Link').t`All Contacts (${totalContacts})`}
-                        link="/contacts"
-                        title={c('Link').t`All Contacts (${totalContacts})`}
-                    />
+                        icon="contacts"
+                    >
+                        {c('Link').t`All Contacts (${totalContacts})`}
+                    </SimpleSidebarListItemLink>
                     <SidebarGroups
                         history={history}
                         hasPaidMail={hasPaidMail}
@@ -71,11 +69,9 @@ const ContactsSidebar = ({
                         displayGroups={displayGroups}
                         onToggle={() => setDisplayGroups((displayGroups) => !displayGroups)}
                     />
-                </ul>
-            </nav>
-            <SidebarVersion />
-            <MobileAppsLinks />
-        </div>
+                </SidebarList>
+            </SidebarNav>
+        </Sidebar>
     );
 };
 
