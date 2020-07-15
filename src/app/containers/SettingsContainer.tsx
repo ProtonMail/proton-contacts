@@ -33,7 +33,7 @@ const SettingsContainer = ({ location, history }: Props) => {
 
     useEffect(() => {
         setExpand(false);
-    }, [location.pathname]);
+    }, [location.pathname, location.hash]);
 
     const base = '/contacts';
     const goBack = () => history.push(base);
