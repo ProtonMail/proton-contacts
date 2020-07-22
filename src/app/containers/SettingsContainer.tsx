@@ -9,7 +9,6 @@ import {
     SidebarList,
     SidebarNav,
     SidebarBackButton,
-    FloatingButton,
     PrivateHeader
 } from 'react-components';
 import { Route, Switch, Redirect } from 'react-router';
@@ -45,7 +44,6 @@ const SettingsContainer = ({ location, history }: Props) => {
             expanded={expanded}
             onToggleExpand={onToggleExpand}
             isNarrow={isNarrow}
-            floatingButton={<FloatingButton onClick={goBack} icon="arrow-left" />}
         />
     );
 
