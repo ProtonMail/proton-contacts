@@ -1,25 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, Dispatch, SetStateAction } from 'react';
 import { c } from 'ttag';
-import { useNotifications, useLoading, Table, Alert, Block } from 'react-components';
+import { useNotifications, Table, Alert } from 'react-components';
+import { ImportContactsModel } from '../../interfaces/Import';
 
 import ImportCsvTableHeader from './ImportCsvTableHeader';
 import ImportCsvTableBody from './ImportCsvTableBody';
 
-import { prepare, toVcardContacts } from '../../helpers/csv';
 import { modifyContactField, modifyContactType, toggleContactChecked } from '../../helpers/importCsv';
 
-const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
+interface Props {
+    model: ImportContactsModel & Required<Pick<ImportContactsModel, 'preVcardsContacts'>>;
+    setModel: Dispatch<SetStateAction<ImportContactsModel>>;
+}
+const ImportCsvModalContent = ({ model, setModel }: Props) => {
     const { createNotification } = useNotifications();
-
-    const [isParsingFile, withParsing] = useLoading(true);
     const [contactIndex, setContactIndex] = useState(0);
-    const [preVcardsContacts, setPreVcardsContacts] = useState([]);
+
+    const { preVcardsContacts } = model;
 
     const handleClickPrevious = () => setContactIndex((index) => index - 1);
     const handleClickNext = () => setContactIndex((index) => index + 1);
 
-    const handleToggle = (groupIndex) => (index) => {
+    const handleToggle = (groupIndex: number) => (index: number) => {
         if (preVcardsContacts[0][groupIndex][index].combineInto === 'fn-main') {
             // do not allow to uncheck first name and last name simultaneously
             const preVcards = preVcardsContacts[0][groupIndex];
@@ -35,27 +37,23 @@ const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
                 });
             }
         }
-        setPreVcardsContacts(preVcardsContacts.map((contact) => toggleContactChecked(contact, [groupIndex, index])));
+        setModel({
+            ...model,
+            preVcardsContacts: preVcardsContacts.map((contact) => toggleContactChecked(contact, [groupIndex, index]))
+        });
     };
 
-    const handleChangeField = (groupIndex) => (newField) =>
-        setPreVcardsContacts(preVcardsContacts.map((contact) => modifyContactField(contact, groupIndex, newField)));
+    const handleChangeField = (groupIndex: number) => (newField: string) =>
+        setModel({
+            ...model,
+            preVcardsContacts: preVcardsContacts.map((contact) => modifyContactField(contact, groupIndex, newField))
+        });
 
-    const handleChangeType = (groupIndex) => (newType) =>
-        setPreVcardsContacts(preVcardsContacts.map((contact) => modifyContactType(contact, groupIndex, newType)));
-
-    useEffect(() => {
-        const parseFile = async () => {
-            const preVcardsContacts = prepare(file);
-            setPreVcardsContacts(preVcardsContacts);
-        };
-
-        withParsing(parseFile());
-    }, []);
-
-    useEffect(() => {
-        onSetVcardContacts(toVcardContacts(preVcardsContacts));
-    }, [preVcardsContacts]);
+    const handleChangeType = (groupIndex: number) => (newType: string) =>
+        setModel({
+            ...model,
+            preVcardsContacts: preVcardsContacts.map((contact) => modifyContactType(contact, groupIndex, newType))
+        });
 
     return (
         <>
@@ -69,31 +67,20 @@ const ImportCsvModalContent = ({ file, onSetVcardContacts }) => {
             </Alert>
             <Table>
                 <ImportCsvTableHeader
-                    disabledPrevious={isParsingFile || contactIndex === 0}
-                    disabledNext={
-                        isParsingFile || preVcardsContacts.length === 0 || contactIndex + 1 === preVcardsContacts.length
-                    }
+                    disabledPrevious={contactIndex === 0}
+                    disabledNext={preVcardsContacts.length === 0 || contactIndex + 1 === preVcardsContacts.length}
                     onNext={handleClickNext}
                     onPrevious={handleClickPrevious}
                 />
                 <ImportCsvTableBody
-                    loading={isParsingFile}
                     contact={preVcardsContacts && preVcardsContacts[contactIndex]}
                     onToggle={handleToggle}
                     onChangeField={handleChangeField}
                     onChangeType={handleChangeType}
                 />
             </Table>
-            {!isParsingFile && !preVcardsContacts.length && (
-                <Block className="aligncenter">{c('Info').t`No contacts to be imported`}</Block>
-            )}
         </>
     );
-};
-
-ImportCsvModalContent.propTypes = {
-    file: PropTypes.shape({ headers: PropTypes.array, contacts: PropTypes.array }).isRequired,
-    onSetVcardContacts: PropTypes.func
 };
 
 export default ImportCsvModalContent;

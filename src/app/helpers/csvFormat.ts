@@ -1,6 +1,9 @@
 import { capitalize, normalize } from 'proton-shared/lib/helpers/string';
+import { ContactValue } from 'proton-shared/lib/interfaces/contacts';
+import { Combine, Display, ParsedCsvContacts } from '../interfaces/Import';
+import { PreVcardProperty, PreVcardsProperty } from './csv';
 
-// See './csv.js' for the definition of pre-vCard and pre-vCards contact
+// See './csv.ts' for the definition of pre-vCard and pre-vCards contact
 
 // Csv properties to be ignored
 const beIgnoredCsvProperties = [
@@ -21,12 +24,8 @@ const beIgnoredCsvProperties = [
 /**
  * For a list of headers and csv contacts extracted from a csv,
  * check if a given header index has the empty value for all contacts
- * @param {Number} index
- * @param {Array<Array<String>>} contacts
- *
- * @return {Boolean}
  */
-const isEmptyHeaderIndex = (index, contacts) => !contacts.some((values) => values[index] !== '');
+const isEmptyHeaderIndex = (index: number, contacts: string[][]) => !contacts.some((values) => values[index] !== '');
 
 /**
  * Standarize a custom vcard type coming from a csv property
@@ -34,7 +33,7 @@ const isEmptyHeaderIndex = (index, contacts) => !contacts.some((values) => value
  *
  * @return {String}
  */
-const toVcardType = (csvType) => {
+const toVcardType = (csvType = '') => {
     const type = csvType.toLowerCase();
 
     switch (type) {
@@ -70,16 +69,10 @@ const toVcardType = (csvType) => {
 /**
  * Given csv properties and csv contacts from any csv file, transform the properties
  * into csv properties from a standard outlook csv. Transform the contacts accordingly
- * @param {Object} csvData
- * @param {Array<String>} csvData.headers           Array of csv properties
- * @param {Array<Array<String>>} csvData.contacts   Array of csv contacts
- *
- * @return {Object.headers}                         Object with the standarized headers and the corresponding original header: { standard, original }
- * @return {Object.contacts}                        Standarized csv contacts
  */
-export const standarize = ({ headers, contacts }) => {
+export const standarize = ({ headers, contacts }: ParsedCsvContacts) => {
     if (!contacts.length) {
-        return { headers, contacts };
+        return;
     }
 
     // do a first simple formatting of headers
@@ -88,7 +81,10 @@ export const standarize = ({ headers, contacts }) => {
     // change name of certain headers into outlook equivalents
     // remove headers we are not interested in
     // merge headers 'xxx - type' and 'xxx - value' into one header
-    const { beRemoved, beChanged } = formattedHeaders.reduce(
+    const { beRemoved, beChanged } = formattedHeaders.reduce<{
+        beRemoved: { [key: number]: boolean };
+        beChanged: { [key: number]: string };
+    }>(
         (acc, header, i) => {
             const { beRemoved, beChanged } = acc;
             const value = contacts[0][i];
@@ -121,8 +117,9 @@ export const standarize = ({ headers, contacts }) => {
                 * address n - extended address
                 we have to drop the first two headers and change the rest accordingly
             */
-            if (/^address\s?(\d+)? - type$/.test(header)) {
-                const [, pref] = header.match(/^address\s?\d+? - type$/);
+            const addressMatch = header.match(/^address\s?\d+? - type$/);
+            if (addressMatch) {
+                const [, pref] = addressMatch;
                 const n = pref ? pref : '';
                 beRemoved[i] = true;
                 beRemoved[i + 1] = true;
@@ -147,8 +144,9 @@ export const standarize = ({ headers, contacts }) => {
                 * organization n - job description
                 we can simply keep the name, title and department changing the corresponding header
             */
-            if (/^organization\s?\d+? - (\w+)$/.test(header)) {
-                const [, str] = header.match(/^organization\s?\d+? - (\w+)$/);
+            const organizationMatch = header.match(/^organization\s?\d+? - (\w+)$/);
+            if (organizationMatch) {
+                const [, str] = organizationMatch;
                 if (str === 'name') {
                     beChanged[i] = 'Company';
                 } else if (str === 'title') {
@@ -168,8 +166,9 @@ export const standarize = ({ headers, contacts }) => {
                 * property - value
                 we have to erase the first header and change the second one accordingly
             */
-            if (/(.*) - type$/i.test(header)) {
-                const [, property] = header.match(/(.*) - type$/i);
+            const genericMatch = header.match(/(.*) - type$/i);
+            if (genericMatch) {
+                const [, property] = genericMatch;
                 beRemoved[i] = true;
                 beChanged[i + 1] = (capitalize(toVcardType(value)) + ' ' + property).trim();
                 return acc;
@@ -177,7 +176,7 @@ export const standarize = ({ headers, contacts }) => {
 
             return acc;
         },
-        { beRemoved: Object.create(null), beChanged: Object.create(null) }
+        { beRemoved: {}, beChanged: {} }
     );
 
     const enrichedHeaders = formattedHeaders
@@ -192,8 +191,16 @@ export const standarize = ({ headers, contacts }) => {
     return { headers: enrichedHeaders, contacts: standardContacts };
 };
 
+interface TemplateArgs {
+    header: string;
+    value: ContactValue;
+    index?: number;
+    type?: string;
+    pref?: number;
+}
+
 const templates = {
-    fn({ header, value, index }) {
+    fn({ header, value, index }: TemplateArgs) {
         return {
             header,
             value,
@@ -205,7 +212,7 @@ const templates = {
             combineIndex: index
         };
     },
-    fnYomi({ header, value, index }) {
+    fnYomi({ header, value, index }: TemplateArgs) {
         return {
             header,
             value,
@@ -217,10 +224,10 @@ const templates = {
             combineIndex: index
         };
     },
-    n({ header, value, index }) {
+    n({ header, value, index }: TemplateArgs) {
         return { header, value, checked: true, field: 'n', combineInto: 'n', combineIndex: index };
     },
-    email({ pref, header, value, type }) {
+    email({ pref, header, value, type }: TemplateArgs) {
         return {
             pref,
             header,
@@ -231,7 +238,7 @@ const templates = {
             group: pref
         };
     },
-    tel({ pref, header, value, type }) {
+    tel({ pref, header, value, type }: TemplateArgs) {
         return {
             pref,
             header,
@@ -241,7 +248,7 @@ const templates = {
             type
         };
     },
-    adr({ pref, header, type, value, index }) {
+    adr({ pref, header, type, value, index }: TemplateArgs) {
         return {
             pref,
             header,
@@ -253,7 +260,7 @@ const templates = {
             combineIndex: index
         };
     },
-    org({ pref, header, value, index }) {
+    org({ pref, header, value, index }: TemplateArgs) {
         return {
             pref,
             header,
@@ -275,107 +282,132 @@ const templates = {
  *
  * @return {Function}
  */
-export const toPreVcard = ({ original, standard }) => {
+export const toPreVcard = ({ original, standard }: { original: string; standard: string }) => {
     const property = normalize(standard);
     const header = original;
 
-    const companyRegex = /^company\s?(\d*)/;
-    const departmentRegex = /^department\s?(\d*)/;
-    const emailRegex = /^(\w+)?\s?e-?mail\s?(\d*)/;
-    const phoneRegex = /^(\w+\s*\w+)?\s?phone\s?(\d*)$/;
-    const faxRegex = /^(\w+)?\s?fax\s?(\d*)$/;
-    const pagerRegex = /^(\w+)?\s?pager\s?(\d*)$/;
-    const telexRegex = /^callback|telex\s?(\d*)$/;
-    const poBoxRegex = /^(\w*)\s?po box\s?(\d*)$/;
-    const extAddressRegex = /^(\w*)\s?extended address\s?(\d*)$/;
-    const streetRegex = /^(\w*)\s?street\s?(\d*)$/;
-    const cityRegex = /^(\w*)\s?city\s?(\d*)$/;
-    const stateRegex = /^(\w*)\s?state\s?(\d*)$/;
-    const postalCodeRegex = /^(\w*)\s?postal code\s?(\d*)$/;
-    const countryRegex = /^(\w*)\s?country\/region\s?(\d*)$/;
+    const companyMatch = property.match(/^company\s?(\d*)/);
+    const departmentMatch = property.match(/^department\s?(\d*)/);
+    const emailMatch = property.match(/^(\w+)?\s?e-?mail\s?(\d*)/);
+    const phoneMatch = property.match(/^(\w+\s*\w+)?\s?phone\s?(\d*)$/);
+    const faxMatch = property.match(/^(\w+)?\s?fax\s?(\d*)$/);
+    const pagerMatch = property.match(/^(\w+)?\s?pager\s?(\d*)$/);
+    const telexMatch = property.match(/^callback|telex\s?(\d*)$/);
+    const poBoxMatch = property.match(/^(\w*)\s?po box\s?(\d*)$/);
+    const extAddressMatch = property.match(/^(\w*)\s?extended address\s?(\d*)$/);
+    const streetMatch = property.match(/^(\w*)\s?street\s?(\d*)$/);
+    const cityMatch = property.match(/^(\w*)\s?city\s?(\d*)$/);
+    const stateMatch = property.match(/^(\w*)\s?state\s?(\d*)$/);
+    const postalCodeMatch = property.match(/^(\w*)\s?postal code\s?(\d*)$/);
+    const countryMatch = property.match(/^(\w*)\s?country\/region\s?(\d*)$/);
 
     if (['title', 'name prefix'].includes(property)) {
-        return (value) => [templates['fn']({ header, value, index: 0 }), templates['n']({ header, value, index: 3 })];
+        return (value: ContactValue) => [
+            templates['fn']({ header, value, index: 0 }),
+            templates['n']({ header, value, index: 3 })
+        ];
     }
     if (['first name', 'given name'].includes(property)) {
-        return (value) => [templates['fn']({ header, value, index: 1 }), templates['n']({ header, value, index: 1 })];
+        return (value: ContactValue) => [
+            templates['fn']({ header, value, index: 1 }),
+            templates['n']({ header, value, index: 1 })
+        ];
     }
     if (['middle name', 'additional name'].includes(property)) {
-        return (value) => [templates['fn']({ header, value, index: 2 }), templates['n']({ header, value, index: 2 })];
+        return (value: ContactValue) => [
+            templates['fn']({ header, value, index: 2 }),
+            templates['n']({ header, value, index: 2 })
+        ];
     }
     if (['last name', 'family name'].includes(property)) {
-        return (value) => [templates['fn']({ header, value, index: 3 }), templates['n']({ header, value, index: 0 })];
+        return (value: ContactValue) => [
+            templates['fn']({ header, value, index: 3 }),
+            templates['n']({ header, value, index: 0 })
+        ];
     }
     if (['suffix', 'name suffix'].includes(property)) {
-        return (value) => [templates['fn']({ header, value, index: 4 }), templates['n']({ header, value, index: 4 })];
+        return (value: ContactValue) => [
+            templates['fn']({ header, value, index: 4 }),
+            templates['n']({ header, value, index: 4 })
+        ];
     }
     if (['given yomi', 'given name yomi'].includes(property)) {
-        return (value) => templates['fnYomi']({ header, value, index: 0 });
+        return (value: ContactValue) => templates['fnYomi']({ header, value, index: 0 });
     }
     if (['middle name yomi', 'additional name yomi'].includes(property)) {
-        return (value) => templates['fnYomi']({ header, value, index: 1 });
+        return (value: ContactValue) => templates['fnYomi']({ header, value, index: 1 });
     }
     if (['surname yomi', 'family name yomi'].includes(property)) {
-        return (value) => templates['fnYomi']({ header, value, index: 2 });
+        return (value: ContactValue) => templates['fnYomi']({ header, value, index: 2 });
     }
-    if (companyRegex.test(property)) {
-        const [, pref] = property.match(companyRegex);
-        return (value) => templates['org']({ pref, header, value, index: 0 });
+    if (companyMatch) {
+        const pref = companyMatch[1] ? +companyMatch[1] : undefined;
+        return (value: ContactValue) => templates['org']({ pref, header, value, index: 0 });
     }
-    if (departmentRegex.test(property)) {
-        const [, pref] = property.match(departmentRegex);
-        return (value) => templates['org']({ pref, header, value, index: 1 });
+    if (departmentMatch) {
+        const pref = departmentMatch[1] ? +departmentMatch[1] : undefined;
+        return (value: ContactValue) => templates['org']({ pref, header, value, index: 1 });
     }
-    if (emailRegex.test(property)) {
-        const [, type, pref] = property.match(emailRegex);
-        return (value) => templates['email']({ pref, header, value, type: type ? toVcardType(type) : '' });
+    if (emailMatch) {
+        const type = emailMatch[1] ? emailMatch[1] : undefined;
+        const pref = emailMatch?.[2] ? +emailMatch[2] : undefined;
+        return (value: ContactValue) =>
+            templates['email']({ pref, header, value, type: type ? toVcardType(type) : '' });
     }
-    if (phoneRegex.test(property)) {
-        const [, type, pref] = property.match(phoneRegex);
-        return (value) => templates['tel']({ pref, header, value, type: type ? toVcardType(type) : '' });
+    if (phoneMatch) {
+        const type = phoneMatch[1] ? phoneMatch[1] : undefined;
+        const pref = phoneMatch?.[2] ? +phoneMatch[2] : undefined;
+        return (value: ContactValue) => templates['tel']({ pref, header, value, type: type ? toVcardType(type) : '' });
     }
-    if (faxRegex.test(property)) {
-        const [, , pref] = property.match(faxRegex);
-        return (value) => templates['tel']({ pref, header, value, type: 'fax' });
+    if (faxMatch) {
+        const pref = faxMatch?.[2] ? +faxMatch[2] : undefined;
+        return (value: ContactValue) => templates['tel']({ pref, header, value, type: 'fax' });
     }
-    if (pagerRegex.test(property)) {
-        const [, , pref] = property.match(pagerRegex);
-        return (value) => templates['tel']({ pref, header, value, type: 'pager' });
+    if (pagerMatch) {
+        const pref = pagerMatch?.[2] ? +pagerMatch[2] : undefined;
+        return (value: ContactValue) => templates['tel']({ pref, header, value, type: 'pager' });
     }
-    if (telexRegex.test(property)) {
-        const [, pref] = property.match(telexRegex);
-        return (value) => templates['tel']({ pref, header, value, type: 'other' });
+    if (telexMatch) {
+        const pref = telexMatch[1] ? +telexMatch[1] : undefined;
+        return (value: ContactValue) => templates['tel']({ pref, header, value, type: 'other' });
     }
-    if (poBoxRegex.test(property)) {
-        const [, type, pref] = property.match(poBoxRegex);
-        return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 0 });
+    if (poBoxMatch) {
+        const type = poBoxMatch[1] ? poBoxMatch[1] : undefined;
+        const pref = poBoxMatch?.[2] ? +poBoxMatch[2] : undefined;
+        return (value: ContactValue) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 0 });
     }
-    if (extAddressRegex.test(property)) {
-        const [, type, pref] = property.match(extAddressRegex);
-        return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 1 });
+    if (extAddressMatch) {
+        const type = extAddressMatch[1] ? extAddressMatch[1] : undefined;
+        const pref = extAddressMatch?.[2] ? +extAddressMatch[2] : undefined;
+        return (value: ContactValue) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 1 });
     }
-    if (streetRegex.test(property)) {
-        const [, type, pref] = property.match(streetRegex);
-        return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 2 });
+    if (streetMatch) {
+        const type = streetMatch[1] ? streetMatch[1] : undefined;
+        const pref = streetMatch?.[2] ? +streetMatch[2] : undefined;
+        return (value: ContactValue) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 2 });
     }
-    if (cityRegex.test(property)) {
-        const [, type, pref] = property.match(cityRegex);
-        return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 3 });
+    if (cityMatch) {
+        const type = cityMatch[1] ? cityMatch[1] : undefined;
+        const pref = cityMatch?.[2] ? +cityMatch[2] : undefined;
+        return (value: ContactValue) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 3 });
     }
-    if (stateRegex.test(property)) {
-        const [, type, pref] = property.match(stateRegex);
-        return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 4 });
+    if (stateMatch) {
+        const type = stateMatch[1] ? stateMatch[1] : undefined;
+        const pref = stateMatch?.[2] ? +stateMatch[2] : undefined;
+        return (value: ContactValue) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 4 });
     }
-    if (postalCodeRegex.test(property)) {
-        const [, type, pref] = property.match(postalCodeRegex);
-        return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 5 });
+    if (postalCodeMatch) {
+        const type = postalCodeMatch[1] ? postalCodeMatch[1] : undefined;
+        const pref = postalCodeMatch?.[2] ? +postalCodeMatch[2] : undefined;
+        return (value: ContactValue) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 5 });
     }
-    if (countryRegex.test(property)) {
-        const [, type, pref] = property.match(countryRegex);
-        return (value) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 6 });
+    if (countryMatch) {
+        const type = countryMatch[1] ? countryMatch[1] : undefined;
+        const pref = countryMatch?.[2] ? +countryMatch[2] : undefined;
+        return (value: ContactValue) => templates['adr']({ pref, header, type: toVcardType(type), value, index: 6 });
     }
     if (property === 'nickname') {
-        return (value) => ({
+        return (value: ContactValue) => ({
             header,
             value: value,
             checked: true,
@@ -383,7 +415,7 @@ export const toPreVcard = ({ original, standard }) => {
         });
     }
     if (property === 'imaddress') {
-        return (value) => ({
+        return (value: ContactValue) => ({
             header,
             value,
             checked: true,
@@ -391,7 +423,7 @@ export const toPreVcard = ({ original, standard }) => {
         });
     }
     if (property === 'job title') {
-        return (value) => ({
+        return (value: ContactValue) => ({
             header,
             value,
             checked: true,
@@ -399,7 +431,7 @@ export const toPreVcard = ({ original, standard }) => {
         });
     }
     if (property === 'role') {
-        return (value) => ({
+        return (value: ContactValue) => ({
             header,
             value,
             checked: true,
@@ -407,7 +439,7 @@ export const toPreVcard = ({ original, standard }) => {
         });
     }
     if (property.includes('relation')) {
-        return (value) => ({
+        return (value: ContactValue) => ({
             header,
             value,
             checked: true,
@@ -415,7 +447,7 @@ export const toPreVcard = ({ original, standard }) => {
         });
     }
     if (property === "manager's name") {
-        return (value) => ({
+        return (value: ContactValue) => ({
             header,
             value,
             checked: true,
@@ -424,7 +456,7 @@ export const toPreVcard = ({ original, standard }) => {
         });
     }
     if (property === "assistant's name") {
-        return (value) => ({
+        return (value: ContactValue) => ({
             header,
             value,
             checked: true,
@@ -433,7 +465,7 @@ export const toPreVcard = ({ original, standard }) => {
         });
     }
     if (property === 'spouse') {
-        return (value) => ({
+        return (value: ContactValue) => ({
             header,
             value,
             checked: true,
@@ -442,7 +474,7 @@ export const toPreVcard = ({ original, standard }) => {
         });
     }
     if (property === 'birthday') {
-        return (value) => ({
+        return (value: ContactValue) => ({
             header,
             value,
             checked: true,
@@ -450,7 +482,7 @@ export const toPreVcard = ({ original, standard }) => {
         });
     }
     if (property === 'anniversary') {
-        return (value) => ({
+        return (value: ContactValue) => ({
             header,
             value,
             checked: true,
@@ -458,7 +490,7 @@ export const toPreVcard = ({ original, standard }) => {
         });
     }
     if (property.includes('web')) {
-        return (value) => ({
+        return (value: ContactValue) => ({
             header,
             value,
             checked: true,
@@ -466,7 +498,7 @@ export const toPreVcard = ({ original, standard }) => {
         });
     }
     if (property === 'photo') {
-        return (value) => ({
+        return (value: ContactValue) => ({
             header,
             value,
             checked: true,
@@ -474,7 +506,7 @@ export const toPreVcard = ({ original, standard }) => {
         });
     }
     if (property === 'logo') {
-        return (value) => ({
+        return (value: ContactValue) => ({
             header,
             value,
             checked: true,
@@ -482,7 +514,7 @@ export const toPreVcard = ({ original, standard }) => {
         });
     }
     if (property === 'location') {
-        return (value) => ({
+        return (value: ContactValue) => ({
             header,
             value,
             checked: true,
@@ -491,7 +523,7 @@ export const toPreVcard = ({ original, standard }) => {
         });
     }
     if (property === 'office location') {
-        return (value) => ({
+        return (value: ContactValue) => ({
             header,
             value,
             checked: true,
@@ -500,7 +532,7 @@ export const toPreVcard = ({ original, standard }) => {
         });
     }
     if (property === 'notes' || property.includes('custom field')) {
-        return (value) => ({
+        return (value: ContactValue) => ({
             header,
             value,
             checked: true,
@@ -509,7 +541,7 @@ export const toPreVcard = ({ original, standard }) => {
     }
 
     // convert any other property into custom note
-    return (value) => ({
+    return (value: ContactValue) => ({
         header,
         value,
         checked: true,
@@ -520,43 +552,41 @@ export const toPreVcard = ({ original, standard }) => {
 
 /**
  * When there is only one pre-vCard property in a pre-vCards property, get the property
- * @param {Array} preVcards     A pre-vCards property
- *
- * @return {String}             Value of the pre-vCards property
  */
-const getFirstValue = (preVcards) => (preVcards[0].checked ? preVcards[0].value : '');
+const getFirstValue = (preVcards: PreVcardProperty[]): string =>
+    (preVcards[0].checked ? preVcards[0].value : '') as string;
 
 /**
  * This object contains the functions that must be used when combining pre-vCard properties into
  * vCard ones. The keys correspond to the field of the pre-vCards to be combined.
  */
-export const combine = {
-    fn(preVcards) {
+export const combine: Combine = {
+    fn(preVcards: PreVcardsProperty) {
         return preVcards.reduce((acc, { value, checked }) => (value && checked ? acc + ` ${value}` : acc), '').trim();
     },
-    n(preVcards) {
-        const propertyN = new Array(5).fill('');
+    n(preVcards: PreVcardsProperty) {
+        const propertyN: string[] = new Array(5).fill('');
         preVcards.forEach(({ value, checked, combineIndex }) => {
             if (checked) {
-                propertyN[combineIndex] = value;
+                propertyN[combineIndex || 0] = value as string;
             }
         });
         return propertyN;
     },
-    adr(preVcards) {
+    adr(preVcards: PreVcardsProperty) {
         const propertyADR = new Array(7).fill('');
         preVcards.forEach(({ value, checked, combineIndex }) => {
             if (checked) {
-                propertyADR[combineIndex] = value;
+                propertyADR[combineIndex || 0] = value;
             }
         });
         return propertyADR;
     },
-    org(preVcards) {
-        const propertyORG = new Array(2).fill('');
+    org(preVcards: PreVcardsProperty) {
+        const propertyORG: string[] = new Array(2).fill('');
         preVcards.forEach(({ value, checked, combineIndex }) => {
             if (checked) {
-                propertyORG[combineIndex] = value;
+                propertyORG[combineIndex || 0] = value as string;
             }
         });
         return propertyORG.filter(Boolean).join(';');
@@ -581,7 +611,7 @@ export const combine = {
     related: getFirstValue,
     categories: getFirstValue,
     sound: getFirstValue,
-    custom(preVcards) {
+    custom(preVcards: PreVcardsProperty) {
         const { checked, header, value } = preVcards[0];
         return checked && value ? `${header}: ${getFirstValue(preVcards)}` : '';
     }
@@ -593,38 +623,38 @@ export const combine = {
  * This object contains the functions that take an array of pre-vCards properties to be combined
  * and returns the value to be displayed. The keys correspond to the field of the pre-vCards to be combined.
  */
-export const display = {
-    fn(preVcards) {
+export const display: Display = {
+    fn(preVcards: PreVcardsProperty) {
         return preVcards.reduce((acc, { value, checked }) => (value && checked ? acc + ` ${value}` : acc), '').trim();
     },
-    n(preVcards) {
+    n(preVcards: PreVcardsProperty) {
         const propertyN = new Array(5).fill('');
         preVcards.forEach(({ value, checked, combineIndex }) => {
             if (checked) {
-                propertyN[combineIndex] = value;
+                propertyN[combineIndex || 0] = value;
             }
         });
         return propertyN.filter(Boolean).join(', ');
     },
-    adr(preVcards) {
+    adr(preVcards: PreVcardsProperty) {
         const propertyADR = new Array(7).fill('');
         preVcards.forEach(({ value, checked, combineIndex }) => {
             if (checked) {
-                propertyADR[combineIndex] = value;
+                propertyADR[combineIndex || 0] = value;
             }
         });
         return propertyADR.filter(Boolean).join(', ');
     },
-    org(preVcards) {
+    org(preVcards: PreVcardsProperty) {
         const propertyORG = new Array(2).fill('');
         preVcards.forEach(({ value, checked, combineIndex }) => {
             if (checked) {
-                propertyORG[combineIndex] = value;
+                propertyORG[combineIndex || 0] = value;
             }
         });
         return propertyORG.filter(Boolean).join('; ');
     },
-    nickname(preVcards) {
+    nickname(preVcards: PreVcardsProperty) {
         return getFirstValue(preVcards)[0];
     },
     email: getFirstValue,
@@ -646,7 +676,7 @@ export const display = {
     related: getFirstValue,
     categories: getFirstValue,
     sound: getFirstValue,
-    custom(preVcards) {
+    custom(preVcards: PreVcardsProperty) {
         const { header, value, checked } = preVcards[0];
         return checked && value ? `${header}: ${getFirstValue(preVcards)}` : '';
     }

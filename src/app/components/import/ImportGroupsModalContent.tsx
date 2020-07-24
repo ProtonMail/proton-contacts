@@ -1,5 +1,4 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { Alert, Block, Row } from 'react-components';
 
@@ -16,7 +15,5 @@ const ImportGroupsModalContent = () => {
         </>
     );
 };
-
-// ImportGroupsModalContent.propTypes = {};
 
 export default ImportGroupsModalContent;

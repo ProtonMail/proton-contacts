@@ -1,9 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { TableCell, Button, Icon } from 'react-components';
 
-const ImportCsvTableHeader = ({ disabledPrevious, disabledNext, onPrevious, onNext, ...rest }) => {
+interface Props {
+    disabledPrevious: boolean;
+    disabledNext: boolean;
+    onPrevious: () => void;
+    onNext: () => void;
+}
+const ImportCsvTableHeader = ({ disabledPrevious = true, disabledNext = true, onPrevious, onNext, ...rest }: Props) => {
     return (
         <thead {...rest}>
             <tr>
@@ -32,18 +37,6 @@ const ImportCsvTableHeader = ({ disabledPrevious, disabledNext, onPrevious, onNe
             </tr>
         </thead>
     );
-};
-
-ImportCsvTableHeader.propTypes = {
-    disabledPrevious: PropTypes.bool,
-    disabledNext: PropTypes.bool,
-    onPrevious: PropTypes.func,
-    onNext: PropTypes.func
-};
-
-ImportCsvTableHeader.defaultPropTypes = {
-    disabledPrevious: true,
-    disabledNext: true
 };
 
 export default ImportCsvTableHeader;

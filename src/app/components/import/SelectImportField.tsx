@@ -1,24 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ChangeEvent } from 'react';
 import { Label, Select } from 'react-components';
 
 import { getAllFields } from '../../helpers/fields';
 
-const SelectImportField = ({ value, onChangeField }) => {
+interface Props {
+    value?: string;
+    onChangeField: (field: string) => void;
+}
+const SelectImportField = ({ value = '', onChangeField }: Props) => {
     const fields = getAllFields();
 
-    const handleChangeField = ({ target }) => onChangeField(target.value);
+    const handleChangeField = ({ target }: ChangeEvent<HTMLSelectElement>) => onChangeField(target.value);
 
     return (
         <Label className="pt0">
             <Select value={value} options={fields} onChange={handleChangeField} />
         </Label>
     );
-};
-
-SelectImportField.propTypes = {
-    value: PropTypes.string.isRequired,
-    onChangeField: PropTypes.func
 };
 
 export default SelectImportField;

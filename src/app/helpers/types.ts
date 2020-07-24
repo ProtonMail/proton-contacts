@@ -11,8 +11,11 @@ export const getTypeLabels = () => ({
     pager: c('Contact type label').t`Pager`
 });
 
-export const getAllTypes = () => ({
-    fn: [{ text: c('Property type').t`Name`, value: '' }, { text: c('Property type').t`Yomi`, value: 'yomi' }],
+export const getAllTypes: () => { [key: string]: { text: string; value: string }[] } = () => ({
+    fn: [
+        { text: c('Property type').t`Name`, value: '' },
+        { text: c('Property type').t`Yomi`, value: 'yomi' }
+    ],
     n: [],
     nickname: [],
     email: [
@@ -75,7 +78,7 @@ export const getAllTypes = () => ({
     url: []
 });
 
-export const getTypeValues = () => ({
+export const getTypeValues: () => { [key: string]: string[] } = () => ({
     fn: ['', 'yomi'],
     n: [],
     nickname: [],

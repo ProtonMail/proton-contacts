@@ -1,17 +1,14 @@
+import { PreVcardProperty, PreVcardsContact } from './csv';
 import { getTypeValues } from './types';
 
-// See './csv.js' for the definition of pre-vCard and pre-vCards contact
+// See './csv.ts' for the definition of pre-vCard and pre-vCards contact
 
 /**
  * Modify the field (and accordingly the type, if needed) of a pre-vCard
- * @param {Object} preVcard         A pre-vCard: { field, type, ... }
- * @param {String} newField         The new field
- *
- * @return {Object}                 pre-vCard with the modified field (and type, if needed)
  */
-const modifyPreVcardField = (preVcard, newField) => {
+const modifyPreVcardField = (preVcard: PreVcardProperty, newField: string) => {
     const types = getTypeValues();
-    const newType = types[newField].includes(preVcard.type)
+    const newType = types[newField].includes(preVcard.type || '')
         ? preVcard.type
         : types[newField].length
         ? types[newField][0]
@@ -22,13 +19,8 @@ const modifyPreVcardField = (preVcard, newField) => {
 
 /**
  * Modify the field (and accordingly the type) of a pre-vCard inside a pre-vCards contact
- * @param {Object} preVcardsContact     A pre-vCards contact
- * @param {Number} index                Index of the group of pre-vCards for which the field will be modified
- * @param {String} newField             The new field
- *
- * @return {Array<Array<Object>>}       the pre-vCards contact with the modified pre-vCard
  */
-export const modifyContactField = (preVcardsContact, index, newField) => {
+export const modifyContactField = (preVcardsContact: PreVcardsContact, index: number, newField: string) => {
     return preVcardsContact.map((preVcards, i) =>
         i !== index ? preVcards : preVcards.map((preVcard) => modifyPreVcardField(preVcard, newField))
     );
@@ -36,22 +28,13 @@ export const modifyContactField = (preVcardsContact, index, newField) => {
 
 /**
  * Modify the type of a pre-vCard
- * @param {Object} preVcard         A pre-vCard: { type, ... }
- * @param {String} newType          The new type
- *
- * @return {Object}                 pre-vCard with the modified type
  */
-const modifyPreVcardType = (preVcard, newType) => ({ ...preVcard, type: newType });
+const modifyPreVcardType = (preVcard: PreVcardProperty, newType: string) => ({ ...preVcard, type: newType });
 
 /**
  * Modify the type of a pre-vCard inside a pre-vCards contact
- * @param {Object} preVcardsContact     A pre-vCards contact
- * @param {Number} index                Index of the group of pre-vCards for which the type will be modified
- * @param {String} newField             The new type
- *
- * @return {Array<Array<Object>>}       the pre-vCards contact with the modified pre-vCard
  */
-export const modifyContactType = (preVcardsContact, index, newField) => {
+export const modifyContactType = (preVcardsContact: PreVcardsContact, index: number, newField: string) => {
     return preVcardsContact.map((preVcards, i) =>
         i !== index ? preVcards : preVcards.map((preVcard) => modifyPreVcardType(preVcard, newField))
     );
@@ -65,7 +48,7 @@ export const modifyContactType = (preVcardsContact, index, newField) => {
  *
  * @return {Array<Array<Object>>}       the pre-vCards contact with the modified pre-vCard
  */
-export const toggleContactChecked = (preVcardsContact, [groupIndex, index]) => {
+export const toggleContactChecked = (preVcardsContact: PreVcardsContact, [groupIndex, index]: number[]) => {
     const toggleFN = preVcardsContact[groupIndex][index].combineInto === 'fn-main';
     const groupIndexN = toggleFN ? preVcardsContact.findIndex((group) => group[0].combineInto === 'n') : -1;
 

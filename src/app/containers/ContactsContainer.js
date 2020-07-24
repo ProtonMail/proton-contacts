@@ -206,7 +206,7 @@ const ContactsContainer = ({ location, history }) => {
             />
         );
     };
-    const handleImport = () => createModal(<ImportModal userKeysList={userKeysList} />);
+    const handleImport = () => createModal(<ImportModal />);
     const handleExport = (contactGroupID) =>
         createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
     const handleGroups = () => history.replace('/contacts/settings/groups');
@@ -244,7 +244,6 @@ const ContactsContainer = ({ location, history }) => {
             contactGroupsMap={contactGroupsMap}
             user={user}
             userSettings={userSettings}
-            userKeysList={userKeysList}
             loadingUserKeys={loadingUserKeys}
             onCheck={handleCheck}
             onClearSearch={handleClearSearch}

@@ -33,7 +33,6 @@ const ContactsList = ({
     onClearSelection,
     user,
     userSettings,
-    userKeysList,
     loadingUserKeys,
     history,
     contactID,
@@ -50,7 +49,7 @@ const ContactsList = ({
     const noContactsImg = getLightOrDark(noContactsImgLight, noContactsImgDark);
 
     const handleImport = () => {
-        createModal(<ImportModal userKeysList={userKeysList} />);
+        createModal(<ImportModal />);
     };
     const handleAddContact = () => {
         createModal(<ContactModal history={history} onAdd={onClearSearch} />);

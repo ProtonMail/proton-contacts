@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import PropTypes from 'prop-types';
 import { Label, Select } from 'react-components';
 
 import { getAllTypes } from '../../helpers/types';
 
-const SelectImportType = ({ field, value, onChangeType }) => {
+interface Props {
+    field?: string;
+    value: string;
+    onChangeType: (type: string) => void;
+}
+const SelectImportType = ({ field = '', value, onChangeType }: Props) => {
     const types = getAllTypes();
 
-    const handleChangeType = ({ target }) => onChangeType(target.value);
+    const handleChangeType = ({ target }: ChangeEvent<HTMLSelectElement>) => onChangeType(target.value);
 
     return (
         <Label className="pt0">
