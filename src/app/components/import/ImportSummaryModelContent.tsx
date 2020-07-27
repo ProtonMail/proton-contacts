@@ -16,7 +16,7 @@ const ImportSummaryModalContent = ({ model }: Props) => {
     const alertMessage = isSuccess
         ? c('Import contacts').ngettext(
               msgid`Contact successfully imported. The imported contact will now appear in your contact list.`,
-              `contacts successfully imported. The imported contacts will now appear in your contact list.`,
+              `Contacts successfully imported. The imported contacts will now appear in your contact list.`,
               totalImported
           )
         : isPartialSuccess
