@@ -172,8 +172,8 @@ const ContactsList = ({
         );
     }
 
-    const contactRowHeightComfort = 64;
-    const contactRowHeightCompact = 48;
+    const contactRowHeightComfort = 66;
+    const contactRowHeightCompact = 50;
 
     return (
         <div

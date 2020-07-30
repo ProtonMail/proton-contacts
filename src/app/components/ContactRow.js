@@ -19,11 +19,11 @@ const ContactRow = ({ style, userSettings, contactID, hasPaidMail, contactGroups
             key={ID}
             onClick={() => onClick(ID)}
             className={classnames([
-                'item-container item-contact flex cursor-pointer bg-global-white',
+                'item-container item-contact flex cursor-pointer',
                 contactID === ID && 'item-is-selected'
             ])}
         >
-            <div className="flex flex-nowrap w100 mtauto mbauto flex-items-center">
+            <div className="item-container-inner flex flex-nowrap flex-items-center w100 mtauto mbauto bg-global-white">
                 {isCompactView ? (
                     <Checkbox
                         className="item-icon-compact"
