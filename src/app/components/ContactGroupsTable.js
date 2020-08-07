@@ -78,6 +78,7 @@ const ContactGroupsTable = () => {
                         },
                         {
                             text: c('Action').t`Delete`,
+                            actionType: 'delete',
                             onClick() {
                                 createModal(
                                     <ConfirmModal
