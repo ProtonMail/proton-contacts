@@ -14,7 +14,8 @@ import {
     OrderableTableBody,
     OrderableTableRow,
     ContactGroupModal,
-    ContactGroupIcon
+    ContactGroupIcon,
+    ErrorButton
 } from 'react-components';
 import { c, msgid } from 'ttag';
 import { deleteLabel, orderContactGroup } from 'proton-shared/lib/api/labels';
@@ -82,13 +83,17 @@ const ContactGroupsTable = () => {
                             onClick() {
                                 createModal(
                                     <ConfirmModal
+                                        title={c('Title').t`Delete ${Name}`}
                                         onConfirm={handleConfirmDeletion(ID)}
-                                        title={c('Title').t`Delete contact group`}
+                                        confirm={<ErrorButton type="submit">{c('Action').t`Delete`}</ErrorButton>}
                                     >
+                                        <Alert type="info">
+                                            {c('Info')
+                                                .t`Please note that addresses assigned to this group will NOT be deleted.`}
+                                        </Alert>
                                         <Alert type="error">
-                                            <p>{c('Info').t`Are you sure you want to delete this contact group?`}</p>
-                                            <p>{c('Info')
-                                                .t`Contacts in the group aren't deleted if the contact group is deleted.`}</p>
+                                            {c('Info')
+                                                .t`Are you sure you want to permanently delete this contact group?`}
                                         </Alert>
                                     </ConfirmModal>
                                 );
