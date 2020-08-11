@@ -43,7 +43,7 @@ const ContactToolbar = ({
     if (simplified) {
         return (
             <Toolbar>
-                <ToolbarLink to="/contacts" icon="arrow-left" />
+                <ToolbarLink to="/" icon="arrow-left" />
             </Toolbar>
         );
     }

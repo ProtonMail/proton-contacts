@@ -181,7 +181,7 @@ const MergingModalContent = ({
                     beDeletedBatchIDs.push(...beDeletedAfterMergeIDs);
                     if (!signal.aborted && beDeletedAfterMergeIDs.includes(contactID)) {
                         // if the current contact is merged, update URL
-                        history.replace({ ...location, state: { ignoreClose: true }, pathname: `/contacts/${ID}` });
+                        history.replace({ ...location, state: { ignoreClose: true }, pathname: `/${ID}` });
                     }
                 } else {
                     !signal.aborted &&
@@ -223,7 +223,7 @@ const MergingModalContent = ({
                 history.replace({
                     ...location,
                     state: { ignoreClose: true },
-                    pathname: `/contacts/${beDeletedModel[contactID]}`
+                    pathname: `/${beDeletedModel[contactID]}`
                 });
             }
         };

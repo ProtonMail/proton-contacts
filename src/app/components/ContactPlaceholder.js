@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
-import { useModals, PrimaryButton, Button, Icon, ContactGroupModal } from 'react-components';
+import { useModals, PrimaryButton, Button, Icon, ContactGroupModal, useAppLink } from 'react-components';
 
-import { redirectTo } from 'proton-shared/lib/helpers/browser';
+import { getAccountSettingsApp } from 'proton-shared/lib/apps/helper';
 import importSvg from 'design-system/assets/img/pm-images/contact-import.svg';
 import exportSvg from 'design-system/assets/img/pm-images/contact-export.svg';
 import contactGroupsSvg from 'design-system/assets/img/pm-images/contact-groups.svg';
@@ -66,7 +66,11 @@ PaidCards.propTypes = {
 };
 
 const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
-    const handleUpgrade = () => redirectTo('/settings/subscription');
+    const goToApp = useAppLink();
+
+    const handleUpgrade = () => {
+        goToApp('/subscription', getAccountSettingsApp());
+    };
 
     return (
         <div className="flex flex-nowrap onmobile-flex-column boxes-placeholder--2columns">
@@ -211,7 +215,7 @@ const ContactPlaceholder = ({
                         .jt`You can decide whether or not contacts are automatically added to your address book by navigating to ${navigateTo}`}
                 </div>
                 <div className="mb1">
-                    <Link to="/contacts/settings" className="inline-flex flex-nowrap nodecoration">
+                    <Link to="/settings" className="inline-flex flex-nowrap nodecoration">
                         <Icon className="mr0-5 flex-item-centered-vert" name="settings-master" />
                         <span>{c('Title').t`Settings`}</span>
                     </Link>

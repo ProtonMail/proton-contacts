@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { ErrorBoundary, StandardPrivateApp, ContactProvider } from 'react-components';
 import { Redirect, Route, Switch } from 'react-router';
 import {
@@ -11,7 +10,7 @@ import {
     SubscriptionModel,
     MailSettingsModel
 } from 'proton-shared/lib/models';
-import locales from '../locales';
+import { TtagLocaleMap } from 'proton-shared/lib/interfaces/Locale';
 
 import ContactsContainer from '../containers/ContactsContainer';
 import SettingsContainer from '../containers/SettingsContainer';
@@ -28,7 +27,11 @@ const EVENT_MODELS = [
 
 const PRELOAD_MODELS = [UserSettingsModel, UserModel, MailSettingsModel];
 
-const PrivateApp = ({ onLogout }) => {
+interface Props {
+    onLogout: () => void;
+    locales: TtagLocaleMap;
+}
+const PrivateApp = ({ onLogout, locales }: Props) => {
     return (
         <StandardPrivateApp
             locales={locales}
@@ -39,23 +42,19 @@ const PrivateApp = ({ onLogout }) => {
             <ContactProvider>
                 <ErrorBoundary>
                     <Switch>
-                        <Route path="/contacts/settings" component={SettingsContainer} />
+                        <Route path="/settings" component={SettingsContainer} />
                         <Route
-                            path="/contacts"
+                            path="/"
                             render={({ location, history }) => (
                                 <ContactsContainer location={location} history={history} />
                             )}
                         />
-                        <Redirect to="/contacts" />
+                        <Redirect to="/" />
                     </Switch>
                 </ErrorBoundary>
             </ContactProvider>
         </StandardPrivateApp>
     );
-};
-
-PrivateApp.propTypes = {
-    onLogout: PropTypes.func.isRequired
 };
 
 export default PrivateApp;

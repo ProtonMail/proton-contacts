@@ -25,9 +25,6 @@
             }
         }
     },
-    "globals": {
-        "PL_IS_STANDALONE": true
-    },
     "extends": ["plugin:@typescript-eslint/recommended", "eslint:recommended", "plugin:react/recommended"],
     "rules": {
         "react/display-name": "off",

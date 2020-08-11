@@ -15,7 +15,7 @@ import SidebarVersion from './SidebarVersion';
 import SidebarGroups from './SidebarGroups';
 
 const ContactsSidebar = ({
-    url,
+    logo,
     user,
     totalContacts,
     contactGroups,
@@ -36,7 +36,7 @@ const ContactsSidebar = ({
 
     return (
         <Sidebar
-            url={url}
+            logo={logo}
             expanded={expanded}
             onToggleExpand={onToggleExpand}
             primary={
@@ -49,7 +49,7 @@ const ContactsSidebar = ({
             <SidebarNav>
                 <SidebarList>
                     <SimpleSidebarListItemLink
-                        to="/contacts"
+                        to="/"
                         isActive={(match, location) => {
                             if (!match) {
                                 return false;
@@ -78,6 +78,7 @@ const ContactsSidebar = ({
 ContactsSidebar.propTypes = {
     url: PropTypes.string,
     user: PropTypes.object,
+    logo: PropTypes.node,
     totalContacts: PropTypes.number,
     contactGroups: PropTypes.array,
     expanded: PropTypes.bool,

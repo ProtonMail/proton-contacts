@@ -6,7 +6,7 @@ import ContactGroupsSection from '../components/ContactGroupsSection';
 
 export const getContactGroupsPage = () => {
     return {
-        to: '/contacts/settings/groups',
+        to: '/settings/groups',
         icon: 'contacts-groups',
         text: c('Title').t`Contact groups`,
         subsections: [

@@ -9,7 +9,8 @@ import {
     SidebarList,
     SidebarNav,
     SidebarBackButton,
-    PrivateHeader
+    PrivateHeader,
+    MainLogo
 } from 'react-components';
 import { Route, Switch, Redirect } from 'react-router';
 import { c } from 'ttag';
@@ -21,10 +22,9 @@ import SettingsContactGroupsPage, { getContactGroupsPage } from '../pages/Settin
 import SidebarVersion from '../content/SidebarVersion';
 
 interface Props {
-    history: H.History;
     location: H.Location;
 }
-const SettingsContainer = ({ location, history }: Props) => {
+const SettingsContainer = ({ location }: Props) => {
     const [{ hasPaidMail }] = useUser();
     const { state: expanded, toggle: onToggleExpand, set: setExpand } = useToggle();
     const { isNarrow } = useActiveBreakpoint();
@@ -34,12 +34,11 @@ const SettingsContainer = ({ location, history }: Props) => {
         setExpand(false);
     }, [location.pathname, location.hash]);
 
-    const base = '/contacts';
-    const goBack = () => history.push(base);
+    const logo = <MainLogo to="/" />;
 
     const header = (
         <PrivateHeader
-            url={base}
+            logo={logo}
             title={c('Title').t`Settings`}
             expanded={expanded}
             onToggleExpand={onToggleExpand}
@@ -49,10 +48,10 @@ const SettingsContainer = ({ location, history }: Props) => {
 
     const sidebar = (
         <Sidebar
-            url={base}
+            logo={logo}
             expanded={expanded}
             onToggleExpand={onToggleExpand}
-            primary={<SidebarBackButton onClick={goBack}>{c('Action').t`Back to Contacts`}</SidebarBackButton>}
+            primary={<SidebarBackButton to="/">{c('Action').t`Back to Contacts`}</SidebarBackButton>}
             version={<SidebarVersion />}
         >
             <SidebarNav>
@@ -71,18 +70,18 @@ const SettingsContainer = ({ location, history }: Props) => {
         <PrivateAppContainer header={header} sidebar={sidebar}>
             <Switch>
                 <Route
-                    path={`${base}/settings/general`}
+                    path="/settings/general"
                     render={({ location }) => {
                         return <GeneralPage location={location} setActiveSection={setActiveSection} />;
                     }}
                 />
                 <Route
-                    path={`${base}/settings/groups`}
+                    path="/settings/groups"
                     render={({ location }) => {
                         return <SettingsContactGroupsPage location={location} setActiveSection={setActiveSection} />;
                     }}
                 />
-                <Redirect to={`${base}/settings/general`} />
+                <Redirect to="/settings/general" />
             </Switch>
         </PrivateAppContainer>
     );

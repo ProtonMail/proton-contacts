@@ -77,7 +77,7 @@ const ContactsList = ({
 
     const handleClick = (ID) => {
         onClearSelection();
-        history.push({ ...location, pathname: `/contacts/${ID}` });
+        history.push({ ...location, pathname: `/${ID}` });
     };
 
     useEffect(() => {
