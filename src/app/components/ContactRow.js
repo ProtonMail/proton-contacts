@@ -45,7 +45,7 @@ const ContactRow = ({ style, userSettings, contactID, hasPaidMail, contactGroups
                 )}
 
                 <div className="flex-item-fluid pl1 flex flex-column flex-spacebetween conversation-titlesender">
-                    <div className="flex flex flex-items-center item-firstline mw100">
+                    <div className="flex flex-nowrap flex-items-center item-firstline mw100">
                         <div className={classnames(['flex flex-item-fluid w0', LabelIDs.length && 'pr1'])}>
                             <span className="bold inbl mw100 ellipsis" id={ID}>
                                 {Name}
