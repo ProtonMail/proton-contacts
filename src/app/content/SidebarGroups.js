@@ -32,7 +32,7 @@ const SidebarGroups = ({ displayGroups, onToggle, hasPaidMail, contactGroups, hi
                         onClick={onClickSettingsIcon}
                         title={c('Info').t`Manage your contact groups`}
                         icon="settings-singular"
-                        info={c('Link').t`Groups`}
+                        info={c('Link').t`Manage your contact groups`}
                     />
                 }
             />
