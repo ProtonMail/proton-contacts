@@ -17,6 +17,7 @@ import { c } from 'ttag';
 import * as H from 'history';
 import isTruthy from 'proton-shared/lib/helpers/isTruthy';
 
+import OverviewPage, { getOverviewPage } from '../pages/SettingsOverviewPage';
 import GeneralPage, { getGeneralSettingsPage } from '../pages/SettingsGeneralPage';
 import SettingsContactGroupsPage, { getContactGroupsPage } from '../pages/SettingsContactGroupsPage';
 import SidebarVersion from '../content/SidebarVersion';
@@ -35,6 +36,7 @@ const SettingsContainer = ({ location }: Props) => {
     }, [location.pathname, location.hash]);
 
     const logo = <MainLogo to="/" />;
+    const pages = [getOverviewPage(), getGeneralSettingsPage(), hasPaidMail && getContactGroupsPage()].filter(isTruthy);
 
     const header = (
         <PrivateHeader
@@ -57,7 +59,7 @@ const SettingsContainer = ({ location }: Props) => {
             <SidebarNav>
                 <SidebarList>
                     <SidebarListItemsWithSubsections
-                        list={[getGeneralSettingsPage(), hasPaidMail && getContactGroupsPage()].filter(isTruthy)}
+                        list={pages}
                         pathname={location.pathname}
                         activeSection={activeSection}
                     />
@@ -70,6 +72,12 @@ const SettingsContainer = ({ location }: Props) => {
         <PrivateAppContainer header={header} sidebar={sidebar}>
             <Switch>
                 <Route
+                    path="/settings/overview"
+                    render={() => {
+                        return <OverviewPage />;
+                    }}
+                />
+                <Route
                     path="/settings/general"
                     render={({ location }) => {
                         return <GeneralPage location={location} setActiveSection={setActiveSection} />;
@@ -81,7 +89,7 @@ const SettingsContainer = ({ location }: Props) => {
                         return <SettingsContactGroupsPage location={location} setActiveSection={setActiveSection} />;
                     }}
                 />
-                <Redirect to="/settings/general" />
+                <Redirect to="/settings/overview" />
             </Switch>
         </PrivateAppContainer>
     );
