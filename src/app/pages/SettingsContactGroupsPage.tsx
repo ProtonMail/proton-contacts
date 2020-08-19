@@ -1,14 +1,19 @@
 import React from 'react';
 import { c } from 'ttag';
-import { SettingsPropsShared, PrivateMainSettingsArea } from 'react-components';
+import { SettingsPropsShared } from 'react-components';
+import { PERMISSIONS } from 'proton-shared/lib/constants';
 
 import ContactGroupsSection from '../components/ContactGroupsSection';
+import PrivateMainSettingsAreaWithPermissions from '../components/PrivateMainSettingsAreaWithPermissions';
+
+const { PAID_MAIL } = PERMISSIONS;
 
 export const getContactGroupsPage = () => {
     return {
         to: '/settings/groups',
         icon: 'contacts-groups',
         text: c('Title').t`Contact groups`,
+        permissions: [PAID_MAIL],
         subsections: [
             {
                 text: c('Title').t`Contact groups`,
@@ -19,17 +24,14 @@ export const getContactGroupsPage = () => {
 };
 
 const SettingsContactGroupsPage = ({ setActiveSection, location }: SettingsPropsShared) => {
-    const { text, subsections } = getContactGroupsPage();
     return (
-        <PrivateMainSettingsArea
-            title={text}
+        <PrivateMainSettingsAreaWithPermissions
+            config={getContactGroupsPage()}
             location={location}
-            appName="ProtonContacts"
             setActiveSection={setActiveSection}
-            subsections={subsections}
         >
             <ContactGroupsSection />
-        </PrivateMainSettingsArea>
+        </PrivateMainSettingsAreaWithPermissions>
     );
 };
 

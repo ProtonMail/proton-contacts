@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
     Sidebar,
-    useUser,
     useToggle,
     useActiveBreakpoint,
     PrivateAppContainer,
@@ -15,7 +14,6 @@ import {
 import { Route, Switch, Redirect } from 'react-router';
 import { c } from 'ttag';
 import * as H from 'history';
-import isTruthy from 'proton-shared/lib/helpers/isTruthy';
 
 import OverviewPage, { getOverviewPage } from '../pages/SettingsOverviewPage';
 import GeneralPage, { getGeneralSettingsPage } from '../pages/SettingsGeneralPage';
@@ -26,7 +24,6 @@ interface Props {
     location: H.Location;
 }
 const SettingsContainer = ({ location }: Props) => {
-    const [{ hasPaidMail }] = useUser();
     const { state: expanded, toggle: onToggleExpand, set: setExpand } = useToggle();
     const { isNarrow } = useActiveBreakpoint();
     const [activeSection, setActiveSection] = useState('');
@@ -36,7 +33,7 @@ const SettingsContainer = ({ location }: Props) => {
     }, [location.pathname, location.hash]);
 
     const logo = <MainLogo to="/" />;
-    const pages = [getOverviewPage(), getGeneralSettingsPage(), hasPaidMail && getContactGroupsPage()].filter(isTruthy);
+    const pages = [getOverviewPage(), getGeneralSettingsPage(), getContactGroupsPage()];
 
     const header = (
         <PrivateHeader
