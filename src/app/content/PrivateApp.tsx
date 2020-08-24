@@ -25,7 +25,7 @@ const EVENT_MODELS = [
     LabelsModel
 ];
 
-const PRELOAD_MODELS = [UserSettingsModel, UserModel, MailSettingsModel];
+const PRELOAD_MODELS = [UserSettingsModel, UserModel];
 
 interface Props {
     onLogout: () => void;
