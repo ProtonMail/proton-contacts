@@ -276,7 +276,7 @@ const ContactsContainer = ({ location, history }) => {
 
     const title = search === '' ? c('Title').t`Contacts` : c('Title').t`Search`;
 
-    useAppTitle(title, 'ProtonContacts');
+    useAppTitle(title);
 
     const logo = <MainLogo to="/" />;
     const header = (

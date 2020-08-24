@@ -24,7 +24,6 @@ const SettingsGeneralPage = ({ setActiveSection, location }: SettingsPropsShared
         <PrivateMainSettingsArea
             title={text}
             location={location}
-            appName="ProtonContacts"
             setActiveSection={setActiveSection}
             subsections={subsections}
         >
