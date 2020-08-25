@@ -88,7 +88,7 @@ export const processInBatches = async ({
 
     for (let i = 0; i < batches.length; i++) {
         // The API requests limit for the submit route are 100 calls per 10 seconds
-        // We play it safe by enforcing a 100ms minimum wait between API calls. During this wait we encrypt the events
+        // We play it safe by enforcing a 100ms minimum wait between API calls. During this wait we encrypt the contacts
         if (signal.aborted) {
             return [];
         }

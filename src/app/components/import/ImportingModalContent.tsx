@@ -20,7 +20,7 @@ const ImportingModalContent = ({ model, setModel, onFinish }: Props) => {
     const api = useApi();
     const getUserKeys = useGetUserKeys();
 
-    useBeforeUnload(c('Alert').t`By leaving now, some events may not be imported`);
+    useBeforeUnload(c('Alert').t`By leaving now, some contacts may not be imported`);
 
     useEffect(() => {
         // Prepare api for allowing cancellation in the middle of the import
