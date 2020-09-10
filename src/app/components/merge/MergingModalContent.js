@@ -14,7 +14,7 @@ import { API_CODES } from 'proton-shared/lib/constants';
 import { OVERWRITE, CATEGORIES } from 'proton-shared/lib/contacts/constants';
 
 import { merge } from '../../helpers/merge';
-import { splitContacts } from '../../helpers/import';
+import { splitEncryptedContacts } from '../../helpers/import';
 import { combineProgress } from '../../helpers/progress';
 import { API_SAFE_INTERVAL, ADD_CONTACTS_MAX_SIZE } from '../../constants';
 
@@ -235,7 +235,7 @@ const MergingModalContent = ({
             const beSubmittedContacts = !alreadyMerged
                 ? await mergeAndEncrypt({ signal })
                 : await encryptAlreadyMerged({ signal });
-            const { withCategories, withoutCategories } = splitContacts(beSubmittedContacts);
+            const { withCategories, withoutCategories } = splitEncryptedContacts(beSubmittedContacts);
             await submitContacts({ contacts: withCategories, labels: INCLUDE }, { signal });
             await submitContacts({ contacts: withoutCategories, labels: IGNORE }, { signal });
             await deleteMarkedForDeletion({ signal });
