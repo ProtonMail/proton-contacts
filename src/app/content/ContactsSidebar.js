@@ -42,7 +42,7 @@ const ContactsSidebar = ({
             primary={
                 <SidebarPrimaryButton
                     onClick={() => createModal(<ContactModal history={history} onAdd={onClearSearch} />)}
-                >{c('Action').t`Add contact`}</SidebarPrimaryButton>
+                >{c('Action').t`New contact`}</SidebarPrimaryButton>
             }
             version={<SidebarVersion />}
         >
