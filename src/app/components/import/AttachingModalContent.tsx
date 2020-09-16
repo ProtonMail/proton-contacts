@@ -1,5 +1,4 @@
 import React, { ChangeEvent } from 'react';
-import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { Bordered, FileInput, Alert, AttachedFile } from 'react-components';
 import { MAX_IMPORT_FILE_SIZE_STRING, MAX_IMPORT_CONTACTS_STRING } from '../../constants';
@@ -36,17 +35,6 @@ const AttachingModalContent = ({ model, onAttach, onClear }: Props) => {
             </Bordered>
         </>
     );
-};
-
-AttachingModalContent.propTypes = {
-    attached: PropTypes.bool,
-    file: PropTypes.instanceOf(File),
-    onAttach: PropTypes.func,
-    onClear: PropTypes.func
-};
-
-AttachingModalContent.PropTypes = {
-    files: []
 };
 
 export default AttachingModalContent;
