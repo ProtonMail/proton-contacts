@@ -1,11 +1,18 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router';
-import { ErrorBoundary } from 'react-components';
+import { ErrorBoundary, useWelcomeFlags } from 'react-components';
 
 import SettingsContainer from './SettingsContainer';
 import ContactsContainer from './ContactsContainer';
+import ContactsOnboardingContainer from './ContactsOnboardingContainer';
 
 const MainContainer = () => {
+    const [welcomeFlags, setWelcomeFlagsDone] = useWelcomeFlags();
+
+    if (welcomeFlags.isWelcomeFlow) {
+        return <ContactsOnboardingContainer onDone={setWelcomeFlagsDone} />;
+    }
+
     return (
         <ErrorBoundary>
             <Switch>
