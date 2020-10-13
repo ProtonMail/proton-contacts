@@ -23,7 +23,7 @@ const ContactRow = ({ style, userSettings, contactID, hasPaidMail, contactGroups
                 contactID === ID && 'item-is-selected'
             ])}
         >
-            <div className="flex flex-nowrap w100 mtauto mbauto flex-items-center">
+            <div className="flex flex-nowrap w100 h100 mtauto mbauto flex-items-center">
                 {isCompactView ? (
                     <Checkbox
                         className="item-icon-compact"
