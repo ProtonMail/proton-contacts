@@ -2,7 +2,6 @@ import { ContactCard, ContactProperties, ContactProperty, ContactValue } from 'p
 import { ImportContactError } from '../components/import/ImportContactError';
 import { ImportFatalError } from '../components/import/ImportFatalError';
 import { ImportFileError } from '../components/import/ImportFileError';
-import { PreVcardsContact, PreVcardsProperty } from '../helpers/csv';
 
 export enum IMPORT_STEPS {
     ATTACHING,
@@ -11,12 +10,12 @@ export enum IMPORT_STEPS {
     WARNING,
     IMPORTING,
     IMPORT_GROUPS,
-    FINISHED
+    FINISHED,
 }
 
 export enum EXTENSION {
     CSV = 'csv',
-    VCF = 'vcf'
+    VCF = 'vcf',
 }
 
 export type ACCEPTED_EXTENSIONS = EXTENSION.CSV | EXTENSION.VCF;
@@ -69,3 +68,19 @@ export interface Combine {
 export interface Display {
     [key: string]: (preVcards: PreVcardsProperty) => string;
 }
+
+export interface PreVcardProperty {
+    header: string;
+    checked: boolean;
+    pref?: number;
+    field: string;
+    type?: string;
+    value: ContactValue;
+    combineInto?: string;
+    combineIndex?: number;
+    custom?: boolean;
+}
+
+export type PreVcardsProperty = PreVcardProperty[];
+
+export type PreVcardsContact = PreVcardsProperty[];

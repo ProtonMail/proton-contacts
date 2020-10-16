@@ -51,7 +51,7 @@ DynamicProgress.propTypes = {
     value: PropTypes.number.isRequired,
     max: PropTypes.number,
     endPostponed: PropTypes.bool,
-    failed: PropTypes.bool
+    failed: PropTypes.bool,
 };
 
 export default DynamicProgress;

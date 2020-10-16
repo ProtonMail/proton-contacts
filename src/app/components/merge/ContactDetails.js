@@ -10,7 +10,7 @@ import {
     Loader,
     FormModal,
     PrimaryButton,
-    ContactView
+    ContactView,
 } from 'react-components';
 import { splitKeys } from 'proton-shared/lib/keys/keys';
 import { getContact } from 'proton-shared/lib/api/contacts';
@@ -76,7 +76,7 @@ const ContactDetails = ({ contactID, userKeysList, ...rest }) => {
 
 ContactDetails.propTypes = {
     contactID: PropTypes.string,
-    userKeysList: PropTypes.array
+    userKeysList: PropTypes.array,
 };
 
 export default ContactDetails;

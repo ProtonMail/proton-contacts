@@ -9,7 +9,7 @@ export const getOverviewPage = () => {
     return {
         to: '/settings/overview',
         icon: 'apps',
-        text: c('Link').t`Overview`
+        text: c('Link').t`Overview`,
     };
 };
 

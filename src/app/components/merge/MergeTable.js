@@ -26,7 +26,7 @@ const MergeTable = ({
     onClickDetails,
     onToggleDelete,
     onClickPreview,
-    onSortEnd
+    onSortEnd,
 }) => {
     return (
         <>
@@ -72,7 +72,7 @@ MergeTable.propTypes = {
     onClickDetails: PropTypes.func,
     onToggleDelete: PropTypes.func,
     onClickPreview: PropTypes.func,
-    onSortEnd: PropTypes.func
+    onSortEnd: PropTypes.func,
 };
 
 export default MergeTable;

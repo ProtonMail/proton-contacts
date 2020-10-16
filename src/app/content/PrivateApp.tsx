@@ -7,7 +7,7 @@ import {
     LabelsModel,
     UserSettingsModel,
     SubscriptionModel,
-    MailSettingsModel
+    MailSettingsModel,
 } from 'proton-shared/lib/models';
 import { TtagLocaleMap } from 'proton-shared/lib/interfaces/Locale';
 
@@ -18,7 +18,7 @@ const EVENT_MODELS = [
     ContactsModel,
     SubscriptionModel,
     ContactEmailsModel,
-    LabelsModel
+    LabelsModel,
 ];
 
 const PRELOAD_MODELS = [UserSettingsModel, UserModel, MailSettingsModel];

@@ -24,7 +24,7 @@ export const getAllFields = () => [
     { text: c('Contact field label').t`IMPP`, value: 'impp' },
     { text: c('Contact field label').t`Related`, value: 'related' },
     { text: c('Contact field label').t`Categories`, value: 'categories' },
-    { text: c('Contact field label').t`Sound`, value: 'sound' }
+    { text: c('Contact field label').t`Sound`, value: 'sound' },
 ];
 
 export const getEditableFields = () => [
@@ -45,7 +45,7 @@ export const getEditableFields = () => [
     { text: c('Contact field label').t`Language`, value: 'lang' },
     { text: c('Contact field label').t`Timezone`, value: 'tz' },
     { text: c('Contact field label').t`Geo`, value: 'geo' },
-    { text: c('Contact field label').t`Logo`, value: 'logo' }
+    { text: c('Contact field label').t`Logo`, value: 'logo' },
 ];
 export const getOtherInformationFields = () => [
     { text: c('Contact field label').t`Photo`, value: 'photo' },
@@ -61,7 +61,7 @@ export const getOtherInformationFields = () => [
     { text: c('Contact field label').t`Language`, value: 'lang' },
     { text: c('Contact field label').t`Timezone`, value: 'tz' },
     { text: c('Contact field label').t`Geo`, value: 'geo' },
-    { text: c('Contact field label').t`Logo`, value: 'logo' }
+    { text: c('Contact field label').t`Logo`, value: 'logo' },
 ];
 
 export const getAllFieldLabels = () => ({
@@ -88,7 +88,7 @@ export const getAllFieldLabels = () => ({
     impp: c('Contact field label').t`IMPP`,
     related: c('Contact field label').t`Related`,
     categories: c('Contact field label').t`Categories`,
-    sound: c('Contact field label').t`Sound`
+    sound: c('Contact field label').t`Sound`,
 });
 
 // ** NOT USED FOR THE MOMENT **

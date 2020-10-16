@@ -17,19 +17,19 @@ const MergeModalContent = ({ contactID, userKeysList, model, updateModel, beMerg
     const handleToggleCheck = (ID) => {
         updateModel((model) => ({
             ...model,
-            isChecked: { ...isChecked, [ID]: !isChecked[ID] }
+            isChecked: { ...isChecked, [ID]: !isChecked[ID] },
         }));
     };
     const handleToggleDelete = (ID) => {
         updateModel((model) => ({
             ...model,
-            beDeleted: { ...beDeleted, [ID]: !beDeleted[ID] }
+            beDeleted: { ...beDeleted, [ID]: !beDeleted[ID] },
         }));
     };
     const handleSortEnd = (groupIndex) => ({ oldIndex, newIndex }) => {
         updateModel((model) => ({
             ...model,
-            orderedContacts: moveInGroup(orderedContacts, groupIndex, { oldIndex, newIndex })
+            orderedContacts: moveInGroup(orderedContacts, groupIndex, { oldIndex, newIndex }),
         }));
     };
 
@@ -86,7 +86,7 @@ MergeModalContent.propTypes = {
     model: PropTypes.object.isRequired,
     updateModel: PropTypes.func.isRequired,
     beMergedModel: PropTypes.shape({ ID: PropTypes.arrayOf(PropTypes.string) }),
-    beDeletedModel: PropTypes.shape({ ID: PropTypes.string })
+    beDeletedModel: PropTypes.shape({ ID: PropTypes.string }),
 };
 
 export default MergeModalContent;

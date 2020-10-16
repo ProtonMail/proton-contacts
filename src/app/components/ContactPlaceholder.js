@@ -13,9 +13,9 @@ import upgradeSvg from 'design-system/assets/img/pm-images/contact-unlock-featur
 import contactGroupCardLight from 'design-system/assets/img/shared/empty-address-book.svg';
 import contactGroupCardDark from 'design-system/assets/img/shared/empty-address-book-dark.svg';
 
+import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
 import ExportModal from './ExportModal';
 import MergeRow from './MergeRow';
-import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
 
 const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
     return (
@@ -62,7 +62,7 @@ PaidCards.propTypes = {
     loadingUserKeys: PropTypes.bool,
     onImport: PropTypes.func,
     onExport: PropTypes.func,
-    onGroups: PropTypes.func
+    onGroups: PropTypes.func,
 };
 
 const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
@@ -116,7 +116,7 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
 FreeCards.propTypes = {
     loadingUserKeys: PropTypes.bool,
     onImport: PropTypes.func,
-    onExport: PropTypes.func
+    onExport: PropTypes.func,
 };
 
 const ContactPlaceholder = ({
@@ -133,7 +133,7 @@ const ContactPlaceholder = ({
     onMerge,
     onImport,
     onExport,
-    onGroups
+    onGroups,
 }) => {
     const { hasPaidMail } = user;
     const { createModal } = useModals();
@@ -256,7 +256,7 @@ ContactPlaceholder.propTypes = {
     onMerge: PropTypes.func,
     onImport: PropTypes.func,
     onExport: PropTypes.func,
-    onGroups: PropTypes.func
+    onGroups: PropTypes.func,
 };
 
 export default ContactPlaceholder;

@@ -33,26 +33,26 @@ const ImportCsvModalContent = ({ model, setModel }: Props) => {
             if ((!isFirstNameChecked && index === lastNameIndex) || (!isLastNameChecked && index === firstNameIndex)) {
                 return createNotification({
                     type: 'error',
-                    text: c('Error notification').t`First name and last name cannot be unchecked at the same time`
+                    text: c('Error notification').t`First name and last name cannot be unchecked at the same time`,
                 });
             }
         }
         setModel({
             ...model,
-            preVcardsContacts: preVcardsContacts.map((contact) => toggleContactChecked(contact, [groupIndex, index]))
+            preVcardsContacts: preVcardsContacts.map((contact) => toggleContactChecked(contact, [groupIndex, index])),
         });
     };
 
     const handleChangeField = (groupIndex: number) => (newField: string) =>
         setModel({
             ...model,
-            preVcardsContacts: preVcardsContacts.map((contact) => modifyContactField(contact, groupIndex, newField))
+            preVcardsContacts: preVcardsContacts.map((contact) => modifyContactField(contact, groupIndex, newField)),
         });
 
     const handleChangeType = (groupIndex: number) => (newType: string) =>
         setModel({
             ...model,
-            preVcardsContacts: preVcardsContacts.map((contact) => modifyContactType(contact, groupIndex, newType))
+            preVcardsContacts: preVcardsContacts.map((contact) => modifyContactType(contact, groupIndex, newType)),
         });
 
     return (

@@ -8,13 +8,13 @@ export const getTypeLabels = () => ({
     yomi: c('Contact type label').t`Yomi`,
     other: c('Contact type label').t`Other`,
     fax: c('Contact type label').t`Fax`,
-    pager: c('Contact type label').t`Pager`
+    pager: c('Contact type label').t`Pager`,
 });
 
 export const getAllTypes: () => { [key: string]: { text: string; value: string }[] } = () => ({
     fn: [
         { text: c('Property type').t`Name`, value: '' },
-        { text: c('Property type').t`Yomi`, value: 'yomi' }
+        { text: c('Property type').t`Yomi`, value: 'yomi' },
     ],
     n: [],
     nickname: [],
@@ -22,7 +22,7 @@ export const getAllTypes: () => { [key: string]: { text: string; value: string }
         { text: c('Property type').t`Email`, value: '' },
         { text: c('Property type').t`Home`, value: 'home' },
         { text: c('Property type').t`Work`, value: 'work' },
-        { text: c('Property type').t`Other`, value: 'other' }
+        { text: c('Property type').t`Other`, value: 'other' },
     ],
     tel: [
         { text: c('Property type').t`Phone`, value: '' },
@@ -32,13 +32,13 @@ export const getAllTypes: () => { [key: string]: { text: string; value: string }
         { text: c('Property type').t`Mobile`, value: 'cell' },
         { text: c('Property type').t`Main`, value: 'main' },
         { text: c('Property type').t`Fax`, value: 'fax' },
-        { text: c('Property type').t`Pager`, value: 'pager' }
+        { text: c('Property type').t`Pager`, value: 'pager' },
     ],
     adr: [
         { text: c('Property type').t`Address`, value: '' },
         { text: c('Property type').t`Home`, value: 'home' },
         { text: c('Property type').t`Work`, value: 'work' },
-        { text: c('Property type').t`Other`, value: 'other' }
+        { text: c('Property type').t`Other`, value: 'other' },
     ],
     bday: [],
     anniversary: [],
@@ -71,11 +71,11 @@ export const getAllTypes: () => { [key: string]: { text: string; value: string }
         { text: c('Property type').t`Sweetheart`, value: 'sweetheart' },
         { text: c('Property type').t`Me`, value: 'me' },
         { text: c('Property type').t`Agent`, value: 'agent' },
-        { text: c('Property type').t`Emergency`, value: 'emergency' }
+        { text: c('Property type').t`Emergency`, value: 'emergency' },
     ],
     member: [],
     note: [],
-    url: []
+    url: [],
 });
 
 export const getTypeValues: () => { [key: string]: string[] } = () => ({
@@ -115,9 +115,9 @@ export const getTypeValues: () => { [key: string]: string[] } = () => ({
         'sweetheart',
         'me',
         'agent',
-        'emergency'
+        'emergency',
     ],
     member: [],
     note: [],
-    url: []
+    url: [],
 });

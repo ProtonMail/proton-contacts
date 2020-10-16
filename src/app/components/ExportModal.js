@@ -11,7 +11,7 @@ import { splitKeys } from 'proton-shared/lib/keys/keys';
 import { prepareContact } from 'proton-shared/lib/contacts/decrypt';
 import { toICAL } from 'proton-shared/lib/contacts/vcard';
 
-import { percentageProgress } from './../helpers/progress';
+import { percentageProgress } from '../helpers/progress';
 import DynamicProgress from './DynamicProgress';
 import { QUERY_EXPORT_MAX_PAGESIZE, API_SAFE_INTERVAL } from '../constants';
 
@@ -29,7 +29,7 @@ const ExportFooter = ({ loading }) => {
 };
 
 ExportFooter.propTypes = {
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
 };
 
 const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...rest }) => {
@@ -79,11 +79,15 @@ const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...
                     const contactExported = toICAL(contactDecrypted).toString();
                     // need to check again for signal.aborted because the abort
                     // may have taken place during await prepareContact
-                    !signal.aborted && addSuccess((contactsExported) => [...contactsExported, contactExported]);
+                    if (!signal.aborted) {
+                        addSuccess((contactsExported) => [...contactsExported, contactExported]);
+                    }
                 } catch (error) {
                     // need to check again for signal.aborted because the abort
                     // may have taken place during await prepareContact
-                    !signal.aborted && addError((contactsNotExported) => [...contactsNotExported, ID]);
+                    if (!signal.aborted) {
+                        addError((contactsNotExported) => [...contactsNotExported, ID]);
+                    }
                 }
             }
         };
@@ -137,7 +141,7 @@ const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...
 ExportModal.propTypes = {
     onSave: PropTypes.func,
     contactGroupID: PropTypes.string,
-    userKeysList: PropTypes.array
+    userKeysList: PropTypes.array,
 };
 
 export default ExportModal;

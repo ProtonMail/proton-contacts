@@ -107,7 +107,7 @@ export const splitEncryptedContacts = (contacts: EncryptedContact[] = []) =>
     contacts.reduce<{ withCategories: EncryptedContact[]; withoutCategories: EncryptedContact[] }>(
         (acc, contact) => {
             const {
-                contact: { Cards, error }
+                contact: { Cards, error },
             } = contact;
             if (error) {
                 return acc;

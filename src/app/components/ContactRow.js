@@ -14,13 +14,14 @@ const ContactRow = ({ style, userSettings, contactID, hasPaidMail, contactGroups
     const contactGroups = contact.LabelIDs.map((ID) => contactGroupsMap[ID]);
 
     return (
+        // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
         <div
             style={style}
             key={ID}
             onClick={() => onClick(ID)}
             className={classnames([
                 'item-container item-contact flex cursor-pointer bg-global-white',
-                contactID === ID && 'item-is-selected'
+                contactID === ID && 'item-is-selected',
             ])}
         >
             <div className="flex flex-nowrap w100 h100 mtauto mbauto flex-items-center">
@@ -78,8 +79,8 @@ ContactRow.propTypes = {
         Name: PropTypes.string,
         LabelIDs: PropTypes.array,
         emails: PropTypes.array,
-        isChecked: PropTypes.bool
-    })
+        isChecked: PropTypes.bool,
+    }),
 };
 
 export default ContactRow;

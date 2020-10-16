@@ -7,7 +7,7 @@ import {
     LinkButton,
     classnames,
     ContactModal,
-    ContactGroupModal
+    ContactGroupModal,
 } from 'react-components';
 import { withRouter } from 'react-router';
 import { List, AutoSizer } from 'react-virtualized';
@@ -18,10 +18,10 @@ import noContactsImgDark from 'design-system/assets/img/shared/empty-address-boo
 import noResultsImgLight from 'design-system/assets/img/shared/no-result-search.svg';
 import noResultsImgDark from 'design-system/assets/img/shared/no-result-search-dark.svg';
 
-import ImportModal from './import/ImportModal';
-import ContactRow from './ContactRow';
 import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
 import { DENSITY } from 'proton-shared/lib/constants';
+import ImportModal from './import/ImportModal';
+import ContactRow from './ContactRow';
 
 const ContactsList = ({
     totalContacts,
@@ -38,7 +38,7 @@ const ContactsList = ({
     contactID,
     contactGroupID,
     location,
-    isDesktop = true
+    isDesktop = true,
 }) => {
     const listRef = useRef(null);
     const containerRef = useRef(null);
@@ -60,7 +60,7 @@ const ContactsList = ({
 
     const handleCheck = (event) => {
         const { target } = event;
-        const shiftKey = event.nativeEvent.shiftKey;
+        const { shiftKey } = event.nativeEvent;
 
         const contactID = target.getAttribute('data-contact-id');
         const contactIDs = [contactID];
@@ -180,7 +180,7 @@ const ContactsList = ({
             ref={containerRef}
             className={classnames([
                 isDesktop ? 'items-column-list' : 'items-column-list--mobile',
-                isCompactView && 'is-compact'
+                isCompactView && 'is-compact',
             ])}
         >
             <div className="items-column-list-inner items-column-list-inner--noborder">
@@ -223,13 +223,12 @@ ContactsList.propTypes = {
     onClearSelection: PropTypes.func,
     user: PropTypes.object,
     userSettings: PropTypes.object,
-    userKeysList: PropTypes.array,
     loadingUserKeys: PropTypes.bool.isRequired,
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     contactID: PropTypes.string,
     contactGroupID: PropTypes.string,
-    isDesktop: PropTypes.bool
+    isDesktop: PropTypes.bool,
 };
 
 export default withRouter(ContactsList);

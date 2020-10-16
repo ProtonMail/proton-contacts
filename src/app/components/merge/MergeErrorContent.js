@@ -12,7 +12,7 @@ const MergeErrorContent = ({ error }) => {
 };
 
 MergeErrorContent.propTypes = {
-    error: PropTypes.string
+    error: PropTypes.string,
 };
 
 export default MergeErrorContent;

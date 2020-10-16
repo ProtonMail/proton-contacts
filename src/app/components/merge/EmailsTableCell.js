@@ -12,7 +12,7 @@ const EmailsTableCell = ({ contactID, emails = [], highlightedID, greyedOut }) =
                 'flex-items-center',
                 'mw100',
                 opaqueClassName(greyedOut),
-                contactID === highlightedID && 'bold'
+                contactID === highlightedID && 'bold',
             ])}
         >
             <span className="inbl ellipsis">{emails.map((email) => `<${email}>`).join(', ')}</span>
@@ -24,7 +24,7 @@ EmailsTableCell.propTypes = {
     emails: PropTypes.arrayOf(PropTypes.string),
     contactID: PropTypes.string.isRequired,
     highlightedID: PropTypes.string,
-    greyedOut: PropTypes.bool
+    greyedOut: PropTypes.bool,
 };
 
 export default EmailsTableCell;

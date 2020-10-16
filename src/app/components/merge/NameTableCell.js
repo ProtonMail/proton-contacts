@@ -20,7 +20,7 @@ const NameTableCell = ({ name, contactID, highlightedID, checked, deleted, greye
                     'inbl',
                     'ellipsis',
                     opaqueClassName(greyedOut),
-                    contactID === highlightedID && 'bold'
+                    contactID === highlightedID && 'bold',
                 ])}
             >
                 {name}
@@ -36,7 +36,7 @@ NameTableCell.propTypes = {
     deleted: PropTypes.bool,
     greyedOut: PropTypes.bool,
     name: PropTypes.string,
-    onToggle: PropTypes.func
+    onToggle: PropTypes.func,
 };
 
 export default NameTableCell;

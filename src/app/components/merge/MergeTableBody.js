@@ -25,14 +25,14 @@ const MergeTableBody = ({
                         text: c('Action').t`Contact details`,
                         onClick() {
                             onClickDetails(ID);
-                        }
+                        },
                     },
                     {
                         text: deleted ? c('Action').t`Unmark for deletion` : c('Action').t`Mark for deletion`,
                         onClick() {
                             onToggleDelete(ID);
-                        }
-                    }
+                        },
+                    },
                 ].filter(Boolean);
                 const cells = [
                     <NameTableCell
@@ -52,7 +52,7 @@ const MergeTableBody = ({
                         emails={emails}
                         greyedOut={deleted}
                     />,
-                    <DropdownActions key="options" className="pm-button--small" list={options} />
+                    <DropdownActions key="options" className="pm-button--small" list={options} />,
                 ];
 
                 return deleted ? (
@@ -73,7 +73,7 @@ MergeTableBody.propTypes = {
     onClickCheckbox: PropTypes.func,
     onClickDetails: PropTypes.func,
     onToggleDelete: PropTypes.func,
-    onClickPreview: PropTypes.func
+    onClickPreview: PropTypes.func,
 };
 
 export default MergeTableBody;

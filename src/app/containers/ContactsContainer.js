@@ -27,7 +27,7 @@ import {
     SearchDropdown,
     Icon,
     SettingsButton,
-    MainLogo
+    MainLogo,
 } from 'react-components';
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { toMap } from 'proton-shared/lib/helpers/object';
@@ -74,7 +74,7 @@ const ContactsContainer = ({ location, history }) => {
         const contactGroup = contactGroups.find(({ ID }) => ID === contactGroupID);
         return {
             contactGroupName: contactGroup.Name,
-            totalContactsInGroup: contacts.filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID)).length
+            totalContactsInGroup: contacts.filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID)).length,
         };
     }, [contacts, contactGroups, contactGroupID]);
 
@@ -130,7 +130,7 @@ const ContactsContainer = ({ location, history }) => {
             return {
                 ...contact,
                 emails: (contactEmailsMap[ID] || []).map(({ Email }) => Email),
-                isChecked: !!checkedContacts[ID]
+                isChecked: !!checkedContacts[ID],
             };
         });
     }, [filteredContacts, checkedContacts, contactEmailsMap]);
@@ -148,9 +148,7 @@ const ContactsContainer = ({ location, history }) => {
     }, [filteredContacts, filteredCheckedIDs]);
 
     const activeIDs = useMemo(() => {
-        {
-            return !filteredCheckedIDs.length && contactID ? [contactID] : filteredCheckedIDs;
-        }
+        return !filteredCheckedIDs.length && contactID ? [contactID] : filteredCheckedIDs;
     }, [filteredCheckedIDs, contactID]);
 
     const handleCheck = (contactIDs = [], checked = false) => {
@@ -355,7 +353,7 @@ const ContactsContainer = ({ location, history }) => {
 
 ContactsContainer.propTypes = {
     location: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
 };
 
 export default ContactsContainer;
