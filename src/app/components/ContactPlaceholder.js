@@ -143,7 +143,11 @@ const ContactPlaceholder = ({
     if (selectedContacts) {
         const totalContactsText = (
             <b key="total-contacts">
-                {c('Info').ngettext(msgid`1 contact`, `${selectedContacts} contacts`, selectedContacts)}
+                {c('Info').ngettext(
+                    msgid`${selectedContacts} contact`,
+                    `${selectedContacts} contacts`,
+                    selectedContacts
+                )}
             </b>
         );
 
