@@ -11,7 +11,7 @@ import {
     AddContactsApiResponse,
     AddContactsApiResponses,
     EncryptedContact,
-    ImportContactsModel
+    ImportContactsModel,
 } from '../../interfaces/Import';
 import { IMPORT_CONTACT_ERROR_TYPE, ImportContactError } from './ImportContactError';
 
@@ -36,24 +36,24 @@ const submitContacts = async (contacts: EncryptedContact[], labels: CATEGORIES, 
             ...addContacts({
                 Contacts: contacts.map(({ contact }) => contact),
                 Overwrite: overwrite,
-                Labels: labels
+                Labels: labels,
             }),
             timeout: HOUR,
-            silence: true
+            silence: true,
         });
         responses = Responses;
     } catch (error) {
         const { Code = 0, Error = error.message } = error.data || {};
         responses = contacts.map((contact, index) => ({
             Index: index,
-            Response: { Code, Error }
+            Response: { Code, Error },
         }));
     }
 
     return responses.map((response): EncryptedContact | ImportContactError => {
         const {
             Index,
-            Response: { Error: errorMessage, Code }
+            Response: { Error: errorMessage, Code },
         } = response;
         if (Code === SINGLE_SUCCESS) {
             return contacts[Index];
@@ -80,7 +80,7 @@ export const processInBatches = async ({
     keyPair,
     api,
     signal,
-    onProgress
+    onProgress,
 }: ProcessData) => {
     const batches = chunk(contacts, BATCH_SIZE);
     const promises = [];
@@ -95,7 +95,7 @@ export const processInBatches = async ({
         const batchedContacts = batches[i];
         const [result] = await Promise.all([
             Promise.all(batchedContacts.map((contacts) => encryptContact(contacts, keyPair))),
-            wait(100)
+            wait(100),
         ]);
         const { errors, rest: encrypted } = splitErrors(result);
         if (signal.aborted) {

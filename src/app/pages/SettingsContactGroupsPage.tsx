@@ -17,9 +17,9 @@ export const getContactGroupsPage = () => {
         subsections: [
             {
                 text: c('Title').t`Contact groups`,
-                id: 'contacts'
-            }
-        ]
+                id: 'contacts',
+            },
+        ],
     };
 };
 

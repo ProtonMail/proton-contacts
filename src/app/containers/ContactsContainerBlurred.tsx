@@ -8,12 +8,12 @@ import {
     useAppTitle,
     Searchbox,
     SettingsButton,
-    MainLogo
+    MainLogo,
 } from 'react-components';
 
+import { noop } from 'proton-shared/lib/helpers/function';
 import ContactToolbar from '../components/ContactToolbar';
 import ContactsSidebar from '../content/ContactsSidebar';
-import { noop } from 'proton-shared/lib/helpers/function';
 
 const ContactsContainerBlurred = () => {
     const { isDesktop, isNarrow } = useActiveBreakpoint();
@@ -41,7 +41,6 @@ const ContactsContainerBlurred = () => {
     const sidebar = (
         <ContactsSidebar
             logo={logo}
-            history={history}
             user={user}
             expanded={expanded}
             onToggleExpand={noop}

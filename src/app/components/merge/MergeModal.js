@@ -20,7 +20,7 @@ const MergeModal = ({ contacts, contactID, userKeysList, onMerged, ...rest }) =>
         beDeleted: contacts.flat().reduce((acc, { ID }) => {
             acc[ID] = false;
             return acc;
-        }, {})
+        }, {}),
     }));
 
     const { orderedContacts, isChecked, beDeleted } = model;
@@ -82,7 +82,7 @@ const MergeModal = ({ contacts, contactID, userKeysList, onMerged, ...rest }) =>
                 ),
                 submit,
                 onSubmit: handleSubmit,
-                ...rest
+                ...rest,
             };
         }
 
@@ -118,7 +118,7 @@ const MergeModal = ({ contacts, contactID, userKeysList, onMerged, ...rest }) =>
                 onMerged?.();
                 rest.onClose();
             },
-            ...rest
+            ...rest,
         };
     })();
 
@@ -129,7 +129,7 @@ MergeModal.propTypes = {
     contacts: PropTypes.arrayOf(PropTypes.array).isRequired,
     contactID: PropTypes.string,
     userKeysList: PropTypes.array.isRequired,
-    onMerged: PropTypes.func
+    onMerged: PropTypes.func,
 };
 
 export default MergeModal;

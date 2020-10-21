@@ -1,70 +1,15 @@
 import Papa from 'papaparse';
 import isTruthy from 'proton-shared/lib/helpers/isTruthy';
-import { ContactProperties, ContactValue } from 'proton-shared/lib/interfaces/contacts';
-import { ContactPropertyWithDisplay, ParsedCsvContacts } from '../interfaces/Import';
-import { standarize, combine, display, toPreVcard } from './csvFormat';
+import { ContactProperties } from 'proton-shared/lib/interfaces/contacts';
 import { sortByPref } from 'proton-shared/lib/contacts/properties';
-
-/** NOTATION
- *
- * Because the words 'property' and 'contact' are used several times in this file with different
- * meanings depending on the context, let us establish here those context meanings.
- *
- * "csv property": The first row of a csv file is made of several headers.
- *                 We call them csv properties.
- *                 E.g. 'First Name', 'Last Name', 'Email 2 Address'
- *
- * "csv contact": Each row of a csv file (except for the first one) is made of string values
- *                that correspond to the property in the header. We call the array made of
- *                these values a csv contact.
- *                E.g. ['john', 'doe', 'john.doe@microsoft.com', ...]
- *
- * "csv contact value": Each of the string values inside a csv contact
- *
- * "vCard property": A format we are using for vCard properties in the file './vcard.ts'.
- *                   Namely a vCard property is the JS object:
- *                   { pref, field, group, type, value }
- *                   The key pref stands for preference, and is used when a property is repeated in a vcard
- *                   The key field indicates the field of this property. See the possibilities in './fields'
- *                   The key type indicates the type of this property, which depends on the field. See the possibilities in './types'
- *                   The key group is used for contact groups
- *                   The Key value is the value of the property. An string-valued array for adr and nickname, a string for the rest
- *
- * "vCard contact": An array made of vCard properties
- *
- * "pre-vCard property": Because different csv properties may correspond to a single vCard property,
- *                       to pass from one to the other we go through an intermediate step.
- *                       A pre-vCard property is the JS object:
- *                       { header, checked, pref, field, type, value, combineInto, combineIndex, custom }
- *                       The key "header" equals the csv property.
- *                       The key "checked" will mark whether we want to include this property into the vCard
- *                       The key "combineInto" will be the same for different csv properties that will
- *                       assemble into a single vCard property. For this assembly we need to order
- *                       the properties, which will be indicated by the key "combineIndex".
- *                       The key "custom" is a Boolean that indicates whether the header couldn't be matched
- *                       with a standard vCard property.
- *
- * "pre-vCard contact": An array made of pre-vCard properties
- *
- * "pre-vCards property" An array of pre-vCard properties. These pre-Vcards are to be combined into a single vCard
- * "pre-vCards contact": An array made of arrays of pre-Vcard properties
- */
-
-export interface PreVcardProperty {
-    header: string;
-    checked: boolean;
-    pref?: number;
-    field: string;
-    type?: string;
-    value: ContactValue;
-    combineInto?: string;
-    combineIndex?: number;
-    custom?: boolean;
-}
-
-export type PreVcardsProperty = PreVcardProperty[];
-
-export type PreVcardsContact = PreVcardsProperty[];
+import {
+    ContactPropertyWithDisplay,
+    ParsedCsvContacts,
+    PreVcardProperty,
+    PreVcardsContact,
+    PreVcardsProperty,
+} from '../interfaces/Import';
+import { standarize, combine, display, toPreVcard } from './csvFormat';
 
 interface PapaParseOnCompleteArgs {
     data?: string[][];
@@ -91,7 +36,7 @@ export const readCsv = async (file: File) => {
                 dynamicTyping: false, // If true, numeric and Boolean data will be converted to their type instead of remaining strings.
                 complete: onComplete,
                 error: reject,
-                skipEmptyLines: true // If true, lines that are completely empty will be skipped. An empty line is defined to be one which evaluates to empty string.
+                skipEmptyLines: true, // If true, lines that are completely empty will be skipped. An empty line is defined to be one which evaluates to empty string.
             });
         }
     );
@@ -187,7 +132,7 @@ export const prepare = ({ headers = [], contacts = [] }: ParsedCsvContacts) => {
         indices.forEach((index) => {
             preparedPreVcardContacts.forEach((contact, k) =>
                 contact[i].push({
-                    ...preVcardContacts[k][index]
+                    ...preVcardContacts[k][index],
                 })
             );
         });
@@ -211,7 +156,7 @@ export const toVcard = (preVcards: PreVcardProperty[]): ContactPropertyWithDispl
     }
     const { pref, field, type, custom } = preVcards[0];
     return custom
-        ? { pref, field, type, value: combine['custom'](preVcards), display: display['custom'](preVcards) }
+        ? { pref, field, type, value: combine.custom(preVcards), display: display.custom(preVcards) }
         : { pref, field, type, value: combine[field](preVcards), display: display[field](preVcards) };
 };
 
@@ -219,9 +164,4 @@ export const toVcard = (preVcards: PreVcardProperty[]): ContactPropertyWithDispl
  * Transform pre-vCards contacts into vCard contacts
  */
 export const toVcardContacts = (preVcardsContacts: PreVcardsContact[]): ContactProperties[] =>
-    preVcardsContacts.map((preVcardsContact) =>
-        preVcardsContact
-            .map(toVcard)
-            .filter(isTruthy)
-            .sort(sortByPref)
-    );
+    preVcardsContacts.map((preVcardsContact) => preVcardsContact.map(toVcard).filter(isTruthy).sort(sortByPref));

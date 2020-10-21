@@ -28,7 +28,7 @@ const MergeRow = ({ loadingUserKeys, style, onMerge, ...rest }) => {
 MergeRow.propTypes = {
     style: PropTypes.object,
     onMerge: PropTypes.func,
-    loadingUserKeys: PropTypes.bool
+    loadingUserKeys: PropTypes.bool,
 };
 
 export default MergeRow;

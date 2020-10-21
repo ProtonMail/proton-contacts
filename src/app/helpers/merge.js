@@ -5,7 +5,7 @@ import {
     ONE_OR_MORE_MUST_BE_PRESENT,
     ONE_OR_MORE_MAY_BE_PRESENT,
     PROPERTIES,
-    isCustomField
+    isCustomField,
 } from 'proton-shared/lib/contacts/vcard';
 
 /**
@@ -236,7 +236,7 @@ export const merge = (contacts = []) => {
                     const newGroup = group ? changeGroup[group] : group;
                     if (!mergedProperties[field]) {
                         // an unseen property is directly merged
-                        mergedContact.push({ ...property, pref: pref, group: newGroup });
+                        mergedContact.push({ ...property, pref, group: newGroup });
                         mergedProperties[field] = [value];
                         if (hasPref(field)) {
                             mergedPropertiesPrefs[field] = [pref];
@@ -275,7 +275,7 @@ export const merge = (contacts = []) => {
             mergedContact: [],
             mergedProperties: {},
             mergedPropertiesPrefs: {},
-            mergedGroups: {}
+            mergedGroups: {},
         }
     );
 

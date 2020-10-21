@@ -12,9 +12,9 @@ export const getGeneralSettingsPage = () => {
         subsections: [
             {
                 text: c('Title').t`Contacts`,
-                id: 'contacts'
-            }
-        ]
+                id: 'contacts',
+            },
+        ],
     };
 };
 

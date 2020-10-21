@@ -33,7 +33,7 @@ const MergingModalContent = ({
     totalBeMerged = 0,
     onFinish,
     history,
-    location
+    location,
 }) => {
     const api = useApi();
     const { privateKeys, publicKeys } = useMemo(() => splitKeys(userKeysList), []);
@@ -43,7 +43,7 @@ const MergingModalContent = ({
         mergedAndEncrypted: [],
         failedOnMergeAndEncrypt: [],
         submitted: [],
-        failedOnSubmit: []
+        failedOnSubmit: [],
     });
 
     useEffect(() => {
@@ -61,7 +61,7 @@ const MergingModalContent = ({
             const { Contact } = await apiWithAbort(getContact(ID));
             const { properties, errors: contactErrors } = await decrypt(Contact, {
                 privateKeys,
-                publicKeys
+                publicKeys,
             });
             if (contactErrors.length) {
                 throw new Error(`Error decrypting contact ${ID}`);
@@ -78,7 +78,7 @@ const MergingModalContent = ({
                 // avoid overloading API in case getDecryptedContact is too fast
                 const [decryptedContact] = await Promise.all([
                     getDecryptedContact(ID, { signal }),
-                    wait(API_SAFE_INTERVAL)
+                    wait(API_SAFE_INTERVAL),
                 ]);
                 decryptedGroup.push(decryptedContact);
             }
@@ -98,18 +98,20 @@ const MergingModalContent = ({
             try {
                 const encryptedMergedContact = await encrypt(alreadyMerged, {
                     privateKey: privateKeys[0],
-                    publicKey: publicKeys[0]
+                    publicKey: publicKeys[0],
                 });
                 beSubmittedContacts.push({ contact: encryptedMergedContact });
 
-                !signal.aborted &&
+                if (!signal.aborted) {
                     setModel((model) => ({ ...model, mergedAndEncrypted: [...model.mergedAndEncrypted, ...groupIDs] }));
+                }
             } catch {
-                !signal.aborted &&
+                if (!signal.aborted) {
                     setModel((model) => ({
                         ...model,
-                        failedOnMergeAndEncrypt: [...model.failedOnMergeAndEncrypt, ...groupIDs]
+                        failedOnMergeAndEncrypt: [...model.failedOnMergeAndEncrypt, ...groupIDs],
                     }));
+                }
             }
             return beSubmittedContacts;
         };
@@ -128,20 +130,22 @@ const MergingModalContent = ({
                     const decryptedGroup = await getDecryptedGroup(groupIDs, { signal });
                     const encryptedMergedContact = await encrypt(merge(decryptedGroup), {
                         privateKey: privateKeys[0],
-                        publicKey: publicKeys[0]
+                        publicKey: publicKeys[0],
                     });
                     beSubmittedContacts.push({ contact: encryptedMergedContact });
-                    !signal.aborted &&
+                    if (!signal.aborted) {
                         setModel((model) => ({
                             ...model,
-                            mergedAndEncrypted: [...model.mergedAndEncrypted, ...groupIDs]
+                            mergedAndEncrypted: [...model.mergedAndEncrypted, ...groupIDs],
                         }));
+                    }
                 } catch {
-                    !signal.aborted &&
+                    if (!signal.aborted) {
                         setModel((model) => ({
                             ...model,
-                            failedOnMergeAndEncrypt: [...model.failedOnMergeAndEncrypt, ...groupIDs]
+                            failedOnMergeAndEncrypt: [...model.failedOnMergeAndEncrypt, ...groupIDs],
                         }));
+                    }
                 }
             }
             return beSubmittedContacts;
@@ -160,7 +164,7 @@ const MergingModalContent = ({
                     addContacts({
                         Contacts: contacts.map(({ contact }) => contact),
                         Overwrite: OVERWRITE_CONTACT,
-                        Labels: labels
+                        Labels: labels,
                     })
                 )
             ).Responses.map(({ Response }) => Response);
@@ -171,24 +175,26 @@ const MergingModalContent = ({
 
             for (const {
                 Code,
-                Contact: { ID }
+                Contact: { ID },
             } of responses) {
                 const groupIDs = beMergedModel[ID];
                 const beDeletedAfterMergeIDs = groupIDs.slice(1);
                 if (Code === SINGLE_SUCCESS) {
-                    !signal.aborted &&
+                    if (!signal.aborted) {
                         setModel((model) => ({ ...model, submitted: [...model.submitted, ...groupIDs] }));
+                    }
                     beDeletedBatchIDs.push(...beDeletedAfterMergeIDs);
                     if (!signal.aborted && beDeletedAfterMergeIDs.includes(contactID)) {
                         // if the current contact is merged, update URL
                         history.replace({ ...location, state: { ignoreClose: true }, pathname: `/${ID}` });
                     }
-                } else {
-                    !signal.aborted &&
-                        setModel((model) => ({ ...model, failedOnSubmit: [...model.failedOnSubmit, ...groupIDs] }));
+                } else if (!signal.aborted) {
+                    setModel((model) => ({ ...model, failedOnSubmit: [...model.failedOnSubmit, ...groupIDs] }));
                 }
             }
-            !signal.aborted && !!beDeletedBatchIDs.length && (await apiWithAbort(deleteContacts(beDeletedBatchIDs)));
+            if (!signal.aborted && !!beDeletedBatchIDs.length) {
+                await apiWithAbort(deleteContacts(beDeletedBatchIDs));
+            }
         };
 
         /**
@@ -206,7 +212,7 @@ const MergingModalContent = ({
                 // avoid overloading API in the unlikely case submitBatch is too fast
                 await Promise.all([
                     submitBatch({ contacts: contactBatches[i], labels }, { signal }),
-                    wait(API_SAFE_INTERVAL)
+                    wait(API_SAFE_INTERVAL),
                 ]);
             }
         };
@@ -223,7 +229,7 @@ const MergingModalContent = ({
                 history.replace({
                     ...location,
                     state: { ignoreClose: true },
-                    pathname: `/${beDeletedModel[contactID]}`
+                    pathname: `/${beDeletedModel[contactID]}`,
                 });
             }
         };
@@ -239,7 +245,9 @@ const MergingModalContent = ({
             await submitContacts({ contacts: withCategories, labels: INCLUDE }, { signal });
             await submitContacts({ contacts: withoutCategories, labels: IGNORE }, { signal });
             await deleteMarkedForDeletion({ signal });
-            !signal.aborted && (await onFinish());
+            if (!signal.aborted) {
+                await onFinish();
+            }
         };
 
         withLoading(mergeContacts(abortController));
@@ -255,14 +263,14 @@ const MergingModalContent = ({
             allocated: 0.9,
             successful: model.mergedAndEncrypted.length,
             failed: model.failedOnMergeAndEncrypt.length,
-            total: totalBeMerged
+            total: totalBeMerged,
         },
         {
             allocated: 0.1,
             successful: model.submitted.length,
             failed: model.failedOnSubmit.length,
-            total: totalBeMerged - model.failedOnMergeAndEncrypt.length
-        }
+            total: totalBeMerged - model.failedOnMergeAndEncrypt.length,
+        },
     ]);
     const failed = model.failedOnMergeAndEncrypt.length + model.failedOnSubmit.length === totalBeMerged;
 
@@ -295,7 +303,7 @@ MergingModalContent.propTypes = {
     totalBeMerged: PropTypes.number,
     onFinish: PropTypes.func,
     history: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired
+    location: PropTypes.object.isRequired,
 };
 
 export default withRouter(MergingModalContent);

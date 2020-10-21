@@ -7,7 +7,7 @@ import {
     ContactUpgradeModal,
     SimpleSidebarListItemLink,
     SimpleSidebarListItemHeader,
-    SidebarListItemHeaderButton
+    SidebarListItemHeaderButton,
 } from 'react-components';
 
 const SidebarGroups = ({ displayGroups, onToggle, hasPaidMail, contactGroups, history }) => {
@@ -65,7 +65,7 @@ SidebarGroups.propTypes = {
     onToggle: PropTypes.func,
     contactGroups: PropTypes.array,
     history: PropTypes.object.isRequired,
-    hasPaidMail: PropTypes.number
+    hasPaidMail: PropTypes.number,
 };
 
 export default SidebarGroups;

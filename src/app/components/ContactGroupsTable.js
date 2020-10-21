@@ -15,7 +15,7 @@ import {
     OrderableTableRow,
     ContactGroupModal,
     ContactGroupIcon,
-    ErrorButton
+    ErrorButton,
 } from 'react-components';
 import { c, msgid } from 'ttag';
 import { deleteLabel, orderContactGroup } from 'proton-shared/lib/api/labels';
@@ -42,7 +42,7 @@ const ContactGroupsTable = () => {
         await api(deleteLabel(ID));
         await call();
         createNotification({
-            text: c('Contact group notification').t`Contact group removed`
+            text: c('Contact group notification').t`Contact group removed`,
         });
     };
 
@@ -75,7 +75,7 @@ const ContactGroupsTable = () => {
                             text: c('Action').t`Edit`,
                             onClick() {
                                 createModal(<ContactGroupModal contactGroupID={ID} />);
-                            }
+                            },
                         },
                         {
                             text: c('Action').t`Delete`,
@@ -97,8 +97,8 @@ const ContactGroupsTable = () => {
                                         </Alert>
                                     </ConfirmModal>
                                 );
-                            }
-                        }
+                            },
+                        },
                     ];
                     const cells = [
                         <div key={ID} className="flex">
@@ -111,7 +111,7 @@ const ContactGroupsTable = () => {
                             `${countEmailAddresses} email addresses`,
                             countEmailAddresses
                         ),
-                        <DropdownActions key={ID} className="pm-button--small" list={list} />
+                        <DropdownActions key={ID} className="pm-button--small" list={list} />,
                     ];
                     return <OrderableTableRow key={ID} index={index} cells={cells} />;
                 })}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { PreVcardsContact } from '../../helpers/csv';
+import { PreVcardsContact } from '../../interfaces/Import';
 
 import ImportCsvTableRows from './ImportCsvTableRows';
 
@@ -15,7 +15,7 @@ const ImportCsvTableBody = ({ contact, onToggle, onChangeField, onChangeType }: 
             {contact &&
                 contact.map((preVcards, i) => (
                     <ImportCsvTableRows
-                        key={`${preVcards[0].header}` + i.toString()}
+                        key={`${preVcards[0].header}${i.toString()}`}
                         preVcards={preVcards}
                         onToggle={onToggle(i)}
                         onChangeField={onChangeField(i)}

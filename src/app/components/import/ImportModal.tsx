@@ -10,7 +10,7 @@ import {
     getHasPreVcardsContacts,
     getIsAcceptedExtension,
     getSupportedContacts,
-    splitErrors
+    splitErrors,
 } from '../../helpers/import';
 import { EXTENSION, IMPORT_STEPS, ImportContactsModel } from '../../interfaces/Import';
 
@@ -31,7 +31,7 @@ const getInitialState = (): ImportContactsModel => ({
     totalEncrypted: 0,
     totalImported: 0,
     errors: [],
-    loading: false
+    loading: false,
 });
 
 interface Props {
@@ -95,7 +95,7 @@ const ImportModal = ({ ...rest }: Props) => {
                             step: IMPORT_STEPS.IMPORT_CSV,
                             preVcardsContacts,
                             failure: undefined,
-                            loading: false
+                            loading: false,
                         });
                     } else if (extension === VCF) {
                         const vcards = extractVcards(await readVcf(fileAttached));
@@ -113,7 +113,7 @@ const ImportModal = ({ ...rest }: Props) => {
                             parsedVcardContacts,
                             errors,
                             failure: undefined,
-                            loading: false
+                            loading: false,
                         });
                     } else {
                         throw new ImportFileError(IMPORT_ERROR_TYPE.NO_CSV_OR_VCF_FILE);
@@ -122,7 +122,7 @@ const ImportModal = ({ ...rest }: Props) => {
                     const failure = e instanceof ImportFileError ? e : new ImportFatalError(e);
                     setModel({
                         ...getInitialState(),
-                        failure
+                        failure,
                     });
                 }
             };
@@ -130,7 +130,7 @@ const ImportModal = ({ ...rest }: Props) => {
             return {
                 content: <AttachingModalContent model={model} onAttach={handleAttach} onClear={handleClear} />,
                 submit,
-                onSubmit: handleSubmit
+                onSubmit: handleSubmit,
             };
         }
 
@@ -146,7 +146,7 @@ const ImportModal = ({ ...rest }: Props) => {
                     ...model,
                     step: IMPORT_STEPS.IMPORTING,
                     parsedVcardContacts: toVcardContacts(model.preVcardsContacts || []),
-                    errors: []
+                    errors: [],
                 });
             };
 
@@ -157,7 +157,7 @@ const ImportModal = ({ ...rest }: Props) => {
             return {
                 content: <ImportCsvModalContent model={model} setModel={setModel} />,
                 submit,
-                onSubmit: handleSubmit
+                onSubmit: handleSubmit,
             };
         }
 
@@ -176,7 +176,7 @@ const ImportModal = ({ ...rest }: Props) => {
                 title: c('Title').t`Warning`,
                 content: <WarningModalContent model={model} />,
                 submit,
-                onSubmit: handleSubmit
+                onSubmit: handleSubmit,
             };
         }
 
@@ -199,7 +199,7 @@ const ImportModal = ({ ...rest }: Props) => {
             return {
                 content: <ImportingModalContent model={model} setModel={setModel} onFinish={handleFinish} />,
                 submit,
-                onSubmit: noop
+                onSubmit: noop,
             };
         }
 
@@ -213,7 +213,7 @@ const ImportModal = ({ ...rest }: Props) => {
             return {
                 content: <ImportGroupsModalContent />,
                 submit,
-                onSubmit: handleSubmit
+                onSubmit: handleSubmit,
             };
         }
         // model.step === IMPORT_STEPS.FINISHED at this stage
@@ -223,7 +223,7 @@ const ImportModal = ({ ...rest }: Props) => {
             content: <ImportSummaryModalContent model={model} />,
             submit,
             close: null,
-            onSubmit: rest.onClose
+            onSubmit: rest.onClose,
         };
     })();
 

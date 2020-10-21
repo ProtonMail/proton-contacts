@@ -9,12 +9,12 @@ import {
     ToolbarLink,
     ToolbarButton,
     ToolbarSeparator,
-    ContactGroupDropdown
+    ContactGroupDropdown,
 } from 'react-components';
 import { c } from 'ttag';
 
 import ImportModal from './import/ImportModal';
-import ExportModal from '../components/ExportModal';
+import ExportModal from './ExportModal';
 
 const ContactToolbar = ({
     user,
@@ -25,7 +25,7 @@ const ContactToolbar = ({
     contactEmailsMap = {},
     onMerge,
     userKeysList = [],
-    simplified = false
+    simplified = false,
 }) => {
     const { hasPaidMail } = user;
     const { createModal } = useModals();
@@ -81,7 +81,7 @@ const ContactToolbar = ({
                                 className="toolbar-button toolbar-button--dropdown"
                                 disabled={!contactEmailsSelected.length}
                                 contactEmails={contactEmailsSelected}
-                                forToolbar={true}
+                                forToolbar
                             >
                                 <Icon name="contacts-groups" className="toolbar-icon mauto" />
                             </ContactGroupDropdown>
@@ -127,7 +127,7 @@ ContactToolbar.propTypes = {
     userKeysList: PropTypes.array,
     contactEmailsMap: PropTypes.object,
     onMerge: PropTypes.func,
-    simplified: PropTypes.bool
+    simplified: PropTypes.bool,
 };
 
 export default ContactToolbar;

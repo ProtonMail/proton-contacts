@@ -9,7 +9,7 @@ import {
     SidebarNav,
     SidebarBackButton,
     PrivateHeader,
-    MainLogo
+    MainLogo,
 } from 'react-components';
 import { Route, Switch, Redirect } from 'react-router';
 import { c } from 'ttag';

@@ -1,4 +1,4 @@
-import { PreVcardProperty, PreVcardsContact } from './csv';
+import { PreVcardProperty, PreVcardsContact } from '../interfaces/Import';
 import { getTypeValues } from './types';
 
 // See './csv.ts' for the definition of pre-vCard and pre-vCards contact

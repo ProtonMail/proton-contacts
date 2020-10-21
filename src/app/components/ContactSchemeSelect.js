@@ -13,10 +13,10 @@ const ContactSchemeSelect = ({ value, mailSettings, onChange }) => {
     const options = [
         {
             value: PGP_SCHEMES_MORE.GLOBAL_DEFAULT,
-            text: c('Default encryption scheme').t`Use global default (${defaultValueText})`
+            text: c('Default encryption scheme').t`Use global default (${defaultValueText})`,
         },
         { value: PGP_MIME, text: PGP_SCHEME_TEXT.MIME },
-        { value: PGP_INLINE, text: PGP_SCHEME_TEXT.INLINE }
+        { value: PGP_INLINE, text: PGP_SCHEME_TEXT.INLINE },
     ];
 
     const handleChange = ({ target }) => onChange(target.value);
@@ -27,7 +27,7 @@ const ContactSchemeSelect = ({ value, mailSettings, onChange }) => {
 ContactSchemeSelect.propTypes = {
     value: PropTypes.string,
     mailSettings: PropTypes.object,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
 };
 
 export default ContactSchemeSelect;

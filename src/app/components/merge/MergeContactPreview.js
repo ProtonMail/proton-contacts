@@ -12,7 +12,7 @@ import {
     ContactView,
     useContactEmails,
     useAddresses,
-    useContactGroups
+    useContactGroups,
 } from 'react-components';
 import { splitKeys } from 'proton-shared/lib/keys/keys';
 import { getContact } from 'proton-shared/lib/api/contacts';
@@ -52,7 +52,7 @@ const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeleted
             ...model,
             orderedContacts: model.orderedContacts
                 .map((group) => group.filter(({ ID }) => !beRemovedIDs.includes(ID)))
-                .filter((group) => group.length > 1)
+                .filter((group) => group.length > 1),
         }));
     };
 
@@ -121,7 +121,7 @@ const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeleted
                 title: c('Title').t`Contact Details`,
                 submit,
                 onSubmit: handleSubmit,
-                ...rest
+                ...rest,
             };
         }
 
@@ -156,7 +156,7 @@ const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeleted
             close,
             submit,
             onSubmit: rest.onClose,
-            ...rest
+            ...rest,
         };
     })();
 
@@ -168,7 +168,7 @@ MergeContactPreview.propTypes = {
     userKeysList: PropTypes.array.isRequired,
     beMergedModel: PropTypes.shape({ ID: PropTypes.arrayOf(PropTypes.string) }),
     beDeletedModel: PropTypes.shape({ ID: PropTypes.string }),
-    updateModel: PropTypes.func
+    updateModel: PropTypes.func,
 };
 
 export default MergeContactPreview;

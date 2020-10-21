@@ -4,7 +4,8 @@ import { Checkbox } from 'react-components';
 import SelectImportField from './SelectImportField';
 import SelectImportType from './SelectImportType';
 
-import { PreVcardsProperty, toVcard } from '../../helpers/csv';
+import { PreVcardsProperty } from '../../interfaces/Import';
+import { toVcard } from '../../helpers/csv';
 
 interface Props {
     preVcards: PreVcardsProperty;

@@ -10,7 +10,7 @@ import {
     Toggle,
     SelectKeyFiles,
     useNotifications,
-    ContactKeysTable
+    ContactKeysTable,
 } from 'react-components';
 import { getIsValidForSending, getKeyEncryptStatus } from 'proton-shared/lib/keys/publicKeys';
 
@@ -35,7 +35,7 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
         if (!files.length) {
             return createNotification({
                 type: 'error',
-                text: c('Error').t`Invalid public key file`
+                text: c('Error').t`Invalid public key file`,
             });
         }
         const pinnedKeys = [...model.publicKeys.pinnedKeys];
@@ -49,14 +49,18 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
                     // do not allow to upload private keys
                     createNotification({
                         type: 'error',
-                        text: c('Error').t`Invalid public key file`
+                        text: c('Error').t`Invalid public key file`,
                     });
                     return;
                 }
                 const fingerprint = publicKey.getFingerprint();
                 const { isExpired, isRevoked } = await getKeyEncryptStatus(publicKey);
-                isExpired && expiredFingerprints.add(fingerprint);
-                isRevoked && revokedFingerprints.add(fingerprint);
+                if (isExpired) {
+                    expiredFingerprints.add(fingerprint);
+                }
+                if (isRevoked) {
+                    revokedFingerprints.add(fingerprint);
+                }
                 if (!trustedFingerprints.has(fingerprint)) {
                     trustedFingerprints.add(fingerprint);
                     pinnedKeys.push(publicKey);
@@ -65,7 +69,6 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
                 const indexFound = pinnedKeys.findIndex((publicKey) => publicKey.getFingerprint() === fingerprint);
                 createNotification({ text: c('Info').t`Duplicate key updated`, type: 'warning' });
                 pinnedKeys.splice(indexFound, 1, publicKey);
-                return;
             })
         );
 
@@ -74,7 +77,7 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
             publicKeys: { ...model.publicKeys, pinnedKeys },
             trustedFingerprints,
             expiredFingerprints,
-            revokedFingerprints
+            revokedFingerprints,
         });
     };
 
@@ -125,7 +128,7 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
                                 setModel({
                                     ...model,
                                     encrypt: target.checked,
-                                    sign: target.checked ? true : model.sign
+                                    sign: target.checked ? true : model.sign,
                                 })
                             }
                         />
@@ -151,7 +154,7 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
                                 setModel({
                                     ...model,
                                     sign: target.checked,
-                                    mimeType: ''
+                                    mimeType: '',
                                 })
                             }
                         />
@@ -187,7 +190,7 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
                     />
                 </Label>
                 <Field className="onmobile-mt0-5">
-                    {model.isPGPExternalWithoutWKDKeys && <SelectKeyFiles onFiles={handleUploadKeys} multiple={true} />}
+                    {model.isPGPExternalWithoutWKDKeys && <SelectKeyFiles onFiles={handleUploadKeys} multiple />}
                 </Field>
             </Row>
             {(hasApiKeys || hasPinnedKeys) && <ContactKeysTable model={model} setModel={setModel} />}
@@ -198,7 +201,7 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
 ContactPgpSettings.propTypes = {
     model: PropTypes.object,
     setModel: PropTypes.func,
-    mailSettings: PropTypes.object
+    mailSettings: PropTypes.object,
 };
 
 export default ContactPgpSettings;

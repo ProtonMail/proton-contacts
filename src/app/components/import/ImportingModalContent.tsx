@@ -2,13 +2,13 @@ import React, { useEffect, Dispatch, SetStateAction } from 'react';
 import { c } from 'ttag';
 import { useApi, Alert, useBeforeUnload, useGetUserKeys, DynamicProgress } from 'react-components';
 import { splitKeys } from 'proton-shared/lib/keys/keys';
-import { extractTotals } from './encryptAndSubmit';
-import { processInBatches } from './encryptAndSubmit';
+import { OVERWRITE, CATEGORIES } from 'proton-shared/lib/contacts/constants';
+import { extractTotals, processInBatches } from './encryptAndSubmit';
+
 import { ImportContactError } from './ImportContactError';
 import { ImportFatalError } from './ImportFatalError';
 import { EncryptedContact, IMPORT_STEPS, ImportContactsModel } from '../../interfaces/Import';
 
-import { OVERWRITE, CATEGORIES } from 'proton-shared/lib/contacts/constants';
 import { splitContacts, splitErrors } from '../../helpers/import';
 
 interface Props {
@@ -45,14 +45,14 @@ const ImportingModalContent = ({ model, setModel, onFinish }: Props) => {
                 ...model,
                 totalEncrypted: model.totalEncrypted + encrypted.length,
                 totalImported: model.totalImported + imported.length,
-                errors: [...model.errors, ...errors]
+                errors: [...model.errors, ...errors],
             }));
         };
 
         const process = async () => {
             try {
                 const {
-                    privateKeys: [privateKey]
+                    privateKeys: [privateKey],
                 } = splitKeys(await getUserKeys());
                 const keyPair = { privateKey, publicKey: privateKey.toPublic() };
                 const { withCategories, withoutCategories } = splitContacts(model.parsedVcardContacts);
@@ -63,7 +63,7 @@ const ImportingModalContent = ({ model, setModel, onFinish }: Props) => {
                     keyPair,
                     api: apiWithAbort,
                     signal,
-                    onProgress: handleImportProgress
+                    onProgress: handleImportProgress,
                 });
                 const importedContactsWithoutCategories = await processInBatches({
                     contacts: withoutCategories,
@@ -72,7 +72,7 @@ const ImportingModalContent = ({ model, setModel, onFinish }: Props) => {
                     keyPair,
                     api: apiWithAbort,
                     signal,
-                    onProgress: handleImportProgress
+                    onProgress: handleImportProgress,
                 });
                 const importedContacts = [...importedContactsWithCategories, ...importedContactsWithoutCategories];
                 const { errors } = splitErrors(importedContacts);
@@ -89,7 +89,7 @@ const ImportingModalContent = ({ model, setModel, onFinish }: Props) => {
                     totalImported: 0,
                     errors: [],
                     loading: false,
-                    failure: new ImportFatalError(error)
+                    failure: new ImportFatalError(error),
                 }));
                 if (signal.aborted) {
                     return;

@@ -6,10 +6,11 @@ import {
     SidebarPrimaryButton,
     SidebarList,
     SidebarNav,
-    SimpleSidebarListItemLink
+    SimpleSidebarListItemLink,
 } from 'react-components';
 import { c } from 'ttag';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 
 import SidebarVersion from './SidebarVersion';
 import SidebarGroups from './SidebarGroups';
@@ -22,16 +23,16 @@ const ContactsSidebar = ({
     expanded,
     onToggleExpand,
     onClearSearch,
-    history,
-    contacts
+    contacts,
 }) => {
+    const history = useHistory();
     const { hasPaidMail } = user;
     const { createModal } = useModals();
     const [displayGroups, setDisplayGroups] = useState(true);
 
     const groupsWithCount = contactGroups.map((group) => ({
         ...group,
-        count: contacts.filter((c) => c.LabelIDs.includes(group.ID)).length
+        count: contacts.filter((c) => c.LabelIDs.includes(group.ID)).length,
     }));
 
     return (
@@ -76,7 +77,6 @@ const ContactsSidebar = ({
 };
 
 ContactsSidebar.propTypes = {
-    url: PropTypes.string,
     user: PropTypes.object,
     logo: PropTypes.node,
     totalContacts: PropTypes.number,
@@ -84,8 +84,7 @@ ContactsSidebar.propTypes = {
     expanded: PropTypes.bool,
     onToggleExpand: PropTypes.func,
     onClearSearch: PropTypes.func,
-    history: PropTypes.object.isRequired,
-    contacts: PropTypes.arrayOf(PropTypes.object)
+    contacts: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default ContactsSidebar;
