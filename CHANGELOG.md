@@ -1,4 +1,4 @@
-# [4.0.0-beta.15] - 2020-10-14
+# [4.0.0-beta.16] - 2020-10-26
 
 ## Improvements
 
@@ -8,7 +8,15 @@
 
 -   Various bug fixes
 
----
+# [4.0.0-beta.15] - 2020-10-14
+
+## Improvements
+
+-   Various UI/UX improvements
+
+## Fixes
+
+-   Various bug fixes
 
 # [4.0.0-beta.14] - 2020-09-30
 
