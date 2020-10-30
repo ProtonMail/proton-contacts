@@ -73,7 +73,7 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
     };
 
     return (
-        <div className="flex flex-nowrap onmobile-flex-column boxes-placeholder--2columns">
+        <div className="flex flex-nowrap onmobile-flex-column boxes-placeholder-container">
             <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex-noMinChildren flex-column">
                 <div className="flex-item-fluid">
                     <img src={importSvg} alt="contact-import" className="mb1" />
