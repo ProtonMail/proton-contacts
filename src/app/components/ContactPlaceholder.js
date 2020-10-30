@@ -14,7 +14,7 @@ import contactGroupCardLight from 'design-system/assets/img/shared/empty-address
 import contactGroupCardDark from 'design-system/assets/img/shared/empty-address-book-dark.svg';
 
 import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
-import ExportModal from './ExportModal';
+import ExportModal from './settings/ExportModal';
 import MergeRow from './MergeRow';
 
 const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {

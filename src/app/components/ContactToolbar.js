@@ -5,16 +5,12 @@ import {
     Checkbox,
     Toolbar,
     Tooltip,
-    useModals,
     ToolbarLink,
     ToolbarButton,
     ToolbarSeparator,
     ContactGroupDropdown,
 } from 'react-components';
 import { c } from 'ttag';
-
-import ImportModal from './import/ImportModal';
-import ExportModal from './ExportModal';
 
 const ContactToolbar = ({
     user,
@@ -24,11 +20,9 @@ const ContactToolbar = ({
     activeIDs = [],
     contactEmailsMap = {},
     onMerge,
-    userKeysList = [],
     simplified = false,
 }) => {
     const { hasPaidMail } = user;
-    const { createModal } = useModals();
     const handleCheck = ({ target }) => onCheck(target.checked);
 
     const contactEmailsSelected = useMemo(() => {
@@ -95,24 +89,6 @@ const ContactToolbar = ({
                         disabled={activeIDs.length <= 1}
                     />
                 </div>
-                <div className="flex flex-nowrap">
-                    <ToolbarButton
-                        icon="import"
-                        title={c('Action').t`Import`}
-                        className="toolbar-button"
-                        onClick={() => {
-                            createModal(<ImportModal />);
-                        }}
-                    />
-                    <ToolbarButton
-                        icon="export"
-                        title={c('Action').t`Export all contacts`}
-                        className="toolbar-button"
-                        onClick={() => {
-                            createModal(<ExportModal userKeysList={userKeysList} />);
-                        }}
-                    />
-                </div>
             </div>
         </Toolbar>
     );
@@ -124,7 +100,6 @@ ContactToolbar.propTypes = {
     onCheck: PropTypes.func,
     onDelete: PropTypes.func,
     activeIDs: PropTypes.array,
-    userKeysList: PropTypes.array,
     contactEmailsMap: PropTypes.object,
     onMerge: PropTypes.func,
     simplified: PropTypes.bool,

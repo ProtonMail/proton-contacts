@@ -19,6 +19,7 @@ import OverviewPage, { getOverviewPage } from '../pages/SettingsOverviewPage';
 import GeneralPage, { getGeneralSettingsPage } from '../pages/SettingsGeneralPage';
 import SettingsContactGroupsPage, { getContactGroupsPage } from '../pages/SettingsContactGroupsPage';
 import SidebarVersion from '../content/SidebarVersion';
+import SettingsImportExportPage, { getImportExportPage } from '../pages/SettingsImportExportPage';
 
 interface Props {
     location: H.Location;
@@ -33,7 +34,7 @@ const SettingsContainer = ({ location }: Props) => {
     }, [location.pathname, location.hash]);
 
     const logo = <MainLogo to="/" />;
-    const pages = [getOverviewPage(), getGeneralSettingsPage(), getContactGroupsPage()];
+    const pages = [getOverviewPage(), getGeneralSettingsPage(), getContactGroupsPage(), getImportExportPage()];
 
     const header = (
         <PrivateHeader
@@ -84,6 +85,12 @@ const SettingsContainer = ({ location }: Props) => {
                     path="/settings/groups"
                     render={({ location }) => {
                         return <SettingsContactGroupsPage location={location} setActiveSection={setActiveSection} />;
+                    }}
+                />
+                <Route
+                    path="/settings/import"
+                    render={({ location }) => {
+                        return <SettingsImportExportPage location={location} setActiveSection={setActiveSection} />;
                     }}
                 />
                 <Redirect to="/settings/overview" />

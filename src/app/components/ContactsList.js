@@ -10,6 +10,8 @@ import {
     ContactGroupModal,
 } from 'react-components';
 import { withRouter } from 'react-router';
+import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
+import { DENSITY } from 'proton-shared/lib/constants';
 import { List, AutoSizer } from 'react-virtualized';
 
 import noContactsImgLight from 'design-system/assets/img/shared/empty-address-book.svg';
@@ -18,9 +20,6 @@ import noContactsImgDark from 'design-system/assets/img/shared/empty-address-boo
 import noResultsImgLight from 'design-system/assets/img/shared/no-result-search.svg';
 import noResultsImgDark from 'design-system/assets/img/shared/no-result-search-dark.svg';
 
-import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
-import { DENSITY } from 'proton-shared/lib/constants';
-import ImportModal from './import/ImportModal';
 import ContactRow from './ContactRow';
 
 const ContactsList = ({
@@ -31,6 +30,7 @@ const ContactsList = ({
     onCheck,
     onClearSearch,
     onClearSelection,
+    onImport,
     user,
     userSettings,
     loadingUserKeys,
@@ -48,9 +48,6 @@ const ContactsList = ({
 
     const noContactsImg = getLightOrDark(noContactsImgLight, noContactsImgDark);
 
-    const handleImport = () => {
-        createModal(<ImportModal />);
-    };
     const handleAddContact = () => {
         createModal(<ContactModal history={history} onAdd={onClearSearch} />);
     };
@@ -104,10 +101,10 @@ const ContactsList = ({
                 key="import"
                 type="button"
                 className="color-primary ml0-5 mr0-5 underline"
-                onClick={handleImport}
+                onClick={onImport}
                 disabled={loadingUserKeys}
             >
-                {c('Action').t`Import contact`}
+                {c('Action').t`Import contacts`}
             </button>
         );
 
@@ -221,6 +218,7 @@ ContactsList.propTypes = {
     onCheck: PropTypes.func,
     onClearSearch: PropTypes.func,
     onClearSelection: PropTypes.func,
+    onImport: PropTypes.func,
     user: PropTypes.object,
     userSettings: PropTypes.object,
     loadingUserKeys: PropTypes.bool.isRequired,
