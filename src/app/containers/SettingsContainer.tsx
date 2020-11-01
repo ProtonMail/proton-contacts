@@ -11,9 +11,8 @@ import {
     PrivateHeader,
     MainLogo,
 } from 'react-components';
-import { Route, Switch, Redirect } from 'react-router';
+import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import { c } from 'ttag';
-import * as H from 'history';
 
 import OverviewPage, { getOverviewPage } from '../pages/SettingsOverviewPage';
 import GeneralPage, { getGeneralSettingsPage } from '../pages/SettingsGeneralPage';
@@ -21,10 +20,8 @@ import SettingsContactGroupsPage, { getContactGroupsPage } from '../pages/Settin
 import SidebarVersion from '../content/SidebarVersion';
 import SettingsImportExportPage, { getImportExportPage } from '../pages/SettingsImportExportPage';
 
-interface Props {
-    location: H.Location;
-}
-const SettingsContainer = ({ location }: Props) => {
+const SettingsContainer = () => {
+    const location = useLocation();
     const { state: expanded, toggle: onToggleExpand, set: setExpand } = useToggle();
     const { isNarrow } = useActiveBreakpoint();
     const [activeSection, setActiveSection] = useState('');
@@ -69,30 +66,18 @@ const SettingsContainer = ({ location }: Props) => {
     return (
         <PrivateAppContainer header={header} sidebar={sidebar}>
             <Switch>
-                <Route
-                    path="/settings/overview"
-                    render={() => {
-                        return <OverviewPage />;
-                    }}
-                />
-                <Route
-                    path="/settings/general"
-                    render={({ location }) => {
-                        return <GeneralPage location={location} setActiveSection={setActiveSection} />;
-                    }}
-                />
-                <Route
-                    path="/settings/groups"
-                    render={({ location }) => {
-                        return <SettingsContactGroupsPage location={location} setActiveSection={setActiveSection} />;
-                    }}
-                />
-                <Route
-                    path="/settings/import"
-                    render={({ location }) => {
-                        return <SettingsImportExportPage location={location} setActiveSection={setActiveSection} />;
-                    }}
-                />
+                <Route path="/settings/overview">
+                    <OverviewPage />
+                </Route>
+                <Route path="/settings/general">
+                    <GeneralPage location={location} setActiveSection={setActiveSection} />
+                </Route>
+                <Route path="/settings/groups">
+                    <SettingsContactGroupsPage location={location} setActiveSection={setActiveSection} />
+                </Route>
+                <Route path="/settings/import">
+                    <SettingsImportExportPage location={location} setActiveSection={setActiveSection} />
+                </Route>
                 <Redirect to="/settings/overview" />
             </Switch>
         </PrivateAppContainer>

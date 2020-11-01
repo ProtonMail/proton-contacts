@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { useLocation, useHistory } from 'react-router-dom';
 import { c } from 'ttag';
 import {
     Loader,
@@ -39,7 +39,9 @@ import ContactToolbar from '../components/ContactToolbar';
 import ContactsSidebar from '../content/ContactsSidebar';
 import MergeModal from '../components/merge/MergeModal';
 
-const ContactsContainer = ({ location, history }) => {
+const ContactsContainer = () => {
+    const history = useHistory();
+    const location = useLocation();
     const { state: expanded, toggle: onToggleExpand, set: setExpand } = useToggle();
     const { createModal } = useModals();
     const { isDesktop, isNarrow } = useActiveBreakpoint();
@@ -346,11 +348,6 @@ const ContactsContainer = ({ location, history }) => {
             </PrivateMainArea>
         </PrivateAppContainer>
     );
-};
-
-ContactsContainer.propTypes = {
-    location: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
 };
 
 export default ContactsContainer;
