@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { useApi, useLoading, Alert } from 'react-components';
@@ -32,9 +32,9 @@ const MergingModalContent = ({
     beDeletedModel = {},
     totalBeMerged = 0,
     onFinish,
-    history,
-    location,
 }) => {
+    const history = useHistory();
+    const location = useLocation();
     const api = useApi();
     const { privateKeys, publicKeys } = useMemo(() => splitKeys(userKeysList), []);
 
@@ -302,8 +302,6 @@ MergingModalContent.propTypes = {
     beDeletedModel: PropTypes.shape({ ID: PropTypes.string }),
     totalBeMerged: PropTypes.number,
     onFinish: PropTypes.func,
-    history: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
 };
 
-export default withRouter(MergingModalContent);
+export default MergingModalContent;

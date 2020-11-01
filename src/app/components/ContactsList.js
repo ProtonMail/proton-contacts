@@ -9,7 +9,7 @@ import {
     ContactModal,
     ContactGroupModal,
 } from 'react-components';
-import { withRouter } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
 import { DENSITY } from 'proton-shared/lib/constants';
 import { List, AutoSizer } from 'react-virtualized';
@@ -34,12 +34,12 @@ const ContactsList = ({
     user,
     userSettings,
     loadingUserKeys,
-    history,
     contactID,
     contactGroupID,
-    location,
     isDesktop = true,
 }) => {
+    const history = useHistory();
+    const location = useLocation();
     const listRef = useRef(null);
     const containerRef = useRef(null);
     const [lastChecked, setLastChecked] = useState(); // Store ID of the last contact ID checked
@@ -222,11 +222,9 @@ ContactsList.propTypes = {
     user: PropTypes.object,
     userSettings: PropTypes.object,
     loadingUserKeys: PropTypes.bool.isRequired,
-    history: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
     contactID: PropTypes.string,
     contactGroupID: PropTypes.string,
     isDesktop: PropTypes.bool,
 };
 
-export default withRouter(ContactsList);
+export default ContactsList;
