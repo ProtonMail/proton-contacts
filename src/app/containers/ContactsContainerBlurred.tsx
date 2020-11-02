@@ -62,7 +62,6 @@ const ContactsContainerBlurred = () => {
                 onDelete={noop}
                 simplified={!isDesktop}
                 onMerge={noop}
-                userKeysList={[]}
             />
             <PrivateMainArea hasToolbar className="flex" />
         </PrivateAppContainer>

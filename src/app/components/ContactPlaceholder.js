@@ -14,7 +14,7 @@ import contactGroupCardLight from 'design-system/assets/img/shared/empty-address
 import contactGroupCardDark from 'design-system/assets/img/shared/empty-address-book-dark.svg';
 
 import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
-import ExportModal from './ExportModal';
+import ExportModal from './settings/ExportModal';
 import MergeRow from './MergeRow';
 
 const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
@@ -73,7 +73,7 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
     };
 
     return (
-        <div className="flex flex-nowrap onmobile-flex-column boxes-placeholder--2columns">
+        <div className="flex flex-nowrap onmobile-flex-column boxes-placeholder-container">
             <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex-noMinChildren flex-column">
                 <div className="flex-item-fluid">
                     <img src={importSvg} alt="contact-import" className="mb1" />

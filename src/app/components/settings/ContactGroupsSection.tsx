@@ -2,11 +2,11 @@ import React from 'react';
 import { c } from 'ttag';
 import { PrimaryButton, Alert, useModals, ContactGroupModal } from 'react-components';
 
-import ContactGroupsTable from './ContactGroupsTable';
+import ContactGroupsTable from '../ContactGroupsTable';
 
 const ContactGroupsSection = () => {
     const { createModal } = useModals();
-    const handleCreate = () => createModal(<ContactGroupModal />);
+    const handleCreate = () => createModal(<ContactGroupModal selectedContactEmails={[]} />);
     return (
         <>
             <Alert>{c('Info')

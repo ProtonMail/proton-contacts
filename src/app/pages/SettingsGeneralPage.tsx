@@ -2,7 +2,7 @@ import React from 'react';
 import { c } from 'ttag';
 import { SettingsPropsShared, PrivateMainSettingsArea } from 'react-components';
 
-import ContactsSection from '../components/ContactsSection';
+import ContactsSection from '../components/settings/ContactsSection';
 
 export const getGeneralSettingsPage = () => {
     return {

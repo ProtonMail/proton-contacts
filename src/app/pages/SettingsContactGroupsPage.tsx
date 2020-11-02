@@ -3,7 +3,7 @@ import { c } from 'ttag';
 import { SettingsPropsShared } from 'react-components';
 import { PERMISSIONS } from 'proton-shared/lib/constants';
 
-import ContactGroupsSection from '../components/ContactGroupsSection';
+import ContactGroupsSection from '../components/settings/ContactGroupsSection';
 import PrivateMainSettingsAreaWithPermissions from '../components/PrivateMainSettingsAreaWithPermissions';
 
 const { PAID_MAIL } = PERMISSIONS;

@@ -3,7 +3,8 @@ import { c } from 'ttag';
 import { Row, Field, Label, AutoSaveContactsToggle, Info, useMailSettings } from 'react-components';
 
 const ContactsSection = () => {
-    const [{ AutoSaveContacts } = {}] = useMailSettings();
+    const [mailSettings] = useMailSettings();
+    const { AutoSaveContacts } = mailSettings || {};
     return (
         <Row>
             <Label htmlFor="saveContactToggle">

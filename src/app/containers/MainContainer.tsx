@@ -16,11 +16,12 @@ const MainContainer = () => {
     return (
         <ErrorBoundary>
             <Switch>
-                <Route path="/settings" component={SettingsContainer} />
-                <Route
-                    path="/"
-                    render={({ location, history }) => <ContactsContainer location={location} history={history} />}
-                />
+                <Route path="/settings">
+                    <SettingsContainer />
+                </Route>
+                <Route path="/">
+                    <ContactsContainer />
+                </Route>
                 <Redirect to="/" />
             </Switch>
         </ErrorBoundary>

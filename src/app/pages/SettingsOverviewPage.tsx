@@ -4,6 +4,7 @@ import { PrivateMainArea, OverviewLayout } from 'react-components';
 
 import { getGeneralSettingsPage } from './SettingsGeneralPage';
 import { getContactGroupsPage } from './SettingsContactGroupsPage';
+import { getImportExportPage } from './SettingsImportExportPage';
 
 export const getOverviewPage = () => {
     return {
@@ -14,7 +15,7 @@ export const getOverviewPage = () => {
 };
 
 const SettingsOverviewPage = () => {
-    const pages = [getGeneralSettingsPage(), getContactGroupsPage()];
+    const pages = [getGeneralSettingsPage(), getContactGroupsPage(), getImportExportPage()];
     return (
         <PrivateMainArea className="flex">
             <OverviewLayout pages={pages} title={c('Title').t`Contact settings`} />

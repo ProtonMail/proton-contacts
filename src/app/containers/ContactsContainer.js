@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { useLocation, useHistory } from 'react-router-dom';
 import { c } from 'ttag';
 import {
     Loader,
@@ -38,10 +38,10 @@ import ContactPlaceholder from '../components/ContactPlaceholder';
 import ContactToolbar from '../components/ContactToolbar';
 import ContactsSidebar from '../content/ContactsSidebar';
 import MergeModal from '../components/merge/MergeModal';
-import ImportModal from '../components/import/ImportModal';
-import ExportModal from '../components/ExportModal';
 
-const ContactsContainer = ({ location, history }) => {
+const ContactsContainer = () => {
+    const history = useHistory();
+    const location = useLocation();
     const { state: expanded, toggle: onToggleExpand, set: setExpand } = useToggle();
     const { createModal } = useModals();
     const { isDesktop, isNarrow } = useActiveBreakpoint();
@@ -206,10 +206,9 @@ const ContactsContainer = ({ location, history }) => {
             />
         );
     };
-    const handleImport = () => createModal(<ImportModal />);
-    const handleExport = (contactGroupID) =>
-        createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
-    const handleGroups = () => history.replace('/settings/groups');
+    const handleImport = () => history.push('/settings/import#import');
+    const handleExport = () => history.push('/settings/import#export');
+    const handleGroups = () => history.push('/settings/groups');
 
     const isLoading =
         loadingContactEmails ||
@@ -248,6 +247,7 @@ const ContactsContainer = ({ location, history }) => {
             onCheck={handleCheck}
             onClearSearch={handleClearSearch}
             onClearSelection={handleUncheckAll}
+            onImport={handleImport}
             isDesktop={isDesktop}
         />
     );
@@ -334,7 +334,6 @@ const ContactsContainer = ({ location, history }) => {
                 onDelete={handleDelete}
                 simplified={!!contactID && !isDesktop}
                 onMerge={() => handleMerge(false)}
-                userKeysList={userKeysList}
             />
             <PrivateMainArea hasToolbar className="flex">
                 {isLoading ? (
@@ -349,11 +348,6 @@ const ContactsContainer = ({ location, history }) => {
             </PrivateMainArea>
         </PrivateAppContainer>
     );
-};
-
-ContactsContainer.propTypes = {
-    location: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
 };
 
 export default ContactsContainer;

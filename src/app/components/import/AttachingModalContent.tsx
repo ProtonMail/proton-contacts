@@ -14,9 +14,7 @@ const AttachingModalContent = ({ model, onAttach, onClear }: Props) => {
         <Alert type="error">{model.failure?.message}</Alert>
     ) : (
         <Alert learnMore="https://protonmail.com/support/knowledge-base/adding-contacts/">
-            {c('Description').t`We support importing CSV files from Outlook, Outlook Express, Yahoo! Mail, Hotmail,
-                Eudora and some other apps. We also support importing vCard 4.0. (UTF-8 encoding).
-                The file should have a maximum size of ${MAX_IMPORT_FILE_SIZE_STRING} and have
+            {c('Description').t`The file should have a maximum size of ${MAX_IMPORT_FILE_SIZE_STRING} and have
                 up to ${MAX_IMPORT_CONTACTS_STRING} contacts. If your file is bigger, please split it into smaller files.`}
         </Alert>
     );

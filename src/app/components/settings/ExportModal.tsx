@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { format } from 'date-fns';
 import { useContacts, useApi, FormModal, ResetButton, PrimaryButton, Alert } from 'react-components';
@@ -10,14 +9,19 @@ import { noop } from 'proton-shared/lib/helpers/function';
 import { splitKeys } from 'proton-shared/lib/keys/keys';
 import { prepareContact } from 'proton-shared/lib/contacts/decrypt';
 import { toICAL } from 'proton-shared/lib/contacts/vcard';
-
-import { percentageProgress } from '../helpers/progress';
-import DynamicProgress from './DynamicProgress';
-import { QUERY_EXPORT_MAX_PAGESIZE, API_SAFE_INTERVAL } from '../constants';
+import { CachedKey } from 'proton-shared/lib/interfaces';
+import { Contact } from 'proton-shared/lib/interfaces/contacts';
+import { percentageProgress } from '../../helpers/progress';
+import DynamicProgress from '../DynamicProgress';
+import { QUERY_EXPORT_MAX_PAGESIZE, API_SAFE_INTERVAL } from '../../constants';
 
 const DOWNLOAD_FILENAME = 'protonContacts';
 
-const ExportFooter = ({ loading }) => {
+interface FooterProps {
+    loading: boolean;
+}
+
+const ExportFooter = ({ loading }: FooterProps) => {
     return (
         <>
             <ResetButton>{c('Action').t`Cancel`}</ResetButton>
@@ -28,47 +32,50 @@ const ExportFooter = ({ loading }) => {
     );
 };
 
-ExportFooter.propTypes = {
-    loading: PropTypes.bool,
-};
+interface Props {
+    contactGroupID?: string;
+    userKeysList: CachedKey[];
+    onSave?: () => void;
+    onClose?: () => void;
+}
 
-const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...rest }) => {
+const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...rest }: Props) => {
     const api = useApi();
-    const [contacts, loadingContacts] = useContacts();
+    const [contacts = [], loadingContacts] = useContacts() as [Contact[], boolean, Error];
 
-    const [contactsExported, addSuccess] = useState([]);
-    const [contactsNotExported, addError] = useState([]);
+    const [contactsExported, addSuccess] = useState<string[]>([]);
+    const [contactsNotExported, addError] = useState<string[]>([]);
 
     const countContacts = LabelID
         ? contacts.filter(({ LabelIDs = [] }) => LabelIDs.includes(LabelID)).length
         : contacts.length;
     const apiCalls = Math.ceil(countContacts / QUERY_EXPORT_MAX_PAGESIZE);
 
-    const handleSave = (vcards) => {
+    const handleSave = (vcards: string[]) => {
         const allVcards = vcards.join('\n');
         const blob = new Blob([allVcards], { type: 'data:text/plain;charset=utf-8;' });
         downloadFile(blob, `${DOWNLOAD_FILENAME}-${format(Date.now(), 'yyyy-MM-dd')}.vcf`);
         onSave();
-        rest.onClose();
+        rest.onClose?.();
     };
 
     useEffect(() => {
         const abortController = new AbortController();
-        const apiWithAbort = (config) => api({ ...config, signal: abortController.signal });
+        const apiWithAbort = (config: any) => api({ ...config, signal: abortController.signal });
 
         const { publicKeys, privateKeys } = splitKeys(userKeysList);
 
-        const exportBatch = async (i, { signal }) => {
-            const { Contacts: contacts } = await apiWithAbort(
+        const exportBatch = async (i: number, { signal }: AbortController) => {
+            const { Contacts: contacts } = (await apiWithAbort(
                 queryContactExport({ LabelID, Page: i, PageSize: QUERY_EXPORT_MAX_PAGESIZE })
-            );
+            )) as { Contacts: Contact[] };
             for (const { Cards, ID } of contacts) {
                 if (signal.aborted) {
                     return;
                 }
                 try {
                     const { properties: contactDecrypted = [], errors = [] } = await prepareContact(
-                        { Cards },
+                        { Cards } as Contact,
                         { publicKeys, privateKeys }
                     );
 
@@ -92,7 +99,7 @@ const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...
             }
         };
 
-        const exportContacts = async (abortController) => {
+        const exportContacts = async (abortController: AbortController) => {
             for (let i = 0; i < apiCalls; i++) {
                 // avoid overloading API in the unlikely case exportBatch is too fast
                 await Promise.all([exportBatch(i, abortController), wait(API_SAFE_INTERVAL)]);
@@ -101,7 +108,7 @@ const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...
 
         exportContacts(abortController).catch((error) => {
             if (error.name !== 'AbortError') {
-                rest.onClose(); // close the modal; otherwise it is left hanging in there
+                rest.onClose?.(); // close the modal; otherwise it is left hanging in there
                 throw error;
             }
         });
@@ -136,12 +143,6 @@ const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...
             />
         </FormModal>
     );
-};
-
-ExportModal.propTypes = {
-    onSave: PropTypes.func,
-    contactGroupID: PropTypes.string,
-    userKeysList: PropTypes.array,
 };
 
 export default ExportModal;
