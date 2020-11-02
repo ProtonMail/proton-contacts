@@ -1,3 +1,10 @@
+# [4.0.0 - Beta 17] - 2020-11-04
+
+## Improvements
+
+-   The import and export features were moved to the settings of the ProtonContacts app
+-   The layout of the welcome message in the right hand pane has been updated to improve readability on small screens
+
 # [4.0.0-beta.16] - 2020-10-26
 
 ## Improvements
