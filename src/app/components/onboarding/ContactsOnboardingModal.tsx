@@ -20,9 +20,9 @@ const ContactsOnboardingModal = (props: any) => {
                     close={null}
                 >
                     <OnboardingContent
-                        img={<img src={getLightOrDark(onboardingWelcome, onboardingWelcomeDark)} alt={appName} />}
-                        text={c('Onboarding ProtonContacts')
+                        description={c('Onboarding ProtonContacts')
                             .t`Even the people you interact with benefit from Proton privacy. Apart from their email address and display name, all other contact details are protected with end-to-end encryption.`}
+                        img={<img src={getLightOrDark(onboardingWelcome, onboardingWelcomeDark)} alt={appName} />}
                     />
                 </OnboardingStep>
             )}
