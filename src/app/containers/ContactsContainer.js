@@ -210,6 +210,9 @@ const ContactsContainer = () => {
     const handleExport = () => history.push('/settings/import#export');
     const handleGroups = () => history.push('/settings/groups');
 
+    const showToolbar = !(isNarrow && contactID);
+    const backUrl = showToolbar ? undefined : '/';
+
     const isLoading =
         loadingContactEmails ||
         loadingContacts ||
@@ -286,6 +289,7 @@ const ContactsContainer = () => {
             onToggleExpand={onToggleExpand}
             search={search}
             isNarrow={isNarrow}
+            backUrl={backUrl}
             history={history}
             searchDropdown={
                 <SearchDropdown
@@ -325,16 +329,18 @@ const ContactsContainer = () => {
 
     return (
         <PrivateAppContainer header={header} sidebar={sidebar}>
-            <ContactToolbar
-                user={user}
-                contactEmailsMap={contactEmailsMap}
-                activeIDs={activeIDs}
-                checked={hasCheckedAllFiltered}
-                onCheck={handleCheckAllFiltered}
-                onDelete={handleDelete}
-                simplified={!!contactID && !isDesktop}
-                onMerge={() => handleMerge(false)}
-            />
+            {showToolbar ? (
+                <ContactToolbar
+                    user={user}
+                    contactEmailsMap={contactEmailsMap}
+                    activeIDs={activeIDs}
+                    checked={hasCheckedAllFiltered}
+                    onCheck={handleCheckAllFiltered}
+                    onDelete={handleDelete}
+                    simplified={!!contactID && !isDesktop}
+                    onMerge={() => handleMerge(false)}
+                />
+            ) : undefined}
             <PrivateMainArea hasToolbar className="flex">
                 {isLoading ? (
                     <Loader />
