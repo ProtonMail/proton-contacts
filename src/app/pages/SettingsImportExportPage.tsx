@@ -45,8 +45,8 @@ const SettingsImportExportPage = ({ setActiveSection, location }: SettingsPropsS
                         text: c('Info').t`Import your old messages and folders into ProtonMail.`,
                         link: (
                             <AppLink
-                                to="/import"
-                                toApp={APPS.PROTONMAIL_SETTINGS}
+                                to="/settings/import"
+                                toApp={APPS.PROTONMAIL}
                                 className="pm-button--primary mtauto"
                             >
                                 {c('Action').t`Import mailbox`}
