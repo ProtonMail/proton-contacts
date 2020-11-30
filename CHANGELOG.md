@@ -1,3 +1,14 @@
+# [4.0.0 - Beta 18] - 2020-12-02
+
+## Improvements
+
+-   Better handling of searching/filtering queries and matching results
+-   Various UI/UX improvements
+
+## Fixes
+
+-   Various bug fixes
+
 # [4.0.0 - Beta 17] - 2020-11-04
 
 ## Improvements
