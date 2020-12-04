@@ -42,6 +42,7 @@ const ContactsSidebar = ({
             onToggleExpand={onToggleExpand}
             primary={
                 <SidebarPrimaryButton
+                    className="nomobile"
                     onClick={() => createModal(<ContactModal history={history} onAdd={onClearSearch} />)}
                 >{c('Action').t`New contact`}</SidebarPrimaryButton>
             }
