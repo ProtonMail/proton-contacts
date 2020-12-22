@@ -63,7 +63,7 @@ const ContactGroupsTable = () => {
     const header = [c('Table header').t`Name`, c('Table header').t`Group size`, c('Table header').t`Actions`];
 
     return (
-        <OrderableTable className="noborder" onSortEnd={handleSortEnd}>
+        <OrderableTable className="noborder pm-simple-table--has-actions" onSortEnd={handleSortEnd}>
             <OrderableTableHeader cells={header} />
             <OrderableTableBody>
                 {list.map(({ ID, Name, Color }, index) => {
