@@ -1,4 +1,5 @@
 import React from 'react';
+import { c } from 'ttag';
 import PropTypes from 'prop-types';
 import { classnames, Checkbox, ContactGroupLabels } from 'react-components';
 import { DENSITY } from 'proton-shared/lib/constants';
@@ -58,7 +59,11 @@ const ContactRow = ({ style, userSettings, contactID, hasPaidMail, contactGroups
                         className="flex flex-items-center item-secondline mw100 ellipsis item-sender--smaller"
                         title={emails.join(', ')}
                     >
-                        {addPlus(emails)}
+                        {emails.length ? (
+                            addPlus(emails)
+                        ) : (
+                            <span className="placeholder">{c('Info').t`No email address`}</span>
+                        )}
                     </div>
                 </div>
             </div>
