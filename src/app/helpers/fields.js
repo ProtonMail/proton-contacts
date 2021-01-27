@@ -9,7 +9,9 @@ export const getAllFields = () => [
     { text: c('Contact field label').t`Address`, value: 'adr' },
     { text: c('Contact field label').t`Photo`, value: 'photo' },
     { text: c('Contact field label').t`Organization`, value: 'org' },
+    // translator: this field is used to specify the birth date of the contact
     { text: c('Contact field label').t`Birthday`, value: 'bday' },
+    // translator: this field is used to specify the anniversary date of the contact (e.g. marriage, or equivalent)
     { text: c('Contact field label').t`Anniversary`, value: 'anniversary' },
     { text: c('Contact field label').t`Title`, value: 'title' },
     { text: c('Contact field label').t`Role`, value: 'role' },
@@ -34,7 +36,9 @@ export const getEditableFields = () => [
     { text: c('Contact field label').t`Address`, value: 'adr' },
     { text: c('Contact field label').t`Photo`, value: 'photo' },
     { text: c('Contact field label').t`Organization`, value: 'org' },
+    // translator: this field is used to specify the birth date of the contact
     { text: c('Contact field label').t`Birthday`, value: 'bday' },
+    // translator: this field is used to specify the anniversary date of the contact (e.g. marriage, or equivalent)
     { text: c('Contact field label').t`Anniversary`, value: 'anniversary' },
     { text: c('Contact field label').t`Title`, value: 'title' },
     { text: c('Contact field label').t`Role`, value: 'role' },
@@ -50,7 +54,9 @@ export const getEditableFields = () => [
 export const getOtherInformationFields = () => [
     { text: c('Contact field label').t`Photo`, value: 'photo' },
     { text: c('Contact field label').t`Organization`, value: 'org' },
+    // translator: this field is used to specify the birth date of the contact
     { text: c('Contact field label').t`Birthday`, value: 'bday' },
+    // translator: this field is used to specify the anniversary date of the contact (e.g. marriage, or equivalent)
     { text: c('Contact field label').t`Anniversary`, value: 'anniversary' },
     { text: c('Contact field label').t`Title`, value: 'title' },
     { text: c('Contact field label').t`Role`, value: 'role' },
@@ -73,7 +79,9 @@ export const getAllFieldLabels = () => ({
     adr: c('Contact field label').t`Address`,
     photo: c('Contact field label').t`Photo`,
     org: c('Contact field label').t`Organization`,
+    // translator: this field is used to specify the birth date of the contact
     bday: c('Contact field label').t`Birthday`,
+    // translator: this field is used to specify the anniversary date of the contact (e.g. marriage, or equivalent)
     anniversary: c('Contact field label').t`Anniversary`,
     title: c('Contact field label').t`Title`,
     role: c('Contact field label').t`Role`,
