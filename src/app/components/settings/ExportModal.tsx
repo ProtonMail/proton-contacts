@@ -9,7 +9,7 @@ import { noop } from 'proton-shared/lib/helpers/function';
 import { splitKeys } from 'proton-shared/lib/keys/keys';
 import { prepareContact } from 'proton-shared/lib/contacts/decrypt';
 import { toICAL } from 'proton-shared/lib/contacts/vcard';
-import { CachedKey } from 'proton-shared/lib/interfaces';
+import { DecryptedKey } from 'proton-shared/lib/interfaces';
 import { Contact } from 'proton-shared/lib/interfaces/contacts';
 import { percentageProgress } from '../../helpers/progress';
 import DynamicProgress from '../DynamicProgress';
@@ -34,7 +34,7 @@ const ExportFooter = ({ loading }: FooterProps) => {
 
 interface Props {
     contactGroupID?: string;
-    userKeysList: CachedKey[];
+    userKeysList: DecryptedKey[];
     onSave?: () => void;
     onClose?: () => void;
 }
