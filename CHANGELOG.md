@@ -1,3 +1,11 @@
+# [4.0.0 - Beta 19] - 2021-02-03
+
+## Improvements
+
+-   When merging contacts, only the first display name will be used instead of the display names of all merged contacts
+-   Improved the contact search to respect special characters and umlauts
+-   When clicking on a contact group, the view is now filtered by the respective group
+
 # [4.0.0 - Beta 18] - 2020-12-03
 
 ## Improvements
