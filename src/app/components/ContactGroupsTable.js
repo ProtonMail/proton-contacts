@@ -101,10 +101,11 @@ const ContactGroupsTable = () => {
                         },
                     ];
                     const cells = [
-                        <div key={ID} className="flex">
-                            <span className="ellipsis">
-                                <ContactGroupIcon name={Name} color={Color} /> {Name}
+                        <div key={ID} className="flex flex-items-center flex-nowrap">
+                            <span className="flex-item-noshrink mr0-5">
+                                <ContactGroupIcon className="flex" name={Name} color={Color} />
                             </span>
+                            <span className="ellipsis">{Name}</span>
                         </div>,
                         c('Info').ngettext(
                             msgid`${countEmailAddresses} email address`,
