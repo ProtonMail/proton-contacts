@@ -189,7 +189,7 @@ const ContactPgpSettings = ({ model, setModel, mailSettings }) => {
                             .t`Upload a public key to enable sending end-to-end encrypted emails to this email`}
                     />
                 </Label>
-                <Field className="onmobile-mt0-5">
+                <Field className="on-mobile-mt0-5">
                     {model.isPGPExternalWithoutWKDKeys && <SelectKeyFiles onFiles={handleUploadKeys} multiple />}
                 </Field>
             </Row>

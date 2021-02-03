@@ -8,19 +8,21 @@ const NameTableCell = ({ name, contactID, highlightedID, checked, deleted, greye
     const handleToggle = () => onToggle(contactID);
 
     return (
-        <div className="flex flex-nowrap flex-items-center">
+        <div className="flex flex-nowrap flex-align-items-center">
             <Checkbox
                 checked={checked}
                 onChange={handleToggle}
-                className={`flex flex-items-center flex-item-noshrink mr0-5 ${deleted ? 'nonvisible' : ''}`}
+                className={`flex flex-align-items-center flex-item-noshrink mr0-5 ${
+                    deleted ? 'visibility-hidden' : ''
+                }`}
             />
             <span
                 className={classnames([
-                    'mw100',
-                    'inbl',
-                    'ellipsis',
+                    'max-w100',
+                    'inline-block',
+                    'text-ellipsis',
                     opaqueClassName(greyedOut),
-                    contactID === highlightedID && 'bold',
+                    contactID === highlightedID && 'text-bold',
                 ])}
             >
                 {name}

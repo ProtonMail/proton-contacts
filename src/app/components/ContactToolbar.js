@@ -44,14 +44,14 @@ const ContactToolbar = ({
 
     return (
         <Toolbar>
-            <div className="flex-item-fluid flex flex-spacebetween">
+            <div className="flex-item-fluid flex flex-justify-space-between">
                 <div className="flex flex-nowrap">
                     <Tooltip
                         title={checked ? c('Action').t`Deselect all` : c('Action').t`Select all`}
                         className="flex flex-item-noshrink"
                     >
                         <Checkbox
-                            className="flex pm-select-all ml0-5 pl1 pr1"
+                            className="flex select-all ml0-5 pl1 pr1"
                             checked={checked}
                             id="idSelectAll"
                             onChange={handleCheck}

@@ -9,13 +9,13 @@ const EmailsTableCell = ({ contactID, emails = [], highlightedID, greyedOut }) =
         <div
             className={classnames([
                 'flex',
-                'flex-items-center',
-                'mw100',
+                'flex-align-items-center',
+                'max-w100',
                 opaqueClassName(greyedOut),
-                contactID === highlightedID && 'bold',
+                contactID === highlightedID && 'text-bold',
             ])}
         >
-            <span className="inbl ellipsis">{emails.map((email) => `<${email}>`).join(', ')}</span>
+            <span className="inline-block text-ellipsis">{emails.map((email) => `<${email}>`).join(', ')}</span>
         </div>
     );
 };

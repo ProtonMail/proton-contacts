@@ -44,11 +44,7 @@ const SettingsImportExportPage = ({ setActiveSection, location }: SettingsPropsS
                         icon: 'email',
                         text: c('Info').t`Import your old messages and folders into ProtonMail.`,
                         link: (
-                            <AppLink
-                                to="/settings/import"
-                                toApp={APPS.PROTONMAIL}
-                                className="pm-button--primary mtauto"
-                            >
+                            <AppLink to="/settings/import" toApp={APPS.PROTONMAIL} className="button--primary mtauto">
                                 {c('Action').t`Import mailbox`}
                             </AppLink>
                         ),
@@ -60,7 +56,7 @@ const SettingsImportExportPage = ({ setActiveSection, location }: SettingsPropsS
                             <AppLink
                                 to="/settings/calendars"
                                 toApp={APPS.PROTONCALENDAR}
-                                className="pm-button--primary mtauto"
+                                className="button--primary mtauto"
                             >
                                 {c('Action').t`Import calendar`}
                             </AppLink>

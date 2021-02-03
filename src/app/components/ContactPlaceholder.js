@@ -19,39 +19,39 @@ import MergeRow from './MergeRow';
 
 const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
     return (
-        <div className="flex flex-nowrap onmobile-flex-column boxes-placeholder-container">
-            <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex-noMinChildren flex-column">
+        <div className="flex flex-nowrap on-mobile-flex-column boxes-placeholder-container">
+            <div className="bordered-container flex-item-fluid mr1 on-mobile-mr0 on-mobile-mb1 p1 text-center flex-no-min-children flex-column">
                 <div className="flex-item-fluid">
                     <img src={importSvg} alt="contact-import" className="mb1" />
-                    <div className="bold">{c('Title').t`Import contacts`}</div>
+                    <div className="text-bold">{c('Title').t`Import contacts`}</div>
                     <p>{c('Info')
                         .t`Add contacts to your ProtonMail account by importing them from a CSV or vCard file.`}</p>
                 </div>
                 <div className="flex-item-noshrink mt2 boxes-placeholder-button">
-                    <PrimaryButton className="bold" onClick={onImport} disabled={loadingUserKeys}>{c('Action')
+                    <PrimaryButton className="text-bold" onClick={onImport} disabled={loadingUserKeys}>{c('Action')
                         .t`Import`}</PrimaryButton>
                 </div>
             </div>
-            <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex-noMinChildren flex-column">
+            <div className="bordered-container flex-item-fluid mr1 on-mobile-mr0 on-mobile-mb1 p1 text-center flex-no-min-children flex-column">
                 <div className="flex-item-fluid">
                     <img src={exportSvg} alt="contact-export" className="mb1" />
-                    <div className="bold">{c('Title').t`Export contacts`}</div>
+                    <div className="text-bold">{c('Title').t`Export contacts`}</div>
                     <p>{c('Info').t`Create a backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
                 </div>
                 <div className="flex-item-noshrink mt2 boxes-placeholder-button">
-                    <PrimaryButton className="bold" onClick={onExport} disabled={loadingUserKeys}>{c('Action')
+                    <PrimaryButton className="text-bold" onClick={onExport} disabled={loadingUserKeys}>{c('Action')
                         .t`Export`}</PrimaryButton>
                 </div>
             </div>
-            <div className="bordered-container flex-item-fluid onmobile-mr0 onmobile-mb1 p1 aligncenter flex-noMinChildren flex-column">
+            <div className="bordered-container flex-item-fluid on-mobile-mr0 on-mobile-mb1 p1 text-center flex-no-min-children flex-column">
                 <div className="flex-item-fluid">
                     <img src={contactGroupsSvg} alt="contact-groups" className="mb1" />
-                    <div className="bold">{c('Title').t`Manage groups`}</div>
+                    <div className="text-bold">{c('Title').t`Manage groups`}</div>
                     <p>{c('Info')
                         .t`Use groups to send email to a list of addresses you regularly communicate with.`}</p>
                 </div>
                 <div className="flex-item-noshrink mt2 boxes-placeholder-button">
-                    <PrimaryButton className="bold" onClick={onGroups}>{c('Action').t`Groups`}</PrimaryButton>
+                    <PrimaryButton className="text-bold" onClick={onGroups}>{c('Action').t`Groups`}</PrimaryButton>
                 </div>
             </div>
         </div>
@@ -73,38 +73,38 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
     };
 
     return (
-        <div className="flex flex-nowrap onmobile-flex-column boxes-placeholder-container">
-            <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex-noMinChildren flex-column">
+        <div className="flex flex-nowrap on-mobile-flex-column boxes-placeholder-container">
+            <div className="bordered-container flex-item-fluid mr1 on-mobile-mr0 on-mobile-mb1 p1 text-center flex-no-min-children flex-column">
                 <div className="flex-item-fluid">
                     <img src={importSvg} alt="contact-import" className="mb1" />
-                    <div className="bold">{c('Title').t`Import contacts`}</div>
+                    <div className="text-bold">{c('Title').t`Import contacts`}</div>
                     <p>{c('Info')
                         .t`Add contacts to your ProtonMail account by importing them from a CSV or vCard file.`}</p>
                 </div>
                 <div className="flex-item-noshrink mt2 boxes-placeholder-button">
-                    <PrimaryButton className="bold" onClick={onImport} disabled={loadingUserKeys}>{c('Action')
+                    <PrimaryButton className="text-bold" onClick={onImport} disabled={loadingUserKeys}>{c('Action')
                         .t`Import`}</PrimaryButton>
                 </div>
             </div>
-            <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex-noMinChildren flex-column">
+            <div className="bordered-container flex-item-fluid mr1 on-mobile-mr0 on-mobile-mb1 p1 text-center flex-no-min-children flex-column">
                 <div className="flex-item-fluid">
                     <img src={exportSvg} alt="contact-export" className="mb1" />
-                    <div className="bold">{c('Title').t`Export contacts`}</div>
+                    <div className="text-bold">{c('Title').t`Export contacts`}</div>
                     <p>{c('Info').t`Create a backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
                 </div>
                 <div className="flex-item-noshrink mt2 boxes-placeholder-button">
-                    <PrimaryButton className="bold" onClick={onExport} disabled={loadingUserKeys}>{c('Action')
+                    <PrimaryButton className="text-bold" onClick={onExport} disabled={loadingUserKeys}>{c('Action')
                         .t`Export`}</PrimaryButton>
                 </div>
             </div>
-            <div className="bordered-container flex-item-fluid onmobile-mr0 onmobile-mb1 p1 aligncenter flex-noMinChildren flex-column">
+            <div className="bordered-container flex-item-fluid on-mobile-mr0 on-mobile-mb1 p1 text-center flex-no-min-children flex-column">
                 <div className="flex-item-fluid">
                     <img src={upgradeSvg} alt="contact-unlock-features" className="mb1" />
-                    <div className="bold">{c('Title').t`Unlock features`}</div>
+                    <div className="text-bold">{c('Title').t`Unlock features`}</div>
                     <p>{c('Info').t`Upgrade to a paid plan to manage contact groups.`}</p>
                 </div>
                 <div className="flex-item-noshrink mt2 boxes-placeholder-button">
-                    <PrimaryButton className="bold" onClick={handleUpgrade}>
+                    <PrimaryButton className="text-bold" onClick={handleUpgrade}>
                         {c('Action').t`Upgrade`}
                     </PrimaryButton>
                 </div>
@@ -153,9 +153,9 @@ const ContactPlaceholder = ({
 
         return (
             <div className="p2 view-column-detail flex flex-item-fluid scroll-if-needed">
-                <div className="aligncenter center mbauto mtauto">
+                <div className="text-center center mbauto mtauto">
                     <div className="mb2">{c('Info').jt`You selected ${totalContactsText} from your address book.`}</div>
-                    <div className="aligncenter mb2">
+                    <div className="text-center mb2">
                         <img src={contactGroupCard} alt="contact-group-card" />
                     </div>
                     <div className="mb2">
@@ -182,10 +182,10 @@ const ContactPlaceholder = ({
 
         return (
             <div className="p2 view-column-detail flex flex-item-fluid scroll-if-needed">
-                <div className="aligncenter center mbauto mtauto">
-                    <h1 className="ellipsis lh-standard">{contactGroupName}</h1>
+                <div className="text-center center mbauto mtauto">
+                    <h1 className="text-ellipsis lh-rg">{contactGroupName}</h1>
                     <div className="mb2">{c('Info').jt`You have ${totalContactsText} in this group.`}</div>
-                    <div className="aligncenter mb2">
+                    <div className="text-center mb2">
                         <img src={contactGroupCard} alt="contact-group-card" />
                     </div>
                     <div className="mb2">
@@ -211,7 +211,7 @@ const ContactPlaceholder = ({
 
     return (
         <div className="p2 view-column-detail flex-item-fluid scroll-if-needed">
-            <div className="aligncenter mt2">
+            <div className="text-center mt2">
                 <h1>{c('Title').t`Contacts`}</h1>
                 <div className="mb2">{c('Info').jt`You have ${boldTotalContacts} in your address book`}</div>
                 <div className="mb1">
@@ -219,7 +219,7 @@ const ContactPlaceholder = ({
                         .jt`You can decide whether or not contacts are automatically added to your address book by navigating to ${navigateTo}`}
                 </div>
                 <div className="mb1">
-                    <Link to="/settings" className="inline-flex flex-nowrap nodecoration">
+                    <Link to="/settings" className="inline-flex flex-nowrap text-no-decoration">
                         <Icon className="mr0-5 flex-item-centered-vert" name="settings-master" />
                         <span>{c('Title').t`Settings`}</span>
                     </Link>

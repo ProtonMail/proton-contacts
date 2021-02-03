@@ -25,7 +25,7 @@ const ImportCsvTableRows = ({ preVcards, onToggle, onChangeField, onChangeType }
         <>
             {preVcards.map(({ checked, header }, i) => (
                 <tr key={i.toString()}>
-                    <td className="aligncenter">
+                    <td className="text-center">
                         <Checkbox checked={checked} onChange={() => onToggle(i)} />
                     </td>
                     <td>{header}</td>
