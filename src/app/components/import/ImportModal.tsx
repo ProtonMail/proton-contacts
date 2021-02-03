@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useState } from 'react';
-import { FormModal, PrimaryButton, useEventManager } from 'react-components';
+import React, { ChangeEvent, useState, DragEvent } from 'react';
+import { FormModal, PrimaryButton, useEventManager, onlyDragFiles } from 'react-components';
 import { c } from 'ttag';
 import { extractVcards, readVcf } from 'proton-shared/lib/contacts/vcard';
 import { splitExtension } from 'proton-shared/lib/helpers/file';
@@ -40,6 +40,7 @@ interface Props {
 const ImportModal = ({ ...rest }: Props) => {
     const { call } = useEventManager();
     const [model, setModel] = useState<ImportContactsModel>(getInitialState());
+    const [isDropzoneHovered, setIsDropzoneHovered] = useState(false);
 
     const { content, ...modalProps } = (() => {
         if (model.step <= IMPORT_STEPS.ATTACHED) {
@@ -53,22 +54,50 @@ const ImportModal = ({ ...rest }: Props) => {
                 setModel(getInitialState());
             };
 
+            const handleHover = (hover: boolean) =>
+                onlyDragFiles((event: DragEvent) => {
+                    setIsDropzoneHovered(hover);
+                    event.stopPropagation();
+                });
+
+            const handleFiles = (files: File[]) => {
+                const [fileAttached] = files;
+                const filename = fileAttached.name;
+                const [, ext] = splitExtension(filename);
+                const extension = ext.toLowerCase();
+                if (!getIsAcceptedExtension(extension) || !fileAttached) {
+                    throw new ImportFileError(IMPORT_ERROR_TYPE.NO_CSV_OR_VCF_FILE, filename);
+                }
+                if (fileAttached.size > MAX_IMPORT_FILE_SIZE) {
+                    throw new ImportFileError(IMPORT_ERROR_TYPE.FILE_TOO_BIG, filename);
+                }
+                setModel({ ...model, step: IMPORT_STEPS.ATTACHED, fileAttached, extension, failure: undefined });
+            };
+
+            const onAddFiles = (files: File[]) => {
+                try {
+                    if (!files) {
+                        throw new ImportFileError(IMPORT_ERROR_TYPE.NO_FILE_SELECTED);
+                    }
+
+                    handleFiles(files);
+                } catch (e) {
+                    setModel({ ...model, failure: e });
+                }
+            };
+
+            const handleDrop = onlyDragFiles((event: DragEvent) => {
+                event.preventDefault();
+                setIsDropzoneHovered(false);
+                onAddFiles([...event.dataTransfer.files]);
+            });
+
             const handleAttach = ({ target }: ChangeEvent<HTMLInputElement>) => {
                 try {
                     if (!target.files) {
                         throw new ImportFileError(IMPORT_ERROR_TYPE.NO_FILE_SELECTED);
                     }
-                    const [fileAttached] = target.files;
-                    const filename = fileAttached.name;
-                    const [, ext] = splitExtension(filename);
-                    const extension = ext.toLowerCase();
-                    if (!getIsAcceptedExtension(extension) || !fileAttached) {
-                        throw new ImportFileError(IMPORT_ERROR_TYPE.NO_CSV_OR_VCF_FILE, filename);
-                    }
-                    if (fileAttached.size > MAX_IMPORT_FILE_SIZE) {
-                        throw new ImportFileError(IMPORT_ERROR_TYPE.FILE_TOO_BIG, filename);
-                    }
-                    setModel({ ...model, step: IMPORT_STEPS.ATTACHED, fileAttached, extension, failure: undefined });
+                    handleFiles([...target.files]);
                 } catch (e) {
                     setModel({ ...model, failure: e });
                 }
@@ -128,7 +157,17 @@ const ImportModal = ({ ...rest }: Props) => {
             };
 
             return {
-                content: <AttachingModalContent model={model} onAttach={handleAttach} onClear={handleClear} />,
+                content: (
+                    <AttachingModalContent
+                        model={model}
+                        onAttach={handleAttach}
+                        onClear={handleClear}
+                        isDropzoneHovered={isDropzoneHovered}
+                        onDrop={handleDrop}
+                        onDragEnter={handleHover(true)}
+                        onDragLeave={handleHover(false)}
+                    />
+                ),
                 submit,
                 onSubmit: handleSubmit,
             };
