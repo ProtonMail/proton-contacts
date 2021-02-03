@@ -92,7 +92,12 @@ const ContactsList = ({
 
     if (!totalContacts) {
         const addContact = (
-            <button key="add" type="button" className="color-primary ml0-5 mr0-5 underline" onClick={handleAddContact}>
+            <button
+                key="add"
+                type="button"
+                className="color-primary ml0-5 mr0-5 text-underline"
+                onClick={handleAddContact}
+            >
                 {c('Action').t`Add a contact`}
             </button>
         );
@@ -100,7 +105,7 @@ const ContactsList = ({
             <button
                 key="import"
                 type="button"
-                className="color-primary ml0-5 mr0-5 underline"
+                className="color-primary ml0-5 mr0-5 text-underline"
                 onClick={onImport}
                 disabled={loadingUserKeys}
             >
@@ -115,7 +120,7 @@ const ContactsList = ({
                     url={noContactsImg}
                     className="mtauto mbauto"
                 >
-                    <div className="flex flex-items-center">
+                    <div className="flex flex-align-items-center">
                         {c('Actions message').jt`You can either ${addContact} or ${importContact} from a file.`}
                     </div>
                 </IllustrationPlaceholder>
@@ -129,7 +134,7 @@ const ContactsList = ({
                 <button
                     key="add"
                     type="button"
-                    className="color-primary ml0-5 mr0-5 underline"
+                    className="color-primary ml0-5 mr0-5 text-underline"
                     onClick={() => handleEditGroup(contactGroupID)}
                 >
                     {c('Action').t`Edit your group`}
@@ -137,12 +142,12 @@ const ContactsList = ({
             );
 
             return (
-                <div className="p2 aligncenter w100">
+                <div className="p2 text-center w100">
                     <IllustrationPlaceholder
                         title={c('Info message').t`Your contact group is empty`}
                         url={noContactsImg}
                     >
-                        <div className="flex flex-items-center">
+                        <div className="flex flex-align-items-center">
                             {c('Actions message').jt`You can ${editGroup} to add a contact.`}
                         </div>
                     </IllustrationPlaceholder>
@@ -151,7 +156,7 @@ const ContactsList = ({
         }
 
         const clearSearch = (
-            <LinkButton key="add" onClick={onClearSearch} className="ml0-25 bold">
+            <LinkButton key="add" onClick={onClearSearch} className="ml0-25 text-bold">
                 {c('Action').t`Clear it`}
             </LinkButton>
         );
@@ -159,9 +164,9 @@ const ContactsList = ({
         const noResultsImg = getLightOrDark(noResultsImgLight, noResultsImgDark);
 
         return (
-            <div className="p2 aligncenter w100">
+            <div className="p2 text-center w100">
                 <IllustrationPlaceholder title={c('Info message').t`No results found`} url={noResultsImg}>
-                    <div className="flex flex-items-center">
+                    <div className="flex flex-align-items-center">
                         {c('Actions message').jt`You can either update your search query or ${clearSearch}.`}
                     </div>
                 </IllustrationPlaceholder>
@@ -180,7 +185,7 @@ const ContactsList = ({
                 isCompactView && 'is-compact',
             ])}
         >
-            <div className="items-column-list-inner items-column-list-inner--noborder">
+            <div className="items-column-list-inner items-column-list-inner--no-border">
                 <AutoSizer>
                     {({ height, width }) => (
                         <List

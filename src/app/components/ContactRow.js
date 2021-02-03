@@ -25,7 +25,7 @@ const ContactRow = ({ style, userSettings, contactID, hasPaidMail, contactGroups
                 contactID === ID && 'item-is-selected',
             ])}
         >
-            <div className="flex flex-nowrap w100 h100 mtauto mbauto flex-items-center">
+            <div className="flex flex-nowrap w100 h100 mtauto mbauto flex-align-items-center">
                 {isCompactView ? (
                     <Checkbox
                         className="item-icon-compact"
@@ -46,17 +46,17 @@ const ContactRow = ({ style, userSettings, contactID, hasPaidMail, contactGroups
                     </ItemCheckbox>
                 )}
 
-                <div className="flex-item-fluid pl1 flex flex-column flex-spacebetween conversation-titlesender">
-                    <div className="flex flex-nowrap flex-items-center item-firstline mw100">
+                <div className="flex-item-fluid pl1 flex flex-column flex-justify-space-between conversation-titlesender">
+                    <div className="flex flex-nowrap flex-align-items-center item-firstline max-w100">
                         <div className={classnames(['flex flex-item-fluid w0', LabelIDs.length && 'pr1'])}>
-                            <span className="bold inbl mw100 ellipsis" id={ID}>
+                            <span className="text-bold inline-block max-w100 text-ellipsis" id={ID}>
                                 {Name}
                             </span>
                         </div>
                         {hasPaidMail && contactGroups && <ContactGroupLabels contactGroups={contactGroups} />}
                     </div>
                     <div
-                        className="flex flex-items-center item-secondline mw100 ellipsis item-sender--smaller"
+                        className="flex flex-align-items-center item-secondline max-w100 text-ellipsis item-sender--smaller"
                         title={emails.join(', ')}
                     >
                         {emails.length ? (

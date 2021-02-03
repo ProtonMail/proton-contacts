@@ -26,10 +26,10 @@ const DynamicProgress = ({
     const displayEnd = failed ? displayFailed : displaySuccess;
 
     return (
-        <div className="aligncenter">
+        <div className="text-center">
             {icon}
             <Progress
-                className={classnames(['mt1', failed && 'progressbar--error'])}
+                className={classnames(['mt1', failed && 'progress-bar--error'])}
                 aria-describedby={id}
                 value={value}
                 max={max}

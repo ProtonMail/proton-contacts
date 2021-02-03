@@ -63,7 +63,7 @@ const ContactGroupsTable = () => {
     const header = [c('Table header').t`Name`, c('Table header').t`Group size`, c('Table header').t`Actions`];
 
     return (
-        <OrderableTable className="noborder pm-simple-table--has-actions" onSortEnd={handleSortEnd}>
+        <OrderableTable className="no-border simple-table--has-actions" onSortEnd={handleSortEnd}>
             <OrderableTableHeader cells={header} />
             <OrderableTableBody>
                 {list.map(({ ID, Name, Color }, index) => {
@@ -101,18 +101,18 @@ const ContactGroupsTable = () => {
                         },
                     ];
                     const cells = [
-                        <div key={ID} className="flex flex-items-center flex-nowrap">
+                        <div key={ID} className="flex flex-align-items-center flex-nowrap">
                             <span className="flex-item-noshrink mr0-5">
                                 <ContactGroupIcon className="flex" name={Name} color={Color} />
                             </span>
-                            <span className="ellipsis">{Name}</span>
+                            <span className="text-ellipsis">{Name}</span>
                         </div>,
                         c('Info').ngettext(
                             msgid`${countEmailAddresses} email address`,
                             `${countEmailAddresses} email addresses`,
                             countEmailAddresses
                         ),
-                        <DropdownActions key={ID} className="pm-button--small" list={list} />,
+                        <DropdownActions key={ID} className="button--small" list={list} />,
                     ];
                     return <OrderableTableRow key={ID} index={index} cells={cells} />;
                 })}

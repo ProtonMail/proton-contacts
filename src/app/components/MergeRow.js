@@ -7,14 +7,14 @@ const MergeRow = ({ loadingUserKeys, style, onMerge, ...rest }) => {
     const boldText = <b key="boldface">{c('Info').t`Two or more contacts appear to be identical.`}</b>;
 
     return (
-        <div style={style} className="p1 flex flex-nowrap flex-items-center bg-primary color-white" {...rest}>
+        <div style={style} className="p1 flex flex-nowrap flex-align-items-center bg-primary color-white" {...rest}>
             <div className="mr1 flex-item-noshrink">
                 <Icon name="merge" color="white" />
             </div>
-            <div className="alignleft">
+            <div className="text-left">
                 <span className="mr0-5">{c('Info').jt`${boldText} Do you want to merge these contacts now?`}</span>
                 <Button
-                    className="pm-button--small pm-button--primary pm-button--whiteborder alignbaseline"
+                    className="button--small button--primary button--whiteborder align-baseline"
                     disabled={loadingUserKeys}
                     onClick={onMerge}
                 >
