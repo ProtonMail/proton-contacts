@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { c } from 'ttag';
 import { format } from 'date-fns';
-import { useContacts, useApi, FormModal, ResetButton, PrimaryButton, Alert } from 'react-components';
+import { useContacts, useApi, FormModal, ResetButton, PrimaryButton, Alert, DynamicProgress } from 'react-components';
 import { queryContactExport } from 'proton-shared/lib/api/contacts';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 import { wait } from 'proton-shared/lib/helpers/promise';
@@ -11,8 +11,6 @@ import { prepareContact } from 'proton-shared/lib/contacts/decrypt';
 import { toICAL } from 'proton-shared/lib/contacts/vcard';
 import { DecryptedKey } from 'proton-shared/lib/interfaces';
 import { Contact } from 'proton-shared/lib/interfaces/contacts';
-import { percentageProgress } from '../../helpers/progress';
-import DynamicProgress from '../DynamicProgress';
 import { QUERY_EXPORT_MAX_PAGESIZE, API_SAFE_INTERVAL } from '../../constants';
 
 const DOWNLOAD_FILENAME = 'protonContacts';
@@ -60,6 +58,10 @@ const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...
     };
 
     useEffect(() => {
+        if (loadingContacts) {
+            return;
+        }
+
         const abortController = new AbortController();
         const apiWithAbort = (config: any) => api({ ...config, signal: abortController.signal });
 
@@ -116,15 +118,21 @@ const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...
         return () => {
             abortController.abort();
         };
-    }, []);
+    }, [loadingContacts]);
 
-    const failed = contactsNotExported.length === countContacts;
+    const success = contactsNotExported.length !== countContacts;
+    const loading = loadingContacts || contactsExported.length + contactsNotExported.length !== countContacts;
+    const display =
+        loading || success
+            ? c('Progress bar description')
+                  .t`${contactsExported.length} out of ${countContacts} contacts successfully exported.`
+            : c('Progress bar description').t`No contacts exported.`;
 
     return (
         <FormModal
             title={c('Title').t`Exporting contacts`}
             onSubmit={() => handleSave(contactsExported)}
-            footer={ExportFooter({ loading: contactsExported.length + contactsNotExported.length !== countContacts })}
+            footer={ExportFooter({ loading })}
             loading={loadingContacts}
             {...rest}
         >
@@ -134,12 +142,11 @@ const ExportModal = ({ contactGroupID: LabelID, userKeysList, onSave = noop, ...
             </Alert>
             <DynamicProgress
                 id="progress-export-contacts"
-                alt="contact-loader"
-                value={percentageProgress(contactsExported.length, contactsNotExported.length, countContacts)}
-                failed={failed}
-                displaySuccess={c('Progress bar description')
-                    .t`${contactsExported.length} out of ${countContacts} contacts successfully exported.`}
-                displayFailed={c('Progress bar description').t`No contacts exported.`}
+                loading={loading}
+                value={contactsExported.length + contactsNotExported.length}
+                max={countContacts}
+                success={success}
+                display={loadingContacts ? '' : display}
             />
         </FormModal>
     );

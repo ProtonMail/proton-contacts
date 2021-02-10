@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import {
     useModals,
     ContactModal,
@@ -9,11 +9,23 @@ import {
     SimpleSidebarListItemLink,
 } from 'react-components';
 import { c } from 'ttag';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-
+import { UserModel } from 'proton-shared/lib/interfaces';
+import { Contact, ContactGroup } from 'proton-shared/lib/interfaces/contacts';
 import SidebarVersion from './SidebarVersion';
 import SidebarGroups from './SidebarGroups';
+import { GroupsWithCount } from '../interfaces/GroupsWithCount';
+
+interface Props {
+    user: UserModel;
+    logo: ReactNode;
+    totalContacts: number;
+    contactGroups: ContactGroup[];
+    expanded: boolean;
+    onToggleExpand: () => void;
+    onClearSearch: () => void;
+    contacts: Contact[];
+}
 
 const ContactsSidebar = ({
     logo,
@@ -24,13 +36,13 @@ const ContactsSidebar = ({
     onToggleExpand,
     onClearSearch,
     contacts,
-}) => {
+}: Props) => {
     const history = useHistory();
     const { hasPaidMail } = user;
     const { createModal } = useModals();
     const [displayGroups, setDisplayGroups] = useState(true);
 
-    const groupsWithCount = contactGroups.map((group) => ({
+    const groupsWithCount = contactGroups.map<GroupsWithCount>((group) => ({
         ...group,
         count: contacts.filter((c) => c.LabelIDs.includes(group.ID)).length,
     }));
@@ -65,7 +77,6 @@ const ContactsSidebar = ({
                         {c('Link').t`All Contacts (${totalContacts})`}
                     </SimpleSidebarListItemLink>
                     <SidebarGroups
-                        history={history}
                         hasPaidMail={hasPaidMail}
                         contactGroups={groupsWithCount}
                         displayGroups={displayGroups}
@@ -75,17 +86,6 @@ const ContactsSidebar = ({
             </SidebarNav>
         </Sidebar>
     );
-};
-
-ContactsSidebar.propTypes = {
-    user: PropTypes.object,
-    logo: PropTypes.node,
-    totalContacts: PropTypes.number,
-    contactGroups: PropTypes.array,
-    expanded: PropTypes.bool,
-    onToggleExpand: PropTypes.func,
-    onClearSearch: PropTypes.func,
-    contacts: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default ContactsSidebar;

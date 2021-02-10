@@ -10,7 +10,7 @@ import {
     SettingsButton,
     MainLogo,
 } from 'react-components';
-
+import { UserModel } from 'proton-shared/lib/interfaces';
 import { noop } from 'proton-shared/lib/helpers/function';
 import ContactToolbar from '../components/ContactToolbar';
 import ContactsSidebar from '../content/ContactsSidebar';
@@ -41,7 +41,7 @@ const ContactsContainerBlurred = () => {
     const sidebar = (
         <ContactsSidebar
             logo={logo}
-            user={user}
+            user={user as UserModel}
             expanded={expanded}
             onToggleExpand={noop}
             onClearSearch={noop}
@@ -54,7 +54,7 @@ const ContactsContainerBlurred = () => {
     return (
         <PrivateAppContainer header={header} sidebar={sidebar} isBlurred>
             <ContactToolbar
-                user={user}
+                user={user as UserModel}
                 contactEmailsMap={{}}
                 activeIDs={[]}
                 checked={false}

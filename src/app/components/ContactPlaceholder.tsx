@@ -1,23 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
 import { useModals, PrimaryButton, Button, Icon, ContactGroupModal, useAppLink } from 'react-components';
-
+import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
+import { DecryptedKey, UserModel } from 'proton-shared/lib/interfaces';
 import { getAccountSettingsApp } from 'proton-shared/lib/apps/helper';
 import importSvg from 'design-system/assets/img/pm-images/contact-import.svg';
 import exportSvg from 'design-system/assets/img/pm-images/contact-export.svg';
 import contactGroupsSvg from 'design-system/assets/img/pm-images/contact-groups.svg';
 import upgradeSvg from 'design-system/assets/img/pm-images/contact-unlock-features.svg';
-
 import contactGroupCardLight from 'design-system/assets/img/shared/empty-address-book.svg';
 import contactGroupCardDark from 'design-system/assets/img/shared/empty-address-book-dark.svg';
-
-import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
 import ExportModal from './settings/ExportModal';
 import MergeRow from './MergeRow';
 
-const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
+interface PaidCardsProps {
+    loadingUserKeys: boolean;
+    onImport: () => void;
+    onExport: () => void;
+    onGroups: () => void;
+}
+
+const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }: PaidCardsProps) => {
     return (
         <div className="flex flex-nowrap on-mobile-flex-column boxes-placeholder-container">
             <div className="bordered-container flex-item-fluid mr1 on-mobile-mr0 on-mobile-mb1 p1 text-center flex-no-min-children flex-column">
@@ -58,14 +62,13 @@ const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
     );
 };
 
-PaidCards.propTypes = {
-    loadingUserKeys: PropTypes.bool,
-    onImport: PropTypes.func,
-    onExport: PropTypes.func,
-    onGroups: PropTypes.func,
-};
+interface FreeCardsProps {
+    loadingUserKeys: boolean;
+    onImport: () => void;
+    onExport: () => void;
+}
 
-const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
+const FreeCards = ({ loadingUserKeys, onImport, onExport }: FreeCardsProps) => {
     const goToApp = useAppLink();
 
     const handleUpgrade = () => {
@@ -113,11 +116,22 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
     );
 };
 
-FreeCards.propTypes = {
-    loadingUserKeys: PropTypes.bool,
-    onImport: PropTypes.func,
-    onExport: PropTypes.func,
-};
+interface Props {
+    totalContacts: number;
+    totalContactsInGroup: number | undefined;
+    selectedContacts: number;
+    contactGroupID: string | undefined;
+    contactGroupName: string | undefined;
+    user: UserModel;
+    userKeysList: DecryptedKey[];
+    loadingUserKeys: boolean;
+    onUncheck: () => void;
+    canMerge: boolean;
+    onMerge: () => void;
+    onImport: () => void;
+    onExport: () => void;
+    onGroups: () => void;
+}
 
 const ContactPlaceholder = ({
     totalContacts = 0,
@@ -134,7 +148,7 @@ const ContactPlaceholder = ({
     onImport,
     onExport,
     onGroups,
-}) => {
+}: Props) => {
     const { hasPaidMail } = user;
     const { createModal } = useModals();
 
@@ -176,7 +190,8 @@ const ContactPlaceholder = ({
             </b>
         );
 
-        const handleEdit = () => createModal(<ContactGroupModal contactGroupID={contactGroupID} />);
+        const handleEdit = () =>
+            createModal(<ContactGroupModal contactGroupID={contactGroupID} selectedContactEmails={[]} />);
         const handleExport = () =>
             createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
 
@@ -233,7 +248,6 @@ const ContactPlaceholder = ({
             </div>
             {hasPaidMail ? (
                 <PaidCards
-                    userKeysList={userKeysList}
                     loadingUserKeys={loadingUserKeys}
                     onImport={onImport}
                     onExport={() => onExport()}
@@ -244,23 +258,6 @@ const ContactPlaceholder = ({
             )}
         </div>
     );
-};
-
-ContactPlaceholder.propTypes = {
-    totalContacts: PropTypes.number,
-    totalContactsInGroup: PropTypes.number,
-    selectedContacts: PropTypes.number,
-    contactGroupID: PropTypes.string,
-    contactGroupName: PropTypes.string,
-    user: PropTypes.object.isRequired,
-    userKeysList: PropTypes.array,
-    loadingUserKeys: PropTypes.bool,
-    onUncheck: PropTypes.func,
-    canMerge: PropTypes.bool,
-    onMerge: PropTypes.func,
-    onImport: PropTypes.func,
-    onExport: PropTypes.func,
-    onGroups: PropTypes.func,
 };
 
 export default ContactPlaceholder;

@@ -1,23 +1,31 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect, useMemo, ComponentProps } from 'react';
 import { c } from 'ttag';
 import { useEventManager, FormModal, ResetButton, PrimaryButton } from 'react-components';
-
+import { DecryptedKey } from 'proton-shared/lib/interfaces';
 import MergeModalContent from './MergeModalContent';
 import MergingModalContent from './MergingModalContent';
+import { FormattedContact } from '../../interfaces/FormattedContact';
+import { MergeModel } from '../../interfaces/MergeModel';
 
-const MergeModal = ({ contacts, contactID, userKeysList, onMerged, ...rest }) => {
+interface Props extends ComponentProps<typeof FormModal> {
+    contacts: FormattedContact[][];
+    contactID: string;
+    userKeysList: DecryptedKey[];
+    onMerged: () => void;
+}
+
+const MergeModal = ({ contacts, contactID, userKeysList, onMerged, ...rest }: Props) => {
     const { call } = useEventManager();
 
     const [isMerging, setIsMerging] = useState(false);
     const [mergeFinished, setMergeFinished] = useState(false);
-    const [model, setModel] = useState(() => ({
+    const [model, setModel] = useState<MergeModel>(() => ({
         orderedContacts: contacts,
-        isChecked: contacts.flat().reduce((acc, { ID }) => {
+        isChecked: contacts.flat().reduce<{ [ID: string]: boolean }>((acc, { ID }) => {
             acc[ID] = true;
             return acc;
         }, {}),
-        beDeleted: contacts.flat().reduce((acc, { ID }) => {
+        beDeleted: contacts.flat().reduce<{ [ID: string]: boolean }>((acc, { ID }) => {
             acc[ID] = false;
             return acc;
         }, {}),
@@ -37,11 +45,17 @@ const MergeModal = ({ contacts, contactID, userKeysList, onMerged, ...rest }) =>
     // beDeletedModel = { 'ID of be-deleted contact': 'ID to navigate to in case it is the current ID' }
     const { beMergedModel, beDeletedModel, totalBeMerged } = useMemo(
         () =>
-            orderedContacts.reduce(
+            orderedContacts.reduce<{
+                beMergedModel: { [ID: string]: string[] };
+                beDeletedModel: { [ID: string]: string };
+                totalBeMerged: number;
+            }>(
                 (acc, group) => {
                     const groupIDs = group.map(({ ID }) => ID);
-                    const beMergedIDs = groupIDs.map((ID) => isChecked[ID] && !beDeleted[ID] && ID).filter(Boolean);
-                    const beDeletedIDs = groupIDs.map((ID) => beDeleted[ID] && ID).filter(Boolean);
+                    const beMergedIDs = groupIDs
+                        .map((ID) => isChecked[ID] && !beDeleted[ID] && ID)
+                        .filter(Boolean) as string[];
+                    const beDeletedIDs = groupIDs.map((ID) => beDeleted[ID] && ID).filter(Boolean) as string[];
                     const willBeMerged = beMergedIDs.length > 1;
 
                     if (willBeMerged) {
@@ -123,13 +137,6 @@ const MergeModal = ({ contacts, contactID, userKeysList, onMerged, ...rest }) =>
     })();
 
     return <FormModal {...modalProps}>{content}</FormModal>;
-};
-
-MergeModal.propTypes = {
-    contacts: PropTypes.arrayOf(PropTypes.array).isRequired,
-    contactID: PropTypes.string,
-    userKeysList: PropTypes.array.isRequired,
-    onMerged: PropTypes.func,
 };
 
 export default MergeModal;

@@ -20,10 +20,11 @@ import {
 import { c, msgid } from 'ttag';
 import { deleteLabel, orderContactGroup } from 'proton-shared/lib/api/labels';
 import { move } from 'proton-shared/lib/helpers/array';
+import { ContactEmail } from 'proton-shared/lib/interfaces/contacts';
 
 const ContactGroupsTable = () => {
     const [contactGroups] = useContactGroups();
-    const [contactEmails] = useContactEmails();
+    const [contactEmails] = useContactEmails() as [ContactEmail[], boolean, any];
     const { createNotification } = useNotifications();
     const { createModal } = useModals();
     const api = useApi();
@@ -38,7 +39,7 @@ const ContactGroupsTable = () => {
         setContactGroups(contactGroups);
     }, [contactGroups]);
 
-    const handleConfirmDeletion = (ID) => async () => {
+    const handleConfirmDeletion = (ID: string) => async () => {
         await api(deleteLabel(ID));
         await call();
         createNotification({
@@ -52,7 +53,7 @@ const ContactGroupsTable = () => {
                 const newList = move(list, oldIndex, newIndex);
                 setContactGroups(newList);
                 await api(orderContactGroup({ LabelIDs: newList.map(({ ID }) => ID) }));
-                call();
+                void call();
             } catch (error) {
                 setContactGroups(contactGroups);
             }
@@ -65,7 +66,7 @@ const ContactGroupsTable = () => {
     return (
         <OrderableTable className="no-border simple-table--has-actions" onSortEnd={handleSortEnd}>
             <OrderableTableHeader cells={header} />
-            <OrderableTableBody>
+            <OrderableTableBody colSpan={1}>
                 {list.map(({ ID, Name, Color }, index) => {
                     const countEmailAddresses = (contactEmails || []).filter(({ LabelIDs = [] }) =>
                         LabelIDs.includes(ID)
@@ -74,12 +75,12 @@ const ContactGroupsTable = () => {
                         {
                             text: c('Action').t`Edit`,
                             onClick() {
-                                createModal(<ContactGroupModal contactGroupID={ID} />);
+                                createModal(<ContactGroupModal contactGroupID={ID} selectedContactEmails={[]} />);
                             },
                         },
                         {
                             text: c('Action').t`Delete`,
-                            actionType: 'delete',
+                            actionType: 'delete' as 'delete',
                             onClick() {
                                 createModal(
                                     <ConfirmModal
@@ -103,6 +104,8 @@ const ContactGroupsTable = () => {
                     const cells = [
                         <div key={ID} className="flex flex-align-items-center flex-nowrap">
                             <span className="flex-item-noshrink mr0-5">
+                                {/* TODO: Fix ContactGroupIcon typing */}
+                                {/* @ts-ignore */}
                                 <ContactGroupIcon className="flex" name={Name} color={Color} />
                             </span>
                             <span className="text-ellipsis">{Name}</span>

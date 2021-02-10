@@ -1,45 +1,53 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { c } from 'ttag';
 import { useModals, Alert } from 'react-components';
-
+import { DecryptedKey } from 'proton-shared/lib/interfaces';
 import { moveInGroup } from '../../helpers/array';
-
 import ContactDetails from './ContactDetails';
 import MergeContactPreview from './MergeContactPreview';
 import MergeTable from './MergeTable';
+import { MergeModel } from '../../interfaces/MergeModel';
 
-const MergeModalContent = ({ contactID, userKeysList, model, updateModel, beMergedModel, beDeletedModel }) => {
+interface Props {
+    contactID: string;
+    userKeysList: DecryptedKey[];
+    model: MergeModel;
+    updateModel: React.Dispatch<React.SetStateAction<MergeModel>>;
+    beMergedModel: { [ID: string]: string[] };
+    beDeletedModel: { [ID: string]: string };
+}
+
+const MergeModalContent = ({ contactID, userKeysList, model, updateModel, beMergedModel, beDeletedModel }: Props) => {
     const { createModal } = useModals();
 
     const { orderedContacts, isChecked, beDeleted } = model;
 
-    const handleToggleCheck = (ID) => {
+    const handleToggleCheck = (ID: string) => {
         updateModel((model) => ({
             ...model,
             isChecked: { ...isChecked, [ID]: !isChecked[ID] },
         }));
     };
-    const handleToggleDelete = (ID) => {
+    const handleToggleDelete = (ID: string) => {
         updateModel((model) => ({
             ...model,
             beDeleted: { ...beDeleted, [ID]: !beDeleted[ID] },
         }));
     };
-    const handleSortEnd = (groupIndex) => ({ oldIndex, newIndex }) => {
+    const handleSortEnd = (groupIndex: number) => ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
         updateModel((model) => ({
             ...model,
             orderedContacts: moveInGroup(orderedContacts, groupIndex, { oldIndex, newIndex }),
         }));
     };
 
-    const handleClickDetails = (contactID) => {
+    const handleClickDetails = (contactID: string) => {
         createModal(<ContactDetails contactID={contactID} userKeysList={userKeysList} />);
     };
 
-    const handlePreview = (beMergedID, beDeletedIDs) => {
+    const handlePreview = (beMergedID: string, beDeletedIDs: string[]) => {
         const beMergedModelSingle = { [beMergedID]: beMergedModel[beMergedID] };
-        const beDeletedModelSingle = beDeletedIDs.reduce((acc, ID) => {
+        const beDeletedModelSingle = beDeletedIDs.reduce<{ [ID: string]: string }>((acc, ID) => {
             acc[ID] = beDeletedModel[ID];
             return acc;
         }, {});
@@ -78,15 +86,6 @@ const MergeModalContent = ({ contactID, userKeysList, model, updateModel, beMerg
             />
         </>
     );
-};
-
-MergeModalContent.propTypes = {
-    contactID: PropTypes.string,
-    userKeysList: PropTypes.array.isRequired,
-    model: PropTypes.object.isRequired,
-    updateModel: PropTypes.func.isRequired,
-    beMergedModel: PropTypes.shape({ ID: PropTypes.arrayOf(PropTypes.string) }),
-    beDeletedModel: PropTypes.shape({ ID: PropTypes.string }),
 };
 
 export default MergeModalContent;

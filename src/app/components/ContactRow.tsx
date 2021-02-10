@@ -1,18 +1,39 @@
-import React from 'react';
+import React, { CSSProperties, ChangeEvent } from 'react';
 import { c } from 'ttag';
-import PropTypes from 'prop-types';
 import { classnames, Checkbox, ContactGroupLabels } from 'react-components';
 import { DENSITY } from 'proton-shared/lib/constants';
-
+import { UserSettings } from 'proton-shared/lib/interfaces';
+import { SimpleMap } from 'proton-shared/lib/interfaces/utils';
+import { ContactGroup } from 'proton-shared/lib/interfaces/contacts';
 import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
-
 import ItemCheckbox from './ItemCheckbox';
+import { FormattedContact } from '../interfaces/FormattedContact';
 
-const ContactRow = ({ style, userSettings, contactID, hasPaidMail, contactGroupsMap, contact, onClick, onCheck }) => {
+interface Props {
+    userSettings: UserSettings;
+    onClick: (ID: string) => void;
+    onCheck: (event: ChangeEvent) => void;
+    style: CSSProperties;
+    contactID: string;
+    hasPaidMail: boolean;
+    contactGroupsMap: SimpleMap<ContactGroup>;
+    contact: FormattedContact;
+}
+
+const ContactRow = ({
+    style,
+    userSettings,
+    contactID,
+    hasPaidMail,
+    contactGroupsMap,
+    contact,
+    onClick,
+    onCheck,
+}: Props) => {
     const { ID, Name, LabelIDs = [], emails = [], isChecked } = contact;
     const isCompactView = userSettings.Density === DENSITY.COMPACT;
 
-    const contactGroups = contact.LabelIDs.map((ID) => contactGroupsMap[ID]);
+    const contactGroups = contact.LabelIDs.map((ID) => contactGroupsMap[ID] as ContactGroup);
 
     return (
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
@@ -48,7 +69,7 @@ const ContactRow = ({ style, userSettings, contactID, hasPaidMail, contactGroups
 
                 <div className="flex-item-fluid pl1 flex flex-column flex-justify-space-between conversation-titlesender">
                     <div className="flex flex-nowrap flex-align-items-center item-firstline max-w100">
-                        <div className={classnames(['flex flex-item-fluid w0', LabelIDs.length && 'pr1'])}>
+                        <div className={classnames(['flex flex-item-fluid w0', !!LabelIDs.length && 'pr1'])}>
                             <span className="text-bold inline-block max-w100 text-ellipsis" id={ID}>
                                 {Name}
                             </span>
@@ -60,7 +81,7 @@ const ContactRow = ({ style, userSettings, contactID, hasPaidMail, contactGroups
                         title={emails.join(', ')}
                     >
                         {emails.length ? (
-                            addPlus(emails)
+                            addPlus(emails as any)
                         ) : (
                             <span className="placeholder">{c('Info').t`No email address`}</span>
                         )}
@@ -69,23 +90,6 @@ const ContactRow = ({ style, userSettings, contactID, hasPaidMail, contactGroups
             </div>
         </div>
     );
-};
-
-ContactRow.propTypes = {
-    userSettings: PropTypes.object,
-    onClick: PropTypes.func,
-    onCheck: PropTypes.func,
-    style: PropTypes.object,
-    contactID: PropTypes.string,
-    hasPaidMail: PropTypes.bool,
-    contactGroupsMap: PropTypes.object,
-    contact: PropTypes.shape({
-        ID: PropTypes.string,
-        Name: PropTypes.string,
-        LabelIDs: PropTypes.array,
-        emails: PropTypes.array,
-        isChecked: PropTypes.bool,
-    }),
 };
 
 export default ContactRow;

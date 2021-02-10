@@ -1,10 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { classnames } from 'react-components';
 
 import { opaqueClassName } from '../../helpers/css';
 
-const EmailsTableCell = ({ contactID, emails = [], highlightedID, greyedOut }) => {
+interface Props {
+    emails: string[];
+    contactID: string;
+    highlightedID: string;
+    greyedOut: boolean;
+}
+
+const EmailsTableCell = ({ contactID, emails = [], highlightedID, greyedOut }: Props) => {
     return (
         <div
             className={classnames([
@@ -18,13 +24,6 @@ const EmailsTableCell = ({ contactID, emails = [], highlightedID, greyedOut }) =
             <span className="inline-block text-ellipsis">{emails.map((email) => `<${email}>`).join(', ')}</span>
         </div>
     );
-};
-
-EmailsTableCell.propTypes = {
-    emails: PropTypes.arrayOf(PropTypes.string),
-    contactID: PropTypes.string.isRequired,
-    highlightedID: PropTypes.string,
-    greyedOut: PropTypes.bool,
 };
 
 export default EmailsTableCell;

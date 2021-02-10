@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect, useMemo, ComponentProps } from 'react';
 import { c } from 'ttag';
 import {
     useApi,
@@ -14,16 +13,25 @@ import {
 } from 'react-components';
 import { splitKeys } from 'proton-shared/lib/keys/keys';
 import { getContact } from 'proton-shared/lib/api/contacts';
-import { prepareContact } from 'proton-shared/lib/contacts/decrypt';
+import { CryptoProcessingError, prepareContact } from 'proton-shared/lib/contacts/decrypt';
 import { noop } from 'proton-shared/lib/helpers/function';
 import { toMap } from 'proton-shared/lib/helpers/object';
-
 import { CRYPTO_PROCESSING_TYPES } from 'proton-shared/lib/contacts/constants';
+import { DecryptedKey } from 'proton-shared/lib/interfaces';
+import { ContactProperties } from 'proton-shared/lib/interfaces/contacts';
 
-const ContactDetails = ({ contactID, userKeysList, ...rest }) => {
+interface Props extends ComponentProps<typeof FormModal> {
+    contactID: string;
+    userKeysList: DecryptedKey[];
+}
+
+const ContactDetails = ({ contactID, userKeysList, ...rest }: Props) => {
     const api = useApi();
     const [loading, withLoading] = useLoading(true);
-    const [model, setModel] = useState({ properties: [], errors: [] });
+    const [model, setModel] = useState<{ properties: ContactProperties; errors: CryptoProcessingError[] }>({
+        properties: [],
+        errors: [],
+    });
 
     const [contactEmails, loadingContactEmails] = useContactEmails();
 
@@ -41,7 +49,7 @@ const ContactDetails = ({ contactID, userKeysList, ...rest }) => {
         };
 
         try {
-            withLoading(request());
+            void withLoading(request());
         } catch (error) {
             setModel({ ...model, errors: [{ type: CRYPTO_PROCESSING_TYPES.FAIL_TO_LOAD, error }] });
         }
@@ -72,11 +80,6 @@ const ContactDetails = ({ contactID, userKeysList, ...rest }) => {
             )}
         </FormModal>
     );
-};
-
-ContactDetails.propTypes = {
-    contactID: PropTypes.string,
-    userKeysList: PropTypes.array,
 };
 
 export default ContactDetails;
