@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect, useMemo, ComponentProps } from 'react';
 import { c } from 'ttag';
 import {
     useApi,
@@ -19,13 +18,29 @@ import { getContact } from 'proton-shared/lib/api/contacts';
 import { prepareContact } from 'proton-shared/lib/contacts/decrypt';
 import { noop } from 'proton-shared/lib/helpers/function';
 import { toMap } from 'proton-shared/lib/helpers/object';
-
+import { DecryptedKey } from 'proton-shared/lib/interfaces';
+import { ContactProperties } from 'proton-shared/lib/interfaces/contacts';
 import { merge } from '../../helpers/merge';
-
 import MergeErrorContent from './MergeErrorContent';
 import MergingModalContent from './MergingModalContent';
+import { MergeModel } from '../../interfaces/MergeModel';
 
-const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeletedModel, updateModel, ...rest }) => {
+interface Props extends ComponentProps<typeof FormModal> {
+    contactID: string;
+    userKeysList: DecryptedKey[];
+    beMergedModel: { [ID: string]: string[] };
+    beDeletedModel: { [ID: string]: string };
+    updateModel: React.Dispatch<React.SetStateAction<MergeModel>>;
+}
+
+const MergeContactPreview = ({
+    contactID,
+    userKeysList,
+    beMergedModel,
+    beDeletedModel,
+    updateModel,
+    ...rest
+}: Props) => {
     const { call } = useEventManager();
     const api = useApi();
     const { privateKeys, publicKeys } = useMemo(() => splitKeys(userKeysList), []);
@@ -41,7 +56,11 @@ const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeleted
     const [loading, withLoading] = useLoading(true);
     const [isMerging, setIsMerging] = useState(false);
     const [mergeFinished, setMergeFinished] = useState(false);
-    const [model, setModel] = useState({});
+    const [model, setModel] = useState<{
+        mergedContact?: ContactProperties;
+        errorOnMerge?: boolean;
+        errorOnLoad?: boolean;
+    }>({});
 
     const [beMergedIDs] = Object.values(beMergedModel);
     const beDeletedIDs = Object.keys(beDeletedModel);
@@ -75,7 +94,7 @@ const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeleted
             }
         };
 
-        withLoading(mergeContacts());
+        void withLoading(mergeContacts());
     }, []);
 
     const { content, ...modalProps } = (() => {
@@ -101,7 +120,7 @@ const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeleted
 
                 return (
                     <ContactView
-                        properties={model.mergedContact}
+                        properties={model.mergedContact as ContactProperties}
                         contactID={contactID}
                         contactEmails={contactEmails}
                         contactGroupsMap={contactGroupsMap}
@@ -146,7 +165,7 @@ const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeleted
                 <MergingModalContent
                     contactID={contactID}
                     userKeysList={userKeysList}
-                    alreadyMerged={model.mergedContact}
+                    alreadyMerged={model.mergedContact as ContactProperties}
                     beMergedModel={beMergedModel}
                     beDeletedModel={beDeletedModel}
                     totalBeMerged={beMergedIDs.length}
@@ -161,14 +180,6 @@ const MergeContactPreview = ({ contactID, userKeysList, beMergedModel, beDeleted
     })();
 
     return <FormModal {...modalProps}>{content}</FormModal>;
-};
-
-MergeContactPreview.propTypes = {
-    contactID: PropTypes.string,
-    userKeysList: PropTypes.array.isRequired,
-    beMergedModel: PropTypes.shape({ ID: PropTypes.arrayOf(PropTypes.string) }),
-    beDeletedModel: PropTypes.shape({ ID: PropTypes.string }),
-    updateModel: PropTypes.func,
 };
 
 export default MergeContactPreview;

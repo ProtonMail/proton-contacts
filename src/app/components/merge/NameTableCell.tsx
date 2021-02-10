@@ -1,10 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Checkbox, classnames } from 'react-components';
 
 import { opaqueClassName } from '../../helpers/css';
 
-const NameTableCell = ({ name, contactID, highlightedID, checked, deleted, greyedOut, onToggle }) => {
+interface Props {
+    contactID: string;
+    highlightedID: string;
+    checked: boolean;
+    deleted: boolean;
+    greyedOut: boolean;
+    name: string;
+    onToggle: (ID: string) => void;
+}
+
+const NameTableCell = ({ name, contactID, highlightedID, checked, deleted, greyedOut, onToggle }: Props) => {
     const handleToggle = () => onToggle(contactID);
 
     return (
@@ -29,16 +38,6 @@ const NameTableCell = ({ name, contactID, highlightedID, checked, deleted, greye
             </span>
         </div>
     );
-};
-
-NameTableCell.propTypes = {
-    contactID: PropTypes.string.isRequired,
-    highlightedID: PropTypes.string,
-    checked: PropTypes.bool,
-    deleted: PropTypes.bool,
-    greyedOut: PropTypes.bool,
-    name: PropTypes.string,
-    onToggle: PropTypes.func,
 };
 
 export default NameTableCell;

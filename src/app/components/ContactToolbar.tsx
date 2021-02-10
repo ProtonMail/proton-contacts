@@ -1,5 +1,4 @@
-import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React, { ChangeEvent, useMemo } from 'react';
 import {
     Icon,
     Checkbox,
@@ -11,6 +10,20 @@ import {
     ContactGroupDropdown,
 } from 'react-components';
 import { c } from 'ttag';
+import { UserModel } from 'proton-shared/lib/interfaces';
+import { SimpleMap } from 'proton-shared/lib/interfaces/utils';
+import { ContactEmail } from 'proton-shared/lib/interfaces/contacts';
+
+interface Props {
+    checked: boolean;
+    user: UserModel;
+    onCheck: (checked: boolean) => void;
+    onDelete: () => void;
+    activeIDs: string[];
+    contactEmailsMap: SimpleMap<ContactEmail[]>;
+    onMerge: () => void;
+    simplified: boolean;
+}
 
 const ContactToolbar = ({
     user,
@@ -21,16 +34,16 @@ const ContactToolbar = ({
     contactEmailsMap = {},
     onMerge,
     simplified = false,
-}) => {
+}: Props) => {
     const { hasPaidMail } = user;
-    const handleCheck = ({ target }) => onCheck(target.checked);
+    const handleCheck = ({ target }: ChangeEvent<HTMLInputElement>) => onCheck(target.checked);
 
     const contactEmailsSelected = useMemo(() => {
-        return activeIDs.reduce((acc, ID) => {
+        return activeIDs.reduce<ContactEmail[]>((acc, ID) => {
             if (!contactEmailsMap[ID]) {
                 return acc;
             }
-            return acc.concat(contactEmailsMap[ID]);
+            return acc.concat(contactEmailsMap[ID] as ContactEmail[]);
         }, []);
     }, [activeIDs, contactEmailsMap]);
 
@@ -92,17 +105,6 @@ const ContactToolbar = ({
             </div>
         </Toolbar>
     );
-};
-
-ContactToolbar.propTypes = {
-    checked: PropTypes.bool,
-    user: PropTypes.object,
-    onCheck: PropTypes.func,
-    onDelete: PropTypes.func,
-    activeIDs: PropTypes.array,
-    contactEmailsMap: PropTypes.object,
-    onMerge: PropTypes.func,
-    simplified: PropTypes.bool,
 };
 
 export default ContactToolbar;

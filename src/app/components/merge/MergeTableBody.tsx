@@ -1,10 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ComponentProps } from 'react';
 import { c } from 'ttag';
 import { OrderableTableBody, OrderableTableRow, TableRow, DropdownActions } from 'react-components';
 
 import NameTableCell from './NameTableCell';
 import EmailsTableCell from './EmailsTableCell';
+import { FormattedContact } from '../../interfaces/FormattedContact';
+
+interface Props extends Omit<ComponentProps<typeof OrderableTableBody>, 'colSpan'> {
+    contacts: FormattedContact[];
+    highlightedID: string;
+    isChecked: { [ID: string]: boolean };
+    beDeleted: { [ID: string]: boolean };
+    onClickCheckbox: (ID: string) => void;
+    onClickDetails: (ID: string) => void;
+    onToggleDelete: (ID: string) => void;
+}
 
 const MergeTableBody = ({
     contacts,
@@ -15,7 +25,7 @@ const MergeTableBody = ({
     onClickDetails,
     onToggleDelete,
     ...rest
-}) => {
+}: Props) => {
     return (
         <OrderableTableBody colSpan={4} {...rest}>
             {contacts.map(({ ID, Name, emails }, j) => {
@@ -33,7 +43,7 @@ const MergeTableBody = ({
                             onToggleDelete(ID);
                         },
                     },
-                ].filter(Boolean);
+                ].filter(Boolean) as { text: string; onClick: () => void }[];
                 const cells = [
                     <NameTableCell
                         key="name"
@@ -56,24 +66,13 @@ const MergeTableBody = ({
                 ];
 
                 return deleted ? (
-                    <TableRow key={`${ID}`} index={j} cells={[null, ...cells]} />
+                    <TableRow key={`${ID}`} cells={[null, ...cells]} />
                 ) : (
                     <OrderableTableRow key={`${ID}`} index={j} cells={cells} />
                 );
             })}
         </OrderableTableBody>
     );
-};
-
-MergeTableBody.propTypes = {
-    contacts: PropTypes.arrayOf(PropTypes.object),
-    highlightedID: PropTypes.string,
-    isChecked: PropTypes.object,
-    beDeleted: PropTypes.object,
-    onClickCheckbox: PropTypes.func,
-    onClickDetails: PropTypes.func,
-    onToggleDelete: PropTypes.func,
-    onClickPreview: PropTypes.func,
 };
 
 export default MergeTableBody;

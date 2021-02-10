@@ -1,7 +1,6 @@
 import React from 'react';
 import { c } from 'ttag';
-import PropTypes from 'prop-types';
-
+import { useHistory } from 'react-router';
 import {
     useModals,
     ContactUpgradeModal,
@@ -9,9 +8,18 @@ import {
     SimpleSidebarListItemHeader,
     SidebarListItemHeaderButton,
 } from 'react-components';
+import { GroupsWithCount } from '../interfaces/GroupsWithCount';
 
-const SidebarGroups = ({ displayGroups, onToggle, hasPaidMail, contactGroups, history }) => {
+interface Props {
+    displayGroups: boolean;
+    onToggle: () => void;
+    contactGroups: GroupsWithCount[];
+    hasPaidMail: boolean;
+}
+
+const SidebarGroups = ({ displayGroups, onToggle, hasPaidMail, contactGroups }: Props) => {
     const { createModal } = useModals();
+    const history = useHistory();
 
     const onClickSettingsIcon = () => {
         if (!hasPaidMail) {
@@ -42,7 +50,6 @@ const SidebarGroups = ({ displayGroups, onToggle, hasPaidMail, contactGroups, hi
                     return (
                         <SimpleSidebarListItemLink
                             key={ID}
-                            title={title}
                             icon="circle"
                             iconColor={Color}
                             iconSize={12}
@@ -58,14 +65,6 @@ const SidebarGroups = ({ displayGroups, onToggle, hasPaidMail, contactGroups, hi
                 })}
         </>
     );
-};
-
-SidebarGroups.propTypes = {
-    displayGroups: PropTypes.bool,
-    onToggle: PropTypes.func,
-    contactGroups: PropTypes.array,
-    history: PropTypes.object.isRequired,
-    hasPaidMail: PropTypes.number,
 };
 
 export default SidebarGroups;

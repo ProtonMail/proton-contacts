@@ -1,9 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { CSSProperties, HTMLAttributes } from 'react';
 import { c } from 'ttag';
 import { Icon, Button } from 'react-components';
 
-const MergeRow = ({ loadingUserKeys, style, onMerge, ...rest }) => {
+interface Props extends HTMLAttributes<HTMLDivElement> {
+    style?: CSSProperties;
+    onMerge: () => void;
+    loadingUserKeys: boolean;
+}
+
+const MergeRow = ({ loadingUserKeys, style, onMerge, ...rest }: Props) => {
     const boldText = <b key="boldface">{c('Info').t`Two or more contacts appear to be identical.`}</b>;
 
     return (
@@ -23,12 +28,6 @@ const MergeRow = ({ loadingUserKeys, style, onMerge, ...rest }) => {
             </div>
         </div>
     );
-};
-
-MergeRow.propTypes = {
-    style: PropTypes.object,
-    onMerge: PropTypes.func,
-    loadingUserKeys: PropTypes.bool,
 };
 
 export default MergeRow;

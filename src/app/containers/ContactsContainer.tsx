@@ -31,13 +31,15 @@ import {
 } from 'react-components';
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { toMap } from 'proton-shared/lib/helpers/object';
+import { SimpleMap } from 'proton-shared/lib/interfaces/utils';
+import { Contact, ContactEmail } from 'proton-shared/lib/interfaces/contacts';
 import { extractMergeable } from '../helpers/merge';
-
 import ContactsList from '../components/ContactsList';
 import ContactPlaceholder from '../components/ContactPlaceholder';
 import ContactToolbar from '../components/ContactToolbar';
 import ContactsSidebar from '../content/ContactsSidebar';
 import MergeModal from '../components/merge/MergeModal';
+import { FormattedContact } from '../interfaces/FormattedContact';
 
 const ContactsContainer = () => {
     const history = useHistory();
@@ -47,12 +49,12 @@ const ContactsContainer = () => {
     const { isDesktop, isNarrow } = useActiveBreakpoint();
     const [search, updateSearch] = useState('');
     const normalizedSearch = normalize(search);
-    const [contactEmails, loadingContactEmails] = useContactEmails();
-    const [contacts = [], loadingContacts] = useContacts();
+    const [contactEmails, loadingContactEmails] = useContactEmails() as [ContactEmail[], boolean, any];
+    const [contacts = [], loadingContacts] = useContacts() as [Contact[], boolean, any];
     const [contactGroups = [], loadingContactGroups] = useContactGroups();
     const [user] = useUser();
     const [userSettings, loadingUserSettings] = useUserSettings();
-    const [userKeysList, loadingUserKeys] = useUserKeys(user);
+    const [userKeysList, loadingUserKeys] = useUserKeys();
     const [addresses = [], loadingAddresses] = useAddresses();
 
     const [checkedContacts, setCheckedContacts] = useState(Object.create(null));
@@ -64,16 +66,19 @@ const ContactsContainer = () => {
 
     const contactGroupID = useMemo(() => {
         const params = new URLSearchParams(location.search);
-        return params.get('contactGroupID');
+        return params.get('contactGroupID') || undefined;
     }, [location.search]);
 
-    const { contactGroupName, totalContactsInGroup } = useMemo(() => {
+    const { contactGroupName, totalContactsInGroup } = useMemo<{
+        contactGroupName?: string;
+        totalContactsInGroup?: number;
+    }>(() => {
         if (!contactGroups.length || !contactGroupID) {
             return Object.create(null);
         }
         const contactGroup = contactGroups.find(({ ID }) => ID === contactGroupID);
         return {
-            contactGroupName: contactGroup.Name,
+            contactGroupName: contactGroup?.Name,
             totalContactsInGroup: contacts.filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID)).length,
         };
     }, [contacts, contactGroups, contactGroupID]);
@@ -96,12 +101,12 @@ const ContactsContainer = () => {
         if (!Array.isArray(contactEmails)) {
             return {};
         }
-        return contactEmails.reduce((acc, contactEmail) => {
+        return contactEmails.reduce<SimpleMap<ContactEmail[]>>((acc, contactEmail) => {
             const { ContactID } = contactEmail;
             if (!acc[ContactID]) {
                 acc[ContactID] = [];
             }
-            acc[ContactID].push(contactEmail);
+            (acc[ContactID] as ContactEmail[]).push(contactEmail);
             return acc;
         }, Object.create(null));
     }, [contactEmails]);
@@ -113,7 +118,9 @@ const ContactsContainer = () => {
             return [];
         }
         return contacts.filter(({ Name, ID, LabelIDs }) => {
-            const emails = contactEmailsMap[ID] ? contactEmailsMap[ID].map(({ Email }) => Email).join(' ') : '';
+            const emails = contactEmailsMap[ID]
+                ? (contactEmailsMap[ID] as ContactEmail[]).map(({ Email }) => Email).join(' ')
+                : '';
             const searchFilter = normalizedSearch.length
                 ? normalize(`${Name} ${emails}`).includes(normalizedSearch)
                 : true;
@@ -124,7 +131,7 @@ const ContactsContainer = () => {
         });
     }, [contacts, contactGroupID, normalizedSearch, contactEmailsMap]);
 
-    const formattedContacts = useMemo(() => {
+    const formattedContacts = useMemo<FormattedContact[]>(() => {
         return filteredContacts.map((contact) => {
             const { ID } = contact;
             return {
@@ -151,7 +158,7 @@ const ContactsContainer = () => {
         return !filteredCheckedIDs.length && contactID ? [contactID] : filteredCheckedIDs;
     }, [filteredCheckedIDs, contactID]);
 
-    const handleCheck = (contactIDs = [], checked = false) => {
+    const handleCheck = (contactIDs: string[] = [], checked = false) => {
         const update = contactIDs.reduce((acc, contactID) => {
             acc[contactID] = checked;
             return acc;
@@ -226,7 +233,7 @@ const ContactsContainer = () => {
         <ErrorBoundary key={contactID} component={<GenericError className="pt2 view-column-detail flex-item-fluid" />}>
             <ContactContainer
                 contactID={contactID}
-                contactEmails={contactEmailsMap[contactID]}
+                contactEmails={contactEmailsMap[contactID] || []}
                 contactGroupsMap={contactGroupsMap}
                 ownAddresses={ownAddresses}
                 userKeysList={userKeysList}
@@ -237,7 +244,6 @@ const ContactsContainer = () => {
 
     const contactsListComponent = (isDesktop || !contactComponent) && (
         <ContactsList
-            emptyAddressBook={!contactsLength}
             contactID={contactID}
             contactGroupID={contactGroupID}
             totalContacts={contactsLength}
@@ -257,7 +263,6 @@ const ContactsContainer = () => {
 
     const contactPlaceHolderComponent = isDesktop && !contactComponent && !!formattedContacts.length && (
         <ContactPlaceholder
-            history={history}
             user={user}
             userKeysList={userKeysList}
             loadingUserKeys={loadingUserKeys}
@@ -287,10 +292,8 @@ const ContactsContainer = () => {
             title={title}
             expanded={expanded}
             onToggleExpand={onToggleExpand}
-            search={search}
             isNarrow={isNarrow}
             backUrl={backUrl}
-            history={history}
             searchDropdown={
                 <SearchDropdown
                     originalPlacement="bottom-right"
@@ -316,7 +319,6 @@ const ContactsContainer = () => {
     const sidebar = (
         <ContactsSidebar
             logo={logo}
-            history={history}
             user={user}
             expanded={expanded}
             onToggleExpand={onToggleExpand}

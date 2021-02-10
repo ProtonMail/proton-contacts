@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect, useRef, ChangeEvent } from 'react';
 import { c } from 'ttag';
 import {
     useModals,
@@ -13,14 +12,32 @@ import { useHistory, useLocation } from 'react-router';
 import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
 import { DENSITY } from 'proton-shared/lib/constants';
 import { List, AutoSizer } from 'react-virtualized';
-
+import { ContactGroup } from 'proton-shared/lib/interfaces/contacts';
+import { SimpleMap } from 'proton-shared/lib/interfaces/utils';
+import { UserModel, UserSettings } from 'proton-shared/lib/interfaces';
 import noContactsImgLight from 'design-system/assets/img/shared/empty-address-book.svg';
 import noContactsImgDark from 'design-system/assets/img/shared/empty-address-book-dark.svg';
-
 import noResultsImgLight from 'design-system/assets/img/shared/no-result-search.svg';
 import noResultsImgDark from 'design-system/assets/img/shared/no-result-search-dark.svg';
-
 import ContactRow from './ContactRow';
+import { FormattedContact } from '../interfaces/FormattedContact';
+
+interface Props {
+    totalContacts: number;
+    totalContactsInGroup: number | undefined;
+    contacts: FormattedContact[];
+    contactGroupsMap: SimpleMap<ContactGroup>;
+    onCheck: (contactIDs?: string[], checked?: boolean) => void;
+    onClearSearch: () => void;
+    onClearSelection: () => void;
+    onImport: () => void;
+    user: UserModel;
+    userSettings: UserSettings;
+    loadingUserKeys: boolean;
+    contactID: string;
+    contactGroupID: string | undefined;
+    isDesktop: boolean;
+}
 
 const ContactsList = ({
     totalContacts,
@@ -37,12 +54,12 @@ const ContactsList = ({
     contactID,
     contactGroupID,
     isDesktop = true,
-}) => {
+}: Props) => {
     const history = useHistory();
     const location = useLocation();
-    const listRef = useRef(null);
+    const listRef = useRef<List>(null);
     const containerRef = useRef(null);
-    const [lastChecked, setLastChecked] = useState(); // Store ID of the last contact ID checked
+    const [lastChecked, setLastChecked] = useState<string>(); // Store ID of the last contact ID checked
     const { createModal } = useModals();
     const isCompactView = userSettings.Density === DENSITY.COMPACT;
 
@@ -51,15 +68,15 @@ const ContactsList = ({
     const handleAddContact = () => {
         createModal(<ContactModal history={history} onAdd={onClearSearch} />);
     };
-    const handleEditGroup = (contactGroupID) => {
-        createModal(<ContactGroupModal contactGroupID={contactGroupID} />);
+    const handleEditGroup = (contactGroupID: string) => {
+        createModal(<ContactGroupModal contactGroupID={contactGroupID} selectedContactEmails={[]} />);
     };
 
-    const handleCheck = (event) => {
-        const { target } = event;
-        const { shiftKey } = event.nativeEvent;
+    const handleCheck = (event: ChangeEvent) => {
+        const target = event.target as HTMLInputElement;
+        const { shiftKey } = event.nativeEvent as any;
 
-        const contactID = target.getAttribute('data-contact-id');
+        const contactID = target.getAttribute('data-contact-id') as string;
         const contactIDs = [contactID];
 
         if (lastChecked && shiftKey) {
@@ -72,7 +89,7 @@ const ContactsList = ({
         onCheck(contactIDs, target.checked);
     };
 
-    const handleClick = (ID) => {
+    const handleClick = (ID: string) => {
         onClearSelection();
         history.push({ ...location, pathname: `/${ID}` });
     };
@@ -81,7 +98,7 @@ const ContactsList = ({
         const timeoutID = setTimeout(() => {
             if (contactID && totalContacts) {
                 const index = contacts.findIndex(({ ID }) => contactID === ID);
-                listRef.current.scrollToRow(index);
+                listRef.current?.scrollToRow(index);
             }
         }, 200);
 
@@ -214,22 +231,6 @@ const ContactsList = ({
             </div>
         </div>
     );
-};
-
-ContactsList.propTypes = {
-    totalContacts: PropTypes.number,
-    contacts: PropTypes.array,
-    contactGroupsMap: PropTypes.object,
-    onCheck: PropTypes.func,
-    onClearSearch: PropTypes.func,
-    onClearSelection: PropTypes.func,
-    onImport: PropTypes.func,
-    user: PropTypes.object,
-    userSettings: PropTypes.object,
-    loadingUserKeys: PropTypes.bool.isRequired,
-    contactID: PropTypes.string,
-    contactGroupID: PropTypes.string,
-    isDesktop: PropTypes.bool,
 };
 
 export default ContactsList;
