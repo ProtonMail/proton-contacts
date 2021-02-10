@@ -1,6 +1,6 @@
 import React from 'react';
 import { c } from 'ttag';
-import { SettingsPropsShared, PrivateMainSettingsArea } from 'react-components';
+import { SettingsPropsShared, PrivateMainSettingsArea, EarlyAccessSection } from 'react-components';
 
 import ContactsSection from '../components/settings/ContactsSection';
 
@@ -13,6 +13,10 @@ export const getGeneralSettingsPage = () => {
             {
                 text: c('Title').t`Contacts`,
                 id: 'contacts',
+            },
+            {
+                text: c('Title').t`Early Access`,
+                id: 'early-access',
             },
         ],
     };
@@ -28,6 +32,7 @@ const SettingsGeneralPage = ({ setActiveSection, location }: SettingsPropsShared
             subsections={subsections}
         >
             <ContactsSection />
+            <EarlyAccessSection />
         </PrivateMainSettingsArea>
     );
 };
