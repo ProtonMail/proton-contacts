@@ -1,6 +1,6 @@
 import React from 'react';
 import { c } from 'ttag';
-import { PrivateMainArea, OverviewLayout } from 'react-components';
+import { PrivateMainArea, OverviewLayout, useEarlyAccess } from 'react-components';
 
 import { getGeneralSettingsPage } from './SettingsGeneralPage';
 import { getContactGroupsPage } from './SettingsContactGroupsPage';
@@ -15,7 +15,8 @@ export const getOverviewPage = () => {
 };
 
 const SettingsOverviewPage = () => {
-    const pages = [getGeneralSettingsPage(), getContactGroupsPage(), getImportExportPage()];
+    const { hasEarlyAccess } = useEarlyAccess();
+    const pages = [getGeneralSettingsPage({ hasEarlyAccess }), getContactGroupsPage(), getImportExportPage()];
     return (
         <PrivateMainArea className="flex">
             <OverviewLayout pages={pages} title={c('Title').t`Contact settings`} />
