@@ -48,6 +48,7 @@ const ContactsContainerBlurred = () => {
             totalContacts={0}
             contactGroups={[]}
             contacts={[]}
+            contactEmailsMap={{}}
         />
     );
 
@@ -58,10 +59,10 @@ const ContactsContainerBlurred = () => {
                 contactEmailsMap={{}}
                 activeIDs={[]}
                 checked={false}
-                onCheck={noop}
                 onDelete={noop}
                 simplified={!isDesktop}
                 onMerge={noop}
+                onCheckAll={noop}
             />
             <PrivateMainArea hasToolbar className="flex" />
         </PrivateAppContainer>

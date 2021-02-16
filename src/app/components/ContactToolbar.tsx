@@ -17,7 +17,7 @@ import { ContactEmail } from 'proton-shared/lib/interfaces/contacts';
 interface Props {
     checked: boolean;
     user: UserModel;
-    onCheck: (checked: boolean) => void;
+    onCheckAll: (checked: boolean) => void;
     onDelete: () => void;
     activeIDs: string[];
     contactEmailsMap: SimpleMap<ContactEmail[]>;
@@ -27,7 +27,7 @@ interface Props {
 
 const ContactToolbar = ({
     user,
-    onCheck,
+    onCheckAll,
     onDelete,
     checked = false,
     activeIDs = [],
@@ -36,7 +36,7 @@ const ContactToolbar = ({
     simplified = false,
 }: Props) => {
     const { hasPaidMail } = user;
-    const handleCheck = ({ target }: ChangeEvent<HTMLInputElement>) => onCheck(target.checked);
+    const handleCheck = ({ target }: ChangeEvent<HTMLInputElement>) => onCheckAll(target.checked);
 
     const contactEmailsSelected = useMemo(() => {
         return activeIDs.reduce<ContactEmail[]>((acc, ID) => {
