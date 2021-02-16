@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, ChangeEvent } from 'react';
+import React, { useEffect, useRef, ChangeEvent } from 'react';
 import { c } from 'ttag';
 import {
     useModals,
@@ -7,8 +7,9 @@ import {
     classnames,
     ContactModal,
     ContactGroupModal,
+    useItemsDraggable,
 } from 'react-components';
-import { useHistory, useLocation } from 'react-router';
+import { useHistory } from 'react-router';
 import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
 import { DENSITY } from 'proton-shared/lib/constants';
 import { List, AutoSizer } from 'react-virtualized';
@@ -27,7 +28,7 @@ interface Props {
     totalContactsInGroup: number | undefined;
     contacts: FormattedContact[];
     contactGroupsMap: SimpleMap<ContactGroup>;
-    onCheck: (contactIDs?: string[], checked?: boolean) => void;
+    onCheckOne: (event: ChangeEvent, contactID: string) => void;
     onClearSearch: () => void;
     onClearSelection: () => void;
     onImport: () => void;
@@ -37,6 +38,8 @@ interface Props {
     contactID: string;
     contactGroupID: string | undefined;
     isDesktop: boolean;
+    onCheck: (contactIDs: string[], checked: boolean, replace: boolean) => void;
+    checkedIDs: string[];
 }
 
 const ContactsList = ({
@@ -44,7 +47,7 @@ const ContactsList = ({
     totalContactsInGroup,
     contacts,
     contactGroupsMap,
-    onCheck,
+    onCheckOne,
     onClearSearch,
     onClearSelection,
     onImport,
@@ -54,44 +57,27 @@ const ContactsList = ({
     contactID,
     contactGroupID,
     isDesktop = true,
+    onCheck,
+    checkedIDs,
 }: Props) => {
     const history = useHistory();
-    const location = useLocation();
     const listRef = useRef<List>(null);
     const containerRef = useRef(null);
-    const [lastChecked, setLastChecked] = useState<string>(); // Store ID of the last contact ID checked
     const { createModal } = useModals();
     const isCompactView = userSettings.Density === DENSITY.COMPACT;
 
     const noContactsImg = getLightOrDark(noContactsImgLight, noContactsImgDark);
 
     const handleAddContact = () => {
-        createModal(<ContactModal history={history} onAdd={onClearSearch} />);
+        createModal(<ContactModal onAdd={onClearSearch} />);
     };
     const handleEditGroup = (contactGroupID: string) => {
         createModal(<ContactGroupModal contactGroupID={contactGroupID} selectedContactEmails={[]} />);
     };
 
-    const handleCheck = (event: ChangeEvent) => {
-        const target = event.target as HTMLInputElement;
-        const { shiftKey } = event.nativeEvent as any;
-
-        const contactID = target.getAttribute('data-contact-id') as string;
-        const contactIDs = [contactID];
-
-        if (lastChecked && shiftKey) {
-            const start = contacts.findIndex(({ ID }) => ID === contactID);
-            const end = contacts.findIndex(({ ID }) => ID === lastChecked);
-            contactIDs.push(...contacts.slice(Math.min(start, end), Math.max(start, end) + 1).map(({ ID }) => ID));
-        }
-
-        setLastChecked(contactID);
-        onCheck(contactIDs, target.checked);
-    };
-
     const handleClick = (ID: string) => {
         onClearSelection();
-        history.push({ ...location, pathname: `/${ID}` });
+        history.push({ ...history.location, pathname: `/${ID}` });
     };
 
     useEffect(() => {
@@ -106,6 +92,15 @@ const ContactsList = ({
             clearTimeout(timeoutID);
         };
     }, [contactID]);
+
+    const { draggedIDs, handleDragStart, handleDragEnd } = useItemsDraggable(
+        contacts,
+        checkedIDs,
+        onCheck,
+        (draggedIDs: string[]) => {
+            return `${draggedIDs.length} contacts`;
+        }
+    );
 
     if (!totalContacts) {
         const addContact = (
@@ -213,12 +208,16 @@ const ContactsList = ({
                                     style={style}
                                     key={key}
                                     contactID={contactID}
+                                    checked={checkedIDs.includes(contacts[index].ID)}
                                     hasPaidMail={!!user.hasPaidMail}
                                     contactGroupsMap={contactGroupsMap}
                                     contact={contacts[index]}
                                     onClick={handleClick}
-                                    onCheck={handleCheck}
+                                    onCheck={(event) => onCheckOne(event, contacts[index].ID)}
                                     userSettings={userSettings}
+                                    onDragStart={handleDragStart}
+                                    onDragEnd={handleDragEnd}
+                                    dragged={draggedIDs.includes(contacts[index].ID)}
                                 />
                             )}
                             rowCount={contacts.length}

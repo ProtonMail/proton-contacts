@@ -1,4 +1,4 @@
-import React, { CSSProperties, ChangeEvent } from 'react';
+import React, { CSSProperties, ChangeEvent, DragEvent } from 'react';
 import { c } from 'ttag';
 import { classnames, Checkbox, ContactGroupLabels } from 'react-components';
 import { DENSITY } from 'proton-shared/lib/constants';
@@ -10,6 +10,7 @@ import ItemCheckbox from './ItemCheckbox';
 import { FormattedContact } from '../interfaces/FormattedContact';
 
 interface Props {
+    checked: boolean;
     userSettings: UserSettings;
     onClick: (ID: string) => void;
     onCheck: (event: ChangeEvent) => void;
@@ -18,9 +19,13 @@ interface Props {
     hasPaidMail: boolean;
     contactGroupsMap: SimpleMap<ContactGroup>;
     contact: FormattedContact;
+    onDragStart: (event: DragEvent, contact: FormattedContact) => void;
+    onDragEnd: (event: DragEvent) => void;
+    dragged: boolean;
 }
 
 const ContactRow = ({
+    checked,
     style,
     userSettings,
     contactID,
@@ -29,8 +34,11 @@ const ContactRow = ({
     contact,
     onClick,
     onCheck,
+    onDragStart,
+    onDragEnd,
+    dragged,
 }: Props) => {
-    const { ID, Name, LabelIDs = [], emails = [], isChecked } = contact;
+    const { ID, Name, LabelIDs = [], emails = [] } = contact;
     const isCompactView = userSettings.Density === DENSITY.COMPACT;
 
     const contactGroups = contact.LabelIDs.map((ID) => contactGroupsMap[ID] as ContactGroup);
@@ -41,16 +49,20 @@ const ContactRow = ({
             style={style}
             key={ID}
             onClick={() => onClick(ID)}
+            draggable
+            onDragStart={(event) => onDragStart(event, contact)}
+            onDragEnd={onDragEnd}
             className={classnames([
                 'item-container item-contact flex cursor-pointer bg-global-white',
                 contactID === ID && 'item-is-selected',
+                dragged && 'item-dragging',
             ])}
         >
             <div className="flex flex-nowrap w100 h100 mtauto mbauto flex-align-items-center">
                 {isCompactView ? (
                     <Checkbox
                         className="item-icon-compact"
-                        checked={isChecked}
+                        checked={checked}
                         onChange={onCheck}
                         labelOnClick={(event) => event.stopPropagation()}
                         data-contact-id={ID}
@@ -58,7 +70,7 @@ const ContactRow = ({
                     />
                 ) : (
                     <ItemCheckbox
-                        checked={isChecked}
+                        checked={checked}
                         onChange={onCheck}
                         onClick={(event) => event.stopPropagation()}
                         data-contact-id={ID}

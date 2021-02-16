@@ -9,9 +9,9 @@ import {
     SimpleSidebarListItemLink,
 } from 'react-components';
 import { c } from 'ttag';
-import { useHistory } from 'react-router-dom';
 import { UserModel } from 'proton-shared/lib/interfaces';
-import { Contact, ContactGroup } from 'proton-shared/lib/interfaces/contacts';
+import { Contact, ContactEmail, ContactGroup } from 'proton-shared/lib/interfaces/contacts';
+import { SimpleMap } from 'proton-shared/lib/interfaces/utils';
 import SidebarVersion from './SidebarVersion';
 import SidebarGroups from './SidebarGroups';
 import { GroupsWithCount } from '../interfaces/GroupsWithCount';
@@ -25,6 +25,7 @@ interface Props {
     onToggleExpand: () => void;
     onClearSearch: () => void;
     contacts: Contact[];
+    contactEmailsMap: SimpleMap<ContactEmail[]>;
 }
 
 const ContactsSidebar = ({
@@ -36,8 +37,8 @@ const ContactsSidebar = ({
     onToggleExpand,
     onClearSearch,
     contacts,
+    contactEmailsMap,
 }: Props) => {
-    const history = useHistory();
     const { hasPaidMail } = user;
     const { createModal } = useModals();
     const [displayGroups, setDisplayGroups] = useState(true);
@@ -55,7 +56,7 @@ const ContactsSidebar = ({
             primary={
                 <SidebarPrimaryButton
                     className="no-mobile"
-                    onClick={() => createModal(<ContactModal history={history} onAdd={onClearSearch} />)}
+                    onClick={() => createModal(<ContactModal onAdd={onClearSearch} />)}
                 >{c('Action').t`New contact`}</SidebarPrimaryButton>
             }
             version={<SidebarVersion />}
@@ -81,6 +82,7 @@ const ContactsSidebar = ({
                         contactGroups={groupsWithCount}
                         displayGroups={displayGroups}
                         onToggle={() => setDisplayGroups((displayGroups) => !displayGroups)}
+                        contactEmailsMap={contactEmailsMap}
                     />
                 </SidebarList>
             </SidebarNav>

@@ -4,20 +4,23 @@ import { useHistory } from 'react-router';
 import {
     useModals,
     ContactUpgradeModal,
-    SimpleSidebarListItemLink,
     SimpleSidebarListItemHeader,
     SidebarListItemHeaderButton,
 } from 'react-components';
+import { SimpleMap } from 'proton-shared/lib/interfaces/utils';
+import { ContactEmail } from 'proton-shared/lib/interfaces/contacts';
 import { GroupsWithCount } from '../interfaces/GroupsWithCount';
+import SidebarGroup from './SidebarGroup';
 
 interface Props {
     displayGroups: boolean;
     onToggle: () => void;
     contactGroups: GroupsWithCount[];
     hasPaidMail: boolean;
+    contactEmailsMap: SimpleMap<ContactEmail[]>;
 }
 
-const SidebarGroups = ({ displayGroups, onToggle, hasPaidMail, contactGroups }: Props) => {
+const SidebarGroups = ({ displayGroups, onToggle, hasPaidMail, contactGroups, contactEmailsMap }: Props) => {
     const { createModal } = useModals();
     const history = useHistory();
 
@@ -45,24 +48,9 @@ const SidebarGroups = ({ displayGroups, onToggle, hasPaidMail, contactGroups }: 
                 }
             />
             {displayGroups &&
-                contactGroups.map(({ Name, Color, ID, count }) => {
-                    const title = `${Name} (${count})`;
-                    return (
-                        <SimpleSidebarListItemLink
-                            key={ID}
-                            icon="circle"
-                            iconColor={Color}
-                            iconSize={12}
-                            to={`/?contactGroupID=${ID}`}
-                            isActive={(match, location) => {
-                                const params = new URLSearchParams(location.search);
-                                return params.get('contactGroupID') === ID;
-                            }}
-                        >
-                            {title}
-                        </SimpleSidebarListItemLink>
-                    );
-                })}
+                contactGroups.map((group) => (
+                    <SidebarGroup key={group.ID} group={group} contactEmailsMap={contactEmailsMap} />
+                ))}
         </>
     );
 };
