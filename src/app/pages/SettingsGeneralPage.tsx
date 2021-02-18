@@ -1,10 +1,11 @@
 import React from 'react';
 import { c } from 'ttag';
-import { SettingsPropsShared, PrivateMainSettingsArea } from 'react-components';
+import { SettingsPropsShared, PrivateMainSettingsArea, EarlyAccessSection, useEarlyAccess } from 'react-components';
+import isTruthy from 'proton-shared/lib/helpers/isTruthy';
 
 import ContactsSection from '../components/settings/ContactsSection';
 
-export const getGeneralSettingsPage = () => {
+export const getGeneralSettingsPage = ({ hasEarlyAccess }: { hasEarlyAccess: boolean }) => {
     return {
         to: '/settings/general',
         icon: 'settings-singular',
@@ -14,12 +15,19 @@ export const getGeneralSettingsPage = () => {
                 text: c('Title').t`Contacts`,
                 id: 'contacts',
             },
-        ],
+            hasEarlyAccess
+                ? {
+                      text: c('Title').t`Early Access`,
+                      id: 'early-access',
+                  }
+                : undefined,
+        ].filter(isTruthy),
     };
 };
 
 const SettingsGeneralPage = ({ setActiveSection, location }: SettingsPropsShared) => {
-    const { text, subsections } = getGeneralSettingsPage();
+    const { hasEarlyAccess } = useEarlyAccess();
+    const { text, subsections } = getGeneralSettingsPage({ hasEarlyAccess });
     return (
         <PrivateMainSettingsArea
             title={text}
@@ -28,6 +36,7 @@ const SettingsGeneralPage = ({ setActiveSection, location }: SettingsPropsShared
             subsections={subsections}
         >
             <ContactsSection />
+            {hasEarlyAccess ? <EarlyAccessSection /> : null}
         </PrivateMainSettingsArea>
     );
 };
