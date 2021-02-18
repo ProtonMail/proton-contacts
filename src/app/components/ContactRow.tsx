@@ -5,7 +5,7 @@ import { DENSITY } from 'proton-shared/lib/constants';
 import { UserSettings } from 'proton-shared/lib/interfaces';
 import { SimpleMap } from 'proton-shared/lib/interfaces/utils';
 import { ContactGroup } from 'proton-shared/lib/interfaces/contacts';
-import { addPlus, getInitial } from 'proton-shared/lib/helpers/string';
+import { addPlus, getInitials } from 'proton-shared/lib/helpers/string';
 import ItemCheckbox from './ItemCheckbox';
 import { FormattedContact } from '../interfaces/FormattedContact';
 
@@ -75,7 +75,7 @@ const ContactRow = ({
                         onClick={(event) => event.stopPropagation()}
                         data-contact-id={ID}
                     >
-                        {getInitial(Name)}
+                        {getInitials(Name)}
                     </ItemCheckbox>
                 )}
 
