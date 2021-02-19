@@ -127,6 +127,7 @@ const MergeContactPreview = ({
                         ownAddresses={ownAddresses}
                         userKeysList={userKeysList}
                         onDelete={noop}
+                        onReload={noop}
                         isModal
                         isPreview
                     />
