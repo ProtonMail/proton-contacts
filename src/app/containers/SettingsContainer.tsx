@@ -10,6 +10,7 @@ import {
     SidebarBackButton,
     PrivateHeader,
     MainLogo,
+    useEarlyAccess,
 } from 'react-components';
 import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import { c } from 'ttag';
@@ -25,13 +26,19 @@ const SettingsContainer = () => {
     const { state: expanded, toggle: onToggleExpand, set: setExpand } = useToggle();
     const { isNarrow } = useActiveBreakpoint();
     const [activeSection, setActiveSection] = useState('');
+    const { hasEarlyAccess } = useEarlyAccess();
 
     useEffect(() => {
         setExpand(false);
     }, [location.pathname, location.hash]);
 
     const logo = <MainLogo to="/" />;
-    const pages = [getOverviewPage(), getGeneralSettingsPage(), getContactGroupsPage(), getImportExportPage()];
+    const pages = [
+        getOverviewPage(),
+        getGeneralSettingsPage({ hasEarlyAccess }),
+        getContactGroupsPage(),
+        getImportExportPage(),
+    ];
 
     const header = (
         <PrivateHeader

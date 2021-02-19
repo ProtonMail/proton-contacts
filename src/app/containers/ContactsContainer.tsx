@@ -28,16 +28,19 @@ import {
     Icon,
     SettingsButton,
     MainLogo,
+    useItemsSelection,
 } from 'react-components';
 import { normalize } from 'proton-shared/lib/helpers/string';
 import { toMap } from 'proton-shared/lib/helpers/object';
+import { SimpleMap } from 'proton-shared/lib/interfaces/utils';
+import { Contact, ContactEmail } from 'proton-shared/lib/interfaces/contacts';
 import { extractMergeable } from '../helpers/merge';
-
 import ContactsList from '../components/ContactsList';
 import ContactPlaceholder from '../components/ContactPlaceholder';
 import ContactToolbar from '../components/ContactToolbar';
 import ContactsSidebar from '../content/ContactsSidebar';
 import MergeModal from '../components/merge/MergeModal';
+import { FormattedContact } from '../interfaces/FormattedContact';
 
 const ContactsContainer = () => {
     const history = useHistory();
@@ -47,15 +50,13 @@ const ContactsContainer = () => {
     const { isDesktop, isNarrow } = useActiveBreakpoint();
     const [search, updateSearch] = useState('');
     const normalizedSearch = normalize(search);
-    const [contactEmails, loadingContactEmails] = useContactEmails();
-    const [contacts = [], loadingContacts] = useContacts();
+    const [contactEmails, loadingContactEmails] = useContactEmails() as [ContactEmail[], boolean, any];
+    const [contacts = [], loadingContacts] = useContacts() as [Contact[], boolean, any];
     const [contactGroups = [], loadingContactGroups] = useContactGroups();
     const [user] = useUser();
     const [userSettings, loadingUserSettings] = useUserSettings();
-    const [userKeysList, loadingUserKeys] = useUserKeys(user);
+    const [userKeysList, loadingUserKeys] = useUserKeys();
     const [addresses = [], loadingAddresses] = useAddresses();
-
-    const [checkedContacts, setCheckedContacts] = useState(Object.create(null));
 
     const contactID = useMemo(() => {
         const [, contactID] = location.pathname.split('/');
@@ -64,29 +65,26 @@ const ContactsContainer = () => {
 
     const contactGroupID = useMemo(() => {
         const params = new URLSearchParams(location.search);
-        return params.get('contactGroupID');
+        return params.get('contactGroupID') || undefined;
     }, [location.search]);
 
-    const { contactGroupName, totalContactsInGroup } = useMemo(() => {
+    const { contactGroupName, totalContactsInGroup } = useMemo<{
+        contactGroupName?: string;
+        totalContactsInGroup?: number;
+    }>(() => {
         if (!contactGroups.length || !contactGroupID) {
             return Object.create(null);
         }
         const contactGroup = contactGroups.find(({ ID }) => ID === contactGroupID);
         return {
-            contactGroupName: contactGroup.Name,
+            contactGroupName: contactGroup?.Name,
             totalContactsInGroup: contacts.filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID)).length,
         };
     }, [contacts, contactGroups, contactGroupID]);
 
     const ownAddresses = useMemo(() => addresses.map(({ Email }) => Email), [addresses]);
 
-    const hasChecked = useMemo(() => {
-        return Object.keys(checkedContacts).some((key) => checkedContacts[key]);
-    }, [checkedContacts]);
-
     useEffect(() => {
-        // clean checked contacts if navigating to a contact group
-        setCheckedContacts(Object.create(null));
         setExpand(false);
         // clean also the search
         updateSearch('');
@@ -96,12 +94,12 @@ const ContactsContainer = () => {
         if (!Array.isArray(contactEmails)) {
             return {};
         }
-        return contactEmails.reduce((acc, contactEmail) => {
+        return contactEmails.reduce<SimpleMap<ContactEmail[]>>((acc, contactEmail) => {
             const { ContactID } = contactEmail;
             if (!acc[ContactID]) {
                 acc[ContactID] = [];
             }
-            acc[ContactID].push(contactEmail);
+            (acc[ContactID] as ContactEmail[]).push(contactEmail);
             return acc;
         }, Object.create(null));
     }, [contactEmails]);
@@ -113,7 +111,9 @@ const ContactsContainer = () => {
             return [];
         }
         return contacts.filter(({ Name, ID, LabelIDs }) => {
-            const emails = contactEmailsMap[ID] ? contactEmailsMap[ID].map(({ Email }) => Email).join(' ') : '';
+            const emails = contactEmailsMap[ID]
+                ? (contactEmailsMap[ID] as ContactEmail[]).map(({ Email }) => Email).join(' ')
+                : '';
             const searchFilter = normalizedSearch.length
                 ? normalize(`${Name} ${emails}`).includes(normalizedSearch)
                 : true;
@@ -124,85 +124,67 @@ const ContactsContainer = () => {
         });
     }, [contacts, contactGroupID, normalizedSearch, contactEmailsMap]);
 
-    const formattedContacts = useMemo(() => {
+    const formattedContacts = useMemo<FormattedContact[]>(() => {
         return filteredContacts.map((contact) => {
             const { ID } = contact;
             return {
                 ...contact,
                 emails: (contactEmailsMap[ID] || []).map(({ Email }) => Email),
-                isChecked: !!checkedContacts[ID],
             };
         });
-    }, [filteredContacts, checkedContacts, contactEmailsMap]);
-
-    const mergeableContacts = useMemo(() => extractMergeable(formattedContacts), [formattedContacts]);
-    const canMerge = mergeableContacts.length > 0;
-
-    const filteredCheckedIDs = useMemo(() => {
-        return formattedContacts.filter(({ isChecked }) => isChecked).map(({ ID }) => ID);
-    }, [formattedContacts, contactID]);
-
-    const hasCheckedAllFiltered = useMemo(() => {
-        const filteredContactsLength = filteredContacts.length;
-        return !!filteredContactsLength && filteredCheckedIDs.length === filteredContactsLength;
-    }, [filteredContacts, filteredCheckedIDs]);
-
-    const activeIDs = useMemo(() => {
-        return !filteredCheckedIDs.length && contactID ? [contactID] : filteredCheckedIDs;
-    }, [filteredCheckedIDs, contactID]);
-
-    const handleCheck = (contactIDs = [], checked = false) => {
-        const update = contactIDs.reduce((acc, contactID) => {
-            acc[contactID] = checked;
-            return acc;
-        }, Object.create(null));
-        setCheckedContacts({ ...checkedContacts, ...update });
-    };
+    }, [filteredContacts, contactEmailsMap]);
 
     const handleClearSearch = () => {
         updateSearch('');
     };
 
-    const handleCheckAllFiltered = (checked = false) => {
-        handleCheck(
-            filteredContacts.map(({ ID }) => ID),
-            checked
-        );
-    };
+    const mergeableContacts = useMemo(() => extractMergeable(formattedContacts), [formattedContacts]);
+    const canMerge = mergeableContacts.length > 0;
 
-    const handleUncheckAll = () => {
-        handleCheckAllFiltered(false);
-    };
+    const contactIDs = useMemo(() => formattedContacts.map((contact) => contact.ID), [contacts]);
+
+    const { checkedIDs, selectedIDs, handleCheck, handleCheckAll, handleCheckOne } = useItemsSelection(
+        contactID,
+        contactIDs,
+        [contactID, contactGroupID]
+    );
+
+    const hasCheckedAllFiltered = useMemo(() => {
+        const filteredContactsLength = filteredContacts.length;
+        const checkedIDsLength = checkedIDs.length;
+        return !!filteredContactsLength && checkedIDsLength === filteredContactsLength;
+    }, [filteredContacts, checkedIDs]);
 
     const onDelete = () => {
-        const deleteAll = activeIDs.length === contacts.length;
+        const deleteAll = selectedIDs.length === contacts.length;
         if (deleteAll) {
             history.replace({ ...location, state: { ignoreClose: true }, pathname: '/' });
-            return setCheckedContacts(Object.create(null));
+            handleCheckAll(false);
         }
-        if (activeIDs.length === filteredContacts.length) {
+        if (selectedIDs.length === filteredContacts.length) {
             handleClearSearch();
         }
-        if (contactID && activeIDs.includes(contactID)) {
+        if (contactID && selectedIDs.includes(contactID)) {
             history.replace({ ...location, state: { ignoreClose: true }, pathname: '/' });
         }
-        handleCheck(filteredCheckedIDs, false);
+        handleCheckAll(false);
     };
 
     const handleDelete = () => {
-        const deleteAll = activeIDs.length === contacts.length;
-        createModal(<ContactDeleteModal contactIDs={activeIDs} deleteAll={deleteAll} onDelete={onDelete} />);
+        const deleteAll = selectedIDs.length === contacts.length;
+        createModal(<ContactDeleteModal contactIDs={selectedIDs} deleteAll={deleteAll} onDelete={onDelete} />);
     };
 
     const handleMerge = (mergeAll = true) => {
-        const contacts = mergeAll ? mergeableContacts : [formattedContacts.filter(({ isChecked }) => isChecked)];
+        const selectedContacts = formattedContacts.filter((contact) => selectedIDs.includes(contact.ID));
+        const contacts = mergeAll ? mergeableContacts : [selectedContacts];
 
         createModal(
             <MergeModal
                 contacts={contacts}
                 contactID={contactID}
                 userKeysList={userKeysList}
-                onMerged={() => setCheckedContacts(Object.create(null))} // Unselect all contacts
+                onMerged={() => handleCheckAll(false)} // Unselect all contacts
             />
         );
     };
@@ -222,11 +204,11 @@ const ContactsContainer = () => {
         loadingUserSettings;
     const contactsLength = contacts ? contacts.length : 0;
 
-    const contactComponent = contactID && !!contactsLength && !hasChecked && (
+    const contactComponent = contactID && !!contactsLength && !checkedIDs.length && (
         <ErrorBoundary key={contactID} component={<GenericError className="pt2 view-column-detail flex-item-fluid" />}>
             <ContactContainer
                 contactID={contactID}
-                contactEmails={contactEmailsMap[contactID]}
+                contactEmails={contactEmailsMap[contactID] || []}
                 contactGroupsMap={contactGroupsMap}
                 ownAddresses={ownAddresses}
                 userKeysList={userKeysList}
@@ -237,7 +219,6 @@ const ContactsContainer = () => {
 
     const contactsListComponent = (isDesktop || !contactComponent) && (
         <ContactsList
-            emptyAddressBook={!contactsLength}
             contactID={contactID}
             contactGroupID={contactGroupID}
             totalContacts={contactsLength}
@@ -247,26 +228,27 @@ const ContactsContainer = () => {
             user={user}
             userSettings={userSettings}
             loadingUserKeys={loadingUserKeys}
-            onCheck={handleCheck}
+            onCheckOne={handleCheckOne}
             onClearSearch={handleClearSearch}
-            onClearSelection={handleUncheckAll}
+            onClearSelection={() => handleCheckAll(false)}
             onImport={handleImport}
             isDesktop={isDesktop}
+            checkedIDs={checkedIDs}
+            onCheck={handleCheck}
         />
     );
 
     const contactPlaceHolderComponent = isDesktop && !contactComponent && !!formattedContacts.length && (
         <ContactPlaceholder
-            history={history}
             user={user}
             userKeysList={userKeysList}
             loadingUserKeys={loadingUserKeys}
             totalContacts={contactsLength}
             totalContactsInGroup={totalContactsInGroup}
-            selectedContacts={filteredCheckedIDs.length}
+            selectedContacts={checkedIDs.length}
             contactGroupID={contactGroupID}
             contactGroupName={contactGroupName}
-            onUncheck={handleUncheckAll}
+            onUncheck={() => handleCheckAll(false)}
             canMerge={canMerge}
             onMerge={handleMerge}
             onImport={handleImport}
@@ -287,10 +269,8 @@ const ContactsContainer = () => {
             title={title}
             expanded={expanded}
             onToggleExpand={onToggleExpand}
-            search={search}
             isNarrow={isNarrow}
             backUrl={backUrl}
-            history={history}
             searchDropdown={
                 <SearchDropdown
                     originalPlacement="bottom-right"
@@ -305,10 +285,7 @@ const ContactsContainer = () => {
                 <Searchbox placeholder={c('Placeholder').t`Search contacts`} value={search} onChange={updateSearch} />
             }
             floatingButton={
-                <FloatingButton
-                    onClick={() => createModal(<ContactModal history={history} onAdd={handleClearSearch} />)}
-                    icon="plus"
-                />
+                <FloatingButton onClick={() => createModal(<ContactModal onAdd={handleClearSearch} />)} icon="plus" />
             }
         />
     );
@@ -316,7 +293,6 @@ const ContactsContainer = () => {
     const sidebar = (
         <ContactsSidebar
             logo={logo}
-            history={history}
             user={user}
             expanded={expanded}
             onToggleExpand={onToggleExpand}
@@ -324,6 +300,7 @@ const ContactsContainer = () => {
             totalContacts={contactsLength}
             contactGroups={contactGroups}
             contacts={contacts}
+            contactEmailsMap={contactEmailsMap}
         />
     );
 
@@ -333,9 +310,9 @@ const ContactsContainer = () => {
                 <ContactToolbar
                     user={user}
                     contactEmailsMap={contactEmailsMap}
-                    activeIDs={activeIDs}
+                    activeIDs={selectedIDs}
                     checked={hasCheckedAllFiltered}
-                    onCheck={handleCheckAllFiltered}
+                    onCheckAll={handleCheckAll}
                     onDelete={handleDelete}
                     simplified={!!contactID && !isDesktop}
                     onMerge={() => handleMerge(false)}

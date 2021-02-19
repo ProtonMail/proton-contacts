@@ -12,12 +12,12 @@ const ImportCsvTableHeader = ({ disabledPrevious = true, disabledNext = true, on
     return (
         <thead {...rest}>
             <tr>
-                <TableCell type="header" className="w15 aligncenter">
+                <TableCell type="header" className="w15 text-center">
                     {c('TableHeader').t`IMPORT`}
                 </TableCell>
-                <TableCell type="header" className="aligncenter">{c('TableHeader').t`CSV FIELD`}</TableCell>
-                <TableCell type="header" className="aligncenter">{c('TableHeader').t`VCARD FIELD`}</TableCell>
-                <TableCell type="header" className="w30 aligncenter">
+                <TableCell type="header" className="text-center">{c('TableHeader').t`CSV FIELD`}</TableCell>
+                <TableCell type="header" className="text-center">{c('TableHeader').t`VCARD FIELD`}</TableCell>
+                <TableCell type="header" className="w30 text-center">
                     <div className="inline-flex">
                         <span className="flex-item-centered-vert mr0-5">{c('TableHeader').t`VALUES`}</span>
                         <span className="flex flex-nowrap">

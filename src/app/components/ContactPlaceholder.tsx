@@ -1,71 +1,74 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { c, msgid } from 'ttag';
 import { useModals, PrimaryButton, Button, Icon, ContactGroupModal, useAppLink } from 'react-components';
-
+import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
+import { DecryptedKey, UserModel } from 'proton-shared/lib/interfaces';
 import { getAccountSettingsApp } from 'proton-shared/lib/apps/helper';
 import importSvg from 'design-system/assets/img/pm-images/contact-import.svg';
 import exportSvg from 'design-system/assets/img/pm-images/contact-export.svg';
 import contactGroupsSvg from 'design-system/assets/img/pm-images/contact-groups.svg';
 import upgradeSvg from 'design-system/assets/img/pm-images/contact-unlock-features.svg';
-
 import contactGroupCardLight from 'design-system/assets/img/shared/empty-address-book.svg';
 import contactGroupCardDark from 'design-system/assets/img/shared/empty-address-book-dark.svg';
-
-import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
 import ExportModal from './settings/ExportModal';
 import MergeRow from './MergeRow';
 
-const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }) => {
+interface PaidCardsProps {
+    loadingUserKeys: boolean;
+    onImport: () => void;
+    onExport: () => void;
+    onGroups: () => void;
+}
+
+const PaidCards = ({ loadingUserKeys, onImport, onExport, onGroups }: PaidCardsProps) => {
     return (
-        <div className="flex flex-nowrap onmobile-flex-column boxes-placeholder-container">
-            <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex-noMinChildren flex-column">
+        <div className="flex flex-nowrap on-mobile-flex-column boxes-placeholder-container">
+            <div className="bordered-container flex-item-fluid mr1 on-mobile-mr0 on-mobile-mb1 p1 text-center flex-no-min-children flex-column">
                 <div className="flex-item-fluid">
                     <img src={importSvg} alt="contact-import" className="mb1" />
-                    <div className="bold">{c('Title').t`Import contacts`}</div>
+                    <div className="text-bold">{c('Title').t`Import contacts`}</div>
                     <p>{c('Info')
                         .t`Add contacts to your ProtonMail account by importing them from a CSV or vCard file.`}</p>
                 </div>
                 <div className="flex-item-noshrink mt2 boxes-placeholder-button">
-                    <PrimaryButton className="bold" onClick={onImport} disabled={loadingUserKeys}>{c('Action')
+                    <PrimaryButton className="text-bold" onClick={onImport} disabled={loadingUserKeys}>{c('Action')
                         .t`Import`}</PrimaryButton>
                 </div>
             </div>
-            <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex-noMinChildren flex-column">
+            <div className="bordered-container flex-item-fluid mr1 on-mobile-mr0 on-mobile-mb1 p1 text-center flex-no-min-children flex-column">
                 <div className="flex-item-fluid">
                     <img src={exportSvg} alt="contact-export" className="mb1" />
-                    <div className="bold">{c('Title').t`Export contacts`}</div>
+                    <div className="text-bold">{c('Title').t`Export contacts`}</div>
                     <p>{c('Info').t`Create a backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
                 </div>
                 <div className="flex-item-noshrink mt2 boxes-placeholder-button">
-                    <PrimaryButton className="bold" onClick={onExport} disabled={loadingUserKeys}>{c('Action')
+                    <PrimaryButton className="text-bold" onClick={onExport} disabled={loadingUserKeys}>{c('Action')
                         .t`Export`}</PrimaryButton>
                 </div>
             </div>
-            <div className="bordered-container flex-item-fluid onmobile-mr0 onmobile-mb1 p1 aligncenter flex-noMinChildren flex-column">
+            <div className="bordered-container flex-item-fluid on-mobile-mr0 on-mobile-mb1 p1 text-center flex-no-min-children flex-column">
                 <div className="flex-item-fluid">
                     <img src={contactGroupsSvg} alt="contact-groups" className="mb1" />
-                    <div className="bold">{c('Title').t`Manage groups`}</div>
+                    <div className="text-bold">{c('Title').t`Manage groups`}</div>
                     <p>{c('Info')
                         .t`Use groups to send email to a list of addresses you regularly communicate with.`}</p>
                 </div>
                 <div className="flex-item-noshrink mt2 boxes-placeholder-button">
-                    <PrimaryButton className="bold" onClick={onGroups}>{c('Action').t`Groups`}</PrimaryButton>
+                    <PrimaryButton className="text-bold" onClick={onGroups}>{c('Action').t`Groups`}</PrimaryButton>
                 </div>
             </div>
         </div>
     );
 };
 
-PaidCards.propTypes = {
-    loadingUserKeys: PropTypes.bool,
-    onImport: PropTypes.func,
-    onExport: PropTypes.func,
-    onGroups: PropTypes.func,
-};
+interface FreeCardsProps {
+    loadingUserKeys: boolean;
+    onImport: () => void;
+    onExport: () => void;
+}
 
-const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
+const FreeCards = ({ loadingUserKeys, onImport, onExport }: FreeCardsProps) => {
     const goToApp = useAppLink();
 
     const handleUpgrade = () => {
@@ -73,38 +76,38 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
     };
 
     return (
-        <div className="flex flex-nowrap onmobile-flex-column boxes-placeholder-container">
-            <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex-noMinChildren flex-column">
+        <div className="flex flex-nowrap on-mobile-flex-column boxes-placeholder-container">
+            <div className="bordered-container flex-item-fluid mr1 on-mobile-mr0 on-mobile-mb1 p1 text-center flex-no-min-children flex-column">
                 <div className="flex-item-fluid">
                     <img src={importSvg} alt="contact-import" className="mb1" />
-                    <div className="bold">{c('Title').t`Import contacts`}</div>
+                    <div className="text-bold">{c('Title').t`Import contacts`}</div>
                     <p>{c('Info')
                         .t`Add contacts to your ProtonMail account by importing them from a CSV or vCard file.`}</p>
                 </div>
                 <div className="flex-item-noshrink mt2 boxes-placeholder-button">
-                    <PrimaryButton className="bold" onClick={onImport} disabled={loadingUserKeys}>{c('Action')
+                    <PrimaryButton className="text-bold" onClick={onImport} disabled={loadingUserKeys}>{c('Action')
                         .t`Import`}</PrimaryButton>
                 </div>
             </div>
-            <div className="bordered-container flex-item-fluid mr1 onmobile-mr0 onmobile-mb1 p1 aligncenter flex-noMinChildren flex-column">
+            <div className="bordered-container flex-item-fluid mr1 on-mobile-mr0 on-mobile-mb1 p1 text-center flex-no-min-children flex-column">
                 <div className="flex-item-fluid">
                     <img src={exportSvg} alt="contact-export" className="mb1" />
-                    <div className="bold">{c('Title').t`Export contacts`}</div>
+                    <div className="text-bold">{c('Title').t`Export contacts`}</div>
                     <p>{c('Info').t`Create a backup of your ProtonMail contacts by exporting them to a vCard file.`}</p>
                 </div>
                 <div className="flex-item-noshrink mt2 boxes-placeholder-button">
-                    <PrimaryButton className="bold" onClick={onExport} disabled={loadingUserKeys}>{c('Action')
+                    <PrimaryButton className="text-bold" onClick={onExport} disabled={loadingUserKeys}>{c('Action')
                         .t`Export`}</PrimaryButton>
                 </div>
             </div>
-            <div className="bordered-container flex-item-fluid onmobile-mr0 onmobile-mb1 p1 aligncenter flex-noMinChildren flex-column">
+            <div className="bordered-container flex-item-fluid on-mobile-mr0 on-mobile-mb1 p1 text-center flex-no-min-children flex-column">
                 <div className="flex-item-fluid">
                     <img src={upgradeSvg} alt="contact-unlock-features" className="mb1" />
-                    <div className="bold">{c('Title').t`Unlock features`}</div>
+                    <div className="text-bold">{c('Title').t`Unlock features`}</div>
                     <p>{c('Info').t`Upgrade to a paid plan to manage contact groups.`}</p>
                 </div>
                 <div className="flex-item-noshrink mt2 boxes-placeholder-button">
-                    <PrimaryButton className="bold" onClick={handleUpgrade}>
+                    <PrimaryButton className="text-bold" onClick={handleUpgrade}>
                         {c('Action').t`Upgrade`}
                     </PrimaryButton>
                 </div>
@@ -113,11 +116,22 @@ const FreeCards = ({ loadingUserKeys, onImport, onExport }) => {
     );
 };
 
-FreeCards.propTypes = {
-    loadingUserKeys: PropTypes.bool,
-    onImport: PropTypes.func,
-    onExport: PropTypes.func,
-};
+interface Props {
+    totalContacts: number;
+    totalContactsInGroup: number | undefined;
+    selectedContacts: number;
+    contactGroupID: string | undefined;
+    contactGroupName: string | undefined;
+    user: UserModel;
+    userKeysList: DecryptedKey[];
+    loadingUserKeys: boolean;
+    onUncheck: () => void;
+    canMerge: boolean;
+    onMerge: () => void;
+    onImport: () => void;
+    onExport: () => void;
+    onGroups: () => void;
+}
 
 const ContactPlaceholder = ({
     totalContacts = 0,
@@ -134,7 +148,7 @@ const ContactPlaceholder = ({
     onImport,
     onExport,
     onGroups,
-}) => {
+}: Props) => {
     const { hasPaidMail } = user;
     const { createModal } = useModals();
 
@@ -153,9 +167,9 @@ const ContactPlaceholder = ({
 
         return (
             <div className="p2 view-column-detail flex flex-item-fluid scroll-if-needed">
-                <div className="aligncenter center mbauto mtauto">
+                <div className="text-center center mbauto mtauto">
                     <div className="mb2">{c('Info').jt`You selected ${totalContactsText} from your address book.`}</div>
-                    <div className="aligncenter mb2">
+                    <div className="text-center mb2">
                         <img src={contactGroupCard} alt="contact-group-card" />
                     </div>
                     <div className="mb2">
@@ -176,16 +190,17 @@ const ContactPlaceholder = ({
             </b>
         );
 
-        const handleEdit = () => createModal(<ContactGroupModal contactGroupID={contactGroupID} />);
+        const handleEdit = () =>
+            createModal(<ContactGroupModal contactGroupID={contactGroupID} selectedContactEmails={[]} />);
         const handleExport = () =>
             createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
 
         return (
             <div className="p2 view-column-detail flex flex-item-fluid scroll-if-needed">
-                <div className="aligncenter center mbauto mtauto">
-                    <h1 className="ellipsis lh-standard">{contactGroupName}</h1>
+                <div className="text-center center mbauto mtauto">
+                    <h1 className="text-ellipsis lh-rg">{contactGroupName}</h1>
                     <div className="mb2">{c('Info').jt`You have ${totalContactsText} in this group.`}</div>
-                    <div className="aligncenter mb2">
+                    <div className="text-center mb2">
                         <img src={contactGroupCard} alt="contact-group-card" />
                     </div>
                     <div className="mb2">
@@ -211,7 +226,7 @@ const ContactPlaceholder = ({
 
     return (
         <div className="p2 view-column-detail flex-item-fluid scroll-if-needed">
-            <div className="aligncenter mt2">
+            <div className="text-center mt2">
                 <h1>{c('Title').t`Contacts`}</h1>
                 <div className="mb2">{c('Info').jt`You have ${boldTotalContacts} in your address book`}</div>
                 <div className="mb1">
@@ -219,7 +234,7 @@ const ContactPlaceholder = ({
                         .jt`You can decide whether or not contacts are automatically added to your address book by navigating to ${navigateTo}`}
                 </div>
                 <div className="mb1">
-                    <Link to="/settings" className="inline-flex flex-nowrap nodecoration">
+                    <Link to="/settings" className="inline-flex flex-nowrap text-no-decoration">
                         <Icon className="mr0-5 flex-item-centered-vert" name="settings-master" />
                         <span>{c('Title').t`Settings`}</span>
                     </Link>
@@ -233,7 +248,6 @@ const ContactPlaceholder = ({
             </div>
             {hasPaidMail ? (
                 <PaidCards
-                    userKeysList={userKeysList}
                     loadingUserKeys={loadingUserKeys}
                     onImport={onImport}
                     onExport={() => onExport()}
@@ -244,23 +258,6 @@ const ContactPlaceholder = ({
             )}
         </div>
     );
-};
-
-ContactPlaceholder.propTypes = {
-    totalContacts: PropTypes.number,
-    totalContactsInGroup: PropTypes.number,
-    selectedContacts: PropTypes.number,
-    contactGroupID: PropTypes.string,
-    contactGroupName: PropTypes.string,
-    user: PropTypes.object.isRequired,
-    userKeysList: PropTypes.array,
-    loadingUserKeys: PropTypes.bool,
-    onUncheck: PropTypes.func,
-    canMerge: PropTypes.bool,
-    onMerge: PropTypes.func,
-    onImport: PropTypes.func,
-    onExport: PropTypes.func,
-    onGroups: PropTypes.func,
 };
 
 export default ContactPlaceholder;

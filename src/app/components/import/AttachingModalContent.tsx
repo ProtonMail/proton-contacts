@@ -1,6 +1,6 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, DragEvent } from 'react';
 import { c } from 'ttag';
-import { Bordered, FileInput, Alert, AttachedFile } from 'react-components';
+import { Bordered, FileInput, Alert, AttachedFile, Dropzone, classnames } from 'react-components';
 import { MAX_IMPORT_FILE_SIZE_STRING, MAX_IMPORT_CONTACTS_STRING } from '../../constants';
 import { ImportContactsModel } from '../../interfaces/Import';
 
@@ -8,8 +8,20 @@ interface Props {
     model: ImportContactsModel;
     onAttach: (event: ChangeEvent<HTMLInputElement>) => void;
     onClear: () => void;
+    isDropzoneHovered: boolean;
+    onDrop: (event: DragEvent) => void;
+    onDragEnter: (event: DragEvent) => void;
+    onDragLeave: (event: DragEvent) => void;
 }
-const AttachingModalContent = ({ model, onAttach, onClear }: Props) => {
+const AttachingModalContent = ({
+    model,
+    onAttach,
+    onClear,
+    isDropzoneHovered,
+    onDrop,
+    onDragEnter,
+    onDragLeave,
+}: Props) => {
     const alert = model.failure ? (
         <Alert type="error">{model.failure?.message}</Alert>
     ) : (
@@ -21,14 +33,22 @@ const AttachingModalContent = ({ model, onAttach, onClear }: Props) => {
     return (
         <>
             {alert}
-            <Bordered className="flex">
+            <Bordered className={classnames(['flex relative', !!model.failure && 'bordered-container--error'])}>
                 {/* TODO: drag&drop component here. There seems to be no React component for this kind of behavior yet */}
                 {model.fileAttached ? (
                     <AttachedFile file={model.fileAttached} iconName="contacts-groups" onClear={onClear} />
                 ) : (
-                    <FileInput className="center" accept=".csv, .vcf" id="import-contacts" onChange={onAttach}>
-                        {c('Action').t`Select file from computer`}
-                    </FileInput>
+                    <Dropzone
+                        isHovered={isDropzoneHovered}
+                        onDrop={onDrop}
+                        onDragEnter={onDragEnter}
+                        onDragLeave={onDragLeave}
+                        className="w100"
+                    >
+                        <FileInput className="text-center" accept=".csv, .vcf" id="import-contacts" onChange={onAttach}>
+                            {c('Action').t`Choose a file or drag it here`}
+                        </FileInput>
+                    </Dropzone>
                 )}
             </Bordered>
         </>

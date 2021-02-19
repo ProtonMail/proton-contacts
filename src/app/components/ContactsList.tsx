@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useRef, ChangeEvent } from 'react';
 import { c } from 'ttag';
 import {
     useModals,
@@ -8,26 +7,47 @@ import {
     classnames,
     ContactModal,
     ContactGroupModal,
+    useItemsDraggable,
 } from 'react-components';
-import { useHistory, useLocation } from 'react-router';
+import { useHistory } from 'react-router';
 import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
 import { DENSITY } from 'proton-shared/lib/constants';
 import { List, AutoSizer } from 'react-virtualized';
-
+import { ContactGroup } from 'proton-shared/lib/interfaces/contacts';
+import { SimpleMap } from 'proton-shared/lib/interfaces/utils';
+import { UserModel, UserSettings } from 'proton-shared/lib/interfaces';
 import noContactsImgLight from 'design-system/assets/img/shared/empty-address-book.svg';
 import noContactsImgDark from 'design-system/assets/img/shared/empty-address-book-dark.svg';
-
 import noResultsImgLight from 'design-system/assets/img/shared/no-result-search.svg';
 import noResultsImgDark from 'design-system/assets/img/shared/no-result-search-dark.svg';
-
 import ContactRow from './ContactRow';
+import { FormattedContact } from '../interfaces/FormattedContact';
+
+interface Props {
+    totalContacts: number;
+    totalContactsInGroup: number | undefined;
+    contacts: FormattedContact[];
+    contactGroupsMap: SimpleMap<ContactGroup>;
+    onCheckOne: (event: ChangeEvent, contactID: string) => void;
+    onClearSearch: () => void;
+    onClearSelection: () => void;
+    onImport: () => void;
+    user: UserModel;
+    userSettings: UserSettings;
+    loadingUserKeys: boolean;
+    contactID: string;
+    contactGroupID: string | undefined;
+    isDesktop: boolean;
+    onCheck: (contactIDs: string[], checked: boolean, replace: boolean) => void;
+    checkedIDs: string[];
+}
 
 const ContactsList = ({
     totalContacts,
     totalContactsInGroup,
     contacts,
     contactGroupsMap,
-    onCheck,
+    onCheckOne,
     onClearSearch,
     onClearSelection,
     onImport,
@@ -37,51 +57,34 @@ const ContactsList = ({
     contactID,
     contactGroupID,
     isDesktop = true,
-}) => {
+    onCheck,
+    checkedIDs,
+}: Props) => {
     const history = useHistory();
-    const location = useLocation();
-    const listRef = useRef(null);
+    const listRef = useRef<List>(null);
     const containerRef = useRef(null);
-    const [lastChecked, setLastChecked] = useState(); // Store ID of the last contact ID checked
     const { createModal } = useModals();
     const isCompactView = userSettings.Density === DENSITY.COMPACT;
 
     const noContactsImg = getLightOrDark(noContactsImgLight, noContactsImgDark);
 
     const handleAddContact = () => {
-        createModal(<ContactModal history={history} onAdd={onClearSearch} />);
+        createModal(<ContactModal onAdd={onClearSearch} />);
     };
-    const handleEditGroup = (contactGroupID) => {
-        createModal(<ContactGroupModal contactGroupID={contactGroupID} />);
-    };
-
-    const handleCheck = (event) => {
-        const { target } = event;
-        const { shiftKey } = event.nativeEvent;
-
-        const contactID = target.getAttribute('data-contact-id');
-        const contactIDs = [contactID];
-
-        if (lastChecked && shiftKey) {
-            const start = contacts.findIndex(({ ID }) => ID === contactID);
-            const end = contacts.findIndex(({ ID }) => ID === lastChecked);
-            contactIDs.push(...contacts.slice(Math.min(start, end), Math.max(start, end) + 1).map(({ ID }) => ID));
-        }
-
-        setLastChecked(contactID);
-        onCheck(contactIDs, target.checked);
+    const handleEditGroup = (contactGroupID: string) => {
+        createModal(<ContactGroupModal contactGroupID={contactGroupID} selectedContactEmails={[]} />);
     };
 
-    const handleClick = (ID) => {
+    const handleClick = (ID: string) => {
         onClearSelection();
-        history.push({ ...location, pathname: `/${ID}` });
+        history.push({ ...history.location, pathname: `/${ID}` });
     };
 
     useEffect(() => {
         const timeoutID = setTimeout(() => {
             if (contactID && totalContacts) {
                 const index = contacts.findIndex(({ ID }) => contactID === ID);
-                listRef.current.scrollToRow(index);
+                listRef.current?.scrollToRow(index);
             }
         }, 200);
 
@@ -90,9 +93,23 @@ const ContactsList = ({
         };
     }, [contactID]);
 
+    const { draggedIDs, handleDragStart, handleDragEnd } = useItemsDraggable(
+        contacts,
+        checkedIDs,
+        onCheck,
+        (draggedIDs: string[]) => {
+            return `${draggedIDs.length} contacts`;
+        }
+    );
+
     if (!totalContacts) {
         const addContact = (
-            <button key="add" type="button" className="color-primary ml0-5 mr0-5 underline" onClick={handleAddContact}>
+            <button
+                key="add"
+                type="button"
+                className="color-primary ml0-5 mr0-5 text-underline"
+                onClick={handleAddContact}
+            >
                 {c('Action').t`Add a contact`}
             </button>
         );
@@ -100,7 +117,7 @@ const ContactsList = ({
             <button
                 key="import"
                 type="button"
-                className="color-primary ml0-5 mr0-5 underline"
+                className="color-primary ml0-5 mr0-5 text-underline"
                 onClick={onImport}
                 disabled={loadingUserKeys}
             >
@@ -115,7 +132,7 @@ const ContactsList = ({
                     url={noContactsImg}
                     className="mtauto mbauto"
                 >
-                    <div className="flex flex-items-center">
+                    <div className="flex flex-align-items-center">
                         {c('Actions message').jt`You can either ${addContact} or ${importContact} from a file.`}
                     </div>
                 </IllustrationPlaceholder>
@@ -129,7 +146,7 @@ const ContactsList = ({
                 <button
                     key="add"
                     type="button"
-                    className="color-primary ml0-5 mr0-5 underline"
+                    className="color-primary ml0-5 mr0-5 text-underline"
                     onClick={() => handleEditGroup(contactGroupID)}
                 >
                     {c('Action').t`Edit your group`}
@@ -137,12 +154,12 @@ const ContactsList = ({
             );
 
             return (
-                <div className="p2 aligncenter w100">
+                <div className="p2 text-center w100">
                     <IllustrationPlaceholder
                         title={c('Info message').t`Your contact group is empty`}
                         url={noContactsImg}
                     >
-                        <div className="flex flex-items-center">
+                        <div className="flex flex-align-items-center">
                             {c('Actions message').jt`You can ${editGroup} to add a contact.`}
                         </div>
                     </IllustrationPlaceholder>
@@ -151,7 +168,7 @@ const ContactsList = ({
         }
 
         const clearSearch = (
-            <LinkButton key="add" onClick={onClearSearch} className="ml0-25 bold">
+            <LinkButton key="add" onClick={onClearSearch} className="ml0-25 text-bold">
                 {c('Action').t`Clear it`}
             </LinkButton>
         );
@@ -159,9 +176,9 @@ const ContactsList = ({
         const noResultsImg = getLightOrDark(noResultsImgLight, noResultsImgDark);
 
         return (
-            <div className="p2 aligncenter w100">
+            <div className="p2 text-center w100">
                 <IllustrationPlaceholder title={c('Info message').t`No results found`} url={noResultsImg}>
-                    <div className="flex flex-items-center">
+                    <div className="flex flex-align-items-center">
                         {c('Actions message').jt`You can either update your search query or ${clearSearch}.`}
                     </div>
                 </IllustrationPlaceholder>
@@ -180,7 +197,7 @@ const ContactsList = ({
                 isCompactView && 'is-compact',
             ])}
         >
-            <div className="items-column-list-inner items-column-list-inner--noborder">
+            <div className="items-column-list-inner items-column-list-inner--no-border">
                 <AutoSizer>
                     {({ height, width }) => (
                         <List
@@ -191,12 +208,16 @@ const ContactsList = ({
                                     style={style}
                                     key={key}
                                     contactID={contactID}
+                                    checked={checkedIDs.includes(contacts[index].ID)}
                                     hasPaidMail={!!user.hasPaidMail}
                                     contactGroupsMap={contactGroupsMap}
                                     contact={contacts[index]}
                                     onClick={handleClick}
-                                    onCheck={handleCheck}
+                                    onCheck={(event) => onCheckOne(event, contacts[index].ID)}
                                     userSettings={userSettings}
+                                    onDragStart={handleDragStart}
+                                    onDragEnd={handleDragEnd}
+                                    dragged={draggedIDs.includes(contacts[index].ID)}
                                 />
                             )}
                             rowCount={contacts.length}
@@ -209,22 +230,6 @@ const ContactsList = ({
             </div>
         </div>
     );
-};
-
-ContactsList.propTypes = {
-    totalContacts: PropTypes.number,
-    contacts: PropTypes.array,
-    contactGroupsMap: PropTypes.object,
-    onCheck: PropTypes.func,
-    onClearSearch: PropTypes.func,
-    onClearSelection: PropTypes.func,
-    onImport: PropTypes.func,
-    user: PropTypes.object,
-    userSettings: PropTypes.object,
-    loadingUserKeys: PropTypes.bool.isRequired,
-    contactID: PropTypes.string,
-    contactGroupID: PropTypes.string,
-    isDesktop: PropTypes.bool,
 };
 
 export default ContactsList;
