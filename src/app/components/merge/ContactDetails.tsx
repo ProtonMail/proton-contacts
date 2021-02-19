@@ -76,6 +76,7 @@ const ContactDetails = ({ contactID, userKeysList, ...rest }: Props) => {
                     contactEmails={contactEmails}
                     contactGroupsMap={contactGroupsMap}
                     ownAddresses={ownAddresses}
+                    onReload={noop}
                 />
             )}
         </FormModal>
