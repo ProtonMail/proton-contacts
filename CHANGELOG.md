@@ -1,3 +1,12 @@
+# [4.0.0 - Beta 20] - 2021-02-24
+
+## Improvements
+
+-   Drag&drop of contacts into contact groups in the left handside navigation bar is now possible
+-   Added the actual group name to the modal that appears when adding a contact with several email addresses to a group
+-   Updated the contacts merge progress bar to show "x out of y contacts" in order to facilitate progress tracking
+-   Improved the handling of various cases related to failed signature verification
+
 # [4.0.0 - Beta 19] - 2021-02-09
 
 ## Improvements
