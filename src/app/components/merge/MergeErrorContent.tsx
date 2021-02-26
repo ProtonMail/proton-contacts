@@ -7,7 +7,7 @@ interface Props {
 
 const MergeErrorContent = ({ error }: Props) => {
     return (
-        <div className="bg-global-attention p1">
+        <div className="bg-warning p1">
             <Icon name="attention" className="mr1" />
             <span className="mr1">{error}</span>
         </div>
