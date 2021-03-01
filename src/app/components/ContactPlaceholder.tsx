@@ -186,7 +186,11 @@ const ContactPlaceholder = ({
     if (contactGroupID) {
         const totalContactsText = (
             <b key="total-contacts">
-                {totalContactsInGroup === 1 ? c('Info').t`1 contact` : c('Info').t`${totalContactsInGroup} contacts`}
+                {c('Info').ngettext(
+                    msgid`${totalContactsInGroup} contact`,
+                    `${totalContactsInGroup} contacts`,
+                    totalContactsInGroup
+                )}
             </b>
         );
 
@@ -201,7 +205,7 @@ const ContactPlaceholder = ({
                     <h1 className="text-ellipsis lh-rg">{contactGroupName}</h1>
                     <div className="mb2">{c('Info').jt`You have ${totalContactsText} in this group.`}</div>
                     <div className="text-center mb2">
-                        <img src={contactGroupCard} alt="contact-group-card" />
+                        <img src={contactGroupCard} alt="" />
                     </div>
                     <div className="mb2">
                         <Button className="mr1" onClick={handleEdit}>{c('Action').t`Edit`}</Button>
