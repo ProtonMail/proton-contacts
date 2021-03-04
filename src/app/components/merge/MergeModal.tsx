@@ -2,13 +2,13 @@ import React, { useState, useEffect, useMemo, ComponentProps } from 'react';
 import { c } from 'ttag';
 import { useEventManager, FormModal, ResetButton, PrimaryButton } from 'react-components';
 import { DecryptedKey } from 'proton-shared/lib/interfaces';
+import { ContactFormatted } from 'proton-shared/lib/interfaces/contacts';
 import MergeModalContent from './MergeModalContent';
 import MergingModalContent from './MergingModalContent';
-import { FormattedContact } from '../../interfaces/FormattedContact';
 import { MergeModel } from '../../interfaces/MergeModel';
 
 interface Props extends ComponentProps<typeof FormModal> {
-    contacts: FormattedContact[][];
+    contacts: ContactFormatted[][];
     contactID: string;
     userKeysList: DecryptedKey[];
     onMerged: () => void;

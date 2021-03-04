@@ -7,8 +7,7 @@ import {
     PROPERTIES,
     isCustomField,
 } from 'proton-shared/lib/contacts/vcard';
-import { ContactProperties, ContactValue } from 'proton-shared/lib/interfaces/contacts';
-import { FormattedContact } from '../interfaces/FormattedContact';
+import { ContactProperties, ContactValue, ContactFormatted } from 'proton-shared/lib/interfaces/contacts';
 
 /**
  * Given an array of keys and an object storing an index for each key,
@@ -78,7 +77,7 @@ export const linkConnections = (connections: number[][]): number[][] => {
  *
  * @returns List of groups of contacts that can be merged
  */
-export const extractMergeable = (contacts: FormattedContact[] = []) => {
+export const extractMergeable = (contacts: ContactFormatted[] = []) => {
     // detect duplicate names
     // namesConnections = { name: [contact indices with this name] }
     const namesConnections = Object.values(
