@@ -1,8 +1,8 @@
 import React from 'react';
 import { c } from 'ttag';
 import { Block, OrderableTable, TableCell, Button } from 'react-components';
+import { ContactFormatted } from 'proton-shared/lib/interfaces/contacts';
 import MergeTableBody from './MergeTableBody';
-import { FormattedContact } from '../../interfaces/FormattedContact';
 
 const MergeTableHeader = () => {
     return (
@@ -18,7 +18,7 @@ const MergeTableHeader = () => {
 };
 
 interface Props {
-    contacts: FormattedContact[][];
+    contacts: ContactFormatted[][];
     isChecked: { [ID: string]: boolean };
     beDeleted: { [ID: string]: boolean };
     onClickCheckbox: (ID: string) => void;

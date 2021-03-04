@@ -3,11 +3,8 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { c } from 'ttag';
 import {
     Loader,
-    useContactEmails,
-    useContacts,
     useUser,
     useUserKeys,
-    useContactGroups,
     useAddresses,
     useActiveBreakpoint,
     useModals,
@@ -28,19 +25,16 @@ import {
     Icon,
     SettingsButton,
     MainLogo,
-    useItemsSelection,
+    ContactGroupModal,
 } from 'react-components';
-import { normalize } from 'proton-shared/lib/helpers/string';
-import { toMap } from 'proton-shared/lib/helpers/object';
-import { SimpleMap } from 'proton-shared/lib/interfaces/utils';
-import { Contact, ContactEmail } from 'proton-shared/lib/interfaces/contacts';
+import ContactsList from 'react-components/containers/contacts/ContactsList';
+import useContactList from 'react-components/containers/contacts/useContactList';
 import { extractMergeable } from '../helpers/merge';
-import ContactsList from '../components/ContactsList';
 import ContactPlaceholder from '../components/ContactPlaceholder';
 import ContactToolbar from '../components/ContactToolbar';
 import ContactsSidebar from '../content/ContactsSidebar';
 import MergeModal from '../components/merge/MergeModal';
-import { FormattedContact } from '../interfaces/FormattedContact';
+import EmptyPlaceholder, { EmptyType } from '../components/EmptyPlaceholder';
 
 const ContactsContainer = () => {
     const history = useHistory();
@@ -49,10 +43,6 @@ const ContactsContainer = () => {
     const { createModal } = useModals();
     const { isDesktop, isNarrow } = useActiveBreakpoint();
     const [search, updateSearch] = useState('');
-    const normalizedSearch = normalize(search);
-    const [contactEmails, loadingContactEmails] = useContactEmails() as [ContactEmail[], boolean, any];
-    const [contacts = [], loadingContacts] = useContacts() as [Contact[], boolean, any];
-    const [contactGroups = [], loadingContactGroups] = useContactGroups();
     const [user] = useUser();
     const [userSettings, loadingUserSettings] = useUserSettings();
     const [userKeysList, loadingUserKeys] = useUserKeys();
@@ -68,20 +58,6 @@ const ContactsContainer = () => {
         return params.get('contactGroupID') || undefined;
     }, [location.search]);
 
-    const { contactGroupName, totalContactsInGroup } = useMemo<{
-        contactGroupName?: string;
-        totalContactsInGroup?: number;
-    }>(() => {
-        if (!contactGroups.length || !contactGroupID) {
-            return Object.create(null);
-        }
-        const contactGroup = contactGroups.find(({ ID }) => ID === contactGroupID);
-        return {
-            contactGroupName: contactGroup?.Name,
-            totalContactsInGroup: contacts.filter(({ LabelIDs = [] }) => LabelIDs.includes(contactGroupID)).length,
-        };
-    }, [contacts, contactGroups, contactGroupID]);
-
     const ownAddresses = useMemo(() => addresses.map(({ Email }) => Email), [addresses]);
 
     useEffect(() => {
@@ -90,70 +66,39 @@ const ContactsContainer = () => {
         updateSearch('');
     }, [contactGroupID]);
 
-    const contactEmailsMap = useMemo(() => {
-        if (!Array.isArray(contactEmails)) {
-            return {};
-        }
-        return contactEmails.reduce<SimpleMap<ContactEmail[]>>((acc, contactEmail) => {
-            const { ContactID } = contactEmail;
-            if (!acc[ContactID]) {
-                acc[ContactID] = [];
-            }
-            (acc[ContactID] as ContactEmail[]).push(contactEmail);
-            return acc;
-        }, Object.create(null));
-    }, [contactEmails]);
-
-    const contactGroupsMap = useMemo(() => toMap(contactGroups), [contactGroups]);
-
-    const filteredContacts = useMemo(() => {
-        if (!Array.isArray(contacts)) {
-            return [];
-        }
-        return contacts.filter(({ Name, ID, LabelIDs }) => {
-            const emails = contactEmailsMap[ID]
-                ? (contactEmailsMap[ID] as ContactEmail[]).map(({ Email }) => Email).join(' ')
-                : '';
-            const searchFilter = normalizedSearch.length
-                ? normalize(`${Name} ${emails}`).includes(normalizedSearch)
-                : true;
-
-            const groupFilter = contactGroupID ? LabelIDs.includes(contactGroupID) : true;
-
-            return searchFilter && groupFilter;
-        });
-    }, [contacts, contactGroupID, normalizedSearch, contactEmailsMap]);
-
-    const formattedContacts = useMemo<FormattedContact[]>(() => {
-        return filteredContacts.map((contact) => {
-            const { ID } = contact;
-            return {
-                ...contact,
-                emails: (contactEmailsMap[ID] || []).map(({ Email }) => Email),
-            };
-        });
-    }, [filteredContacts, contactEmailsMap]);
-
     const handleClearSearch = () => {
         updateSearch('');
     };
 
+    const {
+        loading: loadingContacts,
+        formattedContacts,
+        filteredContacts,
+        checkedIDs,
+        selectedIDs,
+        contacts,
+        contactGroups,
+        handleCheckAll,
+        contactEmailsMap,
+        contactGroupsMap,
+        contactGroupName,
+        totalContactsInGroup,
+        handleCheck,
+        handleCheckOne,
+        hasCheckedAllFiltered,
+    } = useContactList({
+        search,
+        contactID,
+        contactGroupID,
+    });
+
     const mergeableContacts = useMemo(() => extractMergeable(formattedContacts), [formattedContacts]);
     const canMerge = mergeableContacts.length > 0;
 
-    const contactIDs = useMemo(() => formattedContacts.map((contact) => contact.ID), [contacts]);
-
-    const { checkedIDs, selectedIDs, handleCheck, handleCheckAll, handleCheckOne } = useItemsSelection(
-        contactID,
-        contactIDs,
-        [contactID, contactGroupID]
-    );
-
-    const hasCheckedAllFiltered = useMemo(() => {
-        const filteredContactsLength = filteredContacts.length;
-        const checkedIDsLength = checkedIDs.length;
-        return !!filteredContactsLength && checkedIDsLength === filteredContactsLength;
-    }, [filteredContacts, checkedIDs]);
+    const handleClick = (ID: string) => {
+        handleCheckAll(false);
+        history.push({ ...history.location, pathname: `/${ID}` });
+    };
 
     const onDelete = () => {
         const deleteAll = selectedIDs.length === contacts.length;
@@ -192,70 +137,35 @@ const ContactsContainer = () => {
     const handleExport = () => history.push('/settings/import#export');
     const handleGroups = () => history.push('/settings/groups');
 
+    const handleAddContact = () => {
+        createModal(<ContactModal onAdd={() => updateSearch('')} />);
+    };
+    const handleEditGroup = (contactGroupID: string) => {
+        createModal(<ContactGroupModal contactGroupID={contactGroupID} selectedContactEmails={[]} />);
+    };
+
     const showToolbar = !(isNarrow && contactID);
     const backUrl = showToolbar ? undefined : '/';
 
-    const isLoading =
-        loadingContactEmails ||
-        loadingContacts ||
-        loadingContactGroups ||
-        loadingUserKeys ||
-        loadingAddresses ||
-        loadingUserSettings;
+    const isLoading = loadingContacts || loadingUserKeys || loadingAddresses || loadingUserSettings;
     const contactsLength = contacts ? contacts.length : 0;
 
-    const contactComponent = contactID && !!contactsLength && !checkedIDs.length && (
-        <ErrorBoundary key={contactID} component={<GenericError className="pt2 view-column-detail flex-item-fluid" />}>
-            <ContactContainer
-                contactID={contactID}
-                contactEmails={contactEmailsMap[contactID] || []}
-                contactGroupsMap={contactGroupsMap}
-                ownAddresses={ownAddresses}
-                userKeysList={userKeysList}
-                onDelete={onDelete}
-            />
-        </ErrorBoundary>
-    );
+    const showEmptyPlaceholder = !isLoading && !formattedContacts.length;
+    const showContact = !isLoading && contactID && !!contactsLength && !checkedIDs.length;
+    const showList = !isLoading && (isDesktop || !showContact);
+    const showContactPlaceholder = !isLoading && isDesktop && !showContact && !!formattedContacts.length;
 
-    const contactsListComponent = (isDesktop || !contactComponent) && (
-        <ContactsList
-            contactID={contactID}
-            contactGroupID={contactGroupID}
-            totalContacts={contactsLength}
-            totalContactsInGroup={totalContactsInGroup}
-            contacts={formattedContacts}
-            contactGroupsMap={contactGroupsMap}
-            user={user}
-            userSettings={userSettings}
-            loadingUserKeys={loadingUserKeys}
-            onCheckOne={handleCheckOne}
-            onClearSearch={handleClearSearch}
-            onClearSelection={() => handleCheckAll(false)}
-            onImport={handleImport}
-            isDesktop={isDesktop}
-            checkedIDs={checkedIDs}
-            onCheck={handleCheck}
-        />
-    );
+    let emptyType: EmptyType | undefined;
 
-    const contactPlaceHolderComponent = isDesktop && !contactComponent && !!formattedContacts.length && (
-        <ContactPlaceholder
-            user={user}
-            userKeysList={userKeysList}
-            loadingUserKeys={loadingUserKeys}
-            totalContacts={contactsLength}
-            totalContactsInGroup={totalContactsInGroup}
-            selectedContacts={checkedIDs.length}
-            contactGroupID={contactGroupID}
-            contactGroupName={contactGroupName}
-            onUncheck={() => handleCheckAll(false)}
-            canMerge={canMerge}
-            onMerge={handleMerge}
-            onImport={handleImport}
-            onExport={handleExport}
-            onGroups={handleGroups}
-        />
-    );
+    if (showEmptyPlaceholder) {
+        if (!contactsLength) {
+            emptyType = EmptyType.All;
+        } else if (contactGroupID) {
+            emptyType = EmptyType.Group;
+        } else if (search) {
+            emptyType = EmptyType.Search;
+        }
+    }
 
     const title = search === '' ? c('Title').t`Contacts` : c('Title').t`Search`;
 
@@ -319,15 +229,64 @@ const ContactsContainer = () => {
                 />
             ) : undefined}
             <PrivateMainArea hasToolbar className="flex">
-                {isLoading ? (
-                    <Loader />
-                ) : (
-                    <>
-                        {contactsListComponent}
-                        {contactComponent}
-                        {contactPlaceHolderComponent}
-                    </>
-                )}
+                {isLoading ? <Loader /> : null}
+                {showEmptyPlaceholder ? (
+                    <EmptyPlaceholder
+                        type={emptyType}
+                        onEditGroup={() => handleEditGroup(contactGroupID as string)}
+                        onClearSearch={() => updateSearch('')}
+                        onCreate={handleAddContact}
+                        onImport={handleImport}
+                    />
+                ) : null}
+                {showList ? (
+                    <ContactsList
+                        contactID={contactID}
+                        totalContacts={contactsLength}
+                        contacts={formattedContacts}
+                        contactGroupsMap={contactGroupsMap}
+                        user={user}
+                        userSettings={userSettings}
+                        onCheckOne={handleCheckOne}
+                        isDesktop={isDesktop}
+                        checkedIDs={checkedIDs}
+                        onCheck={handleCheck}
+                        onClick={handleClick}
+                    />
+                ) : null}
+                {showContact ? (
+                    <ErrorBoundary
+                        key={contactID}
+                        component={<GenericError className="pt2 view-column-detail flex-item-fluid" />}
+                    >
+                        <ContactContainer
+                            contactID={contactID}
+                            contactEmails={contactEmailsMap[contactID] || []}
+                            contactGroupsMap={contactGroupsMap}
+                            ownAddresses={ownAddresses}
+                            userKeysList={userKeysList}
+                            onDelete={onDelete}
+                        />
+                    </ErrorBoundary>
+                ) : null}
+                {showContactPlaceholder ? (
+                    <ContactPlaceholder
+                        user={user}
+                        userKeysList={userKeysList}
+                        loadingUserKeys={loadingUserKeys}
+                        totalContacts={contactsLength}
+                        totalContactsInGroup={totalContactsInGroup}
+                        selectedContacts={checkedIDs.length}
+                        contactGroupID={contactGroupID}
+                        contactGroupName={contactGroupName}
+                        onUncheck={() => handleCheckAll(false)}
+                        canMerge={canMerge}
+                        onMerge={handleMerge}
+                        onImport={handleImport}
+                        onExport={handleExport}
+                        onGroups={handleGroups}
+                    />
+                ) : null}
             </PrivateMainArea>
         </PrivateAppContainer>
     );
