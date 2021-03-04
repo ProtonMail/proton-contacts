@@ -1,7 +1,7 @@
-import { FormattedContact } from './FormattedContact';
+import { ContactFormatted } from 'proton-shared/lib/interfaces/contacts';
 
 export interface MergeModel {
-    orderedContacts: FormattedContact[][];
+    orderedContacts: ContactFormatted[][];
     isChecked: {
         [ID: string]: boolean;
     };

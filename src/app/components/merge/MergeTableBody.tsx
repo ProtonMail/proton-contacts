@@ -1,13 +1,12 @@
 import React, { ComponentProps } from 'react';
 import { c } from 'ttag';
 import { OrderableTableBody, OrderableTableRow, TableRow, DropdownActions } from 'react-components';
-
+import { ContactFormatted } from 'proton-shared/lib/interfaces/contacts';
 import NameTableCell from './NameTableCell';
 import EmailsTableCell from './EmailsTableCell';
-import { FormattedContact } from '../../interfaces/FormattedContact';
 
 interface Props extends Omit<ComponentProps<typeof OrderableTableBody>, 'colSpan'> {
-    contacts: FormattedContact[];
+    contacts: ContactFormatted[];
     highlightedID: string;
     isChecked: { [ID: string]: boolean };
     beDeleted: { [ID: string]: boolean };
