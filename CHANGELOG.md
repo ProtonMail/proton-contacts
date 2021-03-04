@@ -1,3 +1,8 @@
+# [4.0.0 - Beta 21] - 2021-03-10
+
+-   Prepared support for the Mail contacts widget
+-   Fixed an issue where selecting a subset of the contact list would select the entire contact list
+
 # [4.0.0 - Beta 20] - 2021-02-25
 
 ## Improvements
