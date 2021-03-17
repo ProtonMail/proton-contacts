@@ -115,7 +115,7 @@ const ContactGroupsTable = () => {
                             `${countEmailAddresses} email addresses`,
                             countEmailAddresses
                         ),
-                        <DropdownActions key={ID} className="button--small" list={list} />,
+                        <DropdownActions key={ID} size="small" list={list} />,
                     ];
                     return <OrderableTableRow key={ID} index={index} cells={cells} />;
                 })}

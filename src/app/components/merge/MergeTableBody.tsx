@@ -61,7 +61,7 @@ const MergeTableBody = ({
                         emails={emails}
                         greyedOut={deleted}
                     />,
-                    <DropdownActions key="options" className="button--small" list={options} />,
+                    <DropdownActions key="options" size="small" list={options} />,
                 ];
 
                 return deleted ? (

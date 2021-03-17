@@ -1,6 +1,6 @@
 import React from 'react';
 import { c } from 'ttag';
-import { AppLink, RelatedSettingsSection, SettingsPropsShared } from 'react-components';
+import { AppLink, ButtonLike, RelatedSettingsSection, SettingsPropsShared } from 'react-components';
 import { APPS } from 'proton-shared/lib/constants';
 import { getAppName } from 'proton-shared/lib/apps/helper';
 import PrivateMainSettingsAreaWithPermissions from '../components/PrivateMainSettingsAreaWithPermissions';
@@ -47,22 +47,30 @@ const SettingsImportExportPage = ({ setActiveSection, location }: SettingsPropsS
                         icon: 'email',
                         text: c('Info').t`Import your old messages and folders into ProtonMail.`,
                         link: (
-                            <AppLink to="/settings/import" toApp={APPS.PROTONMAIL} className="button--primary mtauto">
+                            <ButtonLike
+                                as={AppLink}
+                                to="/settings/import"
+                                toApp={APPS.PROTONMAIL}
+                                color="norm"
+                                className="mtauto"
+                            >
                                 {c('Action').t`Import mailbox`}
-                            </AppLink>
+                            </ButtonLike>
                         ),
                     },
                     {
                         icon: 'calendar',
                         text: c('Info').t`Import your entire calendar or individual events into ${calendarAppName}.`,
                         link: (
-                            <AppLink
+                            <ButtonLike
+                                as={AppLink}
                                 to="/settings/calendars"
                                 toApp={APPS.PROTONCALENDAR}
-                                className="button--primary mtauto"
+                                color="norm"
+                                className="mtauto"
                             >
                                 {c('Action').t`Import calendar`}
-                            </AppLink>
+                            </ButtonLike>
                         ),
                     },
                 ]}
