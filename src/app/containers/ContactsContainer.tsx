@@ -26,6 +26,8 @@ import {
     SettingsButton,
     MainLogo,
     ContactGroupModal,
+    useFeature,
+    FeatureCode,
 } from 'react-components';
 import ContactsList from 'react-components/containers/contacts/ContactsList';
 import useContactList from 'react-components/containers/contacts/useContactList';
@@ -47,6 +49,7 @@ const ContactsContainer = () => {
     const [userSettings, loadingUserSettings] = useUserSettings();
     const [userKeysList, loadingUserKeys] = useUserKeys();
     const [addresses = [], loadingAddresses] = useAddresses();
+    const { feature: featureUsedContactsImport } = useFeature(FeatureCode.UsedContactsImport);
 
     const contactID = useMemo(() => {
         const [, contactID] = location.pathname.split('/');
@@ -134,8 +137,6 @@ const ContactsContainer = () => {
         );
     };
     const handleImport = () => history.push('/settings/import#import');
-    const handleExport = () => history.push('/settings/import#export');
-    const handleGroups = () => history.push('/settings/groups');
 
     const handleAddContact = () => {
         createModal(<ContactModal onAdd={() => updateSearch('')} />);
@@ -281,10 +282,9 @@ const ContactsContainer = () => {
                         contactGroupName={contactGroupName}
                         onUncheck={() => handleCheckAll(false)}
                         canMerge={canMerge}
+                        canImport={!!featureUsedContactsImport?.Value}
                         onMerge={handleMerge}
                         onImport={handleImport}
-                        onExport={handleExport}
-                        onGroups={handleGroups}
                     />
                 ) : null}
             </PrivateMainArea>

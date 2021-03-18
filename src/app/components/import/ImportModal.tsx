@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState, DragEvent } from 'react';
-import { FormModal, PrimaryButton, useEventManager, onlyDragFiles } from 'react-components';
+import { FormModal, PrimaryButton, useEventManager, onlyDragFiles, useFeature, FeatureCode } from 'react-components';
 import { c } from 'ttag';
 import { extractVcards, readVcf } from 'proton-shared/lib/contacts/vcard';
 import { splitExtension } from 'proton-shared/lib/helpers/file';
@@ -41,6 +41,9 @@ const ImportModal = ({ ...rest }: Props) => {
     const { call } = useEventManager();
     const [model, setModel] = useState<ImportContactsModel>(getInitialState());
     const [isDropzoneHovered, setIsDropzoneHovered] = useState(false);
+    const { feature: featureUsedContactsImport, update: updateUsedContactsImport } = useFeature(
+        FeatureCode.UsedContactsImport
+    );
 
     const { content, ...modalProps } = (() => {
         if (model.step <= IMPORT_STEPS.ATTACHED) {
@@ -146,6 +149,9 @@ const ImportModal = ({ ...rest }: Props) => {
                         });
                     } else {
                         throw new ImportFileError(IMPORT_ERROR_TYPE.NO_CSV_OR_VCF_FILE);
+                    }
+                    if (featureUsedContactsImport?.Value === false) {
+                        updateUsedContactsImport(true);
                     }
                 } catch (e) {
                     const failure = e instanceof ImportFileError ? e : new ImportFatalError(e);
