@@ -1,3 +1,24 @@
+# [4.0.0 - Beta 22] - 2021-03-24
+
+## Improvements
+
+-   Updated the UI for contact view and edit pages
+-   Added support for vCards v3.0 - you can now easily import contacts exported from GoogleContacts or Apple Contacts
+-   Made minor UI improvements to the modal that is displayed when creating or editing a contacts group
+-   Updated the UI of the contacts welcome screen to give it a more modern look and feel
+
+## Fixes
+
+-   Fixed an issue where a "Something went wrong" error would be displayed when trying to view some particular imported contacts
+-   Fixed an issue where some .csv contact files would fail to import
+-   Fixed an issue where the contact address would not be displayed correctly for contacts created on an iOS device
+-   Fixed an issue where adding a contact with multiple email addresses to a group would deselect other contacts in the same selection
+-   Fixed an issue where merging a big amount of contacts at once would get stuck in the process
+-   Fixed an issue where Organization information would not be displayed on the contacts view
+-   Fixed an issue where an email address that is not part of ProtonContacts yet would be ignored when adding it to a group
+-   Fixed an issue where group label animation on a contact would not behave as expected when a contact has several groups assigned
+-   Fixed an issue where a contact group would be hidden if the email address is long
+
 # [4.0.0 - Beta 21] - 2021-03-10
 
 -   Prepared support for the Mail contacts widget
