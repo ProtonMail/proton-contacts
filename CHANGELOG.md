@@ -2,16 +2,16 @@
 
 ## Improvements
 
--   Updated the UI for contact view and edit pages
+-   Updated the UI when viewing and editing a contact
 -   Added support for vCards v3.0 - you can now easily import contacts exported from GoogleContacts or Apple Contacts
 -   Made minor UI improvements to the modal that is displayed when creating or editing a contacts group
--   Updated the UI of the contacts welcome screen to give it a more modern look and feel
+-   Updated the UI of the contacts welcome screen
 
 ## Fixes
 
 -   Fixed an issue where a "Something went wrong" error would be displayed when trying to view some particular imported contacts
 -   Fixed an issue where some .csv contact files would fail to import
--   Fixed an issue where the contact address would not be displayed correctly for contacts created on an iOS device
+-   Fixed an issue where a contact's home address would not be displayed correctly after being imported from an iOS device
 -   Fixed an issue where adding a contact with multiple email addresses to a group would deselect other contacts in the same selection
 -   Fixed an issue where merging a big amount of contacts at once would get stuck in the process
 -   Fixed an issue where Organization information would not be displayed on the contacts view
