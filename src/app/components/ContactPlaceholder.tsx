@@ -134,7 +134,7 @@ const ContactPlaceholder = ({
                     <AppLink
                         to="/subscription"
                         toApp={getAccountSettingsApp()}
-                        className="text-bold link align-baseline color-currentColor"
+                        className="text-bold link align-baseline color-inherit"
                     >
                         {c('Action').t`Upgrade`}
                     </AppLink>
