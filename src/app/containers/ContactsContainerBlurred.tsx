@@ -7,7 +7,7 @@ import {
     PrivateAppContainer,
     useAppTitle,
     Searchbox,
-    SettingsButton,
+    TopNavbarListItemSettingsButton,
     MainLogo,
 } from 'react-components';
 import { UserModel } from 'proton-shared/lib/interfaces';
@@ -29,7 +29,7 @@ const ContactsContainerBlurred = () => {
     const header = (
         <PrivateHeader
             logo={logo}
-            settingsButton={<SettingsButton to="/settings" />}
+            settingsButton={<TopNavbarListItemSettingsButton to="/settings" />}
             title={title}
             expanded={false}
             onToggleExpand={noop}
