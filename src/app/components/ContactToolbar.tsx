@@ -4,7 +4,6 @@ import {
     Checkbox,
     Toolbar,
     Tooltip,
-    ToolbarLink,
     ToolbarButton,
     ToolbarSeparator,
     ContactGroupDropdown,
@@ -13,6 +12,7 @@ import { c } from 'ttag';
 import { UserModel } from 'proton-shared/lib/interfaces';
 import { SimpleMap } from 'proton-shared/lib/interfaces/utils';
 import { ContactEmail } from 'proton-shared/lib/interfaces/contacts';
+import { Link } from 'react-router-dom';
 
 interface Props {
     checked: boolean;
@@ -50,7 +50,9 @@ const ContactToolbar = ({
     if (simplified) {
         return (
             <Toolbar>
-                <ToolbarLink to="/" icon="arrow-left" />
+                <Link className="toolbar-button" to="/">
+                    <Icon name="arrow-left" className="toolbar-icon mauto" />
+                </Link>
             </Toolbar>
         );
     }
@@ -59,43 +61,39 @@ const ContactToolbar = ({
         <Toolbar>
             <div className="flex-item-fluid flex flex-justify-space-between">
                 <div className="flex flex-nowrap">
-                    <Tooltip
-                        title={checked ? c('Action').t`Deselect all` : c('Action').t`Select all`}
-                        className="flex flex-item-noshrink"
-                    >
-                        <Checkbox
-                            className="flex select-all ml0-5 pl1 pr1"
-                            checked={checked}
-                            id="idSelectAll"
-                            onChange={handleCheck}
-                        >
-                            <span className="sr-only">
-                                {checked ? c('Action').t`Deselect all` : c('Action').t`Select all`}
-                            </span>
-                        </Checkbox>
+                    <Tooltip title={checked ? c('Action').t`Deselect all` : c('Action').t`Select all`}>
+                        <span className="flex flex-item-noshrink ">
+                            <Checkbox
+                                className="flex select-all ml0-5 pl1 pr1"
+                                checked={checked}
+                                id="idSelectAll"
+                                onChange={handleCheck}
+                            >
+                                <span className="sr-only">
+                                    {checked ? c('Action').t`Deselect all` : c('Action').t`Select all`}
+                                </span>
+                            </Checkbox>
+                        </span>
                     </Tooltip>
                     <ToolbarSeparator />
                     <ToolbarButton
-                        icon="delete"
+                        icon={<Icon name="delete" />}
                         title={c('Action').t`Delete`}
                         className="toolbar-button"
                         onClick={onDelete}
                         disabled={!activeIDs.length}
                     />
                     {hasPaidMail ? (
-                        <Tooltip title={c('Action').t`Add to group`} className="flex flex-item-noshrink">
-                            <ContactGroupDropdown
-                                className="toolbar-button toolbar-button--dropdown"
-                                disabled={!contactEmailsSelected.length}
-                                contactEmails={contactEmailsSelected}
-                                forToolbar
-                            >
-                                <Icon name="contacts-groups" className="toolbar-icon mauto" />
-                            </ContactGroupDropdown>
-                        </Tooltip>
+                        <ContactGroupDropdown
+                            disabled={!contactEmailsSelected.length}
+                            contactEmails={contactEmailsSelected}
+                            forToolbar
+                        >
+                            <Icon name="contacts-groups" className="toolbar-icon mauto" />
+                        </ContactGroupDropdown>
                     ) : null}
                     <ToolbarButton
-                        icon="merge"
+                        icon={<Icon name="merge" />}
                         title={c('Action').t`Merge`}
                         className="toolbar-button"
                         onClick={onMerge}

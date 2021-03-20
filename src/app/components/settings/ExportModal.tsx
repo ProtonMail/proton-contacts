@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { c } from 'ttag';
 import { format } from 'date-fns';
-import { useContacts, useApi, FormModal, ResetButton, PrimaryButton, Alert, DynamicProgress } from 'react-components';
+import { useContacts, useApi, FormModal, Button, PrimaryButton, Alert, DynamicProgress } from 'react-components';
 import downloadFile from 'proton-shared/lib/helpers/downloadFile';
 import { noop } from 'proton-shared/lib/helpers/function';
 import { DecryptedKey } from 'proton-shared/lib/interfaces';
@@ -17,7 +17,7 @@ interface FooterProps {
 const ExportFooter = ({ loading }: FooterProps) => {
     return (
         <>
-            <ResetButton>{c('Action').t`Cancel`}</ResetButton>
+            <Button type="reset">{c('Action').t`Cancel`}</Button>
             <PrimaryButton loading={loading} type="submit">
                 {c('Action').t`Save`}
             </PrimaryButton>

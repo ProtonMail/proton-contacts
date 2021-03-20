@@ -7,7 +7,7 @@ import {
     Loader,
     FormModal,
     PrimaryButton,
-    ResetButton,
+    Button,
     ContactView,
     useContactEmails,
     useAddresses,
@@ -146,7 +146,7 @@ const MergeContactPreview = ({
         }
 
         // Display progress bar while merging contacts
-        const close = !mergeFinished && <ResetButton>{c('Action').t`Cancel`}</ResetButton>;
+        const close = !mergeFinished && <Button type="reset">{c('Action').t`Cancel`}</Button>;
         const submit = (
             <PrimaryButton type="submit" loading={!mergeFinished}>
                 {c('Action').t`Close`}

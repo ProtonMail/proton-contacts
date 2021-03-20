@@ -196,7 +196,9 @@ const ContactsContainer = () => {
                 <Searchbox placeholder={c('Placeholder').t`Search contacts`} value={search} onChange={updateSearch} />
             }
             floatingButton={
-                <FloatingButton onClick={() => createModal(<ContactModal onAdd={handleClearSearch} />)} icon="plus" />
+                <FloatingButton onClick={() => createModal(<ContactModal onAdd={handleClearSearch} />)}>
+                    <Icon size={24} name="plus" className="mauto" />
+                </FloatingButton>
             }
         />
     );

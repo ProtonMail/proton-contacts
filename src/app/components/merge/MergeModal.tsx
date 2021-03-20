@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, ComponentProps } from 'react';
 import { c } from 'ttag';
-import { useEventManager, FormModal, ResetButton, PrimaryButton } from 'react-components';
+import { useEventManager, FormModal, Button, PrimaryButton } from 'react-components';
 import { DecryptedKey } from 'proton-shared/lib/interfaces';
 import { ContactFormatted } from 'proton-shared/lib/interfaces/contacts';
 import MergeModalContent from './MergeModalContent';
@@ -101,7 +101,7 @@ const MergeModal = ({ contacts, contactID, userKeysList, onMerged, ...rest }: Pr
         }
 
         // Display progress bar while merging contacts
-        const close = !mergeFinished && <ResetButton>{c('Action').t`Cancel`}</ResetButton>;
+        const close = !mergeFinished && <Button type="reset">{c('Action').t`Cancel`}</Button>;
         const submit = (
             <PrimaryButton type="submit" loading={!mergeFinished}>
                 {c('Action').t`Close`}
