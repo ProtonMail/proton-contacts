@@ -23,7 +23,7 @@ import {
     Searchbox,
     SearchDropdown,
     Icon,
-    SettingsButton,
+    TopNavbarListItemSettingsButton,
     MainLogo,
     ContactGroupModal,
     useFeature,
@@ -176,7 +176,7 @@ const ContactsContainer = () => {
     const header = (
         <PrivateHeader
             logo={logo}
-            settingsButton={<SettingsButton to="/settings" />}
+            settingsButton={<TopNavbarListItemSettingsButton to="/settings" />}
             title={title}
             expanded={expanded}
             onToggleExpand={onToggleExpand}
