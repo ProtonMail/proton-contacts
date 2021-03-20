@@ -45,7 +45,7 @@ const AttachingModalContent = ({
                         onDragLeave={onDragLeave}
                         className="w100"
                     >
-                        <FileInput className="text-center" accept=".csv, .vcf" id="import-contacts" onChange={onAttach}>
+                        <FileInput accept=".csv, .vcf" id="import-contacts" onChange={onAttach}>
                             {c('Action').t`Choose a file or drag it here`}
                         </FileInput>
                     </Dropzone>

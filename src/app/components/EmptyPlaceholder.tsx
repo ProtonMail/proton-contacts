@@ -66,7 +66,7 @@ const EmptyPlaceholder = ({ type, onEditGroup, onClearSearch, onImport, onCreate
     return (
         <div className="p2 text-center w100">
             <IllustrationPlaceholder title={title} url={imgUrl}>
-                <div className="flex flex-align-items-center">{actions}</div>
+                <div>{actions}</div>
             </IllustrationPlaceholder>
         </div>
     );

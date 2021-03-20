@@ -84,15 +84,13 @@ const ContactToolbar = ({
                         disabled={!activeIDs.length}
                     />
                     {hasPaidMail ? (
-                        <Tooltip title={c('Action').t`Add to group`}>
-                            <ContactGroupDropdown
-                                disabled={!contactEmailsSelected.length}
-                                contactEmails={contactEmailsSelected}
-                                forToolbar
-                            >
-                                <Icon name="contacts-groups" className="toolbar-icon mauto" />
-                            </ContactGroupDropdown>
-                        </Tooltip>
+                        <ContactGroupDropdown
+                            disabled={!contactEmailsSelected.length}
+                            contactEmails={contactEmailsSelected}
+                            forToolbar
+                        >
+                            <Icon name="contacts-groups" className="toolbar-icon mauto" />
+                        </ContactGroupDropdown>
                     ) : null}
                     <ToolbarButton
                         icon={<Icon name="merge" />}
