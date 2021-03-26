@@ -5,6 +5,7 @@ import { opaqueClassName } from '../../helpers/css';
 
 interface Props {
     contactID: string;
+    emails: string[];
     highlightedID: string;
     checked: boolean;
     deleted: boolean;
@@ -13,8 +14,20 @@ interface Props {
     onToggle: (ID: string) => void;
 }
 
-const NameTableCell = ({ name, contactID, highlightedID, checked, deleted, greyedOut, onToggle }: Props) => {
+const NameTableCell = ({
+    name,
+    contactID,
+    emails = [],
+    highlightedID,
+    checked,
+    deleted,
+    greyedOut,
+    onToggle,
+}: Props) => {
     const handleToggle = () => onToggle(contactID);
+
+    const emailsDisplay = emails.map((email) => `<${email}>`).join(', ');
+    const listMailID = `${contactID}_mail`; // need an unique id for proper linking between checkbox/labels
 
     return (
         <div className="flex flex-nowrap flex-align-items-center">
@@ -24,18 +37,16 @@ const NameTableCell = ({ name, contactID, highlightedID, checked, deleted, greye
                 className={`flex flex-align-items-center flex-item-noshrink mr0-5 ${
                     deleted ? 'visibility-hidden' : ''
                 }`}
+                aria-labelledby={`${contactID} ${listMailID}`}
             />
-            <span
-                className={classnames([
-                    'max-w100',
-                    'inline-block',
-                    'text-ellipsis',
-                    opaqueClassName(greyedOut),
-                    contactID === highlightedID && 'text-bold',
-                ])}
-            >
-                {name}
-            </span>
+            <div className={classnames([opaqueClassName(greyedOut), contactID === highlightedID && 'text-bold'])}>
+                <div id={contactID} className="text-ellipsis" title={name}>
+                    {name}
+                </div>
+                <div id={listMailID} className="text-ellipsis" title={emailsDisplay}>
+                    {emailsDisplay}
+                </div>
+            </div>
         </div>
     );
 };
