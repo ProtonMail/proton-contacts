@@ -1,8 +1,6 @@
 import React from 'react';
 import { Checkbox, classnames } from 'react-components';
 
-import { opaqueClassName } from '../../helpers/css';
-
 interface Props {
     contactID: string;
     emails: string[];
@@ -39,7 +37,7 @@ const NameTableCell = ({
                 }`}
                 aria-labelledby={`${contactID} ${listMailID}`}
             />
-            <div className={classnames([opaqueClassName(greyedOut), contactID === highlightedID && 'text-bold'])}>
+            <div className={classnames([greyedOut && 'color-weak', contactID === highlightedID && 'text-bold'])}>
                 <div id={contactID} className="text-ellipsis" title={name}>
                     {name}
                 </div>
