@@ -129,7 +129,7 @@ const ContactPlaceholder = ({
     return (
         <div className="view-column-detail flex flex-column flex-nowrap flex-item-fluid">
             {user.hasPaidMail ? null : (
-                <div className="bg-pm-blue-gradient flex-item-noshrink color-white p1 text-center">
+                <div className="bg-primary flex-item-noshrink color-white p1 text-center">
                     <span className="mr1">{c('Info').jt`Increase storage space starting at $4/month.`}</span>
                     <AppLink
                         to="/subscription"
