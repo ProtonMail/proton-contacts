@@ -260,10 +260,11 @@ export const merge = (contacts: ContactProperties[] = []) => {
                         const newPref = hasPref(field) ? Math.max(...mergedPropertiesPrefs[field]) + 1 : undefined;
                         // check if the new value can be added
                         const canAdd =
-                            isCustomField(field) ||
-                            [ONE_OR_MORE_MAY_BE_PRESENT, ONE_OR_MORE_MUST_BE_PRESENT].includes(
-                                PROPERTIES[field].cardinality
-                            );
+                            field !== 'fn' && // Only keep the name of the first contact
+                            (isCustomField(field) ||
+                                [ONE_OR_MORE_MAY_BE_PRESENT, ONE_OR_MORE_MUST_BE_PRESENT].includes(
+                                    PROPERTIES[field].cardinality
+                                ));
 
                         if (isNewValue && canAdd) {
                             mergedContact.push({
