@@ -5,7 +5,7 @@ describe('merge', () => {
         it('should return same if no connections should be linked', () => {
             const connections = [
                 [1, 2],
-                [3, 4]
+                [3, 4],
             ];
             expect(linkConnections(connections)).toEqual(connections);
         });
@@ -26,14 +26,14 @@ describe('merge', () => {
                     [1, 8, 2],
                     [9, 10, 5],
                     [2, 4],
-                    [3, 5]
+                    [3, 5],
                 ],
                 [
                     [1, 8, 2],
                     [9, 10, 5],
                     [2, 4],
                     [3, 5],
-                    [4, 9]
+                    [4, 9],
                 ],
                 [
                     [1, 2],
@@ -42,20 +42,20 @@ describe('merge', () => {
                     [4, 5],
                     [5, 6],
                     [1, 8],
-                    [7, 9]
-                ]
+                    [7, 9],
+                ],
             ];
             const resultsSorted = cases.map((cs) => linkConnections(cs).map((c) => c.sort((a, b) => a - b)));
             const expectedSorted = [
                 [
                     [1, 2, 4, 8],
-                    [3, 5, 9, 10]
+                    [3, 5, 9, 10],
                 ],
                 [[1, 2, 3, 4, 5, 8, 9, 10]],
                 [
                     [1, 2, 3, 4, 5, 6, 8],
-                    [7, 9]
-                ]
+                    [7, 9],
+                ],
             ];
             expect(resultsSorted).toEqual(expectedSorted);
         });
@@ -76,7 +76,7 @@ describe('merge', () => {
 
             expect(mergeable).toEqual([
                 [alice1, alice2, alice3],
-                [bob1, bob2]
+                [bob1, bob2],
             ]);
         });
 
@@ -96,7 +96,7 @@ describe('merge', () => {
             expect(mergeable).toEqual([
                 [bob1, bob2],
                 [alice1, alicia1, mallory],
-                [alice2, alice3]
+                [alice2, alice3],
             ]);
         });
 
@@ -143,14 +143,14 @@ describe('merge', () => {
         it('should capture only new values (up to normalization) for adr field', () => {
             const mergedValues = [
                 ['', '', 'Old Street', 'old city', 'old region', 'old postal code', 'old country'],
-                ['', '', 'older street', 'older city', 'older region', 'older postal code', 'older country']
+                ['', '', 'older street', 'older city', 'older region', 'older postal code', 'older country'],
             ];
             const values = [
                 ['', '', 'old street', ' Old City  ', 'old region', 'old postal code', 'old COUNTRY'],
-                ['', '', 'older street', 'New city', 'older region', 'older postal code', 'older country']
+                ['', '', 'older street', 'New city', 'older region', 'older postal code', 'older country'],
             ];
             const expectedNewValues = [
-                ['', '', 'older street', 'New city', 'older region', 'older postal code', 'older country']
+                ['', '', 'older street', 'New city', 'older region', 'older postal code', 'older country'],
             ];
             const newValues = values
                 .map((value) => extractNewValue(value, 'adr', mergedValues).newValue)
@@ -162,7 +162,7 @@ describe('merge', () => {
             const mergedValues = [['Stevenson', 'John', ['Philip', 'Paul'], 'Dr.', ['Jr.', 'M.D.', 'A.C.P.']]];
             const values = [
                 ['Stevenson', 'John', 'Philip', 'Dr.', 'jr.'],
-                ['Stevenson', 'John', ['Philip', 'Paul', 'Peter'], 'Dr', 'Jr.']
+                ['Stevenson', 'John', ['Philip', 'Paul', 'Peter'], 'Dr', 'Jr.'],
             ];
             const expectedNewValues = [['Stevenson', 'John', ['Philip', 'Paul', 'Peter'], 'Dr', 'Jr.']];
             const newValues = values
@@ -173,18 +173,18 @@ describe('merge', () => {
     });
 
     describe('merge', () => {
-        it('should merge fn properties in proper order', () => {
+        it('should merge fn properties keeping only first', () => {
             const beMerged = [
                 [{ pref: 1, field: 'fn', value: 'name1' }],
                 [
                     { pref: 1, field: 'fn', value: 'name2' },
-                    { pref: 2, field: 'fn', value: 'name3' }
+                    { pref: 2, field: 'fn', value: 'name3' },
                 ],
-                [{ pref: 1, field: 'fn', value: 'name4' }]
+                [{ pref: 1, field: 'fn', value: 'name4' }],
             ];
 
             const mergedPrefs = merge(beMerged).map(({ pref }) => pref);
-            expect(mergedPrefs).toEqual([1, 2, 3, 4]);
+            expect(mergedPrefs).toEqual([1]);
         });
 
         it('should only merge properties with different value', () => {
@@ -192,21 +192,21 @@ describe('merge', () => {
                 [
                     { field: 'version', group: undefined, type: undefined, value: '4.0' },
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name1' },
-                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email1@domain.org' }
+                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email1@domain.org' },
                 ],
                 [
                     { field: 'version', group: undefined, type: undefined, value: '4.0' },
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name2' },
-                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email1@domain.org' }
+                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email1@domain.org' },
                 ],
                 [
                     { field: 'version', group: undefined, type: undefined, value: '4.0' },
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name2' },
-                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email2@domain.org' }
-                ]
+                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email2@domain.org' },
+                ],
             ];
 
-            expect(merge(beMerged)).toHaveLength(5);
+            expect(merge(beMerged)).toHaveLength(4);
         });
 
         it('should change email groups when merging', () => {
@@ -215,24 +215,24 @@ describe('merge', () => {
                     { field: 'version', group: undefined, type: undefined, value: '4.0' },
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name1' },
                     { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email1@domain.org' },
-                    { pref: 2, field: 'email', group: 'item2', type: 'email', value: 'email2@domain.org' }
+                    { pref: 2, field: 'email', group: 'item2', type: 'email', value: 'email2@domain.org' },
                 ],
                 [
                     { field: 'version', group: undefined, type: undefined, value: '4.0' },
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name2' },
                     { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email1@domain.org' },
-                    { pref: 2, field: 'email', group: 'item2', type: 'email', value: 'email3@domain.org' }
+                    { pref: 2, field: 'email', group: 'item2', type: 'email', value: 'email3@domain.org' },
                 ],
                 [
                     { field: 'version', group: undefined, type: undefined, value: '4.0' },
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name2' },
-                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email2@domain.org' }
+                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email2@domain.org' },
                 ],
                 [
                     { field: 'version', group: undefined, type: undefined, value: '4.0' },
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name2' },
-                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email4@domain.org' }
-                ]
+                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email4@domain.org' },
+                ],
             ];
             const emailGroups = merge(beMerged)
                 .map(({ field, group }) => field === 'email' && group)
@@ -245,13 +245,13 @@ describe('merge', () => {
             const beMerged = [
                 [
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name1' },
-                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email1@domain.org' }
+                    { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email1@domain.org' },
                 ],
                 [
                     { pref: 1, field: 'fn', group: undefined, type: undefined, value: 'name1' },
                     { pref: 1, field: 'email', group: 'item1', type: 'email', value: 'email2@domain.org' },
-                    { pref: 2, field: 'email', group: 'item2', type: 'email', value: 'email3@domain.org' }
-                ]
+                    { pref: 2, field: 'email', group: 'item2', type: 'email', value: 'email3@domain.org' },
+                ],
             ];
             const merged = merge(beMerged);
             const mergedFNPrefs = merged.filter(({ field }) => field === 'fn').map(({ pref }) => pref);
@@ -280,13 +280,13 @@ describe('merge', () => {
                     {
                         pref: 1,
                         field: 'adr',
-                        value: ['PObox1', 'extAdr1', 'street1', 'city1', 'region1', 'postalCode1', 'country1']
+                        value: ['PObox1', 'extAdr1', 'street1', 'city1', 'region1', 'postalCode1', 'country1'],
                     },
                     {
                         pref: 2,
                         field: 'adr',
-                        value: ['PObox2', 'extAdr2', 'street2', 'city2', 'region2', 'postalCode2', 'country2']
-                    }
+                        value: ['PObox2', 'extAdr2', 'street2', 'city2', 'region2', 'postalCode2', 'country2'],
+                    },
                 ],
                 [
                     { pref: 1, field: 'fn', value: 'name2' },
@@ -295,9 +295,9 @@ describe('merge', () => {
                     {
                         pref: 1,
                         field: 'adr',
-                        value: ['PObox2', 'extAdr2', 'street2', 'city2', 'region2', 'postalCode2', 'country2']
+                        value: ['PObox2', 'extAdr2', 'street2', 'city2', 'region2', 'postalCode2', 'country2'],
                     },
-                    { field: 'org', value: 'ACME SA' }
+                    { field: 'org', value: 'ACME SA' },
                 ],
                 [
                     { pref: 1, field: 'fn', value: 'name1' },
@@ -306,9 +306,9 @@ describe('merge', () => {
                     {
                         pref: 1,
                         field: 'adr',
-                        value: ['PObox3', 'extAdr3', 'street3', 'city3', 'region3', 'postalCode3', 'country3']
-                    }
-                ]
+                        value: ['PObox3', 'extAdr3', 'street3', 'city3', 'region3', 'postalCode3', 'country3'],
+                    },
+                ],
             ];
             const merged = merge(beMerged);
             const mergedFNPrefs = merged.filter(({ field }) => field === 'fn').map(({ pref }) => pref);
@@ -319,8 +319,8 @@ describe('merge', () => {
             const mergedTELValues = merged.filter(({ field }) => field === 'tel').map(({ value }) => value);
             const mergedADRPrefs = merged.filter(({ field }) => field === 'adr').map(({ pref }) => pref);
             const mergedADRValues = merged.filter(({ field }) => field === 'adr').map(({ value }) => value);
-            expect(mergedFNPrefs).toEqual([1, 2]);
-            expect(mergedFNValues).toEqual(['name1', 'name2']);
+            expect(mergedFNPrefs).toEqual([1]);
+            expect(mergedFNValues).toEqual(['name1']);
             expect(mergedEMAILPrefs).toEqual([1, 2, 3]);
             expect(mergedEMAILValues).toEqual(['email1@domain.org', 'email2@domain.org', 'email3@domain.org']);
             expect(mergedTELPrefs).toEqual([1, 2, 3]);
@@ -329,7 +329,7 @@ describe('merge', () => {
             expect(mergedADRValues).toEqual([
                 ['PObox1', 'extAdr1', 'street1', 'city1', 'region1', 'postalCode1', 'country1'],
                 ['PObox2', 'extAdr2', 'street2', 'city2', 'region2', 'postalCode2', 'country2'],
-                ['PObox3', 'extAdr3', 'street3', 'city3', 'region3', 'postalCode3', 'country3']
+                ['PObox3', 'extAdr3', 'street3', 'city3', 'region3', 'postalCode3', 'country3'],
             ]);
         });
     });
