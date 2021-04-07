@@ -1,4 +1,4 @@
-# [4.0.0 - Beta 22] - 2021-03-24
+# [4.0.0 - Beta 22] - 2021-04-08
 
 ## Improvements
 
@@ -18,6 +18,7 @@
 -   Fixed an issue where an email address that is not part of ProtonContacts yet would be ignored when adding it to a group
 -   Fixed an issue where group label animation on a contact would not behave as expected when a contact has several groups assigned
 -   Fixed an issue where a contact group would be hidden if the email address is long
+-   Fixed an issue where long email addresses would not be fully visible when merging contacts
 
 # [4.0.0 - Beta 21] - 2021-03-10
 
