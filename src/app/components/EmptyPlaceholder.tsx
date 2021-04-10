@@ -1,11 +1,8 @@
 import React, { ReactNode } from 'react';
 import { IllustrationPlaceholder, InlineLinkButton } from 'react-components';
 import { c } from 'ttag';
-import noContactsImgLight from 'design-system/assets/img/shared/empty-address-book.svg';
-import noContactsImgDark from 'design-system/assets/img/shared/empty-address-book-dark.svg';
-import noResultsImgLight from 'design-system/assets/img/shared/no-result-search.svg';
-import noResultsImgDark from 'design-system/assets/img/shared/no-result-search-dark.svg';
-import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
+import noContactsImg from 'design-system/assets/img/placeholders/empty-address-book.svg';
+import noResultsImg from 'design-system/assets/img/placeholders/empty-search.svg';
 
 export enum EmptyType {
     All,
@@ -29,7 +26,7 @@ const EmptyPlaceholder = ({ type, onEditGroup, onClearSearch, onImport, onCreate
     switch (type) {
         case EmptyType.Group: {
             title = c('Info message').t`Your contact group is empty`;
-            imgUrl = getLightOrDark(noContactsImgLight, noContactsImgDark);
+            imgUrl = noContactsImg;
             const editGroup = (
                 <InlineLinkButton key="edit-group" onClick={onEditGroup}>{c('Action')
                     .t`Edit your group`}</InlineLinkButton>
@@ -39,7 +36,7 @@ const EmptyPlaceholder = ({ type, onEditGroup, onClearSearch, onImport, onCreate
         }
         case EmptyType.Search: {
             title = c('Info message').t`No results found`;
-            imgUrl = getLightOrDark(noResultsImgLight, noResultsImgDark);
+            imgUrl = noResultsImg;
             const clearSearch = (
                 <InlineLinkButton key="clear-search" onClick={onClearSearch}>{c('Action')
                     .t`Clear it`}</InlineLinkButton>
@@ -50,7 +47,7 @@ const EmptyPlaceholder = ({ type, onEditGroup, onClearSearch, onImport, onCreate
         case EmptyType.All:
         default: {
             title = c('Info message').t`Your address book is empty`;
-            imgUrl = getLightOrDark(noContactsImgLight, noContactsImgDark);
+            imgUrl = noContactsImg;
             const addContact = (
                 <InlineLinkButton key="add-contact" onClick={onCreate}>{c('Action').t`Add a contact`}</InlineLinkButton>
             );

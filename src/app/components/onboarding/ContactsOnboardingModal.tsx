@@ -3,10 +3,8 @@ import { c } from 'ttag';
 import { getAppName } from 'proton-shared/lib/apps/helper';
 import { OnboardingContent, OnboardingModal, OnboardingStep, OnboardingStepRenderCallback } from 'react-components';
 import { APPS } from 'proton-shared/lib/constants';
-import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
 
-import onboardingWelcome from 'design-system/assets/img/onboarding/onboarding-protoncontacts.svg';
-import onboardingWelcomeDark from 'design-system/assets/img/onboarding/onboarding-protoncontacts-dark.svg';
+import onboardingWelcome from 'design-system/assets/img/onboarding/contacts-welcome.svg';
 
 const ContactsOnboardingModal = (props: any) => {
     const appName = getAppName(APPS.PROTONCONTACTS);
@@ -22,7 +20,7 @@ const ContactsOnboardingModal = (props: any) => {
                     <OnboardingContent
                         description={c('Onboarding ProtonContacts')
                             .t`Even the people you interact with benefit from Proton privacy. Apart from their email address and display name, all other contact details are protected with end-to-end encryption.`}
-                        img={<img src={getLightOrDark(onboardingWelcome, onboardingWelcomeDark)} alt={appName} />}
+                        img={<img src={onboardingWelcome} alt={appName} />}
                     />
                 </OnboardingStep>
             )}
