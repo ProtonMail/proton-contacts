@@ -1,14 +1,11 @@
 import React from 'react';
 import { c, msgid } from 'ttag';
 import { useModals, PrimaryButton, Button, ContactGroupModal, AppLink } from 'react-components';
-import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
 import { getAccountSettingsApp } from 'proton-shared/lib/apps/helper';
 import { DecryptedKey, UserModel } from 'proton-shared/lib/interfaces';
 import { capitalize } from 'proton-shared/lib/helpers/string';
-import importContactsLight from 'design-system/assets/img/shared/import-contacts-light.svg';
-import importContactsDark from 'design-system/assets/img/shared/import-contacts-dark.svg';
-import contactGroupCardLight from 'design-system/assets/img/shared/empty-address-book.svg';
-import contactGroupCardDark from 'design-system/assets/img/shared/empty-address-book-dark.svg';
+import importContacts from 'design-system/assets/img/placeholders/import-contacts.svg';
+import contactGroupCard from 'design-system/assets/img/placeholders/empty-address-book.svg';
 import ExportModal from './settings/ExportModal';
 
 interface Props {
@@ -43,8 +40,6 @@ const ContactPlaceholder = ({
     onImport,
 }: Props) => {
     const { createModal } = useModals();
-
-    const contactGroupCard = getLightOrDark(contactGroupCardLight, contactGroupCardDark);
 
     if (selectedContacts) {
         const totalContactsText = (
@@ -123,8 +118,6 @@ const ContactPlaceholder = ({
             {capitalize(user.DisplayName)}
         </span>
     );
-
-    const importContacts = getLightOrDark(importContactsLight, importContactsDark);
 
     return (
         <div className="view-column-detail flex flex-column flex-nowrap flex-item-fluid">
