@@ -1,4 +1,4 @@
-import { linkConnections, extractMergeable, extractNewValue, merge } from '../src/app/helpers/merge';
+import { linkConnections, extractMergeable, extractNewValue, merge } from 'proton-shared/lib/contacts/helpers/merge';
 
 describe('merge', () => {
     describe('linkConnections', () => {

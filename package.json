@@ -59,7 +59,6 @@
         "abortcontroller-polyfill": "^1.2.1",
         "core-js": "^3.2.1",
         "design-system": "github:ProtonMail/design-system#master",
-        "papaparse": "^5.0.0",
         "proton-pack": "github:ProtonMail/proton-pack#semver:^3.0.0",
         "proton-shared": "github:ProtonMail/proton-shared#master",
         "proton-translations": "github:ProtonMail/proton-translations#fe-contacts",

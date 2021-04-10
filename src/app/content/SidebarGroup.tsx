@@ -1,8 +1,8 @@
 import React from 'react';
 import { ContactEmail } from 'proton-shared/lib/interfaces/contacts';
 import { SimpleMap } from 'proton-shared/lib/interfaces/utils';
+import { GroupsWithCount } from 'proton-shared/lib/interfaces/contacts/GroupsWithCount';
 import { classnames, SimpleSidebarListItemLink, useApplyGroups, useItemsDroppable } from 'react-components';
-import { GroupsWithCount } from '../interfaces/GroupsWithCount';
 
 interface Props {
     group: GroupsWithCount;

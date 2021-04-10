@@ -1,7 +1,9 @@
 import React from 'react';
 import { c } from 'ttag';
+
 import { Block, OrderableTable, TableCell, Button } from 'react-components';
 import { ContactFormatted } from 'proton-shared/lib/interfaces/contacts';
+
 import MergeTableBody from './MergeTableBody';
 
 const MergeTableHeader = () => {

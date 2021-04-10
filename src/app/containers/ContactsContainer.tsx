@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { c } from 'ttag';
+
 import {
     Loader,
     useUser,
@@ -28,10 +29,14 @@ import {
     ContactGroupModal,
     useFeature,
     FeatureCode,
+    useAppLink,
 } from 'react-components';
+
+import { APPS } from 'proton-shared/lib/constants';
+import { extractMergeable } from 'proton-shared/lib/contacts/helpers/merge';
 import ContactsList from 'react-components/containers/contacts/ContactsList';
 import useContactList from 'react-components/containers/contacts/useContactList';
-import { extractMergeable } from '../helpers/merge';
+
 import ContactPlaceholder from '../components/ContactPlaceholder';
 import ContactToolbar from '../components/ContactToolbar';
 import ContactsSidebar from '../content/ContactsSidebar';
@@ -39,6 +44,7 @@ import MergeModal from '../components/merge/MergeModal';
 import EmptyPlaceholder, { EmptyType } from '../components/EmptyPlaceholder';
 
 const ContactsContainer = () => {
+    const appLink = useAppLink();
     const history = useHistory();
     const location = useLocation();
     const { state: expanded, toggle: onToggleExpand, set: setExpand } = useToggle();
@@ -136,7 +142,7 @@ const ContactsContainer = () => {
             />
         );
     };
-    const handleImport = () => history.push('/settings/import#import');
+    const handleImport = () => appLink('/contacts/import-export#import', APPS.PROTONACCOUNT);
 
     const handleAddContact = () => {
         createModal(<ContactModal onAdd={() => updateSearch('')} />);
@@ -176,7 +182,7 @@ const ContactsContainer = () => {
     const header = (
         <PrivateHeader
             logo={logo}
-            settingsButton={<TopNavbarListItemSettingsButton to="/settings" />}
+            settingsButton={<TopNavbarListItemSettingsButton to="/contacts/general" toApp={APPS.PROTONACCOUNT} />}
             title={title}
             expanded={expanded}
             onToggleExpand={onToggleExpand}
