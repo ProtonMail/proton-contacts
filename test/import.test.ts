@@ -1,17 +1,20 @@
-import { getContactId } from '../src/app/helpers/import';
+import { getContactId } from 'proton-shared/lib/contacts/helpers/import';
 
 describe('import', () => {
     describe('getContactId', () => {
         it('should retrieve FN value whenever present', () => {
-            expect(getContactId(`BEGIN:VCARD
+            expect(
+                getContactId(`BEGIN:VCARD
 VERSION:4.0
 UID:urn:uuid:4fbe8971-0bc3-424c-9c26-36c3e1eff6b1
 FN;PID=1.1:J. Doe
 N:Doe;J.;;;
 EMAIL;PID=1.1:jdoe@example.com
 CLIENTPIDMAP:1;urn:uuid:53e374d9-337e-4727-8803-a1e9c14e0556
-END:VCARD`)).toEqual('J. Doe');
-            expect(getContactId(`BEGIN:VCARD
+END:VCARD`)
+            ).toEqual('J. Doe');
+            expect(
+                getContactId(`BEGIN:VCARD
 VERSION:4.0
 FN:Simon Perreault
 N:Perreault;Simon;;;ing. jr,M.Sc.
@@ -31,8 +34,8 @@ KEY;TYPE=work;VALUE=uri:
 http://www.viagenie.ca/simon.perreault/simon.asc
 TZ:-0500
 URL;TYPE=home:http://nomis80.org
-END:VCARD`)).toEqual('Simon Perreault');
-        })
+END:VCARD`)
+            ).toEqual('Simon Perreault');
+        });
     });
 });
-

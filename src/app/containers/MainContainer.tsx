@@ -2,7 +2,6 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router';
 import { ErrorBoundary, StandardErrorPage, useWelcomeFlags } from 'react-components';
 
-import SettingsContainer from './SettingsContainer';
 import ContactsContainer from './ContactsContainer';
 import ContactsOnboardingContainer from './ContactsOnboardingContainer';
 
@@ -15,9 +14,6 @@ const MainContainer = () => {
 
     return (
         <Switch>
-            <Route path="/settings">
-                <SettingsContainer />
-            </Route>
             <Route path="/">
                 <ContactsContainer />
             </Route>

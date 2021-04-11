@@ -1,12 +1,14 @@
 import React from 'react';
 import { c } from 'ttag';
+
 import { useModals, Alert } from 'react-components';
 import { DecryptedKey } from 'proton-shared/lib/interfaces';
-import { moveInGroup } from '../../helpers/array';
+import { moveInGroup } from 'proton-shared/lib/contacts/helpers/array';
+import { MergeModel } from 'proton-shared/lib/interfaces/contacts/MergeModel';
+
 import ContactDetails from './ContactDetails';
 import MergeContactPreview from './MergeContactPreview';
 import MergeTable from './MergeTable';
-import { MergeModel } from '../../interfaces/MergeModel';
 
 interface Props {
     contactID: string;

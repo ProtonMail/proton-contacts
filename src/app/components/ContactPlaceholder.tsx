@@ -1,12 +1,11 @@
 import React from 'react';
 import { c, msgid } from 'ttag';
-import { useModals, PrimaryButton, Button, ContactGroupModal, AppLink } from 'react-components';
+import { useModals, PrimaryButton, Button, ContactGroupModal, AppLink, ContactsExportModal } from 'react-components';
 import { getAccountSettingsApp } from 'proton-shared/lib/apps/helper';
 import { DecryptedKey, UserModel } from 'proton-shared/lib/interfaces';
 import { capitalize } from 'proton-shared/lib/helpers/string';
 import importContacts from 'design-system/assets/img/placeholders/import-contacts.svg';
 import contactGroupCard from 'design-system/assets/img/placeholders/empty-address-book.svg';
-import ExportModal from './settings/ExportModal';
 
 interface Props {
     totalContacts: number;
@@ -83,7 +82,7 @@ const ContactPlaceholder = ({
         const handleEdit = () =>
             createModal(<ContactGroupModal contactGroupID={contactGroupID} selectedContactEmails={[]} />);
         const handleExport = () =>
-            createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
+            createModal(<ContactsExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
 
         return (
             <div className="p2 view-column-detail flex flex-item-fluid scroll-if-needed">
