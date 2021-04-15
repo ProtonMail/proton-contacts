@@ -10,4 +10,4 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 RewriteRule ^$ /index.html [NC,L]
 
 # Redirect from protonContact to protonMail
-RewriteRule ^(.*)$ https://beta.%{SERVER_NAME} [R=301,L]
+RewriteRule ^(.*)$ https://beta.$hostname [R=301,L]
