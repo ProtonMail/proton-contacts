@@ -1,5 +1,6 @@
 import React from 'react';
 import { c } from 'ttag';
+
 import {
     useActiveBreakpoint,
     PrivateHeader,
@@ -7,11 +8,13 @@ import {
     PrivateAppContainer,
     useAppTitle,
     Searchbox,
-    SettingsButton,
+    TopNavbarListItemSettingsButton,
     MainLogo,
 } from 'react-components';
 import { UserModel } from 'proton-shared/lib/interfaces';
+import { APPS } from 'proton-shared/lib/constants';
 import { noop } from 'proton-shared/lib/helpers/function';
+
 import ContactToolbar from '../components/ContactToolbar';
 import ContactsSidebar from '../content/ContactsSidebar';
 
@@ -29,7 +32,7 @@ const ContactsContainerBlurred = () => {
     const header = (
         <PrivateHeader
             logo={logo}
-            settingsButton={<SettingsButton to="/settings" />}
+            settingsButton={<TopNavbarListItemSettingsButton to="/contacts/general" toApp={APPS.PROTONACCOUNT} />}
             title={title}
             expanded={false}
             onToggleExpand={noop}

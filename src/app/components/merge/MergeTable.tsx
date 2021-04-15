@@ -1,7 +1,9 @@
 import React from 'react';
 import { c } from 'ttag';
+
 import { Block, OrderableTable, TableCell, Button } from 'react-components';
 import { ContactFormatted } from 'proton-shared/lib/interfaces/contacts';
+
 import MergeTableBody from './MergeTableBody';
 
 const MergeTableHeader = () => {
@@ -9,9 +11,8 @@ const MergeTableHeader = () => {
         <thead className="orderableTableHeader">
             <tr>
                 <TableCell type="header"> </TableCell>
-                <TableCell type="header">{c('TableHeader').t`NAME`}</TableCell>
-                <TableCell type="header">{c('TableHeader').t`ADDRESS`}</TableCell>
-                <TableCell type="header">{c('TableHeader').t`ACTIONS`}</TableCell>
+                <TableCell type="header">{c('TableHeader').t`Contact`}</TableCell>
+                <TableCell type="header" className="w10e">{c('TableHeader').t`Actions`}</TableCell>
             </tr>
         </thead>
     );
@@ -49,7 +50,7 @@ const MergeTable = ({
 
                 return (
                     <Block key={`${group && group[0].Name}`} className="mb2 flex flex-column flex-align-items-center">
-                        <OrderableTable onSortEnd={onSortEnd(i)} className="mb1">
+                        <OrderableTable onSortEnd={onSortEnd(i)} className="mb1 simple-table--has-actions">
                             <MergeTableHeader />
                             <MergeTableBody
                                 contacts={group}

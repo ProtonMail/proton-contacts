@@ -11,10 +11,10 @@ import {
 import { c } from 'ttag';
 import { UserModel } from 'proton-shared/lib/interfaces';
 import { Contact, ContactEmail, ContactGroup } from 'proton-shared/lib/interfaces/contacts';
+import { GroupsWithCount } from 'proton-shared/lib/interfaces/contacts/GroupsWithCount';
 import { SimpleMap } from 'proton-shared/lib/interfaces/utils';
 import SidebarVersion from './SidebarVersion';
 import SidebarGroups from './SidebarGroups';
-import { GroupsWithCount } from '../interfaces/GroupsWithCount';
 
 interface Props {
     user: UserModel;

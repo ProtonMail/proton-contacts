@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, ComponentProps } from 'react';
 import { c } from 'ttag';
+
 import {
     useApi,
     useLoading,
@@ -7,23 +8,25 @@ import {
     Loader,
     FormModal,
     PrimaryButton,
-    ResetButton,
+    Button,
     ContactView,
     useContactEmails,
     useAddresses,
     useContactGroups,
 } from 'react-components';
+
 import { splitKeys } from 'proton-shared/lib/keys/keys';
 import { getContact } from 'proton-shared/lib/api/contacts';
 import { prepareContact } from 'proton-shared/lib/contacts/decrypt';
+import { merge } from 'proton-shared/lib/contacts/helpers/merge';
 import { noop } from 'proton-shared/lib/helpers/function';
 import { toMap } from 'proton-shared/lib/helpers/object';
 import { DecryptedKey } from 'proton-shared/lib/interfaces';
 import { ContactProperties } from 'proton-shared/lib/interfaces/contacts';
-import { merge } from '../../helpers/merge';
+import { MergeModel } from 'proton-shared/lib/interfaces/contacts/MergeModel';
+
 import MergeErrorContent from './MergeErrorContent';
 import MergingModalContent from './MergingModalContent';
-import { MergeModel } from '../../interfaces/MergeModel';
 
 interface Props extends ComponentProps<typeof FormModal> {
     contactID: string;
@@ -146,7 +149,7 @@ const MergeContactPreview = ({
         }
 
         // Display progress bar while merging contacts
-        const close = !mergeFinished && <ResetButton>{c('Action').t`Cancel`}</ResetButton>;
+        const close = !mergeFinished && <Button type="reset">{c('Action').t`Cancel`}</Button>;
         const submit = (
             <PrimaryButton type="submit" loading={!mergeFinished}>
                 {c('Action').t`Close`}

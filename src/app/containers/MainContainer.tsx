@@ -1,8 +1,7 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router';
-import { ErrorBoundary, useWelcomeFlags } from 'react-components';
+import { ErrorBoundary, StandardErrorPage, useWelcomeFlags } from 'react-components';
 
-import SettingsContainer from './SettingsContainer';
 import ContactsContainer from './ContactsContainer';
 import ContactsOnboardingContainer from './ContactsOnboardingContainer';
 
@@ -14,18 +13,21 @@ const MainContainer = () => {
     }
 
     return (
-        <ErrorBoundary>
-            <Switch>
-                <Route path="/settings">
-                    <SettingsContainer />
-                </Route>
-                <Route path="/">
-                    <ContactsContainer />
-                </Route>
-                <Redirect to="/" />
-            </Switch>
+        <Switch>
+            <Route path="/">
+                <ContactsContainer />
+            </Route>
+            <Redirect to="/" />
+        </Switch>
+    );
+};
+
+const WrappedMainContainer = () => {
+    return (
+        <ErrorBoundary component={<StandardErrorPage />}>
+            <MainContainer />
         </ErrorBoundary>
     );
 };
 
-export default MainContainer;
+export default WrappedMainContainer;

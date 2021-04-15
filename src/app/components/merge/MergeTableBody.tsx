@@ -1,9 +1,10 @@
 import React, { ComponentProps } from 'react';
 import { c } from 'ttag';
+
 import { OrderableTableBody, OrderableTableRow, TableRow, DropdownActions } from 'react-components';
 import { ContactFormatted } from 'proton-shared/lib/interfaces/contacts';
+
 import NameTableCell from './NameTableCell';
-import EmailsTableCell from './EmailsTableCell';
 
 interface Props extends Omit<ComponentProps<typeof OrderableTableBody>, 'colSpan'> {
     contacts: ContactFormatted[];
@@ -31,7 +32,7 @@ const MergeTableBody = ({
                 const deleted = beDeleted[ID];
                 const options = [
                     !deleted && {
-                        text: c('Action').t`Contact details`,
+                        text: c('Action').t`View`,
                         onClick() {
                             onClickDetails(ID);
                         },
@@ -52,16 +53,10 @@ const MergeTableBody = ({
                         checked={isChecked[ID]}
                         deleted={deleted}
                         greyedOut={deleted}
+                        emails={emails}
                         onToggle={onClickCheckbox}
                     />,
-                    <EmailsTableCell
-                        key="email"
-                        contactID={ID}
-                        highlightedID={highlightedID}
-                        emails={emails}
-                        greyedOut={deleted}
-                    />,
-                    <DropdownActions key="options" className="button--small" list={options} />,
+                    <DropdownActions key="options" size="small" list={options} />,
                 ];
 
                 return deleted ? (

@@ -1,15 +1,11 @@
 import React from 'react';
 import { c, msgid } from 'ttag';
-import { useModals, PrimaryButton, Button, ContactGroupModal, AppLink } from 'react-components';
-import { getLightOrDark } from 'proton-shared/lib/themes/helpers';
+import { useModals, PrimaryButton, Button, ContactGroupModal, AppLink, ContactsExportModal } from 'react-components';
 import { getAccountSettingsApp } from 'proton-shared/lib/apps/helper';
 import { DecryptedKey, UserModel } from 'proton-shared/lib/interfaces';
 import { capitalize } from 'proton-shared/lib/helpers/string';
-import importContactsLight from 'design-system/assets/img/shared/import-contacts-light.svg';
-import importContactsDark from 'design-system/assets/img/shared/import-contacts-dark.svg';
-import contactGroupCardLight from 'design-system/assets/img/shared/empty-address-book.svg';
-import contactGroupCardDark from 'design-system/assets/img/shared/empty-address-book-dark.svg';
-import ExportModal from './settings/ExportModal';
+import importContacts from 'design-system/assets/img/placeholders/import-contacts.svg';
+import contactGroupCard from 'design-system/assets/img/placeholders/empty-address-book.svg';
 
 interface Props {
     totalContacts: number;
@@ -43,8 +39,6 @@ const ContactPlaceholder = ({
     onImport,
 }: Props) => {
     const { createModal } = useModals();
-
-    const contactGroupCard = getLightOrDark(contactGroupCardLight, contactGroupCardDark);
 
     if (selectedContacts) {
         const totalContactsText = (
@@ -88,7 +82,7 @@ const ContactPlaceholder = ({
         const handleEdit = () =>
             createModal(<ContactGroupModal contactGroupID={contactGroupID} selectedContactEmails={[]} />);
         const handleExport = () =>
-            createModal(<ExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
+            createModal(<ContactsExportModal contactGroupID={contactGroupID} userKeysList={userKeysList} />);
 
         return (
             <div className="p2 view-column-detail flex flex-item-fluid scroll-if-needed">
@@ -124,17 +118,15 @@ const ContactPlaceholder = ({
         </span>
     );
 
-    const importContacts = getLightOrDark(importContactsLight, importContactsDark);
-
     return (
         <div className="view-column-detail flex flex-column flex-nowrap flex-item-fluid">
             {user.hasPaidMail ? null : (
-                <div className="bg-pm-blue-gradient flex-item-noshrink color-white p1 text-center">
+                <div className="bg-primary flex-item-noshrink color-white p1 text-center">
                     <span className="mr1">{c('Info').jt`Increase storage space starting at $4/month.`}</span>
                     <AppLink
                         to="/subscription"
                         toApp={getAccountSettingsApp()}
-                        className="text-bold link align-baseline color-currentColor"
+                        className="text-bold link align-baseline color-inherit"
                     >
                         {c('Action').t`Upgrade`}
                     </AppLink>

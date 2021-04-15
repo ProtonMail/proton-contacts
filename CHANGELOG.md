@@ -1,3 +1,14 @@
+# [4.0.0 - Beta 23] - 2021-04-21
+
+## Improvements
+
+-   Redesigned and merged Contact settings with Account settings to streamline the overall Proton Settings experience
+-   Added the ability to import contact categories from .vcf and .csv files
+
+## Fixes
+
+-   Fixed an issue where several display names would be included into a merged contact
+
 # [4.0.0 - Beta 22] - 2021-04-08
 
 ## Improvements

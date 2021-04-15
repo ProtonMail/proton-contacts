@@ -1,15 +1,19 @@
 import React from 'react';
 import { c } from 'ttag';
-import { useHistory } from 'react-router';
+
 import {
     useModals,
     ContactUpgradeModal,
     SimpleSidebarListItemHeader,
     SidebarListItemHeaderButton,
+    useAppLink,
 } from 'react-components';
+
 import { SimpleMap } from 'proton-shared/lib/interfaces/utils';
 import { ContactEmail } from 'proton-shared/lib/interfaces/contacts';
-import { GroupsWithCount } from '../interfaces/GroupsWithCount';
+import { GroupsWithCount } from 'proton-shared/lib/interfaces/contacts/GroupsWithCount';
+import { APPS } from 'proton-shared/lib/constants';
+
 import SidebarGroup from './SidebarGroup';
 
 interface Props {
@@ -22,13 +26,13 @@ interface Props {
 
 const SidebarGroups = ({ displayGroups, onToggle, hasPaidMail, contactGroups, contactEmailsMap }: Props) => {
     const { createModal } = useModals();
-    const history = useHistory();
+    const appLink = useAppLink();
 
     const onClickSettingsIcon = () => {
         if (!hasPaidMail) {
             return createModal(<ContactUpgradeModal />);
         }
-        history.push('/settings/groups');
+        appLink('/contacts/general#contact-groups', APPS.PROTONACCOUNT);
     };
 
     return (
