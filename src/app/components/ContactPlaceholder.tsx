@@ -1,7 +1,13 @@
 import React from 'react';
 import { c, msgid } from 'ttag';
-import { useModals, PrimaryButton, Button, ContactGroupModal, AppLink, ContactsExportModal } from 'react-components';
-import { getAccountSettingsApp } from 'proton-shared/lib/apps/helper';
+import {
+    useModals,
+    PrimaryButton,
+    Button,
+    ContactGroupModal,
+    ContactsExportModal,
+    SettingsLink,
+} from 'react-components';
 import { DecryptedKey, UserModel } from 'proton-shared/lib/interfaces';
 import { capitalize } from 'proton-shared/lib/helpers/string';
 import importContacts from 'design-system/assets/img/placeholders/import-contacts.svg';
@@ -123,13 +129,9 @@ const ContactPlaceholder = ({
             {user.hasPaidMail ? null : (
                 <div className="bg-primary flex-item-noshrink color-white p1 text-center">
                     <span className="mr1">{c('Info').jt`Increase storage space starting at $4/month.`}</span>
-                    <AppLink
-                        to="/subscription"
-                        toApp={getAccountSettingsApp()}
-                        className="text-bold link align-baseline color-inherit"
-                    >
+                    <SettingsLink path="/dashboard" className="text-bold link align-baseline color-inherit">
                         {c('Action').t`Upgrade`}
-                    </AppLink>
+                    </SettingsLink>
                 </div>
             )}
             <div className="flex flex-item-fluid scroll-if-needed pt1 pb1 pr2 pl2">
