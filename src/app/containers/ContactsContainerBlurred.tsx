@@ -37,7 +37,14 @@ const ContactsContainerBlurred = () => {
             expanded={false}
             onToggleExpand={noop}
             isNarrow={isNarrow}
-            searchBox={<Searchbox placeholder={c('Placeholder').t`Search contacts`} value={search} onChange={noop} />}
+            searchBox={
+                <Searchbox
+                    placeholder={c('Placeholder').t`Search contacts`}
+                    value={search}
+                    onChange={noop}
+                    onFocus={noop}
+                />
+            }
         />
     );
 

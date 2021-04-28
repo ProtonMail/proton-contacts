@@ -34,6 +34,7 @@ import {
 
 import { APPS } from 'proton-shared/lib/constants';
 import { extractMergeable } from 'proton-shared/lib/contacts/helpers/merge';
+import { noop } from 'proton-shared/lib/helpers/function';
 import ContactsList from 'react-components/containers/contacts/ContactsList';
 import useContactList from 'react-components/containers/contacts/useContactList';
 
@@ -199,7 +200,12 @@ const ContactsContainer = () => {
                 />
             }
             searchBox={
-                <Searchbox placeholder={c('Placeholder').t`Search contacts`} value={search} onChange={updateSearch} />
+                <Searchbox
+                    placeholder={c('Placeholder').t`Search contacts`}
+                    value={search}
+                    onChange={updateSearch}
+                    onFocus={noop}
+                />
             }
             floatingButton={
                 <FloatingButton onClick={() => createModal(<ContactModal onAdd={handleClearSearch} />)}>
